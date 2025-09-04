@@ -1,4 +1,5 @@
 import Foundation
+import HuggingFaceClient
 
 /// Unified Ollama Integration Framework
 /// Complete free AI solution for code generation, analysis, and automation

@@ -1,4 +1,5 @@
 import Foundation
+import HuggingFaceClient
 
 /// Unified Ollama Integration Framework
 /// Provides a clean, unified interface for all Ollama-powered automation
@@ -497,21 +498,177 @@ private class IntegrationLogger {
     }
 }
 
-// MARK: - Convenience Extensions
+// MARK: - Fallback Integration with Hugging Face
 
 public extension OllamaIntegrationManager {
-    func quickCodeGeneration(description: String, language: String = "Swift") async throws -> String {
-        let result = try await generateCode(description: description, language: language, complexity: .simple)
-        return result.code
+    /// Generate text with Ollama primary, Hugging Face fallback
+    func generateWithFallback(
+        prompt: String,
+        model: String = "llama2",
+        maxTokens: Int = 100,
+        temperature: Double = 0.7
+    ) async throws -> String {
+        do {
+            // Try Ollama first (preferred - local, fast, free)
+            return try await client.generate(
+                prompt: prompt,
+                model: model,
+                maxTokens: maxTokens,
+                temperature: temperature
+            )
+        } catch {
+            logger.log("Ollama generation failed, trying Hugging Face fallback: \(error.localizedDescription)")
+
+            // Fallback to Hugging Face (online, rate-limited but still free)
+            return try await HuggingFaceClient.shared.generateWithFallback(
+                prompt: prompt,
+                maxTokens: maxTokens,
+                temperature: temperature,
+                taskType: .general
+            )
+        }
     }
 
-    func quickAnalysis(code: String, language: String = "Swift") async throws -> String {
-        let result = try await analyzeCodebase(code: code, language: language, analysisType: .comprehensive)
-        return result.analysis
+    /// Analyze code with Ollama primary, Hugging Face fallback
+    func analyzeCodeWithFallback(
+        code: String,
+        language: String,
+        analysisType: AnalysisType = .comprehensive
+    ) async throws -> String {
+        do {
+            // Try Ollama first
+            let result = try await analyzeCodebase(code: code, language: language, analysisType: analysisType)
+            return result.analysis
+        } catch {
+            logger.log("Ollama analysis failed, trying Hugging Face fallback: \(error.localizedDescription)")
+
+            // Fallback to Hugging Face
+            return try await HuggingFaceClient.shared.generateWithFallback(
+                prompt: code,
+                maxTokens: 150,
+                temperature: 0.3,
+                taskType: .codeAnalysis
+            )
+        }
     }
 
-    func healthCheck() async -> Bool {
-        let health = await checkServiceHealth()
-        return health.ollamaRunning && health.modelsAvailable
+    /// Generate documentation with Ollama primary, Hugging Face fallback
+    func generateDocumentationWithFallback(
+        code: String,
+        language: String
+    ) async throws -> String {
+        do {
+            // Try Ollama first
+            return try await generateDocumentation(code: code, language: language)
+        } catch {
+            logger.log("Ollama documentation failed, trying Hugging Face fallback: \(error.localizedDescription)")
+
+            // Fallback to Hugging Face
+            return try await HuggingFaceClient.shared.generateWithFallback(
+                prompt: code,
+                maxTokens: 200,
+                temperature: 0.2,
+                taskType: .documentation
+            )
+        }
     }
+
+    /// Check if any free AI service is available
+    func checkAnyServiceAvailable() async -> Bool {
+        let ollamaHealth = await checkServiceHealth()
+        let huggingFaceAvailable = await HuggingFaceClient.shared.isAvailable()
+
+        return ollamaHealth.ollamaRunning || huggingFaceAvailable
+    }
+
+    /// Get service availability status
+    func getServiceStatus() async -> (ollama: Bool, huggingFace: Bool, anyAvailable: Bool) {
+        let ollamaHealth = await checkServiceHealth()
+        let huggingFaceAvailable = await HuggingFaceClient.shared.isAvailable()
+        let anyAvailable = ollamaHealth.ollamaRunning || huggingFaceAvailable
+
+        return (ollamaHealth.ollamaRunning, huggingFaceAvailable, anyAvailable)
+    }
+}
+
+/// Health monitoring for AI services
+public class AIHealthMonitor {
+    public static let shared = AIHealthMonitor()
+
+    private var ollamaHealthHistory: [Date: Bool] = [:]
+    private var huggingFaceHealthHistory: [Date: Bool] = [:]
+    private let maxHistorySize = 100
+
+    private init() {}
+
+    /// Record health status for Ollama
+    public func recordOllamaHealth(_ healthy: Bool) {
+        recordHealth(&ollamaHealthHistory, healthy: healthy)
+    }
+
+    /// Record health status for Hugging Face
+    public func recordHuggingFaceHealth(_ healthy: Bool) {
+        recordHealth(&huggingFaceHealthHistory, healthy: healthy)
+    }
+
+    /// Get health statistics
+    public func getHealthStats() -> HealthStats {
+        let ollamaUptime = calculateUptime(ollamaHealthHistory)
+        let huggingFaceUptime = calculateUptime(huggingFaceHealthHistory)
+
+        return HealthStats(
+            ollamaUptime: ollamaUptime,
+            huggingFaceUptime: huggingFaceUptime,
+            lastOllamaCheck: ollamaHealthHistory.keys.max(),
+            lastHuggingFaceCheck: huggingFaceHealthHistory.keys.max()
+        )
+    }
+
+    /// Get current health status
+    public func getCurrentHealth() async -> CurrentHealth {
+        let ollamaHealthy = await OllamaIntegrationManager().healthCheck()
+        let huggingFaceHealthy = await HuggingFaceClient.shared.isAvailable()
+
+        recordOllamaHealth(ollamaHealthy)
+        recordHuggingFaceHealth(huggingFaceHealthy)
+
+        return CurrentHealth(
+            ollamaHealthy: ollamaHealthy,
+            huggingFaceHealthy: huggingFaceHealthy,
+            anyServiceAvailable: ollamaHealthy || huggingFaceHealthy
+        )
+    }
+
+    private func recordHealth(_ history: inout [Date: Bool], healthy: Bool) {
+        let now = Date()
+        history[now] = healthy
+
+        // Keep only recent history
+        if history.count > maxHistorySize {
+            let oldestKeys = history.keys.sorted().prefix(history.count - maxHistorySize)
+            for key in oldestKeys {
+                history.removeValue(forKey: key)
+            }
+        }
+    }
+
+    private func calculateUptime(_ history: [Date: Bool]) -> Double {
+        guard !history.isEmpty else { return 0.0 }
+
+        let healthyCount = history.values.filter { $0 }.count
+        return Double(healthyCount) / Double(history.count)
+    }
+}
+
+public struct HealthStats {
+    public let ollamaUptime: Double
+    public let huggingFaceUptime: Double
+    public let lastOllamaCheck: Date?
+    public let lastHuggingFaceCheck: Date?
+}
+
+public struct CurrentHealth {
+    public let ollamaHealthy: Bool
+    public let huggingFaceHealthy: Bool
+    public let anyServiceAvailable: Bool
 }
