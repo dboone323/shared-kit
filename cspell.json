@@ -1,4 +1,72 @@
 {
   "version": "0.2",
-  "words": ["danielstevens", "codegen", "Codegen"]
+  "language": "en",
+  "globRoot": "..",
+  "useGitignore": true,
+  "ignorePaths": [
+    // Generated reports and archives
+    "Tools/Automation/reports/**",
+    "Tools/Automation/Archive/**",
+    // Tooling docs (excluded per policy)
+    "Tools/Documentation/**",
+    "Tools/Documentation/Imported_*/**",
+    // VCS / deps / caches
+    "Documentation/**",
+    "**/.git/**",
+    "**/node_modules/**",
+    "**/.venv/**",
+    "**/venv/**",
+    "**/__pycache__/**",
+    "**/.pytest_cache/**",
+    "**/.mypy_cache/**",
+    // SwiftPM / Xcode build artifacts
+    "**/.build/**",
+    "**/DerivedData/**",
+    "**/*.xcodeproj/**",
+    "**/*.xcworkspace/**",
+    "**/*.xcuserdatad/**",
+    "**/*.xcshareddata/**",
+    "**/*.xcassets/**",
+    "**/*.lproj/**",
+    "**/*.swiftmodule/**",
+    "**/*.xcbuilddata/**",
+    // CocoaPods / Carthage / vendor
+    "**/Pods/**",
+    "**/Carthage/**",
+    "**/vendor/**",
+    // Minified/static bundles
+    "Tools/Automation/static/**"
+  ],
+  "words": [
+    "danielstevens",
+    "codegen",
+    "Codegen",
+    // Common technical terms we accept
+    "swiftlint",
+    "swiftformat",
+    "xcpretty",
+    "cicd",
+    "pytest",
+    "cpython",
+    "pycache",
+    "venv",
+    "swiftpm",
+    "xcodeproj",
+    "xcworkspace",
+    "xcassets",
+    "appiconset",
+    "colorset",
+    "lproj",
+    "swiftmodule",
+    "xcbuilddata",
+    "iphoneos",
+    // Domain-specific allowlist
+    "MVVM",
+    "mvvm",
+    "Fastfile",
+    "fastfile",
+    "tostring",
+    "rgba",
+    "oldavg"
+  ]
 }
