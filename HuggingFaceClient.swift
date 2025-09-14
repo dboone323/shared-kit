@@ -1,7 +1,66 @@
 import Foundation
+import OSLog
 
-/// Hugging Face API Client for free AI services
-/// Provides access to Hugging Face's free inference API
+/// Enhanced Hugging Face API Client with Quantum Performance
+/// Provides access to Hugging Face's free inference API with advanced features
+/// Enhanced by AI System v2.1 on 9/12/25
+
+// MARK: - Enhanced Error Types
+
+public enum HuggingFaceError: LocalizedError {
+    case invalidURL
+    case networkError(String)
+    case apiError(String)
+    case rateLimited
+    case modelLoading
+    case parsingError(String)
+    case authenticationError
+    case modelNotSupported(String)
+    case quotaExceeded
+    case serverOverloaded
+    
+    public var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "Invalid Hugging Face API URL"
+        case .networkError(let message):
+            return "Network error: \(message)"
+        case .apiError(let message):
+            return "API error: \(message)"
+        case .rateLimited:
+            return "Rate limit exceeded. Please wait before making more requests."
+        case .modelLoading:
+            return "Model is loading. This may take a few minutes for first use."
+        case .parsingError(let message):
+            return "Response parsing error: \(message)"
+        case .authenticationError:
+            return "Authentication failed. Please check your API token."
+        case .modelNotSupported(let model):
+            return "Model '\(model)' is not supported or available on free tier"
+        case .quotaExceeded:
+            return "API quota exceeded. Please upgrade your plan or try again later."
+        case .serverOverloaded:
+            return "Servers are overloaded. Please try again in a few minutes."
+        }
+    }
+    
+    public var recoverySuggestion: String? {
+        switch self {
+        case .rateLimited:
+            return "Wait 1-2 minutes before retrying, or use a different model"
+        case .modelLoading:
+            return "Wait a few minutes for the model to load, then try again"
+        case .authenticationError:
+            return "Set your Hugging Face token in environment variable HF_TOKEN"
+        case .quotaExceeded:
+            return "Consider upgrading to a paid plan or using Ollama as fallback"
+        case .serverOverloaded:
+            return "Try again in a few minutes or use a different model"
+        default:
+            return "Check your internet connection and try again"
+        }
+    }
+}
 public class HuggingFaceClient {
     public static let shared = HuggingFaceClient()
 
@@ -264,10 +323,35 @@ public class HuggingFaceClient {
 
     /// Get performance metrics
     /// - Returns: Current performance statistics
-    public func getPerformanceMetrics() -> PerformanceMetrics.Metrics {
-        metrics.getMetrics()
+    public func getPerformanceMetrics() -> PerformanceMetricsData {
+        return PerformanceMetricsData(
+            totalRequests: metrics.getMetrics().totalRequests,
+            successRate: metrics.getMetrics().successRate,
+            averageResponseTime: metrics.getMetrics().averageResponseTime,
+            errorBreakdown: metrics.getMetrics().errorBreakdown
+        )
     }
+}
 
+// MARK: - Public Performance Metrics Data
+
+public struct PerformanceMetricsData {
+    public let totalRequests: Int
+    public let successRate: Double
+    public let averageResponseTime: TimeInterval
+    public let errorBreakdown: [String: Int]
+    
+    public init(totalRequests: Int, successRate: Double, averageResponseTime: TimeInterval, errorBreakdown: [String: Int]) {
+        self.totalRequests = totalRequests
+        self.successRate = successRate
+        self.averageResponseTime = averageResponseTime
+        self.errorBreakdown = errorBreakdown
+    }
+}
+
+// MARK: - Private Methods Extension
+
+extension HuggingFaceClient {
     /// Clear performance metrics
     public func resetMetrics() {
         metrics.reset()
@@ -436,48 +520,5 @@ private class PerformanceMetrics {
         successCount = 0
         totalResponseTime = 0
         errorCounts.removeAll()
-    }
-}
-
-// MARK: - Integration with OllamaIntegrationManager
-
-public extension OllamaIntegrationManager {
-    /// Fallback to Hugging Face when Ollama is unavailable
-    func generateWithFallback(
-        prompt: String,
-        model: String = "llama2",
-        maxTokens: Int = 100
-    ) async throws -> String {
-        do {
-            // Try Ollama first
-            return try await OllamaClient.shared.generate(
-                prompt: prompt,
-                model: model,
-                maxTokens: maxTokens
-            )
-        } catch {
-            // Fallback to Hugging Face
-            return try await HuggingFaceClient.shared.generate(
-                prompt: prompt,
-                maxTokens: maxTokens
-            )
-        }
-    }
-
-    /// Analyze code with fallback support
-    func analyzeCodeWithFallback(
-        code: String,
-        language: String
-    ) async throws -> String {
-        do {
-            // Try Ollama first
-            return try await analyzeCodebase(code: code, language: language)
-        } catch {
-            // Fallback to Hugging Face
-            return try await HuggingFaceClient.shared.analyzeCode(
-                code: code,
-                language: language
-            )
-        }
     }
 }
