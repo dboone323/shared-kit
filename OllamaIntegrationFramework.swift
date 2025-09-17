@@ -79,19 +79,19 @@ public enum OllamaError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "Invalid Ollama server URL"
+            "Invalid Ollama server URL"
         case .invalidResponse:
-            return "Invalid response from Ollama server"
+            "Invalid response from Ollama server"
         case let .httpError(code):
-            return "HTTP error: \(code)"
+            "HTTP error: \(code)"
         case .invalidResponseFormat:
-            return "Invalid response format from Ollama"
+            "Invalid response format from Ollama"
         case .modelPullFailed:
-            return "Failed to pull model from Ollama"
+            "Failed to pull model from Ollama"
         case .serverNotRunning:
-            return "Ollama server is not running"
+            "Ollama server is not running"
         case let .modelNotAvailable(model):
-            return "Model '\(model)' is not available"
+            "Model '\(model)' is not available"
         }
     }
 }
@@ -116,9 +116,9 @@ public class OllamaClient {
         temperature: Double? = nil,
         maxTokens: Int? = nil
     ) async throws -> String {
-        let requestModel = model ?? config.defaultModel
-        let requestTemp = temperature ?? config.temperature
-        let requestMaxTokens = maxTokens ?? config.maxTokens
+        let requestModel = model ?? self.config.defaultModel
+        let requestTemp = temperature ?? self.config.temperature
+        let requestMaxTokens = maxTokens ?? self.config.maxTokens
 
         let requestBody: [String: Any] = [
             "model": requestModel,
@@ -128,7 +128,7 @@ public class OllamaClient {
             "stream": false,
         ]
 
-        logger.log("Generating with model: \(requestModel), prompt length: \(prompt.count)")
+        self.logger.log("Generating with model: \(requestModel), prompt length: \(prompt.count)")
 
         let response = try await performRequest(endpoint: "api/generate", body: requestBody)
         return response["response"] as? String ?? ""
@@ -230,7 +230,7 @@ public class OllamaIntegrationManager {
             ollamaRunning: serverStatus.running,
             modelsAvailable: availableModels,
             modelCount: serverStatus.modelCount,
-            recommendedActions: generateHealthRecommendations(serverStatus, availableModels)
+            recommendedActions: self.generateHealthRecommendations(serverStatus, availableModels)
         )
     }
 
@@ -267,8 +267,7 @@ public class OllamaIntegrationManager {
         context: String? = nil,
         complexity: CodeComplexity = .standard
     ) async throws -> CodeGenerationResult {
-
-        let prompt = buildCodeGenerationPrompt(description, language, context, complexity)
+        let prompt = self.buildCodeGenerationPrompt(description, language, context, complexity)
         let generatedCode = try await client.generate(
             model: "codellama",
             prompt: prompt,
@@ -330,7 +329,7 @@ public class OllamaIntegrationManager {
         3. Potential improvements
         """
 
-        return try await client.generate(model: "codellama", prompt: prompt, temperature: 0.2)
+        return try await self.client.generate(model: "codellama", prompt: prompt, temperature: 0.2)
     }
 
     public func analyzeCodebase(
@@ -338,8 +337,7 @@ public class OllamaIntegrationManager {
         language: String,
         analysisType: AnalysisType = .comprehensive
     ) async throws -> CodeAnalysisResult {
-
-        let prompt = buildAnalysisPrompt(code, language, analysisType)
+        let prompt = self.buildAnalysisPrompt(code, language, analysisType)
         let analysis = try await client.generate(
             model: "llama2",
             prompt: prompt,
@@ -347,8 +345,8 @@ public class OllamaIntegrationManager {
             maxTokens: 1500
         )
 
-        let issues = extractIssues(from: analysis)
-        let suggestions = extractSuggestions(from: analysis)
+        let issues = self.extractIssues(from: analysis)
+        let suggestions = self.extractSuggestions(from: analysis)
 
         return CodeAnalysisResult(
             analysis: analysis,
@@ -412,8 +410,7 @@ public class OllamaIntegrationManager {
 
         for line in lines {
             if line.lowercased().contains("error") || line.lowercased().contains("bug") ||
-                line.lowercased().contains("issue") || line.lowercased().contains("problem")
-            {
+                line.lowercased().contains("issue") || line.lowercased().contains("problem") {
                 issues.append(CodeIssue(description: line.trimmingCharacters(in: .whitespaces), severity: .medium))
             }
         }
@@ -434,7 +431,6 @@ public class OllamaIntegrationManager {
         language: String,
         includeExamples: Bool = true
     ) async throws -> DocumentationResult {
-
         let prompt = """
         Generate comprehensive documentation for this \(language) code:
 
@@ -470,7 +466,6 @@ public class OllamaIntegrationManager {
         language: String,
         testFramework: String = "XCTest"
     ) async throws -> TestGenerationResult {
-
         let prompt = """
         Generate comprehensive \(testFramework) unit tests for this \(language) code:
 
@@ -499,7 +494,7 @@ public class OllamaIntegrationManager {
             testCode: testCode,
             language: language,
             testFramework: testFramework,
-            coverage: estimateTestCoverage(testCode)
+            coverage: self.estimateTestCoverage(testCode)
         )
     }
 
@@ -512,13 +507,13 @@ public class OllamaIntegrationManager {
         var results: [TaskResult] = []
 
         for task in tasks {
-            logger.log("Processing task: \(task.description)")
+            self.logger.log("Processing task: \(task.description)")
 
             do {
                 let result = try await processTask(task)
                 results.append(result)
             } catch {
-                logger.log("Task failed: \(task.description) - \(error.localizedDescription)")
+                self.logger.log("Task failed: \(task.description) - \(error.localizedDescription)")
                 results.append(TaskResult(task: task, success: false, error: error))
             }
         }
@@ -575,17 +570,17 @@ public enum CodeComplexity {
 
     var temperature: Double {
         switch self {
-        case .simple: return 0.1
-        case .standard: return 0.3
-        case .advanced: return 0.5
+        case .simple: 0.1
+        case .standard: 0.3
+        case .advanced: 0.5
         }
     }
 
     var maxTokens: Int {
         switch self {
-        case .simple: return 1000
-        case .standard: return 2000
-        case .advanced: return 4000
+        case .simple: 1000
+        case .standard: 2000
+        case .advanced: 4000
         }
     }
 }

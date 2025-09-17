@@ -74,19 +74,19 @@ public enum OllamaError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "Invalid Ollama server URL"
+            "Invalid Ollama server URL"
         case .invalidResponse:
-            return "Invalid response from Ollama server"
+            "Invalid response from Ollama server"
         case let .httpError(code):
-            return "HTTP error: \(code)"
+            "HTTP error: \(code)"
         case .invalidResponseFormat:
-            return "Invalid response format from Ollama"
+            "Invalid response format from Ollama"
         case .modelPullFailed:
-            return "Failed to pull model from Ollama"
+            "Failed to pull model from Ollama"
         case .serverNotRunning:
-            return "Ollama server is not running"
+            "Ollama server is not running"
         case let .modelNotAvailable(model):
-            return "Model '\(model)' is not available"
+            "Model '\(model)' is not available"
         }
     }
 }
@@ -107,17 +107,17 @@ public enum CodeComplexity {
 
     var temperature: Double {
         switch self {
-        case .simple: return 0.1
-        case .standard: return 0.3
-        case .advanced: return 0.5
+        case .simple: 0.1
+        case .standard: 0.3
+        case .advanced: 0.5
         }
     }
 
     var maxTokens: Int {
         switch self {
-        case .simple: return 1000
-        case .standard: return 2000
-        case .advanced: return 4000
+        case .simple: 1000
+        case .standard: 2000
+        case .advanced: 4000
         }
     }
 }

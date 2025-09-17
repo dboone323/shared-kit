@@ -29,7 +29,7 @@ public class OllamaIntegrationManager {
             ollamaRunning: serverStatus.running,
             modelsAvailable: availableModels,
             modelCount: serverStatus.modelCount,
-            recommendedActions: generateHealthRecommendations(serverStatus, availableModels)
+            recommendedActions: self.generateHealthRecommendations(serverStatus, availableModels)
         )
     }
 
@@ -59,8 +59,7 @@ public class OllamaIntegrationManager {
         context: String? = nil,
         complexity: CodeComplexity = .standard
     ) async throws -> CodeGenerationResult {
-
-        let prompt = buildCodeGenerationPrompt(description, language, context, complexity)
+        let prompt = self.buildCodeGenerationPrompt(description, language, context, complexity)
         let generatedCode = try await client.generate(
             model: "codellama",
             prompt: prompt,
@@ -122,7 +121,7 @@ public class OllamaIntegrationManager {
         3. Potential improvements
         """
 
-        return try await client.generate(model: "codellama", prompt: prompt, temperature: 0.2)
+        return try await self.client.generate(model: "codellama", prompt: prompt, temperature: 0.2)
     }
 
     // MARK: - Code Analysis
@@ -132,8 +131,7 @@ public class OllamaIntegrationManager {
         language: String,
         analysisType: AnalysisType = .comprehensive
     ) async throws -> CodeAnalysisResult {
-
-        let prompt = buildAnalysisPrompt(code, language, analysisType)
+        let prompt = self.buildAnalysisPrompt(code, language, analysisType)
         let analysis = try await client.generate(
             model: "llama2",
             prompt: prompt,
@@ -141,8 +139,8 @@ public class OllamaIntegrationManager {
             maxTokens: 1500
         )
 
-        let issues = extractIssues(from: analysis)
-        let suggestions = extractSuggestions(from: analysis)
+        let issues = self.extractIssues(from: analysis)
+        let suggestions = self.extractSuggestions(from: analysis)
 
         return CodeAnalysisResult(
             analysis: analysis,
@@ -207,8 +205,7 @@ public class OllamaIntegrationManager {
 
         for line in lines {
             if line.lowercased().contains("error") || line.lowercased().contains("bug") ||
-                line.lowercased().contains("issue") || line.lowercased().contains("problem")
-            {
+                line.lowercased().contains("issue") || line.lowercased().contains("problem") {
                 issues.append(CodeIssue(description: line.trimmingCharacters(in: .whitespaces), severity: .medium))
             }
         }
@@ -231,7 +228,6 @@ public class OllamaIntegrationManager {
         language: String,
         includeExamples: Bool = true
     ) async throws -> DocumentationResult {
-
         let prompt = """
         Generate comprehensive documentation for this \(language) code:
 
@@ -269,7 +265,6 @@ public class OllamaIntegrationManager {
         language: String,
         testFramework: String = "XCTest"
     ) async throws -> TestGenerationResult {
-
         let prompt = """
         Generate comprehensive \(testFramework) unit tests for this \(language) code:
 
@@ -298,7 +293,7 @@ public class OllamaIntegrationManager {
             testCode: testCode,
             language: language,
             testFramework: testFramework,
-            coverage: estimateTestCoverage(testCode)
+            coverage: self.estimateTestCoverage(testCode)
         )
     }
 
@@ -315,13 +310,13 @@ public class OllamaIntegrationManager {
         var results: [TaskResult] = []
 
         for task in tasks {
-            logger.log("Processing task: \(task.description)")
+            self.logger.log("Processing task: \(task.description)")
 
             do {
                 let result = try await processTask(task)
                 results.append(result)
             } catch {
-                logger.log("Task failed: \(task.description) - \(error.localizedDescription)")
+                self.logger.log("Task failed: \(task.description) - \(error.localizedDescription)")
                 results.append(TaskResult(task: task, success: false, error: error))
             }
         }
@@ -378,17 +373,17 @@ public enum CodeComplexity {
 
     var temperature: Double {
         switch self {
-        case .simple: return 0.1
-        case .standard: return 0.3
-        case .advanced: return 0.5
+        case .simple: 0.1
+        case .standard: 0.3
+        case .advanced: 0.5
         }
     }
 
     var maxTokens: Int {
         switch self {
-        case .simple: return 1000
-        case .standard: return 2000
-        case .advanced: return 4000
+        case .simple: 1000
+        case .standard: 2000
+        case .advanced: 4000
         }
     }
 }
@@ -510,14 +505,14 @@ public extension OllamaIntegrationManager {
     ) async throws -> String {
         do {
             // Try Ollama first (preferred - local, fast, free)
-            return try await client.generate(
+            return try await self.client.generate(
                 prompt: prompt,
                 model: model,
                 maxTokens: maxTokens,
                 temperature: temperature
             )
         } catch {
-            logger.log("Ollama generation failed, trying Hugging Face fallback: \(error.localizedDescription)")
+            self.logger.log("Ollama generation failed, trying Hugging Face fallback: \(error.localizedDescription)")
 
             // Fallback to Hugging Face (online, rate-limited but still free)
             return try await HuggingFaceClient.shared.generateWithFallback(
@@ -540,7 +535,7 @@ public extension OllamaIntegrationManager {
             let result = try await analyzeCodebase(code: code, language: language, analysisType: analysisType)
             return result.analysis
         } catch {
-            logger.log("Ollama analysis failed, trying Hugging Face fallback: \(error.localizedDescription)")
+            self.logger.log("Ollama analysis failed, trying Hugging Face fallback: \(error.localizedDescription)")
 
             // Fallback to Hugging Face
             return try await HuggingFaceClient.shared.generateWithFallback(
@@ -559,9 +554,9 @@ public extension OllamaIntegrationManager {
     ) async throws -> String {
         do {
             // Try Ollama first
-            return try await generateDocumentation(code: code, language: language)
+            return try await self.generateDocumentation(code: code, language: language)
         } catch {
-            logger.log("Ollama documentation failed, trying Hugging Face fallback: \(error.localizedDescription)")
+            self.logger.log("Ollama documentation failed, trying Hugging Face fallback: \(error.localizedDescription)")
 
             // Fallback to Hugging Face
             return try await HuggingFaceClient.shared.generateWithFallback(
@@ -603,24 +598,24 @@ public class AIHealthMonitor {
 
     /// Record health status for Ollama
     public func recordOllamaHealth(_ healthy: Bool) {
-        recordHealth(&ollamaHealthHistory, healthy: healthy)
+        self.recordHealth(&self.ollamaHealthHistory, healthy: healthy)
     }
 
     /// Record health status for Hugging Face
     public func recordHuggingFaceHealth(_ healthy: Bool) {
-        recordHealth(&huggingFaceHealthHistory, healthy: healthy)
+        self.recordHealth(&self.huggingFaceHealthHistory, healthy: healthy)
     }
 
     /// Get health statistics
     public func getHealthStats() -> HealthStats {
-        let ollamaUptime = calculateUptime(ollamaHealthHistory)
-        let huggingFaceUptime = calculateUptime(huggingFaceHealthHistory)
+        let ollamaUptime = self.calculateUptime(self.ollamaHealthHistory)
+        let huggingFaceUptime = self.calculateUptime(self.huggingFaceHealthHistory)
 
         return HealthStats(
             ollamaUptime: ollamaUptime,
             huggingFaceUptime: huggingFaceUptime,
-            lastOllamaCheck: ollamaHealthHistory.keys.max(),
-            lastHuggingFaceCheck: huggingFaceHealthHistory.keys.max()
+            lastOllamaCheck: self.ollamaHealthHistory.keys.max(),
+            lastHuggingFaceCheck: self.huggingFaceHealthHistory.keys.max()
         )
     }
 
@@ -629,8 +624,8 @@ public class AIHealthMonitor {
         let ollamaHealthy = await OllamaIntegrationManager().healthCheck()
         let huggingFaceHealthy = await HuggingFaceClient.shared.isAvailable()
 
-        recordOllamaHealth(ollamaHealthy)
-        recordHuggingFaceHealth(huggingFaceHealthy)
+        self.recordOllamaHealth(ollamaHealthy)
+        self.recordHuggingFaceHealth(huggingFaceHealthy)
 
         return CurrentHealth(
             ollamaHealthy: ollamaHealthy,
@@ -644,8 +639,8 @@ public class AIHealthMonitor {
         history[now] = healthy
 
         // Keep only recent history
-        if history.count > maxHistorySize {
-            let oldestKeys = history.keys.sorted().prefix(history.count - maxHistorySize)
+        if history.count > self.maxHistorySize {
+            let oldestKeys = history.keys.sorted().prefix(history.count - self.maxHistorySize)
             for key in oldestKeys {
                 history.removeValue(forKey: key)
             }
@@ -655,7 +650,7 @@ public class AIHealthMonitor {
     private func calculateUptime(_ history: [Date: Bool]) -> Double {
         guard !history.isEmpty else { return 0.0 }
 
-        let healthyCount = history.values.filter { $0 }.count
+        let healthyCount = history.values.count(where: { $0 })
         return Double(healthyCount) / Double(history.count)
     }
 }

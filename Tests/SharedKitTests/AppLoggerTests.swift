@@ -1,5 +1,5 @@
-import XCTest
 @testable import SharedKit
+import XCTest
 
 final class AppLoggerTests: XCTestCase {
     func testLogPrefixesMessage() throws {

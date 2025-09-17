@@ -1,15 +1,15 @@
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 // MARK: - Enhanced Financial Intelligence Analysis
+
 // Advanced AI-powered financial analysis with quantum-level performance
 // Upgraded by AI Enhancement System v2.1 on 9/12/25
 
 /// Advanced financial intelligence analyzer with AI capabilities
 @MainActor
 public class FinancialIntelligenceAnalyzer: ObservableObject {
-    
     @Published public var analysisResults: [FinancialInsight] = []
     @Published public var analysisProgress: Double = 0.0
     @Published public var isAnalyzing = false
@@ -24,8 +24,8 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
         budgets: [Any],
         categories: [Any]
     ) async {
-        isAnalyzing = true
-        analysisProgress = 0.0
+        self.isAnalyzing = true
+        self.analysisProgress = 0.0
         
         var allInsights: [FinancialInsight] = []
         
@@ -49,13 +49,13 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
                 categories: categories
             )
             allInsights.append(contentsOf: insights)
-            analysisProgress += progressWeight
+            self.analysisProgress += progressWeight
         }
         
         // AI-powered insight ranking and deduplication
-        analysisResults = await aiEngine.rankAndOptimizeInsights(allInsights)
-        analysisProgress = 1.0
-        isAnalyzing = false
+        self.analysisResults = await self.aiEngine.rankAndOptimizeInsights(allInsights)
+        self.analysisProgress = 1.0
+        self.isAnalyzing = false
     }
     
     private func performSpecificAnalysis(
@@ -67,21 +67,21 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
     ) async -> [FinancialInsight] {
         switch type {
         case "Spending Patterns":
-            return await fi_analyzeSpendingPatterns(transactions: transactions, categories: categories)
+            await fi_analyzeSpendingPatterns(transactions: transactions, categories: categories)
         case "Anomaly Detection":
-            return await fi_detectAnomalies(transactions: transactions)
+            await fi_detectAnomalies(transactions: transactions)
         case "Budget Analysis":
-            return await fi_analyzeBudgets(transactions: transactions, budgets: budgets)
+            await fi_analyzeBudgets(transactions: transactions, budgets: budgets)
         case "Forecasting":
-            return await fi_generateForecasts(transactions: transactions, accounts: accounts)
+            await fi_generateForecasts(transactions: transactions, accounts: accounts)
         case "Cash Insights":
-            return await fi_suggestIdleCashInsights(transactions: transactions, accounts: accounts)
+            await fi_suggestIdleCashInsights(transactions: transactions, accounts: accounts)
         case "Credit Utilization":
-            return await fi_suggestCreditUtilizationInsights(accounts: accounts)
+            await fi_suggestCreditUtilizationInsights(accounts: accounts)
         case "Duplicate Detection":
-            return await fi_suggestDuplicatePaymentInsights(transactions: transactions)
+            await fi_suggestDuplicatePaymentInsights(transactions: transactions)
         default:
-            return []
+            []
         }
     }
 }
@@ -248,7 +248,7 @@ public func fi_suggestDuplicatePaymentInsights(transactions: [Any]) async -> [Fi
 private class AIFinancialEngine {
     func rankAndOptimizeInsights(_ insights: [FinancialInsight]) async -> [FinancialInsight] {
         // AI-powered ranking based on impact score, priority, and user behavior
-        return insights.sorted { first, second in
+        insights.sorted { first, second in
             if first.priority != second.priority {
                 return first.priority > second.priority
             }
@@ -260,7 +260,7 @@ private class AIFinancialEngine {
 private class QuantumAnalysisProcessor {
     func process<T>(_ data: T) async -> T {
         // Quantum-enhanced processing would go here
-        return data
+        data
     }
 }
 
@@ -273,7 +273,7 @@ private class QuantumForecastEngine {
         horizonMonths: Int
     ) async -> [ForecastResult] {
         // ML-powered forecasting would be implemented here
-        return []
+        []
     }
 }
 
@@ -351,37 +351,37 @@ private struct DuplicateTransaction {
 
 private class SpendingPatternAnalyzer {
     func identifyPatterns(transactions: [Any], categories: [Any]) async -> [SpendingPattern] {
-        return []
+        []
     }
 }
 
 private class AnomalyDetectionEngine {
     func detectAnomalies(in transactions: [Any]) async -> [TransactionAnomaly] {
-        return []
+        []
     }
 }
 
 private class BudgetAnalysisEngine {
     func analyzeBudgetPerformance(transactions: [Any], budgets: [Any]) async -> [BudgetInsight] {
-        return []
+        []
     }
 }
 
 private class CashOptimizationEngine {
     func identifyOptimizationOpportunities(transactions: [Any], accounts: [Any]) async -> [CashOptimizationOpportunity] {
-        return []
+        []
     }
 }
 
 private class CreditUtilizationAnalyzer {
     func analyzeCreditHealth(accounts: [Any]) async -> [CreditInsight] {
-        return []
+        []
     }
 }
 
 private class DuplicateTransactionDetector {
     func findDuplicates(in transactions: [Any]) async -> [DuplicateTransaction] {
-        return []
+        []
     }
 }
 

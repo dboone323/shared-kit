@@ -5,7 +5,9 @@ public enum TestHelpers {
     @discardableResult
     public static func wait(seconds: TimeInterval) -> Bool {
         let until = Date().addingTimeInterval(seconds)
-        while Date() < until { RunLoop.current.run(mode: .default, before: until) }
+        while Date() < until {
+            RunLoop.current.run(mode: .default, before: until)
+        }
         return true
     }
 

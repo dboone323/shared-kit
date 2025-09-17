@@ -13,8 +13,8 @@ public struct Query<Value> {
     }
 
     public var wrappedValue: Value {
-        get { value }
-        set { value = newValue }
+        get { self.value }
+        set { self.value = newValue }
     }
 
     public var projectedValue: Query<Value> { self }

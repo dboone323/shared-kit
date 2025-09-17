@@ -76,7 +76,7 @@ protocol AnalyticsTrackable {
 }
 
 protocol AnalyticsService {
-    func track<T: AnalyticsTrackable>(_ event: T)
+    func track(_ event: some AnalyticsTrackable)
     func setUserProperty(_ value: String, forName name: String)
     func incrementUserProperty(_ property: String, by value: Int)
 }
@@ -112,13 +112,13 @@ enum AppError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .networkError(message):
-            return "Network Error: \(message)"
+            "Network Error: \(message)"
         case let .dataError(message):
-            return "Data Error: \(message)"
+            "Data Error: \(message)"
         case let .validationError(message):
-            return "Validation Error: \(message)"
+            "Validation Error: \(message)"
         case .unknownError:
-            return "An unknown error occurred"
+            "An unknown error occurred"
         }
     }
 }
@@ -134,7 +134,7 @@ class BaseListViewModel<T>: ObservableObject {
     @Published var searchText = ""
 
     var filteredItems: [T] {
-        items // Override in subclasses for filtering logic
+        self.items // Override in subclasses for filtering logic
     }
 
     func loadItems() async {
@@ -142,7 +142,7 @@ class BaseListViewModel<T>: ObservableObject {
     }
 
     func refresh() async {
-        await loadItems()
+        await self.loadItems()
     }
 }
 
@@ -197,7 +197,7 @@ class PerformanceMonitor: ObservableObject {
             additionalInfo: [:]
         )
 
-        metrics.append(metric)
+        self.metrics.append(metric)
         return result
     }
 }
@@ -206,7 +206,7 @@ class PerformanceMonitor: ObservableObject {
 
 /// Shared storage interface
 protocol StorageService {
-    func store<T: Codable>(_ object: T, key: String) throws
+    func store(_ object: some Codable, key: String) throws
     func retrieve<T: Codable>(_ type: T.Type, key: String) throws -> T?
     func remove(key: String) throws
     func clear() throws
@@ -240,7 +240,7 @@ extension Date {
     }
 
     var endOfDay: Date {
-        Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)?.addingTimeInterval(-1) ?? self
+        Calendar.current.date(byAdding: .day, value: 1, to: self.startOfDay)?.addingTimeInterval(-1) ?? self
     }
 
     var startOfMonth: Date {
