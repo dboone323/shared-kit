@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -12,9 +12,9 @@ let package = Package(
     ],
     targets: [
         // Minimal package for now; sources live under Sources/SharedKit
-        .target(name: "SharedKit"),
+        .target(name: "SharedKit", path: "Sources/SharedKit"),
         // Utilities intended for use from XCTest targets in app projects
-        .target(name: "SharedTestSupport"),
+        .target(name: "SharedTestSupport", path: "Sources/SharedTestSupport"),
         .testTarget(name: "SharedKitTests", dependencies: ["SharedKit"])
     ]
 )
