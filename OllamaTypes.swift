@@ -9,6 +9,10 @@ public struct OllamaConfig {
     public let maxRetries: Int
     public let temperature: Double
     public let maxTokens: Int
+    
+    // Cloud model support
+    public let enableCloudModels: Bool
+    public let preferCloudModels: Bool
 
     public init(
         baseURL: String = "http://localhost:11434",
@@ -16,7 +20,9 @@ public struct OllamaConfig {
         timeout: TimeInterval = 60.0,
         maxRetries: Int = 3,
         temperature: Double = 0.7,
-        maxTokens: Int = 2048
+        maxTokens: Int = 2048,
+        enableCloudModels: Bool = true,
+        preferCloudModels: Bool = false
     ) {
         self.baseURL = baseURL
         self.defaultModel = defaultModel
@@ -24,12 +30,31 @@ public struct OllamaConfig {
         self.maxRetries = maxRetries
         self.temperature = temperature
         self.maxTokens = maxTokens
+        self.enableCloudModels = enableCloudModels
+        self.preferCloudModels = preferCloudModels
     }
 
     public static let `default` = OllamaConfig()
     public static let codeGeneration = OllamaConfig(defaultModel: "codellama", temperature: 0.2, maxTokens: 4096)
     public static let analysis = OllamaConfig(defaultModel: "llama2", temperature: 0.3, maxTokens: 2048)
     public static let creative = OllamaConfig(defaultModel: "llama2", temperature: 0.8, maxTokens: 1024)
+    
+    // Cloud model presets
+    public static let cloudCoder = OllamaConfig(
+        defaultModel: "qwen3-coder:480b-cloud",
+        temperature: 0.2,
+        maxTokens: 8192,
+        enableCloudModels: true,
+        preferCloudModels: true
+    )
+    
+    public static let cloudAdvanced = OllamaConfig(
+        defaultModel: "deepseek-v3.1:671b-cloud",
+        temperature: 0.3,
+        maxTokens: 16384,
+        enableCloudModels: true,
+        preferCloudModels: true
+    )
 }
 
 public struct OllamaMessage: Codable {

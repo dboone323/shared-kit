@@ -12,7 +12,7 @@ if [[ ! -f "${TODO_JSON}" ]]; then
   exit 1
 fi
 
-echo "🔍 Processing TODOs from${$TODO_JSO}N..." | tee -a ${$LOG_FIL}E"
+echo "🔍 Processing TODOs from ${TODO_JSON}..." | tee -a "${LOG_FILE}"
 
 # Example: For each TODO, print details and (optionally) trigger further automation
 jq -c '.[]' "${TODO_JSON}" | while read -r todo; do

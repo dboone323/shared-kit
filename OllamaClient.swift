@@ -23,6 +23,11 @@ public struct OllamaConfig {
     public let enableAutoModelDownload: Bool
     public let fallbackModels: [String]
     public let requestThrottleDelay: TimeInterval
+    
+    // Cloud model support
+    public let enableCloudModels: Bool
+    public let cloudEndpoint: String
+    public let preferCloudModels: Bool
 
     public init(
         baseURL: String = "http://localhost:11434",
@@ -36,7 +41,10 @@ public struct OllamaConfig {
         enableMetrics: Bool = true,
         enableAutoModelDownload: Bool = true,
         fallbackModels: [String] = ["llama2", "phi3"],
-        requestThrottleDelay: TimeInterval = 0.1
+        requestThrottleDelay: TimeInterval = 0.1,
+        enableCloudModels: Bool = true,
+        cloudEndpoint: String = "https://ollama.com",
+        preferCloudModels: Bool = false
     ) {
         self.baseURL = baseURL
         self.defaultModel = defaultModel
@@ -50,6 +58,9 @@ public struct OllamaConfig {
         self.enableAutoModelDownload = enableAutoModelDownload
         self.fallbackModels = fallbackModels
         self.requestThrottleDelay = requestThrottleDelay
+        self.enableCloudModels = enableCloudModels
+        self.cloudEndpoint = cloudEndpoint
+        self.preferCloudModels = preferCloudModels
     }
 
     public static let `default` = OllamaConfig()
@@ -82,6 +93,34 @@ public struct OllamaConfig {
         enableAutoModelDownload: true,
         fallbackModels: ["phi3", "llama2", "codellama"],
         requestThrottleDelay: 0.05
+    )
+    
+    // Cloud model presets
+    public static let cloudCoder = OllamaConfig(
+        defaultModel: "qwen3-coder:480b-cloud",
+        temperature: 0.2,
+        maxTokens: 8192,
+        fallbackModels: ["qwen3-coder:480b-cloud", "gpt-oss:120b-cloud", "codellama"],
+        enableCloudModels: true,
+        preferCloudModels: true
+    )
+    
+    public static let cloudAdvanced = OllamaConfig(
+        defaultModel: "deepseek-v3.1:671b-cloud",
+        temperature: 0.3,
+        maxTokens: 16384,
+        fallbackModels: ["deepseek-v3.1:671b-cloud", "gpt-oss:120b-cloud", "qwen3-coder:480b-cloud"],
+        enableCloudModels: true,
+        preferCloudModels: true
+    )
+    
+    public static let cloudGeneral = OllamaConfig(
+        defaultModel: "gpt-oss:120b-cloud",
+        temperature: 0.7,
+        maxTokens: 4096,
+        fallbackModels: ["gpt-oss:120b-cloud", "gpt-oss:20b-cloud", "llama2"],
+        enableCloudModels: true,
+        preferCloudModels: true
     )
 }
 
@@ -258,6 +297,36 @@ public class OllamaClient: ObservableObject {
         }
     }
     
+    // MARK: - Cloud Model Utilities
+    
+    private func isCloudModel(_ model: String) -> Bool {
+        model.hasSuffix("-cloud") || model.contains(":") && model.hasSuffix("-cloud")
+    }
+    
+    private func getCloudModels() -> [String] {
+        ["qwen3-coder:480b-cloud", "gpt-oss:120b-cloud", "gpt-oss:20b-cloud", "deepseek-v3.1:671b-cloud"]
+    }
+    
+    private func selectOptimalModel(_ preferredModel: String?) async throws -> String {
+        let targetModel = preferredModel ?? self.config.defaultModel
+        
+        // If cloud models are enabled and preferred, try cloud models first
+        if self.config.enableCloudModels, self.config.preferCloudModels || self.isCloudModel(targetModel) {
+            if self.isCloudModel(targetModel) {
+                return targetModel
+            }
+            
+            // Find best cloud alternative
+            if self.getCloudModels().contains(targetModel + "-cloud") {
+                return targetModel + "-cloud"
+            }
+        }
+        
+        // Check local availability or use fallbacks
+        try await self.ensureModelAvailable(targetModel)
+        return targetModel
+    }
+
     // MARK: - Enhanced Generation Methods
 
     public func generate(
@@ -267,7 +336,7 @@ public class OllamaClient: ObservableObject {
         maxTokens: Int? = nil,
         useCache: Bool = true
     ) async throws -> String {
-        let requestModel = try await getOptimalModel(preferred: model)
+        let requestModel = try await selectOptimalModel(model)
         let requestTemp = temperature ?? self.config.temperature
         let requestMaxTokens = maxTokens ?? self.config.maxTokens
         
@@ -324,7 +393,7 @@ public class OllamaClient: ObservableObject {
         temperature: Double? = nil,
         progressHandler: @escaping (String) -> Void
     ) async throws -> String {
-        let requestModel = try await getOptimalModel(preferred: model)
+        let requestModel = try await selectOptimalModel(model)
         
         // This would implement streaming generation
         // For now, we'll simulate progress
