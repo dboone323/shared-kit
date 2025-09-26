@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 // MARK: - Advanced Animation System
@@ -50,7 +50,7 @@ public struct AnimatedValue<T: VectorArithmetic>: DynamicProperty {
     }
 
     public var wrappedValue: T {
-        get { self.value }
+        get { value }
         nonmutating set {
             withAnimation(animation) {
                 value = newValue
@@ -76,13 +76,13 @@ public enum GestureAnimations {
     // Haptic feedback integration
     public static func hapticFeedback(style: Int = 1) {
         #if canImport(UIKit)
-        let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = switch style {
-        case 0: .light
-        case 2: .heavy
-        default: .medium
-        }
-        let impactFeedback = UIImpactFeedbackGenerator(style: feedbackStyle)
-        impactFeedback.impactOccurred()
+            let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = switch style {
+            case 0: .light
+            case 2: .heavy
+            default: .medium
+            }
+            let impactFeedback = UIImpactFeedbackGenerator(style: feedbackStyle)
+            impactFeedback.impactOccurred()
         #endif
     }
 
@@ -134,10 +134,10 @@ public struct ShimmerEffect: ViewModifier {
                         )
                     )
                     .rotationEffect(.degrees(30))
-                    .offset(x: self.isAnimating ? 200 : -200)
+                    .offset(x: isAnimating ? 200 : -200)
                     .animation(
                         Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: false),
-                        value: self.isAnimating
+                        value: isAnimating
                     )
             )
             .clipped()
@@ -161,11 +161,11 @@ public struct PulseEffect: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .scaleEffect(self.isPulsing ? self.scale : 1.0)
-            .opacity(self.isPulsing ? self.opacity : 1.0)
+            .scaleEffect(isPulsing ? scale : 1.0)
+            .opacity(isPulsing ? opacity : 1.0)
             .animation(
-                Animation.easeInOut(duration: self.duration).repeatForever(autoreverses: true),
-                value: self.isPulsing
+                Animation.easeInOut(duration: duration).repeatForever(autoreverses: true),
+                value: isPulsing
             )
             .onAppear {
                 self.isPulsing = true
@@ -178,11 +178,11 @@ public struct BreathingEffect: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .scaleEffect(self.isBreathing ? 1.05 : 0.95)
-            .opacity(self.isBreathing ? 1.0 : 0.8)
+            .scaleEffect(isBreathing ? 1.05 : 0.95)
+            .opacity(isBreathing ? 1.0 : 0.8)
             .animation(
                 Animation.easeInOut(duration: 2.0).repeatForever(autoreverses: true),
-                value: self.isBreathing
+                value: isBreathing
             )
             .onAppear {
                 self.isBreathing = true
@@ -200,12 +200,11 @@ public struct SlideTransition: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .offset(
-                x: self.edge == .leading || self
-                    .edge == .trailing ? (self.isPresented ? 0 : (self.edge == .leading ? -self.offset : self.offset)) : 0,
-                y: self.edge == .top || self.edge == .bottom ? (self.isPresented ? 0 : (self.edge == .top ? -self.offset : self.offset)) : 0
+                x: edge == .leading || edge == .trailing ? (isPresented ? 0 : (edge == .leading ? -offset : offset)) : 0,
+                y: edge == .top || edge == .bottom ? (isPresented ? 0 : (edge == .top ? -offset : offset)) : 0
             )
-            .opacity(self.isPresented ? 1 : 0)
-            .animation(AnimationTiming.springSmooth, value: self.isPresented)
+            .opacity(isPresented ? 1 : 0)
+            .animation(AnimationTiming.springSmooth, value: isPresented)
     }
 }
 
@@ -215,9 +214,9 @@ public struct ScaleTransition: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .scaleEffect(self.isPresented ? 1.0 : self.scale)
-            .opacity(self.isPresented ? 1.0 : 0.0)
-            .animation(AnimationTiming.springBouncy, value: self.isPresented)
+            .scaleEffect(isPresented ? 1.0 : scale)
+            .opacity(isPresented ? 1.0 : 0.0)
+            .animation(AnimationTiming.springBouncy, value: isPresented)
     }
 }
 
@@ -227,9 +226,9 @@ public struct RotationTransition: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .rotationEffect(.degrees(self.isPresented ? 0 : self.degrees))
-            .opacity(self.isPresented ? 1.0 : 0.0)
-            .animation(AnimationTiming.springSmooth, value: self.isPresented)
+            .rotationEffect(.degrees(isPresented ? 0 : degrees))
+            .opacity(isPresented ? 1.0 : 0.0)
+            .animation(AnimationTiming.springSmooth, value: isPresented)
     }
 }
 
@@ -245,31 +244,31 @@ public class AnimationSequence: ObservableObject {
     public init() {}
 
     public func addStep(delay: TimeInterval = 0, animation: @escaping () -> Void) -> AnimationSequence {
-        self.steps.append((delay: delay, animation: animation))
+        steps.append((delay: delay, animation: animation))
         return self
     }
 
     public func run() {
-        guard !self.isRunning else { return }
-        self.isRunning = true
-        self.currentStep = 0
+        guard !isRunning else { return }
+        isRunning = true
+        currentStep = 0
 
-        self.runStep(0)
+        runStep(0)
     }
 
     public func stop() {
-        self.isRunning = false
-        self.cancellables.removeAll()
+        isRunning = false
+        cancellables.removeAll()
     }
 
     private func runStep(_ index: Int) {
-        guard index < self.steps.count, self.isRunning else {
-            self.isRunning = false
+        guard index < steps.count, isRunning else {
+            isRunning = false
             return
         }
 
-        let step = self.steps[index]
-        self.currentStep = index
+        let step = steps[index]
+        currentStep = index
 
         Timer.publish(every: step.delay, on: .main, in: .common)
             .autoconnect()
@@ -278,7 +277,7 @@ public class AnimationSequence: ObservableObject {
                 step.animation()
                 self.runStep(index + 1)
             }
-            .store(in: &self.cancellables)
+            .store(in: &cancellables)
     }
 }
 
@@ -298,7 +297,7 @@ public struct DragToRevealModifier: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .offset(self.dragOffset)
+            .offset(dragOffset)
             .gesture(
                 DragGesture()
                     .onChanged { value in
@@ -368,12 +367,12 @@ public struct LoadingSpinner: View {
     public var body: some View {
         Circle()
             .trim(from: 0, to: 0.7)
-            .stroke(self.color, style: StrokeStyle(lineWidth: self.lineWidth, lineCap: .round))
-            .frame(width: self.size, height: self.size)
-            .rotationEffect(.degrees(self.isRotating ? 360 : 0))
+            .stroke(color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+            .frame(width: size, height: size)
+            .rotationEffect(.degrees(isRotating ? 360 : 0))
             .animation(
                 Animation.linear(duration: 1.0).repeatForever(autoreverses: false),
-                value: self.isRotating
+                value: isRotating
             )
             .onAppear {
                 self.isRotating = true
@@ -424,7 +423,7 @@ public struct ProgressWave: View {
                 self.waveOffset = 2 * .pi
             }
         }
-        .frame(height: self.height)
+        .frame(height: height)
     }
 }
 
@@ -471,7 +470,7 @@ public struct ParticleSystem: View {
     }
 
     private func startEmission(in bounds: CGRect) {
-        Timer.scheduledTimer(withTimeInterval: self.emissionRate, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: emissionRate, repeats: true) { _ in
             if self.particles.count < self.particleCount {
                 let newParticle = Particle(
                     position: CGPoint(
@@ -491,7 +490,7 @@ public struct ParticleSystem: View {
     }
 
     private func animateParticle(_ particle: Particle, in _: CGRect) {
-        withAnimation(Animation.linear(duration: self.particleLifetime)) {
+        withAnimation(Animation.linear(duration: particleLifetime)) {
             if let index = particles.firstIndex(where: { $0.id == particle.id }) {
                 self.particles[index].position.x += particle.velocity.x * CGFloat(self.particleLifetime)
                 self.particles[index].position.y += particle.velocity.y * CGFloat(self.particleLifetime)
@@ -500,7 +499,7 @@ public struct ParticleSystem: View {
             }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + self.particleLifetime) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + particleLifetime) {
             self.particles.removeAll { $0.id == particle.id }
         }
     }
@@ -553,24 +552,24 @@ private struct MorphPath: Shape {
     var progress: CGFloat
 
     var animatableData: CGFloat {
-        get { self.progress }
-        set { self.progress = newValue }
+        get { progress }
+        set { progress = newValue }
     }
 
     func path(in _: CGRect) -> Path {
-        guard self.shapes.count >= 2 else { return self.shapes.first ?? Path() }
+        guard shapes.count >= 2 else { return shapes.first ?? Path() }
 
-        let currentIndex = Int(progress * CGFloat(self.shapes.count - 1))
+        let currentIndex = Int(progress * CGFloat(shapes.count - 1))
         let nextIndex = min(currentIndex + 1, shapes.count - 1)
-        let localProgress = self.progress * CGFloat(self.shapes.count - 1) - CGFloat(currentIndex)
+        let localProgress = progress * CGFloat(shapes.count - 1) - CGFloat(currentIndex)
 
         if currentIndex == nextIndex {
-            return self.shapes[currentIndex]
+            return shapes[currentIndex]
         }
 
-        return self.interpolatePaths(
-            from: self.shapes[currentIndex],
-            to: self.shapes[nextIndex],
+        return interpolatePaths(
+            from: shapes[currentIndex],
+            to: shapes[nextIndex],
             progress: localProgress
         )
     }
@@ -641,13 +640,13 @@ public struct AnimatedGradient: View {
 
     public var body: some View {
         LinearGradient(
-            gradient: Gradient(colors: self.colors),
-            startPoint: UnitPoint(x: self.gradientOffset, y: 0),
-            endPoint: UnitPoint(x: self.gradientOffset + 1, y: 1)
+            gradient: Gradient(colors: colors),
+            startPoint: UnitPoint(x: gradientOffset, y: 0),
+            endPoint: UnitPoint(x: gradientOffset + 1, y: 1)
         )
         .animation(
-            Animation.linear(duration: 2.0 / self.speed).repeatForever(autoreverses: false),
-            value: self.gradientOffset
+            Animation.linear(duration: 2.0 / speed).repeatForever(autoreverses: false),
+            value: gradientOffset
         )
         .onAppear {
             self.gradientOffset = 1.0
@@ -725,8 +724,8 @@ public struct PerformanceOptimizedView<Content: View>: View {
     }
 
     public var body: some View {
-        self.content
-            .opacity(self.isVisible ? 1 : 0)
+        content
+            .opacity(isVisible ? 1 : 0)
             .onAppear {
                 // Delay appearance to ensure smooth loading
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -743,9 +742,9 @@ public struct PerformanceOptimizedView<Content: View>: View {
 public extension View {
     func accessibleAnimation(reducedMotion: Bool = false) -> some View {
         #if canImport(UIKit)
-        let isReducedMotionEnabled = UIAccessibility.isReduceMotionEnabled
+            let isReducedMotionEnabled = UIAccessibility.isReduceMotionEnabled
         #else
-        let isReducedMotionEnabled = reducedMotion
+            let isReducedMotionEnabled = reducedMotion
         #endif
 
         if isReducedMotionEnabled {

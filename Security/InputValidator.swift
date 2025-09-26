@@ -24,15 +24,15 @@ public enum ValidationError: LocalizedError {
         switch self {
         case .emptyInput:
             return "Input cannot be empty"
-        case .invalidLength(let min, let max):
+        case let .invalidLength(min, max):
             return "Input must be between \(min) and \(max) characters"
-        case .invalidFormat(let description):
+        case let .invalidFormat(description):
             return "Invalid format: \(description)"
-        case .containsInvalidCharacters(let characters):
+        case let .containsInvalidCharacters(characters):
             return "Input contains invalid characters: \(characters)"
-        case .exceedsMaximumLength(let max):
+        case let .exceedsMaximumLength(max):
             return "Input exceeds maximum length of \(max) characters"
-        case .belowMinimumLength(let min):
+        case let .belowMinimumLength(min):
             return "Input must be at least \(min) characters"
         case .invalidEmail:
             return "Invalid email address format"
@@ -50,15 +50,14 @@ public enum ValidationError: LocalizedError {
             return "Invalid numeric value"
         case .invalidDate:
             return "Invalid date format"
-        case .custom(let message):
+        case let .custom(message):
             return message
         }
     }
 }
 
 /// Input validation rules and sanitization
-public struct InputValidator {
-
+public enum InputValidator {
     // MARK: - Basic Validation Rules
 
     /// Validate that input is not empty or whitespace-only
@@ -77,7 +76,7 @@ public struct InputValidator {
         if let max = max, input.count > max {
             throw ValidationError.exceedsMaximumLength(max: max)
         }
-        if let min = min, let max = max, (input.count < min || input.count > max) {
+        if let min = min, let max = max, input.count < min || input.count > max {
             throw ValidationError.invalidLength(min: min, max: max)
         }
     }
@@ -100,7 +99,8 @@ public struct InputValidator {
 
         guard let url = URL(string: urlString),
               url.scheme != nil,
-              url.host != nil else {
+              url.host != nil
+        else {
             throw ValidationError.invalidURL
         }
 
@@ -155,7 +155,7 @@ public struct InputValidator {
             "--",
             ";",
             "/*",
-            "*/"
+            "*/",
         ]
 
         for pattern in sqlPatterns {
@@ -175,7 +175,7 @@ public struct InputValidator {
             "onclick=",
             "<iframe",
             "<object",
-            "<embed"
+            "<embed",
         ]
 
         let lowerInput = input.lowercased()
@@ -196,7 +196,7 @@ public struct InputValidator {
             "/etc/",
             "/bin/",
             "C:\\\\",
-            "/home/"
+            "/home/",
         ]
 
         for pattern in traversalPatterns {
@@ -214,7 +214,7 @@ public struct InputValidator {
 
         // Check for dangerous file extensions
         let dangerousExtensions = [
-            "exe", "bat", "cmd", "com", "pif", "scr", "vbs", "js", "jar", "sh"
+            "exe", "bat", "cmd", "com", "pif", "scr", "vbs", "js", "jar", "sh",
         ]
 
         let fileExtension = (filename as NSString).pathExtension.lowercased()
@@ -240,7 +240,7 @@ public struct InputValidator {
             "&": "&amp;",
             "\"": "&quot;",
             "'": "&#x27;",
-            "/": "&#x2F;"
+            "/": "&#x2F;",
         ]
 
         for (char, entity) in htmlEntities {
@@ -321,9 +321,9 @@ public struct InputValidator {
 
 // MARK: - Extensions
 
-extension String {
+public extension String {
     /// Validate this string with comprehensive security checks
-    public func validated(as type: ValidationType, options: ValidationOptions = .default) throws -> String {
+    func validated(as type: ValidationType, options: ValidationOptions = .default) throws -> String {
         switch type {
         case .username:
             try InputValidator.validateUsername(self)

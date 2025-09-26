@@ -18,23 +18,23 @@ public class WorkspaceAIEnhancer: ObservableObject {
 
     public init(workspacePath: String) {
         self.workspacePath = workspacePath
-        self.ollamaClient = OllamaClient(config: .cloudAdvanced)
-        self.logger = Logger(subsystem: "WorkspaceAI", category: "Enhancement")
+        ollamaClient = OllamaClient(config: .cloudAdvanced)
+        logger = Logger(subsystem: "WorkspaceAI", category: "Enhancement")
     }
 
     // MARK: - Comprehensive Project Analysis
 
     public func analyzeAllProjects() async throws {
-        self.isAnalyzing = true
+        isAnalyzing = true
         defer { self.isAnalyzing = false }
 
         let projectsPath = "\(workspacePath)/Projects"
         let projects = try getProjectDirectories(at: projectsPath)
 
-        self.analysisResults = []
+        analysisResults = []
 
         for project in projects {
-            self.currentTask = "Analyzing \(project.name)..."
+            currentTask = "Analyzing \(project.name)..."
 
             do {
                 let analysis = try await analyzeProject(project)
@@ -42,17 +42,17 @@ public class WorkspaceAIEnhancer: ObservableObject {
                     self.analysisResults.append(analysis)
                 }
             } catch {
-                self.logger.error("Failed to analyze \(project.name): \(error.localizedDescription)")
+                logger.error("Failed to analyze \(project.name): \(error.localizedDescription)")
             }
         }
 
         // Generate workspace-wide insights
-        await self.generateWorkspaceInsights()
+        await generateWorkspaceInsights()
     }
 
     private func analyzeProject(_ project: ProjectInfo) async throws -> ProjectAnalysis {
         let swiftFiles = try getSwiftFiles(in: project.path)
-        let metrics = self.calculateProjectMetrics(swiftFiles)
+        let metrics = calculateProjectMetrics(swiftFiles)
 
         // AI-powered architecture analysis
         let architecturePrompt = """
@@ -130,7 +130,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
             )
 
             // Parse AI response for issues
-            let fileIssues = self.parseQualityIssues(from: qualityResponse, file: file.name)
+            let fileIssues = parseQualityIssues(from: qualityResponse, file: file.name)
             issues.append(contentsOf: fileIssues)
         }
 
@@ -140,7 +140,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
     // MARK: - AI-Powered Cross-Project Integration
 
     public func generateCrossProjectIntegrations() async throws {
-        self.currentTask = "Analyzing cross-project integration opportunities..."
+        currentTask = "Analyzing cross-project integration opportunities..."
 
         let integrationPrompt = """
         Analyze these Quantum workspace projects for integration opportunities:
@@ -149,7 +149,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
         \(analysisResults.map { "- \($0.project.name): \($0.project.type)" }.joined(separator: "\n"))
 
         Project details:
-        \(self.analysisResults.map { "\($0.project.name): \($0.architectureAnalysis.prefix(200))" }.joined(separator: "\n\n"))
+        \(analysisResults.map { "\($0.project.name): \($0.architectureAnalysis.prefix(200))" }.joined(separator: "\n\n"))
 
         Identify:
         1. Shared component opportunities
@@ -168,16 +168,16 @@ public class WorkspaceAIEnhancer: ObservableObject {
         )
 
         // Parse and create actionable integration suggestions
-        await self.parseIntegrationSuggestions(from: integrationAnalysis)
+        await parseIntegrationSuggestions(from: integrationAnalysis)
     }
 
     // MARK: - AI-Powered Code Generation
 
     public func generateSharedComponents() async throws {
-        self.currentTask = "Generating shared components..."
+        currentTask = "Generating shared components..."
 
         // Identify common patterns across projects
-        let commonPatterns = self.identifyCommonPatterns()
+        let commonPatterns = identifyCommonPatterns()
 
         for pattern in commonPatterns {
             let componentPrompt = """
@@ -204,7 +204,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
             )
 
             // Save generated component
-            try await self.saveGeneratedComponent(pattern.name, code: componentCode)
+            try await saveGeneratedComponent(pattern.name, code: componentCode)
         }
     }
 
@@ -215,7 +215,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
             throw WorkspaceAIError.projectNotFound(projectName)
         }
 
-        self.currentTask = "Enhancing documentation for \(projectName)..."
+        currentTask = "Enhancing documentation for \(projectName)..."
 
         let docPrompt = """
         Generate comprehensive documentation for this Swift project:
@@ -246,7 +246,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
         let docPath = "\(project.project.path)/AI_ENHANCED_README.md"
         try documentation.write(to: URL(fileURLWithPath: docPath), atomically: true, encoding: .utf8)
 
-        self.logger.info("Enhanced documentation saved to \(docPath)")
+        logger.info("Enhanced documentation saved to \(docPath)")
     }
 
     // MARK: - AI-Powered Testing Enhancement
@@ -256,7 +256,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
             throw WorkspaceAIError.projectNotFound(projectName)
         }
 
-        self.currentTask = "Generating test suites for \(projectName)..."
+        currentTask = "Generating test suites for \(projectName)..."
 
         let swiftFiles = try getSwiftFiles(in: project.project.path)
         let testsDir = "\(project.project.path)/Tests"
@@ -298,7 +298,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
             try testCode.write(to: URL(fileURLWithPath: testPath), atomically: true, encoding: .utf8)
         }
 
-        self.logger.info("Test suites generated in \(testsDir)")
+        logger.info("Test suites generated in \(testsDir)")
     }
 
     // MARK: - AI-Powered Performance Optimization
@@ -308,7 +308,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
             throw WorkspaceAIError.projectNotFound(projectName)
         }
 
-        self.currentTask = "Analyzing performance optimizations for \(projectName)..."
+        currentTask = "Analyzing performance optimizations for \(projectName)..."
 
         let swiftFiles = try getSwiftFiles(in: project.project.path)
         var optimizations: [PerformanceOptimization] = []
@@ -344,18 +344,18 @@ public class WorkspaceAIEnhancer: ObservableObject {
                 temperature: 0.3
             )
 
-            let fileOptimizations = self.parsePerformanceOptimizations(from: optimizationResponse, file: file.name)
+            let fileOptimizations = parsePerformanceOptimizations(from: optimizationResponse, file: file.name)
             optimizations.append(contentsOf: fileOptimizations)
         }
 
         let report = PerformanceOptimizationReport(
             project: project.project.name,
             optimizations: optimizations,
-            estimatedImpact: self.calculateEstimatedImpact(optimizations)
+            estimatedImpact: calculateEstimatedImpact(optimizations)
         )
 
         // Save optimization report
-        try await self.saveOptimizationReport(report, to: project.project.path)
+        try await saveOptimizationReport(report, to: project.project.path)
 
         return report
     }
@@ -436,7 +436,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
                 let content = try String(contentsOfFile: file.path)
                 totalLines += content.components(separatedBy: .newlines).count
             } catch {
-                self.logger.error("Failed to read file \(file.path): \(error.localizedDescription)")
+                logger.error("Failed to read file \(file.path): \(error.localizedDescription)")
             }
         }
 
@@ -475,7 +475,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
             temperature: 0.4
         )
 
-        return self.parseImprovementSuggestions(from: suggestionsResponse)
+        return parseImprovementSuggestions(from: suggestionsResponse)
     }
 
     // MARK: - Parsing Helpers
@@ -535,10 +535,10 @@ public class WorkspaceAIEnhancer: ObservableObject {
         Analyze this Quantum workspace as a whole:
 
         Projects: \(analysisResults.count)
-        Total insights: \(self.analysisResults.map(\.suggestions.count).reduce(0, +))
+        Total insights: \(analysisResults.map(\.suggestions.count).reduce(0, +))
 
         Workspace structure:
-        \(self.analysisResults.map { "\($0.project.name): \($0.project.type)" }.joined(separator: "\n"))
+        \(analysisResults.map { "\($0.project.name): \($0.project.type)" }.joined(separator: "\n"))
 
         Provide:
         1. Overall architecture assessment
@@ -558,9 +558,9 @@ public class WorkspaceAIEnhancer: ObservableObject {
             let insightsPath = "\(workspacePath)/AI_WORKSPACE_INSIGHTS.md"
             try workspaceInsights.write(to: URL(fileURLWithPath: insightsPath), atomically: true, encoding: .utf8)
 
-            self.logger.info("Workspace insights saved to \(insightsPath)")
+            logger.info("Workspace insights saved to \(insightsPath)")
         } catch {
-            self.logger.error("Failed to generate workspace insights: \(error.localizedDescription)")
+            logger.error("Failed to generate workspace insights: \(error.localizedDescription)")
         }
     }
 
@@ -588,7 +588,7 @@ public class WorkspaceAIEnhancer: ObservableObject {
         let filePath = "\(componentsPath)/\(name).swift"
         try code.write(to: URL(fileURLWithPath: filePath), atomically: true, encoding: .utf8)
 
-        self.logger.info("Generated component saved to \(filePath)")
+        logger.info("Generated component saved to \(filePath)")
     }
 
     private func parseIntegrationSuggestions(from analysis: String) async {

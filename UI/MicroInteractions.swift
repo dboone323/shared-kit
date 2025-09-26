@@ -32,12 +32,12 @@ public struct MicroInteractionButton<Content: View>: View {
     }
 
     public var body: some View {
-        self.content
-            .scaleEffect(self.isPressed ? self.scaleEffect : 1.0)
-            .brightness(self.isPressed ? -0.1 : 0)
+        content
+            .scaleEffect(isPressed ? scaleEffect : 1.0)
+            .brightness(isPressed ? -0.1 : 0)
             .shadow(
-                color: self.showGlow ? (self.glowColor ?? .blue) : .clear,
-                radius: self.showGlow ? 8 : 0
+                color: showGlow ? (glowColor ?? .blue) : .clear,
+                radius: showGlow ? 8 : 0
             )
             .onTapGesture {
                 self.performMicroInteraction()
@@ -58,7 +58,7 @@ public struct MicroInteractionButton<Content: View>: View {
     }
 
     private func performMicroInteraction() {
-        GestureAnimations.hapticFeedback(style: self.feedbackStyle)
+        GestureAnimations.hapticFeedback(style: feedbackStyle)
 
         withAnimation(AnimationTiming.springBouncy) {
             self.showGlow = true
@@ -124,11 +124,11 @@ public struct PressAndHoldButton<Content: View>: View {
     }
 
     private func startProgress() {
-        self.isPressed = true
-        self.progress = 0
+        isPressed = true
+        progress = 0
         GestureAnimations.hapticFeedback(style: 0)
 
-        self.timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
             self.progress += 0.05 / self.duration
             self.onProgress(self.progress)
 
@@ -139,9 +139,9 @@ public struct PressAndHoldButton<Content: View>: View {
     }
 
     private func stopProgress() {
-        self.isPressed = false
-        self.timer?.invalidate()
-        self.timer = nil
+        isPressed = false
+        timer?.invalidate()
+        timer = nil
 
         withAnimation(AnimationTiming.easeOut) {
             self.progress = 0
@@ -149,12 +149,12 @@ public struct PressAndHoldButton<Content: View>: View {
     }
 
     private func completeAction() {
-        self.timer?.invalidate()
-        self.timer = nil
-        self.isPressed = false
+        timer?.invalidate()
+        timer = nil
+        isPressed = false
 
         GestureAnimations.hapticFeedback(style: 2)
-        self.onComplete()
+        onComplete()
 
         withAnimation(AnimationTiming.easeOut) {
             self.progress = 0
@@ -266,7 +266,7 @@ private struct SwipeDirectionHint: View {
     let direction: SwipeDirection
 
     var body: some View {
-        Image(systemName: self.arrowIcon)
+        Image(systemName: arrowIcon)
             .font(.title)
             .foregroundColor(.blue)
             .padding()
@@ -278,7 +278,7 @@ private struct SwipeDirectionHint: View {
     }
 
     private var arrowIcon: String {
-        switch self.direction {
+        switch direction {
         case .left: "arrow.left"
         case .right: "arrow.right"
         case .up: "arrow.up"
@@ -305,7 +305,7 @@ public struct PinchToZoomModifier: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .scaleEffect(self.scale)
+            .scaleEffect(scale)
             .gesture(
                 MagnificationGesture()
                     .onChanged { value in
@@ -318,7 +318,7 @@ public struct PinchToZoomModifier: ViewModifier {
                         GestureAnimations.hapticFeedback(style: 0)
                     }
             )
-            .animation(AnimationTiming.springSmooth, value: self.scale)
+            .animation(AnimationTiming.springSmooth, value: scale)
     }
 }
 
@@ -334,7 +334,7 @@ public struct RotationGestureModifier: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .rotationEffect(self.rotation)
+            .rotationEffect(rotation)
             .gesture(
                 RotationGesture()
                     .onChanged { value in
@@ -346,7 +346,7 @@ public struct RotationGestureModifier: ViewModifier {
                         GestureAnimations.hapticFeedback(style: 0)
                     }
             )
-            .animation(AnimationTiming.springSmooth, value: self.rotation)
+            .animation(AnimationTiming.springSmooth, value: rotation)
     }
 }
 
@@ -375,7 +375,7 @@ public struct MultiTouchGestureArea<Content: View>: View {
     }
 
     public var body: some View {
-        self.content
+        content
             .onTapGesture {
                 self.handleTap()
             }
@@ -386,10 +386,10 @@ public struct MultiTouchGestureArea<Content: View>: View {
     }
 
     private func handleTap() {
-        self.tapCount += 1
-        self.tapTimer?.invalidate()
+        tapCount += 1
+        tapTimer?.invalidate()
 
-        self.tapTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
+        tapTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
             switch self.tapCount {
             case 1:
                 self.onSingleTap?()
@@ -429,13 +429,13 @@ public struct VibrantButton<Content: View>: View {
     }
 
     public var body: some View {
-        self.content
-            .scaleEffect(self.isPressed ? 0.95 : 1.0)
+        content
+            .scaleEffect(isPressed ? 0.95 : 1.0)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(self.vibrantColor, lineWidth: self.showVibration ? 2 : 0)
-                    .scaleEffect(self.showVibration ? 1.1 : 1.0)
-                    .opacity(self.showVibration ? 0.8 : 0)
+                    .stroke(vibrantColor, lineWidth: showVibration ? 2 : 0)
+                    .scaleEffect(showVibration ? 1.1 : 1.0)
+                    .opacity(showVibration ? 0.8 : 0)
             )
             .onTapGesture {
                 self.performVibrantFeedback()
@@ -482,9 +482,9 @@ public struct MagneticButton<Content: View>: View {
     }
 
     public var body: some View {
-        self.content
-            .offset(self.offset)
-            .scaleEffect(self.isAttracting ? 1.05 : 1.0)
+        content
+            .offset(offset)
+            .scaleEffect(isAttracting ? 1.05 : 1.0)
             .gesture(
                 DragGesture(coordinateSpace: .local)
                     .onChanged { value in
@@ -520,7 +520,7 @@ public struct MagneticButton<Content: View>: View {
                         }
                     }
             )
-            .animation(AnimationTiming.springSmooth, value: self.isAttracting)
+            .animation(AnimationTiming.springSmooth, value: isAttracting)
     }
 }
 
@@ -546,9 +546,9 @@ public struct ContextMenuInteraction<Content: View, MenuContent: View>: View {
     }
 
     public var body: some View {
-        self.content
-            .scaleEffect(self.showingPreview ? 1.05 : 1.0)
-            .blur(radius: self.showingPreview ? 1 : 0)
+        content
+            .scaleEffect(showingPreview ? 1.05 : 1.0)
+            .blur(radius: showingPreview ? 1 : 0)
             .onLongPressGesture(minimumDuration: 0.5, maximumDistance: 50) {
                 withAnimation(AnimationTiming.springBouncy) {
                     self.showingMenu = true
@@ -640,7 +640,7 @@ public struct FluidInteractionArea<Content: View>: View {
 
     private func createRipple(at point: CGPoint) {
         let ripple = RippleEffect(position: point)
-        self.ripples.append(ripple)
+        ripples.append(ripple)
 
         withAnimation(.easeOut(duration: 0.8)) {
             if let index = ripples.firstIndex(where: { $0.id == ripple.id }) {

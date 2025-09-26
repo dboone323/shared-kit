@@ -3,11 +3,11 @@ import Foundation
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 /// Advanced Animation System for Quantum Workspace
@@ -84,12 +84,12 @@ public struct AdvancedAnimations {
 
         public func body(content: Content) -> some View {
             content
-                .opacity(self.isVisible ? 1 : 0)
+                .opacity(isVisible ? 1 : 0)
                 .offset(
-                    x: self.isVisible ? 0 : (self.direction == .left ? -self.distance : self.direction == .right ? self.distance : 0),
-                    y: self.isVisible ? 0 : (self.direction == .up ? -self.distance : self.direction == .down ? self.distance : 0)
+                    x: isVisible ? 0 : (direction == .left ? -distance : direction == .right ? distance : 0),
+                    y: isVisible ? 0 : (direction == .up ? -distance : direction == .down ? distance : 0)
                 )
-                .animation(smoothEaseInOut, value: self.isVisible)
+                .animation(smoothEaseInOut, value: isVisible)
         }
     }
 
@@ -100,7 +100,7 @@ public struct AdvancedAnimations {
 
         public func body(content: Content) -> some View {
             content
-                .offset(x: self.shakeNumber != 0 ? (self.shakeNumber % 2 == 0 ? -5 : 5) : 0)
+                .offset(x: shakeNumber != 0 ? (shakeNumber % 2 == 0 ? -5 : 5) : 0)
         }
     }
 
@@ -120,8 +120,8 @@ public struct AdvancedAnimations {
 
         public func body(content: Content) -> some View {
             content
-                .scaleEffect(self.isAnimating ? self.maxScale : self.minScale)
-                .animation(Animation.easeInOut(duration: self.duration).repeatForever(autoreverses: true), value: self.isAnimating)
+                .scaleEffect(isAnimating ? maxScale : minScale)
+                .animation(Animation.easeInOut(duration: duration).repeatForever(autoreverses: true), value: isAnimating)
                 .onAppear {
                     self.isAnimating = true
                 }
@@ -145,10 +145,10 @@ public struct AdvancedAnimations {
         public var body: some View {
             Circle()
                 .trim(from: 0, to: 0.8)
-                .stroke(self.color, style: StrokeStyle(lineWidth: self.lineWidth, lineCap: .round))
-                .frame(width: self.size, height: self.size)
-                .rotationEffect(.degrees(self.isRotating ? 360 : 0))
-                .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false), value: self.isRotating)
+                .stroke(color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                .frame(width: size, height: size)
+                .rotationEffect(.degrees(isRotating ? 360 : 0))
+                .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false), value: isRotating)
                 .onAppear {
                     self.isRotating = true
                 }
@@ -170,8 +170,8 @@ public struct AdvancedAnimations {
             color: Color = .blue,
             duration: Double = 2.0
         ) {
-            self.fromShape = AnyShape(from)
-            self.toShape = AnyShape(to)
+            fromShape = AnyShape(from)
+            toShape = AnyShape(to)
             self.color = color
             self.duration = duration
         }
@@ -231,7 +231,7 @@ public struct AdvancedAnimations {
         }
 
         private func generateParticles() {
-            self.particles = (0 ..< self.particleCount).map { _ in
+            particles = (0 ..< particleCount).map { _ in
                 Particle(
                     id: UUID(),
                     position: CGPoint(x: 200, y: 200),
@@ -253,13 +253,13 @@ public struct AdvancedAnimations {
         }
 
         private func updateParticles() {
-            for index in self.particles.indices {
-                self.particles[index].position.x += self.particles[index].velocity.x * 0.016
-                self.particles[index].position.y += self.particles[index].velocity.y * 0.016
-                self.particles[index].opacity -= 0.01
+            for index in particles.indices {
+                particles[index].position.x += particles[index].velocity.x * 0.016
+                particles[index].position.y += particles[index].velocity.y * 0.016
+                particles[index].opacity -= 0.01
 
-                if self.particles[index].opacity <= 0 {
-                    self.particles[index] = Particle(
+                if particles[index].opacity <= 0 {
+                    particles[index] = Particle(
                         id: UUID(),
                         position: CGPoint(x: 200, y: 200),
                         velocity: CGPoint(
@@ -267,7 +267,7 @@ public struct AdvancedAnimations {
                             y: Double.random(in: -50 ... 50)
                         ),
                         size: Double.random(in: 4 ... 12),
-                        color: self.colors.randomElement() ?? .blue,
+                        color: colors.randomElement() ?? .blue,
                         opacity: Double.random(in: 0.5 ... 1.0)
                     )
                 }
@@ -323,12 +323,12 @@ public struct AnyShape: Shape {
     private let _path: (CGRect) -> Path
 
     public init(_ shape: some Shape) {
-        self._path = { rect in
+        _path = { rect in
             shape.path(in: rect)
         }
     }
 
     public func path(in rect: CGRect) -> Path {
-        self._path(rect)
+        _path(rect)
     }
 }

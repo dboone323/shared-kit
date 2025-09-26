@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# 🔍 AI Learning System Validation and Monitoring Dashboard
-# Comprehensive testing and monitoring for enhanced MCP AI capabilities
+# AI Learning System Validation and Monitoring Dashboard
+# Consolidated validator for all projects in the Quantum workspace
 
 set -euo pipefail
 
@@ -14,435 +14,433 @@ readonly PURPLE='\033[0;35m'
 readonly CYAN='\033[0;36m'
 readonly NC='\033[0m' # No Color
 
-# Logging functions
+# Logging helpers
 print_header() { echo -e "${PURPLE}[AI-MONITOR]${NC} ${CYAN}$1${NC}"; }
 print_success() { echo -e "${GREEN}✅ $1${NC}"; }
 print_error() { echo -e "${RED}❌ $1${NC}"; }
 print_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
 print_status() { echo -e "${BLUE}🔄 $1${NC}"; }
-print_test() { echo -e "${CYAN}🧪 TEST:${NC} $1"; }
-print_result() { echo -e "${GREEN}📊 RESULT:${NC} $1"; }
+print_result() { echo -e "${GREEN}📊 $1${NC}"; }
 
-# Configuration
-readonly CODE_DIR="${CODE_DIR:-/Users/danielstevens/Desktop/Code}"
-readonly PROJECTS=("CodingReviewer" "HabitQuest" "MomentumFinance")
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_DIR
+REPO_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
+readonly REPO_ROOT
+readonly PROJECTS_ROOT="${REPO_ROOT}/Projects"
 
-# Test AI Learning System Functionality
+if [[ ! -d "${PROJECTS_ROOT}" ]]; then
+	print_error "Projects directory not found at ${PROJECTS_ROOT}"
+	exit 1
+fi
+
+declare -a PROJECTS=()
+
+initialise_projects() {
+	if [[ -n ${AI_VALIDATOR_PROJECTS:-} ]]; then
+		IFS=',' read -r -a PROJECTS <<<"${AI_VALIDATOR_PROJECTS}"
+		local i
+		for i in "${!PROJECTS[@]}"; do
+			PROJECTS[$i]="$(echo "${PROJECTS[$i]}" | xargs)"
+		done
+	else
+		while IFS= read -r dir; do
+			local name
+			name="$(basename "${dir}")"
+			if [[ ${name} == .* ]] || [[ ${name} == '"' ]] || [[ ! ${name} =~ [A-Za-z0-9] ]]; then
+				continue
+			fi
+			PROJECTS+=("${name}")
+		done < <(find "${PROJECTS_ROOT}" -maxdepth 1 -mindepth 1 -type d -print | sort)
+	fi
+}
+
+initialise_projects
+
+if [[ ${#PROJECTS[@]} -eq 0 ]]; then
+	print_warning "No projects detected under ${PROJECTS_ROOT}."
+fi
+
+resolve_project_path() {
+	local project="$1"
+	printf '%s' "${PROJECTS_ROOT}/${project}"
+}
+
+learning_script_path() {
+	local project="$1"
+	printf '%s' "$(resolve_project_path "${project}")/Tools/Automation/adaptive_learning_system.sh"
+}
+
+project_config_path() {
+	local project="$1"
+	printf '%s' "$(resolve_project_path "${project}")/Tools/Automation/project_config.sh"
+}
+
+learning_data_dir() {
+	local project="$1"
+	printf '%s' "$(resolve_project_path "${project}")/.ai_learning_system"
+}
+
+mcp_actions_dir() {
+	local project="$1"
+	printf '%s' "$(resolve_project_path "${project}")/.github/actions"
+}
+
+workflows_dir() {
+	local project="$1"
+	printf '%s' "$(resolve_project_path "${project}")/.github/workflows"
+}
+
+project_exists() {
+	local project="$1"
+	[[ -d "$(resolve_project_path "${project}")" ]]
+}
+
+has_learning_script() {
+	local project="$1"
+	[[ -f "$(learning_script_path "${project}")" ]]
+}
+
+has_project_config() {
+	local project="$1"
+	[[ -f "$(project_config_path "${project}")" ]]
+}
+
+count_learning_runs() {
+	local project="$1"
+	local data_dir
+	data_dir="$(learning_data_dir "${project}")"
+	if [[ -d "${data_dir}" ]]; then
+		find "${data_dir}" -type f -name '*.json' -print 2>/dev/null | wc -l | awk '{print $1}'
+	else
+		echo 0
+	fi
+}
+
+count_mcp_actions() {
+	local project="$1"
+	local base
+	base="$(mcp_actions_dir "${project}")"
+	local count=0
+	local action
+	for action in mcp-auto-fix mcp-failure-prediction; do
+		if [[ -d "${base}/${action}" ]]; then
+			count=$((count + 1))
+		fi
+	done
+	echo "${count}"
+}
+
+count_workflows() {
+	local project="$1"
+	local dir
+	dir="$(workflows_dir "${project}")"
+	if [[ -d "${dir}" ]]; then
+		find "${dir}" -maxdepth 1 -type f -name '*.yml' -print 2>/dev/null | wc -l | awk '{print $1}'
+	else
+		echo 0
+	fi
+}
+
+list_ai_workflows() {
+	local project="$1"
+	local dir
+	dir="$(workflows_dir "${project}")"
+	local matches=()
+	if [[ -d "${dir}" ]]; then
+		while IFS= read -r file; do
+			if grep -qiE 'ai|learning' "${file}" 2>/dev/null; then
+				matches+=("$(basename "${file}")")
+			fi
+		done < <(find "${dir}" -maxdepth 1 -type f -name '*.yml' -print 2>/dev/null)
+	fi
+	printf '%s' "${matches[*]-}"
+}
+
 test_ai_learning_functionality() {
-  print_header "Testing AI Learning System Functionality"
+	print_header "Validating adaptive learning tooling across projects"
+	local projects_checked=0
+	local healthy_projects=0
 
-  local overall_score=0
-  local total_tests=0
+	for project in "${PROJECTS[@]}"; do
+		((projects_checked++))
 
-  for project in "${PROJECTS[@]}"; do
-    local project_path="$CODE_DIR/Projects/$project"
+		if ! project_exists "${project}"; then
+			print_warning "${project}: project directory missing"
+			continue
+		fi
 
-    if [[ ! -d "$project_path" ]]; then
-      print_warning "Project $project not found, skipping..."
-      continue
-    fi
+		print_status "${project}: evaluating learning system setup"
 
-    print_status "Testing $project AI learning capabilities..."
-    cd "$project_path"
+		local all_checks_passed=true
+		local run_count
+		run_count="$(count_learning_runs "${project}")"
 
-    # Test 1: Learning System Initialization
-    print_test "Learning system initialization"
-    if ./Tools/Automation/adaptive_learning_system.sh init &>/dev/null; then
-      print_success "Learning system initialized"
-      ((overall_score++))
-    else
-      print_error "Learning system initialization failed"
-    fi
-    ((total_tests++))
+		if has_learning_script "${project}"; then
+			print_success "  • adaptive_learning_system.sh found"
+		else
+			print_warning "  • adaptive_learning_system.sh missing"
+			all_checks_passed=false
+		fi
 
-    # Test 2: Data Collection
-    print_test "Data collection capabilities"
-    if ./Tools/Automation/adaptive_learning_system.sh collect &>/dev/null; then
-      print_success "Data collection working"
-      ((overall_score++))
-    else
-      print_error "Data collection failed"
-    fi
-    ((total_tests++))
+		if has_project_config "${project}"; then
+			print_success "  • project_config.sh available"
+		else
+			print_warning "  • project_config.sh missing"
+			all_checks_passed=false
+		fi
 
-    # Test 3: Project Configuration Validation
-    print_test "Project configuration validation"
-    if source Tools/Automation/project_config.sh 2>/dev/null; then
-      print_success "Project configuration loaded: $PROJECT_TYPE for $TARGET_DEVICE"
-      ((overall_score++))
-    else
-      print_error "Project configuration failed"
-    fi
-    ((total_tests++))
+		if [[ "${run_count}" -gt 0 ]]; then
+			print_status "  • ${run_count} learning dataset(s) detected"
+		else
+			print_warning "  • no learning datasets found"
+		fi
 
-    # Test 4: MCP Actions Availability
-    print_test "MCP actions availability"
-    local mcp_actions_count=0
-    if [[ -d ".github/actions/mcp-auto-fix" ]]; then
-      ((mcp_actions_count++))
-    fi
-    if [[ -d ".github/actions/mcp-failure-prediction" ]]; then
-      ((mcp_actions_count++))
-    fi
+		if [[ "${all_checks_passed}" == true ]]; then
+			((healthy_projects++))
+			print_result "  → ${project} ready for AI learning automation"
+		else
+			print_warning "  → ${project} requires follow-up"
+		fi
+		echo ""
+	done
 
-    if [[ $mcp_actions_count -eq 2 ]]; then
-      print_success "All MCP actions available"
-      ((overall_score++))
-    else
-      print_warning "Some MCP actions missing ($mcp_actions_count/2)"
-    fi
-    ((total_tests++))
-
-    echo ""
-  done
-
-  # Calculate overall score
-  local success_rate=$((overall_score * 100 / total_tests))
-  print_result "Overall AI Learning System Score: $overall_score/$total_tests ($success_rate%)"
-
-  if [[ $success_rate -ge 90 ]]; then
-    print_success "AI Learning System: EXCELLENT"
-  elif [[ $success_rate -ge 75 ]]; then
-    print_success "AI Learning System: GOOD"
-  elif [[ $success_rate -ge 60 ]]; then
-    print_warning "AI Learning System: NEEDS IMPROVEMENT"
-  else
-    print_error "AI Learning System: REQUIRES ATTENTION"
-  fi
-
-  return $((100 - success_rate))
+	if (( projects_checked > 0 )); then
+		local percent=$((healthy_projects * 100 / projects_checked))
+		print_result "Validation summary: ${healthy_projects}/${projects_checked} projects ready (${percent}%)"
+	else
+		print_warning "No projects available for validation."
+	fi
 }
 
-# Test Enhanced MCP Actions
 test_enhanced_mcp_actions() {
-  print_header "Testing Enhanced MCP Actions"
+	print_header "Checking enhanced MCP actions"
+	local projects_checked=0
+	local compliant=0
 
-  for project in "${PROJECTS[@]}"; do
-    local project_path="$CODE_DIR/Projects/$project"
+	for project in "${PROJECTS[@]}"; do
+		((projects_checked++))
 
-    if [[ ! -d "$project_path" ]]; then
-      continue
-    fi
+		if ! project_exists "${project}"; then
+			print_warning "${project}: project directory missing"
+			continue
+		fi
 
-    print_status "Testing MCP actions in $project..."
-    cd "$project_path"
+		local actions_present
+		actions_present="$(count_mcp_actions "${project}")"
 
-    # Test MCP Auto-Fix Action Structure
-    print_test "MCP Auto-Fix action structure"
-    if [[ -f ".github/actions/mcp-auto-fix/action.yml" ]]; then
-      if grep -q "AI Learning" ".github/actions/mcp-auto-fix/action.yml"; then
-        print_success "Enhanced AI learning features detected"
-      else
-        print_warning "Basic action detected, no AI learning"
-      fi
-    else
-      print_error "MCP Auto-Fix action missing"
-    fi
+		if [[ "${actions_present}" -eq 2 ]]; then
+			((compliant++))
+			print_success "${project}: both MCP actions available (2/2)"
+		else
+			print_warning "${project}: ${actions_present}/2 MCP actions available"
+		fi
+	done
 
-    # Test MCP Failure Prediction Action Structure
-    print_test "MCP Failure Prediction action structure"
-    if [[ -f ".github/actions/mcp-failure-prediction/action.yml" ]]; then
-      if grep -q "AI Learning" ".github/actions/mcp-failure-prediction/action.yml"; then
-        print_success "Enhanced AI prediction features detected"
-      else
-        print_warning "Basic action detected, no AI learning"
-      fi
-    else
-      print_error "MCP Failure Prediction action missing"
-    fi
-
-    echo ""
-  done
+	if (( projects_checked > 0 )); then
+		local percent=$((compliant * 100 / projects_checked))
+		print_result "MCP action coverage: ${compliant}/${projects_checked} projects (${percent}%)"
+	else
+		print_warning "No projects available for MCP action checks."
+	fi
 }
 
-# Generate Learning Analytics
 generate_learning_analytics() {
-  print_header "Generating Learning Analytics"
+	print_header "Generating AI learning analytics"
 
-  local analytics_file="$CODE_DIR/AI_LEARNING_ANALYTICS_$(date +%Y%m%d_%H%M%S).md"
+	local analytics_file
+	analytics_file="${REPO_ROOT}/AI_LEARNING_ANALYTICS_$(date +%Y%m%d_%H%M%S).md"
+	local total_runs=0
+	local total_workflows=0
+	local report_rows=""
 
-  cat >"$analytics_file" <<EOF
-# 🧠 AI Learning System Analytics Report
+	for project in "${PROJECTS[@]}"; do
+		if ! project_exists "${project}"; then
+			continue
+		fi
+
+		local run_count workflow_count learning_dir
+		run_count="$(count_learning_runs "${project}")"
+		workflow_count="$(count_workflows "${project}")"
+		learning_dir="$(learning_data_dir "${project}")"
+
+		total_runs=$((total_runs + run_count))
+		total_workflows=$((total_workflows + workflow_count))
+
+		local learning_status
+		if [[ -d "${learning_dir}" ]]; then
+			learning_status="present"
+		else
+			learning_status="missing"
+		fi
+
+		report_rows+="| ${project} | ${run_count} | ${workflow_count} | ${learning_status} |\n"
+		print_status "${project}: runs=${run_count}, workflows=${workflow_count}, data=${learning_status}"
+	done
+
+	cat >"${analytics_file}" <<EOF
+# AI Learning Analytics
 
 **Generated:** $(date)
-**Analysis Scope:** All Projects
-**Report Type:** Comprehensive System Validation
+**Repository Root:** ${REPO_ROOT}
 
-## 📊 System Overview
+| Project | Learning Runs | Workflow Count | Learning Data |
+|---------|----------------|----------------|---------------|
+EOF
+
+	printf '%b' "${report_rows}" >>"${analytics_file}"
+
+	cat >>"${analytics_file}" <<EOF
+
+**Totals**
+
+- Learning datasets discovered: ${total_runs}
+- Workflow files inspected: ${total_workflows}
+- Projects analysed: ${#PROJECTS[@]}
 
 EOF
 
-  # Analyze each project
-  for project in "${PROJECTS[@]}"; do
-    local project_path="$CODE_DIR/Projects/$project"
-
-    if [[ ! -d "$project_path" ]]; then
-      continue
-    fi
-
-    cat >>"$analytics_file" <<EOF
-### 🔍 $project Analysis
-
-EOF
-
-    cd "$project_path"
-
-    # Project configuration analysis
-    if source Tools/Automation/project_config.sh 2>/dev/null; then
-      cat >>"$analytics_file" <<EOF
-- **Project Type:** $PROJECT_TYPE
-- **Target Platform:** $TARGET_DEVICE
-- **Target OS:** $TARGET_OS
-- **AI Enhancement:** $([ "$ENABLE_AI_ENHANCEMENT" = "true" ] && echo "✅ Enabled" || echo "❌ Disabled")
-- **MCP Integration:** $([ "$ENABLE_MCP_INTEGRATION" = "true" ] && echo "✅ Enabled" || echo "❌ Disabled")
-
-EOF
-    fi
-
-    # Learning data analysis
-    if [[ -d ".ai_learning_system" ]]; then
-      local learning_files=$(find .ai_learning_system -name "*.json" 2>/dev/null | wc -l | xargs)
-      cat >>"$analytics_file" <<EOF
-- **Learning Files:** $learning_files
-- **Learning Status:** Active
-EOF
-    else
-      cat >>"$analytics_file" <<EOF
-- **Learning Status:** Initializing
-EOF
-    fi
-
-    # MCP actions analysis
-    local mcp_actions=0
-    if [[ -d ".github/actions/mcp-auto-fix" ]]; then
-      ((mcp_actions++))
-    fi
-    if [[ -d ".github/actions/mcp-failure-prediction" ]]; then
-      ((mcp_actions++))
-    fi
-
-    cat >>"$analytics_file" <<EOF
-- **MCP Actions:** $mcp_actions/2 available
-
-EOF
-  done
-
-  # System recommendations
-  cat >>"$analytics_file" <<EOF
-## 🎯 Recommendations
-
-### Immediate Actions
-1. **Monitor Learning Progress** - Track AI system improvement over time
-2. **Validate Predictions** - Compare AI predictions with actual outcomes
-3. **Collect Feedback** - Gather data on system effectiveness
-
-### Short-term Goals
-1. **Pattern Refinement** - Improve pattern recognition accuracy
-2. **Cross-Repository Learning** - Enhance knowledge sharing between projects
-3. **Performance Optimization** - Optimize learning algorithms for speed
-
-### Long-term Vision
-1. **Autonomous Operation** - Achieve fully autonomous issue resolution
-2. **Predictive Excellence** - Prevent issues before they occur
-3. **Continuous Evolution** - Self-improving AI capabilities
-
-## 📈 Success Metrics
-
-- **Prediction Accuracy:** Target >90%
-- **Fix Success Rate:** Target >90%
-- **Learning Velocity:** Improving weekly
-- **Knowledge Base Growth:** Expanding daily
-
----
-
-*Generated by AI Learning Validation System*
-*Next validation recommended: Daily for first week, then weekly*
-
-EOF
-
-  print_success "Analytics report generated: $analytics_file"
-  echo "📄 Report location: $analytics_file"
+	print_result "Analytics report written to ${analytics_file}"
 }
 
-# Monitor Active Workflows
 monitor_active_workflows() {
-  print_header "Monitoring Active Workflows"
+	print_header "Monitoring AI-focused workflows"
 
-  for project in "${PROJECTS[@]}"; do
-    local project_path="$CODE_DIR/Projects/$project"
+	for project in "${PROJECTS[@]}"; do
+		if ! project_exists "${project}"; then
+			print_warning "${project}: project directory missing"
+			continue
+		fi
 
-    if [[ ! -d "$project_path" ]]; then
-      continue
-    fi
+		local ai_workflows
+		ai_workflows="$(list_ai_workflows "${project}")"
 
-    print_status "Checking $project workflow status..."
-    cd "$project_path"
-
-    # Check for recent workflow files
-    if [[ -d ".github/workflows" ]]; then
-      local workflow_count=$(find .github/workflows -name "*.yml" | wc -l | xargs)
-      print_result "$project has $workflow_count workflow files"
-
-      # Check for AI-enhanced workflows
-      if grep -r "mcp-auto-fix\|mcp-failure-prediction" .github/workflows/ 2>/dev/null | head -3; then
-        print_success "AI-enhanced workflows detected"
-      else
-        print_warning "No AI-enhanced workflows found"
-      fi
-    else
-      print_warning "$project has no workflow directory"
-    fi
-
-    echo ""
-  done
+		if [[ -n "${ai_workflows}" ]]; then
+			print_success "${project}: AI-focused workflows detected"
+			local workflow
+			for workflow in ${ai_workflows}; do
+				print_status "  • ${workflow}"
+			done
+		else
+			print_warning "${project}: no AI-specific workflows found"
+		fi
+	done
 }
 
-# Create Learning Validation Report
 create_validation_report() {
-  print_header "Creating Comprehensive Validation Report"
+	print_header "Creating comprehensive validation report"
 
-  local report_file="$CODE_DIR/AI_LEARNING_VALIDATION_$(date +%Y%m%d_%H%M%S).md"
+	local report_file
+	report_file="${REPO_ROOT}/AI_LEARNING_VALIDATION_$(date +%Y%m%d_%H%M%S).md"
 
-  cat >"$report_file" <<EOF
-# 🔬 AI Learning System Validation Report
+	cat >"${report_file}" <<EOF
+# AI Learning System Validation Report
 
-**Validation Date:** $(date)
+**Generated:** $(date)
 **Validator:** AI Learning Monitoring Dashboard
-**Scope:** Complete system validation across all repositories
 
-## ✅ Validation Results
-
-### System Status
+| Project | Learning Script | Project Config | MCP Actions | Learning Datasets |
+|---------|-----------------|----------------|-------------|-------------------|
 EOF
 
-  # Run validation and capture results
-  if test_ai_learning_functionality >/dev/null 2>&1; then
-    echo "- **AI Learning System:** ✅ OPERATIONAL" >>"$report_file"
-  else
-    echo "- **AI Learning System:** ⚠️ NEEDS ATTENTION" >>"$report_file"
-  fi
+	for project in "${PROJECTS[@]}"; do
+		if ! project_exists "${project}"; then
+			continue
+		fi
 
-  cat >>"$report_file" <<EOF
-- **Enhanced MCP Actions:** ✅ DEPLOYED
-- **Cross-Repository Learning:** ✅ ENABLED
-- **Project Configurations:** ✅ CORRECTED
+		local learning_status config_status actions_present runs
 
-### Project-Specific Validation
+		if has_learning_script "${project}"; then
+			learning_status="✅"
+		else
+			learning_status="⚠️"
+		fi
 
-| Project | Type | AI Learning | MCP Actions | Configuration |
-|---------|------|-------------|-------------|---------------|
+		if has_project_config "${project}"; then
+			config_status="✅"
+		else
+			config_status="⚠️"
+		fi
+
+		actions_present="$(count_mcp_actions "${project}")"
+		if [[ "${actions_present}" -eq 2 ]]; then
+			actions_present="✅ 2/2"
+		else
+			actions_present="⚠️ ${actions_present}/2"
+		fi
+
+		runs="$(count_learning_runs "${project}")"
+
+		cat >>"${report_file}" <<EOF
+| ${project} | ${learning_status} | ${config_status} | ${actions_present} | ${runs} |
 EOF
+	done
 
-  for project in "${PROJECTS[@]}"; do
-    local project_path="$CODE_DIR/Projects/$project"
-
-    if [[ ! -d "$project_path" ]]; then
-      continue
-    fi
-
-    cd "$project_path"
-
-    # Get project info
-    local project_type="Unknown"
-    local ai_status="❌"
-    local mcp_status="❌"
-    local config_status="❌"
-
-    if source Tools/Automation/project_config.sh 2>/dev/null; then
-      project_type="$PROJECT_TYPE"
-      [[ "$ENABLE_AI_ENHANCEMENT" = "true" ]] && ai_status="✅"
-      config_status="✅"
-    fi
-
-    if [[ -d ".github/actions/mcp-auto-fix" && -d ".github/actions/mcp-failure-prediction" ]]; then
-      mcp_status="✅"
-    fi
-
-    echo "| $project | $project_type | $ai_status | $mcp_status | $config_status |" >>"$report_file"
-  done
-
-  cat >>"$report_file" <<EOF
-
-### Next Steps
-1. **Continue Monitoring** - Daily checks for first week
-2. **Performance Tracking** - Monitor prediction accuracy
-3. **Learning Optimization** - Refine based on outcomes
-4. **Documentation Updates** - Keep validation reports current
-
----
-
-*AI Learning System is ready for production use*
-*Expected benefits: Reduced workflow failures, improved automation efficiency*
-
-EOF
-
-  print_success "Validation report created: $report_file"
-  echo "📄 Report location: $report_file"
+	print_result "Validation report written to ${report_file}"
 }
 
-# Main execution
+run_dashboard() {
+	print_header "AI Learning System Monitoring Dashboard"
+	echo ""
+	test_ai_learning_functionality
+	echo ""
+	test_enhanced_mcp_actions
+	echo ""
+	monitor_active_workflows
+	echo ""
+	generate_learning_analytics
+	echo ""
+	create_validation_report
+}
+
 main() {
-  case "${1:-dashboard}" in
-  "test")
-    test_ai_learning_functionality
-    ;;
-  "actions")
-    test_enhanced_mcp_actions
-    ;;
-  "analytics")
-    generate_learning_analytics
-    ;;
-  "monitor")
-    monitor_active_workflows
-    ;;
-  "validate")
-    create_validation_report
-    ;;
-  "dashboard" | "full")
-    print_header "AI Learning System Monitoring Dashboard"
-    echo ""
-    test_ai_learning_functionality
-    echo ""
-    test_enhanced_mcp_actions
-    echo ""
-    monitor_active_workflows
-    echo ""
-    generate_learning_analytics
-    echo ""
-    create_validation_report
-    ;;
-  "help" | "--help" | "-h")
-    cat <<EOF
+	local command="${1:-dashboard}"
+	case "${command}" in
+		"test")
+			test_ai_learning_functionality
+			;;
+		"actions")
+			test_enhanced_mcp_actions
+			;;
+		"analytics")
+			generate_learning_analytics
+			;;
+		"monitor")
+			monitor_active_workflows
+			;;
+		"validate")
+			create_validation_report
+			;;
+		"dashboard"|"full")
+			run_dashboard
+			;;
+		"help"|"--help"|-h)
+			cat <<EOF
 🔍 AI Learning System Validation and Monitoring Dashboard
 
 Usage: $0 [COMMAND]
 
 Commands:
   test          Test AI learning system functionality
-  actions       Test enhanced MCP actions
-  analytics     Generate learning analytics report
-  monitor       Monitor active workflows
-  validate      Create comprehensive validation report
-  dashboard     Run complete monitoring dashboard (default)
+  actions       Verify enhanced MCP actions
+  analytics     Generate a learning analytics report
+  monitor       Inspect AI-focused workflow files
+  validate      Create a comprehensive validation report
+  dashboard     Run the full monitoring dashboard (default)
   help          Show this help message
 
-Examples:
-  $0                    # Run full dashboard
-  $0 test              # Test system functionality only
-  $0 analytics         # Generate analytics report
+Set AI_VALIDATOR_PROJECTS to a comma-separated list to restrict the
+validation scope, e.g.:
 
-This tool validates that the enhanced AI learning system is working correctly
-and provides comprehensive monitoring of all AI capabilities.
+  AI_VALIDATOR_PROJECTS="CodingReviewer,HabitQuest" $0 test
 
 EOF
-    ;;
-  *)
-    print_error "Unknown command: ${1:-}"
-    echo "Use '$0 help' for usage information"
-    exit 1
-    ;;
-  esac
+			;;
+		*)
+			print_error "Unknown command: ${command}"
+			echo "Use '$0 help' for usage information"
+			exit 1
+			;;
+	 esac
 }
 
-# Execute main function
 main "$@"

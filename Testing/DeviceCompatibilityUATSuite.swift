@@ -4,11 +4,11 @@ import os.log
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 // MARK: - Supporting Types
@@ -234,31 +234,31 @@ class DeviceCompatibilityUATSuite {
 
     func setUp() {
         // Initialize test components
-        self.compatibilityManager = CompatibilityManager.shared
-        self.accessibilityValidator = AccessibilityValidator()
-        self.uiTestRunner = UITestRunner()
-        self.localizationTester = LocalizationTester()
+        compatibilityManager = CompatibilityManager.shared
+        accessibilityValidator = AccessibilityValidator()
+        uiTestRunner = UITestRunner()
+        localizationTester = LocalizationTester()
 
-        self.logger.info("📱 Device Compatibility & UAT Suite - Setup Complete")
+        logger.info("📱 Device Compatibility & UAT Suite - Setup Complete")
     }
 
     func tearDown() {
-        self.cleanupCompatibilityTests()
-        self.logger.info("📱 Device Compatibility & UAT Suite - Cleanup Complete")
+        cleanupCompatibilityTests()
+        logger.info("📱 Device Compatibility & UAT Suite - Cleanup Complete")
     }
 
     // MARK: - Device Compatibility Tests
 
     /// Test compatibility across all supported iOS devices
     func testIOSDeviceCompatibility(completion: @escaping (TestResult) -> Void) {
-        self.logger.info("📱 Testing iOS Device Compatibility")
+        logger.info("📱 Testing iOS Device Compatibility")
 
         var compatibilityResults: [DeviceCompatibilityResult] = []
         var completedTests = 0
-        let totalTests = self.iOSDevices.count
+        let totalTests = iOSDevices.count
 
-        for device in self.iOSDevices {
-            self.testDeviceCompatibility(device: device) { result in
+        for device in iOSDevices {
+            testDeviceCompatibility(device: device) { result in
                 compatibilityResults.append(result)
 
                 // Validate individual device compatibility
@@ -296,14 +296,14 @@ class DeviceCompatibilityUATSuite {
 
     /// Run all device compatibility and UAT tests
     func runAllTests(completion: @escaping ([TestResult]) -> Void) {
-        self.logger.info("� Starting Comprehensive Device Compatibility & UAT Testing")
+        logger.info("� Starting Comprehensive Device Compatibility & UAT Testing")
 
         var allResults: [TestResult] = []
         var completedTestSuites = 0
         let totalTestSuites = 6
 
         // Test iOS Device Compatibility
-        self.testIOSDeviceCompatibility { result in
+        testIOSDeviceCompatibility { result in
             allResults.append(result)
             completedTestSuites += 1
             if completedTestSuites == totalTestSuites {

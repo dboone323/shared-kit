@@ -4,11 +4,11 @@ import Foundation
 import os.log
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 /// Performance Validation and Benchmarking System for Phase 4
@@ -68,15 +68,15 @@ class PerformanceBenchmarkSuite {
 
         var summary: String {
             """
-            📊 Benchmark Results: \(self.testName)
-            ⏱️  Duration: \(String(format: "%.2f", self.duration))s
-            🧠 Memory Score: \(String(format: "%.1f", self.memoryResults.score))/100
-            ⚡ CPU Score: \(String(format: "%.1f", self.cpuResults.score))/100
-            🚀 Performance Score: \(String(format: "%.1f", self.performanceResults.score))/100
-            🎬 Frame Rate Score: \(String(format: "%.1f", self.frameRateResults.score))/100
-            🔋 Battery Score: \(String(format: "%.1f", self.batteryResults.score))/100
-            📊 Overall Score: \(String(format: "%.1f", self.overallScore))/100
-            ✅ Status: \(self.passed ? "PASSED" : "FAILED")
+            📊 Benchmark Results: \(testName)
+            ⏱️  Duration: \(String(format: "%.2f", duration))s
+            🧠 Memory Score: \(String(format: "%.1f", memoryResults.score))/100
+            ⚡ CPU Score: \(String(format: "%.1f", cpuResults.score))/100
+            🚀 Performance Score: \(String(format: "%.1f", performanceResults.score))/100
+            🎬 Frame Rate Score: \(String(format: "%.1f", frameRateResults.score))/100
+            🔋 Battery Score: \(String(format: "%.1f", batteryResults.score))/100
+            📊 Overall Score: \(String(format: "%.1f", overallScore))/100
+            ✅ Status: \(passed ? "PASSED" : "FAILED")
             """
         }
     }
@@ -132,33 +132,33 @@ class PerformanceBenchmarkSuite {
 
     /// Run comprehensive performance benchmark suite
     func runComprehensiveBenchmarks() async -> [BenchmarkResults] {
-        self.logger.info("🚀 Starting Comprehensive Performance Benchmarks")
+        logger.info("🚀 Starting Comprehensive Performance Benchmarks")
 
         var results: [BenchmarkResults] = []
 
         // Benchmark 1: App Launch Performance
-        await results.append(self.benchmarkAppLaunch())
+        await results.append(benchmarkAppLaunch())
 
         // Benchmark 2: Memory Management
-        await results.append(self.benchmarkMemoryManagement())
+        await results.append(benchmarkMemoryManagement())
 
         // Benchmark 3: CPU Optimization
-        await results.append(self.benchmarkCPUOptimization())
+        await results.append(benchmarkCPUOptimization())
 
         // Benchmark 4: Animation Performance
-        await results.append(self.benchmarkAnimationPerformance())
+        await results.append(benchmarkAnimationPerformance())
 
         // Benchmark 5: AI Integration Performance
-        await results.append(self.benchmarkAIPerformance())
+        await results.append(benchmarkAIPerformance())
 
         // Benchmark 6: Cross-Platform Performance
-        await results.append(self.benchmarkCrossPlatformPerformance())
+        await results.append(benchmarkCrossPlatformPerformance())
 
         // Benchmark 7: Stress Test
-        await results.append(self.benchmarkStressTest())
+        await results.append(benchmarkStressTest())
 
         // Generate summary report
-        self.generateBenchmarkReport(results)
+        generateBenchmarkReport(results)
 
         return results
     }
@@ -168,7 +168,7 @@ class PerformanceBenchmarkSuite {
         let startTime = CFAbsoluteTimeGetCurrent()
         let testName = "App Launch Performance"
 
-        self.logger.info("📱 Benchmarking App Launch Performance")
+        logger.info("📱 Benchmarking App Launch Performance")
 
         // Simulate app launch components
         let launchTime = await measurePerformance {
@@ -181,21 +181,21 @@ class PerformanceBenchmarkSuite {
         }
 
         // Collect metrics
-        let memoryUsage = self.getCurrentMemoryUsage()
-        let cpuUsage = self.getCurrentCPUUsage()
+        let memoryUsage = getCurrentMemoryUsage()
+        let cpuUsage = getCurrentCPUUsage()
 
         let memoryResults = MemoryBenchmarkResults(
             peakUsage: memoryUsage.peak,
             averageUsage: memoryUsage.average,
             leakDetected: memoryUsage.leaked > 0,
-            score: self.calculateMemoryScore(memoryUsage)
+            score: calculateMemoryScore(memoryUsage)
         )
 
         let cpuResults = CPUBenchmarkResults(
             peakUsage: cpuUsage.peak,
             averageUsage: cpuUsage.average,
-            thermalState: self.getThermalState(),
-            score: self.calculateCPUScore(cpuUsage)
+            thermalState: getThermalState(),
+            score: calculateCPUScore(cpuUsage)
         )
 
         let performanceResults = PerformanceBenchmarkResults(
@@ -219,7 +219,7 @@ class PerformanceBenchmarkSuite {
             score: 95.0
         )
 
-        let overallScore = self.calculateOverallScore([
+        let overallScore = calculateOverallScore([
             memoryResults.score,
             cpuResults.score,
             performanceResults.score,
@@ -249,7 +249,7 @@ class PerformanceBenchmarkSuite {
         let startTime = CFAbsoluteTimeGetCurrent()
         let testName = "Memory Management"
 
-        self.logger.info("🧠 Benchmarking Memory Management")
+        logger.info("🧠 Benchmarking Memory Management")
 
         // Test memory allocation patterns
         var memoryMetrics: [(usage: Int64, timestamp: Date)] = []
@@ -260,20 +260,20 @@ class PerformanceBenchmarkSuite {
         }, recordingTo: &memoryMetrics)
 
         // Memory cleanup test
-        await self.measureMemoryUsage(during: {
+        await measureMemoryUsage(during: {
             await self.simulateMemoryCleanup()
         }, recordingTo: &memoryMetrics)
 
         // Memory leak detection
-        let initialMemory = self.getCurrentMemoryUsage()
-        await self.simulateMemoryLeakTest()
-        let finalMemory = self.getCurrentMemoryUsage()
+        let initialMemory = getCurrentMemoryUsage()
+        await simulateMemoryLeakTest()
+        let finalMemory = getCurrentMemoryUsage()
 
         let memoryResults = MemoryBenchmarkResults(
             peakUsage: memoryMetrics.map(\.usage).max() ?? 0,
             averageUsage: memoryMetrics.map(\.usage).reduce(0, +) / Int64(memoryMetrics.count),
             leakDetected: (finalMemory.current - initialMemory.current) > (10 * 1024 * 1024),
-            score: self.calculateMemoryScore(finalMemory)
+            score: calculateMemoryScore(finalMemory)
         )
 
         let cpuResults = CPUBenchmarkResults(
@@ -304,7 +304,7 @@ class PerformanceBenchmarkSuite {
             score: 91.0
         )
 
-        let overallScore = self.calculateOverallScore([
+        let overallScore = calculateOverallScore([
             memoryResults.score,
             cpuResults.score,
             performanceResults.score,
@@ -334,7 +334,7 @@ class PerformanceBenchmarkSuite {
         let startTime = CFAbsoluteTimeGetCurrent()
         let testName = "CPU Optimization"
 
-        self.logger.info("⚡ Benchmarking CPU Optimization")
+        logger.info("⚡ Benchmarking CPU Optimization")
 
         var cpuMetrics: [(usage: Double, timestamp: Date)] = []
 
@@ -344,11 +344,11 @@ class PerformanceBenchmarkSuite {
         }, recordingTo: &cpuMetrics)
 
         // Multi-threading efficiency
-        await self.measureCPUUsage(during: {
+        await measureCPUUsage(during: {
             await self.simulateMultiThreadedOperations()
         }, recordingTo: &cpuMetrics)
 
-        let currentCPU = self.getCurrentCPUUsage()
+        let currentCPU = getCurrentCPUUsage()
 
         let memoryResults = MemoryBenchmarkResults(
             peakUsage: 80 * 1024 * 1024,
@@ -360,8 +360,8 @@ class PerformanceBenchmarkSuite {
         let cpuResults = CPUBenchmarkResults(
             peakUsage: cpuMetrics.map(\.usage).max() ?? 0,
             averageUsage: cpuMetrics.map(\.usage).reduce(0, +) / Double(cpuMetrics.count),
-            thermalState: self.getThermalState(),
-            score: self.calculateCPUScore(currentCPU)
+            thermalState: getThermalState(),
+            score: calculateCPUScore(currentCPU)
         )
 
         let performanceResults = PerformanceBenchmarkResults(
@@ -385,7 +385,7 @@ class PerformanceBenchmarkSuite {
             score: 78.0
         )
 
-        let overallScore = self.calculateOverallScore([
+        let overallScore = calculateOverallScore([
             memoryResults.score,
             cpuResults.score,
             performanceResults.score,
@@ -415,7 +415,7 @@ class PerformanceBenchmarkSuite {
         let startTime = CFAbsoluteTimeGetCurrent()
         let testName = "Animation Performance"
 
-        self.logger.info("🎬 Benchmarking Animation Performance")
+        logger.info("🎬 Benchmarking Animation Performance")
 
         var animationTimes: [Double] = []
         var frameRateData: [Double] = []
@@ -439,7 +439,7 @@ class PerformanceBenchmarkSuite {
         animationTimes.append(transitionTime)
 
         // Measure frame rates during animations
-        frameRateData = await self.measureFrameRatesDuringAnimations()
+        frameRateData = await measureFrameRatesDuringAnimations()
 
         let memoryResults = MemoryBenchmarkResults(
             peakUsage: 45 * 1024 * 1024,
@@ -467,7 +467,7 @@ class PerformanceBenchmarkSuite {
             averageFrameRate: frameRateData.reduce(0, +) / Double(frameRateData.count),
             minFrameRate: frameRateData.min() ?? 0,
             droppedFrames: frameRateData.count(where: { $0 < 58.0 }),
-            score: self.calculateFrameRateScore(frameRateData)
+            score: calculateFrameRateScore(frameRateData)
         )
 
         let batteryResults = BatteryBenchmarkResults(
@@ -476,7 +476,7 @@ class PerformanceBenchmarkSuite {
             score: 86.0
         )
 
-        let overallScore = self.calculateOverallScore([
+        let overallScore = calculateOverallScore([
             memoryResults.score,
             cpuResults.score,
             performanceResults.score,
@@ -506,7 +506,7 @@ class PerformanceBenchmarkSuite {
         let startTime = CFAbsoluteTimeGetCurrent()
         let testName = "AI Integration Performance"
 
-        self.logger.info("🤖 Benchmarking AI Integration Performance")
+        logger.info("🤖 Benchmarking AI Integration Performance")
 
         var aiInferenceTimes: [Double] = []
 
@@ -572,7 +572,7 @@ class PerformanceBenchmarkSuite {
         // Test network performance for AI services
         let networkResults = await benchmarkNetworkPerformance()
 
-        let overallScore = self.calculateOverallScore([
+        let overallScore = calculateOverallScore([
             memoryResults.score,
             cpuResults.score,
             performanceResults.score,
@@ -603,7 +603,7 @@ class PerformanceBenchmarkSuite {
         let startTime = CFAbsoluteTimeGetCurrent()
         let testName = "Cross-Platform Performance"
 
-        self.logger.info("📱💻 Benchmarking Cross-Platform Performance")
+        logger.info("📱💻 Benchmarking Cross-Platform Performance")
 
         // Test platform-specific optimizations
         let platformOptimizations = await testPlatformOptimizations()
@@ -649,7 +649,7 @@ class PerformanceBenchmarkSuite {
             score: 92.0
         )
 
-        let overallScore = self.calculateOverallScore([
+        let overallScore = calculateOverallScore([
             memoryResults.score,
             cpuResults.score,
             performanceResults.score,
@@ -679,34 +679,34 @@ class PerformanceBenchmarkSuite {
         let startTime = CFAbsoluteTimeGetCurrent()
         let testName = "Stress Test"
 
-        self.logger.info("🔥 Benchmarking Stress Test Scenarios")
+        logger.info("🔥 Benchmarking Stress Test Scenarios")
 
         // Maximum load test
-        await self.simulateMaximumLoad()
+        await simulateMaximumLoad()
 
         // Memory pressure test
-        await self.simulateMemoryPressure()
+        await simulateMemoryPressure()
 
         // Concurrent operations test
-        await self.simulateConcurrentOperations()
+        await simulateConcurrentOperations()
 
         // Extended duration test
-        await self.simulateExtendedUsage()
+        await simulateExtendedUsage()
 
-        let finalMetrics = self.getCurrentSystemMetrics()
+        let finalMetrics = getCurrentSystemMetrics()
 
         let memoryResults = MemoryBenchmarkResults(
             peakUsage: finalMetrics.memory.peak,
             averageUsage: finalMetrics.memory.average,
             leakDetected: finalMetrics.memory.leaked > 0,
-            score: self.calculateMemoryScore(finalMetrics.memory)
+            score: calculateMemoryScore(finalMetrics.memory)
         )
 
         let cpuResults = CPUBenchmarkResults(
             peakUsage: finalMetrics.cpu.peak,
             averageUsage: finalMetrics.cpu.average,
-            thermalState: self.getThermalState(),
-            score: self.calculateCPUScore(finalMetrics.cpu)
+            thermalState: getThermalState(),
+            score: calculateCPUScore(finalMetrics.cpu)
         )
 
         let performanceResults = PerformanceBenchmarkResults(
@@ -721,16 +721,16 @@ class PerformanceBenchmarkSuite {
             averageFrameRate: finalMetrics.frameRate.average,
             minFrameRate: finalMetrics.frameRate.minimum,
             droppedFrames: finalMetrics.frameRate.dropped,
-            score: self.calculateFrameRateScore([finalMetrics.frameRate.average])
+            score: calculateFrameRateScore([finalMetrics.frameRate.average])
         )
 
         let batteryResults = BatteryBenchmarkResults(
             drainRate: finalMetrics.battery.drainRate,
             thermalImpact: finalMetrics.battery.thermalImpact,
-            score: self.calculateBatteryScore(finalMetrics.battery)
+            score: calculateBatteryScore(finalMetrics.battery)
         )
 
-        let overallScore = self.calculateOverallScore([
+        let overallScore = calculateOverallScore([
             memoryResults.score,
             cpuResults.score,
             performanceResults.score,
@@ -758,7 +758,7 @@ class PerformanceBenchmarkSuite {
     // MARK: - Network Performance Benchmarking
 
     private func benchmarkNetworkPerformance() async -> NetworkBenchmarkResults? {
-        self.logger.info("🌐 Benchmarking Network Performance")
+        logger.info("🌐 Benchmarking Network Performance")
 
         let latencyTest = await measureNetworkLatency()
         let throughputTest = await measureNetworkThroughput()
@@ -768,7 +768,7 @@ class PerformanceBenchmarkSuite {
             averageLatency: latencyTest.average,
             throughput: throughputTest,
             errorRate: reliabilityTest.errorRate,
-            score: self.calculateNetworkScore(latencyTest, throughputTest, reliabilityTest)
+            score: calculateNetworkScore(latencyTest, throughputTest, reliabilityTest)
         )
     }
 
@@ -779,13 +779,13 @@ class PerformanceBenchmarkSuite {
         do {
             _ = try await operation()
         } catch {
-            self.logger.error("Performance measurement failed: \(error)")
+            logger.error("Performance measurement failed: \(error)")
         }
         return CFAbsoluteTimeGetCurrent() - startTime
     }
 
     private func generateBenchmarkReport(_ results: [BenchmarkResults]) {
-        self.logger.info("📊 Generating Benchmark Report")
+        logger.info("📊 Generating Benchmark Report")
 
         let overallScore = results.map(\.overallScore).reduce(0, +) / Double(results.count)
         let passedTests = results.filter(\.passed).count
@@ -814,10 +814,10 @@ class PerformanceBenchmarkSuite {
         )
         """
 
-        self.logger.info("\(report)")
+        logger.info("\(report)")
 
         // Save report to file
-        self.saveReportToFile(report)
+        saveReportToFile(report)
     }
 
     private func saveReportToFile(_ report: String) {
@@ -826,9 +826,9 @@ class PerformanceBenchmarkSuite {
 
         do {
             try report.write(to: reportURL, atomically: true, encoding: .utf8)
-            self.logger.info("📄 Benchmark report saved to: \(reportURL.path)")
+            logger.info("📄 Benchmark report saved to: \(reportURL.path)")
         } catch {
-            self.logger.error("Failed to save benchmark report: \(error)")
+            logger.error("Failed to save benchmark report: \(error)")
         }
     }
 
@@ -1061,10 +1061,10 @@ class PerformanceBenchmarkSuite {
     }
 
     private func calculateStressTestScore(_ metrics: SystemMetrics) -> Double {
-        let memoryScore = self.calculateMemoryScore(metrics.memory)
-        let cpuScore = self.calculateCPUScore(metrics.cpu)
-        let frameRateScore = self.calculateFrameRateScore([metrics.frameRate.average])
-        let batteryScore = self.calculateBatteryScore(metrics.battery)
+        let memoryScore = calculateMemoryScore(metrics.memory)
+        let cpuScore = calculateCPUScore(metrics.cpu)
+        let frameRateScore = calculateFrameRateScore([metrics.frameRate.average])
+        let batteryScore = calculateBatteryScore(metrics.battery)
         return (memoryScore + cpuScore + frameRateScore + batteryScore) / 4
     }
 

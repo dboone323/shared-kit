@@ -143,23 +143,23 @@ public struct AppError: AppErrorProtocol {
     // MARK: - Error Protocol Conformance
 
     public var errorDescription: String? {
-        self.userMessage
+        userMessage
     }
 
     public var failureReason: String? {
-        self.technicalDetails
+        technicalDetails
     }
 
     public var recoverySuggestion: String? {
-        self.recoverySuggestions.first
+        recoverySuggestions.first
     }
 
     public var helpAnchor: String? {
-        "error_help_\(self.category.rawValue)"
+        "error_help_\(category.rawValue)"
     }
 
     public var description: String {
-        "[\(self.severity.displayName)] \(self.category.displayName): \(self.userMessage)"
+        "[\(severity.displayName)] \(category.displayName): \(userMessage)"
     }
 
     // MARK: - Codable Implementation
@@ -172,39 +172,39 @@ public struct AppError: AppErrorProtocol {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.errorId = try container.decode(String.self, forKey: .errorId)
-        self.severity = try container.decode(ErrorSeverity.self, forKey: .severity)
-        self.category = try container.decode(ErrorCategory.self, forKey: .category)
-        self.timestamp = try container.decode(Date.self, forKey: .timestamp)
-        self.userMessage = try container.decode(String.self, forKey: .userMessage)
-        self.technicalDetails = try container.decode(String.self, forKey: .technicalDetails)
-        self.recoverySuggestions = try container.decode([String].self, forKey: .recoverySuggestions)
-        self.shouldReport = try container.decode(Bool.self, forKey: .shouldReport)
-        self.isRecoverable = try container.decode(Bool.self, forKey: .isRecoverable)
+        errorId = try container.decode(String.self, forKey: .errorId)
+        severity = try container.decode(ErrorSeverity.self, forKey: .severity)
+        category = try container.decode(ErrorCategory.self, forKey: .category)
+        timestamp = try container.decode(Date.self, forKey: .timestamp)
+        userMessage = try container.decode(String.self, forKey: .userMessage)
+        technicalDetails = try container.decode(String.self, forKey: .technicalDetails)
+        recoverySuggestions = try container.decode([String].self, forKey: .recoverySuggestions)
+        shouldReport = try container.decode(Bool.self, forKey: .shouldReport)
+        isRecoverable = try container.decode(Bool.self, forKey: .isRecoverable)
 
         // Decode context as string dictionary and convert to Any
         if let contextData = try? container.decode([String: String].self, forKey: .contextData) {
-            self.context = contextData
+            context = contextData
         } else {
-            self.context = [:]
+            context = [:]
         }
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
-        try container.encode(self.errorId, forKey: .errorId)
-        try container.encode(self.severity, forKey: .severity)
-        try container.encode(self.category, forKey: .category)
-        try container.encode(self.timestamp, forKey: .timestamp)
-        try container.encode(self.userMessage, forKey: .userMessage)
-        try container.encode(self.technicalDetails, forKey: .technicalDetails)
-        try container.encode(self.recoverySuggestions, forKey: .recoverySuggestions)
-        try container.encode(self.shouldReport, forKey: .shouldReport)
-        try container.encode(self.isRecoverable, forKey: .isRecoverable)
+        try container.encode(errorId, forKey: .errorId)
+        try container.encode(severity, forKey: .severity)
+        try container.encode(category, forKey: .category)
+        try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(userMessage, forKey: .userMessage)
+        try container.encode(technicalDetails, forKey: .technicalDetails)
+        try container.encode(recoverySuggestions, forKey: .recoverySuggestions)
+        try container.encode(shouldReport, forKey: .shouldReport)
+        try container.encode(isRecoverable, forKey: .isRecoverable)
 
         // Encode context as string dictionary
-        let contextData = self.context.compactMapValues { "\($0)" }
+        let contextData = context.compactMapValues { "\($0)" }
         try container.encode(contextData, forKey: .contextData)
     }
 
@@ -224,7 +224,7 @@ public struct AppError: AppErrorProtocol {
         self.errorId = errorId
         self.severity = severity
         self.category = category
-        self.timestamp = Date()
+        timestamp = Date()
         self.context = context
         self.userMessage = userMessage
         self.technicalDetails = technicalDetails
@@ -255,11 +255,11 @@ public struct ValidationError: AppErrorProtocol {
     public let providedValue: Any?
     public let expectedFormat: String?
 
-    public var errorDescription: String? { self.userMessage }
-    public var failureReason: String? { self.technicalDetails }
-    public var recoverySuggestion: String? { self.recoverySuggestions.first }
-    public var helpAnchor: String? { "validation_help_\(self.field)" }
-    public var description: String { "Validation Error: \(self.userMessage)" }
+    public var errorDescription: String? { userMessage }
+    public var failureReason: String? { technicalDetails }
+    public var recoverySuggestion: String? { recoverySuggestions.first }
+    public var helpAnchor: String? { "validation_help_\(field)" }
+    public var description: String { "Validation Error: \(userMessage)" }
 
     public init(
         field: String,
@@ -269,15 +269,15 @@ public struct ValidationError: AppErrorProtocol {
         userMessage: String? = nil,
         recoverySuggestions: [String] = []
     ) {
-        self.errorId = UUID().uuidString
-        self.timestamp = Date()
+        errorId = UUID().uuidString
+        timestamp = Date()
         self.field = field
         self.validationRule = validationRule
         self.providedValue = providedValue
         self.expectedFormat = expectedFormat
 
         self.userMessage = userMessage ?? "Invalid value for \(field)"
-        self.technicalDetails = "Validation failed for field '\(field)' with rule '\(validationRule)'"
+        technicalDetails = "Validation failed for field '\(field)' with rule '\(validationRule)'"
         self.recoverySuggestions = recoverySuggestions.isEmpty ? ["Please check the \(field) field and try again"] : recoverySuggestions
 
         var contextDict: [String: Any] = [
@@ -290,38 +290,38 @@ public struct ValidationError: AppErrorProtocol {
         if let format = expectedFormat {
             contextDict["expected_format"] = format
         }
-        self.context = contextDict
+        context = contextDict
     }
 
     // Codable implementation
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.errorId = try container.decode(String.self, forKey: .errorId)
-        self.timestamp = try container.decode(Date.self, forKey: .timestamp)
-        self.userMessage = try container.decode(String.self, forKey: .userMessage)
-        self.technicalDetails = try container.decode(String.self, forKey: .technicalDetails)
-        self.recoverySuggestions = try container.decode([String].self, forKey: .recoverySuggestions)
-        self.field = try container.decode(String.self, forKey: .field)
-        self.validationRule = try container.decode(String.self, forKey: .validationRule)
-        self.providedValue = try? container.decode(String.self, forKey: .providedValue)
-        self.expectedFormat = try? container.decode(String.self, forKey: .expectedFormat)
-        self.context = try container.decode([String: String].self, forKey: .context)
+        errorId = try container.decode(String.self, forKey: .errorId)
+        timestamp = try container.decode(Date.self, forKey: .timestamp)
+        userMessage = try container.decode(String.self, forKey: .userMessage)
+        technicalDetails = try container.decode(String.self, forKey: .technicalDetails)
+        recoverySuggestions = try container.decode([String].self, forKey: .recoverySuggestions)
+        field = try container.decode(String.self, forKey: .field)
+        validationRule = try container.decode(String.self, forKey: .validationRule)
+        providedValue = try? container.decode(String.self, forKey: .providedValue)
+        expectedFormat = try? container.decode(String.self, forKey: .expectedFormat)
+        context = try container.decode([String: String].self, forKey: .context)
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.errorId, forKey: .errorId)
-        try container.encode(self.timestamp, forKey: .timestamp)
-        try container.encode(self.userMessage, forKey: .userMessage)
-        try container.encode(self.technicalDetails, forKey: .technicalDetails)
-        try container.encode(self.recoverySuggestions, forKey: .recoverySuggestions)
-        try container.encode(self.field, forKey: .field)
-        try container.encode(self.validationRule, forKey: .validationRule)
+        try container.encode(errorId, forKey: .errorId)
+        try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(userMessage, forKey: .userMessage)
+        try container.encode(technicalDetails, forKey: .technicalDetails)
+        try container.encode(recoverySuggestions, forKey: .recoverySuggestions)
+        try container.encode(field, forKey: .field)
+        try container.encode(validationRule, forKey: .validationRule)
         if let value = providedValue {
             try container.encode("\(value)", forKey: .providedValue)
         }
-        try container.encodeIfPresent(self.expectedFormat, forKey: .expectedFormat)
-        let contextData = self.context.compactMapValues { "\($0)" }
+        try container.encodeIfPresent(expectedFormat, forKey: .expectedFormat)
+        let contextData = context.compactMapValues { "\($0)" }
         try container.encode(contextData, forKey: .context)
     }
 
@@ -350,11 +350,11 @@ public struct NetworkError: AppErrorProtocol {
     public let httpMethod: String?
     public let responseData: Data?
 
-    public var errorDescription: String? { self.userMessage }
-    public var failureReason: String? { self.technicalDetails }
-    public var recoverySuggestion: String? { self.recoverySuggestions.first }
+    public var errorDescription: String? { userMessage }
+    public var failureReason: String? { technicalDetails }
+    public var recoverySuggestion: String? { recoverySuggestions.first }
     public var helpAnchor: String? { "network_help" }
-    public var description: String { "Network Error: \(self.userMessage)" }
+    public var description: String { "Network Error: \(userMessage)" }
 
     public init(
         statusCode: Int? = nil,
@@ -364,15 +364,15 @@ public struct NetworkError: AppErrorProtocol {
         userMessage: String? = nil,
         technicalDetails: String? = nil
     ) {
-        self.errorId = UUID().uuidString
-        self.timestamp = Date()
+        errorId = UUID().uuidString
+        timestamp = Date()
         self.statusCode = statusCode
         self.endpoint = endpoint
         self.httpMethod = httpMethod
         self.responseData = responseData
 
         // Determine severity based on status code
-        self.severity = NetworkError.determineSeverity(statusCode: statusCode)
+        severity = NetworkError.determineSeverity(statusCode: statusCode)
 
         // Generate user-friendly message
         self.userMessage = userMessage ?? NetworkError.generateUserMessage(statusCode: statusCode)
@@ -385,7 +385,7 @@ public struct NetworkError: AppErrorProtocol {
         )
 
         // Generate recovery suggestions
-        self.recoverySuggestions = NetworkError.generateRecoverySuggestions(statusCode: statusCode)
+        recoverySuggestions = NetworkError.generateRecoverySuggestions(statusCode: statusCode)
 
         // Build context
         var contextDict: [String: Any] = [:]
@@ -401,7 +401,7 @@ public struct NetworkError: AppErrorProtocol {
         if let data = responseData {
             contextDict["response_size"] = data.count
         }
-        self.context = contextDict
+        context = contextDict
     }
 
     private static func determineSeverity(statusCode: Int?) -> ErrorSeverity {
@@ -467,32 +467,32 @@ public struct NetworkError: AppErrorProtocol {
     // Codable implementation
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.errorId = try container.decode(String.self, forKey: .errorId)
-        self.severity = try container.decode(ErrorSeverity.self, forKey: .severity)
-        self.timestamp = try container.decode(Date.self, forKey: .timestamp)
-        self.userMessage = try container.decode(String.self, forKey: .userMessage)
-        self.technicalDetails = try container.decode(String.self, forKey: .technicalDetails)
-        self.recoverySuggestions = try container.decode([String].self, forKey: .recoverySuggestions)
-        self.statusCode = try? container.decode(Int.self, forKey: .statusCode)
-        self.endpoint = try? container.decode(String.self, forKey: .endpoint)
-        self.httpMethod = try? container.decode(String.self, forKey: .httpMethod)
-        self.responseData = try? container.decode(Data.self, forKey: .responseData)
-        self.context = try container.decode([String: String].self, forKey: .context)
+        errorId = try container.decode(String.self, forKey: .errorId)
+        severity = try container.decode(ErrorSeverity.self, forKey: .severity)
+        timestamp = try container.decode(Date.self, forKey: .timestamp)
+        userMessage = try container.decode(String.self, forKey: .userMessage)
+        technicalDetails = try container.decode(String.self, forKey: .technicalDetails)
+        recoverySuggestions = try container.decode([String].self, forKey: .recoverySuggestions)
+        statusCode = try? container.decode(Int.self, forKey: .statusCode)
+        endpoint = try? container.decode(String.self, forKey: .endpoint)
+        httpMethod = try? container.decode(String.self, forKey: .httpMethod)
+        responseData = try? container.decode(Data.self, forKey: .responseData)
+        context = try container.decode([String: String].self, forKey: .context)
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.errorId, forKey: .errorId)
-        try container.encode(self.severity, forKey: .severity)
-        try container.encode(self.timestamp, forKey: .timestamp)
-        try container.encode(self.userMessage, forKey: .userMessage)
-        try container.encode(self.technicalDetails, forKey: .technicalDetails)
-        try container.encode(self.recoverySuggestions, forKey: .recoverySuggestions)
-        try container.encodeIfPresent(self.statusCode, forKey: .statusCode)
-        try container.encodeIfPresent(self.endpoint, forKey: .endpoint)
-        try container.encodeIfPresent(self.httpMethod, forKey: .httpMethod)
-        try container.encodeIfPresent(self.responseData, forKey: .responseData)
-        let contextData = self.context.compactMapValues { "\($0)" }
+        try container.encode(errorId, forKey: .errorId)
+        try container.encode(severity, forKey: .severity)
+        try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(userMessage, forKey: .userMessage)
+        try container.encode(technicalDetails, forKey: .technicalDetails)
+        try container.encode(recoverySuggestions, forKey: .recoverySuggestions)
+        try container.encodeIfPresent(statusCode, forKey: .statusCode)
+        try container.encodeIfPresent(endpoint, forKey: .endpoint)
+        try container.encodeIfPresent(httpMethod, forKey: .httpMethod)
+        try container.encodeIfPresent(responseData, forKey: .responseData)
+        let contextData = context.compactMapValues { "\($0)" }
         try container.encode(contextData, forKey: .context)
     }
 
@@ -520,11 +520,11 @@ public struct BusinessError: AppErrorProtocol {
     public let violatedConstraint: String
     public let affectedEntity: String?
 
-    public var errorDescription: String? { self.userMessage }
-    public var failureReason: String? { self.technicalDetails }
-    public var recoverySuggestion: String? { self.recoverySuggestions.first }
-    public var helpAnchor: String? { "business_help_\(self.businessRule)" }
-    public var description: String { "Business Error: \(self.userMessage)" }
+    public var errorDescription: String? { userMessage }
+    public var failureReason: String? { technicalDetails }
+    public var recoverySuggestion: String? { recoverySuggestions.first }
+    public var helpAnchor: String? { "business_help_\(businessRule)" }
+    public var description: String { "Business Error: \(userMessage)" }
 
     public init(
         businessRule: String,
@@ -533,13 +533,13 @@ public struct BusinessError: AppErrorProtocol {
         userMessage: String,
         recoverySuggestions: [String] = []
     ) {
-        self.errorId = UUID().uuidString
-        self.timestamp = Date()
+        errorId = UUID().uuidString
+        timestamp = Date()
         self.businessRule = businessRule
         self.violatedConstraint = violatedConstraint
         self.affectedEntity = affectedEntity
         self.userMessage = userMessage
-        self.technicalDetails = "Business rule '\(businessRule)' violated: \(violatedConstraint)"
+        technicalDetails = "Business rule '\(businessRule)' violated: \(violatedConstraint)"
         self.recoverySuggestions = recoverySuggestions
 
         var contextDict: [String: Any] = [
@@ -549,34 +549,34 @@ public struct BusinessError: AppErrorProtocol {
         if let entity = affectedEntity {
             contextDict["affected_entity"] = entity
         }
-        self.context = contextDict
+        context = contextDict
     }
 
     // Codable implementation
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.errorId = try container.decode(String.self, forKey: .errorId)
-        self.timestamp = try container.decode(Date.self, forKey: .timestamp)
-        self.userMessage = try container.decode(String.self, forKey: .userMessage)
-        self.technicalDetails = try container.decode(String.self, forKey: .technicalDetails)
-        self.recoverySuggestions = try container.decode([String].self, forKey: .recoverySuggestions)
-        self.businessRule = try container.decode(String.self, forKey: .businessRule)
-        self.violatedConstraint = try container.decode(String.self, forKey: .violatedConstraint)
-        self.affectedEntity = try? container.decode(String.self, forKey: .affectedEntity)
-        self.context = try container.decode([String: String].self, forKey: .context)
+        errorId = try container.decode(String.self, forKey: .errorId)
+        timestamp = try container.decode(Date.self, forKey: .timestamp)
+        userMessage = try container.decode(String.self, forKey: .userMessage)
+        technicalDetails = try container.decode(String.self, forKey: .technicalDetails)
+        recoverySuggestions = try container.decode([String].self, forKey: .recoverySuggestions)
+        businessRule = try container.decode(String.self, forKey: .businessRule)
+        violatedConstraint = try container.decode(String.self, forKey: .violatedConstraint)
+        affectedEntity = try? container.decode(String.self, forKey: .affectedEntity)
+        context = try container.decode([String: String].self, forKey: .context)
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.errorId, forKey: .errorId)
-        try container.encode(self.timestamp, forKey: .timestamp)
-        try container.encode(self.userMessage, forKey: .userMessage)
-        try container.encode(self.technicalDetails, forKey: .technicalDetails)
-        try container.encode(self.recoverySuggestions, forKey: .recoverySuggestions)
-        try container.encode(self.businessRule, forKey: .businessRule)
-        try container.encode(self.violatedConstraint, forKey: .violatedConstraint)
-        try container.encodeIfPresent(self.affectedEntity, forKey: .affectedEntity)
-        let contextData = self.context.compactMapValues { "\($0)" }
+        try container.encode(errorId, forKey: .errorId)
+        try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(userMessage, forKey: .userMessage)
+        try container.encode(technicalDetails, forKey: .technicalDetails)
+        try container.encode(recoverySuggestions, forKey: .recoverySuggestions)
+        try container.encode(businessRule, forKey: .businessRule)
+        try container.encode(violatedConstraint, forKey: .violatedConstraint)
+        try container.encodeIfPresent(affectedEntity, forKey: .affectedEntity)
+        let contextData = context.compactMapValues { "\($0)" }
         try container.encode(contextData, forKey: .context)
     }
 
@@ -613,34 +613,34 @@ public final class ErrorHandlerManager: ObservableObject {
 
     private init() {
         _analyticsService = MockInjected(wrappedValue: MockAnalyticsService())
-        self.setupDefaultRecoveryStrategies()
-        self.setupDefaultErrorReporters()
+        setupDefaultRecoveryStrategies()
+        setupDefaultErrorReporters()
     }
 
     // MARK: - Public Error Handling Interface
 
     /// Handle an error with full error processing pipeline
     public func handleError(_ error: any AppErrorProtocol) async {
-        self.logger.error("Error occurred: \(error.description)")
+        logger.error("Error occurred: \(error.description)")
 
         // Add to error tracking
-        self.addToErrorHistory(error)
+        addToErrorHistory(error)
 
         // Report error if needed
         if error.shouldReport {
-            await self.reportError(error)
+            await reportError(error)
         }
 
         // Update global error state
-        self.updateGlobalErrorState(with: error)
+        updateGlobalErrorState(with: error)
 
         // Attempt automatic recovery if possible
         if error.isRecoverable {
-            _ = await self.attemptRecovery(for: error)
+            _ = await attemptRecovery(for: error)
         }
 
         // Track error analytics
-        await self.analyticsService.track(
+        await analyticsService.track(
             event: "error_handled",
             properties: [
                 "error_id": error.errorId,
@@ -671,7 +671,7 @@ public final class ErrorHandlerManager: ObservableObject {
             isRecoverable: false
         )
 
-        await self.handleError(appError)
+        await handleError(appError)
     }
 
     /// Handle validation errors from form inputs
@@ -729,7 +729,7 @@ public final class ErrorHandlerManager: ObservableObject {
 
     /// Get recent errors for display in UI
     public func getRecentErrors(severity: ErrorSeverity? = nil, category: ErrorCategory? = nil) -> [any AppErrorProtocol] {
-        var filteredErrors = self.recentErrors
+        var filteredErrors = recentErrors
 
         if let severity {
             filteredErrors = filteredErrors.filter { $0.severity == severity }
@@ -744,20 +744,20 @@ public final class ErrorHandlerManager: ObservableObject {
 
     /// Clear error history
     public func clearErrorHistory() {
-        self.recentErrors.removeAll()
-        self.criticalErrors.removeAll()
-        self.errorHistory.removeAll()
-        self.globalErrorState = .normal
+        recentErrors.removeAll()
+        criticalErrors.removeAll()
+        errorHistory.removeAll()
+        globalErrorState = .normal
     }
 
     /// Export error report for support
     public func exportErrorReport() -> ErrorReport {
         ErrorReport(
             generatedAt: Date(),
-            recentErrors: self.recentErrors.compactMap { $0 as? AppError },
-            criticalErrors: self.criticalErrors.compactMap { $0 as? AppError },
-            globalState: self.globalErrorState,
-            systemInfo: self.collectSystemInfo()
+            recentErrors: recentErrors.compactMap { $0 as? AppError },
+            criticalErrors: criticalErrors.compactMap { $0 as? AppError },
+            globalState: globalErrorState,
+            systemInfo: collectSystemInfo()
         )
     }
 
@@ -765,72 +765,72 @@ public final class ErrorHandlerManager: ObservableObject {
 
     /// Register a custom recovery strategy
     public func registerRecoveryStrategy(_ strategy: RecoveryStrategy, for category: ErrorCategory) {
-        if self.recoveryStrategies[category] == nil {
-            self.recoveryStrategies[category] = []
+        if recoveryStrategies[category] == nil {
+            recoveryStrategies[category] = []
         }
-        self.recoveryStrategies[category]?.append(strategy)
+        recoveryStrategies[category]?.append(strategy)
     }
 
     /// Attempt manual recovery for a specific error
     public func attemptManualRecovery(for error: any AppErrorProtocol) async -> RecoveryResult {
-        await self.attemptRecovery(for: error)
+        await attemptRecovery(for: error)
     }
 
     // MARK: - Error Reporting
 
     /// Register a custom error reporter
     public func registerErrorReporter(_ reporter: ErrorReporter) {
-        self.errorReporters.append(reporter)
+        errorReporters.append(reporter)
     }
 
     // MARK: - Private Methods
 
     private func addToErrorHistory(_ error: any AppErrorProtocol) {
         // Add to recent errors
-        self.recentErrors.insert(error, at: 0)
-        if self.recentErrors.count > self.maxRecentErrors {
-            self.recentErrors.removeLast()
+        recentErrors.insert(error, at: 0)
+        if recentErrors.count > maxRecentErrors {
+            recentErrors.removeLast()
         }
 
         // Add to critical errors if severity is high
         if error.severity.priority >= ErrorSeverity.high.priority {
-            self.criticalErrors.insert(error, at: 0)
-            if self.criticalErrors.count > 10 {
-                self.criticalErrors.removeLast()
+            criticalErrors.insert(error, at: 0)
+            if criticalErrors.count > 10 {
+                criticalErrors.removeLast()
             }
         }
 
         // Add to full error history
-        self.errorHistory.insert(error, at: 0)
-        if self.errorHistory.count > self.maxErrorHistory {
-            self.errorHistory.removeLast()
+        errorHistory.insert(error, at: 0)
+        if errorHistory.count > maxErrorHistory {
+            errorHistory.removeLast()
         }
     }
 
     private func updateGlobalErrorState(with error: any AppErrorProtocol) {
         switch error.severity {
         case .critical:
-            self.globalErrorState = .critical
+            globalErrorState = .critical
         case .high:
-            if self.globalErrorState != .critical {
-                self.globalErrorState = .degraded
+            if globalErrorState != .critical {
+                globalErrorState = .degraded
             }
         case .medium, .low:
-            if self.globalErrorState == .normal {
+            if globalErrorState == .normal {
                 // Check if we have multiple recent errors
-                let recentHighSeverityErrors = self.recentErrors.prefix(5).filter { $0.severity.priority >= ErrorSeverity.medium.priority }
+                let recentHighSeverityErrors = recentErrors.prefix(5).filter { $0.severity.priority >= ErrorSeverity.medium.priority }
                 if recentHighSeverityErrors.count >= 3 {
-                    self.globalErrorState = .degraded
+                    globalErrorState = .degraded
                 }
             }
         }
     }
 
     private func attemptRecovery(for error: any AppErrorProtocol) async -> RecoveryResult {
-        self.isProcessingRecovery = true
+        isProcessingRecovery = true
         defer { isProcessingRecovery = false }
 
-        self.logger.info("Attempting recovery for error: \(error.errorId)")
+        logger.info("Attempting recovery for error: \(error.errorId)")
 
         guard let strategies = recoveryStrategies[error.category] else {
             return RecoveryResult(success: false, message: "No recovery strategies available")
@@ -842,9 +842,9 @@ public final class ErrorHandlerManager: ObservableObject {
                     let result = try await strategy.attemptRecovery(error)
 
                     if result.success {
-                        self.logger.info("Recovery successful for error: \(error.errorId)")
+                        logger.info("Recovery successful for error: \(error.errorId)")
 
-                        await self.analyticsService.track(
+                        await analyticsService.track(
                             event: "error_recovery_success",
                             properties: [
                                 "error_id": error.errorId,
@@ -858,14 +858,14 @@ public final class ErrorHandlerManager: ObservableObject {
                     }
                 }
             } catch {
-                self.logger.error("Recovery strategy failed: \(error)")
+                logger.error("Recovery strategy failed: \(error)")
                 continue
             }
         }
 
-        self.logger.warning("All recovery strategies failed for error: \(error.errorId)")
+        logger.warning("All recovery strategies failed for error: \(error.errorId)")
 
-        await self.analyticsService.track(
+        await analyticsService.track(
             event: "error_recovery_failed",
             properties: [
                 "error_id": error.errorId,
@@ -879,39 +879,39 @@ public final class ErrorHandlerManager: ObservableObject {
     }
 
     private func reportError(_ error: any AppErrorProtocol) async {
-        for reporter in self.errorReporters {
+        for reporter in errorReporters {
             do {
                 try await reporter.reportError(error)
             } catch {
-                self.logger.error("Error reporter failed: \(error)")
+                logger.error("Error reporter failed: \(error)")
             }
         }
     }
 
     private func setupDefaultRecoveryStrategies() {
         // Network recovery strategies
-        self.registerRecoveryStrategy(NetworkRetryStrategy(), for: .network)
-        self.registerRecoveryStrategy(NetworkFallbackStrategy(), for: .network)
+        registerRecoveryStrategy(NetworkRetryStrategy(), for: .network)
+        registerRecoveryStrategy(NetworkFallbackStrategy(), for: .network)
 
         // Data recovery strategies
-        self.registerRecoveryStrategy(DataRefreshStrategy(), for: .data)
-        self.registerRecoveryStrategy(DataCacheStrategy(), for: .data)
+        registerRecoveryStrategy(DataRefreshStrategy(), for: .data)
+        registerRecoveryStrategy(DataCacheStrategy(), for: .data)
 
         // Validation recovery strategies
-        self.registerRecoveryStrategy(ValidationRetryStrategy(), for: .validation)
+        registerRecoveryStrategy(ValidationRetryStrategy(), for: .validation)
 
         // System recovery strategies
-        self.registerRecoveryStrategy(SystemRestartStrategy(), for: .system)
+        registerRecoveryStrategy(SystemRestartStrategy(), for: .system)
     }
 
     private func setupDefaultErrorReporters() {
-        self.errorReporters.append(ConsoleErrorReporter())
-        self.errorReporters.append(AnalyticsErrorReporter(analyticsService: self.analyticsService))
+        errorReporters.append(ConsoleErrorReporter())
+        errorReporters.append(AnalyticsErrorReporter(analyticsService: analyticsService))
 
         #if DEBUG
-        self.errorReporters.append(DebugErrorReporter())
+            errorReporters.append(DebugErrorReporter())
         #else
-        self.errorReporters.append(CrashReporter())
+            errorReporters.append(CrashReporter())
         #endif
     }
 
@@ -996,7 +996,7 @@ public struct AnalyticsErrorReporter: ErrorReporter {
     }
 
     public func reportError(_ error: any AppErrorProtocol) async throws {
-        await self.analyticsService.track(
+        await analyticsService.track(
             event: "error_occurred",
             properties: [
                 "error_id": error.errorId,
@@ -1017,7 +1017,7 @@ public struct DebugErrorReporter: ErrorReporter {
     private let logger = Logger(subsystem: "QuantumWorkspace", category: "ErrorReporting")
 
     public func reportError(_ error: any AppErrorProtocol) async throws {
-        self.logger
+        logger
             .fault(
                 "ERROR: [\(error.category.displayName)] \(error.userMessage) | Technical: \(error.technicalDetails) | Context: \(error.context)"
             )
@@ -1057,7 +1057,7 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
         }
 
         // Simulate retry logic
-        for attempt in 1 ... self.maxRetries {
+        for attempt in 1 ... maxRetries {
             try await Task.sleep(nanoseconds: UInt64(attempt * 1_000_000_000)) // Wait 1, 2, 3 seconds
 
             // In real implementation, would retry the network request
@@ -1071,7 +1071,7 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
             }
         }
 
-        return RecoveryResult(success: false, message: "Network retry failed after \(self.maxRetries) attempts")
+        return RecoveryResult(success: false, message: "Network retry failed after \(maxRetries) attempts")
     }
 }
 

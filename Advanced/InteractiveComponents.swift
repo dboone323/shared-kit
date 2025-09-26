@@ -2,11 +2,11 @@ import Foundation
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 /// Interactive UI Components for Enhanced User Experience
@@ -27,11 +27,11 @@ public struct InteractiveComponents {
         }
 
         public var body: some View {
-            self.content
-                .scaleEffect(self.scale)
-                .opacity(self.isPressed ? 0.8 : 1.0)
-                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: self.scale)
-                .animation(.easeInOut(duration: 0.2), value: self.isPressed)
+            content
+                .scaleEffect(scale)
+                .opacity(isPressed ? 0.8 : 1.0)
+                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: scale)
+                .animation(.easeInOut(duration: 0.2), value: isPressed)
                 .onTapGesture {
                     self.action()
                 }
@@ -69,9 +69,9 @@ public struct InteractiveComponents {
         }
 
         public var body: some View {
-            self.content
-                .offset(self.offset)
-                .rotationEffect(.degrees(self.rotation))
+            content
+                .offset(offset)
+                .rotationEffect(.degrees(rotation))
                 .gesture(
                     DragGesture()
                         .onChanged { gesture in
@@ -108,11 +108,11 @@ public struct InteractiveComponents {
         }
 
         public var body: some View {
-            self.content
-                .position(self.position)
-                .scaleEffect(self.isDragging ? 1.1 : 1.0)
-                .shadow(radius: self.isDragging ? 10 : 5)
-                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: self.isDragging)
+            content
+                .position(position)
+                .scaleEffect(isDragging ? 1.1 : 1.0)
+                .shadow(radius: isDragging ? 10 : 5)
+                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isDragging)
                 .gesture(
                     DragGesture(coordinateSpace: .global)
                         .onChanged { gesture in

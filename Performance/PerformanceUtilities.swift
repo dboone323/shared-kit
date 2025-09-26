@@ -21,7 +21,7 @@ public class PerformanceProfiler {
         let id = UUID()
         let startTime = CFAbsoluteTimeGetCurrent()
 
-        self.queue.async(flags: .barrier) {
+        queue.async(flags: .barrier) {
             self.measurements["\(operation)_\(id.uuidString)_start"] = [startTime]
         }
 
@@ -32,7 +32,7 @@ public class PerformanceProfiler {
         let endTime = CFAbsoluteTimeGetCurrent()
         let key = "\(operation)_\(id.uuidString)_start"
 
-        return self.queue.sync {
+        return queue.sync {
             guard let startTimes = measurements[key],
                   let startTime = startTimes.first
             else {
@@ -66,7 +66,7 @@ public class PerformanceProfiler {
         let endTime = CFAbsoluteTimeGetCurrent()
         let duration = endTime - startTime
 
-        self.queue.async(flags: .barrier) {
+        queue.async(flags: .barrier) {
             if self.measurements[operation] == nil {
                 self.measurements[operation] = []
             }
@@ -90,7 +90,7 @@ public class PerformanceProfiler {
         let endTime = CFAbsoluteTimeGetCurrent()
         let duration = endTime - startTime
 
-        self.queue.async(flags: .barrier) {
+        queue.async(flags: .barrier) {
             if self.measurements[operation] == nil {
                 self.measurements[operation] = []
             }
@@ -108,7 +108,7 @@ public class PerformanceProfiler {
     // MARK: - Performance Analytics
 
     public func getAverageTime(for operation: String) -> TimeInterval? {
-        self.queue.sync {
+        queue.sync {
             guard let times = measurements[operation], !times.isEmpty else {
                 return nil
             }
@@ -117,7 +117,7 @@ public class PerformanceProfiler {
     }
 
     public func getMedianTime(for operation: String) -> TimeInterval? {
-        self.queue.sync {
+        queue.sync {
             guard let times = measurements[operation], !times.isEmpty else {
                 return nil
             }
@@ -134,7 +134,7 @@ public class PerformanceProfiler {
     public func getPercentile(_ percentile: Double, for operation: String) -> TimeInterval? {
         guard percentile >= 0, percentile <= 100 else { return nil }
 
-        return self.queue.sync {
+        return queue.sync {
             guard let times = measurements[operation], !times.isEmpty else {
                 return nil
             }
@@ -145,13 +145,13 @@ public class PerformanceProfiler {
     }
 
     public func getAllMeasurements() -> [String: [TimeInterval]] {
-        self.queue.sync {
+        queue.sync {
             self.measurements
         }
     }
 
     public func clearMeasurements(for operation: String? = nil) {
-        self.queue.async(flags: .barrier) {
+        queue.async(flags: .barrier) {
             if let operation {
                 self.measurements.removeValue(forKey: operation)
             } else {
@@ -198,10 +198,10 @@ private struct PerformanceAwareModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .opacity(self.performanceMonitor.currentMetrics.thermalState.shouldThrottle ? 0.8 : 1.0)
+            .opacity(performanceMonitor.currentMetrics.thermalState.shouldThrottle ? 0.8 : 1.0)
             .animation(
-                self.performanceMonitor.currentMetrics.performanceLevel == .poor ? nil : .easeInOut,
-                value: self.performanceMonitor.currentMetrics.thermalState
+                performanceMonitor.currentMetrics.performanceLevel == .poor ? nil : .easeInOut,
+                value: performanceMonitor.currentMetrics.thermalState
             )
     }
 }
@@ -211,29 +211,29 @@ private struct PerformanceAwareModifier: ViewModifier {
 public enum ImageOptimizer {
     public static func optimizeForNetwork(_ image: UIImage) -> UIImage? {
         #if canImport(UIKit)
-        let networkMonitor = NetworkMonitor.shared
-        let quality = networkMonitor.recommendedImageQuality()
+            let networkMonitor = NetworkMonitor.shared
+            let quality = networkMonitor.recommendedImageQuality()
 
-        guard let data = image.jpegData(compressionQuality: quality.compressionQuality),
-              let optimizedImage = UIImage(data: data)
-        else {
-            return image
-        }
+            guard let data = image.jpegData(compressionQuality: quality.compressionQuality),
+                  let optimizedImage = UIImage(data: data)
+            else {
+                return image
+            }
 
-        return optimizedImage
+            return optimizedImage
         #else
-        return nil
+            return nil
         #endif
     }
 
     public static func resizeForPerformance(_ image: UIImage, targetSize: CGSize) -> UIImage? {
         #if canImport(UIKit)
-        let renderer = UIGraphicsImageRenderer(size: targetSize)
-        return renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: targetSize))
-        }
+            let renderer = UIGraphicsImageRenderer(size: targetSize)
+            return renderer.image { _ in
+                image.draw(in: CGRect(origin: .zero, size: targetSize))
+            }
         #else
-        return nil
+            return nil
         #endif
     }
 
@@ -288,10 +288,10 @@ public struct PerformantAnimationModifier: ViewModifier {
 
     public func body(content: Content) -> some View {
         let performanceLevel = PerformanceMonitor.shared.currentMetrics.performanceLevel
-        let shouldAnimate = self.condition() && performanceLevel != .poor
+        let shouldAnimate = condition() && performanceLevel != .poor
 
         return content
-            .animation(shouldAnimate ? self.animation : nil, value: shouldAnimate)
+            .animation(shouldAnimate ? animation : nil, value: shouldAnimate)
     }
 }
 
@@ -325,36 +325,36 @@ public class PerformanceTest {
     }
 
     public func run(operation: () throws -> Void) rethrows -> PerformanceTestResult {
-        self.results.removeAll()
+        results.removeAll()
 
-        for _ in 0 ..< self.iterations {
+        for _ in 0 ..< iterations {
             let startTime = CFAbsoluteTimeGetCurrent()
             try operation()
             let endTime = CFAbsoluteTimeGetCurrent()
-            self.results.append(endTime - startTime)
+            results.append(endTime - startTime)
         }
 
         return PerformanceTestResult(
-            name: self.name,
-            iterations: self.iterations,
-            times: self.results
+            name: name,
+            iterations: iterations,
+            times: results
         )
     }
 
     public func runAsync(operation: () async throws -> Void) async rethrows -> PerformanceTestResult {
-        self.results.removeAll()
+        results.removeAll()
 
-        for _ in 0 ..< self.iterations {
+        for _ in 0 ..< iterations {
             let startTime = CFAbsoluteTimeGetCurrent()
             try await operation()
             let endTime = CFAbsoluteTimeGetCurrent()
-            self.results.append(endTime - startTime)
+            results.append(endTime - startTime)
         }
 
         return PerformanceTestResult(
-            name: self.name,
-            iterations: self.iterations,
-            times: self.results
+            name: name,
+            iterations: iterations,
+            times: results
         )
     }
 }
@@ -365,11 +365,11 @@ public struct PerformanceTestResult {
     public let times: [TimeInterval]
 
     public var averageTime: TimeInterval {
-        self.times.reduce(0, +) / Double(self.times.count)
+        times.reduce(0, +) / Double(times.count)
     }
 
     public var medianTime: TimeInterval {
-        let sorted = self.times.sorted()
+        let sorted = times.sorted()
         let mid = sorted.count / 2
         if sorted.count % 2 == 0 {
             return (sorted[mid - 1] + sorted[mid]) / 2
@@ -379,29 +379,29 @@ public struct PerformanceTestResult {
     }
 
     public var minTime: TimeInterval {
-        self.times.min() ?? 0
+        times.min() ?? 0
     }
 
     public var maxTime: TimeInterval {
-        self.times.max() ?? 0
+        times.max() ?? 0
     }
 
     public func percentile(_ p: Double) -> TimeInterval? {
         guard p >= 0, p <= 100 else { return nil }
-        let sorted = self.times.sorted()
+        let sorted = times.sorted()
         let index = Int((p / 100.0) * Double(sorted.count - 1))
         return sorted[index]
     }
 
     public var summary: String {
         """
-        Performance Test: \(self.name)
-        Iterations: \(self.iterations)
-        Average: \(String(format: "%.3f", self.averageTime * 1000))ms
-        Median: \(String(format: "%.3f", self.medianTime * 1000))ms
-        Min: \(String(format: "%.3f", self.minTime * 1000))ms
-        Max: \(String(format: "%.3f", self.maxTime * 1000))ms
-        95th percentile: \(String(format: "%.3f", (self.percentile(95) ?? 0) * 1000))ms
+        Performance Test: \(name)
+        Iterations: \(iterations)
+        Average: \(String(format: "%.3f", averageTime * 1000))ms
+        Median: \(String(format: "%.3f", medianTime * 1000))ms
+        Min: \(String(format: "%.3f", minTime * 1000))ms
+        Max: \(String(format: "%.3f", maxTime * 1000))ms
+        95th percentile: \(String(format: "%.3f", (percentile(95) ?? 0) * 1000))ms
         """
     }
 }
@@ -426,7 +426,7 @@ public class BackgroundTaskManager: ObservableObject {
         completion: @escaping (Result<T, Error>) -> Void = { _ in }
     ) {
         // Cancel existing task with same identifier
-        self.cancelTask(identifier)
+        cancelTask(identifier)
 
         let task = Task(priority: priority) {
             await MainActor.run {
@@ -468,13 +468,13 @@ public class BackgroundTaskManager: ObservableObject {
             }
         }
 
-        self.queue.async(flags: .barrier) {
+        queue.async(flags: .barrier) {
             self.tasks[identifier] = task
         }
     }
 
     public func cancelTask(_ identifier: String) {
-        self.queue.async(flags: .barrier) {
+        queue.async(flags: .barrier) {
             self.tasks[identifier]?.cancel()
             self.tasks.removeValue(forKey: identifier)
         }
@@ -485,7 +485,7 @@ public class BackgroundTaskManager: ObservableObject {
     }
 
     public func cancelAllTasks() {
-        self.queue.async(flags: .barrier) {
+        queue.async(flags: .barrier) {
             self.tasks.values.forEach { $0.cancel() }
             self.tasks.removeAll()
         }
@@ -496,11 +496,11 @@ public class BackgroundTaskManager: ObservableObject {
     }
 
     public func isTaskActive(_ identifier: String) -> Bool {
-        self.activeTasks.contains(identifier)
+        activeTasks.contains(identifier)
     }
 
     public func getTaskResult(_ identifier: String) -> TaskResult? {
-        self.taskResults[identifier]
+        taskResults[identifier]
     }
 
     // MARK: - Performance Optimized Task Scheduling
@@ -522,7 +522,7 @@ public class BackgroundTaskManager: ObservableObject {
             .medium
         }
 
-        self.scheduleTask(identifier, priority: priority, operation: operation, completion: completion)
+        scheduleTask(identifier, priority: priority, operation: operation, completion: completion)
     }
 }
 

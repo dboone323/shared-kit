@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 /// Micro-interactions for Enhanced User Feedback
@@ -13,22 +13,22 @@ public struct MicroInteractions {
 
     public static func lightHaptic() {
         #if canImport(UIKit)
-        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-        impactFeedback.impactOccurred()
+            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            impactFeedback.impactOccurred()
         #endif
     }
 
     public static func mediumHaptic() {
         #if canImport(UIKit)
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
         #endif
     }
 
     public static func heavyHaptic() {
         #if canImport(UIKit)
-        let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
-        impactFeedback.impactOccurred()
+            let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+            impactFeedback.impactOccurred()
         #endif
     }
 
@@ -51,8 +51,8 @@ public struct MicroInteractions {
             }) {
                 self.content
             }
-            .scaleEffect(self.isPressed ? 0.9 : 1.0)
-            .animation(.spring(response: 0.3, dampingFraction: 0.5), value: self.isPressed)
+            .scaleEffect(isPressed ? 0.9 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.5), value: isPressed)
             .simultaneousGesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in self.isPressed = true }
@@ -75,13 +75,13 @@ public struct MicroInteractions {
 
         public var body: some View {
             Circle()
-                .fill(self.color)
-                .frame(width: self.size, height: self.size)
-                .scaleEffect(self.isPulsing ? 1.3 : 1.0)
-                .opacity(self.isPulsing ? 0.5 : 1.0)
+                .fill(color)
+                .frame(width: size, height: size)
+                .scaleEffect(isPulsing ? 1.3 : 1.0)
+                .opacity(isPulsing ? 0.5 : 1.0)
                 .animation(
                     Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true),
-                    value: self.isPulsing
+                    value: isPulsing
                 )
                 .onAppear { self.isPulsing = true }
         }
@@ -159,8 +159,8 @@ public struct MicroInteractions {
                             .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                     )
             }
-            .scaleEffect(self.isExpanded ? 1.2 : 1.0)
-            .rotation3DEffect(.degrees(self.isExpanded ? 180 : 0), axis: (x: 0, y: 0, z: 1))
+            .scaleEffect(isExpanded ? 1.2 : 1.0)
+            .rotation3DEffect(.degrees(isExpanded ? 180 : 0), axis: (x: 0, y: 0, z: 1))
         }
     }
 }

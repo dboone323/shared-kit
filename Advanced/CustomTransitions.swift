@@ -48,7 +48,7 @@ public struct CustomTransitions {
             content
                 .rotation3DEffect(
                     .degrees(phase.isIdentity ? 0 : 90),
-                    axis: self.axis
+                    axis: axis
                 )
                 .opacity(phase.isIdentity ? 1 : 0)
         }

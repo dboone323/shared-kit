@@ -42,48 +42,48 @@ public final class CrossProjectIntegrator: ObservableObject {
     private init() {
         _analyticsService = MockInjected(wrappedValue: MockAnalyticsService())
         _crossProjectService = MockInjected(wrappedValue: MockCrossProjectService())
-        self.setupIntegrationObservation()
+        setupIntegrationObservation()
     }
 
     // MARK: - Public Interface
 
     /// Initialize cross-project integration
     public func initializeIntegration() async throws {
-        guard !self.isIntegrationActive else { return }
+        guard !isIntegrationActive else { return }
 
         do {
             // Initialize global state coordinator first
-            try await self.globalCoordinator.initialize()
+            try await globalCoordinator.initialize()
 
             // Discover and connect to available projects
-            await self.discoverProjects()
+            await discoverProjects()
 
             // Start integration workflows
-            await self.startIntegrationWorkflows()
+            await startIntegrationWorkflows()
 
-            self.isIntegrationActive = true
-            self.integrationHealth = self.connectedProjects.isEmpty ? .warning("No projects connected") : .healthy
+            isIntegrationActive = true
+            integrationHealth = connectedProjects.isEmpty ? .warning("No projects connected") : .healthy
 
-            await self.analyticsService.track(
+            await analyticsService.track(
                 event: "cross_project_integration_initialized",
-                properties: ["connected_projects": self.connectedProjects.count],
+                properties: ["connected_projects": connectedProjects.count],
                 userId: nil
             )
 
         } catch {
-            self.integrationHealth = .error(error)
+            integrationHealth = .error(error)
             throw error
         }
     }
 
     /// Connect specific project to the integration system
     public func connectProject(_ project: ProjectType) async throws {
-        self.connectedProjects.insert(project)
+        connectedProjects.insert(project)
 
         // Sync data from the newly connected project
-        try await self.syncProjectData(project)
+        try await syncProjectData(project)
 
-        await self.analyticsService.track(
+        await analyticsService.track(
             event: "project_connected",
             properties: ["project": project.rawValue],
             userId: nil
@@ -92,9 +92,9 @@ public final class CrossProjectIntegrator: ObservableObject {
 
     /// Disconnect project from integration system
     public func disconnectProject(_ project: ProjectType) async {
-        self.connectedProjects.remove(project)
+        connectedProjects.remove(project)
 
-        await self.analyticsService.track(
+        await analyticsService.track(
             event: "project_disconnected",
             properties: ["project": project.rawValue],
             userId: nil
@@ -103,7 +103,7 @@ public final class CrossProjectIntegrator: ObservableObject {
 
     /// Generate unified insights across all connected projects
     public func generateUnifiedInsights(for userId: String) async throws {
-        guard self.isIntegrationActive else {
+        guard isIntegrationActive else {
             throw CrossProjectError.integrationNotActive
         }
 
@@ -113,21 +113,21 @@ public final class CrossProjectIntegrator: ObservableObject {
             var financialInsights: BudgetInsights?
             var productivityInsights: ProductivityInsights?
 
-            if self.connectedProjects.contains(.habitQuest) {
-                habitInsights = await self.gatherHabitInsights(for: userId)
+            if connectedProjects.contains(.habitQuest) {
+                habitInsights = await gatherHabitInsights(for: userId)
             }
 
-            if self.connectedProjects.contains(.momentumFinance) {
-                financialInsights = await self.gatherFinancialInsights(for: userId)
+            if connectedProjects.contains(.momentumFinance) {
+                financialInsights = await gatherFinancialInsights(for: userId)
             }
 
-            if self.connectedProjects.contains(.plannerApp) {
-                productivityInsights = await self.gatherProductivityInsights(for: userId)
+            if connectedProjects.contains(.plannerApp) {
+                productivityInsights = await gatherProductivityInsights(for: userId)
             }
 
             // Calculate cross-project correlations
             let correlations = await calculateCrossProjectCorrelations(userId: userId)
-            self.crossProjectCorrelations = correlations
+            crossProjectCorrelations = correlations
 
             // Generate unified recommendations
             let recommendations = await generateUnifiedRecommendations(
@@ -138,7 +138,7 @@ public final class CrossProjectIntegrator: ObservableObject {
             )
 
             // Calculate overall score
-            let overallScore = self.calculateOverallScore(
+            let overallScore = calculateOverallScore(
                 habitInsights: habitInsights,
                 financialInsights: financialInsights,
                 productivityInsights: productivityInsights
@@ -147,7 +147,7 @@ public final class CrossProjectIntegrator: ObservableObject {
             // Create unified insights
             let timeRange = DateInterval(start: Date().addingTimeInterval(-2_592_000), end: Date()) // Last 30 days
 
-            self.unifiedInsights = UnifiedUserInsights(
+            unifiedInsights = UnifiedUserInsights(
                 userId: userId,
                 timeRange: timeRange,
                 habitInsights: habitInsights,
@@ -165,7 +165,7 @@ public final class CrossProjectIntegrator: ObservableObject {
                 recommendations: recommendations
             )
 
-            await self.analyticsService.track(
+            await analyticsService.track(
                 event: "unified_insights_generated",
                 properties: [
                     "user_id": userId,
@@ -177,7 +177,7 @@ public final class CrossProjectIntegrator: ObservableObject {
             )
 
         } catch {
-            self.integrationHealth = .error(error)
+            integrationHealth = .error(error)
             throw error
         }
     }
@@ -185,7 +185,7 @@ public final class CrossProjectIntegrator: ObservableObject {
     /// Export unified data across all projects
     public func exportUnifiedData(for userId: String, format: ExportFormat) async throws -> Data {
         guard let insights = unifiedInsights else {
-            try await self.generateUnifiedInsights(for: userId)
+            try await generateUnifiedInsights(for: userId)
         }
 
         let exportData = await UnifiedExportData(
@@ -212,13 +212,13 @@ public final class CrossProjectIntegrator: ObservableObject {
 
     /// Sync data between specific projects
     public func syncBetweenProjects(from sourceProject: ProjectType, to targetProject: ProjectType) async throws {
-        guard self.connectedProjects.contains(sourceProject), self.connectedProjects.contains(targetProject) else {
+        guard connectedProjects.contains(sourceProject), connectedProjects.contains(targetProject) else {
             throw CrossProjectError.projectNotConnected
         }
 
-        try await self.crossProjectService.syncData(from: sourceProject, to: targetProject)
+        try await crossProjectService.syncData(from: sourceProject, to: targetProject)
 
-        await self.analyticsService.track(
+        await analyticsService.track(
             event: "cross_project_sync",
             properties: [
                 "source_project": sourceProject.rawValue,
@@ -232,22 +232,22 @@ public final class CrossProjectIntegrator: ObservableObject {
 
     private func setupIntegrationObservation() {
         // Observe global state changes
-        self.globalCoordinator.$isInitialized
+        globalCoordinator.$isInitialized
             .sink { [weak self] isInitialized in
                 if !isInitialized {
                     self?.isIntegrationActive = false
                     self?.integrationHealth = .disconnected
                 }
             }
-            .store(in: &self.cancellables)
+            .store(in: &cancellables)
 
-        self.globalCoordinator.$globalError
+        globalCoordinator.$globalError
             .sink { [weak self] error in
                 if let error {
                     self?.integrationHealth = .error(error)
                 }
             }
-            .store(in: &self.cancellables)
+            .store(in: &cancellables)
     }
 
     private func discoverProjects() async {
@@ -257,8 +257,8 @@ public final class CrossProjectIntegrator: ObservableObject {
         let availableProjects: [ProjectType] = [.habitQuest, .momentumFinance, .plannerApp, .codingReviewer, .avoidObstaclesGame]
 
         for project in availableProjects {
-            if await self.isProjectAvailable(project) {
-                self.connectedProjects.insert(project)
+            if await isProjectAvailable(project) {
+                connectedProjects.insert(project)
             }
         }
     }
@@ -271,24 +271,24 @@ public final class CrossProjectIntegrator: ObservableObject {
 
     private func startIntegrationWorkflows() async {
         // Start periodic sync timer
-        self.integrationTimer = Timer.scheduledTimer(withTimeInterval: 600, repeats: true) { [weak self] _ in
+        integrationTimer = Timer.scheduledTimer(withTimeInterval: 600, repeats: true) { [weak self] _ in
             Task { [weak self] in
                 await self?.performPeriodicSync()
             }
         }
 
         // Start real-time integration workflows
-        await self.startRealTimeIntegration()
+        await startRealTimeIntegration()
     }
 
     private func performPeriodicSync() async {
-        guard self.isIntegrationActive else { return }
+        guard isIntegrationActive else { return }
 
-        for project in self.connectedProjects {
+        for project in connectedProjects {
             do {
-                try await self.syncProjectData(project)
+                try await syncProjectData(project)
             } catch {
-                await self.analyticsService.track(
+                await analyticsService.track(
                     event: "periodic_sync_error",
                     properties: [
                         "project": project.rawValue,
@@ -302,254 +302,254 @@ public final class CrossProjectIntegrator: ObservableObject {
 
     private func startRealTimeIntegration() async {
         // Set up real-time state change propagation
-        self.globalCoordinator.habitState.$habits
+        globalCoordinator.habitState.$habits
             .debounce(for: .milliseconds(1000), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 Task { [weak self] in
                     await self?.propagateHabitChanges()
                 }
             }
-            .store(in: &self.cancellables)
+            .store(in: &cancellables)
 
-        self.globalCoordinator.financialState.$transactions
+        globalCoordinator.financialState.$transactions
             .debounce(for: .milliseconds(1000), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 Task { [weak self] in
                     await self?.propagateFinancialChanges()
                 }
             }
-            .store(in: &self.cancellables)
+            .store(in: &cancellables)
 
-        self.globalCoordinator.plannerState.$tasks
+        globalCoordinator.plannerState.$tasks
             .debounce(for: .milliseconds(1000), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 Task { [weak self] in
                     await self?.propagateTaskChanges()
                 }
             }
-            .store(in: &self.cancellables)
+            .store(in: &cancellables)
     }
 
     private func syncProjectData(_ project: ProjectType) async throws {
         switch project {
         case .habitQuest:
             // Sync habit data with other projects
-            await self.syncHabitData()
+            await syncHabitData()
         case .momentumFinance:
             // Sync financial data
-            await self.syncFinancialData()
+            await syncFinancialData()
         case .plannerApp:
             // Sync task and goal data
-            await self.syncPlannerData()
+            await syncPlannerData()
         case .codingReviewer:
             // Sync coding review data
-            await self.syncCodingData()
+            await syncCodingData()
         case .avoidObstaclesGame:
             // Sync game data
-            await self.syncGameData()
+            await syncGameData()
         }
     }
 
     private func syncHabitData() async {
         // Correlate habits with financial goals
-        if self.connectedProjects.contains(.momentumFinance) {
-            await self.correlateHabitsWithFinancialGoals()
+        if connectedProjects.contains(.momentumFinance) {
+            await correlateHabitsWithFinancialGoals()
         }
 
         // Correlate habits with productivity tasks
-        if self.connectedProjects.contains(.plannerApp) {
-            await self.correlateHabitsWithTasks()
+        if connectedProjects.contains(.plannerApp) {
+            await correlateHabitsWithTasks()
         }
     }
 
     private func syncFinancialData() async {
         // Create financial habit suggestions
-        if self.connectedProjects.contains(.habitQuest) {
-            await self.suggestFinancialHabits()
+        if connectedProjects.contains(.habitQuest) {
+            await suggestFinancialHabits()
         }
 
         // Create budget-based task suggestions
-        if self.connectedProjects.contains(.plannerApp) {
-            await self.suggestBudgetTasks()
+        if connectedProjects.contains(.plannerApp) {
+            await suggestBudgetTasks()
         }
     }
 
     private func syncPlannerData() async {
         // Create productivity habits
-        if self.connectedProjects.contains(.habitQuest) {
-            await self.suggestProductivityHabits()
+        if connectedProjects.contains(.habitQuest) {
+            await suggestProductivityHabits()
         }
 
         // Create financial planning tasks
-        if self.connectedProjects.contains(.momentumFinance) {
-            await self.suggestFinancialTasks()
+        if connectedProjects.contains(.momentumFinance) {
+            await suggestFinancialTasks()
         }
     }
 
     private func syncCodingData() async {
         // Create coding practice habits
-        if self.connectedProjects.contains(.habitQuest) {
-            await self.suggestCodingHabits()
+        if connectedProjects.contains(.habitQuest) {
+            await suggestCodingHabits()
         }
 
         // Create coding tasks
-        if self.connectedProjects.contains(.plannerApp) {
-            await self.suggestCodingTasks()
+        if connectedProjects.contains(.plannerApp) {
+            await suggestCodingTasks()
         }
     }
 
     private func syncGameData() async {
         // Gamify other project activities
-        await self.gamifyHabits()
-        await self.gamifyFinancialGoals()
-        await self.gamifyTasks()
+        await gamifyHabits()
+        await gamifyFinancialGoals()
+        await gamifyTasks()
     }
 
     // MARK: - Cross-Project Correlation Methods
 
     private func correlateHabitsWithFinancialGoals() async {
-        let habitState = self.globalCoordinator.habitState
-        let financialState = self.globalCoordinator.financialState
+        let habitState = globalCoordinator.habitState
+        let financialState = globalCoordinator.financialState
 
         // Find habits that correlate with financial performance
         for (habitId, habit) in habitState.habits {
             if let insights = habitState.insights[habitId] {
                 // Check if habit completion correlates with financial improvement
-                await self.analyzeHabitFinancialCorrelation(habit, insights: insights, financialState: financialState)
+                await analyzeHabitFinancialCorrelation(habit, insights: insights, financialState: financialState)
             }
         }
     }
 
     private func correlateHabitsWithTasks() async {
-        let habitState = self.globalCoordinator.habitState
-        let plannerState = self.globalCoordinator.plannerState
+        let habitState = globalCoordinator.habitState
+        let plannerState = globalCoordinator.plannerState
 
         // Find habits that affect task completion
         for (habitId, habit) in habitState.habits {
             if let insights = habitState.insights[habitId] {
-                await self.analyzeHabitProductivityCorrelation(habit, insights: insights, plannerState: plannerState)
+                await analyzeHabitProductivityCorrelation(habit, insights: insights, plannerState: plannerState)
             }
         }
     }
 
     private func suggestFinancialHabits() async {
-        let financialState = self.globalCoordinator.financialState
-        let habitState = self.globalCoordinator.habitState
+        let financialState = globalCoordinator.financialState
+        let habitState = globalCoordinator.habitState
 
         // Analyze financial patterns and suggest habits
         if let netWorth = financialState.netWorth {
-            await self.createHabitsFromFinancialPatterns(netWorth: netWorth, habitState: habitState)
+            await createHabitsFromFinancialPatterns(netWorth: netWorth, habitState: habitState)
         }
     }
 
     private func suggestBudgetTasks() async {
-        let financialState = self.globalCoordinator.financialState
-        let plannerState = self.globalCoordinator.plannerState
+        let financialState = globalCoordinator.financialState
+        let plannerState = globalCoordinator.plannerState
 
         // Create tasks based on budget insights
         for (budgetId, insights) in financialState.budgets {
-            await self.createTasksFromBudgetInsights(budgetId: budgetId, insights: insights, plannerState: plannerState)
+            await createTasksFromBudgetInsights(budgetId: budgetId, insights: insights, plannerState: plannerState)
         }
     }
 
     private func suggestProductivityHabits() async {
-        let plannerState = self.globalCoordinator.plannerState
-        let habitState = self.globalCoordinator.habitState
+        let plannerState = globalCoordinator.plannerState
+        let habitState = globalCoordinator.habitState
 
         // Analyze productivity patterns and suggest habits
         if let insights = plannerState.productivityInsights {
-            await self.createHabitsFromProductivityInsights(insights: insights, habitState: habitState)
+            await createHabitsFromProductivityInsights(insights: insights, habitState: habitState)
         }
     }
 
     private func suggestFinancialTasks() async {
-        let plannerState = self.globalCoordinator.plannerState
-        let financialState = self.globalCoordinator.financialState
+        let plannerState = globalCoordinator.plannerState
+        let financialState = globalCoordinator.financialState
 
         // Create financial planning tasks
         for recommendation in financialState.recommendations {
-            await self.createTaskFromFinancialRecommendation(recommendation, plannerState: plannerState)
+            await createTaskFromFinancialRecommendation(recommendation, plannerState: plannerState)
         }
     }
 
     private func suggestCodingHabits() async {
         // Create coding practice habits based on review patterns
-        await self.analyticsService.track(event: "coding_habits_suggested", properties: nil, userId: nil)
+        await analyticsService.track(event: "coding_habits_suggested", properties: nil, userId: nil)
     }
 
     private func suggestCodingTasks() async {
         // Create tasks for code improvements
-        await self.analyticsService.track(event: "coding_tasks_suggested", properties: nil, userId: nil)
+        await analyticsService.track(event: "coding_tasks_suggested", properties: nil, userId: nil)
     }
 
     private func gamifyHabits() async {
         // Add game elements to habit tracking
-        await self.analyticsService.track(event: "habits_gamified", properties: nil, userId: nil)
+        await analyticsService.track(event: "habits_gamified", properties: nil, userId: nil)
     }
 
     private func gamifyFinancialGoals() async {
         // Add game elements to financial goals
-        await self.analyticsService.track(event: "financial_goals_gamified", properties: nil, userId: nil)
+        await analyticsService.track(event: "financial_goals_gamified", properties: nil, userId: nil)
     }
 
     private func gamifyTasks() async {
         // Add game elements to task completion
-        await self.analyticsService.track(event: "tasks_gamified", properties: nil, userId: nil)
+        await analyticsService.track(event: "tasks_gamified", properties: nil, userId: nil)
     }
 
     // MARK: - State Change Propagation
 
     private func propagateHabitChanges() async {
         // Propagate habit changes to other projects
-        if self.connectedProjects.contains(.momentumFinance) {
-            await self.updateFinancialBasedOnHabits()
+        if connectedProjects.contains(.momentumFinance) {
+            await updateFinancialBasedOnHabits()
         }
 
-        if self.connectedProjects.contains(.plannerApp) {
-            await self.updateTasksBasedOnHabits()
+        if connectedProjects.contains(.plannerApp) {
+            await updateTasksBasedOnHabits()
         }
 
-        if self.connectedProjects.contains(.avoidObstaclesGame) {
-            await self.updateGameProgressBasedOnHabits()
+        if connectedProjects.contains(.avoidObstaclesGame) {
+            await updateGameProgressBasedOnHabits()
         }
     }
 
     private func propagateFinancialChanges() async {
         // Propagate financial changes to other projects
-        if self.connectedProjects.contains(.habitQuest) {
-            await self.updateHabitsBasedOnFinancial()
+        if connectedProjects.contains(.habitQuest) {
+            await updateHabitsBasedOnFinancial()
         }
 
-        if self.connectedProjects.contains(.plannerApp) {
-            await self.updateTasksBasedOnFinancial()
+        if connectedProjects.contains(.plannerApp) {
+            await updateTasksBasedOnFinancial()
         }
     }
 
     private func propagateTaskChanges() async {
         // Propagate task changes to other projects
-        if self.connectedProjects.contains(.habitQuest) {
-            await self.updateHabitsBasedOnTasks()
+        if connectedProjects.contains(.habitQuest) {
+            await updateHabitsBasedOnTasks()
         }
 
-        if self.connectedProjects.contains(.momentumFinance) {
-            await self.updateFinancialBasedOnTasks()
+        if connectedProjects.contains(.momentumFinance) {
+            await updateFinancialBasedOnTasks()
         }
     }
 
     // MARK: - Data Gathering Methods
 
     private func gatherHabitInsights(for _: String) async -> [HabitInsights] {
-        let habitState = self.globalCoordinator.habitState
+        let habitState = globalCoordinator.habitState
         return Array(habitState.insights.values)
     }
 
     private func gatherFinancialInsights(for _: String) async -> BudgetInsights? {
-        let financialState = self.globalCoordinator.financialState
+        let financialState = globalCoordinator.financialState
         return financialState.budgets.values.first // Simplified - would aggregate all budgets
     }
 
     private func gatherProductivityInsights(for _: String) async -> ProductivityInsights? {
-        let plannerState = self.globalCoordinator.plannerState
+        let plannerState = globalCoordinator.plannerState
         return plannerState.productivityInsights
     }
 
@@ -557,7 +557,7 @@ public final class CrossProjectIntegrator: ObservableObject {
         var correlations: [CrossProjectCorrelation] = []
 
         // Habit-Finance correlation
-        if self.connectedProjects.contains(.habitQuest), self.connectedProjects.contains(.momentumFinance) {
+        if connectedProjects.contains(.habitQuest), connectedProjects.contains(.momentumFinance) {
             let correlation = await calculateHabitFinanceCorrelation(userId: userId)
             if abs(correlation) > 0.3 { // Significant correlation threshold
                 correlations.append(CrossProjectCorrelation(
@@ -571,7 +571,7 @@ public final class CrossProjectIntegrator: ObservableObject {
         }
 
         // Habit-Productivity correlation
-        if self.connectedProjects.contains(.habitQuest), self.connectedProjects.contains(.plannerApp) {
+        if connectedProjects.contains(.habitQuest), connectedProjects.contains(.plannerApp) {
             let correlation = await calculateHabitProductivityCorrelation(userId: userId)
             if abs(correlation) > 0.3 {
                 correlations.append(CrossProjectCorrelation(
@@ -585,7 +585,7 @@ public final class CrossProjectIntegrator: ObservableObject {
         }
 
         // Finance-Productivity correlation
-        if self.connectedProjects.contains(.momentumFinance), self.connectedProjects.contains(.plannerApp) {
+        if connectedProjects.contains(.momentumFinance), connectedProjects.contains(.plannerApp) {
             let correlation = await calculateFinanceProductivityCorrelation(userId: userId)
             if abs(correlation) > 0.3 {
                 correlations.append(CrossProjectCorrelation(
@@ -702,16 +702,16 @@ public final class CrossProjectIntegrator: ObservableObject {
     private func gatherRawData(for userId: String) async -> [String: Any] {
         var rawData: [String: Any] = [:]
 
-        if self.connectedProjects.contains(.habitQuest) {
-            rawData["habits"] = await self.exportHabitData(for: userId)
+        if connectedProjects.contains(.habitQuest) {
+            rawData["habits"] = await exportHabitData(for: userId)
         }
 
-        if self.connectedProjects.contains(.momentumFinance) {
-            rawData["financial"] = await self.exportFinancialData(for: userId)
+        if connectedProjects.contains(.momentumFinance) {
+            rawData["financial"] = await exportFinancialData(for: userId)
         }
 
-        if self.connectedProjects.contains(.plannerApp) {
-            rawData["tasks"] = await self.exportPlannerData(for: userId)
+        if connectedProjects.contains(.plannerApp) {
+            rawData["tasks"] = await exportPlannerData(for: userId)
         }
 
         return rawData
@@ -727,15 +727,15 @@ public final class CrossProjectIntegrator: ObservableObject {
 
         case .csv:
             // Convert to CSV format
-            return try await self.convertToCSV(exportData)
+            return try await convertToCSV(exportData)
 
         case .xml:
             // Convert to XML format
-            return try await self.convertToXML(exportData)
+            return try await convertToXML(exportData)
 
         case .sqlite:
             // Convert to SQLite format
-            return try await self.convertToSQLite(exportData)
+            return try await convertToSQLite(exportData)
         }
     }
 
@@ -919,7 +919,7 @@ public struct AnyCodable: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
 
-        switch self.value {
+        switch value {
         case let string as String:
             try container.encode(string)
         case let int as Int:
@@ -941,15 +941,15 @@ public struct AnyCodable: Codable {
         let container = try decoder.singleValueContainer()
 
         if let string = try? container.decode(String.self) {
-            self.value = string
+            value = string
         } else if let int = try? container.decode(Int.self) {
-            self.value = int
+            value = int
         } else if let double = try? container.decode(Double.self) {
-            self.value = double
+            value = double
         } else if let bool = try? container.decode(Bool.self) {
-            self.value = bool
+            value = bool
         } else {
-            self.value = "Unknown"
+            value = "Unknown"
         }
     }
 }

@@ -96,9 +96,9 @@ private struct AIStatusHeader: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(16)
@@ -233,9 +233,9 @@ private struct AITabView: View {
         }
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemGray6)
+                Color(UIColor.systemGray6)
             #else
-            Color.gray.opacity(0.1)
+                Color.gray.opacity(0.1)
             #endif
         )
     }
@@ -368,9 +368,9 @@ private struct TextAnalysisContent: View {
             .padding()
             .background(
                 #if canImport(UIKit)
-                Color(UIColor.systemBackground)
+                    Color(UIColor.systemBackground)
                 #else
-                Color(.controlBackgroundColor)
+                    Color(.controlBackgroundColor)
                 #endif
             )
             .cornerRadius(12)
@@ -408,17 +408,17 @@ private struct ImageProcessingContent: View {
 
                 if let image = selectedImage {
                     #if canImport(UIKit)
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxHeight: 200)
-                        .cornerRadius(8)
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxHeight: 200)
+                            .cornerRadius(8)
                     #else
-                    Image(nsImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxHeight: 200)
-                        .cornerRadius(8)
+                        Image(nsImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxHeight: 200)
+                            .cornerRadius(8)
                     #endif
                 } else {
                     RoundedRectangle(cornerRadius: 8)
@@ -478,9 +478,9 @@ private struct ImageProcessingContent: View {
             .padding()
             .background(
                 #if canImport(UIKit)
-                Color(UIColor.systemBackground)
+                    Color(UIColor.systemBackground)
                 #else
-                Color(.controlBackgroundColor)
+                    Color(.controlBackgroundColor)
                 #endif
             )
             .cornerRadius(12)
@@ -525,9 +525,9 @@ private struct PredictionsContent: View {
             .padding()
             .background(
                 #if canImport(UIKit)
-                Color(UIColor.systemBackground)
+                    Color(UIColor.systemBackground)
                 #else
-                Color(.controlBackgroundColor)
+                    Color(.controlBackgroundColor)
                 #endif
             )
             .cornerRadius(12)
@@ -583,9 +583,9 @@ private struct ModelsContent: View {
             .padding()
             .background(
                 #if canImport(UIKit)
-                Color(UIColor.systemBackground)
+                    Color(UIColor.systemBackground)
                 #else
-                Color(.controlBackgroundColor)
+                    Color(.controlBackgroundColor)
                 #endif
             )
             .cornerRadius(12)
@@ -622,9 +622,9 @@ private struct StatCard: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)
@@ -662,9 +662,9 @@ private struct AIActivityFeed: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)
@@ -781,9 +781,9 @@ private struct SentimentResultView: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)
@@ -832,9 +832,9 @@ private struct KeywordsResultView: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)
@@ -870,9 +870,9 @@ private struct LanguageResultView: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)
@@ -910,9 +910,9 @@ private struct ImageClassificationResultView: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)
@@ -935,9 +935,9 @@ private struct TextRecognitionResultView: View {
                         .padding(8)
                         .background(
                             #if canImport(UIKit)
-                            Color(UIColor.systemGray6)
+                                Color(UIColor.systemGray6)
                             #else
-                            Color.gray.opacity(0.1)
+                                Color.gray.opacity(0.1)
                             #endif
                         )
                         .cornerRadius(8)
@@ -952,9 +952,9 @@ private struct TextRecognitionResultView: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)
@@ -1062,9 +1062,9 @@ private struct HabitPredictionView: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)
@@ -1113,9 +1113,9 @@ private struct ExpensePredictionView: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)
@@ -1135,9 +1135,9 @@ private struct RecentPredictionsView: View {
         .padding()
         .background(
             #if canImport(UIKit)
-            Color(UIColor.systemBackground)
+                Color(UIColor.systemBackground)
             #else
-            Color(.controlBackgroundColor)
+                Color(.controlBackgroundColor)
             #endif
         )
         .cornerRadius(12)

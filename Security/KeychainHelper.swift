@@ -42,7 +42,7 @@ public final class KeychainHelper {
             print("KeychainHelper: Failed to encode string to data")
             return false
         }
-        return self.setData(data, forKey: key)
+        return setData(data, forKey: key)
     }
 
     /// Retrieve a string value from the Keychain
@@ -61,12 +61,12 @@ public final class KeychainHelper {
     @discardableResult
     public func setData(_ data: Data, forKey key: String) -> Bool {
         // First, delete any existing item
-        self.deleteItem(forKey: key)
+        deleteItem(forKey: key)
 
         // Create the query for storing the data
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: self.serviceName,
+            kSecAttrService as String: serviceName,
             kSecAttrAccount as String: key,
             kSecValueData as String: data,
             kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlocked,
@@ -87,7 +87,7 @@ public final class KeychainHelper {
     public func getData(forKey key: String) -> Data? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: self.serviceName,
+            kSecAttrService as String: serviceName,
             kSecAttrAccount as String: key,
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne,
@@ -113,7 +113,7 @@ public final class KeychainHelper {
     public func deleteItem(forKey key: String) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: self.serviceName,
+            kSecAttrService as String: serviceName,
             kSecAttrAccount as String: key,
         ]
 
@@ -132,7 +132,7 @@ public final class KeychainHelper {
     /// - Parameter key: The key to check
     /// - Returns: True if a value exists, false otherwise
     public func hasValue(forKey key: String) -> Bool {
-        self.getData(forKey: key) != nil
+        getData(forKey: key) != nil
     }
 
     // MARK: - Convenience Methods for Common Types
@@ -145,7 +145,7 @@ public final class KeychainHelper {
     @discardableResult
     public func setBool(_ value: Bool, forKey key: String) -> Bool {
         let stringValue = value ? "true" : "false"
-        return self.setString(stringValue, forKey: key)
+        return setString(stringValue, forKey: key)
     }
 
     /// Retrieve a boolean value from the Keychain
@@ -164,7 +164,7 @@ public final class KeychainHelper {
     @discardableResult
     public func setInt(_ value: Int, forKey key: String) -> Bool {
         let stringValue = String(value)
-        return self.setString(stringValue, forKey: key)
+        return setString(stringValue, forKey: key)
     }
 
     /// Retrieve an integer value from the Keychain
@@ -187,7 +187,7 @@ public extension KeychainHelper {
     @discardableResult
     func migrateFromUserDefaults(key: String, userDefaults: UserDefaults = .standard) -> Bool {
         // Check if already migrated
-        if self.hasValue(forKey: key) {
+        if hasValue(forKey: key) {
             // Already in Keychain, remove from UserDefaults
             userDefaults.removeObject(forKey: key)
             return true
@@ -199,13 +199,13 @@ public extension KeychainHelper {
 
             // Migrate based on type
             if let stringValue = value as? String {
-                success = self.setString(stringValue, forKey: key)
+                success = setString(stringValue, forKey: key)
             } else if let boolValue = value as? Bool {
-                success = self.setBool(boolValue, forKey: key)
+                success = setBool(boolValue, forKey: key)
             } else if let intValue = value as? Int {
-                success = self.setInt(intValue, forKey: key)
+                success = setInt(intValue, forKey: key)
             } else if let dataValue = value as? Data {
-                success = self.setData(dataValue, forKey: key)
+                success = setData(dataValue, forKey: key)
             }
 
             if success {

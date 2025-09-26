@@ -27,36 +27,36 @@ public final class DependencyContainer: @unchecked Sendable {
     // MARK: - Initialization
 
     private init() {
-        self.setupDefaultServices()
+        setupDefaultServices()
     }
 
     // MARK: - Registration Methods
 
     /// Register a service instance
     public func register<T>(_ service: T, for type: T.Type) {
-        self.lock.lock()
+        lock.lock()
         defer { lock.unlock() }
 
         let key = String(describing: type)
-        self.services[key] = service
+        services[key] = service
     }
 
     /// Register a factory for creating service instances
     public func register<T>(factory: @escaping () -> T, for type: T.Type) {
-        self.lock.lock()
+        lock.lock()
         defer { lock.unlock() }
 
         let key = String(describing: type)
-        self.factories[key] = factory
+        factories[key] = factory
     }
 
     /// Register a singleton factory
     public func registerSingleton<T>(factory: @escaping () -> T, for type: T.Type) {
-        self.lock.lock()
+        lock.lock()
         defer { lock.unlock() }
 
         let key = String(describing: type)
-        self.factories[key] = {
+        factories[key] = {
             if let existing = self.singletons[key] {
                 return existing
             }
@@ -70,7 +70,7 @@ public final class DependencyContainer: @unchecked Sendable {
 
     /// Resolve a service instance
     public func resolve<T>(_ type: T.Type) -> T? {
-        self.lock.lock()
+        lock.lock()
         defer { lock.unlock() }
 
         let key = String(describing: type)
@@ -98,42 +98,42 @@ public final class DependencyContainer: @unchecked Sendable {
 
     /// Check if a service is registered
     public func isRegistered(_ type: (some Any).Type) -> Bool {
-        self.lock.lock()
+        lock.lock()
         defer { lock.unlock() }
 
         let key = String(describing: type)
-        return self.services[key] != nil || self.factories[key] != nil
+        return services[key] != nil || factories[key] != nil
     }
 
     // MARK: - Lifecycle Methods
 
     /// Clear all registrations
     public func clear() {
-        self.lock.lock()
+        lock.lock()
         defer { lock.unlock() }
 
-        self.services.removeAll()
-        self.factories.removeAll()
-        self.singletons.removeAll()
+        services.removeAll()
+        factories.removeAll()
+        singletons.removeAll()
     }
 
     /// Reset to default configuration
     public func reset() {
-        self.clear()
-        self.setupDefaultServices()
+        clear()
+        setupDefaultServices()
     }
 
     // MARK: - Private Methods
 
     private func setupDefaultServices() {
         // Register default service implementations
-        self.registerSingleton(factory: { DefaultAnalyticsService() }, for: AnalyticsServiceProtocol.self)
-        self.registerSingleton(factory: { DefaultCrossProjectService() }, for: CrossProjectServiceProtocol.self)
+        registerSingleton(factory: { DefaultAnalyticsService() }, for: AnalyticsServiceProtocol.self)
+        registerSingleton(factory: { DefaultCrossProjectService() }, for: CrossProjectServiceProtocol.self)
 
         // Register data services
-        self.registerSingleton(factory: { DefaultHabitService() }, for: HabitServiceProtocol.self)
-        self.registerSingleton(factory: { DefaultFinancialService() }, for: FinancialServiceProtocol.self)
-        self.registerSingleton(factory: { DefaultPlannerService() }, for: PlannerServiceProtocol.self)
+        registerSingleton(factory: { DefaultHabitService() }, for: HabitServiceProtocol.self)
+        registerSingleton(factory: { DefaultFinancialService() }, for: FinancialServiceProtocol.self)
+        registerSingleton(factory: { DefaultPlannerService() }, for: PlannerServiceProtocol.self)
     }
 }
 
@@ -165,7 +165,7 @@ public struct Injected<T> {
     public init() {}
 
     public init(wrappedValue: T) {
-        self.service = wrappedValue
+        service = wrappedValue
     }
 }
 
@@ -222,41 +222,41 @@ public final class ServiceManager: @unchecked Sendable {
 
         // Initialize analytics service
         if let analyticsService = container.resolve(AnalyticsServiceProtocol.self) {
-            try await self.initializeService(analyticsService)
+            try await initializeService(analyticsService)
         }
 
         // Initialize cross-project service
         if let crossProjectService = container.resolve(CrossProjectServiceProtocol.self) {
-            try await self.initializeService(crossProjectService)
+            try await initializeService(crossProjectService)
         }
 
         // Initialize business logic services
         if let habitService = container.resolve(HabitServiceProtocol.self) {
-            try await self.initializeService(habitService)
+            try await initializeService(habitService)
         }
 
         if let financialService = container.resolve(FinancialServiceProtocol.self) {
-            try await self.initializeService(financialService)
+            try await initializeService(financialService)
         }
 
         if let plannerService = container.resolve(PlannerServiceProtocol.self) {
-            try await self.initializeService(plannerService)
+            try await initializeService(plannerService)
         }
     }
 
     /// Initialize a specific service
     private func initializeService(_ service: ServiceProtocol) async throws {
-        self.lock.lock()
+        lock.lock()
         let serviceId = service.serviceId
-        let alreadyInitialized = self.initializedServices.contains(serviceId)
-        self.lock.unlock()
+        let alreadyInitialized = initializedServices.contains(serviceId)
+        lock.unlock()
 
         if !alreadyInitialized {
             try await service.initialize()
 
-            self.lock.lock()
-            self.initializedServices.insert(serviceId)
-            self.lock.unlock()
+            lock.lock()
+            initializedServices.insert(serviceId)
+            lock.unlock()
         }
     }
 
@@ -264,7 +264,7 @@ public final class ServiceManager: @unchecked Sendable {
     public func cleanupServices() async {
         let container = DependencyContainer.shared
 
-        for serviceId in self.initializedServices {
+        for serviceId in initializedServices {
             // Cleanup services in reverse order
             if let analyticsService = container.resolve(AnalyticsServiceProtocol.self) {
                 await analyticsService.cleanup()
@@ -287,9 +287,9 @@ public final class ServiceManager: @unchecked Sendable {
             }
         }
 
-        self.lock.lock()
-        self.initializedServices.removeAll()
-        self.lock.unlock()
+        lock.lock()
+        initializedServices.removeAll()
+        lock.unlock()
     }
 
     /// Get health status of all services
@@ -345,16 +345,16 @@ final class DefaultAnalyticsService: AnalyticsServiceProtocol {
     func track(event: String, properties: [String: Any]?, userId: String?) async {
         // Default implementation - log to console in debug mode
         #if DEBUG
-        print("📊 Analytics: \(event) | User: \(userId ?? "anonymous") | Properties: \(properties ?? [:])")
+            print("📊 Analytics: \(event) | User: \(userId ?? "anonymous") | Properties: \(properties ?? [:])")
         #endif
     }
 
     func trackUserAction(_ action: UserAction) async {
-        await self.track(event: action.action, properties: action.metadata, userId: action.userId)
+        await track(event: action.action, properties: action.metadata, userId: action.userId)
     }
 
     func trackPerformance(_ metric: PerformanceMetric) async {
-        await self.track(event: "performance_metric", properties: [
+        await track(event: "performance_metric", properties: [
             "name": metric.name,
             "value": metric.value,
             "unit": metric.unit,
@@ -362,7 +362,7 @@ final class DefaultAnalyticsService: AnalyticsServiceProtocol {
     }
 
     func trackError(_ error: Error, context: [String: Any]?) async {
-        await self.track(event: "error", properties: [
+        await track(event: "error", properties: [
             "error": error.localizedDescription,
             "context": context ?? [:],
         ], userId: nil)

@@ -25,22 +25,22 @@ print_insight() { echo -e "${CYAN}💡 INSIGHT:${NC} $1"; }
 
 # Configuration
 readonly CODE_DIR="${CODE_DIR:-/Users/danielstevens/Desktop/Code}"
-readonly LEARNING_DIR="$CODE_DIR/.ai_learning_system"
-readonly MODELS_DIR="$LEARNING_DIR/models"
-readonly PATTERNS_DIR="$LEARNING_DIR/patterns"
-readonly HISTORY_DIR="$LEARNING_DIR/history"
-readonly INSIGHTS_DIR="$LEARNING_DIR/insights"
+readonly LEARNING_DIR="${CODE_DIR}/.ai_learning_system"
+readonly MODELS_DIR="${LEARNING_DIR}/models"
+readonly PATTERNS_DIR="${LEARNING_DIR}/patterns"
+readonly HISTORY_DIR="${LEARNING_DIR}/history"
+readonly INSIGHTS_DIR="${LEARNING_DIR}/insights"
 
 # Initialize learning system
 initialize_learning_system() {
-  print_header "Initializing Adaptive Learning System"
+	print_header "Initializing Adaptive Learning System"
 
-  # Create directory structure
-  mkdir -p "$LEARNING_DIR"/{models,patterns,history,insights,feedback,analytics}
+	# Create directory structure
+	mkdir -p "${LEARNING_DIR}"/{models,patterns,history,insights,feedback,analytics}
 
-  # Initialize master learning database
-  if [[ ! -f "$MODELS_DIR/master_learning_model.json" ]]; then
-    cat >"$MODELS_DIR/master_learning_model.json" <<'EOF'
+	# Initialize master learning database
+	if [[ ! -f "${MODELS_DIR}/master_learning_model.json" ]]; then
+		cat >"${MODELS_DIR}/master_learning_model.json" <<'EOF'
 {
   "version": "3.0",
   "system_type": "adaptive_learning",
@@ -81,12 +81,12 @@ initialize_learning_system() {
   }
 }
 EOF
-    print_success "Master learning model initialized"
-  fi
+		print_success "Master learning model initialized"
+	fi
 
-  # Initialize pattern correlation database
-  if [[ ! -f "$PATTERNS_DIR/pattern_correlations.json" ]]; then
-    cat >"$PATTERNS_DIR/pattern_correlations.json" <<'EOF'
+	# Initialize pattern correlation database
+	if [[ ! -f "${PATTERNS_DIR}/pattern_correlations.json" ]]; then
+		cat >"${PATTERNS_DIR}/pattern_correlations.json" <<'EOF'
 {
   "version": "1.0",
   "correlations": {},
@@ -97,12 +97,12 @@ EOF
   "cross_repository_patterns": {}
 }
 EOF
-    print_success "Pattern correlation database initialized"
-  fi
+		print_success "Pattern correlation database initialized"
+	fi
 
-  # Initialize learning history
-  if [[ ! -f "$HISTORY_DIR/learning_timeline.json" ]]; then
-    cat >"$HISTORY_DIR/learning_timeline.json" <<'EOF'
+	# Initialize learning history
+	if [[ ! -f "${HISTORY_DIR}/learning_timeline.json" ]]; then
+		cat >"${HISTORY_DIR}/learning_timeline.json" <<'EOF'
 {
   "version": "1.0",
   "timeline": [],
@@ -111,20 +111,20 @@ EOF
   "adaptation_events": []
 }
 EOF
-    print_success "Learning history initialized"
-  fi
+		print_success "Learning history initialized"
+	fi
 
-  print_success "Adaptive Learning System initialized successfully"
+	print_success "Adaptive Learning System initialized successfully"
 }
 
 # Collect learning data from recent activities
 collect_learning_data() {
-  local collection_scope="${1:-all}"
+	local collection_scope="${1:-all}"
 
-  print_header "Collecting learning data (scope: $collection_scope)"
+	print_header "Collecting learning data (scope: ${collection_scope})"
 
-  # Create learning data collection script
-  cat >"$LEARNING_DIR/collect_data.py" <<'EOF'
+	# Create learning data collection script
+	cat >"${LEARNING_DIR}/collect_data.py" <<'EOF'
 #!/usr/bin/env python3
 import json
 import os
@@ -361,19 +361,19 @@ if __name__ == "__main__":
     main()
 EOF
 
-  # Execute data collection
-  cd "$CODE_DIR/Projects/CodingReviewer"
-  python3 "$LEARNING_DIR/collect_data.py"
+	# Execute data collection
+	cd "${CODE_DIR}/Projects/CodingReviewer"
+	python3 "${LEARNING_DIR}/collect_data.py"
 
-  print_success "Learning data collection completed"
+	print_success "Learning data collection completed"
 }
 
 # Analyze patterns and update learning models
 analyze_and_learn() {
-  print_header "Analyzing patterns and updating learning models"
+	print_header "Analyzing patterns and updating learning models"
 
-  # Create pattern analysis and learning script
-  cat >"$LEARNING_DIR/analyze_learn.py" <<'EOF'
+	# Create pattern analysis and learning script
+	cat >"${LEARNING_DIR}/analyze_learn.py" <<'EOF'
 #!/usr/bin/env python3
 import json
 import os
@@ -673,21 +673,21 @@ if __name__ == "__main__":
     main()
 EOF
 
-  # Execute analysis and learning
-  cd "$CODE_DIR/Projects/CodingReviewer"
-  python3 "$LEARNING_DIR/analyze_learn.py"
+	# Execute analysis and learning
+	cd "${CODE_DIR}/Projects/CodingReviewer"
+	python3 "${LEARNING_DIR}/analyze_learn.py"
 
-  print_success "Pattern analysis and learning model update completed"
+	print_success "Pattern analysis and learning model update completed"
 }
 
 # Generate learning insights and recommendations
 generate_insights() {
-  print_header "Generating AI learning insights and recommendations"
+	print_header "Generating AI learning insights and recommendations"
 
-  local insights_file="$INSIGHTS_DIR/adaptive_learning_insights.md"
+	local insights_file="${INSIGHTS_DIR}/adaptive_learning_insights.md"
 
-  # Create comprehensive insights report
-  cat >"$insights_file" <<EOF
+	# Create comprehensive insights report
+	cat >"${insights_file}" <<EOF
 # 🧠 Adaptive Learning System Insights
 
 **Generated:** $(date)
@@ -698,9 +698,9 @@ generate_insights() {
 
 EOF
 
-  # Add performance metrics from learning analysis
-  if [[ -f "$INSIGHTS_DIR/learning_analysis_report.json" ]]; then
-    python3 <<'EOF'
+	# Add performance metrics from learning analysis
+	if [[ -f "${INSIGHTS_DIR}/learning_analysis_report.json" ]]; then
+		python3 <<'EOF'
 import json
 
 try:
@@ -723,17 +723,17 @@ except Exception as e:
     print("|--------|-------|--------|")
     print("| **System Status** | Initializing | 🌱 Building Knowledge Base |")
 EOF
-  fi >>"$insights_file"
+	fi >>"${insights_file}"
 
-  cat >>"$insights_file" <<EOF
+	cat >>"${insights_file}" <<EOF
 
 ## 🔍 Key Learning Insights
 
 EOF
 
-  # Add insights from analysis
-  if [[ -f "$INSIGHTS_DIR/learning_analysis_report.json" ]]; then
-    python3 <<'EOF'
+	# Add insights from analysis
+	if [[ -f "${INSIGHTS_DIR}/learning_analysis_report.json" ]]; then
+		python3 <<'EOF'
 import json
 
 try:
@@ -776,9 +776,9 @@ except Exception as e:
     print("- Building baseline knowledge from current data")
     print("- Pattern recognition capabilities are developing")
 EOF
-  fi >>"$insights_file"
+	fi >>"${insights_file}"
 
-  cat >>"$insights_file" <<EOF
+	cat >>"${insights_file}" <<EOF
 
 ## 🚀 Adaptive Improvements
 
@@ -824,16 +824,16 @@ Based on current learning patterns, the system will focus on:
 ## 📊 Learning Metrics Dashboard
 
 ### Recent Learning Activity
-- **New Patterns Learned:** $(find "$PATTERNS_DIR" -name "*.json" -mtime -1 | wc -l | xargs)
-- **Model Updates:** $(find "$MODELS_DIR" -name "*.json" -mtime -1 | wc -l | xargs)
-- **Learning Sessions:** $(find "$HISTORY_DIR" -name "*.json" -mtime -7 | wc -l | xargs) (last 7 days)
+- **New Patterns Learned:** $(find "${PATTERNS_DIR}" -name "*.json" -mtime -1 | wc -l | xargs)
+- **Model Updates:** $(find "${MODELS_DIR}" -name "*.json" -mtime -1 | wc -l | xargs)
+- **Learning Sessions:** $(find "${HISTORY_DIR}" -name "*.json" -mtime -7 | wc -l | xargs) (last 7 days)
 
 ### Knowledge Base Status
 EOF
 
-  # Add knowledge base statistics
-  if [[ -f "$MODELS_DIR/master_learning_model.json" ]]; then
-    python3 <<'EOF'
+	# Add knowledge base statistics
+	if [[ -f "${MODELS_DIR}/master_learning_model.json" ]]; then
+		python3 <<'EOF'
 import json
 
 try:
@@ -858,9 +858,9 @@ except Exception as e:
     print("- Learning modules are building baseline data")
     print("- Metrics will be available after initial learning cycle")
 EOF
-  fi >>"$insights_file"
+	fi >>"${insights_file}"
 
-  cat >>"$insights_file" <<EOF
+	cat >>"${insights_file}" <<EOF
 
 ## 🎯 Next Steps
 
@@ -886,40 +886,40 @@ EOF
 
 EOF
 
-  print_success "Learning insights report generated: $insights_file"
+	print_success "Learning insights report generated: ${insights_file}"
 }
 
 # Main execution function
 main() {
-  case "${1:-help}" in
-  "init" | "initialize")
-    initialize_learning_system
-    ;;
-  "collect")
-    initialize_learning_system
-    collect_learning_data "${2:-all}"
-    ;;
-  "analyze")
-    initialize_learning_system
-    collect_learning_data
-    analyze_and_learn
-    ;;
-  "insights")
-    initialize_learning_system
-    collect_learning_data
-    analyze_and_learn
-    generate_insights
-    ;;
-  "full")
-    initialize_learning_system
-    collect_learning_data
-    analyze_and_learn
-    generate_insights
-    ;;
-  "status")
-    print_header "Adaptive Learning System Status"
-    if [[ -f "$MODELS_DIR/master_learning_model.json" ]]; then
-      python3 <<'EOF'
+	case "${1:-help}" in
+	"init" | "initialize")
+		initialize_learning_system
+		;;
+	"collect")
+		initialize_learning_system
+		collect_learning_data "${2:-all}"
+		;;
+	"analyze")
+		initialize_learning_system
+		collect_learning_data
+		analyze_and_learn
+		;;
+	"insights")
+		initialize_learning_system
+		collect_learning_data
+		analyze_and_learn
+		generate_insights
+		;;
+	"full")
+		initialize_learning_system
+		collect_learning_data
+		analyze_and_learn
+		generate_insights
+		;;
+	"status")
+		print_header "Adaptive Learning System Status"
+		if [[ -f "${MODELS_DIR}/master_learning_model.json" ]]; then
+			python3 <<'EOF'
 import json
 try:
     with open('.ai_learning_system/models/master_learning_model.json', 'r') as f:
@@ -933,13 +933,13 @@ try:
 except Exception as e:
     print("🌱 System Status: Initializing")
 EOF
-    else
-      print_status "Learning system not yet initialized"
-      print_status "Run './adaptive_learning_system.sh init' to initialize"
-    fi
-    ;;
-  "help" | "--help" | "-h")
-    cat <<EOF
+		else
+			print_status "Learning system not yet initialized"
+			print_status "Run './adaptive_learning_system.sh init' to initialize"
+		fi
+		;;
+	"help" | "--help" | "-h")
+		cat <<EOF
 🧠 Adaptive Learning System for MCP AI
 
 Usage: $0 [COMMAND] [OPTIONS]
@@ -972,13 +972,13 @@ The adaptive learning system continuously improves MCP AI capabilities by:
 - Optimizing system performance over time
 
 EOF
-    ;;
-  *)
-    print_error "Unknown command: ${1:-}"
-    echo "Use '$0 help' for usage information"
-    exit 1
-    ;;
-  esac
+		;;
+	*)
+		print_error "Unknown command: ${1-}"
+		echo "Use '$0 help' for usage information"
+		exit 1
+		;;
+	esac
 }
 
 # Execute main function

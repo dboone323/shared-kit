@@ -1,29 +1,21 @@
 #!/bin/bash
 
-echo "════════════════════════════════════════════════════════════════════"
-echo "🎉 ENHANCED DEVELOPMENT WORKFLOWS - INTEGRATION COMPLETE!"
-echo "════════════════════════════════════════════════════════════════════"
-echo ""
-echo "✅ Successfully installed and integrated:"
-echo "   • SwiftFormat (v0.57.2) - Code formatting"
-echo "   • Fastlane (v2.228.0) - iOS deployment automation"
-echo "   • CocoaPods (v1.16.2) - Dependency management"
-echo "   • VS Code Extensions - Enhanced development environment"
-echo ""
-echo "🚀 Key workflows now available:"
-echo "   • Pre-commit workflow (format → lint → build → test)"
-echo "   • Quality assurance analysis with metrics"
-echo "   • Smart Git workflows with automated checks"
-echo "   • iOS deployment setup with Fastlane"
-echo "   • Comprehensive dependency management"
-echo ""
-echo "🎯 Quick start commands:"
-echo "   ./master_automation.sh dashboard"
-echo "   ./master_automation.sh workflow pre-commit CodingReviewer"
-echo "   ./git_workflow.sh status"
-echo ""
-echo "📊 System Health: 🟢 EXCELLENT (100%)"
-echo "   All tools installed and configured properly!"
-echo ""
-echo "📚 Documentation: ./Documentation/Enhanced_Workflows.md"
-echo "════════════════════════════════════════════════════════════════════"
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+find_repo_root() {
+	local dir="${SCRIPT_DIR}"
+	while [[ "${dir}" != "/" ]]; do
+		if [[ -d "${dir}/.git" ]]; then
+			echo "${dir}"
+			return 0
+		fi
+		dir="$(dirname "${dir}")"
+	done
+	echo "Unable to locate repository root from ${SCRIPT_DIR}" >&2
+	exit 1
+}
+
+REPO_ROOT="$(find_repo_root)"
+exec "${REPO_ROOT}/Tools/Automation/completion_summary.sh" "$@"

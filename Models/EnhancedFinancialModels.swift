@@ -65,42 +65,42 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
     // Computed Properties
     public var availableCredit: Double {
         guard let creditLimit, accountType == .credit else { return 0 }
-        return creditLimit - self.balance
+        return creditLimit - balance
     }
 
     public var creditUtilization: Double {
         guard let creditLimit, creditLimit > 0, accountType == .credit else { return 0 }
-        return (self.balance / creditLimit) * 100
+        return (balance / creditLimit) * 100
     }
 
     public var monthlySpending: Double {
         let startOfMonth = Calendar.current.dateInterval(of: .month, for: Date())?.start ?? Date()
-        return self.transactions
+        return transactions
             .filter { $0.date >= startOfMonth && $0.transactionType == .expense }
             .reduce(0) { $0 + $1.amount }
     }
 
     public var monthlyIncome: Double {
         let startOfMonth = Calendar.current.dateInterval(of: .month, for: Date())?.start ?? Date()
-        return self.transactions
+        return transactions
             .filter { $0.date >= startOfMonth && $0.transactionType == .income }
             .reduce(0) { $0 + $1.amount }
     }
 
     public var netWorth: Double {
-        switch self.accountType {
+        switch accountType {
         case .checking, .savings, .cash:
-            self.balance
+            balance
         case .credit:
-            -self.balance // Credit card balances are liabilities
+            -balance // Credit card balances are liabilities
         case .investment:
-            self.balance // Investment accounts are assets
+            balance // Investment accounts are assets
         }
     }
 
     public var averageTransactionAmount: Double {
-        guard !self.transactions.isEmpty else { return 0 }
-        return self.transactions.reduce(0) { $0 + $1.amount } / Double(self.transactions.count)
+        guard !transactions.isEmpty else { return 0 }
+        return transactions.reduce(0) { $0 + $1.amount } / Double(transactions.count)
     }
 
     // Initialization
@@ -113,59 +113,59 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         institutionName: String = "",
         accountOwner: String = ""
     ) {
-        self.id = UUID()
+        id = UUID()
         self.name = name
         self.balance = balance
         self.iconName = iconName
         self.accountType = accountType
         self.currencyCode = currencyCode
-        self.createdDate = Date()
+        createdDate = Date()
 
         self.institutionName = institutionName
-        self.color = "blue"
-        self.isActive = true
+        color = "blue"
+        isActive = true
         self.accountOwner = accountOwner
-        self.jointOwners = []
-        self.tags = []
-        self.notes = ""
+        jointOwners = []
+        tags = []
+        notes = ""
 
-        self.totalInflow = 0
-        self.totalOutflow = 0
-        self.averageMonthlyBalance = balance
-        self.highestBalance = balance
-        self.lowestBalance = balance
+        totalInflow = 0
+        totalOutflow = 0
+        averageMonthlyBalance = balance
+        highestBalance = balance
+        lowestBalance = balance
 
-        self.globalId = "account_\(self.id.uuidString)"
-        self.projectContext = ProjectContext.momentumFinance.rawValue
-        self.externalReferences = []
+        globalId = "account_\(id.uuidString)"
+        projectContext = ProjectContext.momentumFinance.rawValue
+        externalReferences = []
     }
 
     // MARK: - Validatable Implementation
 
     @MainActor
     public func validate() throws {
-        let errors = self.validationErrors
+        let errors = validationErrors
         if !errors.isEmpty {
             throw errors.first!
         }
     }
 
     public var isValid: Bool {
-        self.validationErrors.isEmpty
+        validationErrors.isEmpty
     }
 
     public var validationErrors: [ValidationError] {
         var errors: [ValidationError] = []
 
-        if self.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             errors.append(.required(field: "name"))
         }
 
-        if self.name.count > 100 {
+        if name.count > 100 {
             errors.append(.invalid(field: "name", reason: "must be 100 characters or less"))
         }
 
-        if self.accountOwner.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if accountOwner.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             errors.append(.required(field: "accountOwner"))
         }
 
@@ -183,77 +183,77 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
     // MARK: - Trackable Implementation
 
     public var trackingId: String {
-        "account_\(self.id.uuidString)"
+        "account_\(id.uuidString)"
     }
 
     public var analyticsMetadata: [String: Any] {
         [
-            "accountType": self.accountType.rawValue,
-            "currencyCode": self.currencyCode,
-            "institutionName": self.institutionName,
-            "balance": self.balance,
-            "transactionCount": self.transactions.count,
-            "isActive": self.isActive,
-            "creditUtilization": self.creditUtilization,
+            "accountType": accountType.rawValue,
+            "currencyCode": currencyCode,
+            "institutionName": institutionName,
+            "balance": balance,
+            "transactionCount": transactions.count,
+            "isActive": isActive,
+            "creditUtilization": creditUtilization,
         ]
     }
 
     public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
-        var eventParameters = self.analyticsMetadata
+        var eventParameters = analyticsMetadata
         parameters?.forEach { key, value in
             eventParameters[key] = value
         }
 
-        print("Tracking event: \(event) for account: \(self.name) with parameters: \(eventParameters)")
+        print("Tracking event: \(event) for account: \(name) with parameters: \(eventParameters)")
     }
 
     // MARK: - Business Logic Methods
 
     @MainActor
     public func updateBalance(for transaction: EnhancedFinancialTransaction) {
-        let previousBalance = self.balance
+        let previousBalance = balance
 
         switch transaction.transactionType {
         case .income:
-            self.balance += transaction.amount
-            self.totalInflow += transaction.amount
+            balance += transaction.amount
+            totalInflow += transaction.amount
         case .expense:
-            self.balance -= transaction.amount
-            self.totalOutflow += transaction.amount
+            balance -= transaction.amount
+            totalOutflow += transaction.amount
         case .transfer:
             // Handle transfer logic
             break
         }
 
         // Update analytics
-        self.updateBalanceAnalytics()
-        self.lastTransactionDate = transaction.date
+        updateBalanceAnalytics()
+        lastTransactionDate = transaction.date
 
-        self.trackEvent("balance_updated", parameters: [
+        trackEvent("balance_updated", parameters: [
             "previousBalance": previousBalance,
-            "newBalance": self.balance,
-            "change": self.balance - previousBalance,
+            "newBalance": balance,
+            "change": balance - previousBalance,
             "transactionType": transaction.transactionType.rawValue,
         ])
     }
 
     private func updateBalanceAnalytics() {
-        if self.balance > self.highestBalance {
-            self.highestBalance = self.balance
+        if balance > highestBalance {
+            highestBalance = balance
         }
 
-        if self.balance < self.lowestBalance {
-            self.lowestBalance = self.balance
+        if balance < lowestBalance {
+            lowestBalance = balance
         }
 
         // Calculate average monthly balance (simplified)
-        self.averageMonthlyBalance = (self.averageMonthlyBalance + self.balance) / 2
+        averageMonthlyBalance = (averageMonthlyBalance + balance) / 2
     }
 
     @MainActor
     public func addExternalReference(_ reference: ExternalReference) {
-        self.externalReferences.append(reference)
-        self.trackEvent("external_reference_added", parameters: [
+        externalReferences.append(reference)
+        trackEvent("external_reference_added", parameters: [
             "project": reference.projectContext.rawValue,
             "model_type": reference.modelType,
         ])
@@ -261,7 +261,7 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
 
     public func getSpendingByCategory(for period: DatePeriod = .thisMonth) -> [String: Double] {
         let dateRange = period.dateRange
-        let expenses = self.transactions
+        let expenses = transactions
             .filter { $0.transactionType == .expense && $0.date >= dateRange.start && $0.date <= dateRange.end }
 
         var categorySpending: [String: Double] = [:]
@@ -332,16 +332,16 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
     public var displayAmount: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.currencyCode = self.originalCurrency ?? "USD"
-        return formatter.string(from: NSNumber(value: self.amount)) ?? "$0.00"
+        formatter.currencyCode = originalCurrency ?? "USD"
+        return formatter.string(from: NSNumber(value: amount)) ?? "$0.00"
     }
 
     public var isExpense: Bool {
-        self.transactionType == .expense
+        transactionType == .expense
     }
 
     public var isIncome: Bool {
-        self.transactionType == .income
+        transactionType == .income
     }
 
     public var categoryPath: String {
@@ -360,50 +360,50 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
         category: String? = nil,
         account: EnhancedFinancialAccount? = nil
     ) {
-        self.id = UUID()
+        id = UUID()
         self.amount = amount
         self.date = date
-        self.transactionDescription = description
+        transactionDescription = description
         self.transactionType = transactionType
         self.category = category
-        self.isReconciled = false
-        self.createdDate = Date()
+        isReconciled = false
+        createdDate = Date()
         self.account = account
 
-        self.tags = []
-        self.notes = ""
-        self.isRecurring = false
-        self.confidence = 1.0
-        self.isBusinessExpense = false
-        self.isTaxDeductible = false
+        tags = []
+        notes = ""
+        isRecurring = false
+        confidence = 1.0
+        isBusinessExpense = false
+        isTaxDeductible = false
     }
 
     // MARK: - Validatable Implementation
 
     @MainActor
     public func validate() throws {
-        let errors = self.validationErrors
+        let errors = validationErrors
         if !errors.isEmpty {
             throw errors.first!
         }
     }
 
     public var isValid: Bool {
-        self.validationErrors.isEmpty
+        validationErrors.isEmpty
     }
 
     public var validationErrors: [ValidationError] {
         var errors: [ValidationError] = []
 
-        if self.amount <= 0 {
+        if amount <= 0 {
             errors.append(.invalid(field: "amount", reason: "must be greater than 0"))
         }
 
-        if self.transactionDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if transactionDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             errors.append(.required(field: "description"))
         }
 
-        if self.date > Date().addingTimeInterval(86400) { // Allow 1 day in future
+        if date > Date().addingTimeInterval(86400) { // Allow 1 day in future
             errors.append(.invalid(field: "date", reason: "cannot be more than 1 day in the future"))
         }
 
@@ -417,29 +417,29 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
     // MARK: - Trackable Implementation
 
     public var trackingId: String {
-        "transaction_\(self.id.uuidString)"
+        "transaction_\(id.uuidString)"
     }
 
     public var analyticsMetadata: [String: Any] {
         [
-            "amount": self.amount,
-            "transactionType": self.transactionType.rawValue,
-            "category": self.category ?? "none",
-            "paymentMethod": self.paymentMethod?.rawValue ?? "none",
-            "isRecurring": self.isRecurring,
-            "isBusinessExpense": self.isBusinessExpense,
-            "isTaxDeductible": self.isTaxDeductible,
-            "hasAttachments": !self.attachments.isEmpty,
+            "amount": amount,
+            "transactionType": transactionType.rawValue,
+            "category": category ?? "none",
+            "paymentMethod": paymentMethod?.rawValue ?? "none",
+            "isRecurring": isRecurring,
+            "isBusinessExpense": isBusinessExpense,
+            "isTaxDeductible": isTaxDeductible,
+            "hasAttachments": !attachments.isEmpty,
         ]
     }
 
     public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
-        var eventParameters = self.analyticsMetadata
+        var eventParameters = analyticsMetadata
         parameters?.forEach { key, value in
             eventParameters[key] = value
         }
 
-        print("Tracking event: \(event) for transaction: \(self.transactionDescription) with parameters: \(eventParameters)")
+        print("Tracking event: \(event) for transaction: \(transactionDescription) with parameters: \(eventParameters)")
     }
 }
 
@@ -499,32 +499,32 @@ public final class EnhancedBudget: Validatable, Trackable {
 
     // Computed Properties
     public var remainingAmount: Double {
-        max(0, self.amount - self.totalSpent)
+        max(0, amount - totalSpent)
     }
 
     public var spentPercentage: Double {
-        guard self.amount > 0 else { return 0 }
-        return (self.totalSpent / self.amount) * 100
+        guard amount > 0 else { return 0 }
+        return (totalSpent / amount) * 100
     }
 
     public var isOverBudget: Bool {
-        self.totalSpent > self.amount
+        totalSpent > amount
     }
 
     public var daysRemaining: Int {
-        max(0, Calendar.current.dateComponents([.day], from: Date(), to: self.endDate).day ?? 0)
+        max(0, Calendar.current.dateComponents([.day], from: Date(), to: endDate).day ?? 0)
     }
 
     public var dailyBudgetRemaining: Double {
-        guard self.daysRemaining > 0 else { return 0 }
-        return self.remainingAmount / Double(self.daysRemaining)
+        guard daysRemaining > 0 else { return 0 }
+        return remainingAmount / Double(daysRemaining)
     }
 
     public var status: BudgetStatus {
-        let percentage = self.spentPercentage
+        let percentage = spentPercentage
         if percentage >= 100 {
             return .exceeded
-        } else if percentage >= self.alertThreshold {
+        } else if percentage >= alertThreshold {
             return .warning
         } else if percentage >= 50 {
             return .onTrack
@@ -557,81 +557,81 @@ public final class EnhancedBudget: Validatable, Trackable {
         category: String? = nil,
         budgetType: BudgetType = .spending
     ) {
-        self.id = UUID()
+        id = UUID()
         self.name = name
         self.amount = amount
         self.period = period
         self.category = category
         self.budgetType = budgetType
-        self.isActive = true
-        self.createdDate = Date()
+        isActive = true
+        createdDate = Date()
 
         // Calculate dates based on period
         let calendar = Calendar.current
-        self.startDate = calendar.startOfDay(for: Date())
+        startDate = calendar.startOfDay(for: Date())
 
         switch period {
         case .weekly:
-            self.endDate = calendar.date(byAdding: .weekOfYear, value: 1, to: self.startDate) ?? self.startDate
+            endDate = calendar.date(byAdding: .weekOfYear, value: 1, to: startDate) ?? startDate
         case .monthly:
-            self.endDate = calendar.date(byAdding: .month, value: 1, to: self.startDate) ?? self.startDate
+            endDate = calendar.date(byAdding: .month, value: 1, to: startDate) ?? startDate
         case .quarterly:
-            self.endDate = calendar.date(byAdding: .month, value: 3, to: self.startDate) ?? self.startDate
+            endDate = calendar.date(byAdding: .month, value: 3, to: startDate) ?? startDate
         case .yearly:
-            self.endDate = calendar.date(byAdding: .year, value: 1, to: self.startDate) ?? self.startDate
+            endDate = calendar.date(byAdding: .year, value: 1, to: startDate) ?? startDate
         case .custom:
-            self.endDate = calendar.date(byAdding: .month, value: 1, to: self.startDate) ?? self.startDate
+            endDate = calendar.date(byAdding: .month, value: 1, to: startDate) ?? startDate
         }
 
-        self.alertThreshold = 80.0
-        self.color = "blue"
-        self.iconName = "dollarsign.circle"
-        self.notes = ""
-        self.tags = []
-        self.autoRenew = false
-        self.carryover = false
-        self.priority = 3
+        alertThreshold = 80.0
+        color = "blue"
+        iconName = "dollarsign.circle"
+        notes = ""
+        tags = []
+        autoRenew = false
+        carryover = false
+        priority = 3
 
-        self.totalSpent = 0
-        self.averageSpentPerPeriod = 0
-        self.periodsOver = 0
-        self.periodsUnder = 0
+        totalSpent = 0
+        averageSpentPerPeriod = 0
+        periodsOver = 0
+        periodsUnder = 0
     }
 
     // MARK: - Validatable Implementation
 
     @MainActor
     public func validate() throws {
-        let errors = self.validationErrors
+        let errors = validationErrors
         if !errors.isEmpty {
             throw errors.first!
         }
     }
 
     public var isValid: Bool {
-        self.validationErrors.isEmpty
+        validationErrors.isEmpty
     }
 
     public var validationErrors: [ValidationError] {
         var errors: [ValidationError] = []
 
-        if self.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             errors.append(.required(field: "name"))
         }
 
-        if self.amount <= 0 {
+        if amount <= 0 {
             errors.append(.invalid(field: "amount", reason: "must be greater than 0"))
         }
 
-        if self.endDate <= self.startDate {
+        if endDate <= startDate {
             errors.append(.invalid(field: "endDate", reason: "must be after start date"))
         }
 
-        if self.alertThreshold < 0 || self.alertThreshold > 100 {
+        if alertThreshold < 0 || alertThreshold > 100 {
             errors.append(.outOfRange(field: "alertThreshold", min: 0, max: 100))
         }
 
-        if self.priority < 1 || self.priority > 5 {
+        if priority < 1 || priority > 5 {
             errors.append(.outOfRange(field: "priority", min: 1, max: 5))
         }
 
@@ -641,29 +641,29 @@ public final class EnhancedBudget: Validatable, Trackable {
     // MARK: - Trackable Implementation
 
     public var trackingId: String {
-        "budget_\(self.id.uuidString)"
+        "budget_\(id.uuidString)"
     }
 
     public var analyticsMetadata: [String: Any] {
         [
-            "budgetType": self.budgetType.rawValue,
-            "period": self.period.rawValue,
-            "amount": self.amount,
-            "spentPercentage": self.spentPercentage,
-            "status": self.status.rawValue,
-            "isActive": self.isActive,
-            "autoRenew": self.autoRenew,
-            "priority": self.priority,
+            "budgetType": budgetType.rawValue,
+            "period": period.rawValue,
+            "amount": amount,
+            "spentPercentage": spentPercentage,
+            "status": status.rawValue,
+            "isActive": isActive,
+            "autoRenew": autoRenew,
+            "priority": priority,
         ]
     }
 
     public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
-        var eventParameters = self.analyticsMetadata
+        var eventParameters = analyticsMetadata
         parameters?.forEach { key, value in
             eventParameters[key] = value
         }
 
-        print("Tracking event: \(event) for budget: \(self.name) with parameters: \(eventParameters)")
+        print("Tracking event: \(event) for budget: \(name) with parameters: \(eventParameters)")
     }
 }
 
@@ -689,58 +689,58 @@ public final class EnhancedSavingsGoal: Validatable, Trackable {
 
     // Computed Properties
     public var progressPercentage: Double {
-        guard self.targetAmount > 0 else { return 0 }
-        return (self.currentAmount / self.targetAmount) * 100
+        guard targetAmount > 0 else { return 0 }
+        return (currentAmount / targetAmount) * 100
     }
 
     public var remainingAmount: Double {
-        max(0, self.targetAmount - self.currentAmount)
+        max(0, targetAmount - currentAmount)
     }
 
     public var isComplete: Bool {
-        self.currentAmount >= self.targetAmount
+        currentAmount >= targetAmount
     }
 
     public init(name: String, targetAmount: Double, targetDate: Date? = nil) {
-        self.id = UUID()
+        id = UUID()
         self.name = name
         self.targetAmount = targetAmount
-        self.currentAmount = 0
+        currentAmount = 0
         self.targetDate = targetDate
-        self.isActive = true
-        self.createdDate = Date()
-        self.priority = 3
-        self.color = "green"
-        self.iconName = "target"
-        self.notes = ""
+        isActive = true
+        createdDate = Date()
+        priority = 3
+        color = "green"
+        iconName = "target"
+        notes = ""
     }
 
     // MARK: - Validatable Implementation
 
     @MainActor
     public func validate() throws {
-        let errors = self.validationErrors
+        let errors = validationErrors
         if !errors.isEmpty {
             throw errors.first!
         }
     }
 
     public var isValid: Bool {
-        self.validationErrors.isEmpty
+        validationErrors.isEmpty
     }
 
     public var validationErrors: [ValidationError] {
         var errors: [ValidationError] = []
 
-        if self.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             errors.append(.required(field: "name"))
         }
 
-        if self.targetAmount <= 0 {
+        if targetAmount <= 0 {
             errors.append(.invalid(field: "targetAmount", reason: "must be greater than 0"))
         }
 
-        if self.currentAmount < 0 {
+        if currentAmount < 0 {
             errors.append(.invalid(field: "currentAmount", reason: "cannot be negative"))
         }
 
@@ -750,26 +750,26 @@ public final class EnhancedSavingsGoal: Validatable, Trackable {
     // MARK: - Trackable Implementation
 
     public var trackingId: String {
-        "goal_\(self.id.uuidString)"
+        "goal_\(id.uuidString)"
     }
 
     public var analyticsMetadata: [String: Any] {
         [
-            "targetAmount": self.targetAmount,
-            "currentAmount": self.currentAmount,
-            "progressPercentage": self.progressPercentage,
-            "isComplete": self.isComplete,
-            "priority": self.priority,
+            "targetAmount": targetAmount,
+            "currentAmount": currentAmount,
+            "progressPercentage": progressPercentage,
+            "isComplete": isComplete,
+            "priority": priority,
         ]
     }
 
     public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
-        var eventParameters = self.analyticsMetadata
+        var eventParameters = analyticsMetadata
         parameters?.forEach { key, value in
             eventParameters[key] = value
         }
 
-        print("Tracking event: \(event) for goal: \(self.name) with parameters: \(eventParameters)")
+        print("Tracking event: \(event) for goal: \(name) with parameters: \(eventParameters)")
     }
 }
 
@@ -787,12 +787,12 @@ public final class TransactionAttachment {
     public var transaction: EnhancedFinancialTransaction?
 
     public init(fileName: String, fileUrl: String, fileType: String, fileSize: Int64) {
-        self.id = UUID()
+        id = UUID()
         self.fileName = fileName
         self.fileUrl = fileUrl
         self.fileType = fileType
         self.fileSize = fileSize
-        self.uploadDate = Date()
+        uploadDate = Date()
     }
 }
 

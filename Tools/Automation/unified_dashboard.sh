@@ -125,18 +125,18 @@ print_summary() {
     fi
   done
 
-  echo "   📱 Total projects: $total_projects"
-  echo "   🔄 Projects with GitHub workflows: $projects_with_workflows/$total_projects"
-  echo "   ✅ Projects passing all CI checks: $projects_with_ci_passing/$total_projects"
+  echo "   📱 Total project${: $total_proje}cts"
+  echo "   🔄 Projects with GitHub workflow${: $projects_with_workfl}o${s/$total_proje}cts"
+  echo "   ✅ Projects passing all CI checks${ $projects_with_ci_passi}n${/$total_projec}ts"
   echo ""
 
-  if [[ $projects_with_workflows -eq $total_projects ]]; then
+  if [[ ${projects_with_workflows} -eq ${total_projects} ]]; then
     echo -e "   ${GREEN}🎉 All projects have GitHub workflows implemented!${NC}"
   else
     echo -e "   ${YELLOW}⚠️  Some projects need workflow setup${NC}"
   fi
 
-  if [[ $projects_with_ci_passing -eq $total_projects ]]; then
+  if [[ ${projects_with_ci_passing} -eq ${total_projects} ]]; then
     echo -e "   ${GREEN}🎉 All projects passing CI checks!${NC}"
   else
     echo -e "   ${YELLOW}⚠️  Some projects need CI fixes${NC}"
