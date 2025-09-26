@@ -13,10 +13,10 @@ public struct MicroInteractionButton<Content: View>: View {
     let feedbackStyle: Int
     let scaleEffect: CGFloat
     let glowColor: Color?
-    
+
     @State private var isPressed = false
     @State private var showGlow = false
-    
+
     public init(
         feedbackStyle: Int = 1,
         scaleEffect: CGFloat = 0.95,
@@ -30,7 +30,7 @@ public struct MicroInteractionButton<Content: View>: View {
         self.scaleEffect = scaleEffect
         self.glowColor = glowColor
     }
-    
+
     public var body: some View {
         self.content
             .scaleEffect(self.isPressed ? self.scaleEffect : 1.0)
@@ -56,14 +56,14 @@ public struct MicroInteractionButton<Content: View>: View {
                 }
             }, perform: {})
     }
-    
+
     private func performMicroInteraction() {
         GestureAnimations.hapticFeedback(style: self.feedbackStyle)
-        
+
         withAnimation(AnimationTiming.springBouncy) {
             self.showGlow = true
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             withAnimation(AnimationTiming.easeOut) {
                 self.showGlow = false
@@ -77,11 +77,11 @@ public struct PressAndHoldButton<Content: View>: View {
     let duration: TimeInterval
     let onProgress: (Double) -> Void
     let onComplete: () -> Void
-    
+
     @State private var isPressed = false
     @State private var progress: Double = 0
     @State private var timer: Timer?
-    
+
     public init(
         duration: TimeInterval = 2.0,
         onProgress: @escaping (Double) -> Void = { _ in },
@@ -93,20 +93,20 @@ public struct PressAndHoldButton<Content: View>: View {
         self.onProgress = onProgress
         self.onComplete = onComplete
     }
-    
+
     public var body: some View {
         ZStack {
             // Progress background
             Circle()
                 .stroke(Color.gray.opacity(0.3), lineWidth: 4)
-            
+
             // Progress indicator
             Circle()
                 .trim(from: 0, to: CGFloat(self.progress))
                 .stroke(Color.blue, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                 .rotationEffect(.degrees(-90))
                 .animation(AnimationTiming.quick, value: self.progress)
-            
+
             self.content
                 .scaleEffect(self.isPressed ? 0.9 : 1.0)
         }
@@ -122,40 +122,40 @@ public struct PressAndHoldButton<Content: View>: View {
                 }
         )
     }
-    
+
     private func startProgress() {
         self.isPressed = true
         self.progress = 0
         GestureAnimations.hapticFeedback(style: 0)
-        
+
         self.timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
             self.progress += 0.05 / self.duration
             self.onProgress(self.progress)
-            
+
             if self.progress >= 1.0 {
                 self.completeAction()
             }
         }
     }
-    
+
     private func stopProgress() {
         self.isPressed = false
         self.timer?.invalidate()
         self.timer = nil
-        
+
         withAnimation(AnimationTiming.easeOut) {
             self.progress = 0
         }
     }
-    
+
     private func completeAction() {
         self.timer?.invalidate()
         self.timer = nil
         self.isPressed = false
-        
+
         GestureAnimations.hapticFeedback(style: 2)
         self.onComplete()
-        
+
         withAnimation(AnimationTiming.easeOut) {
             self.progress = 0
         }
@@ -169,11 +169,11 @@ public struct SwipeGestureArea<Content: View>: View {
     let onSwipeUp: (() -> Void)?
     let onSwipeDown: (() -> Void)?
     let threshold: CGFloat
-    
+
     @State private var dragOffset: CGSize = .zero
     @State private var showDirectionHint = false
     @State private var swipeDirection: SwipeDirection?
-    
+
     public init(
         threshold: CGFloat = 100,
         onSwipeLeft: (() -> Void)? = nil,
@@ -189,12 +189,12 @@ public struct SwipeGestureArea<Content: View>: View {
         self.onSwipeUp = onSwipeUp
         self.onSwipeDown = onSwipeDown
     }
-    
+
     public var body: some View {
         ZStack {
             self.content
                 .offset(self.dragOffset)
-            
+
             // Direction hint
             if self.showDirectionHint, let direction = swipeDirection {
                 SwipeDirectionHint(direction: direction)
@@ -208,7 +208,7 @@ public struct SwipeGestureArea<Content: View>: View {
                         width: value.translation.x * 0.3,
                         height: value.translation.y * 0.3
                     )
-                    
+
                     let direction = self.getSwipeDirection(from: value.translation)
                     if direction != self.swipeDirection {
                         self.swipeDirection = direction
@@ -220,15 +220,15 @@ public struct SwipeGestureArea<Content: View>: View {
                 }
                 .onEnded { value in
                     let translation = value.translation
-                    
+
                     withAnimation(AnimationTiming.springBouncy) {
                         self.dragOffset = .zero
                         self.showDirectionHint = false
                     }
-                    
+
                     if abs(translation.x) > self.threshold || abs(translation.y) > self.threshold {
                         GestureAnimations.hapticFeedback(style: 1)
-                        
+
                         if abs(translation.x) > abs(translation.y) {
                             if translation.x > 0 {
                                 self.onSwipeRight?()
@@ -243,12 +243,12 @@ public struct SwipeGestureArea<Content: View>: View {
                             }
                         }
                     }
-                    
+
                     self.swipeDirection = nil
                 }
         )
     }
-    
+
     private func getSwipeDirection(from translation: CGSize) -> SwipeDirection? {
         if abs(translation.x) > abs(translation.y) {
             translation.x > 0 ? .right : .left
@@ -264,7 +264,7 @@ private enum SwipeDirection {
 
 private struct SwipeDirectionHint: View {
     let direction: SwipeDirection
-    
+
     var body: some View {
         Image(systemName: self.arrowIcon)
             .font(.title)
@@ -276,7 +276,7 @@ private struct SwipeDirectionHint: View {
                     .background(.ultraThinMaterial, in: Circle())
             )
     }
-    
+
     private var arrowIcon: String {
         switch self.direction {
         case .left: "arrow.left"
@@ -292,17 +292,17 @@ private struct SwipeDirectionHint: View {
 public struct PinchToZoomModifier: ViewModifier {
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
-    
+
     let minScale: CGFloat
     let maxScale: CGFloat
     let onScaleChange: (CGFloat) -> Void
-    
+
     public init(minScale: CGFloat = 0.5, maxScale: CGFloat = 3.0, onScaleChange: @escaping (CGFloat) -> Void = { _ in }) {
         self.minScale = minScale
         self.maxScale = maxScale
         self.onScaleChange = onScaleChange
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .scaleEffect(self.scale)
@@ -325,13 +325,13 @@ public struct PinchToZoomModifier: ViewModifier {
 public struct RotationGestureModifier: ViewModifier {
     @State private var rotation: Angle = .zero
     @State private var lastRotation: Angle = .zero
-    
+
     let onRotationChange: (Angle) -> Void
-    
+
     public init(onRotationChange: @escaping (Angle) -> Void = { _ in }) {
         self.onRotationChange = onRotationChange
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .rotationEffect(self.rotation)
@@ -356,10 +356,10 @@ public struct MultiTouchGestureArea<Content: View>: View {
     let onDoubleTap: (() -> Void)?
     let onTripleTap: (() -> Void)?
     let onLongPress: (() -> Void)?
-    
+
     @State private var tapCount = 0
     @State private var tapTimer: Timer?
-    
+
     public init(
         onSingleTap: (() -> Void)? = nil,
         onDoubleTap: (() -> Void)? = nil,
@@ -373,7 +373,7 @@ public struct MultiTouchGestureArea<Content: View>: View {
         self.onTripleTap = onTripleTap
         self.onLongPress = onLongPress
     }
-    
+
     public var body: some View {
         self.content
             .onTapGesture {
@@ -384,11 +384,11 @@ public struct MultiTouchGestureArea<Content: View>: View {
                 GestureAnimations.hapticFeedback(style: 1)
             }
     }
-    
+
     private func handleTap() {
         self.tapCount += 1
         self.tapTimer?.invalidate()
-        
+
         self.tapTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
             switch self.tapCount {
             case 1:
@@ -414,10 +414,10 @@ public struct VibrantButton<Content: View>: View {
     let content: Content
     let action: () -> Void
     let vibrantColor: Color
-    
+
     @State private var isPressed = false
     @State private var showVibration = false
-    
+
     public init(
         vibrantColor: Color = .blue,
         action: @escaping () -> Void,
@@ -427,7 +427,7 @@ public struct VibrantButton<Content: View>: View {
         self.action = action
         self.vibrantColor = vibrantColor
     }
-    
+
     public var body: some View {
         self.content
             .scaleEffect(self.isPressed ? 0.95 : 1.0)
@@ -447,14 +447,14 @@ public struct VibrantButton<Content: View>: View {
                 }
             }, perform: {})
     }
-    
+
     private func performVibrantFeedback() {
         GestureAnimations.hapticFeedback(style: 1)
-        
+
         withAnimation(AnimationTiming.springBouncy) {
             self.showVibration = true
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             withAnimation(AnimationTiming.easeOut) {
                 self.showVibration = false
@@ -467,10 +467,10 @@ public struct MagneticButton<Content: View>: View {
     let content: Content
     let action: () -> Void
     let magneticRadius: CGFloat
-    
+
     @State private var offset: CGSize = .zero
     @State private var isAttracting = false
-    
+
     public init(
         magneticRadius: CGFloat = 50,
         action: @escaping () -> Void,
@@ -480,7 +480,7 @@ public struct MagneticButton<Content: View>: View {
         self.action = action
         self.magneticRadius = magneticRadius
     }
-    
+
     public var body: some View {
         self.content
             .offset(self.offset)
@@ -489,14 +489,14 @@ public struct MagneticButton<Content: View>: View {
                 DragGesture(coordinateSpace: .local)
                     .onChanged { value in
                         let distance = sqrt(pow(value.location.x, 2) + pow(value.location.y, 2))
-                        
+
                         if distance < self.magneticRadius {
                             let attraction = 1 - (distance / self.magneticRadius)
                             self.offset = CGSize(
                                 width: value.location.x * attraction * 0.3,
                                 height: value.location.y * attraction * 0.3
                             )
-                            
+
                             if !self.isAttracting {
                                 self.isAttracting = true
                                 GestureAnimations.hapticFeedback(style: 0)
@@ -513,7 +513,7 @@ public struct MagneticButton<Content: View>: View {
                             self.action()
                             GestureAnimations.hapticFeedback(style: 1)
                         }
-                        
+
                         withAnimation(AnimationTiming.springBouncy) {
                             self.offset = .zero
                             self.isAttracting = false
@@ -530,11 +530,11 @@ public struct ContextMenuInteraction<Content: View, MenuContent: View>: View {
     let content: Content
     let menuContent: MenuContent
     let previewContent: Content?
-    
+
     @State private var showingPreview = false
     @State private var showingMenu = false
     @State private var pressLocation: CGPoint = .zero
-    
+
     public init(
         @ViewBuilder content: () -> Content,
         @ViewBuilder menuContent: () -> MenuContent,
@@ -544,7 +544,7 @@ public struct ContextMenuInteraction<Content: View, MenuContent: View>: View {
         self.menuContent = menuContent()
         self.previewContent = previewContent?()
     }
-    
+
     public var body: some View {
         self.content
             .scaleEffect(self.showingPreview ? 1.05 : 1.0)
@@ -573,7 +573,7 @@ public struct ContextMenuInteraction<Content: View, MenuContent: View>: View {
                                     self.showingMenu = false
                                 }
                             }
-                        
+
                         VStack {
                             if let preview = previewContent {
                                 preview
@@ -581,7 +581,7 @@ public struct ContextMenuInteraction<Content: View, MenuContent: View>: View {
                                     .cornerRadius(12)
                                     .shadow(radius: 20)
                             }
-                            
+
                             self.menuContent
                                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
                                 .padding()
@@ -596,10 +596,10 @@ public struct ContextMenuInteraction<Content: View, MenuContent: View>: View {
 public struct FluidInteractionArea<Content: View>: View {
     let content: Content
     let onInteraction: (InteractionType, CGPoint) -> Void
-    
+
     @State private var lastTouchPoint: CGPoint = .zero
     @State private var ripples: [RippleEffect] = []
-    
+
     public init(
         onInteraction: @escaping (InteractionType, CGPoint) -> Void = { _, _ in },
         @ViewBuilder content: () -> Content
@@ -607,11 +607,11 @@ public struct FluidInteractionArea<Content: View>: View {
         self.content = content()
         self.onInteraction = onInteraction
     }
-    
+
     public var body: some View {
         ZStack {
             self.content
-            
+
             // Ripple effects
             ForEach(self.ripples, id: \.id) { ripple in
                 Circle()
@@ -637,18 +637,18 @@ public struct FluidInteractionArea<Content: View>: View {
             self.createRipple(at: location)
         }
     }
-    
+
     private func createRipple(at point: CGPoint) {
         let ripple = RippleEffect(position: point)
         self.ripples.append(ripple)
-        
+
         withAnimation(.easeOut(duration: 0.8)) {
             if let index = ripples.firstIndex(where: { $0.id == ripple.id }) {
                 self.ripples[index].radius = 50
                 self.ripples[index].opacity = 0
             }
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             self.ripples.removeAll { $0.id == ripple.id }
         }
@@ -684,7 +684,7 @@ public extension View {
             self
         }
     }
-    
+
     func swipeGestures(
         threshold: CGFloat = 100,
         onSwipeLeft: (() -> Void)? = nil,
@@ -702,7 +702,7 @@ public extension View {
             self
         }
     }
-    
+
     func pinchToZoom(
         minScale: CGFloat = 0.5,
         maxScale: CGFloat = 3.0,
@@ -710,11 +710,11 @@ public extension View {
     ) -> some View {
         modifier(PinchToZoomModifier(minScale: minScale, maxScale: maxScale, onScaleChange: onScaleChange))
     }
-    
+
     func rotationGesture(onRotationChange: @escaping (Angle) -> Void = { _ in }) -> some View {
         modifier(RotationGestureModifier(onRotationChange: onRotationChange))
     }
-    
+
     func multiTouchGestures(
         onSingleTap: (() -> Void)? = nil,
         onDoubleTap: (() -> Void)? = nil,
@@ -730,7 +730,7 @@ public extension View {
             self
         }
     }
-    
+
     func vibrantButton(
         vibrantColor: Color = .blue,
         action: @escaping () -> Void
@@ -739,7 +739,7 @@ public extension View {
             self
         }
     }
-    
+
     func magneticButton(
         magneticRadius: CGFloat = 50,
         action: @escaping () -> Void
@@ -748,7 +748,7 @@ public extension View {
             self
         }
     }
-    
+
     func fluidInteraction(onInteraction: @escaping (InteractionType, CGPoint) -> Void = { _, _ in }) -> some View {
         FluidInteractionArea(onInteraction: onInteraction) {
             self

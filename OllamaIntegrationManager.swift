@@ -83,30 +83,32 @@ public class OllamaIntegrationManager {
         _ context: String?,
         _ complexity: CodeComplexity
     ) -> String {
-        var prompt = """
-        Generate \(language) code for: \(description)
+        var promptParts = [
+            """
+            Generate \(language) code for: \(description)
 
-        Requirements:
-        - Use modern \(language) best practices
-        - Include proper error handling
-        - Add meaningful comments
-        - Follow naming conventions
-        """
+            Requirements:
+            - Use modern \(language) best practices
+            - Include proper error handling
+            - Add meaningful comments
+            - Follow naming conventions
+            """,
+        ]
 
         if let context {
-            prompt += "\n\nContext: \(context)"
+            promptParts.append("\n\nContext: \(context)")
         }
 
         switch complexity {
         case .simple:
-            prompt += "\n- Keep it simple and focused"
+            promptParts.append("\n- Keep it simple and focused")
         case .standard:
-            prompt += "\n- Include comprehensive functionality"
+            promptParts.append("\n- Include comprehensive functionality")
         case .advanced:
-            prompt += "\n- Implement advanced features and optimizations"
+            promptParts.append("\n- Implement advanced features and optimizations")
         }
 
-        return prompt
+        return promptParts.joined()
     }
 
     private func analyzeGeneratedCode(_ code: String, _ language: String) async throws -> String {
@@ -355,133 +357,6 @@ public class OllamaIntegrationManager {
             return TaskResult(task: task, success: true, testResult: result)
         }
     }
-}
-
-// MARK: - Supporting Types
-
-public struct ServiceHealth {
-    public let ollamaRunning: Bool
-    public let modelsAvailable: Bool
-    public let modelCount: Int
-    public let recommendedActions: [String]
-}
-
-public enum CodeComplexity {
-    case simple
-    case standard
-    case advanced
-
-    var temperature: Double {
-        switch self {
-        case .simple: 0.1
-        case .standard: 0.3
-        case .advanced: 0.5
-        }
-    }
-
-    var maxTokens: Int {
-        switch self {
-        case .simple: 1000
-        case .standard: 2000
-        case .advanced: 4000
-        }
-    }
-}
-
-public enum AnalysisType {
-    case bugs
-    case performance
-    case security
-    case comprehensive
-}
-
-public struct CodeGenerationResult {
-    public let code: String
-    public let analysis: String
-    public let language: String
-    public let complexity: CodeComplexity
-}
-
-public struct CodeAnalysisResult {
-    public let analysis: String
-    public let issues: [CodeIssue]
-    public let suggestions: [String]
-    public let language: String
-    public let analysisType: AnalysisType
-}
-
-public struct CodeIssue {
-    public let description: String
-    public let severity: IssueSeverity
-}
-
-public enum IssueSeverity {
-    case low
-    case medium
-    case high
-    case critical
-}
-
-public struct DocumentationResult {
-    public let documentation: String
-    public let language: String
-    public let includesExamples: Bool
-}
-
-public struct TestGenerationResult {
-    public let testCode: String
-    public let language: String
-    public let testFramework: String
-    public let coverage: Double
-}
-
-public struct AutomationTask {
-    public let id: String
-    public let type: TaskType
-    public let description: String
-    public let language: String?
-    public let code: String?
-
-    public enum TaskType {
-        case codeGeneration
-        case codeAnalysis
-        case documentation
-        case testing
-    }
-}
-
-public struct TaskResult {
-    public let task: AutomationTask
-    public let success: Bool
-    public let error: Error?
-    public let codeGenerationResult: CodeGenerationResult?
-    public let analysisResult: CodeAnalysisResult?
-    public let documentationResult: DocumentationResult?
-    public let testResult: TestGenerationResult?
-
-    public init(
-        task: AutomationTask,
-        success: Bool,
-        error: Error? = nil,
-        codeGenerationResult: CodeGenerationResult? = nil,
-        analysisResult: CodeAnalysisResult? = nil,
-        documentationResult: DocumentationResult? = nil,
-        testResult: TestGenerationResult? = nil
-    ) {
-        self.task = task
-        self.success = success
-        self.error = error
-        self.codeGenerationResult = codeGenerationResult
-        self.analysisResult = analysisResult
-        self.documentationResult = documentationResult
-        self.testResult = testResult
-    }
-}
-
-public enum IntegrationError: Error {
-    case missingRequiredData(String)
-    case serviceUnavailable
-    case invalidConfiguration
 }
 
 // MARK: - Logger

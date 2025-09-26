@@ -14,18 +14,18 @@ import AppKit
 @available(iOS 15.0, macOS 12.0, *)
 public struct InteractiveComponents {
     // MARK: - Interactive Button
-    
+
     public struct InteractiveButton<Content: View>: View {
         let action: () -> Void
         let content: Content
         @State private var isPressed = false
         @State private var scale: CGFloat = 1.0
-        
+
         public init(action: @escaping () -> Void, @ViewBuilder content: () -> Content) {
             self.action = action
             self.content = content()
         }
-        
+
         public var body: some View {
             self.content
                 .scaleEffect(self.scale)
@@ -48,16 +48,16 @@ public struct InteractiveComponents {
                 )
         }
     }
-    
+
     // MARK: - Swipeable Card
-    
+
     public struct SwipeableCard<Content: View>: View {
         let content: Content
         let onSwipeLeft: (() -> Void)?
         let onSwipeRight: (() -> Void)?
         @State private var offset = CGSize.zero
         @State private var rotation: Double = 0
-        
+
         public init(
             onSwipeLeft: (() -> Void)? = nil,
             onSwipeRight: (() -> Void)? = nil,
@@ -67,7 +67,7 @@ public struct InteractiveComponents {
             self.onSwipeRight = onSwipeRight
             self.content = content()
         }
-        
+
         public var body: some View {
             self.content
                 .offset(self.offset)
@@ -86,7 +86,7 @@ public struct InteractiveComponents {
                                     self.onSwipeLeft?()
                                 }
                             }
-                            
+
                             withAnimation(.spring()) {
                                 self.offset = .zero
                                 self.rotation = 0
@@ -95,18 +95,18 @@ public struct InteractiveComponents {
                 )
         }
     }
-    
+
     // MARK: - Draggable Element
-    
+
     public struct DraggableElement<Content: View>: View {
         let content: Content
         @State private var position = CGPoint(x: 100, y: 100)
         @State private var isDragging = false
-        
+
         public init(@ViewBuilder content: () -> Content) {
             self.content = content()
         }
-        
+
         public var body: some View {
             self.content
                 .position(self.position)

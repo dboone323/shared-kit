@@ -10,40 +10,40 @@ import UIKit
 @available(iOS 15.0, macOS 12.0, *)
 public struct MicroInteractions {
     // MARK: - Haptic Feedback
-    
+
     public static func lightHaptic() {
         #if canImport(UIKit)
         let impactFeedback = UIImpactFeedbackGenerator(style: .light)
         impactFeedback.impactOccurred()
         #endif
     }
-    
+
     public static func mediumHaptic() {
         #if canImport(UIKit)
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
         impactFeedback.impactOccurred()
         #endif
     }
-    
+
     public static func heavyHaptic() {
         #if canImport(UIKit)
         let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
         impactFeedback.impactOccurred()
         #endif
     }
-    
+
     // MARK: - Button Interactions
-    
+
     public struct BouncyButton<Content: View>: View {
         let action: () -> Void
         let content: Content
         @State private var isPressed = false
-        
+
         public init(action: @escaping () -> Void, @ViewBuilder content: () -> Content) {
             self.action = action
             self.content = content()
         }
-        
+
         public var body: some View {
             Button(action: {
                 lightHaptic()
@@ -60,19 +60,19 @@ public struct MicroInteractions {
             )
         }
     }
-    
+
     // MARK: - Loading States
-    
+
     public struct PulsingDot: View {
         @State private var isPulsing = false
         let color: Color
         let size: CGFloat
-        
+
         public init(color: Color = .blue, size: CGFloat = 10) {
             self.color = color
             self.size = size
         }
-        
+
         public var body: some View {
             Circle()
                 .fill(self.color)
@@ -86,31 +86,31 @@ public struct MicroInteractions {
                 .onAppear { self.isPulsing = true }
         }
     }
-    
+
     // MARK: - Success Animations
-    
+
     public struct CheckmarkAnimation: View {
         @State private var progress: CGFloat = 0
         let color: Color
         let size: CGFloat
-        
+
         public init(color: Color = .green, size: CGFloat = 24) {
             self.color = color
             self.size = size
         }
-        
+
         public var body: some View {
             ZStack {
                 Circle()
                     .stroke(self.color.opacity(0.3), lineWidth: 2)
                     .frame(width: self.size, height: self.size)
-                
+
                 Circle()
                     .trim(from: 0, to: self.progress)
                     .stroke(self.color, style: StrokeStyle(lineWidth: 3, lineCap: .round))
                     .frame(width: self.size, height: self.size)
                     .rotationEffect(.degrees(-90))
-                
+
                 if self.progress >= 1.0 {
                     Image(systemName: "checkmark")
                         .foregroundColor(self.color)
@@ -125,19 +125,19 @@ public struct MicroInteractions {
             }
         }
     }
-    
+
     // MARK: - Floating Action Button
-    
+
     public struct FloatingActionButton: View {
         let action: () -> Void
         let systemImage: String
         @State private var isExpanded = false
-        
+
         public init(systemImage: String = "plus", action: @escaping () -> Void) {
             self.systemImage = systemImage
             self.action = action
         }
-        
+
         public var body: some View {
             Button(action: {
                 mediumHaptic()

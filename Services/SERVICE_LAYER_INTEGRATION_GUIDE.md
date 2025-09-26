@@ -1,6 +1,7 @@
 # Service Layer Architecture Integration Guide
 
 ## Overview
+
 This guide provides comprehensive instructions for integrating the new Service Layer Architecture across all projects in the Quantum workspace. The service layer implements dependency injection, protocol-based architecture, and centralized business logic management.
 
 ## Architecture Components
@@ -8,9 +9,11 @@ This guide provides comprehensive instructions for integrating the new Service L
 ### Core Service Layer Files
 
 #### 1. ServiceProtocols.swift
+
 **Location**: `/Shared/Services/ServiceProtocols.swift`
 **Purpose**: Defines all service protocols and supporting models
 **Key Components**:
+
 - `ServiceProtocol` - Base protocol for all services
 - `DataServiceProtocol` - Generic CRUD operations
 - `AnalyticsServiceProtocol` - Analytics and tracking
@@ -20,9 +23,11 @@ This guide provides comprehensive instructions for integrating the new Service L
 - `CrossProjectServiceProtocol` - Inter-project integration
 
 #### 2. DependencyContainer.swift
+
 **Location**: `/Shared/Services/DependencyContainer.swift`
 **Purpose**: Dependency injection container and service management
 **Key Components**:
+
 - `DependencyContainer` - Main DI container
 - `@Injected` property wrapper - Automatic dependency injection
 - `ServiceManager` - Service lifecycle management
@@ -31,6 +36,7 @@ This guide provides comprehensive instructions for integrating the new Service L
 ## Service Architecture Patterns
 
 ### Dependency Injection
+
 The service layer uses a comprehensive dependency injection system:
 
 ```swift
@@ -40,7 +46,7 @@ DependencyContainer.shared.register(MyHabitService(), for: HabitServiceProtocol.
 // Use @Injected property wrapper
 class HabitViewController {
     @Injected private var habitService: HabitServiceProtocol
-    
+
     func createHabit() {
         // Service automatically injected
         habitService.createHabit(...)
@@ -49,6 +55,7 @@ class HabitViewController {
 ```
 
 ### Protocol-Based Architecture
+
 All business logic is defined through protocols:
 
 ```swift
@@ -73,6 +80,7 @@ class MockHabitService: HabitServiceProtocol {
 ### 1. Creating Custom Services
 
 #### Step 1: Define Service Protocol
+
 ```swift
 protocol MyBusinessServiceProtocol: ServiceProtocol {
     func performBusinessLogic() async throws -> Result
@@ -80,24 +88,25 @@ protocol MyBusinessServiceProtocol: ServiceProtocol {
 ```
 
 #### Step 2: Implement Service
+
 ```swift
 final class MyBusinessService: MyBusinessServiceProtocol {
     let serviceId = "my_business_service"
     let version = "1.0.0"
-    
+
     func initialize() async throws {
         // Setup resources
     }
-    
+
     func cleanup() async {
         // Cleanup resources
     }
-    
+
     func healthCheck() async -> ServiceHealthStatus {
         // Return health status
         return .healthy
     }
-    
+
     func performBusinessLogic() async throws -> Result {
         // Business logic implementation
     }
@@ -105,10 +114,11 @@ final class MyBusinessService: MyBusinessServiceProtocol {
 ```
 
 #### Step 3: Register Service
+
 ```swift
 // Register in dependency container
 DependencyContainer.shared.register(
-    MyBusinessService(), 
+    MyBusinessService(),
     for: MyBusinessServiceProtocol.self
 )
 ```
@@ -116,11 +126,12 @@ DependencyContainer.shared.register(
 ### 2. Using Services in Applications
 
 #### Option 1: Property Wrapper (Recommended)
+
 ```swift
 class MyViewController: UIViewController {
     @Injected private var habitService: HabitServiceProtocol
     @Injected private var analyticsService: AnalyticsServiceProtocol
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Services are automatically available
@@ -132,10 +143,11 @@ class MyViewController: UIViewController {
 ```
 
 #### Option 2: Service Locator
+
 ```swift
 class MyManager {
     private let habitService: HabitServiceProtocol
-    
+
     init() throws {
         self.habitService = try ServiceLocator.get(HabitServiceProtocol.self)
     }
@@ -143,6 +155,7 @@ class MyManager {
 ```
 
 #### Option 3: Direct Resolution
+
 ```swift
 class MyComponent {
     func performAction() async {
@@ -159,30 +172,32 @@ class MyComponent {
 ### For HabitQuest
 
 1. **Service Integration**:
+
 ```swift
 // In AppDelegate or App.swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Register HabitQuest-specific services
     DependencyContainer.shared.register(
-        HabitQuestHabitService(), 
+        HabitQuestHabitService(),
         for: HabitServiceProtocol.self
     )
-    
+
     // Initialize services
     Task {
         try await ServiceManager.shared.initializeServices()
     }
-    
+
     return true
 }
 ```
 
 2. **Use in ViewControllers**:
+
 ```swift
 class HabitListViewController: UIViewController {
     @Injected private var habitService: HabitServiceProtocol
     @Injected private var analyticsService: AnalyticsServiceProtocol
-    
+
     func loadHabits() async {
         await analyticsService.track(event: "habits_loaded", properties: nil, userId: getCurrentUserId())
         // Load habits using service
@@ -193,19 +208,21 @@ class HabitListViewController: UIViewController {
 ### For MomentumFinance
 
 1. **Service Registration**:
+
 ```swift
 // Register financial services
 DependencyContainer.shared.register(
-    MomentumFinancialService(), 
+    MomentumFinancialService(),
     for: FinancialServiceProtocol.self
 )
 ```
 
 2. **Integration Example**:
+
 ```swift
 class TransactionViewController: UIViewController {
     @Injected private var financialService: FinancialServiceProtocol
-    
+
     func createTransaction(_ transaction: EnhancedFinancialTransaction) async {
         do {
             let createdTransaction = try await financialService.createTransaction(transaction)
@@ -220,18 +237,20 @@ class TransactionViewController: UIViewController {
 ### For PlannerApp
 
 1. **Service Setup**:
+
 ```swift
 DependencyContainer.shared.register(
-    PlannerTaskService(), 
+    PlannerTaskService(),
     for: PlannerServiceProtocol.self
 )
 ```
 
 2. **Task Management**:
+
 ```swift
 class TaskViewController: UIViewController {
     @Injected private var plannerService: PlannerServiceProtocol
-    
+
     func createTask(_ task: EnhancedTask) async {
         do {
             let optimizedTask = try await plannerService.createTask(task)
@@ -246,6 +265,7 @@ class TaskViewController: UIViewController {
 ### For CodingReviewer
 
 1. **Custom Service Protocol**:
+
 ```swift
 protocol CodeReviewServiceProtocol: ServiceProtocol {
     func analyzeCode(_ code: String) async throws -> CodeAnalysis
@@ -254,10 +274,11 @@ protocol CodeReviewServiceProtocol: ServiceProtocol {
 ```
 
 2. **Service Implementation**:
+
 ```swift
 class CodeReviewService: CodeReviewServiceProtocol {
     @Injected private var analyticsService: AnalyticsServiceProtocol
-    
+
     func analyzeCode(_ code: String) async throws -> CodeAnalysis {
         await analyticsService.track(event: "code_analyzed", properties: ["lines": code.components(separatedBy: .newlines).count], userId: nil)
         // Analysis logic
@@ -268,10 +289,11 @@ class CodeReviewService: CodeReviewServiceProtocol {
 ### For AvoidObstaclesGame
 
 1. **Game Analytics**:
+
 ```swift
 class GameManager {
     @Injected private var analyticsService: AnalyticsServiceProtocol
-    
+
     func playerScored(_ score: Int) async {
         await analyticsService.track(event: "player_scored", properties: ["score": score], userId: getPlayerId())
     }
@@ -285,7 +307,7 @@ class GameManager {
 ```swift
 class UnifiedDashboard {
     @Injected private var crossProjectService: CrossProjectServiceProtocol
-    
+
     func loadUnifiedInsights() async {
         do {
             let insights = try await crossProjectService.getUnifiedUserInsights(for: getCurrentUserId())
@@ -303,7 +325,7 @@ class UnifiedDashboard {
 class HealthDashboard {
     func checkSystemHealth() async {
         let healthStatuses = await ServiceManager.shared.getServicesHealthStatus()
-        
+
         for (serviceId, status) in healthStatuses {
             switch status {
             case .healthy:
@@ -323,10 +345,10 @@ class HealthDashboard {
 ```swift
 class BaseViewController: UIViewController {
     @Injected private var analyticsService: AnalyticsServiceProtocol
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         Task {
             await analyticsService.trackUserAction(UserAction(
                 action: "screen_view",
@@ -347,18 +369,18 @@ class BaseViewController: UIViewController {
 class MockHabitService: HabitServiceProtocol {
     let serviceId = "mock_habit_service"
     let version = "1.0.0"
-    
+
     var mockHabits: [EnhancedHabit] = []
-    
+
     func initialize() async throws {}
     func cleanup() async {}
     func healthCheck() async -> ServiceHealthStatus { return .healthy }
-    
+
     func createHabit(_ habit: EnhancedHabit) async throws -> EnhancedHabit {
         mockHabits.append(habit)
         return habit
     }
-    
+
     // Implement other methods with mock behavior
 }
 ```
@@ -369,19 +391,19 @@ class MockHabitService: HabitServiceProtocol {
 class HabitServiceTests: XCTestCase {
     override func setUp() {
         super.setUp()
-        
+
         // Replace production service with mock
         DependencyContainer.shared.register(
-            MockHabitService(), 
+            MockHabitService(),
             for: HabitServiceProtocol.self
         )
     }
-    
+
     override func tearDown() {
         DependencyContainer.shared.clear()
         super.tearDown()
     }
-    
+
     func testHabitCreation() async throws {
         let service: HabitServiceProtocol = try ServiceLocator.get(HabitServiceProtocol.self)
         // Test with mock service
@@ -392,16 +414,19 @@ class HabitServiceTests: XCTestCase {
 ## Performance Considerations
 
 ### 1. Service Lifecycle
+
 - Services are initialized once and reused
 - Use singleton pattern for stateless services
 - Implement proper cleanup to prevent memory leaks
 
 ### 2. Async Operations
+
 - All service operations are async for better performance
 - Use Task groups for concurrent operations
 - Implement timeout handling for long-running operations
 
 ### 3. Error Handling
+
 - Services throw specific error types
 - Implement retry logic for transient failures
 - Log errors for debugging and monitoring
@@ -446,6 +471,7 @@ When migrating existing code to use the service layer:
 4. **Testing**: Use mock services to isolate issues
 
 For additional support, refer to:
+
 - Service protocol documentation
 - Individual service implementation guides
 - Project-specific integration examples

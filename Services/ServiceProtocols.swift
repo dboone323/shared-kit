@@ -62,7 +62,7 @@ public struct ValidationError {
     public let field: String
     public let message: String
     public let code: String
-    
+
     public init(field: String, message: String, code: String) {
         self.field = field
         self.message = message
@@ -110,16 +110,16 @@ public typealias EnhancedTask = any EnhancedTaskProtocol
 public protocol ServiceProtocol {
     /// Service identifier
     var serviceId: String { get }
-    
+
     /// Service version for compatibility tracking
     var version: String { get }
-    
+
     /// Initialize service with dependencies
     func initialize() async throws
-    
+
     /// Cleanup resources when service is deallocated
     func cleanup() async
-    
+
     /// Health check for service monitoring
     func healthCheck() async -> ServiceHealthStatus
 }
@@ -129,7 +129,7 @@ public enum ServiceHealthStatus {
     case healthy
     case degraded(reason: String)
     case unhealthy(error: Error)
-    
+
     public var isHealthy: Bool {
         switch self {
         case .healthy: true
@@ -143,33 +143,33 @@ public enum ServiceHealthStatus {
 /// Protocol for data persistence services
 public protocol DataServiceProtocol: ServiceProtocol {
     associatedtype ModelType: Validatable & Trackable
-    
+
     /// Create a new model instance
     func create(_ model: ModelType) async throws -> ModelType
-    
+
     /// Retrieve model by ID
     func get(by id: UUID) async throws -> ModelType?
-    
+
     /// Retrieve all models with optional filtering
     func getAll(predicate: NSPredicate?) async throws -> [ModelType]
-    
+
     /// Update existing model
     func update(_ model: ModelType) async throws -> ModelType
-    
+
     /// Delete model by ID
     func delete(by id: UUID) async throws
-    
+
     /// Batch operations
     func batchCreate(_ models: [ModelType]) async throws -> [ModelType]
     func batchUpdate(_ models: [ModelType]) async throws -> [ModelType]
     func batchDelete(ids: [UUID]) async throws
-    
+
     /// Search functionality
     func search(query: String, fields: [String]) async throws -> [ModelType]
-    
+
     /// Count operations
     func count(predicate: NSPredicate?) async throws -> Int
-    
+
     /// Data validation
     func validate(_ model: ModelType) async throws
 }
@@ -178,19 +178,19 @@ public protocol DataServiceProtocol: ServiceProtocol {
 public protocol AnalyticsServiceProtocol: ServiceProtocol {
     /// Track an event with metadata
     func track(event: String, properties: [String: Any]?, userId: String?) async
-    
+
     /// Track user behavior
     func trackUserAction(_ action: UserAction) async
-    
+
     /// Track performance metrics
     func trackPerformance(_ metric: PerformanceMetric) async
-    
+
     /// Track errors and exceptions
     func trackError(_ error: Error, context: [String: Any]?) async
-    
+
     /// Get analytics summary
     func getAnalyticsSummary(timeRange: DateInterval) async throws -> AnalyticsSummary
-    
+
     /// Export analytics data
     func exportData(format: ExportFormat, timeRange: DateInterval) async throws -> Data
 }
@@ -203,7 +203,7 @@ public struct UserAction {
     public let context: String?
     public let userId: String?
     public let metadata: [String: Any]?
-    
+
     public init(action: String, context: String? = nil, userId: String? = nil, metadata: [String: Any]? = nil) {
         self.action = action
         self.context = context
@@ -220,7 +220,7 @@ public struct PerformanceMetric {
     public let value: Double
     public let unit: String
     public let metadata: [String: Any]?
-    
+
     public init(name: String, value: Double, unit: String, metadata: [String: Any]? = nil) {
         self.name = name
         self.value = value
@@ -238,7 +238,7 @@ public struct AnalyticsSummary {
     public let averageSessionDuration: TimeInterval
     public let errorRate: Double
     public let performanceMetrics: [String: Double]
-    
+
     public init(
         timeRange: DateInterval,
         totalEvents: Int,
@@ -264,7 +264,7 @@ public enum ExportFormat {
     case csv
     case xml
     case sqlite
-    
+
     public var fileExtension: String {
         switch self {
         case .json: "json"
@@ -273,7 +273,7 @@ public enum ExportFormat {
         case .sqlite: "db"
         }
     }
-    
+
     public var mimeType: String {
         switch self {
         case .json: "application/json"
@@ -290,19 +290,19 @@ public enum ExportFormat {
 public protocol HabitServiceProtocol: ServiceProtocol {
     /// Create a new habit with validation
     func createHabit(_ habit: EnhancedHabit) async throws -> EnhancedHabit
-    
+
     /// Log habit completion
     func logHabitCompletion(_ habitId: UUID, value: Double?, mood: MoodRating?, notes: String?) async throws -> EnhancedHabitLog
-    
+
     /// Calculate habit streak
     func calculateStreak(for habitId: UUID) async throws -> Int
-    
+
     /// Get habit insights
     func getHabitInsights(for habitId: UUID, timeRange: DateInterval) async throws -> HabitInsights
-    
+
     /// Check for achievements
     func checkAchievements(for habitId: UUID) async throws -> [HabitAchievement]
-    
+
     /// Generate habit recommendations
     func generateRecommendations(for userId: String) async throws -> [HabitRecommendation]
 }
@@ -311,19 +311,19 @@ public protocol HabitServiceProtocol: ServiceProtocol {
 public protocol FinancialServiceProtocol: ServiceProtocol {
     /// Create financial transaction with validation
     func createTransaction(_ transaction: EnhancedFinancialTransaction) async throws -> EnhancedFinancialTransaction
-    
+
     /// Calculate account balances
     func calculateAccountBalance(_ accountId: UUID, asOf: Date?) async throws -> Double
-    
+
     /// Generate budget insights
     func getBudgetInsights(for budgetId: UUID, timeRange: DateInterval) async throws -> BudgetInsights
-    
+
     /// Calculate net worth
     func calculateNetWorth(for userId: String, asOf: Date?) async throws -> NetWorthSummary
-    
+
     /// Generate financial recommendations
     func generateFinancialRecommendations(for userId: String) async throws -> [FinancialRecommendation]
-    
+
     /// Categorize transactions automatically
     func categorizeTransaction(_ transaction: EnhancedFinancialTransaction) async throws -> TransactionCategory
 }
@@ -332,19 +332,19 @@ public protocol FinancialServiceProtocol: ServiceProtocol {
 public protocol PlannerServiceProtocol: ServiceProtocol {
     /// Create task with intelligent scheduling
     func createTask(_ task: EnhancedTask) async throws -> EnhancedTask
-    
+
     /// Update task progress
     func updateTaskProgress(_ taskId: UUID, progress: Double) async throws -> EnhancedTask
-    
+
     /// Calculate goal progress
     func calculateGoalProgress(_ goalId: UUID) async throws -> GoalProgress
-    
+
     /// Generate task recommendations based on context
     func generateTaskRecommendations(for userId: String, context: PlanningContext) async throws -> [TaskRecommendation]
-    
+
     /// Optimize task scheduling
     func optimizeSchedule(for userId: String, timeRange: DateInterval) async throws -> ScheduleOptimization
-    
+
     /// Generate productivity insights
     func getProductivityInsights(for userId: String, timeRange: DateInterval) async throws -> ProductivityInsights
 }
@@ -355,16 +355,16 @@ public protocol PlannerServiceProtocol: ServiceProtocol {
 public protocol CrossProjectServiceProtocol: ServiceProtocol {
     /// Sync data between projects
     func syncData(from sourceProject: ProjectType, to targetProject: ProjectType) async throws
-    
+
     /// Get cross-project references
     func getCrossProjectReferences(for entityId: UUID, entityType: String) async throws -> [CrossProjectReference]
-    
+
     /// Create cross-project relationship
     func createCrossProjectRelationship(_ relationship: CrossProjectRelationship) async throws
-    
+
     /// Get unified user insights across all projects
     func getUnifiedUserInsights(for userId: String) async throws -> UnifiedUserInsights
-    
+
     /// Export unified data for analysis
     func exportUnifiedData(for userId: String, format: ExportFormat) async throws -> Data
 }
@@ -376,7 +376,7 @@ public enum ProjectType: String, CaseIterable {
     case plannerApp = "planner_app"
     case codingReviewer = "coding_reviewer"
     case avoidObstaclesGame = "avoid_obstacles_game"
-    
+
     public var displayName: String {
         switch self {
         case .habitQuest: "HabitQuest"
@@ -400,7 +400,7 @@ public struct CrossProjectReference {
     public let relationship: String
     public let metadata: [String: Any]?
     public let createdAt: Date
-    
+
     public init(
         sourceProject: ProjectType,
         sourceEntityId: UUID,
@@ -431,7 +431,7 @@ public struct CrossProjectRelationship {
     public let entities: [ProjectEntity]
     public let metadata: [String: Any]?
     public let createdAt: Date
-    
+
     public init(type: RelationshipType, entities: [ProjectEntity], metadata: [String: Any]? = nil) {
         self.id = UUID()
         self.type = type
@@ -457,7 +457,7 @@ public struct ProjectEntity {
     public let entityId: UUID
     public let entityType: String
     public let metadata: [String: Any]?
-    
+
     public init(project: ProjectType, entityId: UUID, entityType: String, metadata: [String: Any]? = nil) {
         self.project = project
         self.entityId = entityId
@@ -478,7 +478,7 @@ public struct HabitInsights {
     public let averageValue: Double?
     public let moodCorrelation: Double?
     public let recommendations: [String]
-    
+
     public init(
         habitId: UUID,
         timeRange: DateInterval,
@@ -510,7 +510,7 @@ public struct HabitRecommendation {
     public let estimatedTime: Int
     public let confidence: Double
     public let reasoning: String
-    
+
     public init(
         title: String,
         description: String,
@@ -539,7 +539,7 @@ public struct BudgetInsights {
     public let trendAnalysis: TrendDirection
     public let recommendations: [String]
     public let alerts: [BudgetAlert]
-    
+
     public init(
         budgetId: UUID,
         timeRange: DateInterval,
@@ -569,7 +569,7 @@ public struct NetWorthSummary {
     public let monthOverMonthChange: Double
     public let yearOverYearChange: Double
     public let breakdown: NetWorthBreakdown
-    
+
     public init(
         userId: String,
         asOfDate: Date,
@@ -599,7 +599,7 @@ public struct NetWorthBreakdown {
     public let creditCardDebt: Double
     public let loans: Double
     public let mortgages: Double
-    
+
     public init(
         cashAndEquivalents: Double,
         investments: Double,
@@ -630,7 +630,7 @@ public struct FinancialRecommendation {
     public let confidence: Double
     public let actionItems: [String]
     public let timeframe: String
-    
+
     public init(
         type: RecommendationType,
         title: String,
@@ -668,7 +668,7 @@ public enum RecommendationPriority: Int, CaseIterable {
     case medium = 2
     case high = 3
     case urgent = 4
-    
+
     public var description: String {
         switch self {
         case .low: "Low"
@@ -685,7 +685,7 @@ public enum TrendDirection {
     case decreasing
     case stable
     case volatile
-    
+
     public var description: String {
         switch self {
         case .increasing: "Increasing"
@@ -705,7 +705,7 @@ public struct BudgetAlert {
     public let threshold: Double
     public let currentValue: Double
     public let createdAt: Date = .init()
-    
+
     public init(type: AlertType, severity: AlertSeverity, message: String, threshold: Double, currentValue: Double) {
         self.type = type
         self.severity = severity
@@ -731,7 +731,7 @@ public enum AlertSeverity: Int, CaseIterable {
     case warning = 2
     case error = 3
     case critical = 4
-    
+
     public var description: String {
         switch self {
         case .info: "Info"
@@ -751,7 +751,7 @@ public struct GoalProgress {
     public let estimatedCompletion: Date?
     public let onTrack: Bool
     public let milestones: [GoalMilestone]
-    
+
     public init(goalId: UUID, currentProgress: Double, targetValue: Double, estimatedCompletion: Date?, milestones: [GoalMilestone]) {
         self.goalId = goalId
         self.currentProgress = currentProgress
@@ -772,7 +772,7 @@ public struct GoalMilestone {
     public let achieved: Bool
     public let achievedAt: Date?
     public let description: String?
-    
+
     public init(title: String, targetValue: Double, achieved: Bool, achievedAt: Date? = nil, description: String? = nil) {
         self.title = title
         self.targetValue = targetValue
@@ -792,7 +792,7 @@ public struct TaskRecommendation {
     public let suggestedSchedule: Date?
     public let reasoning: String
     public let confidence: Double
-    
+
     public init(
         title: String,
         description: String,
@@ -821,7 +821,7 @@ public struct PlanningContext {
     public let location: String?
     public let mood: MoodRating?
     public let priorities: [String]
-    
+
     public init(
         userId: String,
         currentTime: Date = Date(),
@@ -848,7 +848,7 @@ public struct ScheduleOptimization {
     public let optimizedTasks: [OptimizedTaskSchedule]
     public let efficiency: Double
     public let recommendations: [String]
-    
+
     public init(
         userId: String,
         timeRange: DateInterval,
@@ -872,7 +872,7 @@ public struct OptimizedTaskSchedule {
     public let scheduledEnd: Date
     public let optimalTimeSlot: Bool
     public let reasoning: String
-    
+
     public init(taskId: UUID, title: String, scheduledStart: Date, scheduledEnd: Date, optimalTimeSlot: Bool, reasoning: String) {
         self.taskId = taskId
         self.title = title
@@ -893,7 +893,7 @@ public struct ProductivityInsights {
     public let productivityTrend: TrendDirection
     public let topCategories: [String: Int]
     public let recommendations: [String]
-    
+
     public init(
         userId: String,
         timeRange: DateInterval,
@@ -925,7 +925,7 @@ public struct UnifiedUserInsights {
     public let crossProjectCorrelations: [CrossProjectCorrelation]
     public let overallScore: Double
     public let recommendations: [UnifiedRecommendation]
-    
+
     public init(
         userId: String,
         timeRange: DateInterval,
@@ -954,7 +954,7 @@ public struct CrossProjectCorrelation {
     public let correlation: Double
     public let significance: Double
     public let description: String
-    
+
     public init(project1: ProjectType, project2: ProjectType, correlation: Double, significance: Double, description: String) {
         self.project1 = project1
         self.project2 = project2
@@ -974,7 +974,7 @@ public struct UnifiedRecommendation {
     public let priority: RecommendationPriority
     public let estimatedImpact: Double
     public let actionItems: [String]
-    
+
     public init(
         type: UnifiedRecommendationType,
         title: String,

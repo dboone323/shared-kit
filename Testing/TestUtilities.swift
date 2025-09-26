@@ -10,7 +10,7 @@ class TestUtilities {
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [configuration])
     }
-    
+
     /// Measures async operation performance
     static func measureAsync<T>(
         operation: String,
@@ -20,13 +20,13 @@ class TestUtilities {
         let startTime = Date()
         let result = try await operation()
         let duration = Date().timeIntervalSince(startTime)
-        
+
         print("⏱️ \(operation) completed in \(String(format: "%.3f", duration))s")
         XCTAssertLessThan(duration, timeout, "\(operation) took too long")
-        
+
         return (result: result, duration: duration)
     }
-    
+
     /// Creates test data for different project types
     static func createTestTransaction() -> [String: Any] {
         [
@@ -34,25 +34,25 @@ class TestUtilities {
             "description": "Test Transaction",
             "date": Date(),
             "type": "expense",
-            "category": "Test Category"
+            "category": "Test Category",
         ]
     }
-    
+
     static func createTestHabit() -> [String: Any] {
         [
             "name": "Test Habit",
             "description": "Test habit description",
             "frequency": "daily",
-            "isActive": true
+            "isActive": true,
         ]
     }
-    
+
     static func createTestCodeFile() -> [String: Any] {
         [
             "name": "TestFile.swift",
             "content": "import Foundation\n\nclass TestClass {\n    func testMethod() {\n        print(\"Hello, test!\")\n    }\n}",
             "language": "swift",
-            "size": 100
+            "size": 100,
         ]
     }
 }
@@ -68,7 +68,7 @@ extension XCTestCase {
         let startTime = Date()
         let result = try block()
         let duration = Date().timeIntervalSince(startTime)
-        
+
         XCTAssertLessThan(
             duration,
             expectedTime,
@@ -76,7 +76,7 @@ extension XCTestCase {
         )
         return result
     }
-    
+
     /// Assert async operation completes within time limit
     func assertAsyncPerformance<T>(
         operation: String,
@@ -86,7 +86,7 @@ extension XCTestCase {
         let startTime = Date()
         let result = try await block()
         let duration = Date().timeIntervalSince(startTime)
-        
+
         XCTAssertLessThan(
             duration,
             expectedTime,
@@ -106,14 +106,14 @@ enum MockDataGenerator {
                 "description": "Transaction \(i)",
                 "date": Date().addingTimeInterval(-Double(i * 86400)),
                 "type": i % 2 == 0 ? "income" : "expense",
-                "category": ["Food", "Transport", "Entertainment", "Bills", "Shopping"].randomElement()!
+                "category": ["Food", "Transport", "Entertainment", "Bills", "Shopping"].randomElement()!,
             ]
         }
     }
-    
+
     static func generateHabits(count: Int) -> [[String: Any]] {
         let habitNames = ["Exercise", "Read", "Meditate", "Drink Water", "Walk", "Study", "Cook", "Sleep Early"]
-        
+
         return (1 ... count).map { i in
             [
                 "id": UUID().uuidString,
@@ -121,43 +121,43 @@ enum MockDataGenerator {
                 "description": "Description for habit \(i)",
                 "frequency": ["daily", "weekly", "monthly"].randomElement()!,
                 "isActive": Bool.random(),
-                "streak": Int.random(in: 0 ... 30)
+                "streak": Int.random(in: 0 ... 30),
             ]
         }
     }
-    
+
     static func generateCodeFiles(count: Int) -> [[String: Any]] {
         let languages = ["swift", "javascript", "python", "java", "typescript"]
         let fileTypes = ["class", "function", "interface", "enum", "struct"]
-        
+
         return (1 ... count).map { i in
             let language = languages.randomElement()!
             let fileType = fileTypes.randomElement()!
-            
+
             return [
                 "id": UUID().uuidString,
                 "name": "\(fileType.capitalized)\(i).\(language)",
                 "content": self.generateCodeContent(language: language, type: fileType, index: i),
                 "language": language,
                 "size": Int.random(in: 100 ... 5000),
-                "complexity": Int.random(in: 1 ... 10)
+                "complexity": Int.random(in: 1 ... 10),
             ]
         }
     }
-    
+
     private static func generateCodeContent(language: String, type: String, index: Int) -> String {
         switch language {
         case "swift":
             """
             import Foundation
-            
+
             class \(type.capitalized)\(index) {
                 private let property\(index): String
-            
+
                 init(property: String) {
                     self.property\(index) = property
                 }
-            
+
                 func method\(index)() -> String {
                     return "Result from \(type) \(index): \\(property\(index))"
                 }
@@ -169,12 +169,12 @@ enum MockDataGenerator {
                 constructor(property) {
                     this.property\(index) = property;
                 }
-            
+
                 method\(index)() {
                     return `Result from \(type) \(index): ${this.property\(index)}`;
                 }
             }
-            
+
             module.exports = \(type.capitalized)\(index);
             """
         case "python":
@@ -182,7 +182,7 @@ enum MockDataGenerator {
             class \(type.capitalized)\(index):
                 def __init__(self, property):
                     self.property\(index) = property
-            
+
                 def method\(index)(self):
                     return f"Result from \(type) \(index): {self.property\(index)}"
             """

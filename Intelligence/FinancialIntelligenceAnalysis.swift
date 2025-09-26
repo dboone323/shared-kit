@@ -13,10 +13,10 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
     @Published public var analysisResults: [FinancialInsight] = []
     @Published public var analysisProgress: Double = 0.0
     @Published public var isAnalyzing = false
-    
+
     private let aiEngine = AIFinancialEngine()
     private let quantumProcessor = QuantumAnalysisProcessor()
-    
+
     /// Generate comprehensive financial insights using AI analysis
     public func performComprehensiveAnalysis(
         transactions: [Any],
@@ -26,9 +26,9 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
     ) async {
         self.isAnalyzing = true
         self.analysisProgress = 0.0
-        
+
         var allInsights: [FinancialInsight] = []
-        
+
         // Run multiple analysis types concurrently with progress tracking
         let analysisTypes = [
             ("Spending Patterns", 0.15),
@@ -37,9 +37,9 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
             ("Forecasting", 0.25),
             ("Cash Insights", 0.10),
             ("Credit Utilization", 0.10),
-            ("Duplicate Detection", 0.05)
+            ("Duplicate Detection", 0.05),
         ]
-        
+
         for (analysisType, progressWeight) in analysisTypes {
             let insights = await performSpecificAnalysis(
                 type: analysisType,
@@ -51,13 +51,13 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
             allInsights.append(contentsOf: insights)
             self.analysisProgress += progressWeight
         }
-        
+
         // AI-powered insight ranking and deduplication
         self.analysisResults = await self.aiEngine.rankAndOptimizeInsights(allInsights)
         self.analysisProgress = 1.0
         self.isAnalyzing = false
     }
-    
+
     private func performSpecificAnalysis(
         type: String,
         transactions: [Any],
@@ -96,10 +96,10 @@ public func fi_generateForecasts(transactions: [Any], accounts: [Any]) async -> 
         accounts: accounts,
         horizonMonths: 12
     )
-    
+
     return forecasts.compactMap { forecast in
         guard forecast.confidence > 0.7 else { return nil }
-        
+
         return FinancialInsight(
             title: forecast.title,
             description: forecast.description,
@@ -117,10 +117,10 @@ public func fi_generateForecasts(transactions: [Any], accounts: [Any]) async -> 
 public func fi_analyzeSpendingPatterns(transactions: [Any], categories: [Any]) async -> [FinancialInsight] {
     let analyzer = SpendingPatternAnalyzer()
     let patterns = await analyzer.identifyPatterns(transactions: transactions, categories: categories)
-    
+
     return patterns.compactMap { pattern in
         guard pattern.significance > 0.6 else { return nil }
-        
+
         return FinancialInsight(
             title: "Spending Pattern: \(pattern.category)",
             description: pattern.description,
@@ -138,10 +138,10 @@ public func fi_analyzeSpendingPatterns(transactions: [Any], categories: [Any]) a
 public func fi_detectAnomalies(transactions: [Any]) async -> [FinancialInsight] {
     let detector = AnomalyDetectionEngine()
     let anomalies = await detector.detectAnomalies(in: transactions)
-    
+
     return anomalies.compactMap { anomaly in
         guard anomaly.confidence > 0.8 else { return nil }
-        
+
         return FinancialInsight(
             title: "Unusual Transaction Detected",
             description: anomaly.description,
@@ -162,7 +162,7 @@ public func fi_analyzeBudgets(transactions: [Any], budgets: [Any]) async -> [Fin
         transactions: transactions,
         budgets: budgets
     )
-    
+
     return budgetInsights.compactMap { insight in
         FinancialInsight(
             title: insight.title,
@@ -185,7 +185,7 @@ public func fi_suggestIdleCashInsights(transactions: [Any], accounts: [Any]) asy
         transactions: transactions,
         accounts: accounts
     )
-    
+
     return opportunities.compactMap { opportunity in
         FinancialInsight(
             title: "Cash Optimization Opportunity",
@@ -205,7 +205,7 @@ public func fi_suggestIdleCashInsights(transactions: [Any], accounts: [Any]) asy
 public func fi_suggestCreditUtilizationInsights(accounts: [Any]) async -> [FinancialInsight] {
     let analyzer = CreditUtilizationAnalyzer()
     let insights = await analyzer.analyzeCreditHealth(accounts: accounts)
-    
+
     return insights.compactMap { insight in
         FinancialInsight(
             title: "Credit Utilization Alert",
@@ -225,7 +225,7 @@ public func fi_suggestCreditUtilizationInsights(accounts: [Any]) async -> [Finan
 public func fi_suggestDuplicatePaymentInsights(transactions: [Any]) async -> [FinancialInsight] {
     let detector = DuplicateTransactionDetector()
     let duplicates = await detector.findDuplicates(in: transactions)
-    
+
     return duplicates.compactMap { duplicate in
         FinancialInsight(
             title: "Potential Duplicate Payment",
@@ -266,11 +266,11 @@ private class QuantumAnalysisProcessor {
 
 private class QuantumForecastEngine {
     static let shared = QuantumForecastEngine()
-    
+
     func generatePredictions(
-        transactions: [Any],
-        accounts: [Any],
-        horizonMonths: Int
+        transactions _: [Any],
+        accounts _: [Any],
+        horizonMonths _: Int
     ) async -> [ForecastResult] {
         // ML-powered forecasting would be implemented here
         []
@@ -350,37 +350,37 @@ private struct DuplicateTransaction {
 // MARK: - Analysis Engine Classes (Placeholders)
 
 private class SpendingPatternAnalyzer {
-    func identifyPatterns(transactions: [Any], categories: [Any]) async -> [SpendingPattern] {
+    func identifyPatterns(transactions _: [Any], categories _: [Any]) async -> [SpendingPattern] {
         []
     }
 }
 
 private class AnomalyDetectionEngine {
-    func detectAnomalies(in transactions: [Any]) async -> [TransactionAnomaly] {
+    func detectAnomalies(in _: [Any]) async -> [TransactionAnomaly] {
         []
     }
 }
 
 private class BudgetAnalysisEngine {
-    func analyzeBudgetPerformance(transactions: [Any], budgets: [Any]) async -> [BudgetInsight] {
+    func analyzeBudgetPerformance(transactions _: [Any], budgets _: [Any]) async -> [BudgetInsight] {
         []
     }
 }
 
 private class CashOptimizationEngine {
-    func identifyOptimizationOpportunities(transactions: [Any], accounts: [Any]) async -> [CashOptimizationOpportunity] {
+    func identifyOptimizationOpportunities(transactions _: [Any], accounts _: [Any]) async -> [CashOptimizationOpportunity] {
         []
     }
 }
 
 private class CreditUtilizationAnalyzer {
-    func analyzeCreditHealth(accounts: [Any]) async -> [CreditInsight] {
+    func analyzeCreditHealth(accounts _: [Any]) async -> [CreditInsight] {
         []
     }
 }
 
 private class DuplicateTransactionDetector {
-    func findDuplicates(in transactions: [Any]) async -> [DuplicateTransaction] {
+    func findDuplicates(in _: [Any]) async -> [DuplicateTransaction] {
         []
     }
 }
@@ -401,7 +401,7 @@ public struct FinancialInsight: Identifiable {
     public let relatedBudgetId: String?
     public let actionRecommendations: [String]
     public let riskLevel: RiskLevel
-    
+
     public init(
         title: String,
         description: String,
@@ -433,7 +433,7 @@ public struct FinancialInsight: Identifiable {
 
 public enum InsightPriority: Comparable {
     case low, medium, high, critical
-    
+
     public static func < (lhs: InsightPriority, rhs: InsightPriority) -> Bool {
         let order: [InsightPriority] = [.low, .medium, .high, .critical]
         guard let lhsIndex = order.firstIndex(of: lhs),

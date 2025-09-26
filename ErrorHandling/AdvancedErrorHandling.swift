@@ -20,7 +20,7 @@ public protocol AnalyticsServiceProtocol {
 
 // Mock analytics service for compilation
 public class MockAnalyticsService: AnalyticsServiceProtocol {
-    public func track(event: String, properties: [String: Any]?, userId: String?) async {
+    public func track(event: String, properties _: [String: Any]?, userId _: String?) async {
         print("📊 Analytics: \(event)")
     }
 }
@@ -29,7 +29,7 @@ public class MockAnalyticsService: AnalyticsServiceProtocol {
 @propertyWrapper
 public struct MockInjected<T> {
     public var wrappedValue: T
-    
+
     public init(wrappedValue: T) {
         self.wrappedValue = wrappedValue
     }
@@ -41,31 +41,31 @@ public struct MockInjected<T> {
 public protocol AppErrorProtocol: Error, LocalizedError, CustomStringConvertible, Codable {
     /// Unique error identifier
     var errorId: String { get }
-    
+
     /// Error severity level
     var severity: ErrorSeverity { get }
-    
+
     /// Error category for grouping
     var category: ErrorCategory { get }
-    
+
     /// Timestamp when error occurred
     var timestamp: Date { get }
-    
+
     /// Context information for debugging
     var context: [String: Any] { get }
-    
+
     /// User-friendly error message
     var userMessage: String { get }
-    
+
     /// Technical error details for developers
     var technicalDetails: String { get }
-    
+
     /// Recovery suggestions for users
     var recoverySuggestions: [String] { get }
-    
+
     /// Whether this error should be reported to analytics
     var shouldReport: Bool { get }
-    
+
     /// Whether this error can be recovered from automatically
     var isRecoverable: Bool { get }
 }
@@ -76,7 +76,7 @@ public enum ErrorSeverity: String, CaseIterable, Codable {
     case medium
     case high
     case critical
-    
+
     public var priority: Int {
         switch self {
         case .low: 1
@@ -85,7 +85,7 @@ public enum ErrorSeverity: String, CaseIterable, Codable {
         case .critical: 4
         }
     }
-    
+
     public var displayName: String {
         switch self {
         case .low: "Low"
@@ -108,7 +108,7 @@ public enum ErrorCategory: String, CaseIterable, Codable {
     case ui
     case integration
     case unknown
-    
+
     public var displayName: String {
         switch self {
         case .validation: "Validation Error"
@@ -139,39 +139,39 @@ public struct AppError: AppErrorProtocol {
     public let recoverySuggestions: [String]
     public let shouldReport: Bool
     public let isRecoverable: Bool
-    
+
     // MARK: - Error Protocol Conformance
-    
+
     public var errorDescription: String? {
         self.userMessage
     }
-    
+
     public var failureReason: String? {
         self.technicalDetails
     }
-    
+
     public var recoverySuggestion: String? {
         self.recoverySuggestions.first
     }
-    
+
     public var helpAnchor: String? {
         "error_help_\(self.category.rawValue)"
     }
-    
+
     public var description: String {
         "[\(self.severity.displayName)] \(self.category.displayName): \(self.userMessage)"
     }
-    
+
     // MARK: - Codable Implementation
-    
+
     private enum CodingKeys: String, CodingKey {
         case errorId, severity, category, timestamp, userMessage, technicalDetails, recoverySuggestions, shouldReport, isRecoverable
         case contextData
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         self.errorId = try container.decode(String.self, forKey: .errorId)
         self.severity = try container.decode(ErrorSeverity.self, forKey: .severity)
         self.category = try container.decode(ErrorCategory.self, forKey: .category)
@@ -181,7 +181,7 @@ public struct AppError: AppErrorProtocol {
         self.recoverySuggestions = try container.decode([String].self, forKey: .recoverySuggestions)
         self.shouldReport = try container.decode(Bool.self, forKey: .shouldReport)
         self.isRecoverable = try container.decode(Bool.self, forKey: .isRecoverable)
-        
+
         // Decode context as string dictionary and convert to Any
         if let contextData = try? container.decode([String: String].self, forKey: .contextData) {
             self.context = contextData
@@ -189,10 +189,10 @@ public struct AppError: AppErrorProtocol {
             self.context = [:]
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
+
         try container.encode(self.errorId, forKey: .errorId)
         try container.encode(self.severity, forKey: .severity)
         try container.encode(self.category, forKey: .category)
@@ -202,14 +202,14 @@ public struct AppError: AppErrorProtocol {
         try container.encode(self.recoverySuggestions, forKey: .recoverySuggestions)
         try container.encode(self.shouldReport, forKey: .shouldReport)
         try container.encode(self.isRecoverable, forKey: .isRecoverable)
-        
+
         // Encode context as string dictionary
         let contextData = self.context.compactMapValues { "\($0)" }
         try container.encode(contextData, forKey: .contextData)
     }
-    
+
     // MARK: - Initialization
-    
+
     public init(
         errorId: String = UUID().uuidString,
         severity: ErrorSeverity,
@@ -248,19 +248,19 @@ public struct ValidationError: AppErrorProtocol {
     public let recoverySuggestions: [String]
     public let shouldReport: Bool = false
     public let isRecoverable: Bool = true
-    
+
     // Validation-specific properties
     public let field: String
     public let validationRule: String
     public let providedValue: Any?
     public let expectedFormat: String?
-    
+
     public var errorDescription: String? { self.userMessage }
     public var failureReason: String? { self.technicalDetails }
     public var recoverySuggestion: String? { self.recoverySuggestions.first }
     public var helpAnchor: String? { "validation_help_\(self.field)" }
     public var description: String { "Validation Error: \(self.userMessage)" }
-    
+
     public init(
         field: String,
         validationRule: String,
@@ -275,14 +275,14 @@ public struct ValidationError: AppErrorProtocol {
         self.validationRule = validationRule
         self.providedValue = providedValue
         self.expectedFormat = expectedFormat
-        
+
         self.userMessage = userMessage ?? "Invalid value for \(field)"
         self.technicalDetails = "Validation failed for field '\(field)' with rule '\(validationRule)'"
         self.recoverySuggestions = recoverySuggestions.isEmpty ? ["Please check the \(field) field and try again"] : recoverySuggestions
-        
+
         var contextDict: [String: Any] = [
             "field": field,
-            "validation_rule": validationRule
+            "validation_rule": validationRule,
         ]
         if let value = providedValue {
             contextDict["provided_value"] = value
@@ -292,7 +292,7 @@ public struct ValidationError: AppErrorProtocol {
         }
         self.context = contextDict
     }
-    
+
     // Codable implementation
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -307,7 +307,7 @@ public struct ValidationError: AppErrorProtocol {
         self.expectedFormat = try? container.decode(String.self, forKey: .expectedFormat)
         self.context = try container.decode([String: String].self, forKey: .context)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.errorId, forKey: .errorId)
@@ -324,7 +324,7 @@ public struct ValidationError: AppErrorProtocol {
         let contextData = self.context.compactMapValues { "\($0)" }
         try container.encode(contextData, forKey: .context)
     }
-    
+
     private enum CodingKeys: String, CodingKey {
         case errorId, timestamp, userMessage, technicalDetails, recoverySuggestions
         case field, validationRule, providedValue, expectedFormat, context
@@ -343,19 +343,19 @@ public struct NetworkError: AppErrorProtocol {
     public let recoverySuggestions: [String]
     public let shouldReport: Bool = true
     public let isRecoverable: Bool = true
-    
+
     // Network-specific properties
     public let statusCode: Int?
     public let endpoint: String?
     public let httpMethod: String?
     public let responseData: Data?
-    
+
     public var errorDescription: String? { self.userMessage }
     public var failureReason: String? { self.technicalDetails }
     public var recoverySuggestion: String? { self.recoverySuggestions.first }
     public var helpAnchor: String? { "network_help" }
     public var description: String { "Network Error: \(self.userMessage)" }
-    
+
     public init(
         statusCode: Int? = nil,
         endpoint: String? = nil,
@@ -370,23 +370,23 @@ public struct NetworkError: AppErrorProtocol {
         self.endpoint = endpoint
         self.httpMethod = httpMethod
         self.responseData = responseData
-        
+
         // Determine severity based on status code
         self.severity = NetworkError.determineSeverity(statusCode: statusCode)
-        
+
         // Generate user-friendly message
         self.userMessage = userMessage ?? NetworkError.generateUserMessage(statusCode: statusCode)
-        
+
         // Generate technical details
         self.technicalDetails = technicalDetails ?? NetworkError.generateTechnicalDetails(
             statusCode: statusCode,
             endpoint: endpoint,
             httpMethod: httpMethod
         )
-        
+
         // Generate recovery suggestions
         self.recoverySuggestions = NetworkError.generateRecoverySuggestions(statusCode: statusCode)
-        
+
         // Build context
         var contextDict: [String: Any] = [:]
         if let code = statusCode {
@@ -403,22 +403,22 @@ public struct NetworkError: AppErrorProtocol {
         }
         self.context = contextDict
     }
-    
+
     private static func determineSeverity(statusCode: Int?) -> ErrorSeverity {
         guard let code = statusCode else { return .medium }
-        
+
         switch code {
         case 400 ... 499: return .medium
         case 500 ... 599: return .high
         default: return .low
         }
     }
-    
+
     private static func generateUserMessage(statusCode: Int?) -> String {
         guard let code = statusCode else {
             return "Network connection failed. Please check your internet connection."
         }
-        
+
         switch code {
         case 400: return "Invalid request. Please check your input and try again."
         case 401: return "Authentication required. Please sign in and try again."
@@ -429,30 +429,30 @@ public struct NetworkError: AppErrorProtocol {
         default: return "Network error occurred. Please check your connection and try again."
         }
     }
-    
+
     private static func generateTechnicalDetails(statusCode: Int?, endpoint: String?, httpMethod: String?) -> String {
-        var details = "Network request failed"
-        
+        var detailsParts = ["Network request failed"]
+
         if let method = httpMethod, let url = endpoint {
-            details += " (\(method) \(url))"
+            detailsParts.append(" (\(method) \(url))")
         }
-        
+
         if let code = statusCode {
-            details += " with status code \(code)"
+            detailsParts.append(" with status code \(code)")
         }
-        
-        return details
+
+        return detailsParts.joined()
     }
-    
+
     private static func generateRecoverySuggestions(statusCode: Int?) -> [String] {
         guard let code = statusCode else {
             return [
                 "Check your internet connection",
                 "Try again in a few moments",
-                "Contact support if the problem persists"
+                "Contact support if the problem persists",
             ]
         }
-        
+
         switch code {
         case 400: return ["Check your input data", "Verify required fields are filled", "Contact support if needed"]
         case 401: return ["Sign in to your account", "Check your credentials", "Reset password if necessary"]
@@ -463,7 +463,7 @@ public struct NetworkError: AppErrorProtocol {
         default: return ["Check your internet connection", "Try again", "Contact support if needed"]
         }
     }
-    
+
     // Codable implementation
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -479,7 +479,7 @@ public struct NetworkError: AppErrorProtocol {
         self.responseData = try? container.decode(Data.self, forKey: .responseData)
         self.context = try container.decode([String: String].self, forKey: .context)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.errorId, forKey: .errorId)
@@ -495,7 +495,7 @@ public struct NetworkError: AppErrorProtocol {
         let contextData = self.context.compactMapValues { "\($0)" }
         try container.encode(contextData, forKey: .context)
     }
-    
+
     private enum CodingKeys: String, CodingKey {
         case errorId, severity, timestamp, userMessage, technicalDetails, recoverySuggestions
         case statusCode, endpoint, httpMethod, responseData, context
@@ -514,18 +514,18 @@ public struct BusinessError: AppErrorProtocol {
     public let recoverySuggestions: [String]
     public let shouldReport: Bool = true
     public let isRecoverable: Bool = true
-    
+
     // Business-specific properties
     public let businessRule: String
     public let violatedConstraint: String
     public let affectedEntity: String?
-    
+
     public var errorDescription: String? { self.userMessage }
     public var failureReason: String? { self.technicalDetails }
     public var recoverySuggestion: String? { self.recoverySuggestions.first }
     public var helpAnchor: String? { "business_help_\(self.businessRule)" }
     public var description: String { "Business Error: \(self.userMessage)" }
-    
+
     public init(
         businessRule: String,
         violatedConstraint: String,
@@ -541,17 +541,17 @@ public struct BusinessError: AppErrorProtocol {
         self.userMessage = userMessage
         self.technicalDetails = "Business rule '\(businessRule)' violated: \(violatedConstraint)"
         self.recoverySuggestions = recoverySuggestions
-        
+
         var contextDict: [String: Any] = [
             "business_rule": businessRule,
-            "violated_constraint": violatedConstraint
+            "violated_constraint": violatedConstraint,
         ]
         if let entity = affectedEntity {
             contextDict["affected_entity"] = entity
         }
         self.context = contextDict
     }
-    
+
     // Codable implementation
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -565,7 +565,7 @@ public struct BusinessError: AppErrorProtocol {
         self.affectedEntity = try? container.decode(String.self, forKey: .affectedEntity)
         self.context = try container.decode([String: String].self, forKey: .context)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.errorId, forKey: .errorId)
@@ -579,7 +579,7 @@ public struct BusinessError: AppErrorProtocol {
         let contextData = self.context.compactMapValues { "\($0)" }
         try container.encode(contextData, forKey: .context)
     }
-    
+
     private enum CodingKeys: String, CodingKey {
         case errorId, timestamp, userMessage, technicalDetails, recoverySuggestions
         case businessRule, violatedConstraint, affectedEntity, context
@@ -592,14 +592,14 @@ public struct BusinessError: AppErrorProtocol {
 @MainActor
 public final class ErrorHandlerManager: ObservableObject {
     public static let shared = ErrorHandlerManager()
-    
+
     // MARK: - Published Properties
 
     @Published public private(set) var recentErrors: [any AppErrorProtocol] = []
     @Published public private(set) var criticalErrors: [any AppErrorProtocol] = []
     @Published public private(set) var isProcessingRecovery = false
     @Published public private(set) var globalErrorState: GlobalErrorState = .normal
-    
+
     // MARK: - Private Properties
 
     private var errorHistory: [any AppErrorProtocol] = []
@@ -608,37 +608,37 @@ public final class ErrorHandlerManager: ObservableObject {
     private let logger = Logger(subsystem: "QuantumWorkspace", category: "ErrorHandling")
     private let maxRecentErrors = 50
     private let maxErrorHistory = 500
-    
+
     @MockInjected private var analyticsService: AnalyticsServiceProtocol
-    
+
     private init() {
-        self._analyticsService = MockInjected(wrappedValue: MockAnalyticsService())
+        _analyticsService = MockInjected(wrappedValue: MockAnalyticsService())
         self.setupDefaultRecoveryStrategies()
         self.setupDefaultErrorReporters()
     }
-    
+
     // MARK: - Public Error Handling Interface
-    
+
     /// Handle an error with full error processing pipeline
     public func handleError(_ error: any AppErrorProtocol) async {
         self.logger.error("Error occurred: \(error.description)")
-        
+
         // Add to error tracking
         self.addToErrorHistory(error)
-        
+
         // Report error if needed
         if error.shouldReport {
             await self.reportError(error)
         }
-        
+
         // Update global error state
         self.updateGlobalErrorState(with: error)
-        
+
         // Attempt automatic recovery if possible
         if error.isRecoverable {
             _ = await self.attemptRecovery(for: error)
         }
-        
+
         // Track error analytics
         await self.analyticsService.track(
             event: "error_handled",
@@ -646,12 +646,12 @@ public final class ErrorHandlerManager: ObservableObject {
                 "error_id": error.errorId,
                 "category": error.category.rawValue,
                 "severity": error.severity.rawValue,
-                "recoverable": error.isRecoverable
+                "recoverable": error.isRecoverable,
             ],
             userId: nil as String?
         )
     }
-    
+
     /// Handle standard Swift Error by converting to AppError
     public func handleStandardError(
         _ error: Error,
@@ -670,10 +670,10 @@ public final class ErrorHandlerManager: ObservableObject {
             shouldReport: severity.priority > ErrorSeverity.low.priority,
             isRecoverable: false
         )
-        
+
         await self.handleError(appError)
     }
-    
+
     /// Handle validation errors from form inputs
     public func handleValidationError(
         field: String,
@@ -687,10 +687,10 @@ public final class ErrorHandlerManager: ObservableObject {
             providedValue: value,
             userMessage: userMessage
         )
-        
+
         await handleError(validationError)
     }
-    
+
     /// Handle network errors from API calls
     public func handleNetworkError(
         statusCode: Int? = nil,
@@ -704,10 +704,10 @@ public final class ErrorHandlerManager: ObservableObject {
             httpMethod: method,
             responseData: data
         )
-        
+
         await handleError(networkError)
     }
-    
+
     /// Handle business logic errors
     public func handleBusinessError(
         rule: String,
@@ -723,25 +723,25 @@ public final class ErrorHandlerManager: ObservableObject {
             userMessage: message,
             recoverySuggestions: suggestions
         )
-        
+
         await handleError(businessError)
     }
-    
+
     /// Get recent errors for display in UI
     public func getRecentErrors(severity: ErrorSeverity? = nil, category: ErrorCategory? = nil) -> [any AppErrorProtocol] {
         var filteredErrors = self.recentErrors
-        
+
         if let severity {
             filteredErrors = filteredErrors.filter { $0.severity == severity }
         }
-        
+
         if let category {
             filteredErrors = filteredErrors.filter { $0.category == category }
         }
-        
+
         return filteredErrors
     }
-    
+
     /// Clear error history
     public func clearErrorHistory() {
         self.recentErrors.removeAll()
@@ -749,7 +749,7 @@ public final class ErrorHandlerManager: ObservableObject {
         self.errorHistory.removeAll()
         self.globalErrorState = .normal
     }
-    
+
     /// Export error report for support
     public func exportErrorReport() -> ErrorReport {
         ErrorReport(
@@ -760,9 +760,9 @@ public final class ErrorHandlerManager: ObservableObject {
             systemInfo: self.collectSystemInfo()
         )
     }
-    
+
     // MARK: - Recovery Management
-    
+
     /// Register a custom recovery strategy
     public func registerRecoveryStrategy(_ strategy: RecoveryStrategy, for category: ErrorCategory) {
         if self.recoveryStrategies[category] == nil {
@@ -770,28 +770,28 @@ public final class ErrorHandlerManager: ObservableObject {
         }
         self.recoveryStrategies[category]?.append(strategy)
     }
-    
+
     /// Attempt manual recovery for a specific error
     public func attemptManualRecovery(for error: any AppErrorProtocol) async -> RecoveryResult {
         await self.attemptRecovery(for: error)
     }
-    
+
     // MARK: - Error Reporting
-    
+
     /// Register a custom error reporter
     public func registerErrorReporter(_ reporter: ErrorReporter) {
         self.errorReporters.append(reporter)
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func addToErrorHistory(_ error: any AppErrorProtocol) {
         // Add to recent errors
         self.recentErrors.insert(error, at: 0)
         if self.recentErrors.count > self.maxRecentErrors {
             self.recentErrors.removeLast()
         }
-        
+
         // Add to critical errors if severity is high
         if error.severity.priority >= ErrorSeverity.high.priority {
             self.criticalErrors.insert(error, at: 0)
@@ -799,14 +799,14 @@ public final class ErrorHandlerManager: ObservableObject {
                 self.criticalErrors.removeLast()
             }
         }
-        
+
         // Add to full error history
         self.errorHistory.insert(error, at: 0)
         if self.errorHistory.count > self.maxErrorHistory {
             self.errorHistory.removeLast()
         }
     }
-    
+
     private func updateGlobalErrorState(with error: any AppErrorProtocol) {
         switch error.severity {
         case .critical:
@@ -825,35 +825,35 @@ public final class ErrorHandlerManager: ObservableObject {
             }
         }
     }
-    
+
     private func attemptRecovery(for error: any AppErrorProtocol) async -> RecoveryResult {
         self.isProcessingRecovery = true
         defer { isProcessingRecovery = false }
-        
+
         self.logger.info("Attempting recovery for error: \(error.errorId)")
-        
+
         guard let strategies = recoveryStrategies[error.category] else {
             return RecoveryResult(success: false, message: "No recovery strategies available")
         }
-        
+
         for strategy in strategies {
             do {
                 if try await strategy.canRecover(error) {
                     let result = try await strategy.attemptRecovery(error)
-                    
+
                     if result.success {
                         self.logger.info("Recovery successful for error: \(error.errorId)")
-                        
+
                         await self.analyticsService.track(
                             event: "error_recovery_success",
                             properties: [
                                 "error_id": error.errorId,
                                 "strategy": strategy.name,
-                                "category": error.category.rawValue
+                                "category": error.category.rawValue,
                             ],
                             userId: nil
                         )
-                        
+
                         return result
                     }
                 }
@@ -862,22 +862,22 @@ public final class ErrorHandlerManager: ObservableObject {
                 continue
             }
         }
-        
+
         self.logger.warning("All recovery strategies failed for error: \(error.errorId)")
-        
+
         await self.analyticsService.track(
             event: "error_recovery_failed",
             properties: [
                 "error_id": error.errorId,
                 "category": error.category.rawValue,
-                "strategies_attempted": strategies.count
+                "strategies_attempted": strategies.count,
             ],
             userId: nil
         )
-        
+
         return RecoveryResult(success: false, message: "All recovery attempts failed")
     }
-    
+
     private func reportError(_ error: any AppErrorProtocol) async {
         for reporter in self.errorReporters {
             do {
@@ -887,34 +887,34 @@ public final class ErrorHandlerManager: ObservableObject {
             }
         }
     }
-    
+
     private func setupDefaultRecoveryStrategies() {
         // Network recovery strategies
         self.registerRecoveryStrategy(NetworkRetryStrategy(), for: .network)
         self.registerRecoveryStrategy(NetworkFallbackStrategy(), for: .network)
-        
+
         // Data recovery strategies
         self.registerRecoveryStrategy(DataRefreshStrategy(), for: .data)
         self.registerRecoveryStrategy(DataCacheStrategy(), for: .data)
-        
+
         // Validation recovery strategies
         self.registerRecoveryStrategy(ValidationRetryStrategy(), for: .validation)
-        
+
         // System recovery strategies
         self.registerRecoveryStrategy(SystemRestartStrategy(), for: .system)
     }
-    
+
     private func setupDefaultErrorReporters() {
         self.errorReporters.append(ConsoleErrorReporter())
         self.errorReporters.append(AnalyticsErrorReporter(analyticsService: self.analyticsService))
-        
+
         #if DEBUG
         self.errorReporters.append(DebugErrorReporter())
         #else
         self.errorReporters.append(CrashReporter())
         #endif
     }
-    
+
     private func collectSystemInfo() -> SystemInfo {
         SystemInfo(
             platform: "iOS", // Would be determined at runtime
@@ -942,7 +942,7 @@ public struct RecoveryResult {
     public let success: Bool
     public let message: String
     public let recoveredData: Any?
-    
+
     public init(success: Bool, message: String, recoveredData: Any? = nil) {
         self.success = success
         self.message = message
@@ -955,7 +955,7 @@ public enum GlobalErrorState: String, Codable {
     case normal
     case degraded
     case critical
-    
+
     public var displayName: String {
         switch self {
         case .normal: "Normal"
@@ -990,11 +990,11 @@ public struct ConsoleErrorReporter: ErrorReporter {
 /// Analytics error reporter
 public struct AnalyticsErrorReporter: ErrorReporter {
     private let analyticsService: AnalyticsServiceProtocol
-    
+
     public init(analyticsService: AnalyticsServiceProtocol) {
         self.analyticsService = analyticsService
     }
-    
+
     public func reportError(_ error: any AppErrorProtocol) async throws {
         await self.analyticsService.track(
             event: "error_occurred",
@@ -1005,7 +1005,7 @@ public struct AnalyticsErrorReporter: ErrorReporter {
                 "user_message": error.userMessage,
                 "technical_details": error.technicalDetails,
                 "timestamp": error.timestamp.timeIntervalSince1970,
-                "context": error.context
+                "context": error.context,
             ],
             userId: nil
         )
@@ -1015,7 +1015,7 @@ public struct AnalyticsErrorReporter: ErrorReporter {
 /// Debug error reporter with detailed logging
 public struct DebugErrorReporter: ErrorReporter {
     private let logger = Logger(subsystem: "QuantumWorkspace", category: "ErrorReporting")
-    
+
     public func reportError(_ error: any AppErrorProtocol) async throws {
         self.logger
             .fault(
@@ -1039,30 +1039,30 @@ public struct CrashReporter: ErrorReporter {
 public struct NetworkRetryStrategy: RecoveryStrategy {
     public let name = "NetworkRetry"
     private let maxRetries = 3
-    
+
     public func canRecover(_ error: any AppErrorProtocol) async throws -> Bool {
         guard let networkError = error as? NetworkError else { return false }
-        
+
         // Can retry for temporary failures
         if let statusCode = networkError.statusCode {
             return statusCode >= 500 || statusCode == 429 || statusCode == 408
         }
-        
+
         return true // Can retry connection failures
     }
-    
+
     public func attemptRecovery(_ error: any AppErrorProtocol) async throws -> RecoveryResult {
         guard let networkError = error as? NetworkError else {
             return RecoveryResult(success: false, message: "Not a network error")
         }
-        
+
         // Simulate retry logic
         for attempt in 1 ... self.maxRetries {
             try await Task.sleep(nanoseconds: UInt64(attempt * 1_000_000_000)) // Wait 1, 2, 3 seconds
-            
+
             // In real implementation, would retry the network request
             let simulatedSuccess = attempt == 2 // Succeed on second attempt
-            
+
             if simulatedSuccess {
                 return RecoveryResult(
                     success: true,
@@ -1070,7 +1070,7 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
                 )
             }
         }
-        
+
         return RecoveryResult(success: false, message: "Network retry failed after \(self.maxRetries) attempts")
     }
 }
@@ -1078,12 +1078,12 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
 /// Network fallback strategy
 public struct NetworkFallbackStrategy: RecoveryStrategy {
     public let name = "NetworkFallback"
-    
+
     public func canRecover(_ error: any AppErrorProtocol) async throws -> Bool {
         error is NetworkError
     }
-    
-    public func attemptRecovery(_ error: any AppErrorProtocol) async throws -> RecoveryResult {
+
+    public func attemptRecovery(_: any AppErrorProtocol) async throws -> RecoveryResult {
         // In real implementation, would switch to fallback endpoint or cached data
         RecoveryResult(
             success: true,
@@ -1095,12 +1095,12 @@ public struct NetworkFallbackStrategy: RecoveryStrategy {
 /// Data refresh strategy
 public struct DataRefreshStrategy: RecoveryStrategy {
     public let name = "DataRefresh"
-    
+
     public func canRecover(_ error: any AppErrorProtocol) async throws -> Bool {
         error.category == .data
     }
-    
-    public func attemptRecovery(_ error: any AppErrorProtocol) async throws -> RecoveryResult {
+
+    public func attemptRecovery(_: any AppErrorProtocol) async throws -> RecoveryResult {
         // In real implementation, would refresh data from source
         RecoveryResult(
             success: true,
@@ -1112,12 +1112,12 @@ public struct DataRefreshStrategy: RecoveryStrategy {
 /// Data cache strategy
 public struct DataCacheStrategy: RecoveryStrategy {
     public let name = "DataCache"
-    
+
     public func canRecover(_ error: any AppErrorProtocol) async throws -> Bool {
         error.category == .data
     }
-    
-    public func attemptRecovery(_ error: any AppErrorProtocol) async throws -> RecoveryResult {
+
+    public func attemptRecovery(_: any AppErrorProtocol) async throws -> RecoveryResult {
         // In real implementation, would use cached data
         RecoveryResult(
             success: true,
@@ -1129,12 +1129,12 @@ public struct DataCacheStrategy: RecoveryStrategy {
 /// Validation retry strategy
 public struct ValidationRetryStrategy: RecoveryStrategy {
     public let name = "ValidationRetry"
-    
+
     public func canRecover(_ error: any AppErrorProtocol) async throws -> Bool {
         error is ValidationError
     }
-    
-    public func attemptRecovery(_ error: any AppErrorProtocol) async throws -> RecoveryResult {
+
+    public func attemptRecovery(_: any AppErrorProtocol) async throws -> RecoveryResult {
         // Validation errors typically require user input, so automatic recovery is limited
         RecoveryResult(
             success: false,
@@ -1146,12 +1146,12 @@ public struct ValidationRetryStrategy: RecoveryStrategy {
 /// System restart strategy
 public struct SystemRestartStrategy: RecoveryStrategy {
     public let name = "SystemRestart"
-    
+
     public func canRecover(_ error: any AppErrorProtocol) async throws -> Bool {
         error.category == .system && error.severity == .critical
     }
-    
-    public func attemptRecovery(_ error: any AppErrorProtocol) async throws -> RecoveryResult {
+
+    public func attemptRecovery(_: any AppErrorProtocol) async throws -> RecoveryResult {
         // In real implementation, would restart affected system components
         RecoveryResult(
             success: true,

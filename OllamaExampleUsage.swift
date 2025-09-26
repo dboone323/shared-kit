@@ -2,132 +2,6 @@
 
 import Foundation
 
-// MARK: - Ollama Integration Framework Types (Embedded for Example)
-
-// Note: In a real project, you would import these from OllamaIntegrationFramework
-// For this example, we'll define the essential types here
-
-enum CodeComplexity {
-    case simple, standard, complex
-}
-
-enum AnalysisType {
-    case basic, comprehensive
-}
-
-enum AutomationTaskType {
-    case codeGeneration, codeAnalysis, documentation
-}
-
-struct AutomationTask {
-    let id: String
-    let type: AutomationTaskType
-    let description: String
-    let language: String
-}
-
-struct CodeGenerationResult {
-    let code: String
-    let analysis: String
-    let language: String
-}
-
-struct CodeAnalysisResult {
-    let analysis: String
-    let issues: [CodeIssue]
-    let suggestions: [String]
-}
-
-struct CodeIssue {
-    let description: String
-    let severity: String
-}
-
-struct DocumentationResult {
-    let documentation: String
-}
-
-struct BatchTaskResult {
-    let task: AutomationTask
-    let success: Bool
-    let codeGenerationResult: CodeGenerationResult?
-    let error: Error?
-}
-
-struct ServiceHealth {
-    let ollamaRunning: Bool
-    let modelsAvailable: [String]
-}
-
-// MARK: - Ollama Integration Manager (Simplified for Example)
-
-class OllamaIntegrationManager {
-    private let baseURL = "http://localhost:11434"
-
-    func checkServiceHealth() async -> ServiceHealth {
-        // Simplified health check
-        ServiceHealth(ollamaRunning: true, modelsAvailable: ["llama2", "codellama"])
-    }
-
-    func generateCode(description: String, language: String, complexity: CodeComplexity) async throws -> CodeGenerationResult {
-        // Simplified code generation - using the description for generation
-        let code = "// Generated \(language) code for: \(description)\n// This is a placeholder implementation\n\nfunc example() {\n    print(\"Hello, World!\")\n}"
-
-        return CodeGenerationResult(
-            code: code,
-            analysis: "Generated basic \(language) code structure for: \(description)",
-            language: language
-        )
-    }
-
-    func analyzeCodebase(code: String, language: String, analysisType: AnalysisType) async throws -> CodeAnalysisResult {
-        // Simplified analysis
-        CodeAnalysisResult(
-            analysis: "Code analysis for \(language): \(code.count) characters",
-            issues: [],
-            suggestions: ["Consider adding error handling", "Add documentation"]
-        )
-    }
-
-    func generateDocumentation(code: String, language: String, includeExamples: Bool) async throws -> DocumentationResult {
-        // Simplified documentation
-        let docs = """
-        /// Documentation for the provided \(language) code
-        ///
-        /// This code contains \(code.count) characters and appears to be a \(language) implementation.
-        /// Key features: Basic functionality with room for enhancement.
-        """
-
-        return DocumentationResult(documentation: docs)
-    }
-
-    func processBatchTasks(_ tasks: [AutomationTask]) async throws -> [BatchTaskResult] {
-        // Simplified batch processing
-        tasks.map { task in
-            BatchTaskResult(
-                task: task,
-                success: true,
-                codeGenerationResult: CodeGenerationResult(
-                    code: "// Generated code for task: \(task.description)",
-                    analysis: "Task completed successfully",
-                    language: task.language
-                ),
-                error: nil
-            )
-        }
-    }
-
-    func quickCodeGeneration(description: String, language: String) async throws -> String {
-        let result = try await generateCode(description: description, language: language, complexity: .simple)
-        return result.code
-    }
-
-    func quickAnalysis(code: String, language: String) async throws -> String {
-        let result = try await analyzeCodebase(code: code, language: language, analysisType: .basic)
-        return result.analysis
-    }
-}
-
 // MARK: - Example Usage Functions
 
 // Example 1: Basic Code Generation
@@ -139,9 +13,13 @@ func exampleCodeGeneration() async {
     do {
         // Check if Ollama is running and models are available
         let health = await manager.checkServiceHealth()
-        print("Ollama Status: Running=\(health.ollamaRunning), Models=\(health.modelsAvailable)")
+        print("Ollama Status: running=\(health.ollamaRunning), modelsAvailable=\(health.modelsAvailable), modelCount=\(health.modelCount)")
 
-        if !health.ollamaRunning {
+        if !health.recommendedActions.isEmpty {
+            print("Recommended actions: \(health.recommendedActions.joined(separator: ", "))")
+        }
+
+        guard health.ollamaRunning else {
             print("Please start Ollama server: ollama serve")
             return
         }
@@ -191,7 +69,7 @@ func exampleCodeAnalysis() async {
 
         print("\nIssues Found:")
         for issue in result.issues {
-            print("- \(issue.description) (Severity: \(issue.severity))")
+            print("- \(issue.description) (Severity: \(String(describing: issue.severity)))")
         }
 
         print("\nSuggestions:")
@@ -303,7 +181,9 @@ func exampleQuickOperations() async {
             language: "Swift"
         )
         print("\nQuick Analysis:")
-        print(analysis.prefix(200) + "...")
+        let preview = String(analysis.prefix(200))
+        let suffix = analysis.count > 200 ? "..." : ""
+        print(preview + suffix)
 
     } catch {
         print("Error: \(error.localizedDescription)")

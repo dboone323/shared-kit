@@ -33,20 +33,20 @@ public struct SlideTransitionAdvanced: ViewModifier {
     let edge: Edge
     let distance: CGFloat
     let overshoot: CGFloat
-    
+
     public init(isPresented: Bool, edge: Edge, distance: CGFloat = 300, overshoot: CGFloat = 50) {
         self.isPresented = isPresented
         self.edge = edge
         self.distance = distance
         self.overshoot = overshoot
     }
-    
+
     public func body(content: Content) -> some View {
         let offset: CGSize = {
             let baseOffset: CGFloat = self.isPresented ? 0 : self.distance
             let overshootOffset: CGFloat = self.isPresented ? -self.overshoot : 0
             let finalOffset = baseOffset + overshootOffset
-            
+
             switch self.edge {
             case .leading: return CGSize(width: -finalOffset, height: 0)
             case .trailing: return CGSize(width: finalOffset, height: 0)
@@ -54,7 +54,7 @@ public struct SlideTransitionAdvanced: ViewModifier {
             case .bottom: return CGSize(width: 0, height: finalOffset)
             }
         }()
-        
+
         content
             .offset(offset)
             .opacity(self.isPresented ? 1 : 0)
@@ -66,14 +66,14 @@ public struct ScaleTransitionAdvanced: ViewModifier {
     let fromScale: CGFloat
     let toScale: CGFloat
     let anchor: UnitPoint
-    
+
     public init(isPresented: Bool, fromScale: CGFloat = 0.5, toScale: CGFloat = 1.0, anchor: UnitPoint = .center) {
         self.isPresented = isPresented
         self.fromScale = fromScale
         self.toScale = toScale
         self.anchor = anchor
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .scaleEffect(self.isPresented ? self.toScale : self.fromScale, anchor: self.anchor)
@@ -85,13 +85,13 @@ public struct RotationTransitionAdvanced: ViewModifier {
     let isPresented: Bool
     let degrees: Double
     let anchor: UnitPoint
-    
+
     public init(isPresented: Bool, degrees: Double = 180, anchor: UnitPoint = .center) {
         self.isPresented = isPresented
         self.degrees = degrees
         self.anchor = anchor
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .rotationEffect(.degrees(self.isPresented ? 0 : self.degrees), anchor: self.anchor)
@@ -102,12 +102,12 @@ public struct RotationTransitionAdvanced: ViewModifier {
 public struct FlipTransition: ViewModifier {
     let isPresented: Bool
     let axis: FlipAxis
-    
+
     public init(isPresented: Bool, axis: FlipAxis = .horizontal) {
         self.isPresented = isPresented
         self.axis = axis
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .rotation3DEffect(
@@ -120,11 +120,11 @@ public struct FlipTransition: ViewModifier {
 
 public struct ElasticTransition: ViewModifier {
     let isPresented: Bool
-    
+
     public init(isPresented: Bool) {
         self.isPresented = isPresented
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .scaleEffect(self.isPresented ? 1.0 : 0.1)
@@ -140,11 +140,11 @@ public struct ElasticTransition: ViewModifier {
 
 public struct BounceTransition: ViewModifier {
     let isPresented: Bool
-    
+
     public init(isPresented: Bool) {
         self.isPresented = isPresented
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .scaleEffect(self.isPresented ? 1.0 : 0.0)
@@ -163,14 +163,14 @@ public struct BounceTransition: ViewModifier {
 public struct IrisTransition: ViewModifier {
     let isPresented: Bool
     let center: UnitPoint
-    
+
     @State private var animationProgress: CGFloat = 0
-    
+
     public init(isPresented: Bool, center: UnitPoint = .center) {
         self.isPresented = isPresented
         self.center = center
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .clipShape(
@@ -192,25 +192,25 @@ public struct IrisTransition: ViewModifier {
 private struct IrisShape: Shape {
     var progress: CGFloat
     let center: UnitPoint
-    
+
     var animatableData: CGFloat {
         get { self.progress }
         set { self.progress = newValue }
     }
-    
+
     func path(in rect: CGRect) -> Path {
         let centerPoint = CGPoint(
             x: rect.width * self.center.x,
             y: rect.height * self.center.y
         )
-        
+
         let maxRadius = max(
             max(centerPoint.x, rect.width - centerPoint.x),
             max(centerPoint.y, rect.height - centerPoint.y)
         )
-        
+
         let radius = maxRadius * self.progress
-        
+
         var path = Path()
         path.addEllipse(in: CGRect(
             x: centerPoint.x - radius,
@@ -225,14 +225,14 @@ private struct IrisShape: Shape {
 public struct FanTransition: ViewModifier {
     let isPresented: Bool
     let segments: Int
-    
+
     @State private var animationProgress: CGFloat = 0
-    
+
     public init(isPresented: Bool, segments: Int = 8) {
         self.isPresented = isPresented
         self.segments = segments
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .clipShape(
@@ -254,23 +254,23 @@ public struct FanTransition: ViewModifier {
 private struct FanShape: Shape {
     var progress: CGFloat
     let segments: Int
-    
+
     var animatableData: CGFloat {
         get { self.progress }
         set { self.progress = newValue }
     }
-    
+
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let center = CGPoint(x: rect.midX, y: rect.midY)
         let radius = max(rect.width, rect.height)
         let anglePerSegment = 2 * CGFloat.pi / CGFloat(self.segments)
         let visibleSegments = Int(progress * CGFloat(self.segments))
-        
+
         for i in 0 ..< visibleSegments {
             let startAngle = CGFloat(i) * anglePerSegment - CGFloat.pi / 2
             let endAngle = startAngle + anglePerSegment
-            
+
             path.move(to: center)
             path.addArc(
                 center: center,
@@ -280,7 +280,7 @@ private struct FanShape: Shape {
                 clockwise: false
             )
         }
-        
+
         return path
     }
 }
@@ -289,14 +289,14 @@ private struct FanShape: Shape {
 
 public struct LiquidTransition: ViewModifier {
     let isPresented: Bool
-    
+
     @State private var waveOffset: CGFloat = 0
     @State private var animationProgress: CGFloat = 0
-    
+
     public init(isPresented: Bool) {
         self.isPresented = isPresented
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .clipShape(
@@ -306,7 +306,7 @@ public struct LiquidTransition: ViewModifier {
                 withAnimation(Animation.linear(duration: 2.0).repeatForever(autoreverses: false)) {
                     self.waveOffset = 2 * CGFloat.pi
                 }
-                
+
                 withAnimation(AnimationTiming.easeInOut) {
                     self.animationProgress = self.isPresented ? 1.0 : 0.0
                 }
@@ -322,7 +322,7 @@ public struct LiquidTransition: ViewModifier {
 private struct LiquidShape: Shape {
     var progress: CGFloat
     var waveOffset: CGFloat
-    
+
     var animatableData: AnimatablePair<CGFloat, CGFloat> {
         get { AnimatableData(self.progress, self.waveOffset) }
         set {
@@ -330,35 +330,35 @@ private struct LiquidShape: Shape {
             self.waveOffset = newValue.second
         }
     }
-    
+
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let waveHeight: CGFloat = 20
         let frequency: CGFloat = 4
         let fillHeight = rect.height * self.progress
-        
+
         if self.progress <= 0 {
             return path
         }
-        
+
         path.move(to: CGPoint(x: 0, y: rect.height))
-        
+
         for x in stride(from: 0, to: rect.width, by: 1) {
             let relativeX = x / rect.width
             let waveY = sin((relativeX * frequency * CGFloat.pi * 2) + self.waveOffset) * waveHeight * (1 - self.progress)
             let y = rect.height - fillHeight + waveY
-            
+
             if x == 0 {
                 path.move(to: CGPoint(x: x, y: y))
             } else {
                 path.addLine(to: CGPoint(x: x, y: y))
             }
         }
-        
+
         path.addLine(to: CGPoint(x: rect.width, y: rect.height))
         path.addLine(to: CGPoint(x: 0, y: rect.height))
         path.closeSubpath()
-        
+
         return path
     }
 }
@@ -369,15 +369,15 @@ public struct RippleTransition: ViewModifier {
     let isPresented: Bool
     let center: UnitPoint
     let rippleCount: Int
-    
+
     @State private var animationProgress: CGFloat = 0
-    
+
     public init(isPresented: Bool, center: UnitPoint = .center, rippleCount: Int = 3) {
         self.isPresented = isPresented
         self.center = center
         self.rippleCount = rippleCount
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .clipShape(
@@ -400,28 +400,28 @@ private struct RippleShape: Shape {
     var progress: CGFloat
     let center: UnitPoint
     let rippleCount: Int
-    
+
     var animatableData: CGFloat {
         get { self.progress }
         set { self.progress = newValue }
     }
-    
+
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let centerPoint = CGPoint(
             x: rect.width * self.center.x,
             y: rect.height * self.center.y
         )
-        
+
         let maxRadius = max(
             max(centerPoint.x, rect.width - centerPoint.x),
             max(centerPoint.y, rect.height - centerPoint.y)
         )
-        
+
         for i in 0 ..< self.rippleCount {
             let rippleProgress = max(0, progress * CGFloat(self.rippleCount) - CGFloat(i))
             let rippleRadius = maxRadius * min(1, rippleProgress)
-            
+
             if rippleRadius > 0 {
                 path.addEllipse(in: CGRect(
                     x: centerPoint.x - rippleRadius,
@@ -431,7 +431,7 @@ private struct RippleShape: Shape {
                 ))
             }
         }
-        
+
         return path
     }
 }
@@ -442,15 +442,15 @@ public struct MorphTransition<StartShape: Shape, EndShape: Shape>: ViewModifier 
     let isPresented: Bool
     let startShape: StartShape
     let endShape: EndShape
-    
+
     @State private var morphProgress: CGFloat = 0
-    
+
     public init(isPresented: Bool, from startShape: StartShape, to endShape: EndShape) {
         self.isPresented = isPresented
         self.startShape = startShape
         self.endShape = endShape
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .clipShape(
@@ -477,12 +477,12 @@ private struct MorphingShape<StartShape: Shape, EndShape: Shape>: Shape {
     let startShape: StartShape
     let endShape: EndShape
     var progress: CGFloat
-    
+
     var animatableData: CGFloat {
         get { self.progress }
         set { self.progress = newValue }
     }
-    
+
     func path(in rect: CGRect) -> Path {
         if self.progress <= 0.5 {
             self.startShape.path(in: rect)
@@ -497,14 +497,14 @@ private struct MorphingShape<StartShape: Shape, EndShape: Shape>: Shape {
 public struct PageCurlTransition: ViewModifier {
     let isPresented: Bool
     let direction: CurlDirection
-    
+
     @State private var curlProgress: CGFloat = 0
-    
+
     public init(isPresented: Bool, direction: CurlDirection = .topRight) {
         self.isPresented = isPresented
         self.direction = direction
     }
-    
+
     public func body(content: Content) -> some View {
         content
             .clipShape(
@@ -530,17 +530,17 @@ public enum CurlDirection {
 private struct PageCurlShape: Shape {
     var progress: CGFloat
     let direction: CurlDirection
-    
+
     var animatableData: CGFloat {
         get { self.progress }
         set { self.progress = newValue }
     }
-    
+
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        
+
         let curlSize = min(rect.width, rect.height) * self.progress
-        
+
         switch self.direction {
         case .topRight:
             path.move(to: CGPoint(x: 0, y: 0))
@@ -571,7 +571,7 @@ private struct PageCurlShape: Shape {
             path.addLine(to: CGPoint(x: 0, y: rect.height - curlSize))
             path.closeSubpath()
         }
-        
+
         return path
     }
 }
@@ -581,11 +581,11 @@ private struct PageCurlShape: Shape {
 public class TransitionManager: ObservableObject {
     @Published public var currentTransition: TransitionType = .slide(edge: .trailing)
     @Published public var isAnimating = false
-    
+
     public func performTransition(_ transition: TransitionType, duration: Double = 0.5, completion: @escaping () -> Void = {}) {
         self.isAnimating = true
         self.currentTransition = transition
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
             self.isAnimating = false
             completion()
@@ -624,11 +624,11 @@ public extension View {
             }
         }
     }
-    
+
     func slideTransitionAdvanced(isPresented: Bool, edge: Edge, distance: CGFloat = 300, overshoot: CGFloat = 50) -> some View {
         modifier(SlideTransitionAdvanced(isPresented: isPresented, edge: edge, distance: distance, overshoot: overshoot))
     }
-    
+
     func scaleTransitionAdvanced(
         isPresented: Bool,
         fromScale: CGFloat = 0.5,
@@ -637,31 +637,31 @@ public extension View {
     ) -> some View {
         modifier(ScaleTransitionAdvanced(isPresented: isPresented, fromScale: fromScale, toScale: toScale, anchor: anchor))
     }
-    
+
     func flipTransition(isPresented: Bool, axis: FlipAxis = .horizontal) -> some View {
         modifier(FlipTransition(isPresented: isPresented, axis: axis))
     }
-    
+
     func elasticTransition(isPresented: Bool) -> some View {
         modifier(ElasticTransition(isPresented: isPresented))
     }
-    
+
     func bounceTransition(isPresented: Bool) -> some View {
         modifier(BounceTransition(isPresented: isPresented))
     }
-    
+
     func irisTransition(isPresented: Bool, center: UnitPoint = .center) -> some View {
         modifier(IrisTransition(isPresented: isPresented, center: center))
     }
-    
+
     func liquidTransition(isPresented: Bool) -> some View {
         modifier(LiquidTransition(isPresented: isPresented))
     }
-    
+
     func rippleTransition(isPresented: Bool, center: UnitPoint = .center, rippleCount: Int = 3) -> some View {
         modifier(RippleTransition(isPresented: isPresented, center: center, rippleCount: rippleCount))
     }
-    
+
     func pageCurlTransition(isPresented: Bool, direction: CurlDirection = .topRight) -> some View {
         modifier(PageCurlTransition(isPresented: isPresented, direction: direction))
     }

@@ -18,7 +18,7 @@ public enum HuggingFaceError: LocalizedError {
     case modelNotSupported(String)
     case quotaExceeded
     case serverOverloaded
-    
+
     public var errorDescription: String? {
         switch self {
         case .invalidURL:
@@ -43,7 +43,7 @@ public enum HuggingFaceError: LocalizedError {
             "Servers are overloaded. Please try again in a few minutes."
         }
     }
-    
+
     public var recoverySuggestion: String? {
         switch self {
         case .rateLimited:
@@ -342,7 +342,7 @@ public struct PerformanceMetricsData {
     public let successRate: Double
     public let averageResponseTime: TimeInterval
     public let errorBreakdown: [String: Int]
-    
+
     public init(totalRequests: Int, successRate: Double, averageResponseTime: TimeInterval, errorBreakdown: [String: Int]) {
         self.totalRequests = totalRequests
         self.successRate = successRate

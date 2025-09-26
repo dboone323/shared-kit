@@ -18,7 +18,7 @@ public struct ErrorDisplayView: View {
     let onDismiss: () -> Void
     let onRetry: (() -> Void)?
     let onReportIssue: (() -> Void)?
-    
+
     public init(
         error: any AppErrorProtocol,
         onDismiss: @escaping () -> Void,
@@ -30,32 +30,32 @@ public struct ErrorDisplayView: View {
         self.onRetry = onRetry
         self.onReportIssue = onReportIssue
     }
-    
+
     public var body: some View {
         VStack(spacing: 16) {
             // Error Icon
             Image(systemName: self.severityIcon)
                 .font(.system(size: 48))
                 .foregroundColor(self.severityColor)
-            
+
             // Error Message
             VStack(spacing: 8) {
                 Text(self.error.userMessage)
                     .font(.headline)
                     .multilineTextAlignment(.center)
-                
+
                 Text(self.error.category.displayName)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
-            
+
             // Recovery Suggestions
             if !self.error.recoverySuggestions.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Try these solutions:")
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    
+
                     ForEach(Array(self.error.recoverySuggestions.enumerated()), id: \.offset) { index, suggestion in
                         HStack {
                             Text("\(index + 1).")
@@ -69,7 +69,7 @@ public struct ErrorDisplayView: View {
                 .background(Color.secondary.opacity(0.1))
                 .cornerRadius(8)
             }
-            
+
             // Action Buttons
             HStack(spacing: 16) {
                 if let onRetry, error.isRecoverable {
@@ -78,14 +78,14 @@ public struct ErrorDisplayView: View {
                     }
                     .buttonStyle(.borderedProminent)
                 }
-                
+
                 if let onReportIssue {
                     Button("Report Issue") {
                         onReportIssue()
                     }
                     .buttonStyle(.bordered)
                 }
-                
+
                 Button("Dismiss") {
                     self.onDismiss()
                 }
@@ -97,7 +97,7 @@ public struct ErrorDisplayView: View {
         .cornerRadius(16)
         .shadow(radius: 8)
     }
-    
+
     private var severityIcon: String {
         switch self.error.severity {
         case .low: "info.circle"
@@ -106,7 +106,7 @@ public struct ErrorDisplayView: View {
         case .critical: "xmark.octagon"
         }
     }
-    
+
     private var severityColor: Color {
         switch self.error.severity {
         case .low: .blue
@@ -122,7 +122,7 @@ public struct ErrorBannerView: View {
     let error: any AppErrorProtocol
     let onDismiss: () -> Void
     let onTap: (() -> Void)?
-    
+
     public init(
         error: any AppErrorProtocol,
         onDismiss: @escaping () -> Void,
@@ -132,25 +132,25 @@ public struct ErrorBannerView: View {
         self.onDismiss = onDismiss
         self.onTap = onTap
     }
-    
+
     public var body: some View {
         HStack {
             Image(systemName: self.severityIcon)
                 .foregroundColor(self.severityColor)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(self.error.userMessage)
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .lineLimit(2)
-                
+
                 Text(self.error.category.displayName)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
-            
+
             Button(action: self.onDismiss) {
                 Image(systemName: "xmark")
                     .foregroundColor(.secondary)
@@ -167,7 +167,7 @@ public struct ErrorBannerView: View {
             self.onTap?()
         }
     }
-    
+
     private var severityIcon: String {
         switch self.error.severity {
         case .low: "info.circle.fill"
@@ -176,7 +176,7 @@ public struct ErrorBannerView: View {
         case .critical: "xmark.octagon.fill"
         }
     }
-    
+
     private var severityColor: Color {
         switch self.error.severity {
         case .low: .blue
@@ -192,9 +192,9 @@ public struct ErrorListView: View {
     @StateObject private var errorManager = ErrorHandlerManager.shared
     @State private var selectedError: (any AppErrorProtocol)?
     @State private var showingErrorDetail = false
-    
+
     public init() {}
-    
+
     public var body: some View {
         NavigationView {
             VStack {
@@ -207,7 +207,7 @@ public struct ErrorListView: View {
                     )
                     .padding(.horizontal)
                 }
-                
+
                 // Error list
                 List {
                     if self.errorManager.recentErrors.isEmpty {
@@ -246,8 +246,8 @@ public struct ErrorListView: View {
             }
         }
     }
-    
-    private func deleteErrors(offsets: IndexSet) {
+
+    private func deleteErrors(offsets _: IndexSet) {
         // In a real implementation, would remove specific errors
         // For now, just clear all
         self.errorManager.clearErrorHistory()
@@ -259,29 +259,29 @@ public struct ErrorSummaryCard: View {
     let totalErrors: Int
     let criticalErrors: Int
     let globalState: GlobalErrorState
-    
+
     public var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Error Summary")
                     .font(.headline)
-                
+
                 Text("\(self.totalErrors) recent errors")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
-                
+
                 if self.criticalErrors > 0 {
                     Text("\(self.criticalErrors) critical")
                         .font(.caption)
                         .foregroundColor(.red)
                 }
             }
-            
+
             Spacer()
-            
+
             VStack(alignment: .trailing, spacing: 4) {
                 StatusIndicator(state: self.globalState)
-                
+
                 Text(self.globalState.displayName)
                     .font(.caption)
                     .foregroundColor(self.stateColor)
@@ -291,7 +291,7 @@ public struct ErrorSummaryCard: View {
         .background(Color(.systemGray6))
         .cornerRadius(12)
     }
-    
+
     private var stateColor: Color {
         switch self.globalState {
         case .normal: .green
@@ -304,7 +304,7 @@ public struct ErrorSummaryCard: View {
 /// Status indicator for global error state
 public struct StatusIndicator: View {
     let state: GlobalErrorState
-    
+
     public var body: some View {
         Circle()
             .fill(self.indicatorColor)
@@ -315,7 +315,7 @@ public struct StatusIndicator: View {
                     .scaleEffect(1.5)
             )
     }
-    
+
     private var indicatorColor: Color {
         switch self.state {
         case .normal: .green
@@ -329,18 +329,18 @@ public struct StatusIndicator: View {
 public struct ErrorRowView: View {
     let error: any AppErrorProtocol
     let onTap: () -> Void
-    
+
     public var body: some View {
         HStack {
             Image(systemName: self.severityIcon)
                 .foregroundColor(self.severityColor)
                 .frame(width: 20)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(self.error.userMessage)
                     .font(.subheadline)
                     .lineLimit(2)
-                
+
                 HStack {
                     Text(self.error.category.displayName)
                         .font(.caption)
@@ -348,15 +348,15 @@ public struct ErrorRowView: View {
                         .padding(.vertical, 2)
                         .background(self.severityColor.opacity(0.2))
                         .cornerRadius(4)
-                    
+
                     Text(self.formatTimestamp(self.error.timestamp))
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Spacer()
                 }
             }
-            
+
             if self.error.isRecoverable {
                 Image(systemName: "arrow.clockwise")
                     .foregroundColor(.blue)
@@ -366,7 +366,7 @@ public struct ErrorRowView: View {
         .contentShape(Rectangle())
         .onTapGesture(perform: self.onTap)
     }
-    
+
     private var severityIcon: String {
         switch self.error.severity {
         case .low: "info.circle"
@@ -375,7 +375,7 @@ public struct ErrorRowView: View {
         case .critical: "xmark.octagon"
         }
     }
-    
+
     private var severityColor: Color {
         switch self.error.severity {
         case .low: .blue
@@ -384,7 +384,7 @@ public struct ErrorRowView: View {
         case .critical: .purple
         }
     }
-    
+
     private func formatTimestamp(_ timestamp: Date) -> String {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
@@ -396,33 +396,33 @@ public struct ErrorRowView: View {
 public struct ErrorDetailView: View {
     let error: any AppErrorProtocol
     let onDismiss: () -> Void
-    
+
     @StateObject private var errorManager = ErrorHandlerManager.shared
     @State private var isAttemptingRecovery = false
-    
+
     public var body: some View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     // Error header
                     ErrorHeaderView(error: self.error)
-                    
+
                     // Error details
                     ErrorDetailsSection(error: self.error)
-                    
+
                     // Recovery suggestions
                     if !self.error.recoverySuggestions.isEmpty {
                         RecoverySuggestionsSection(error: self.error)
                     }
-                    
+
                     // Context information
                     if !self.error.context.isEmpty {
                         ContextSection(context: self.error.context)
                     }
-                    
+
                     // Technical details
                     TechnicalDetailsSection(error: self.error)
-                    
+
                     // Recovery action
                     if self.error.isRecoverable {
                         RecoveryActionSection(error: self.error, isAttempting: self.$isAttemptingRecovery)
@@ -438,17 +438,17 @@ public struct ErrorDetailView: View {
                         self.onDismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button("Copy Error ID") {
                             UIPasteboard.general.string = self.error.errorId
                         }
-                        
+
                         Button("Export Error Report") {
                             self.exportErrorReport()
                         }
-                        
+
                         if self.error.shouldReport {
                             Button("Report Issue") {
                                 self.reportIssue()
@@ -461,13 +461,13 @@ public struct ErrorDetailView: View {
             }
         }
     }
-    
+
     private func exportErrorReport() {
         let report = self.errorManager.exportErrorReport()
         // In real implementation, would export the report
         print("Error report exported: \(report)")
     }
-    
+
     private func reportIssue() {
         // In real implementation, would open issue reporting flow
         print("Reporting issue for error: \(self.error.errorId)")
@@ -477,18 +477,18 @@ public struct ErrorDetailView: View {
 /// Error header section
 public struct ErrorHeaderView: View {
     let error: any AppErrorProtocol
-    
+
     public var body: some View {
         VStack(spacing: 12) {
             Image(systemName: self.severityIcon)
                 .font(.system(size: 48))
                 .foregroundColor(self.severityColor)
-            
+
             Text(self.error.userMessage)
                 .font(.title2)
                 .fontWeight(.medium)
                 .multilineTextAlignment(.center)
-            
+
             HStack {
                 Label(self.error.severity.displayName, systemImage: "exclamationmark.triangle")
                     .font(.caption)
@@ -496,7 +496,7 @@ public struct ErrorHeaderView: View {
                     .padding(.vertical, 4)
                     .background(self.severityColor.opacity(0.2))
                     .cornerRadius(6)
-                
+
                 Label(self.error.category.displayName, systemImage: "tag")
                     .font(.caption)
                     .padding(.horizontal, 8)
@@ -506,7 +506,7 @@ public struct ErrorHeaderView: View {
             }
         }
     }
-    
+
     private var severityIcon: String {
         switch self.error.severity {
         case .low: "info.circle"
@@ -515,7 +515,7 @@ public struct ErrorHeaderView: View {
         case .critical: "xmark.octagon"
         }
     }
-    
+
     private var severityColor: Color {
         switch self.error.severity {
         case .low: .blue
@@ -529,12 +529,12 @@ public struct ErrorHeaderView: View {
 /// Error details section
 public struct ErrorDetailsSection: View {
     let error: any AppErrorProtocol
-    
+
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Error Details", systemImage: "info.circle")
                 .font(.headline)
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 DetailRow(title: "Error ID", value: self.error.errorId)
                 DetailRow(title: "Timestamp", value: self.formatTimestamp(self.error.timestamp))
@@ -546,7 +546,7 @@ public struct ErrorDetailsSection: View {
             .cornerRadius(8)
         }
     }
-    
+
     private func formatTimestamp(_ timestamp: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -558,12 +558,12 @@ public struct ErrorDetailsSection: View {
 /// Recovery suggestions section
 public struct RecoverySuggestionsSection: View {
     let error: any AppErrorProtocol
-    
+
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Recovery Suggestions", systemImage: "lightbulb")
                 .font(.headline)
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(Array(self.error.recoverySuggestions.enumerated()), id: \.offset) { index, suggestion in
                     HStack(alignment: .top) {
@@ -585,12 +585,12 @@ public struct RecoverySuggestionsSection: View {
 /// Context section
 public struct ContextSection: View {
     let context: [String: Any]
-    
+
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Context Information", systemImage: "doc.text")
                 .font(.headline)
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 ForEach(Array(self.context.keys.sorted()), id: \.self) { key in
                     DetailRow(title: key, value: "\(self.context[key] ?? "N/A")")
@@ -606,12 +606,12 @@ public struct ContextSection: View {
 /// Technical details section
 public struct TechnicalDetailsSection: View {
     let error: any AppErrorProtocol
-    
+
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Technical Details", systemImage: "wrench.and.screwdriver")
                 .font(.headline)
-            
+
             Text(self.error.technicalDetails)
                 .font(.system(.caption, design: .monospaced))
                 .padding()
@@ -625,14 +625,14 @@ public struct TechnicalDetailsSection: View {
 public struct RecoveryActionSection: View {
     let error: any AppErrorProtocol
     @Binding var isAttempting: Bool
-    
+
     @StateObject private var errorManager = ErrorHandlerManager.shared
-    
+
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Recovery Actions", systemImage: "arrow.clockwise")
                 .font(.headline)
-            
+
             if self.isAttempting {
                 HStack {
                     ProgressView()
@@ -651,14 +651,14 @@ public struct RecoveryActionSection: View {
             }
         }
     }
-    
+
     private func attemptRecovery() {
         Task {
             self.isAttempting = true
             defer { isAttempting = false }
-            
+
             let result = await errorManager.attemptManualRecovery(for: self.error)
-            
+
             // In real implementation, would show recovery result to user
             print("Recovery result: \(result.success ? "Success" : "Failed") - \(result.message)")
         }
@@ -669,15 +669,15 @@ public struct RecoveryActionSection: View {
 public struct DetailRow: View {
     let title: String
     let value: String
-    
+
     public var body: some View {
         HStack {
             Text(self.title + ":")
                 .fontWeight(.medium)
                 .foregroundColor(.secondary)
-            
+
             Spacer()
-            
+
             Text(self.value)
                 .font(.system(.subheadline, design: .monospaced))
         }
@@ -690,7 +690,7 @@ public struct DetailRow: View {
 public struct ErrorAlertModifier: ViewModifier {
     @Binding var error: (any AppErrorProtocol)?
     let onRetry: (() -> Void)?
-    
+
     public func body(content: Content) -> some View {
         content
             .alert(
@@ -701,14 +701,14 @@ public struct ErrorAlertModifier: ViewModifier {
                 Button("OK") {
                     self.error = nil
                 }
-                
+
                 if let onRetry, presentedError.isRecoverable {
                     Button("Try Again") {
                         onRetry()
                         self.error = nil
                     }
                 }
-                
+
                 if presentedError.shouldReport {
                     Button("Report") {
                         // Report error
@@ -727,7 +727,7 @@ public extension View {
         error: Binding<(any AppErrorProtocol)?>,
         onRetry: (() -> Void)? = nil
     ) -> some View {
-        self.modifier(ErrorAlertModifier(error: error, onRetry: onRetry))
+        modifier(ErrorAlertModifier(error: error, onRetry: onRetry))
     }
 }
 
@@ -737,21 +737,21 @@ public extension View {
 public struct ErrorToast: View {
     let error: any AppErrorProtocol
     let onDismiss: () -> Void
-    
+
     @State private var isVisible = false
-    
+
     public var body: some View {
         HStack {
             Image(systemName: self.severityIcon)
                 .foregroundColor(.white)
-            
+
             Text(self.error.userMessage)
                 .font(.subheadline)
                 .foregroundColor(.white)
                 .lineLimit(2)
-            
+
             Spacer()
-            
+
             Button(action: self.onDismiss) {
                 Image(systemName: "xmark")
                     .foregroundColor(.white)
@@ -767,7 +767,7 @@ public struct ErrorToast: View {
             withAnimation(.easeOut(duration: 0.3)) {
                 self.isVisible = true
             }
-            
+
             // Auto-dismiss after delay for non-critical errors
             if self.error.severity != .critical {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
@@ -776,7 +776,7 @@ public struct ErrorToast: View {
             }
         }
     }
-    
+
     private var severityIcon: String {
         switch self.error.severity {
         case .low: "info.circle.fill"
@@ -785,7 +785,7 @@ public struct ErrorToast: View {
         case .critical: "xmark.octagon.fill"
         }
     }
-    
+
     private var severityColor: Color {
         switch self.error.severity {
         case .low: .blue
@@ -794,7 +794,7 @@ public struct ErrorToast: View {
         case .critical: .purple
         }
     }
-    
+
     private func dismissToast() {
         withAnimation(.easeIn(duration: 0.2)) {
             self.isVisible = false

@@ -33,58 +33,58 @@ print_quantum() { echo -e "${WHITE}⚛️  QUANTUM:${NC} $1"; }
 
 # Create necessary directories
 setup_directories() {
-    print_status "Setting up quantum enhancement directories..."
+  print_status "Setting up quantum enhancement directories..."
 
-    mkdir -p "$ENHANCEMENT_DIR"
-    mkdir -p "$SHARED_DIR/Tools/Automation"
+  mkdir -p "$ENHANCEMENT_DIR"
+  mkdir -p "$SHARED_DIR/Tools/Automation"
 
-    # Create quantum models directory
-    mkdir -p "$ENHANCEMENT_DIR/.quantum_models"
+  # Create quantum models directory
+  mkdir -p "$ENHANCEMENT_DIR/.quantum_models"
 
-    print_success "Directories created successfully"
+  print_success "Directories created successfully"
 }
 
 # Propagate quantum automation to all projects
 propagate_quantum_automation() {
-    print_header "Propagating Quantum Automation to All Projects"
+  print_header "Propagating Quantum Automation to All Projects"
 
-    local projects=("CodingReviewer" "HabitQuest" "MomentumFinance" "PlannerApp" "AvoidObstaclesGame")
+  local projects=("CodingReviewer" "HabitQuest" "MomentumFinance" "PlannerApp" "AvoidObstaclesGame")
 
-    for project in "${projects[@]}"; do
-        local project_path="$PROJECTS_DIR/$project"
+  for project in "${projects[@]}"; do
+    local project_path="$PROJECTS_DIR/$project"
 
-        if [[ -d "$project_path" ]]; then
-            print_status "Enhancing $project with quantum automation..."
+    if [[ -d "$project_path" ]]; then
+      print_status "Enhancing $project with quantum automation..."
 
-            # Create automation directory
-            mkdir -p "$project_path/Tools/Automation"
+      # Create automation directory
+      mkdir -p "$project_path/Tools/Automation"
 
-            # Copy all quantum scripts
-            cp "$SHARED_DIR/Tools/Automation/"*.sh "$project_path/Tools/Automation/" 2>/dev/null || true
-            cp "$SHARED_DIR/Tools/Automation/"*.py "$project_path/Tools/Automation/" 2>/dev/null || true
+      # Copy all quantum scripts
+      cp "$SHARED_DIR/Tools/Automation/"*.sh "$project_path/Tools/Automation/" 2>/dev/null || true
+      cp "$SHARED_DIR/Tools/Automation/"*.py "$project_path/Tools/Automation/" 2>/dev/null || true
 
-            # Make scripts executable
-            chmod +x "$project_path/Tools/Automation/"*.sh 2>/dev/null || true
+      # Make scripts executable
+      chmod +x "$project_path/Tools/Automation/"*.sh 2>/dev/null || true
 
-            # Create project-specific automation runner
-            create_project_automation_runner "$project_path" "$project"
+      # Create project-specific automation runner
+      create_project_automation_runner "$project_path" "$project"
 
-            print_success "$project enhanced with quantum automation"
-        else
-            print_warning "Project $project not found, skipping..."
-        fi
-    done
+      print_success "$project enhanced with quantum automation"
+    else
+      print_warning "Project $project not found, skipping..."
+    fi
+  done
 }
 
 # Create project-specific automation runner
 create_project_automation_runner() {
-    local project_path="$1"
-    local project_name="$2"
+  local project_path="$1"
+  local project_name="$2"
 
-    # Create automation directory if it doesn't exist
-    mkdir -p "$project_path/automation"
+  # Create automation directory if it doesn't exist
+  mkdir -p "$project_path/automation"
 
-    cat > "$project_path/automation/run_automation.sh" << EOF
+  cat >"$project_path/automation/run_automation.sh" <<EOF
 #!/bin/bash
 # Quantum Automation Runner for $project_name
 
@@ -116,17 +116,17 @@ fi
 echo "✅ Quantum automation completed for $project_name"
 EOF
 
-    chmod +x "$project_path/automation/run_automation.sh"
+  chmod +x "$project_path/automation/run_automation.sh"
 }
 
 # Initialize quantum ML models
 initialize_quantum_models() {
-    print_quantum "Initializing Quantum ML Models"
+  print_quantum "Initializing Quantum ML Models"
 
-    local models_dir="$ENHANCEMENT_DIR/.quantum_models"
+  local models_dir="$ENHANCEMENT_DIR/.quantum_models"
 
-    # Create model configuration
-    cat > "$models_dir/quantum_config.json" << EOF
+  # Create model configuration
+  cat >"$models_dir/quantum_config.json" <<EOF
 {
     "version": "1.0",
     "quantum_mode": true,
@@ -169,14 +169,14 @@ initialize_quantum_models() {
 }
 EOF
 
-    print_quantum "Quantum models initialized"
+  print_quantum "Quantum models initialized"
 }
 
 # Create unified quantum dashboard
 create_unified_dashboard() {
-    print_header "Creating Unified Quantum Dashboard"
+  print_header "Creating Unified Quantum Dashboard"
 
-    cat > "$SHARED_DIR/Tools/Automation/quantum_dashboard.sh" << 'EOF'
+  cat >"$SHARED_DIR/Tools/Automation/quantum_dashboard.sh" <<'EOF'
 #!/bin/bash
 
 # Quantum-Level Unified Dashboard
@@ -342,103 +342,103 @@ main() {
 main "$@"
 EOF
 
-    chmod +x "$SHARED_DIR/Tools/Automation/quantum_dashboard.sh"
+  chmod +x "$SHARED_DIR/Tools/Automation/quantum_dashboard.sh"
 
-    print_success "Unified quantum dashboard created"
+  print_success "Unified quantum dashboard created"
 }
 
 # Run AI enhancement analysis on all projects
 run_ai_enhancement_all() {
-    print_header "Running AI Enhancement Analysis on All Projects"
+  print_header "Running AI Enhancement Analysis on All Projects"
 
-    local projects=("CodingReviewer" "HabitQuest" "MomentumFinance" "PlannerApp" "AvoidObstaclesGame")
+  local projects=("CodingReviewer" "HabitQuest" "MomentumFinance" "PlannerApp" "AvoidObstaclesGame")
 
-    for project in "${projects[@]}"; do
-        local project_path="$PROJECTS_DIR/$project"
+  for project in "${projects[@]}"; do
+    local project_path="$PROJECTS_DIR/$project"
 
-        if [[ -d "$project_path" && -f "$project_path/Tools/Automation/ai_enhancement_system.sh" ]]; then
-            print_status "Analyzing $project with AI enhancement system..."
-            cd "$project_path/Tools/Automation"
-            bash ai_enhancement_system.sh analyze "$project"
-            print_success "$project AI analysis completed"
-        else
-            print_warning "AI enhancement system not available for $project"
-        fi
-    done
+    if [[ -d "$project_path" && -f "$project_path/Tools/Automation/ai_enhancement_system.sh" ]]; then
+      print_status "Analyzing $project with AI enhancement system..."
+      cd "$project_path/Tools/Automation"
+      bash ai_enhancement_system.sh analyze "$project"
+      print_success "$project AI analysis completed"
+    else
+      print_warning "AI enhancement system not available for $project"
+    fi
+  done
 
-    print_success "AI enhancement analysis completed for all projects"
+  print_success "AI enhancement analysis completed for all projects"
 }
 
 # Run intelligent auto-fix on all projects
 run_autofix_all() {
-    print_header "Running Intelligent Auto-Fix on All Projects"
+  print_header "Running Intelligent Auto-Fix on All Projects"
 
-    local projects=("CodingReviewer" "HabitQuest" "MomentumFinance" "PlannerApp" "AvoidObstaclesGame")
+  local projects=("CodingReviewer" "HabitQuest" "MomentumFinance" "PlannerApp" "AvoidObstaclesGame")
 
-    for project in "${projects[@]}"; do
-        local project_path="$PROJECTS_DIR/$project"
+  for project in "${projects[@]}"; do
+    local project_path="$PROJECTS_DIR/$project"
 
-        if [[ -d "$project_path" && -f "$project_path/Tools/Automation/intelligent_autofix.sh" ]]; then
-            print_status "Auto-fixing $project..."
-            cd "$project_path/Tools/Automation"
-            bash intelligent_autofix.sh fix "$project"
-            print_success "$project auto-fix completed"
-        else
-            print_warning "Intelligent auto-fix not available for $project"
-        fi
-    done
+    if [[ -d "$project_path" && -f "$project_path/Tools/Automation/intelligent_autofix.sh" ]]; then
+      print_status "Auto-fixing $project..."
+      cd "$project_path/Tools/Automation"
+      bash intelligent_autofix.sh fix "$project"
+      print_success "$project auto-fix completed"
+    else
+      print_warning "Intelligent auto-fix not available for $project"
+    fi
+  done
 
-    print_success "Intelligent auto-fix completed for all projects"
+  print_success "Intelligent auto-fix completed for all projects"
 }
 
 # Show quantum metrics
 show_quantum_metrics() {
-    print_header "Quantum Enhancement Metrics"
+  print_header "Quantum Enhancement Metrics"
 
-    # Run the quantum dashboard
-    if [[ -f "$SHARED_DIR/Tools/Automation/quantum_dashboard.sh" ]]; then
-        bash "$SHARED_DIR/Tools/Automation/quantum_dashboard.sh"
-    else
-        print_error "Quantum dashboard not found"
-    fi
+  # Run the quantum dashboard
+  if [[ -f "$SHARED_DIR/Tools/Automation/quantum_dashboard.sh" ]]; then
+    bash "$SHARED_DIR/Tools/Automation/quantum_dashboard.sh"
+  else
+    print_error "Quantum dashboard not found"
+  fi
 }
 
 # Main execution
 main() {
-    case "${1:-help}" in
-        "setup")
-            setup_directories
-            initialize_quantum_models
-            propagate_quantum_automation
-            create_unified_dashboard
-            print_success "Quantum enhancement system setup completed"
-            ;;
-        "enhance-all")
-            run_ai_enhancement_all
-            ;;
-        "fix-all")
-            run_autofix_all
-            ;;
-        "dashboard")
-            show_quantum_metrics
-            ;;
-        "metrics")
-            show_quantum_metrics
-            ;;
-        "learn")
-            print_quantum "Cross-project learning analysis..."
-            # This would implement cross-project pattern learning
-            print_success "Cross-project learning completed"
-            ;;
-        "status")
-            print_header "Quantum Enhancement System Status"
-            echo "✅ Quantum Mode: $QUANTUM_MODE"
-            echo "📍 Code Directory: $CODE_DIR"
-            echo "🤖 Enhancement Directory: $ENHANCEMENT_DIR"
-            echo "📊 Projects Directory: $PROJECTS_DIR"
-            ;;
-        "--help"|"-h"|"help")
-            cat << EOF
+  case "${1:-help}" in
+  "setup")
+    setup_directories
+    initialize_quantum_models
+    propagate_quantum_automation
+    create_unified_dashboard
+    print_success "Quantum enhancement system setup completed"
+    ;;
+  "enhance-all")
+    run_ai_enhancement_all
+    ;;
+  "fix-all")
+    run_autofix_all
+    ;;
+  "dashboard")
+    show_quantum_metrics
+    ;;
+  "metrics")
+    show_quantum_metrics
+    ;;
+  "learn")
+    print_quantum "Cross-project learning analysis..."
+    # This would implement cross-project pattern learning
+    print_success "Cross-project learning completed"
+    ;;
+  "status")
+    print_header "Quantum Enhancement System Status"
+    echo "✅ Quantum Mode: $QUANTUM_MODE"
+    echo "📍 Code Directory: $CODE_DIR"
+    echo "🤖 Enhancement Directory: $ENHANCEMENT_DIR"
+    echo "📊 Projects Directory: $PROJECTS_DIR"
+    ;;
+  "--help" | "-h" | "help")
+    cat <<EOF
 Quantum-Level Automation Enhancement System
 ==========================================
 
@@ -470,13 +470,13 @@ EXAMPLES:
     $0 dashboard               # View quantum status
 
 EOF
-            ;;
-        *)
-            print_error "Unknown command: ${1:-}"
-            echo "Use '$0 help' for usage information"
-            exit 1
-            ;;
-    esac
+    ;;
+  *)
+    print_error "Unknown command: ${1:-}"
+    echo "Use '$0 help' for usage information"
+    exit 1
+    ;;
+  esac
 }
 
 # Execute main function

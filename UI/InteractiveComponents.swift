@@ -12,9 +12,9 @@ public struct NeumorphicButton<Label: View>: View {
     let isPressed: Bool
     let backgroundColor: Color
     let shadowColor: Color
-    
+
     @State private var isAnimating = false
-    
+
     public init(
         action: @escaping () -> Void,
         backgroundColor: Color = Color(.systemGray6),
@@ -28,14 +28,14 @@ public struct NeumorphicButton<Label: View>: View {
         self.isPressed = isPressed
         self.label = label()
     }
-    
+
     public var body: some View {
         Button(action: {
             GestureAnimations.hapticFeedback(style: 0)
             withAnimation(AnimationTiming.quick) {
                 self.isAnimating = true
             }
-            
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.action()
                 self.isAnimating = false
@@ -71,9 +71,9 @@ public struct GlassButton<Label: View>: View {
     let action: () -> Void
     let label: Label
     let backgroundColor: Color
-    
+
     @State private var isPressed = false
-    
+
     public init(
         action: @escaping () -> Void,
         backgroundColor: Color = Color.white.opacity(0.2),
@@ -83,7 +83,7 @@ public struct GlassButton<Label: View>: View {
         self.backgroundColor = backgroundColor
         self.label = label()
     }
-    
+
     public var body: some View {
         Button(action: {
             GestureAnimations.hapticFeedback(style: 0)
@@ -118,10 +118,10 @@ public struct FloatingActionButton: View {
     let icon: Image
     let color: Color
     let size: CGFloat
-    
+
     @State private var isPressed = false
     @State private var showRipple = false
-    
+
     public init(
         action: @escaping () -> Void,
         icon: Image = Image(systemName: "plus"),
@@ -133,7 +133,7 @@ public struct FloatingActionButton: View {
         self.color = color
         self.size = size
     }
-    
+
     public var body: some View {
         ZStack {
             // Ripple effect
@@ -144,17 +144,17 @@ public struct FloatingActionButton: View {
                     .opacity(0)
                     .animation(AnimationTiming.easeOut, value: self.showRipple)
             }
-            
+
             Button(action: {
                 GestureAnimations.hapticFeedback(style: 1)
                 withAnimation(AnimationTiming.quick) {
                     self.showRipple = true
                 }
-                
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     self.showRipple = false
                 }
-                
+
                 self.action()
             }) {
                 self.icon
@@ -187,10 +187,10 @@ public struct InteractiveCard<Content: View>: View {
     let shadowRadius: CGFloat
     let onTap: (() -> Void)?
     let onLongPress: (() -> Void)?
-    
+
     @State private var isPressed = false
     @State private var dragOffset: CGSize = .zero
-    
+
     public init(
         backgroundColor: Color = Color(.systemBackground),
         cornerRadius: CGFloat = 16,
@@ -206,7 +206,7 @@ public struct InteractiveCard<Content: View>: View {
         self.onLongPress = onLongPress
         self.content = content()
     }
-    
+
     public var body: some View {
         self.content
             .padding()
@@ -246,10 +246,10 @@ public struct SwipeActionCard<Content: View>: View {
     let content: Content
     let leftActions: [SwipeAction]
     let rightActions: [SwipeAction]
-    
+
     @State private var dragOffset: CGFloat = 0
     @State private var isRevealed = false
-    
+
     public init(
         leftActions: [SwipeAction] = [],
         rightActions: [SwipeAction] = [],
@@ -259,7 +259,7 @@ public struct SwipeActionCard<Content: View>: View {
         self.rightActions = rightActions
         self.content = content()
     }
-    
+
     public var body: some View {
         ZStack {
             // Background actions
@@ -271,9 +271,9 @@ public struct SwipeActionCard<Content: View>: View {
                         }
                     }
                 }
-                
+
                 Spacer()
-                
+
                 if !self.rightActions.isEmpty {
                     HStack(spacing: 0) {
                         ForEach(self.rightActions.indices, id: \.self) { index in
@@ -282,7 +282,7 @@ public struct SwipeActionCard<Content: View>: View {
                     }
                 }
             }
-            
+
             // Main content
             self.content
                 .background(Color(.systemBackground))
@@ -292,7 +292,7 @@ public struct SwipeActionCard<Content: View>: View {
                     DragGesture()
                         .onChanged { value in
                             let translation = value.translation.x
-                            
+
                             // Limit drag distance
                             if translation > 0, !self.leftActions.isEmpty {
                                 self.dragOffset = min(translation, CGFloat(self.leftActions.count * 80))
@@ -302,11 +302,11 @@ public struct SwipeActionCard<Content: View>: View {
                         }
                         .onEnded { _ in
                             let threshold: CGFloat = 80
-                            
+
                             if abs(self.dragOffset) > threshold {
                                 GestureAnimations.hapticFeedback(style: 1)
                             }
-                            
+
                             withAnimation(AnimationTiming.springBouncy) {
                                 self.dragOffset = 0
                             }
@@ -321,7 +321,7 @@ public struct SwipeAction {
     let icon: Image
     let backgroundColor: Color
     let action: () -> Void
-    
+
     public init(title: String, icon: Image, backgroundColor: Color, action: @escaping () -> Void) {
         self.title = title
         self.icon = icon
@@ -332,7 +332,7 @@ public struct SwipeAction {
 
 private struct SwipeActionView: View {
     let action: SwipeAction
-    
+
     var body: some View {
         Button(action: self.action.action) {
             VStack(spacing: 4) {
@@ -358,10 +358,10 @@ public struct InteractiveProgressBar: View {
     let backgroundColor: Color
     let foregroundColor: Color
     let isInteractive: Bool
-    
+
     @State private var dragProgress: Double = 0
     @State private var isDragging = false
-    
+
     public init(
         progress: Binding<Double>,
         height: CGFloat = 8,
@@ -369,13 +369,13 @@ public struct InteractiveProgressBar: View {
         foregroundColor: Color = .blue,
         isInteractive: Bool = false
     ) {
-        self._progress = progress
+        _progress = progress
         self.height = height
         self.backgroundColor = backgroundColor
         self.foregroundColor = foregroundColor
         self.isInteractive = isInteractive
     }
-    
+
     public var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
@@ -383,13 +383,13 @@ public struct InteractiveProgressBar: View {
                 RoundedRectangle(cornerRadius: self.height / 2)
                     .fill(self.backgroundColor)
                     .frame(height: self.height)
-                
+
                 // Progress fill
                 RoundedRectangle(cornerRadius: self.height / 2)
                     .fill(self.foregroundColor)
                     .frame(width: geometry.size.width * CGFloat(self.isDragging ? self.dragProgress : self.progress), height: self.height)
                     .animation(self.isDragging ? nil : AnimationTiming.easeOut, value: self.progress)
-                
+
                 if self.isInteractive {
                     // Interactive overlay
                     Rectangle()
@@ -422,9 +422,9 @@ public struct RadialProgressIndicator: View {
     let backgroundColor: Color
     let foregroundColor: Color
     let showPercentage: Bool
-    
+
     @State private var animatedProgress: Double = 0
-    
+
     public init(
         progress: Double,
         size: CGFloat = 100,
@@ -440,14 +440,14 @@ public struct RadialProgressIndicator: View {
         self.foregroundColor = foregroundColor
         self.showPercentage = showPercentage
     }
-    
+
     public var body: some View {
         ZStack {
             // Background circle
             Circle()
                 .stroke(self.backgroundColor, lineWidth: self.lineWidth)
                 .frame(width: self.size, height: self.size)
-            
+
             // Progress circle
             Circle()
                 .trim(from: 0, to: CGFloat(self.animatedProgress))
@@ -457,7 +457,7 @@ public struct RadialProgressIndicator: View {
                 )
                 .frame(width: self.size, height: self.size)
                 .rotationEffect(.degrees(-90))
-            
+
             // Percentage text
             if self.showPercentage {
                 Text("\(Int(self.animatedProgress * 100))%")
@@ -489,10 +489,10 @@ public struct InteractiveSlider: View {
     let trackColor: Color
     let thumbColor: Color
     let fillColor: Color
-    
+
     @State private var isDragging = false
     @State private var dragValue: Double
-    
+
     public init(
         value: Binding<Double>,
         in range: ClosedRange<Double> = 0 ... 1,
@@ -503,7 +503,7 @@ public struct InteractiveSlider: View {
         thumbColor: Color = .white,
         fillColor: Color = .blue
     ) {
-        self._value = value
+        _value = value
         self.range = range
         self.step = step
         self.trackHeight = trackHeight
@@ -511,29 +511,29 @@ public struct InteractiveSlider: View {
         self.trackColor = trackColor
         self.thumbColor = thumbColor
         self.fillColor = fillColor
-        self._dragValue = State(initialValue: value.wrappedValue)
+        _dragValue = State(initialValue: value.wrappedValue)
     }
-    
+
     public var body: some View {
         GeometryReader { geometry in
             let trackWidth = geometry.size.width - self.thumbSize
             let progress = CGFloat((isDragging ? self.dragValue : self.value) - self.range.lowerBound) /
                 CGFloat(self.range.upperBound - self.range.lowerBound)
             let thumbOffset = trackWidth * progress
-            
+
             ZStack(alignment: .leading) {
                 // Track background
                 RoundedRectangle(cornerRadius: self.trackHeight / 2)
                     .fill(self.trackColor)
                     .frame(height: self.trackHeight)
                     .padding(.horizontal, self.thumbSize / 2)
-                
+
                 // Fill
                 RoundedRectangle(cornerRadius: self.trackHeight / 2)
                     .fill(self.fillColor)
                     .frame(width: thumbOffset + self.thumbSize / 2, height: self.trackHeight)
                     .padding(.leading, self.thumbSize / 2)
-                
+
                 // Thumb
                 Circle()
                     .fill(self.thumbColor)
@@ -547,10 +547,10 @@ public struct InteractiveSlider: View {
                                 let newOffset = max(0, min(trackWidth, gesture.location.x - self.thumbSize / 2))
                                 let newProgress = Double(newOffset / trackWidth)
                                 let newValue = self.range.lowerBound + (self.range.upperBound - self.range.lowerBound) * newProgress
-                                
+
                                 self.dragValue = (newValue / self.step).rounded() * self.step
                                 self.dragValue = max(self.range.lowerBound, min(self.range.upperBound, self.dragValue))
-                                
+
                                 if !self.isDragging {
                                     self.isDragging = true
                                     GestureAnimations.hapticFeedback(style: 0)
@@ -574,9 +574,9 @@ public struct InteractiveToggle: View {
     let onColor: Color
     let offColor: Color
     let thumbColor: Color
-    
+
     @State private var isAnimating = false
-    
+
     public init(
         isOn: Binding<Bool>,
         size: CGSize = CGSize(width: 50, height: 30),
@@ -584,13 +584,13 @@ public struct InteractiveToggle: View {
         offColor: Color = Color(.systemGray4),
         thumbColor: Color = .white
     ) {
-        self._isOn = isOn
+        _isOn = isOn
         self.size = size
         self.onColor = onColor
         self.offColor = offColor
         self.thumbColor = thumbColor
     }
-    
+
     public var body: some View {
         Button(action: {
             GestureAnimations.hapticFeedback(style: 0)
@@ -598,7 +598,7 @@ public struct InteractiveToggle: View {
                 self.isOn.toggle()
                 self.isAnimating = true
             }
-            
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self.isAnimating = false
             }
@@ -608,7 +608,7 @@ public struct InteractiveToggle: View {
                 RoundedRectangle(cornerRadius: self.size.height / 2)
                     .fill(self.isOn ? self.onColor : self.offColor)
                     .frame(width: self.size.width, height: self.size.height)
-                
+
                 // Thumb
                 Circle()
                     .fill(self.thumbColor)
@@ -630,9 +630,9 @@ public struct TabBarItem: View {
     let selectedIcon: Image?
     let isSelected: Bool
     let action: () -> Void
-    
+
     @State private var isPressed = false
-    
+
     public init(
         title: String,
         icon: Image,
@@ -646,7 +646,7 @@ public struct TabBarItem: View {
         self.isSelected = isSelected
         self.action = action
     }
-    
+
     public var body: some View {
         Button(action: {
             GestureAnimations.hapticFeedback(style: 0)
@@ -657,7 +657,7 @@ public struct TabBarItem: View {
                     .font(.system(size: 24))
                     .foregroundColor(self.isSelected ? .primary : .secondary)
                     .scaleEffect(self.isPressed ? 0.9 : (self.isSelected ? 1.1 : 1.0))
-                
+
                 Text(self.title)
                     .font(.caption)
                     .fontWeight(self.isSelected ? .semibold : .regular)
@@ -681,7 +681,7 @@ public struct InteractiveTabBar: View {
     @Binding var selectedIndex: Int
     let backgroundColor: Color
     let shadowColor: Color
-    
+
     public init(
         items: [TabBarItemData],
         selectedIndex: Binding<Int>,
@@ -689,11 +689,11 @@ public struct InteractiveTabBar: View {
         shadowColor: Color = Color.black.opacity(0.1)
     ) {
         self.items = items
-        self._selectedIndex = selectedIndex
+        _selectedIndex = selectedIndex
         self.backgroundColor = backgroundColor
         self.shadowColor = shadowColor
     }
-    
+
     public var body: some View {
         HStack(spacing: 0) {
             ForEach(self.items.indices, id: \.self) { index in
@@ -722,7 +722,7 @@ public struct TabBarItemData {
     let icon: Image
     let selectedIcon: Image?
     let action: () -> Void
-    
+
     public init(title: String, icon: Image, selectedIcon: Image? = nil, action: @escaping () -> Void = {}) {
         self.title = title
         self.icon = icon

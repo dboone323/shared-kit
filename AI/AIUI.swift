@@ -14,21 +14,21 @@ public struct AIDashboard: View {
     @StateObject private var nlProcessor = NaturalLanguageProcessor.shared
     @StateObject private var visionProcessor = ComputerVisionProcessor.shared
     @StateObject private var predictiveEngine = PredictiveAnalyticsEngine.shared
-    
+
     @State private var selectedTab: AITab = .overview
     @State private var showingModelManager = false
-    
+
     public init() {}
-    
+
     public var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 // Status Header
                 AIStatusHeader()
-                
+
                 // Tab Selection
                 AITabView(selectedTab: self.$selectedTab)
-                
+
                 // Content
                 ScrollView {
                     LazyVStack(spacing: 16) {
@@ -64,7 +64,7 @@ public struct AIDashboard: View {
 @available(iOS 13.0, macOS 10.15, *)
 private struct AIStatusHeader: View {
     @StateObject private var aiCoordinator = AICoordinator.shared
-    
+
     var body: some View {
         VStack(spacing: 12) {
             HStack {
@@ -72,17 +72,17 @@ private struct AIStatusHeader: View {
                     Text("AI Status")
                         .font(.headline)
                         .foregroundColor(.primary)
-                    
+
                     Text(self.statusText)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 StatusIndicatorView(isActive: self.aiCoordinator.isInitialized)
             }
-            
+
             // Available Features
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 8) {
                 ForEach(AIFeature.allCases, id: \.self) { feature in
@@ -104,7 +104,7 @@ private struct AIStatusHeader: View {
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
     }
-    
+
     private var statusText: String {
         if aiCoordinator.isInitialized {
             "AI system initialized - \(aiCoordinator.availableFeatures.count) features available"
@@ -119,13 +119,13 @@ private struct AIStatusHeader: View {
 private struct FeatureStatusCard: View {
     let feature: AIFeature
     let isAvailable: Bool
-    
+
     var body: some View {
         VStack(spacing: 6) {
             Image(systemName: iconName)
                 .font(.system(size: 20))
                 .foregroundColor(isAvailable ? .green : .gray)
-            
+
             Text(displayName)
                 .font(.caption)
                 .foregroundColor(.primary)
@@ -138,7 +138,7 @@ private struct FeatureStatusCard: View {
                 .fill(isAvailable ? Color.green.opacity(0.1) : Color.gray.opacity(0.1))
         )
     }
-    
+
     private var iconName: String {
         switch feature {
         case .machineLearning:
@@ -151,7 +151,7 @@ private struct FeatureStatusCard: View {
             "chart.line.uptrend.xyaxis"
         }
     }
-    
+
     private var displayName: String {
         switch feature {
         case .machineLearning:
@@ -170,7 +170,7 @@ private struct FeatureStatusCard: View {
 
 private struct StatusIndicatorView: View {
     let isActive: Bool
-    
+
     var body: some View {
         HStack(spacing: 6) {
             Circle()
@@ -178,7 +178,7 @@ private struct StatusIndicatorView: View {
                 .frame(width: 8, height: 8)
                 .scaleEffect(isActive ? 1.0 : 0.8)
                 .animation(.easeInOut(duration: 1.0).repeatForever(), value: isActive)
-            
+
             Text(isActive ? "Active" : "Initializing")
                 .font(.caption)
                 .fontWeight(.medium)
@@ -195,7 +195,7 @@ private enum AITab: String, CaseIterable {
     case imageProcessing = "Vision"
     case predictions = "Predictions"
     case models = "Models"
-    
+
     var icon: String {
         switch self {
         case .overview:
@@ -214,7 +214,7 @@ private enum AITab: String, CaseIterable {
 
 private struct AITabView: View {
     @Binding var selectedTab: AITab
-    
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
@@ -245,13 +245,13 @@ private struct AITabButton: View {
     let tab: AITab
     let isSelected: Bool
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: 8) {
                 Image(systemName: tab.icon)
                     .font(.system(size: 14, weight: .medium))
-                
+
                 Text(tab.rawValue)
                     .font(.system(size: 14, weight: .medium))
             }
@@ -273,7 +273,7 @@ private struct AITabButton: View {
 private struct AIOverviewContent: View {
     @StateObject private var aiCoordinator = AICoordinator.shared
     @StateObject private var coreMLManager = CoreMLManager.shared
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Quick Stats
@@ -284,21 +284,21 @@ private struct AIOverviewContent: View {
                     icon: "brain.head.profile",
                     color: .blue
                 )
-                
+
                 StatCard(
                     title: "Loaded Models",
                     value: "\(coreMLManager.loadedModels.count)",
                     icon: "cpu",
                     color: .green
                 )
-                
+
                 StatCard(
                     title: "AI Features",
                     value: "\(aiCoordinator.availableFeatures.count)",
                     icon: "sparkles",
                     color: .purple
                 )
-                
+
                 StatCard(
                     title: "Status",
                     value: aiCoordinator.isInitialized ? "Ready" : "Loading",
@@ -306,7 +306,7 @@ private struct AIOverviewContent: View {
                     color: aiCoordinator.isInitialized ? .green : .orange
                 )
             }
-            
+
             // Recent Activity
             AIActivityFeed()
         }
@@ -320,14 +320,14 @@ private struct TextAnalysisContent: View {
     @State private var analysisResult: SentimentAnalysis?
     @State private var keywords: [Keyword] = []
     @State private var languageInfo: LanguageInfo?
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Text Input
             VStack(alignment: .leading, spacing: 8) {
                 Text("Text Analysis")
                     .font(.headline)
-                
+
                 TextEditor(text: $inputText)
                     .frame(minHeight: 100)
                     .padding(8)
@@ -335,7 +335,7 @@ private struct TextAnalysisContent: View {
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                     )
-                
+
                 HStack {
                     Button("Analyze Sentiment") {
                         Task {
@@ -344,21 +344,21 @@ private struct TextAnalysisContent: View {
                     }
                     .buttonStyle(.bordered)
                     .disabled(inputText.isEmpty || nlProcessor.isProcessing)
-                    
+
                     Button("Extract Keywords") {
                         keywords = nlProcessor.extractKeywords(inputText)
                     }
                     .buttonStyle(.bordered)
                     .disabled(inputText.isEmpty)
-                    
+
                     Button("Detect Language") {
                         languageInfo = nlProcessor.detectLanguage(inputText)
                     }
                     .buttonStyle(.bordered)
                     .disabled(inputText.isEmpty)
-                    
+
                     Spacer()
-                    
+
                     if nlProcessor.isProcessing {
                         ProgressView()
                             .scaleEffect(0.8)
@@ -374,16 +374,16 @@ private struct TextAnalysisContent: View {
                 #endif
             )
             .cornerRadius(12)
-            
+
             // Results
             if let analysis = analysisResult {
                 SentimentResultView(analysis: analysis)
             }
-            
+
             if !keywords.isEmpty {
                 KeywordsResultView(keywords: keywords)
             }
-            
+
             if let language = languageInfo {
                 LanguageResultView(languageInfo: language)
             }
@@ -398,14 +398,14 @@ private struct ImageProcessingContent: View {
     @State private var classificationResult: ImageClassificationResult?
     @State private var textRecognitionResult: TextRecognitionResult?
     @State private var showingImagePicker = false
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Image Selection
             VStack(alignment: .leading, spacing: 12) {
                 Text("Image Processing")
                     .font(.headline)
-                
+
                 if let image = selectedImage {
                     #if canImport(UIKit)
                     Image(uiImage: image)
@@ -434,13 +434,13 @@ private struct ImageProcessingContent: View {
                             }
                         )
                 }
-                
+
                 HStack {
                     Button("Select Image") {
                         showingImagePicker = true
                     }
                     .buttonStyle(.bordered)
-                    
+
                     if selectedImage != nil {
                         Button("Classify") {
                             Task {
@@ -453,7 +453,7 @@ private struct ImageProcessingContent: View {
                         }
                         .buttonStyle(.bordered)
                         .disabled(visionProcessor.isProcessing)
-                        
+
                         Button("Extract Text") {
                             Task {
                                 do {
@@ -466,9 +466,9 @@ private struct ImageProcessingContent: View {
                         .buttonStyle(.bordered)
                         .disabled(visionProcessor.isProcessing)
                     }
-                    
+
                     Spacer()
-                    
+
                     if visionProcessor.isProcessing {
                         ProgressView()
                             .scaleEffect(0.8)
@@ -484,12 +484,12 @@ private struct ImageProcessingContent: View {
                 #endif
             )
             .cornerRadius(12)
-            
+
             // Results
             if let classification = classificationResult {
                 ImageClassificationResultView(result: classification)
             }
-            
+
             if let textResult = textRecognitionResult {
                 TextRecognitionResultView(result: textResult)
             }
@@ -508,14 +508,14 @@ private struct PredictionsContent: View {
     @State private var selectedPredictionType: PredictionType = .habitSuccess
     @State private var habitPrediction: HabitPrediction?
     @State private var expensePrediction: ExpensePrediction?
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Prediction Type Selector
             VStack(alignment: .leading, spacing: 12) {
                 Text("Predictive Analytics")
                     .font(.headline)
-                
+
                 Picker("Prediction Type", selection: $selectedPredictionType) {
                     Text("Habit Success").tag(PredictionType.habitSuccess)
                     Text("Expense Category").tag(PredictionType.expenseCategory)
@@ -531,7 +531,7 @@ private struct PredictionsContent: View {
                 #endif
             )
             .cornerRadius(12)
-            
+
             // Prediction Interface
             switch selectedPredictionType {
             case .habitSuccess:
@@ -542,12 +542,12 @@ private struct PredictionsContent: View {
                 Text("Prediction type not implemented")
                     .foregroundColor(.secondary)
             }
-            
+
             // Recent Predictions
             RecentPredictionsView()
         }
     }
-    
+
     private enum PredictionType: CaseIterable {
         case habitSuccess
         case expenseCategory
@@ -557,7 +557,7 @@ private struct PredictionsContent: View {
 @available(iOS 13.0, macOS 10.15, *)
 private struct ModelsContent: View {
     @StateObject private var coreMLManager = CoreMLManager.shared
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Available Models
@@ -565,15 +565,15 @@ private struct ModelsContent: View {
                 HStack {
                     Text("Available Models")
                         .font(.headline)
-                    
+
                     Spacer()
-                    
+
                     if coreMLManager.isLoading {
                         ProgressView()
                             .scaleEffect(0.8)
                     }
                 }
-                
+
                 LazyVStack(spacing: 8) {
                     ForEach(coreMLManager.availableModels) { model in
                         ModelCard(model: model)
@@ -600,21 +600,21 @@ private struct StatCard: View {
     let value: String
     let icon: String
     let color: Color
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: icon)
                     .foregroundColor(color)
                     .font(.system(size: 16))
-                
+
                 Spacer()
-                
+
                 Text(value)
                     .font(.system(size: 18, weight: .semibold, design: .rounded))
                     .foregroundColor(color)
             }
-            
+
             Text(title)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -635,12 +635,12 @@ private struct StatCard: View {
 @available(iOS 13.0, macOS 10.15, *)
 private struct AIActivityFeed: View {
     @StateObject private var predictiveEngine = PredictiveAnalyticsEngine.shared
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Recent AI Activity")
                 .font(.headline)
-            
+
             if predictiveEngine.predictions.isEmpty {
                 VStack {
                     Image(systemName: "brain.head.profile")
@@ -673,24 +673,24 @@ private struct AIActivityFeed: View {
 
 private struct AIActivityItem: View {
     let prediction: Prediction
-    
+
     var body: some View {
         HStack {
             Image(systemName: iconForPredictionType(prediction.type))
                 .foregroundColor(.blue)
                 .frame(width: 20)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(titleForPredictionType(prediction.type))
                     .font(.system(size: 14, weight: .medium))
-                
+
                 Text(prediction.timestamp, style: .relative)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
-            
+
             Text("\(Int(prediction.confidence * 100))%")
                 .font(.caption)
                 .fontWeight(.semibold)
@@ -698,7 +698,7 @@ private struct AIActivityItem: View {
         }
         .padding(.vertical, 4)
     }
-    
+
     private func iconForPredictionType(_ type: Prediction.PredictionType) -> String {
         switch type {
         case .habitSuccess:
@@ -711,7 +711,7 @@ private struct AIActivityItem: View {
             "person.crop.circle"
         }
     }
-    
+
     private func titleForPredictionType(_ type: Prediction.PredictionType) -> String {
         switch type {
         case .habitSuccess:
@@ -728,43 +728,43 @@ private struct AIActivityItem: View {
 
 private struct SentimentResultView: View {
     let analysis: SentimentAnalysis
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Sentiment Analysis Results")
                 .font(.headline)
-            
+
             HStack {
                 VStack(alignment: .leading) {
                     Text("Sentiment")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
-                    
+
                     Text(analysis.sentiment.rawValue.capitalized)
                         .font(.title2)
                         .fontWeight(.semibold)
                         .foregroundColor(colorForSentiment(analysis.sentiment))
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing) {
                     Text("Confidence")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
-                    
+
                     Text("\(Int(analysis.confidence * 100))%")
                         .font(.title2)
                         .fontWeight(.semibold)
                 }
             }
-            
+
             if !analysis.emotions.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Detected Emotions")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
-                    
+
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
                         ForEach(analysis.emotions, id: \.self) { emotion in
                             Text(emotion.rawValue.capitalized)
@@ -788,7 +788,7 @@ private struct SentimentResultView: View {
         )
         .cornerRadius(12)
     }
-    
+
     private func colorForSentiment(_ sentiment: Sentiment) -> Color {
         switch sentiment {
         case .positive:
@@ -803,21 +803,21 @@ private struct SentimentResultView: View {
 
 private struct KeywordsResultView: View {
     let keywords: [Keyword]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Extracted Keywords")
                 .font(.headline)
-            
+
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 8) {
                 ForEach(keywords.prefix(10), id: \.word) { keyword in
                     HStack {
                         Text(keyword.word)
                             .font(.system(size: 14))
                             .fontWeight(.medium)
-                        
+
                         Spacer()
-                        
+
                         Text("\(keyword.frequency)")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -843,24 +843,24 @@ private struct KeywordsResultView: View {
 
 private struct LanguageResultView: View {
     let languageInfo: LanguageInfo
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Language Detection")
                 .font(.headline)
-            
+
             if let dominantLanguage = languageInfo.dominantLanguage {
                 HStack {
                     Text("Detected Language:")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
-                    
+
                     Text(dominantLanguage.rawValue)
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                    
+
                     Spacer()
-                    
+
                     Text("\(Int(languageInfo.confidence * 100))%")
                         .font(.caption)
                         .foregroundColor(.blue)
@@ -881,20 +881,20 @@ private struct LanguageResultView: View {
 
 private struct ImageClassificationResultView: View {
     let result: ImageClassificationResult
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Image Classification Results")
                 .font(.headline)
-            
+
             LazyVStack(spacing: 8) {
                 ForEach(result.classifications, id: \.identifier) { classification in
                     HStack {
                         Text(classification.identifier)
                             .font(.system(size: 14))
-                        
+
                         Spacer()
-                        
+
                         Text("\(Int(classification.confidence * 100))%")
                             .font(.caption)
                             .fontWeight(.semibold)
@@ -921,12 +921,12 @@ private struct ImageClassificationResultView: View {
 
 private struct TextRecognitionResultView: View {
     let result: TextRecognitionResult
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Text Recognition Results")
                 .font(.headline)
-            
+
             if !result.recognizedText.isEmpty {
                 ScrollView {
                     Text(result.recognizedText)
@@ -964,17 +964,17 @@ private struct TextRecognitionResultView: View {
 private struct ModelCard: View {
     let model: AIModel
     @StateObject private var coreMLManager = CoreMLManager.shared
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(model.name)
                     .font(.system(size: 16, weight: .medium))
-                
+
                 Text(model.description)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 HStack {
                     Text(model.type.rawValue.capitalized)
                         .font(.caption)
@@ -982,15 +982,15 @@ private struct ModelCard: View {
                         .padding(.vertical, 2)
                         .background(Color.blue.opacity(0.1))
                         .cornerRadius(6)
-                    
+
                     Text(formatFileSize(model.modelSize))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             Spacer()
-            
+
             if model.isLoaded || coreMLManager.loadedModels.keys.contains(model.id) {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.green)
@@ -1013,7 +1013,7 @@ private struct ModelCard: View {
         .background(Color.gray.opacity(0.05))
         .cornerRadius(8)
     }
-    
+
     private func formatFileSize(_ bytes: Int) -> String {
         let formatter = ByteCountFormatter()
         formatter.allowedUnits = [.useMB, .useKB]
@@ -1026,12 +1026,12 @@ private struct ModelCard: View {
 
 private struct HabitPredictionView: View {
     @Binding var prediction: HabitPrediction?
-    
+
     var body: some View {
         VStack {
             Text("Habit Success Prediction")
                 .font(.headline)
-            
+
             Button("Generate Prediction") {
                 // Simulate prediction generation
                 prediction = HabitPrediction(
@@ -1043,13 +1043,13 @@ private struct HabitPredictionView: View {
                 )
             }
             .buttonStyle(.bordered)
-            
+
             if let pred = prediction {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Success Probability: \(Int(pred.successProbability * 100))%")
                         .font(.title2)
                         .fontWeight(.semibold)
-                    
+
                     Text("Confidence: \(Int(pred.confidence * 100))%")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -1073,12 +1073,12 @@ private struct HabitPredictionView: View {
 
 private struct ExpensePredictionView: View {
     @Binding var prediction: ExpensePrediction?
-    
+
     var body: some View {
         VStack {
             Text("Expense Category Prediction")
                 .font(.headline)
-            
+
             Button("Generate Prediction") {
                 // Simulate prediction generation
                 prediction = ExpensePrediction(
@@ -1090,17 +1090,17 @@ private struct ExpensePredictionView: View {
                 )
             }
             .buttonStyle(.bordered)
-            
+
             if let pred = prediction {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Category: \(pred.predictedCategory)")
                         .font(.title2)
                         .fontWeight(.semibold)
-                    
+
                     Text("Confidence: \(Int(pred.confidence * 100))%")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
-                    
+
                     Text(pred.reasoning)
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -1127,7 +1127,7 @@ private struct RecentPredictionsView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Recent Predictions")
                 .font(.headline)
-            
+
             Text("No recent predictions available")
                 .foregroundColor(.secondary)
                 .italic()
@@ -1147,17 +1147,17 @@ private struct RecentPredictionsView: View {
 private struct ImagePickerView: View {
     let onImageSelected: (PlatformImage) -> Void
     @Environment(\.presentationMode) var presentationMode
-    
+
     var body: some View {
         VStack {
             Text("Image Picker Placeholder")
                 .font(.headline)
-            
+
             Text("In a real implementation, this would open the system image picker")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
-            
+
             Button("Cancel") {
                 presentationMode.wrappedValue.dismiss()
             }
@@ -1170,7 +1170,7 @@ private struct ImagePickerView: View {
 private struct ModelManagerView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var coreMLManager = CoreMLManager.shared
-    
+
     var body: some View {
         NavigationView {
             List {
@@ -1194,9 +1194,9 @@ private struct ModelManagerView: View {
 public struct AIWidget: View {
     @StateObject private var aiCoordinator = AICoordinator.shared
     @State private var showingDashboard = false
-    
+
     public init() {}
-    
+
     public var body: some View {
         Button(action: {
             showingDashboard = true
@@ -1204,12 +1204,12 @@ public struct AIWidget: View {
             HStack(spacing: 8) {
                 Image(systemName: aiCoordinator.isInitialized ? "brain.head.profile" : "clock")
                     .foregroundColor(aiCoordinator.isInitialized ? .blue : .orange)
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text("AI System")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Text(aiCoordinator.isInitialized ? "Ready" : "Loading")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(.primary)
