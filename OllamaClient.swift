@@ -35,15 +35,15 @@ public class OllamaClient: ObservableObject {
         configuration.timeoutIntervalForResource = config.timeout * 2
         configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
         configuration.httpMaximumConnectionsPerHost = 4
-        session = URLSession(configuration: configuration)
+        self.session = URLSession(configuration: configuration)
 
         // Enhanced logging
-        logger = Logger(subsystem: "OllamaClient", category: "AI")
+        self.logger = Logger(subsystem: "OllamaClient", category: "AI")
 
         // Cache and metrics
-        cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)
-        metrics = OllamaMetrics(enabled: config.enableMetrics)
-        currentModel = config.defaultModel
+        self.cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)
+        self.metrics = OllamaMetrics(enabled: config.enableMetrics)
+        self.currentModel = config.defaultModel
 
         Task {
             await self.initializeConnection()
@@ -55,28 +55,28 @@ public class OllamaClient: ObservableObject {
     private func initializeConnection() async {
         do {
             let serverRunning = await isServerRunning()
-            isConnected = serverRunning
-            if isConnected {
+            self.isConnected = serverRunning
+            if self.isConnected {
                 let models = try await listModels()
-                availableModels = models
-                serverStatus = await getServerStatus()
-                logger.info("Connected to Ollama server with \(models.count) models")
+                self.availableModels = models
+                self.serverStatus = await self.getServerStatus()
+                self.logger.info("Connected to Ollama server with \(models.count) models")
             }
         } catch {
-            logger.error("Failed to initialize connection: \(error.localizedDescription)")
+            self.logger.error("Failed to initialize connection: \(error.localizedDescription)")
         }
     }
 
     private func ensureModelAvailable(_ model: String) async throws {
-        if !availableModels.contains(model), config.enableAutoModelDownload {
-            logger.info("Auto-downloading model: \(model)")
-            try await pullModel(model)
-            availableModels = try await listModels()
-        } else if !availableModels.contains(model) {
+        if !self.availableModels.contains(model), self.config.enableAutoModelDownload {
+            self.logger.info("Auto-downloading model: \(model)")
+            try await self.pullModel(model)
+            self.availableModels = try await self.listModels()
+        } else if !self.availableModels.contains(model) {
             // Try fallback models
-            for fallback in config.fallbackModels {
-                if availableModels.contains(fallback) {
-                    logger.info("Using fallback model: \(fallback) instead of \(model)")
+            for fallback in self.config.fallbackModels {
+                if self.availableModels.contains(fallback) {
+                    self.logger.info("Using fallback model: \(fallback) instead of \(model)")
                     return
                 }
             }
@@ -95,22 +95,22 @@ public class OllamaClient: ObservableObject {
     }
 
     private func selectOptimalModel(_ preferredModel: String?) async throws -> String {
-        let targetModel = preferredModel ?? config.defaultModel
+        let targetModel = preferredModel ?? self.config.defaultModel
 
         // If cloud models are enabled and preferred, try cloud models first
-        if config.enableCloudModels, config.preferCloudModels || isCloudModel(targetModel) {
-            if isCloudModel(targetModel) {
+        if self.config.enableCloudModels, self.config.preferCloudModels || self.isCloudModel(targetModel) {
+            if self.isCloudModel(targetModel) {
                 return targetModel
             }
 
             // Find best cloud alternative
-            if getCloudModels().contains(targetModel + "-cloud") {
+            if self.getCloudModels().contains(targetModel + "-cloud") {
                 return targetModel + "-cloud"
             }
         }
 
         // Check local availability or use fallbacks
-        try await ensureModelAvailable(targetModel)
+        try await self.ensureModelAvailable(targetModel)
         return targetModel
     }
 
@@ -124,20 +124,20 @@ public class OllamaClient: ObservableObject {
         useCache: Bool = true
     ) async throws -> String {
         let requestModel = try await selectOptimalModel(model)
-        let requestTemp = temperature ?? config.temperature
-        let requestMaxTokens = maxTokens ?? config.maxTokens
+        let requestTemp = temperature ?? self.config.temperature
+        let requestMaxTokens = maxTokens ?? self.config.maxTokens
 
         // Check cache first
-        if useCache, config.enableCaching {
+        if useCache, self.config.enableCaching {
             let cacheKey = "\(requestModel):\(prompt.hashValue):\(requestTemp)"
             if let cached = cache.get(cacheKey) {
-                metrics.recordCacheHit()
+                self.metrics.recordCacheHit()
                 return cached
             }
         }
 
         // Apply rate limiting
-        await throttleRequest()
+        await self.throttleRequest()
 
         let startTime = Date()
         let requestBody: [String: Any] = [
@@ -148,7 +148,7 @@ public class OllamaClient: ObservableObject {
             "stream": false,
         ]
 
-        logger.info("Generating with model: \(requestModel), prompt length: \(prompt.count)")
+        self.logger.info("Generating with model: \(requestModel), prompt length: \(prompt.count)")
 
         do {
             let response = try await performRequestWithRetry(endpoint: "api/generate", body: requestBody)
@@ -157,19 +157,19 @@ public class OllamaClient: ObservableObject {
             }
 
             // Cache successful response
-            if useCache, config.enableCaching {
+            if useCache, self.config.enableCaching {
                 let cacheKey = "\(requestModel):\(prompt.hashValue):\(requestTemp)"
-                cache.set(cacheKey, value: result)
+                self.cache.set(cacheKey, value: result)
             }
 
             // Record metrics
             let duration = Date().timeIntervalSince(startTime)
-            metrics.recordRequest(model: requestModel, duration: duration, tokenCount: result.count / 4)
+            self.metrics.recordRequest(model: requestModel, duration: duration, tokenCount: result.count / 4)
 
             return result
 
         } catch {
-            metrics.recordError(error: error)
+            self.metrics.recordError(error: error)
             throw error
         }
     }
@@ -198,7 +198,7 @@ public class OllamaClient: ObservableObject {
         temperature: Double = 0.7,
         contextOptimization: Bool = true
     ) async throws -> String {
-        let optimizedMessages = contextOptimization ? optimizeMessageContext(messages) : messages
+        let optimizedMessages = contextOptimization ? self.optimizeMessageContext(messages) : messages
 
         let requestBody: [String: Any] = [
             "model": model,
@@ -226,23 +226,23 @@ public class OllamaClient: ObservableObject {
     // MARK: - Private Helper Methods
 
     private func throttleRequest() async {
-        let timeSinceLastRequest = Date().timeIntervalSince(lastRequestTime)
-        if timeSinceLastRequest < config.requestThrottleDelay {
-            let delay = config.requestThrottleDelay - timeSinceLastRequest
+        let timeSinceLastRequest = Date().timeIntervalSince(self.lastRequestTime)
+        if timeSinceLastRequest < self.config.requestThrottleDelay {
+            let delay = self.config.requestThrottleDelay - timeSinceLastRequest
             try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
         }
-        lastRequestTime = Date()
+        self.lastRequestTime = Date()
     }
 
     private func performRequestWithRetry(endpoint: String, body: [String: Any]) async throws -> [String: Any] {
         var lastError: Error?
 
-        for attempt in 0 ..< config.maxRetries {
+        for attempt in 0 ..< self.config.maxRetries {
             do {
-                return try await performRequest(endpoint: endpoint, body: body)
+                return try await self.performRequest(endpoint: endpoint, body: body)
             } catch {
                 lastError = error
-                if attempt < config.maxRetries - 1 {
+                if attempt < self.config.maxRetries - 1 {
                     let delay = pow(2.0, Double(attempt)) // Exponential backoff
                     try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                 }
@@ -331,7 +331,7 @@ public class OllamaClient: ObservableObject {
             "stream": false,
         ]
 
-        _ = try await performRequest(endpoint: "api/pull", body: requestBody)
+        _ = try await self.performRequest(endpoint: "api/pull", body: requestBody)
     }
 
     public func checkModelAvailability(_ model: String) async -> Bool {
@@ -405,7 +405,7 @@ private class OllamaCache {
         let timestamp: Date
 
         func isExpired(expiryTime: TimeInterval) -> Bool {
-            Date().timeIntervalSince(timestamp) > expiryTime
+            Date().timeIntervalSince(self.timestamp) > expiryTime
         }
     }
 
@@ -415,9 +415,9 @@ private class OllamaCache {
     }
 
     func get(_ key: String) -> String? {
-        guard enabled else { return nil }
+        guard self.enabled else { return nil }
 
-        return queue.sync {
+        return self.queue.sync {
             guard let entry = cache[key], !entry.isExpired(expiryTime: expiryTime) else {
                 self.cache.removeValue(forKey: key)
                 return nil
@@ -427,9 +427,9 @@ private class OllamaCache {
     }
 
     func set(_ key: String, value: String) {
-        guard enabled else { return }
+        guard self.enabled else { return }
 
-        queue.async(flags: .barrier) {
+        self.queue.async(flags: .barrier) {
             self.cache[key] = CacheEntry(value: value, timestamp: Date())
 
             // Clean expired entries periodically
@@ -440,7 +440,7 @@ private class OllamaCache {
     }
 
     private func cleanExpiredEntries() {
-        cache = cache.filter { !$0.value.isExpired(expiryTime: self.expiryTime) }
+        self.cache = self.cache.filter { !$0.value.isExpired(expiryTime: self.expiryTime) }
     }
 }
 
@@ -459,30 +459,30 @@ private class OllamaMetrics {
     }
 
     func recordRequest(model _: String, duration: TimeInterval, tokenCount: Int) {
-        guard enabled else { return }
-        requestCount += 1
-        totalTokens += tokenCount
-        totalDuration += duration
+        guard self.enabled else { return }
+        self.requestCount += 1
+        self.totalTokens += tokenCount
+        self.totalDuration += duration
     }
 
     func recordError(error _: Error) {
-        guard enabled else { return }
-        errorCount += 1
+        guard self.enabled else { return }
+        self.errorCount += 1
     }
 
     func recordCacheHit() {
-        guard enabled else { return }
-        cacheHits += 1
+        guard self.enabled else { return }
+        self.cacheHits += 1
     }
 
     var averageResponseTime: TimeInterval {
-        guard requestCount > 0 else { return 0 }
-        return totalDuration / TimeInterval(requestCount)
+        guard self.requestCount > 0 else { return 0 }
+        return self.totalDuration / TimeInterval(self.requestCount)
     }
 
     var cacheHitRate: Double {
-        guard requestCount > 0 else { return 0 }
-        return Double(cacheHits) / Double(requestCount)
+        guard self.requestCount > 0 else { return 0 }
+        return Double(self.cacheHits) / Double(self.requestCount)
     }
 }
 
@@ -500,7 +500,7 @@ public extension OllamaClient {
         \(context != nil ? "Context: \(context!)" : "")
         """
 
-        return try await generate(
+        return try await self.generate(
             model: "codellama",
             prompt: userPrompt,
             temperature: 0.2,
@@ -523,7 +523,7 @@ public extension OllamaClient {
         \(code)
         """
 
-        return try await generate(
+        return try await self.generate(
             model: "llama2",
             prompt: prompt,
             temperature: 0.3,
@@ -546,7 +546,7 @@ public extension OllamaClient {
         \(code)
         """
 
-        return try await generate(
+        return try await self.generate(
             model: "llama2",
             prompt: prompt,
             temperature: 0.4,

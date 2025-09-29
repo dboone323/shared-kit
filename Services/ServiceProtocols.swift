@@ -411,7 +411,7 @@ public struct CrossProjectReference {
         relationship: String,
         metadata: [String: Any]? = nil
     ) {
-        id = UUID()
+        self.id = UUID()
         self.sourceProject = sourceProject
         self.sourceEntityId = sourceEntityId
         self.sourceEntityType = sourceEntityType
@@ -420,7 +420,7 @@ public struct CrossProjectReference {
         self.targetEntityType = targetEntityType
         self.relationship = relationship
         self.metadata = metadata
-        createdAt = Date()
+        self.createdAt = Date()
     }
 }
 
@@ -433,11 +433,11 @@ public struct CrossProjectRelationship {
     public let createdAt: Date
 
     public init(type: RelationshipType, entities: [ProjectEntity], metadata: [String: Any]? = nil) {
-        id = UUID()
+        self.id = UUID()
         self.type = type
         self.entities = entities
         self.metadata = metadata
-        createdAt = Date()
+        self.createdAt = Date()
     }
 }
 
@@ -583,7 +583,7 @@ public struct NetWorthSummary {
         self.asOfDate = asOfDate
         self.totalAssets = totalAssets
         self.totalLiabilities = totalLiabilities
-        netWorth = totalAssets - totalLiabilities
+        self.netWorth = totalAssets - totalLiabilities
         self.monthOverMonthChange = monthOverMonthChange
         self.yearOverYearChange = yearOverYearChange
         self.breakdown = breakdown
@@ -756,9 +756,10 @@ public struct GoalProgress {
         self.goalId = goalId
         self.currentProgress = currentProgress
         self.targetValue = targetValue
-        progressPercentage = targetValue > 0 ? (currentProgress / targetValue) * 100 : 0
+        self.progressPercentage = targetValue > 0 ? (currentProgress / targetValue) * 100 : 0
         self.estimatedCompletion = estimatedCompletion
-        onTrack = progressPercentage >= 95 || (estimatedCompletion != nil && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
+        self.onTrack = self
+            .progressPercentage >= 95 || (estimatedCompletion != nil && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
         self.milestones = milestones
     }
 }

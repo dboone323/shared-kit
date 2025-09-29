@@ -29,25 +29,25 @@ public final class IntegrationWorkflowManager: ObservableObject {
 
     private init() {
         _analyticsService = MockInjected(wrappedValue: MockAnalyticsService())
-        setupWorkflowObservation()
-        registerDefaultWorkflows()
+        self.setupWorkflowObservation()
+        self.registerDefaultWorkflows()
     }
 
     // MARK: - Workflow Management
 
     public func startWorkflow(_ workflow: IntegrationWorkflow) async throws {
-        guard !activeWorkflows.contains(where: { $0.id == workflow.id }) else {
+        guard !self.activeWorkflows.contains(where: { $0.id == workflow.id }) else {
             throw WorkflowError.alreadyRunning
         }
 
-        activeWorkflows.append(workflow)
-        isProcessing = true
+        self.activeWorkflows.append(workflow)
+        self.isProcessing = true
 
         do {
             let result = try await executeWorkflow(workflow)
-            workflowResults[workflow.id] = result
+            self.workflowResults[workflow.id] = result
 
-            await analyticsService.track(
+            await self.analyticsService.track(
                 event: "workflow_completed",
                 properties: [
                     "workflow_id": workflow.id.uuidString,
@@ -65,9 +65,9 @@ public final class IntegrationWorkflowManager: ObservableObject {
                 data: [:],
                 completedAt: Date()
             )
-            workflowResults[workflow.id] = errorResult
+            self.workflowResults[workflow.id] = errorResult
 
-            await analyticsService.track(
+            await self.analyticsService.track(
                 event: "workflow_failed",
                 properties: [
                     "workflow_id": workflow.id.uuidString,
@@ -77,15 +77,15 @@ public final class IntegrationWorkflowManager: ObservableObject {
             )
         }
 
-        activeWorkflows.removeAll { $0.id == workflow.id }
-        isProcessing = !activeWorkflows.isEmpty
+        self.activeWorkflows.removeAll { $0.id == workflow.id }
+        self.isProcessing = !self.activeWorkflows.isEmpty
     }
 
     public func stopWorkflow(_ workflowId: UUID) async {
-        activeWorkflows.removeAll { $0.id == workflowId }
-        isProcessing = !activeWorkflows.isEmpty
+        self.activeWorkflows.removeAll { $0.id == workflowId }
+        self.isProcessing = !self.activeWorkflows.isEmpty
 
-        await analyticsService.track(
+        await self.analyticsService.track(
             event: "workflow_stopped",
             properties: ["workflow_id": workflowId.uuidString],
             userId: nil
@@ -93,20 +93,20 @@ public final class IntegrationWorkflowManager: ObservableObject {
     }
 
     public func getWorkflowResult(_ workflowId: UUID) -> WorkflowResult? {
-        workflowResults[workflowId]
+        self.workflowResults[workflowId]
     }
 
     // MARK: - Private Methods
 
     private func setupWorkflowObservation() {
         // Monitor integration state changes to trigger workflows
-        integrator.$connectedProjects
+        self.integrator.$connectedProjects
             .sink { [weak self] connectedProjects in
                 Task { [weak self] in
                     await self?.handleProjectConnectionChanges(connectedProjects)
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
     }
 
     private func registerDefaultWorkflows() {
@@ -127,17 +127,17 @@ public final class IntegrationWorkflowManager: ObservableObject {
     private func executeWorkflow(_ workflow: IntegrationWorkflow) async throws -> WorkflowResult {
         switch workflow.type {
         case .habitFinanceIntegration:
-            try await executeHabitFinanceIntegration(workflow)
+            try await self.executeHabitFinanceIntegration(workflow)
         case .productivityOptimization:
-            try await executeProductivityOptimization(workflow)
+            try await self.executeProductivityOptimization(workflow)
         case .wellnessIntegration:
-            try await executeWellnessIntegration(workflow)
+            try await self.executeWellnessIntegration(workflow)
         case .gamification:
-            try await executeGamification(workflow)
+            try await self.executeGamification(workflow)
         case .dataSync:
-            try await executeDataSync(workflow)
+            try await self.executeDataSync(workflow)
         case .customAnalytics:
-            try await executeCustomAnalytics(workflow)
+            try await self.executeCustomAnalytics(workflow)
         }
     }
 
@@ -159,7 +159,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
         resultData["linked_habits"] = linkedHabits.count
 
         // Step 4: Set up tracking correlations
-        await setupFinancialHabitTracking()
+        await self.setupFinancialHabitTracking()
 
         return WorkflowResult(
             workflowId: workflow.id,
@@ -186,7 +186,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
         resultData["productivity_habits"] = productivityHabits.count
 
         // Step 4: Set up energy tracking
-        await setupEnergyProductivityTracking()
+        await self.setupEnergyProductivityTracking()
 
         return WorkflowResult(
             workflowId: workflow.id,
@@ -250,11 +250,11 @@ public final class IntegrationWorkflowManager: ObservableObject {
         var resultData: [String: Any] = [:]
 
         // Step 1: Sync all project data
-        for project in integrator.connectedProjects {
-            try await integrator.syncBetweenProjects(from: project, to: .habitQuest)
+        for project in self.integrator.connectedProjects {
+            try await self.integrator.syncBetweenProjects(from: project, to: .habitQuest)
         }
 
-        resultData["synced_projects"] = integrator.connectedProjects.count
+        resultData["synced_projects"] = self.integrator.connectedProjects.count
         resultData["sync_timestamp"] = Date().timeIntervalSince1970
 
         return WorkflowResult(
@@ -342,7 +342,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
             type: .dataSync,
             title: "Data Synchronization",
             description: "Synchronize data across all connected projects",
-            requiredProjects: Array(integrator.connectedProjects),
+            requiredProjects: Array(self.integrator.connectedProjects),
             parameters: [:],
             schedule: .hourly,
             createdAt: Date()
@@ -354,8 +354,8 @@ public final class IntegrationWorkflowManager: ObservableObject {
     private func handleProjectConnectionChanges(_ connectedProjects: Set<ProjectType>) async {
         // Trigger relevant workflows when projects are connected/disconnected
         if connectedProjects.contains(.habitQuest), connectedProjects.contains(.momentumFinance) {
-            let workflow = createHabitFinanceWorkflow()
-            try? await startWorkflow(workflow)
+            let workflow = self.createHabitFinanceWorkflow()
+            try? await self.startWorkflow(workflow)
         }
     }
 

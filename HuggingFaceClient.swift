@@ -74,7 +74,7 @@ public class HuggingFaceClient {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 30.0
         config.timeoutIntervalForResource = 300.0
-        session = URLSession(configuration: config)
+        self.session = URLSession(configuration: config)
     }
 
     /// Generate text using Hugging Face free inference API
@@ -91,18 +91,18 @@ public class HuggingFaceClient {
         temperature: Double = 0.7
     ) async throws -> String {
         let startTime = Date()
-        let cacheKey = cache.cacheKey(for: prompt, model: model, maxTokens: maxTokens, temperature: temperature)
+        let cacheKey = self.cache.cacheKey(for: prompt, model: model, maxTokens: maxTokens, temperature: temperature)
 
         // Check cache first
         if let cachedResponse = cache.get(cacheKey) {
-            metrics.recordRequest(startTime: startTime, success: true)
+            self.metrics.recordRequest(startTime: startTime, success: true)
             return cachedResponse
         }
 
         let endpoint = "/models/\(model)"
 
         guard let url = URL(string: baseURL + endpoint) else {
-            metrics.recordRequest(startTime: startTime, success: false, errorType: "invalidURL")
+            self.metrics.recordRequest(startTime: startTime, success: false, errorType: "invalidURL")
             throw HuggingFaceError.invalidURL
         }
 
@@ -134,28 +134,28 @@ public class HuggingFaceClient {
         let (data, response) = try await session.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse else {
-            metrics.recordRequest(startTime: startTime, success: false, errorType: "networkError")
+            self.metrics.recordRequest(startTime: startTime, success: false, errorType: "networkError")
             throw HuggingFaceError.networkError("Invalid response type")
         }
 
         switch httpResponse.statusCode {
         case 200:
             let result = try parseSuccessResponse(data)
-            cache.set(cacheKey, response: result, prompt: prompt, model: model)
-            metrics.recordRequest(startTime: startTime, success: true)
+            self.cache.set(cacheKey, response: result, prompt: prompt, model: model)
+            self.metrics.recordRequest(startTime: startTime, success: true)
             return result
         case 404:
-            metrics.recordRequest(startTime: startTime, success: false, errorType: "modelNotFound")
+            self.metrics.recordRequest(startTime: startTime, success: false, errorType: "modelNotFound")
             throw HuggingFaceError.apiError("Model not found or not available on free tier")
         case 429:
-            metrics.recordRequest(startTime: startTime, success: false, errorType: "rateLimited")
+            self.metrics.recordRequest(startTime: startTime, success: false, errorType: "rateLimited")
             throw HuggingFaceError.rateLimited
         case 503:
-            metrics.recordRequest(startTime: startTime, success: false, errorType: "modelLoading")
+            self.metrics.recordRequest(startTime: startTime, success: false, errorType: "modelLoading")
             throw HuggingFaceError.modelLoading
         default:
             let errorMessage = try? parseErrorResponse(data)
-            metrics.recordRequest(startTime: startTime, success: false, errorType: "apiError")
+            self.metrics.recordRequest(startTime: startTime, success: false, errorType: "apiError")
             throw HuggingFaceError.apiError("HTTP \(httpResponse.statusCode): \(errorMessage ?? "Unknown error")")
         }
     }
@@ -188,7 +188,7 @@ public class HuggingFaceClient {
         Keep the response under 200 words.
         """
 
-        return try await generate(
+        return try await self.generate(
             prompt: prompt,
             model: "microsoft/DialoGPT-medium",
             maxTokens: 150,
@@ -221,7 +221,7 @@ public class HuggingFaceClient {
         Format as clean markdown documentation.
         """
 
-        return try await generate(
+        return try await self.generate(
             prompt: prompt,
             model: "microsoft/DialoGPT-medium",
             maxTokens: 200,
@@ -242,7 +242,7 @@ public class HuggingFaceClient {
         temperature: Double = 0.7,
         taskType: TaskType = .general
     ) async throws -> String {
-        let models = getModelsForTask(taskType)
+        let models = self.getModelsForTask(taskType)
         var lastError: Error?
 
         for model in models {
@@ -251,7 +251,7 @@ public class HuggingFaceClient {
 
             while retryCount <= maxRetries {
                 do {
-                    return try await generate(
+                    return try await self.generate(
                         prompt: prompt,
                         model: model,
                         maxTokens: maxTokens,
@@ -327,10 +327,10 @@ public class HuggingFaceClient {
     /// - Returns: Current performance statistics
     public func getPerformanceMetrics() -> PerformanceMetricsData {
         PerformanceMetricsData(
-            totalRequests: metrics.getMetrics().totalRequests,
-            successRate: metrics.getMetrics().successRate,
-            averageResponseTime: metrics.getMetrics().averageResponseTime,
-            errorBreakdown: metrics.getMetrics().errorBreakdown
+            totalRequests: self.metrics.getMetrics().totalRequests,
+            successRate: self.metrics.getMetrics().successRate,
+            averageResponseTime: self.metrics.getMetrics().averageResponseTime,
+            errorBreakdown: self.metrics.getMetrics().errorBreakdown
         )
     }
 }
@@ -356,12 +356,12 @@ public struct PerformanceMetricsData {
 extension HuggingFaceClient {
     /// Clear performance metrics
     public func resetMetrics() {
-        metrics.reset()
+        self.metrics.reset()
     }
 
     /// Clear response cache
     public func clearCache() {
-        cache.clear()
+        self.cache.clear()
     }
 
     // MARK: - Private Methods
@@ -380,22 +380,19 @@ extension HuggingFaceClient {
         // Try to parse as array of responses (common format)
         if let jsonArray = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]],
            let firstResult = jsonArray.first,
-           let generatedText = firstResult["generated_text"] as? String
-        {
+           let generatedText = firstResult["generated_text"] as? String {
             return generatedText.trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
         // Try to parse as single response object
         if let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let generatedText = jsonObject["generated_text"] as? String
-        {
+           let generatedText = jsonObject["generated_text"] as? String {
             return generatedText.trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
         // Try to parse as direct string array
         if let stringArray = try? JSONSerialization.jsonObject(with: data) as? [String],
-           let firstString = stringArray.first
-        {
+           let firstString = stringArray.first {
             return firstString.trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
@@ -409,8 +406,7 @@ extension HuggingFaceClient {
 
     private func parseErrorResponse(_ data: Data) throws -> String? {
         if let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let error = jsonObject["error"] as? String
-        {
+           let error = jsonObject["error"] as? String {
             return error
         }
         return nil
@@ -436,8 +432,8 @@ private class ResponseCache {
         guard let cached = cache[key] else { return nil }
 
         // Check if expired
-        if Date().timeIntervalSince(cached.timestamp) > cacheExpiration {
-            cache.removeValue(forKey: key)
+        if Date().timeIntervalSince(cached.timestamp) > self.cacheExpiration {
+            self.cache.removeValue(forKey: key)
             return nil
         }
 
@@ -446,17 +442,17 @@ private class ResponseCache {
 
     func set(_ key: String, response: String, prompt: String, model: String) {
         // Clean up expired entries
-        cleanup()
+        self.cleanup()
 
         // Remove oldest entries if cache is full
-        if cache.count >= maxCacheSize {
-            let oldestKey = cache.min(by: { $0.value.timestamp < $1.value.timestamp })?.key
+        if self.cache.count >= self.maxCacheSize {
+            let oldestKey = self.cache.min(by: { $0.value.timestamp < $1.value.timestamp })?.key
             if let key = oldestKey {
-                cache.removeValue(forKey: key)
+                self.cache.removeValue(forKey: key)
             }
         }
 
-        cache[key] = CachedResponse(
+        self.cache[key] = CachedResponse(
             response: response,
             timestamp: Date(),
             prompt: prompt,
@@ -466,11 +462,11 @@ private class ResponseCache {
 
     private func cleanup() {
         let now = Date()
-        cache = cache.filter { now.timeIntervalSince($0.value.timestamp) <= self.cacheExpiration }
+        self.cache = self.cache.filter { now.timeIntervalSince($0.value.timestamp) <= self.cacheExpiration }
     }
 
     func clear() {
-        cache.removeAll()
+        self.cache.removeAll()
     }
 
     func cacheKey(for prompt: String, model: String, maxTokens: Int, temperature: Double) -> String {
@@ -494,33 +490,33 @@ private class PerformanceMetrics {
     }
 
     func recordRequest(startTime: Date, success: Bool, errorType: String? = nil) {
-        requestCount += 1
+        self.requestCount += 1
         if success {
-            successCount += 1
+            self.successCount += 1
         }
-        totalResponseTime += Date().timeIntervalSince(startTime)
+        self.totalResponseTime += Date().timeIntervalSince(startTime)
 
         if let errorType {
-            errorCounts[errorType, default: 0] += 1
+            self.errorCounts[errorType, default: 0] += 1
         }
     }
 
     func getMetrics() -> Metrics {
-        let successRate = requestCount > 0 ? Double(successCount) / Double(requestCount) : 0
-        let avgResponseTime = requestCount > 0 ? totalResponseTime / Double(requestCount) : 0
+        let successRate = self.requestCount > 0 ? Double(self.successCount) / Double(self.requestCount) : 0
+        let avgResponseTime = self.requestCount > 0 ? self.totalResponseTime / Double(self.requestCount) : 0
 
         return Metrics(
-            totalRequests: requestCount,
+            totalRequests: self.requestCount,
             successRate: successRate,
             averageResponseTime: avgResponseTime,
-            errorBreakdown: errorCounts
+            errorBreakdown: self.errorCounts
         )
     }
 
     func reset() {
-        requestCount = 0
-        successCount = 0
-        totalResponseTime = 0
-        errorCounts.removeAll()
+        self.requestCount = 0
+        self.successCount = 0
+        self.totalResponseTime = 0
+        self.errorCounts.removeAll()
     }
 }

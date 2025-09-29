@@ -24,8 +24,8 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
         budgets: [Any],
         categories: [Any]
     ) async {
-        isAnalyzing = true
-        analysisProgress = 0.0
+        self.isAnalyzing = true
+        self.analysisProgress = 0.0
 
         var allInsights: [FinancialInsight] = []
 
@@ -49,13 +49,13 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
                 categories: categories
             )
             allInsights.append(contentsOf: insights)
-            analysisProgress += progressWeight
+            self.analysisProgress += progressWeight
         }
 
         // AI-powered insight ranking and deduplication
-        analysisResults = await aiEngine.rankAndOptimizeInsights(allInsights)
-        analysisProgress = 1.0
-        isAnalyzing = false
+        self.analysisResults = await self.aiEngine.rankAndOptimizeInsights(allInsights)
+        self.analysisProgress = 1.0
+        self.isAnalyzing = false
     }
 
     private func performSpecificAnalysis(

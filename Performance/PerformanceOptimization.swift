@@ -3,7 +3,7 @@ import Foundation
 import Network
 import SwiftUI
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 #endif
 
 // MARK: - Performance Optimization Framework
@@ -24,7 +24,7 @@ public class PerformanceMonitor: ObservableObject {
     private let networkMonitor = NetworkMonitor.shared
 
     private init() {
-        setupSystemObservers()
+        self.setupSystemObservers()
     }
 
     deinit {
@@ -35,21 +35,21 @@ public class PerformanceMonitor: ObservableObject {
     // MARK: - Monitoring Control
 
     public func startMonitoring(interval: TimeInterval = 1.0) {
-        guard !isMonitoring else { return }
+        guard !self.isMonitoring else { return }
 
-        isMonitoring = true
-        monitoringTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+        self.isMonitoring = true
+        self.monitoringTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
             self?.updateMetrics()
         }
 
-        networkMonitor.startMonitoring()
+        self.networkMonitor.startMonitoring()
     }
 
     public func stopMonitoring() {
-        isMonitoring = false
-        monitoringTimer?.invalidate()
-        monitoringTimer = nil
-        networkMonitor.stopMonitoring()
+        self.isMonitoring = false
+        self.monitoringTimer?.invalidate()
+        self.monitoringTimer = nil
+        self.networkMonitor.stopMonitoring()
     }
 
     // MARK: - Metrics Collection
@@ -143,16 +143,16 @@ public class PerformanceMonitor: ObservableObject {
 
     private func getCurrentBatteryLevel() -> BatteryStatus {
         #if canImport(UIKit)
-            let device = UIDevice.current
-            device.isBatteryMonitoringEnabled = true
+        let device = UIDevice.current
+        device.isBatteryMonitoringEnabled = true
 
-            return BatteryStatus(
-                level: Double(device.batteryLevel * 100),
-                state: BatteryState(from: device.batteryState),
-                isLowPowerModeEnabled: ProcessInfo.processInfo.isLowPowerModeEnabled
-            )
+        return BatteryStatus(
+            level: Double(device.batteryLevel * 100),
+            state: BatteryState(from: device.batteryState),
+            isLowPowerModeEnabled: ProcessInfo.processInfo.isLowPowerModeEnabled
+        )
         #else
-            return BatteryStatus(level: 100, state: .unknown, isLowPowerModeEnabled: false)
+        return BatteryStatus(level: 100, state: .unknown, isLowPowerModeEnabled: false)
         #endif
     }
 
@@ -164,20 +164,20 @@ public class PerformanceMonitor: ObservableObject {
 
     private func getCurrentThermalState() -> ThermalState {
         #if canImport(UIKit)
-            switch ProcessInfo.processInfo.thermalState {
-            case .nominal:
-                return .nominal
-            case .fair:
-                return .fair
-            case .serious:
-                return .serious
-            case .critical:
-                return .critical
-            @unknown default:
-                return .nominal
-            }
-        #else
+        switch ProcessInfo.processInfo.thermalState {
+        case .nominal:
             return .nominal
+        case .fair:
+            return .fair
+        case .serious:
+            return .serious
+        case .critical:
+            return .critical
+        @unknown default:
+            return .nominal
+        }
+        #else
+        return .nominal
         #endif
     }
 
@@ -185,21 +185,21 @@ public class PerformanceMonitor: ObservableObject {
 
     private func setupSystemObservers() {
         #if canImport(UIKit)
-            memoryWarningObserver = NotificationCenter.default.addObserver(
-                forName: UIApplication.didReceiveMemoryWarningNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                self?.handleMemoryWarning()
-            }
+        self.memoryWarningObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didReceiveMemoryWarningNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleMemoryWarning()
+        }
 
-            batteryObserver = NotificationCenter.default.addObserver(
-                forName: UIDevice.batteryStateDidChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                self?.updateMetrics()
-            }
+        self.batteryObserver = NotificationCenter.default.addObserver(
+            forName: UIDevice.batteryStateDidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateMetrics()
+        }
         #endif
     }
 
@@ -255,32 +255,32 @@ public struct PerformanceMetrics {
         var score = 100.0
 
         // Memory impact (0-30 points)
-        if memoryUsage.percentage > 80 {
+        if self.memoryUsage.percentage > 80 {
             score -= 30
-        } else if memoryUsage.percentage > 60 {
+        } else if self.memoryUsage.percentage > 60 {
             score -= 15
-        } else if memoryUsage.percentage > 40 {
+        } else if self.memoryUsage.percentage > 40 {
             score -= 5
         }
 
         // CPU impact (0-25 points)
-        if cpuUsage.total > 80 {
+        if self.cpuUsage.total > 80 {
             score -= 25
-        } else if cpuUsage.total > 60 {
+        } else if self.cpuUsage.total > 60 {
             score -= 15
-        } else if cpuUsage.total > 40 {
+        } else if self.cpuUsage.total > 40 {
             score -= 8
         }
 
         // Battery impact (0-20 points)
-        if batteryLevel.isLowPowerModeEnabled {
+        if self.batteryLevel.isLowPowerModeEnabled {
             score -= 20
-        } else if batteryLevel.level < 20 {
+        } else if self.batteryLevel.level < 20 {
             score -= 10
         }
 
         // Thermal impact (0-15 points)
-        switch thermalState {
+        switch self.thermalState {
         case .critical:
             score -= 15
         case .serious:
@@ -292,9 +292,9 @@ public struct PerformanceMetrics {
         }
 
         // Frame rate impact (0-10 points)
-        if frameRate < 30 {
+        if self.frameRate < 30 {
             score -= 10
-        } else if frameRate < 45 {
+        } else if self.frameRate < 45 {
             score -= 5
         }
 
@@ -302,7 +302,7 @@ public struct PerformanceMetrics {
     }
 
     public var performanceLevel: PerformanceLevel {
-        let score = overallPerformanceScore
+        let score = self.overallPerformanceScore
         if score >= 85 {
             return .excellent
         } else if score >= 70 {
@@ -327,11 +327,11 @@ public struct MemoryUsage: Codable {
     }
 
     public var usageLevel: UsageLevel {
-        if percentage > 80 {
+        if self.percentage > 80 {
             .critical
-        } else if percentage > 60 {
+        } else if self.percentage > 60 {
             .high
-        } else if percentage > 40 {
+        } else if self.percentage > 40 {
             .medium
         } else {
             .low
@@ -353,11 +353,11 @@ public struct CPUUsage: Codable {
     }
 
     public var usageLevel: UsageLevel {
-        if total > 80 {
+        if self.total > 80 {
             .critical
-        } else if total > 60 {
+        } else if self.total > 60 {
             .high
-        } else if total > 40 {
+        } else if self.total > 40 {
             .medium
         } else {
             .low
@@ -377,7 +377,7 @@ public struct BatteryStatus: Codable {
     }
 
     public var needsOptimization: Bool {
-        level < 20 || isLowPowerModeEnabled || state == .unplugged
+        self.level < 20 || self.isLowPowerModeEnabled || self.state == .unplugged
     }
 }
 
@@ -388,20 +388,20 @@ public enum BatteryState: String, Codable {
     case full
 
     #if canImport(UIKit)
-        init(from uiState: UIDevice.BatteryState) {
-            switch uiState {
-            case .unknown:
-                self = .unknown
-            case .unplugged:
-                self = .unplugged
-            case .charging:
-                self = .charging
-            case .full:
-                self = .full
-            @unknown default:
-                self = .unknown
-            }
+    init(from uiState: UIDevice.BatteryState) {
+        switch uiState {
+        case .unknown:
+            self = .unknown
+        case .unplugged:
+            self = .unplugged
+        case .charging:
+            self = .charging
+        case .full:
+            self = .full
+        @unknown default:
+            self = .unknown
         }
+    }
     #endif
 }
 
@@ -417,11 +417,11 @@ public struct NetworkStatus: Codable {
     }
 
     public var isHighBandwidth: Bool {
-        connectionType == .wifi || connectionType == .ethernet
+        self.connectionType == .wifi || self.connectionType == .ethernet
     }
 
     public var shouldOptimizeForBandwidth: Bool {
-        connectionType == .cellular || bandwidth < 1.0
+        self.connectionType == .cellular || self.bandwidth < 1.0
     }
 }
 
@@ -503,7 +503,7 @@ public class MemoryManager: ObservableObject {
     public static let shared = MemoryManager()
 
     #if canImport(UIKit)
-        private let imageCache = NSCache<NSString, UIImage>()
+    private let imageCache = NSCache<NSString, UIImage>()
     #endif
     private let dataCache = NSCache<NSString, NSData>()
     private var cacheCleanupTimer: Timer?
@@ -512,8 +512,8 @@ public class MemoryManager: ObservableObject {
     @Published public var lastCleanupDate: Date?
 
     private init() {
-        setupCaches()
-        startPeriodicCleanup()
+        self.setupCaches()
+        self.startPeriodicCleanup()
     }
 
     deinit {
@@ -524,28 +524,28 @@ public class MemoryManager: ObservableObject {
 
     private func setupCaches() {
         #if canImport(UIKit)
-            // Configure image cache
-            imageCache.countLimit = 100 // Max 100 images
-            imageCache.totalCostLimit = 50 * 1024 * 1024 // 50MB
+        // Configure image cache
+        self.imageCache.countLimit = 100 // Max 100 images
+        self.imageCache.totalCostLimit = 50 * 1024 * 1024 // 50MB
         #endif
 
         // Configure data cache
-        dataCache.countLimit = 200 // Max 200 data objects
-        dataCache.totalCostLimit = 20 * 1024 * 1024 // 20MB
+        self.dataCache.countLimit = 200 // Max 200 data objects
+        self.dataCache.totalCostLimit = 20 * 1024 * 1024 // 20MB
 
         // Set up automatic cleanup on memory warning
         #if canImport(UIKit)
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(handleMemoryWarning),
-                name: UIApplication.didReceiveMemoryWarningNotification,
-                object: nil
-            )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.handleMemoryWarning),
+            name: UIApplication.didReceiveMemoryWarningNotification,
+            object: nil
+        )
         #endif
     }
 
     @objc private func handleMemoryWarning() {
-        performEmergencyCleanup()
+        self.performEmergencyCleanup()
     }
 
     // MARK: - Cleanup Operations
@@ -557,9 +557,9 @@ public class MemoryManager: ObservableObject {
 
         // Clear caches aggressively
         #if canImport(UIKit)
-            imageCache.removeAllObjects()
+        self.imageCache.removeAllObjects()
         #endif
-        dataCache.removeAllObjects()
+        self.dataCache.removeAllObjects()
 
         // Force garbage collection
         autoreleasepool {
@@ -585,10 +585,10 @@ public class MemoryManager: ObservableObject {
 
         if memoryUsage.percentage > 60 {
             // Clear half of the caches
-            clearCachePercentage(0.5)
+            self.clearCachePercentage(0.5)
         } else if memoryUsage.percentage > 40 {
             // Clear quarter of the caches
-            clearCachePercentage(0.25)
+            self.clearCachePercentage(0.25)
         }
 
         Task { @MainActor in
@@ -599,22 +599,22 @@ public class MemoryManager: ObservableObject {
 
     private func clearCachePercentage(_ percentage: Double) {
         #if canImport(UIKit)
-            _ = Int(Double(imageCache.countLimit) * percentage)
+        _ = Int(Double(self.imageCache.countLimit) * percentage)
         #endif
-        _ = Int(Double(dataCache.countLimit) * percentage)
+        _ = Int(Double(self.dataCache.countLimit) * percentage)
 
         // Implementation would need to track cache keys for selective removal
         // For now, we'll remove all if percentage > 0.5, otherwise do nothing
         if percentage > 0.5 {
             #if canImport(UIKit)
-                imageCache.removeAllObjects()
+            self.imageCache.removeAllObjects()
             #endif
-            dataCache.removeAllObjects()
+            self.dataCache.removeAllObjects()
         }
     }
 
     private func startPeriodicCleanup() {
-        cacheCleanupTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { [weak self] _ in
+        self.cacheCleanupTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { [weak self] _ in
             // Cleanup every 5 minutes
             self?.performRoutineCleanup()
         }
@@ -623,22 +623,22 @@ public class MemoryManager: ObservableObject {
     // MARK: - Cache Access
 
     #if canImport(UIKit)
-        public func cacheImage(_ image: UIImage, forKey key: String) {
-            let cost = Int(image.size.width * image.size.height * 4) // Rough memory estimate
-            imageCache.setObject(image, forKey: key as NSString, cost: cost)
-        }
+    public func cacheImage(_ image: UIImage, forKey key: String) {
+        let cost = Int(image.size.width * image.size.height * 4) // Rough memory estimate
+        self.imageCache.setObject(image, forKey: key as NSString, cost: cost)
+    }
 
-        public func cachedImage(forKey key: String) -> UIImage? {
-            imageCache.object(forKey: key as NSString)
-        }
+    public func cachedImage(forKey key: String) -> UIImage? {
+        self.imageCache.object(forKey: key as NSString)
+    }
     #endif
 
     public func cacheData(_ data: Data, forKey key: String) {
-        dataCache.setObject(data as NSData, forKey: key as NSString, cost: data.count)
+        self.dataCache.setObject(data as NSData, forKey: key as NSString, cost: data.count)
     }
 
     public func cachedData(forKey key: String) -> Data? {
-        dataCache.object(forKey: key as NSString) as Data?
+        self.dataCache.object(forKey: key as NSString) as Data?
     }
 }
 
@@ -654,7 +654,7 @@ public class CPUOptimizer: ObservableObject {
     private let processingQueue = DispatchQueue(label: "cpu.optimization", qos: .utility)
 
     private init() {
-        startMonitoring()
+        self.startMonitoring()
     }
 
     // MARK: - Optimization Control
@@ -682,7 +682,7 @@ public class CPUOptimizer: ObservableObject {
             newLevel = .mild
         }
 
-        if newLevel != optimizationLevel {
+        if newLevel != self.optimizationLevel {
             Task { @MainActor in
                 self.optimizationLevel = newLevel
                 self.applyOptimizationLevel(newLevel)
@@ -693,13 +693,13 @@ public class CPUOptimizer: ObservableObject {
     private func applyOptimizationLevel(_ level: OptimizationLevel) {
         switch level {
         case .normal:
-            stopThrottling()
+            self.stopThrottling()
         case .mild:
-            startThrottling(factor: 0.9)
+            self.startThrottling(factor: 0.9)
         case .moderate:
-            startThrottling(factor: 0.7)
+            self.startThrottling(factor: 0.7)
         case .aggressive:
-            startThrottling(factor: 0.5)
+            self.startThrottling(factor: 0.5)
         }
 
         // Notify other systems of optimization changes
@@ -710,18 +710,18 @@ public class CPUOptimizer: ObservableObject {
     }
 
     private func startThrottling(factor: Double) {
-        isThrottling = true
+        self.isThrottling = true
 
         // Implement CPU throttling by introducing delays in processing
-        processingQueue.async { [weak self] in
+        self.processingQueue.async { [weak self] in
             self?.throttleProcessing(factor: factor)
         }
     }
 
     private func stopThrottling() {
-        isThrottling = false
-        throttleTimer?.invalidate()
-        throttleTimer = nil
+        self.isThrottling = false
+        self.throttleTimer?.invalidate()
+        self.throttleTimer = nil
     }
 
     private func throttleProcessing(factor: Double) {
@@ -756,7 +756,7 @@ public class CPUOptimizer: ObservableObject {
     }
 
     public func shouldDeferNonCriticalWork() -> Bool {
-        optimizationLevel == .moderate || optimizationLevel == .aggressive
+        self.optimizationLevel == .moderate || self.optimizationLevel == .aggressive
     }
 }
 
@@ -816,24 +816,24 @@ public class NetworkMonitor: ObservableObject {
     private var bandwidthTimer: Timer?
 
     private init() {
-        setupPathMonitor()
+        self.setupPathMonitor()
     }
 
     // MARK: - Monitoring
 
     public func startMonitoring() {
-        pathMonitor.start(queue: monitorQueue)
-        startBandwidthMeasurement()
+        self.pathMonitor.start(queue: self.monitorQueue)
+        self.startBandwidthMeasurement()
     }
 
     public func stopMonitoring() {
-        pathMonitor.cancel()
-        bandwidthTimer?.invalidate()
-        bandwidthTimer = nil
+        self.pathMonitor.cancel()
+        self.bandwidthTimer?.invalidate()
+        self.bandwidthTimer = nil
     }
 
     private func setupPathMonitor() {
-        pathMonitor.pathUpdateHandler = { [weak self] path in
+        self.pathMonitor.pathUpdateHandler = { [weak self] path in
             DispatchQueue.main.async {
                 self?.updateNetworkStatus(from: path)
             }
@@ -854,18 +854,18 @@ public class NetworkMonitor: ObservableObject {
             .unknown
         }
 
-        currentStatus = NetworkStatus(
+        self.currentStatus = NetworkStatus(
             isConnected: isConnected,
             connectionType: connectionType,
-            bandwidth: currentStatus.bandwidth // Keep existing bandwidth until updated
+            bandwidth: self.currentStatus.bandwidth // Keep existing bandwidth until updated
         )
 
         // Apply network-based optimizations
-        applyNetworkOptimizations()
+        self.applyNetworkOptimizations()
     }
 
     private func startBandwidthMeasurement() {
-        bandwidthTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+        self.bandwidthTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
             self?.measureBandwidth()
         }
     }
@@ -873,7 +873,7 @@ public class NetworkMonitor: ObservableObject {
     private func measureBandwidth() {
         // Simplified bandwidth measurement
         // In production, this would perform actual network tests
-        let estimatedBandwidth: Double = switch currentStatus.connectionType {
+        let estimatedBandwidth: Double = switch self.currentStatus.connectionType {
         case .wifi:
             Double.random(in: 10 ... 100)
         case .ethernet:
@@ -884,37 +884,37 @@ public class NetworkMonitor: ObservableObject {
             0
         }
 
-        currentStatus = NetworkStatus(
-            isConnected: currentStatus.isConnected,
-            connectionType: currentStatus.connectionType,
+        self.currentStatus = NetworkStatus(
+            isConnected: self.currentStatus.isConnected,
+            connectionType: self.currentStatus.connectionType,
             bandwidth: estimatedBandwidth
         )
     }
 
     private func applyNetworkOptimizations() {
-        isOptimizing = currentStatus.shouldOptimizeForBandwidth
+        self.isOptimizing = self.currentStatus.shouldOptimizeForBandwidth
 
         // Notify other systems of network changes
         NotificationCenter.default.post(
             name: .performanceNetworkChanged,
-            object: currentStatus
+            object: self.currentStatus
         )
     }
 
     // MARK: - Network Optimization Helpers
 
     public func shouldCompressData() -> Bool {
-        currentStatus.connectionType == .cellular || currentStatus.bandwidth < 5.0
+        self.currentStatus.connectionType == .cellular || self.currentStatus.bandwidth < 5.0
     }
 
     public func shouldCacheAggressively() -> Bool {
-        !currentStatus.isConnected || currentStatus.bandwidth < 2.0
+        !self.currentStatus.isConnected || self.currentStatus.bandwidth < 2.0
     }
 
     public func recommendedImageQuality() -> ImageQuality {
-        if currentStatus.connectionType == .wifi, currentStatus.bandwidth > 10 {
+        if self.currentStatus.connectionType == .wifi, self.currentStatus.bandwidth > 10 {
             .high
-        } else if currentStatus.connectionType == .cellular, currentStatus.bandwidth > 5 {
+        } else if self.currentStatus.connectionType == .cellular, self.currentStatus.bandwidth > 5 {
             .medium
         } else {
             .low
@@ -953,46 +953,46 @@ public class BatteryOptimizer: ObservableObject {
     private var batteryHistory: [BatteryReading] = []
 
     private init() {
-        startBatteryMonitoring()
+        self.startBatteryMonitoring()
     }
 
     // MARK: - Battery Monitoring
 
     private func startBatteryMonitoring() {
-        batteryTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
+        self.batteryTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
             self?.updateBatteryOptimization()
         }
 
         #if canImport(UIKit)
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(batteryLevelChanged),
-                name: UIDevice.batteryLevelDidChangeNotification,
-                object: nil
-            )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.batteryLevelChanged),
+            name: UIDevice.batteryLevelDidChangeNotification,
+            object: nil
+        )
 
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(powerModeChanged),
-                name: .NSProcessInfoPowerStateDidChange,
-                object: nil
-            )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.powerModeChanged),
+            name: .NSProcessInfoPowerStateDidChange,
+            object: nil
+        )
         #endif
     }
 
     @objc private func batteryLevelChanged() {
-        updateBatteryOptimization()
+        self.updateBatteryOptimization()
     }
 
     @objc private func powerModeChanged() {
-        updateBatteryOptimization()
+        self.updateBatteryOptimization()
     }
 
     private func updateBatteryOptimization() {
         let batteryStatus = PerformanceMonitor.shared.currentMetrics.batteryLevel
 
         // Record battery reading
-        recordBatteryReading(batteryStatus)
+        self.recordBatteryReading(batteryStatus)
 
         // Determine battery mode
         let newMode: BatteryMode = if batteryStatus.isLowPowerModeEnabled {
@@ -1005,7 +1005,7 @@ public class BatteryOptimizer: ObservableObject {
             .normal
         }
 
-        if newMode != currentMode {
+        if newMode != self.currentMode {
             Task { @MainActor in
                 self.currentMode = newMode
                 self.applyBatteryOptimizations(newMode)
@@ -1013,7 +1013,7 @@ public class BatteryOptimizer: ObservableObject {
         }
 
         // Update battery life estimation
-        updateBatteryLifeEstimation()
+        self.updateBatteryLifeEstimation()
     }
 
     private func recordBatteryReading(_ status: BatteryStatus) {
@@ -1023,34 +1023,34 @@ public class BatteryOptimizer: ObservableObject {
             isCharging: status.state == .charging
         )
 
-        batteryHistory.append(reading)
+        self.batteryHistory.append(reading)
 
         // Keep only last 24 hours of readings
         let cutoffTime = Date().addingTimeInterval(-24 * 3600)
-        batteryHistory = batteryHistory.filter { $0.timestamp > cutoffTime }
+        self.batteryHistory = self.batteryHistory.filter { $0.timestamp > cutoffTime }
     }
 
     private func updateBatteryLifeEstimation() {
-        guard batteryHistory.count > 2 else {
-            estimatedBatteryLife = nil
+        guard self.batteryHistory.count > 2 else {
+            self.estimatedBatteryLife = nil
             return
         }
 
         // Calculate battery drain rate
-        let recentReadings = batteryHistory.suffix(10)
+        let recentReadings = self.batteryHistory.suffix(10)
         let timeSpan = recentReadings.last!.timestamp.timeIntervalSince(recentReadings.first!.timestamp)
         let levelDrop = recentReadings.first!.level - recentReadings.last!.level
 
         if timeSpan > 0, levelDrop > 0 {
             let drainRate = levelDrop / timeSpan // Percent per second
-            let currentLevel = batteryHistory.last!.level
+            let currentLevel = self.batteryHistory.last!.level
             let estimatedSeconds = currentLevel / drainRate
-            estimatedBatteryLife = estimatedSeconds
+            self.estimatedBatteryLife = estimatedSeconds
         }
     }
 
     private func applyBatteryOptimizations(_ mode: BatteryMode) {
-        isOptimizing = mode != .normal
+        self.isOptimizing = mode != .normal
 
         switch mode {
         case .normal:
@@ -1058,13 +1058,13 @@ public class BatteryOptimizer: ObservableObject {
             break
         case .saver:
             // Moderate battery saving
-            enableBatterySaving(level: .moderate)
+            self.enableBatterySaving(level: .moderate)
         case .critical:
             // Aggressive battery saving
-            enableBatterySaving(level: .aggressive)
+            self.enableBatterySaving(level: .aggressive)
         case .lowPowerMode:
             // System-level low power mode optimizations
-            enableBatterySaving(level: .maximum)
+            self.enableBatterySaving(level: .maximum)
         }
 
         // Notify other systems

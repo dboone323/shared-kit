@@ -7,11 +7,11 @@ import Vision
 import XCTest
 
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 #endif
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 /// Comprehensive Integration Testing Suite for Phase 4 Validation
@@ -34,20 +34,20 @@ class IntegrationTestSuite: XCTestCase {
         super.setUp()
 
         // Initialize all system components
-        performanceMonitor = PerformanceMonitor.shared
-        aiIntegration = AIIntegration.shared
-        animationSystem = AdvancedAnimations()
-        testingFramework = TestingFramework.shared
+        self.performanceMonitor = PerformanceMonitor.shared
+        self.aiIntegration = AIIntegration.shared
+        self.animationSystem = AdvancedAnimations()
+        self.testingFramework = TestingFramework.shared
 
         // Reset performance monitoring
-        performanceMonitor.resetMetrics()
+        self.performanceMonitor.resetMetrics()
 
         print("🧪 Integration Test Suite - Setup Complete")
     }
 
     override func tearDown() {
-        cancellables.removeAll()
-        performanceMonitor.stopMonitoring()
+        self.cancellables.removeAll()
+        self.performanceMonitor.stopMonitoring()
 
         super.tearDown()
         print("🧪 Integration Test Suite - Cleanup Complete")
@@ -60,15 +60,15 @@ class IntegrationTestSuite: XCTestCase {
         let expectation = XCTestExpectation(description: "UI Performance Integration")
 
         // Start performance monitoring
-        performanceMonitor.startMonitoring()
+        self.performanceMonitor.startMonitoring()
 
         // Create complex animated view
-        let animatedView = createComplexAnimatedView()
+        let animatedView = self.createComplexAnimatedView()
 
         // Monitor performance during animation
         var performanceData: [PerformanceMetrics] = []
 
-        performanceMonitor.metricsPublisher
+        self.performanceMonitor.metricsPublisher
             .sink { metrics in
                 performanceData.append(metrics)
 
@@ -81,12 +81,12 @@ class IntegrationTestSuite: XCTestCase {
                     expectation.fulfill()
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
 
         // Start animation sequence
         animatedView.startComplexAnimation()
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
 
         // Validate overall performance
         let averageCPU = performanceData.map(\.cpuUsage).reduce(0, +) / Double(performanceData.count)
@@ -105,17 +105,17 @@ class IntegrationTestSuite: XCTestCase {
         let expectation = XCTestExpectation(description: "AI Performance Integration")
 
         // Enable performance optimization for AI
-        performanceMonitor.enableAIOptimization()
+        self.performanceMonitor.enableAIOptimization()
 
         // Test Core ML integration
-        let testImage = createTestImage()
+        let testImage = self.createTestImage()
         let testText = "This is a sample text for natural language processing validation."
 
         var completedTasks = 0
         let totalTasks = 3
 
         // Test Computer Vision
-        aiIntegration.processImage(testImage) { result in
+        self.aiIntegration.processImage(testImage) { result in
             switch result {
             case let .success(analysis):
                 XCTAssertNotNil(analysis.detectedObjects)
@@ -131,7 +131,7 @@ class IntegrationTestSuite: XCTestCase {
         }
 
         // Test Natural Language Processing
-        aiIntegration.processText(testText) { result in
+        self.aiIntegration.processText(testText) { result in
             switch result {
             case let .success(analysis):
                 XCTAssertNotNil(analysis.sentiment)
@@ -147,8 +147,8 @@ class IntegrationTestSuite: XCTestCase {
         }
 
         // Test Predictive Analytics
-        let sampleData = generateSamplePredictiveData()
-        aiIntegration.generatePredictions(from: sampleData) { result in
+        let sampleData = self.generateSamplePredictiveData()
+        self.aiIntegration.generatePredictions(from: sampleData) { result in
             switch result {
             case let .success(predictions):
                 XCTAssertGreaterThan(predictions.count, 0)
@@ -163,10 +163,10 @@ class IntegrationTestSuite: XCTestCase {
             if completedTasks == totalTasks { expectation.fulfill() }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
 
         // Validate AI performance metrics
-        let aiMetrics = performanceMonitor.getAIPerformanceMetrics()
+        let aiMetrics = self.performanceMonitor.getAIPerformanceMetrics()
         XCTAssertLessThan(aiMetrics.averageInferenceTime, 2.0, "AI inference too slow")
         XCTAssertLessThan(aiMetrics.memoryUsage, 100 * 1024 * 1024, "AI memory usage too high")
 
@@ -195,41 +195,41 @@ class IntegrationTestSuite: XCTestCase {
         let totalComponents = 5
 
         // Test HabitQuest integration
-        testHabitQuestIntegration { success in
+        self.testHabitQuestIntegration { success in
             XCTAssertTrue(success, "HabitQuest SharedKit integration failed")
             componentTests += 1
             if componentTests == totalComponents { expectation.fulfill() }
         }
 
         // Test MomentumFinance integration
-        testMomentumFinanceIntegration { success in
+        self.testMomentumFinanceIntegration { success in
             XCTAssertTrue(success, "MomentumFinance SharedKit integration failed")
             componentTests += 1
             if componentTests == totalComponents { expectation.fulfill() }
         }
 
         // Test PlannerApp integration
-        testPlannerAppIntegration { success in
+        self.testPlannerAppIntegration { success in
             XCTAssertTrue(success, "PlannerApp SharedKit integration failed")
             componentTests += 1
             if componentTests == totalComponents { expectation.fulfill() }
         }
 
         // Test AvoidObstaclesGame integration
-        testAvoidObstaclesGameIntegration { success in
+        self.testAvoidObstaclesGameIntegration { success in
             XCTAssertTrue(success, "AvoidObstaclesGame SharedKit integration failed")
             componentTests += 1
             if componentTests == totalComponents { expectation.fulfill() }
         }
 
         // Test CodingReviewer integration
-        testCodingReviewerIntegration { success in
+        self.testCodingReviewerIntegration { success in
             XCTAssertTrue(success, "CodingReviewer SharedKit integration failed")
             componentTests += 1
             if componentTests == totalComponents { expectation.fulfill() }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
 
         print("✅ SharedKit Compatibility: PASSED")
         print("   All 5 projects successfully integrated")
@@ -240,12 +240,12 @@ class IntegrationTestSuite: XCTestCase {
         let expectation = XCTestExpectation(description: "Data Flow Integration")
 
         // Create data pipeline test
-        let testData = generateTestDataSet()
+        let testData = self.generateTestDataSet()
         var processingSteps = 0
         let totalSteps = 4
 
         // Step 1: Performance monitoring captures data
-        performanceMonitor.captureDataPoint(testData) { result in
+        self.performanceMonitor.captureDataPoint(testData) { result in
             XCTAssertTrue(result)
             processingSteps += 1
 
@@ -283,7 +283,7 @@ class IntegrationTestSuite: XCTestCase {
             }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
 
         print("✅ Data Flow Integration: PASSED")
         print("   Successfully processed data through 4-step pipeline")
@@ -297,14 +297,14 @@ class IntegrationTestSuite: XCTestCase {
         let totalTests = 6
 
         // Test 1: Memory pressure handling
-        performanceMonitor.simulateMemoryPressure { handled in
+        self.performanceMonitor.simulateMemoryPressure { handled in
             XCTAssertTrue(handled, "Failed to handle memory pressure")
             resilenceTests += 1
             if resilenceTests == totalTests { expectation.fulfill() }
         }
 
         // Test 2: Network failure handling
-        aiIntegration.testNetworkFailureRecovery { recovered in
+        self.aiIntegration.testNetworkFailureRecovery { recovered in
             XCTAssertTrue(recovered, "Failed to recover from network failure")
             resilenceTests += 1
             if resilenceTests == totalTests { expectation.fulfill() }
@@ -312,7 +312,7 @@ class IntegrationTestSuite: XCTestCase {
 
         // Test 3: Invalid data handling
         let invalidData = Data()
-        aiIntegration.processImage(createInvalidImage()) { result in
+        self.aiIntegration.processImage(self.createInvalidImage()) { result in
             switch result {
             case .success:
                 XCTFail("Should have failed with invalid image")
@@ -325,27 +325,27 @@ class IntegrationTestSuite: XCTestCase {
         }
 
         // Test 4: Animation interruption handling
-        animationSystem.testInterruptionRecovery { recovered in
+        self.animationSystem.testInterruptionRecovery { recovered in
             XCTAssertTrue(recovered, "Failed to recover from animation interruption")
             resilenceTests += 1
             if resilenceTests == totalTests { expectation.fulfill() }
         }
 
         // Test 5: Concurrent access handling
-        testingFramework.testConcurrentAccess { concurrencyHandled in
+        self.testingFramework.testConcurrentAccess { concurrencyHandled in
             XCTAssertTrue(concurrencyHandled, "Failed to handle concurrent access")
             resilenceTests += 1
             if resilenceTests == totalTests { expectation.fulfill() }
         }
 
         // Test 6: System cleanup and recovery
-        performanceMonitor.testSystemCleanup { cleanupSuccessful in
+        self.performanceMonitor.testSystemCleanup { cleanupSuccessful in
             XCTAssertTrue(cleanupSuccessful, "Failed to cleanup system resources")
             resilenceTests += 1
             if resilenceTests == totalTests { expectation.fulfill() }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
 
         print("✅ System Resilience: PASSED")
         print("   All 6 resilience scenarios handled properly")
@@ -360,13 +360,13 @@ class IntegrationTestSuite: XCTestCase {
     private func createTestImage() -> Data {
         // Create a sample image for testing
         #if canImport(UIKit)
-            let image = UIImage(systemName: "star.fill") ?? UIImage()
-            return image.pngData() ?? Data()
+        let image = UIImage(systemName: "star.fill") ?? UIImage()
+        return image.pngData() ?? Data()
         #elseif canImport(AppKit)
-            let image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: nil) ?? NSImage()
-            return image.tiffRepresentation ?? Data()
+        let image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: nil) ?? NSImage()
+        return image.tiffRepresentation ?? Data()
         #else
-            return Data()
+        return Data()
         #endif
     }
 
@@ -381,7 +381,7 @@ class IntegrationTestSuite: XCTestCase {
     private func generateTestDataSet() -> TestDataSet {
         TestDataSet(
             id: UUID(),
-            values: generateSamplePredictiveData(),
+            values: self.generateSamplePredictiveData(),
             timestamp: Date(),
             metadata: ["test": true, "integration": "phase4"]
         )
@@ -444,36 +444,36 @@ class IntegrationTestSuite: XCTestCase {
     private func validateHabitQuestSharedComponents() -> Bool {
         // Validate SharedKit integration for HabitQuest
         AppLogger.shared.isConfigured &&
-            performanceMonitor.isMonitoring &&
-            aiIntegration.isAvailable
+            self.performanceMonitor.isMonitoring &&
+            self.aiIntegration.isAvailable
     }
 
     private func validateMomentumFinanceSharedComponents() -> Bool {
         // Validate SharedKit integration for MomentumFinance
         AppLogger.shared.isConfigured &&
-            performanceMonitor.isMonitoring &&
-            aiIntegration.isAvailable
+            self.performanceMonitor.isMonitoring &&
+            self.aiIntegration.isAvailable
     }
 
     private func validatePlannerAppSharedComponents() -> Bool {
         // Validate SharedKit integration for PlannerApp
         AppLogger.shared.isConfigured &&
-            performanceMonitor.isMonitoring &&
-            aiIntegration.isAvailable
+            self.performanceMonitor.isMonitoring &&
+            self.aiIntegration.isAvailable
     }
 
     private func validateAvoidObstaclesGameSharedComponents() -> Bool {
         // Validate SharedKit integration for AvoidObstaclesGame
         AppLogger.shared.isConfigured &&
-            performanceMonitor.isMonitoring &&
-            aiIntegration.isAvailable
+            self.performanceMonitor.isMonitoring &&
+            self.aiIntegration.isAvailable
     }
 
     private func validateCodingReviewerSharedComponents() -> Bool {
         // Validate SharedKit integration for CodingReviewer
         AppLogger.shared.isConfigured &&
-            performanceMonitor.isMonitoring &&
-            aiIntegration.isAvailable
+            self.performanceMonitor.isMonitoring &&
+            self.aiIntegration.isAvailable
     }
 }
 
@@ -490,7 +490,7 @@ class ComplexAnimatedView: ObservableObject {
     @Published var isAnimating = false
 
     func startComplexAnimation() {
-        isAnimating = true
+        self.isAnimating = true
         // Simulate complex animation sequence
     }
 }

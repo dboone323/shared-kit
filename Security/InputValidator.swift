@@ -23,35 +23,35 @@ public enum ValidationError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .emptyInput:
-            return "Input cannot be empty"
+            "Input cannot be empty"
         case let .invalidLength(min, max):
-            return "Input must be between \(min) and \(max) characters"
+            "Input must be between \(min) and \(max) characters"
         case let .invalidFormat(description):
-            return "Invalid format: \(description)"
+            "Invalid format: \(description)"
         case let .containsInvalidCharacters(characters):
-            return "Input contains invalid characters: \(characters)"
+            "Input contains invalid characters: \(characters)"
         case let .exceedsMaximumLength(max):
-            return "Input exceeds maximum length of \(max) characters"
+            "Input exceeds maximum length of \(max) characters"
         case let .belowMinimumLength(min):
-            return "Input must be at least \(min) characters"
+            "Input must be at least \(min) characters"
         case .invalidEmail:
-            return "Invalid email address format"
+            "Invalid email address format"
         case .invalidURL:
-            return "Invalid URL format"
+            "Invalid URL format"
         case .invalidPhoneNumber:
-            return "Invalid phone number format"
+            "Invalid phone number format"
         case .containsSQLInjection:
-            return "Input contains potentially malicious SQL content"
+            "Input contains potentially malicious SQL content"
         case .containsXSS:
-            return "Input contains potentially malicious script content"
+            "Input contains potentially malicious script content"
         case .containsPathTraversal:
-            return "Input contains path traversal attempts"
+            "Input contains path traversal attempts"
         case .invalidNumericValue:
-            return "Invalid numeric value"
+            "Invalid numeric value"
         case .invalidDate:
-            return "Invalid date format"
+            "Invalid date format"
         case let .custom(message):
-            return message
+            message
         }
     }
 }
@@ -70,13 +70,13 @@ public enum InputValidator {
 
     /// Validate input length
     public static func validateLength(_ input: String, min: Int? = nil, max: Int? = nil) throws {
-        if let min = min, input.count < min {
+        if let min, input.count < min {
             throw ValidationError.belowMinimumLength(min: min)
         }
-        if let max = max, input.count > max {
+        if let max, input.count > max {
             throw ValidationError.exceedsMaximumLength(max: max)
         }
-        if let min = min, let max = max, input.count < min || input.count > max {
+        if let min, let max, input.count < min || input.count > max {
             throw ValidationError.invalidLength(min: min, max: max)
         }
     }
@@ -95,7 +95,7 @@ public enum InputValidator {
 
     /// Validate URL format
     public static func validateURL(_ urlString: String) throws {
-        try validateNotEmpty(urlString)
+        try self.validateNotEmpty(urlString)
 
         guard let url = URL(string: urlString),
               url.scheme != nil,
@@ -127,16 +127,16 @@ public enum InputValidator {
 
     /// Validate numeric input
     public static func validateNumeric(_ input: String, min: Double? = nil, max: Double? = nil) throws {
-        try validateNotEmpty(input)
+        try self.validateNotEmpty(input)
 
         guard let number = Double(input) else {
             throw ValidationError.invalidNumericValue
         }
 
-        if let min = min, number < min {
+        if let min, number < min {
             throw ValidationError.custom(message: "Value must be at least \(min)")
         }
-        if let max = max, number > max {
+        if let max, number > max {
             throw ValidationError.custom(message: "Value must be at most \(max)")
         }
     }
@@ -208,9 +208,9 @@ public enum InputValidator {
 
     /// Validate filename (prevent directory traversal and dangerous extensions)
     public static func validateFilename(_ filename: String) throws {
-        try validateNotEmpty(filename)
-        try validateLength(filename, max: 255)
-        try validateNoPathTraversal(filename)
+        try self.validateNotEmpty(filename)
+        try self.validateLength(filename, max: 255)
+        try self.validateNoPathTraversal(filename)
 
         // Check for dangerous file extensions
         let dangerousExtensions = [
@@ -252,7 +252,7 @@ public enum InputValidator {
 
     /// Sanitize SQL input (basic escaping)
     public static func sanitizeSQL(_ input: String) -> String {
-        return input.replacingOccurrences(of: "'", with: "''")
+        input.replacingOccurrences(of: "'", with: "''")
     }
 
     /// Remove potentially dangerous characters
@@ -266,10 +266,10 @@ public enum InputValidator {
 
     /// Comprehensive validation for user names
     public static func validateUsername(_ username: String) throws {
-        try validateNotEmpty(username)
-        try validateLength(username, min: 3, max: 50)
-        try validateNoSQLInjection(username)
-        try validateNoXSS(username)
+        try self.validateNotEmpty(username)
+        try self.validateLength(username, min: 3, max: 50)
+        try self.validateNoSQLInjection(username)
+        try self.validateNoXSS(username)
 
         // Check for valid username characters (alphanumeric, underscore, dash)
         let usernameRegex = #"^[a-zA-Z0-9_-]+$"#
@@ -282,8 +282,8 @@ public enum InputValidator {
 
     /// Comprehensive validation for passwords
     public static func validatePassword(_ password: String) throws {
-        try validateNotEmpty(password)
-        try validateLength(password, min: 8, max: 128)
+        try self.validateNotEmpty(password)
+        try self.validateLength(password, min: 8, max: 128)
 
         // Check for at least one uppercase, one lowercase, one digit
         let uppercaseRegex = ".*[A-Z].*"
@@ -305,17 +305,17 @@ public enum InputValidator {
 
     /// Comprehensive validation for general text input
     public static func validateTextInput(_ input: String, maxLength: Int = 1000) throws {
-        try validateNotEmpty(input)
-        try validateLength(input, max: maxLength)
-        try validateNoSQLInjection(input)
-        try validateNoXSS(input)
-        try validateNoPathTraversal(input)
+        try self.validateNotEmpty(input)
+        try self.validateLength(input, max: maxLength)
+        try self.validateNoSQLInjection(input)
+        try self.validateNoXSS(input)
+        try self.validateNoPathTraversal(input)
     }
 
     /// Validate and sanitize user input (returns sanitized version)
     public static func validateAndSanitize(_ input: String, maxLength: Int = 1000) throws -> String {
-        try validateTextInput(input, maxLength: maxLength)
-        return sanitizeInput(input)
+        try self.validateTextInput(input, maxLength: maxLength)
+        return self.sanitizeInput(input)
     }
 }
 

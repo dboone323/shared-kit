@@ -8,11 +8,11 @@ import Vision
 import XCTest
 
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 #endif
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 /// Comprehensive AI/ML Testing and Validation Suite for Phase 4
@@ -40,21 +40,21 @@ class AIMLValidationSuite: XCTestCase {
         super.setUp()
 
         // Initialize AI components
-        aiIntegration = AIIntegration.shared
-        performanceMonitor = PerformanceMonitor.shared
+        self.aiIntegration = AIIntegration.shared
+        self.performanceMonitor = PerformanceMonitor.shared
 
         // Load test data sets
-        loadTestDataSets()
+        self.loadTestDataSets()
 
-        logger.info("🤖 AI/ML Validation Suite - Setup Complete")
+        self.logger.info("🤖 AI/ML Validation Suite - Setup Complete")
     }
 
     override func tearDown() {
-        cancellables.removeAll()
-        cleanupTestResources()
+        self.cancellables.removeAll()
+        self.cleanupTestResources()
 
         super.tearDown()
-        logger.info("🤖 AI/ML Validation Suite - Cleanup Complete")
+        self.logger.info("🤖 AI/ML Validation Suite - Cleanup Complete")
     }
 
     // MARK: - Core ML Model Validation
@@ -63,14 +63,14 @@ class AIMLValidationSuite: XCTestCase {
     func testCoreMLModelValidation() {
         let expectation = XCTestExpectation(description: "Core ML Model Validation")
 
-        logger.info("🧠 Testing Core ML Model Validation")
+        self.logger.info("🧠 Testing Core ML Model Validation")
 
         var validationResults: [CoreMLValidationResult] = []
-        let totalTests = testImages.count
+        let totalTests = self.testImages.count
         var completedTests = 0
 
-        for testImage in testImages {
-            aiIntegration.processImageWithCoreML(testImage.data) { result in
+        for testImage in self.testImages {
+            self.aiIntegration.processImageWithCoreML(testImage.data) { result in
                 switch result {
                 case let .success(prediction):
                     let validationResult = self.validateCoreMLPrediction(
@@ -118,20 +118,20 @@ class AIMLValidationSuite: XCTestCase {
             }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
     }
 
     /// Test Computer Vision functionality
     func testComputerVisionAccuracy() {
         let expectation = XCTestExpectation(description: "Computer Vision Accuracy")
 
-        logger.info("👁️ Testing Computer Vision Accuracy")
+        self.logger.info("👁️ Testing Computer Vision Accuracy")
 
         var visionResults: [VisionValidationResult] = []
-        let totalTests = testImages.count(where: { $0.hasObjects })
+        let totalTests = self.testImages.count(where: { $0.hasObjects })
         var completedTests = 0
 
-        for testImage in testImages where testImage.hasObjects {
+        for testImage in self.testImages where testImage.hasObjects {
             aiIntegration.processImageWithVision(testImage.data) { result in
                 switch result {
                 case let .success(analysis):
@@ -183,21 +183,21 @@ class AIMLValidationSuite: XCTestCase {
             }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
     }
 
     /// Test Natural Language Processing accuracy
     func testNaturalLanguageProcessing() {
         let expectation = XCTestExpectation(description: "NLP Accuracy")
 
-        logger.info("💬 Testing Natural Language Processing")
+        self.logger.info("💬 Testing Natural Language Processing")
 
         var nlpResults: [NLPValidationResult] = []
-        let totalTests = testTexts.count
+        let totalTests = self.testTexts.count
         var completedTests = 0
 
-        for testText in testTexts {
-            aiIntegration.processTextWithNLP(testText.content) { result in
+        for testText in self.testTexts {
+            self.aiIntegration.processTextWithNLP(testText.content) { result in
                 switch result {
                 case let .success(analysis):
                     let validationResult = self.validateNLPAnalysis(
@@ -266,21 +266,21 @@ class AIMLValidationSuite: XCTestCase {
             }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
     }
 
     /// Test Predictive Analytics accuracy
     func testPredictiveAnalytics() {
         let expectation = XCTestExpectation(description: "Predictive Analytics")
 
-        logger.info("📈 Testing Predictive Analytics")
+        self.logger.info("📈 Testing Predictive Analytics")
 
         var predictionResults: [PredictionValidationResult] = []
-        let totalTests = testPredictionData.count
+        let totalTests = self.testPredictionData.count
         var completedTests = 0
 
-        for testDataSet in testPredictionData {
-            aiIntegration.generatePredictionsML(from: testDataSet.inputData) { result in
+        for testDataSet in self.testPredictionData {
+            self.aiIntegration.generatePredictionsML(from: testDataSet.inputData) { result in
                 switch result {
                 case let .success(predictions):
                     let validationResult = self.validatePredictions(
@@ -336,14 +336,14 @@ class AIMLValidationSuite: XCTestCase {
             }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
     }
 
     /// Test AI model performance under load
     func testAIPerformanceUnderLoad() {
         let expectation = XCTestExpectation(description: "AI Performance Under Load")
 
-        logger.info("🔥 Testing AI Performance Under Load")
+        self.logger.info("🔥 Testing AI Performance Under Load")
 
         let concurrentRequests = 10
         let iterations = 5
@@ -354,7 +354,7 @@ class AIMLValidationSuite: XCTestCase {
         var errorCount = 0
 
         // Performance monitoring
-        performanceMonitor.startAILoadTesting()
+        self.performanceMonitor.startAILoadTesting()
 
         for iteration in 0 ..< iterations {
             DispatchQueue.global().async {
@@ -398,10 +398,10 @@ class AIMLValidationSuite: XCTestCase {
             }
         }
 
-        wait(for: [expectation], timeout: testTimeout * 3)
+        wait(for: [expectation], timeout: self.testTimeout * 3)
 
         // Stop performance monitoring and analyze results
-        let loadTestMetrics = performanceMonitor.stopAILoadTesting()
+        let loadTestMetrics = self.performanceMonitor.stopAILoadTesting()
 
         // Validate performance metrics
         let averageResponseTime = responseTimes.reduce(0, +) / Double(responseTimes.count)
@@ -416,26 +416,26 @@ class AIMLValidationSuite: XCTestCase {
         XCTAssertLessThan(loadTestMetrics.maxMemoryUsage, 300 * 1024 * 1024, "Memory usage too high under load")
         XCTAssertLessThan(loadTestMetrics.maxCPUUsage, 85.0, "CPU usage too high under load")
 
-        logger.info("✅ AI Load Testing Results:")
-        logger.info("   Requests Processed: \(completedRequests)")
-        logger.info("   Average Response Time: \(String(format: "%.3f", averageResponseTime))s")
-        logger.info("   Error Rate: \(String(format: "%.1f", errorRate * 100))%")
-        logger.info("   Max Memory Usage: \(loadTestMetrics.maxMemoryUsage / (1024 * 1024))MB")
-        logger.info("   Max CPU Usage: \(String(format: "%.1f", loadTestMetrics.maxCPUUsage))%")
+        self.logger.info("✅ AI Load Testing Results:")
+        self.logger.info("   Requests Processed: \(completedRequests)")
+        self.logger.info("   Average Response Time: \(String(format: "%.3f", averageResponseTime))s")
+        self.logger.info("   Error Rate: \(String(format: "%.1f", errorRate * 100))%")
+        self.logger.info("   Max Memory Usage: \(loadTestMetrics.maxMemoryUsage / (1024 * 1024))MB")
+        self.logger.info("   Max CPU Usage: \(String(format: "%.1f", loadTestMetrics.maxCPUUsage))%")
     }
 
     /// Test AI model compatibility across platforms
     func testCrossPlatformAICompatibility() {
         let expectation = XCTestExpectation(description: "Cross-Platform AI Compatibility")
 
-        logger.info("📱💻 Testing Cross-Platform AI Compatibility")
+        self.logger.info("📱💻 Testing Cross-Platform AI Compatibility")
 
         var compatibilityResults: [String: Bool] = [:]
         var completedTests = 0
         let totalTests = 4
 
         // Test iOS compatibility
-        testIOSAICompatibility { success in
+        self.testIOSAICompatibility { success in
             compatibilityResults["iOS"] = success
             XCTAssertTrue(success, "iOS AI compatibility failed")
             completedTests += 1
@@ -443,7 +443,7 @@ class AIMLValidationSuite: XCTestCase {
         }
 
         // Test macOS compatibility
-        testMacOSAICompatibility { success in
+        self.testMacOSAICompatibility { success in
             compatibilityResults["macOS"] = success
             XCTAssertTrue(success, "macOS AI compatibility failed")
             completedTests += 1
@@ -451,7 +451,7 @@ class AIMLValidationSuite: XCTestCase {
         }
 
         // Test shared model compatibility
-        testSharedModelCompatibility { success in
+        self.testSharedModelCompatibility { success in
             compatibilityResults["SharedModels"] = success
             XCTAssertTrue(success, "Shared model compatibility failed")
             completedTests += 1
@@ -459,35 +459,35 @@ class AIMLValidationSuite: XCTestCase {
         }
 
         // Test feature parity
-        testAIFeatureParity { success in
+        self.testAIFeatureParity { success in
             compatibilityResults["FeatureParity"] = success
             XCTAssertTrue(success, "AI feature parity failed")
             completedTests += 1
             if completedTests == totalTests { expectation.fulfill() }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
 
         // Validate all platforms are compatible
         let successfulPlatforms = compatibilityResults.values.count(where: { $0 })
         XCTAssertEqual(successfulPlatforms, totalTests, "Some platforms have AI compatibility issues")
 
-        logger.info("✅ Cross-Platform AI Compatibility: All platforms compatible")
+        self.logger.info("✅ Cross-Platform AI Compatibility: All platforms compatible")
     }
 
     // MARK: - Test Data Loading
 
     private func loadTestDataSets() {
-        loadTestImages()
-        loadTestTexts()
-        loadTestPredictionData()
+        self.loadTestImages()
+        self.loadTestTexts()
+        self.loadTestPredictionData()
     }
 
     private func loadTestImages() {
-        testImages = [
+        self.testImages = [
             TestImage(
                 name: "cat_photo",
-                data: createTestImageData(type: "cat"),
+                data: self.createTestImageData(type: "cat"),
                 expectedLabel: "cat",
                 expectedConfidence: 0.85,
                 hasObjects: true,
@@ -496,7 +496,7 @@ class AIMLValidationSuite: XCTestCase {
             ),
             TestImage(
                 name: "dog_photo",
-                data: createTestImageData(type: "dog"),
+                data: self.createTestImageData(type: "dog"),
                 expectedLabel: "dog",
                 expectedConfidence: 0.88,
                 hasObjects: true,
@@ -505,7 +505,7 @@ class AIMLValidationSuite: XCTestCase {
             ),
             TestImage(
                 name: "landscape",
-                data: createTestImageData(type: "landscape"),
+                data: self.createTestImageData(type: "landscape"),
                 expectedLabel: "landscape",
                 expectedConfidence: 0.75,
                 hasObjects: true,
@@ -514,7 +514,7 @@ class AIMLValidationSuite: XCTestCase {
             ),
             TestImage(
                 name: "person",
-                data: createTestImageData(type: "person"),
+                data: self.createTestImageData(type: "person"),
                 expectedLabel: "person",
                 expectedConfidence: 0.90,
                 hasObjects: true,
@@ -523,7 +523,7 @@ class AIMLValidationSuite: XCTestCase {
             ),
             TestImage(
                 name: "car",
-                data: createTestImageData(type: "car"),
+                data: self.createTestImageData(type: "car"),
                 expectedLabel: "car",
                 expectedConfidence: 0.82,
                 hasObjects: true,
@@ -534,7 +534,7 @@ class AIMLValidationSuite: XCTestCase {
     }
 
     private func loadTestTexts() {
-        testTexts = [
+        self.testTexts = [
             TestText(
                 name: "positive_review",
                 content: "This app is absolutely fantastic! The user interface is intuitive and the features work perfectly. I highly recommend it to everyone.",
@@ -581,7 +581,7 @@ class AIMLValidationSuite: XCTestCase {
     }
 
     private func loadTestPredictionData() {
-        testPredictionData = [
+        self.testPredictionData = [
             TestPredictionDataSet(
                 name: "financial_trends",
                 inputData: Array(1 ... 30).map { Double($0) + Double.random(in: -2 ... 2) },
@@ -608,20 +608,20 @@ class AIMLValidationSuite: XCTestCase {
     private func createTestImageData(type _: String) -> Data {
         // Create sample test image data
         #if canImport(UIKit)
-            let image = UIImage(systemName: "star.fill") ?? UIImage()
-            return image.pngData() ?? Data()
+        let image = UIImage(systemName: "star.fill") ?? UIImage()
+        return image.pngData() ?? Data()
         #elseif canImport(AppKit)
-            let image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: nil) ?? NSImage()
-            return image.tiffRepresentation ?? Data()
+        let image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: nil) ?? NSImage()
+        return image.tiffRepresentation ?? Data()
         #else
-            return Data()
+        return Data()
         #endif
     }
 
     private func cleanupTestResources() {
-        testImages.removeAll()
-        testTexts.removeAll()
-        testPredictionData.removeAll()
+        self.testImages.removeAll()
+        self.testTexts.removeAll()
+        self.testPredictionData.removeAll()
     }
 
     // MARK: - Validation Methods
@@ -717,23 +717,23 @@ class AIMLValidationSuite: XCTestCase {
 
     private func testIOSAICompatibility(completion: @escaping (Bool) -> Void) {
         #if os(iOS)
-            // Test iOS-specific AI features
-            DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
-                completion(true)
-            }
+        // Test iOS-specific AI features
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            completion(true)
+        }
         #else
-            completion(true) // Skip iOS tests on other platforms
+        completion(true) // Skip iOS tests on other platforms
         #endif
     }
 
     private func testMacOSAICompatibility(completion: @escaping (Bool) -> Void) {
         #if os(macOS)
-            // Test macOS-specific AI features
-            DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
-                completion(true)
-            }
+        // Test macOS-specific AI features
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            completion(true)
+        }
         #else
-            completion(true) // Skip macOS tests on other platforms
+        completion(true) // Skip macOS tests on other platforms
         #endif
     }
 

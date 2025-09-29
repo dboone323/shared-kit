@@ -99,7 +99,7 @@ public struct ErrorDisplayView: View {
     }
 
     private var severityIcon: String {
-        switch error.severity {
+        switch self.error.severity {
         case .low: "info.circle"
         case .medium: "exclamationmark.triangle"
         case .high: "xmark.circle"
@@ -108,7 +108,7 @@ public struct ErrorDisplayView: View {
     }
 
     private var severityColor: Color {
-        switch error.severity {
+        switch self.error.severity {
         case .low: .blue
         case .medium: .orange
         case .high: .red
@@ -157,11 +157,11 @@ public struct ErrorBannerView: View {
             }
         }
         .padding()
-        .background(severityColor.opacity(0.1))
+        .background(self.severityColor.opacity(0.1))
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(severityColor.opacity(0.3), lineWidth: 1)
+                .stroke(self.severityColor.opacity(0.3), lineWidth: 1)
         )
         .onTapGesture {
             self.onTap?()
@@ -169,7 +169,7 @@ public struct ErrorBannerView: View {
     }
 
     private var severityIcon: String {
-        switch error.severity {
+        switch self.error.severity {
         case .low: "info.circle.fill"
         case .medium: "exclamationmark.triangle.fill"
         case .high: "xmark.circle.fill"
@@ -178,7 +178,7 @@ public struct ErrorBannerView: View {
     }
 
     private var severityColor: Color {
-        switch error.severity {
+        switch self.error.severity {
         case .low: .blue
         case .medium: .orange
         case .high: .red
@@ -238,7 +238,7 @@ public struct ErrorListView: View {
                 }
             }
         }
-        .sheet(isPresented: $showingErrorDetail) {
+        .sheet(isPresented: self.$showingErrorDetail) {
             if let error = selectedError {
                 ErrorDetailView(error: error) {
                     self.showingErrorDetail = false
@@ -250,7 +250,7 @@ public struct ErrorListView: View {
     private func deleteErrors(offsets _: IndexSet) {
         // In a real implementation, would remove specific errors
         // For now, just clear all
-        errorManager.clearErrorHistory()
+        self.errorManager.clearErrorHistory()
     }
 }
 
@@ -293,7 +293,7 @@ public struct ErrorSummaryCard: View {
     }
 
     private var stateColor: Color {
-        switch globalState {
+        switch self.globalState {
         case .normal: .green
         case .degraded: .orange
         case .critical: .red
@@ -307,17 +307,17 @@ public struct StatusIndicator: View {
 
     public var body: some View {
         Circle()
-            .fill(indicatorColor)
+            .fill(self.indicatorColor)
             .frame(width: 12, height: 12)
             .overlay(
                 Circle()
-                    .stroke(indicatorColor.opacity(0.3), lineWidth: 2)
+                    .stroke(self.indicatorColor.opacity(0.3), lineWidth: 2)
                     .scaleEffect(1.5)
             )
     }
 
     private var indicatorColor: Color {
-        switch state {
+        switch self.state {
         case .normal: .green
         case .degraded: .orange
         case .critical: .red
@@ -364,11 +364,11 @@ public struct ErrorRowView: View {
             }
         }
         .contentShape(Rectangle())
-        .onTapGesture(perform: onTap)
+        .onTapGesture(perform: self.onTap)
     }
 
     private var severityIcon: String {
-        switch error.severity {
+        switch self.error.severity {
         case .low: "info.circle"
         case .medium: "exclamationmark.triangle"
         case .high: "xmark.circle"
@@ -377,7 +377,7 @@ public struct ErrorRowView: View {
     }
 
     private var severityColor: Color {
-        switch error.severity {
+        switch self.error.severity {
         case .low: .blue
         case .medium: .orange
         case .high: .red
@@ -463,14 +463,14 @@ public struct ErrorDetailView: View {
     }
 
     private func exportErrorReport() {
-        let report = errorManager.exportErrorReport()
+        let report = self.errorManager.exportErrorReport()
         // In real implementation, would export the report
         print("Error report exported: \(report)")
     }
 
     private func reportIssue() {
         // In real implementation, would open issue reporting flow
-        print("Reporting issue for error: \(error.errorId)")
+        print("Reporting issue for error: \(self.error.errorId)")
     }
 }
 
@@ -508,7 +508,7 @@ public struct ErrorHeaderView: View {
     }
 
     private var severityIcon: String {
-        switch error.severity {
+        switch self.error.severity {
         case .low: "info.circle"
         case .medium: "exclamationmark.triangle"
         case .high: "xmark.circle"
@@ -517,7 +517,7 @@ public struct ErrorHeaderView: View {
     }
 
     private var severityColor: Color {
-        switch error.severity {
+        switch self.error.severity {
         case .low: .blue
         case .medium: .orange
         case .high: .red
@@ -694,9 +694,9 @@ public struct ErrorAlertModifier: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .alert(
-                error?.category.displayName ?? "Error",
-                isPresented: .constant(error != nil),
-                presenting: error
+                self.error?.category.displayName ?? "Error",
+                isPresented: .constant(self.error != nil),
+                presenting: self.error
             ) { presentedError in
                 Button("OK") {
                     self.error = nil
@@ -758,11 +758,11 @@ public struct ErrorToast: View {
             }
         }
         .padding()
-        .background(severityColor)
+        .background(self.severityColor)
         .cornerRadius(8)
         .shadow(radius: 4)
-        .offset(y: isVisible ? 0 : -100)
-        .opacity(isVisible ? 1 : 0)
+        .offset(y: self.isVisible ? 0 : -100)
+        .opacity(self.isVisible ? 1 : 0)
         .onAppear {
             withAnimation(.easeOut(duration: 0.3)) {
                 self.isVisible = true
@@ -778,7 +778,7 @@ public struct ErrorToast: View {
     }
 
     private var severityIcon: String {
-        switch error.severity {
+        switch self.error.severity {
         case .low: "info.circle.fill"
         case .medium: "exclamationmark.triangle.fill"
         case .high: "xmark.circle.fill"
@@ -787,7 +787,7 @@ public struct ErrorToast: View {
     }
 
     private var severityColor: Color {
-        switch error.severity {
+        switch self.error.severity {
         case .low: .blue
         case .medium: .orange
         case .high: .red

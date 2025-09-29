@@ -122,15 +122,15 @@ private struct PerformanceRing: View {
     let score: Double
 
     private var progress: Double {
-        score / 100.0
+        self.score / 100.0
     }
 
     private var color: Color {
-        if score >= 85 {
+        if self.score >= 85 {
             .green
-        } else if score >= 70 {
+        } else if self.score >= 70 {
             .blue
-        } else if score >= 50 {
+        } else if self.score >= 50 {
             .orange
         } else {
             .red
@@ -142,25 +142,25 @@ private struct PerformanceRing: View {
             Circle()
                 .stroke(
                     #if canImport(UIKit)
-                        Color(UIColor.systemGray5)
+                    Color(UIColor.systemGray5)
                     #else
-                        Color.gray.opacity(0.2)
+                    Color.gray.opacity(0.2)
                     #endif,
                     lineWidth: 8
                 )
 
             Circle()
-                .trim(from: 0, to: progress)
+                .trim(from: 0, to: self.progress)
                 .stroke(
-                    color,
+                    self.color,
                     style: StrokeStyle(lineWidth: 8, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
-                .animation(.easeInOut(duration: 1.0), value: progress)
+                .animation(.easeInOut(duration: 1.0), value: self.progress)
 
-            Text("\(Int(score))")
+            Text("\(Int(self.score))")
                 .font(.system(size: 16, weight: .semibold, design: .rounded))
-                .foregroundColor(color)
+                .foregroundColor(self.color)
         }
     }
 }
@@ -232,9 +232,9 @@ private struct MetricTabButton: View {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(isSelected ? Color.accentColor :
                         #if canImport(UIKit)
-                            Color(UIColor.systemGray6)
+                        Color(UIColor.systemGray6)
                         #else
-                            Color.gray.opacity(0.1)
+                        Color.gray.opacity(0.1)
                         #endif
                     )
             )
@@ -925,16 +925,16 @@ private struct BatteryOptimizationActions: View {
                 }
 
                 #if canImport(UIKit)
-                    Button(action: {
-                        // Open system settings for Low Power Mode
-                        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
-                            UIApplication.shared.open(settingsUrl)
-                        }
-                    }) {
-                        Label("Open Battery Settings", systemImage: "gearshape")
-                            .frame(maxWidth: .infinity)
+                Button(action: {
+                    // Open system settings for Low Power Mode
+                    if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(settingsUrl)
                     }
-                    .buttonStyle(.bordered)
+                }) {
+                    Label("Open Battery Settings", systemImage: "gearshape")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
                 #endif
             }
         }

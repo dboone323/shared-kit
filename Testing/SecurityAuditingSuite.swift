@@ -6,11 +6,11 @@ import os.log
 import XCTest
 
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 #endif
 
 #if canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 /// Comprehensive Security Auditing and Compliance Suite for Phase 4
@@ -33,25 +33,25 @@ class SecurityAuditingSuite: XCTestCase {
         super.setUp()
 
         // Initialize security components
-        securityManager = SecurityManager.shared
-        encryptionService = EncryptionService.shared
-        authenticationService = AuthenticationService.shared
-        networkSecurity = NetworkSecurityService.shared
+        self.securityManager = SecurityManager.shared
+        self.encryptionService = EncryptionService.shared
+        self.authenticationService = AuthenticationService.shared
+        self.networkSecurity = NetworkSecurityService.shared
 
-        logger.info("🔒 Security Auditing Suite - Setup Complete")
+        self.logger.info("🔒 Security Auditing Suite - Setup Complete")
     }
 
     override func tearDown() {
-        cleanupSecurityTests()
+        self.cleanupSecurityTests()
         super.tearDown()
-        logger.info("🔒 Security Auditing Suite - Cleanup Complete")
+        self.logger.info("🔒 Security Auditing Suite - Cleanup Complete")
     }
 
     // MARK: - Data Encryption Tests
 
     /// Test data encryption implementation and strength
     func testDataEncryption() {
-        logger.info("🔐 Testing Data Encryption")
+        self.logger.info("🔐 Testing Data Encryption")
 
         let testData = "Sensitive user data for encryption testing".data(using: .utf8)!
         let testKey = SymmetricKey(size: .bits256)
@@ -68,7 +68,7 @@ class SecurityAuditingSuite: XCTestCase {
             let decryptedData = try encryptionService.decrypt(encryptedData, with: testKey)
             XCTAssertEqual(decryptedData, testData, "Decryption failed")
 
-            logger.info("✅ Data encryption/decryption successful")
+            self.logger.info("✅ Data encryption/decryption successful")
 
         } catch {
             XCTFail("Encryption test failed: \(error)")
@@ -78,49 +78,49 @@ class SecurityAuditingSuite: XCTestCase {
         let wrongKey = SymmetricKey(size: .bits256)
         do {
             let encryptedData = try encryptionService.encrypt(testData, with: testKey)
-            _ = try encryptionService.decrypt(encryptedData, with: wrongKey)
+            _ = try self.encryptionService.decrypt(encryptedData, with: wrongKey)
             XCTFail("Decryption with wrong key should have failed")
         } catch {
             // Expected to fail
-            logger.info("✅ Wrong key decryption correctly failed")
+            self.logger.info("✅ Wrong key decryption correctly failed")
         }
     }
 
     /// Test keychain security implementation
     func testKeychainSecurity() {
-        logger.info("🗝️ Testing Keychain Security")
+        self.logger.info("🗝️ Testing Keychain Security")
 
         let testKey = "test_security_key"
         let testValue = "sensitive_test_value".data(using: .utf8)!
 
         // Test storing in keychain
         do {
-            try securityManager.storeInKeychain(key: testKey, data: testValue)
-            logger.info("✅ Successfully stored data in keychain")
+            try self.securityManager.storeInKeychain(key: testKey, data: testValue)
+            self.logger.info("✅ Successfully stored data in keychain")
 
             // Test retrieving from keychain
             let retrievedValue = try securityManager.retrieveFromKeychain(key: testKey)
             XCTAssertEqual(retrievedValue, testValue, "Retrieved value doesn't match stored value")
-            logger.info("✅ Successfully retrieved data from keychain")
+            self.logger.info("✅ Successfully retrieved data from keychain")
 
             // Test updating keychain value
             let updatedValue = "updated_sensitive_value".data(using: .utf8)!
-            try securityManager.updateKeychain(key: testKey, data: updatedValue)
+            try self.securityManager.updateKeychain(key: testKey, data: updatedValue)
 
             let retrievedUpdatedValue = try securityManager.retrieveFromKeychain(key: testKey)
             XCTAssertEqual(retrievedUpdatedValue, updatedValue, "Updated value doesn't match")
-            logger.info("✅ Successfully updated keychain data")
+            self.logger.info("✅ Successfully updated keychain data")
 
             // Test deleting from keychain
-            try securityManager.deleteFromKeychain(key: testKey)
+            try self.securityManager.deleteFromKeychain(key: testKey)
 
             // Verify deletion
             do {
-                _ = try securityManager.retrieveFromKeychain(key: testKey)
+                _ = try self.securityManager.retrieveFromKeychain(key: testKey)
                 XCTFail("Should not be able to retrieve deleted keychain item")
             } catch {
                 // Expected to fail after deletion
-                logger.info("✅ Successfully deleted keychain data")
+                self.logger.info("✅ Successfully deleted keychain data")
             }
 
         } catch {
@@ -132,9 +132,9 @@ class SecurityAuditingSuite: XCTestCase {
     func testBiometricAuthentication() {
         let expectation = XCTestExpectation(description: "Biometric Authentication")
 
-        logger.info("👤 Testing Biometric Authentication")
+        self.logger.info("👤 Testing Biometric Authentication")
 
-        authenticationService.checkBiometricAvailability { result in
+        self.authenticationService.checkBiometricAvailability { result in
             switch result {
             case let .success(biometricType):
                 self.logger.info("✅ Biometric authentication available: \(biometricType.rawValue)")
@@ -161,14 +161,14 @@ class SecurityAuditingSuite: XCTestCase {
             }
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
     }
 
     /// Test secure data transmission
     func testSecureDataTransmission() {
         let expectation = XCTestExpectation(description: "Secure Data Transmission")
 
-        logger.info("🌐 Testing Secure Data Transmission")
+        self.logger.info("🌐 Testing Secure Data Transmission")
 
         let testPayload = SecureDataPayload(
             userId: "test_user_123",
@@ -177,7 +177,7 @@ class SecurityAuditingSuite: XCTestCase {
         )
 
         // Test secure transmission
-        networkSecurity.transmitSecurely(payload: testPayload) { result in
+        self.networkSecurity.transmitSecurely(payload: testPayload) { result in
             switch result {
             case let .success(response):
                 XCTAssertNotNil(response.signature, "Response should be signed")
@@ -199,19 +199,19 @@ class SecurityAuditingSuite: XCTestCase {
             expectation.fulfill()
         }
 
-        wait(for: [expectation], timeout: testTimeout)
+        wait(for: [expectation], timeout: self.testTimeout)
     }
 
     // MARK: - Vulnerability Assessment Tests
 
     /// Test for common security vulnerabilities
     func testVulnerabilityAssessment() {
-        logger.info("🛡️ Running Vulnerability Assessment")
+        self.logger.info("🛡️ Running Vulnerability Assessment")
 
         var vulnerabilities: [SecurityVulnerability] = []
 
         // Test 1: SQL Injection Prevention
-        let sqlInjectionResult = testSQLInjectionPrevention()
+        let sqlInjectionResult = self.testSQLInjectionPrevention()
         if !sqlInjectionResult.isSecure {
             vulnerabilities.append(SecurityVulnerability(
                 type: .sqlInjection,
@@ -222,7 +222,7 @@ class SecurityAuditingSuite: XCTestCase {
         }
 
         // Test 2: Cross-Site Scripting (XSS) Prevention
-        let xssResult = testXSSPrevention()
+        let xssResult = self.testXSSPrevention()
         if !xssResult.isSecure {
             vulnerabilities.append(SecurityVulnerability(
                 type: .crossSiteScripting,
@@ -233,7 +233,7 @@ class SecurityAuditingSuite: XCTestCase {
         }
 
         // Test 3: Insecure Data Storage
-        let dataStorageResult = testInsecureDataStorage()
+        let dataStorageResult = self.testInsecureDataStorage()
         if !dataStorageResult.isSecure {
             vulnerabilities.append(SecurityVulnerability(
                 type: .insecureDataStorage,
@@ -244,7 +244,7 @@ class SecurityAuditingSuite: XCTestCase {
         }
 
         // Test 4: Weak Authentication
-        let authResult = testWeakAuthentication()
+        let authResult = self.testWeakAuthentication()
         if !authResult.isSecure {
             vulnerabilities.append(SecurityVulnerability(
                 type: .weakAuthentication,
@@ -255,7 +255,7 @@ class SecurityAuditingSuite: XCTestCase {
         }
 
         // Test 5: Insufficient Transport Layer Protection
-        let transportResult = testTransportLayerSecurity()
+        let transportResult = self.testTransportLayerSecurity()
         if !transportResult.isSecure {
             vulnerabilities.append(SecurityVulnerability(
                 type: .insufficientTransportSecurity,
@@ -269,131 +269,131 @@ class SecurityAuditingSuite: XCTestCase {
         XCTAssertEqual(vulnerabilities.count, 0, "Security vulnerabilities found: \(vulnerabilities)")
 
         if vulnerabilities.isEmpty {
-            logger.info("✅ No security vulnerabilities detected")
+            self.logger.info("✅ No security vulnerabilities detected")
         } else {
-            logger.error("⚠️ Security vulnerabilities found:")
+            self.logger.error("⚠️ Security vulnerabilities found:")
             for vulnerability in vulnerabilities {
-                logger.error("   \(vulnerability.type.rawValue): \(vulnerability.description)")
+                self.logger.error("   \(vulnerability.type.rawValue): \(vulnerability.description)")
             }
         }
     }
 
     /// Test privacy compliance (GDPR, CCPA, etc.)
     func testPrivacyCompliance() {
-        logger.info("📋 Testing Privacy Compliance")
+        self.logger.info("📋 Testing Privacy Compliance")
 
         var complianceIssues: [ComplianceIssue] = []
 
         // Test GDPR Compliance
-        let gdprCompliance = testGDPRCompliance()
+        let gdprCompliance = self.testGDPRCompliance()
         complianceIssues.append(contentsOf: gdprCompliance)
 
         // Test CCPA Compliance
-        let ccpaCompliance = testCCPACompliance()
+        let ccpaCompliance = self.testCCPACompliance()
         complianceIssues.append(contentsOf: ccpaCompliance)
 
         // Test Data Minimization
-        let dataMinimization = testDataMinimization()
+        let dataMinimization = self.testDataMinimization()
         complianceIssues.append(contentsOf: dataMinimization)
 
         // Test Consent Management
-        let consentManagement = testConsentManagement()
+        let consentManagement = self.testConsentManagement()
         complianceIssues.append(contentsOf: consentManagement)
 
         // Test Data Portability
-        let dataPortability = testDataPortability()
+        let dataPortability = self.testDataPortability()
         complianceIssues.append(contentsOf: dataPortability)
 
         // Test Right to Be Forgotten
-        let rightToBeForgotten = testRightToBeForgotten()
+        let rightToBeForgotten = self.testRightToBeForgotten()
         complianceIssues.append(contentsOf: rightToBeForgotten)
 
         // Validate compliance
         XCTAssertEqual(complianceIssues.count, 0, "Privacy compliance issues found: \(complianceIssues)")
 
         if complianceIssues.isEmpty {
-            logger.info("✅ All privacy compliance requirements met")
+            self.logger.info("✅ All privacy compliance requirements met")
         } else {
-            logger.error("⚠️ Privacy compliance issues found:")
+            self.logger.error("⚠️ Privacy compliance issues found:")
             for issue in complianceIssues {
-                logger.error("   \(issue.regulation.rawValue): \(issue.description)")
+                self.logger.error("   \(issue.regulation.rawValue): \(issue.description)")
             }
         }
     }
 
     /// Test App Store security requirements
     func testAppStoreSecurityRequirements() {
-        logger.info("🍎 Testing App Store Security Requirements")
+        self.logger.info("🍎 Testing App Store Security Requirements")
 
         var requirements: [AppStoreSecurityRequirement] = []
 
         // Test Info.plist security configurations
-        let infoPlistSecurity = validateInfoPlistSecurity()
+        let infoPlistSecurity = self.validateInfoPlistSecurity()
         requirements.append(contentsOf: infoPlistSecurity)
 
         // Test network security configurations
-        let networkSecurityConfig = validateNetworkSecurityConfig()
+        let networkSecurityConfig = self.validateNetworkSecurityConfig()
         requirements.append(contentsOf: networkSecurityConfig)
 
         // Test code signing and entitlements
-        let codeSigningValidation = validateCodeSigning()
+        let codeSigningValidation = self.validateCodeSigning()
         requirements.append(contentsOf: codeSigningValidation)
 
         // Test privacy permissions
-        let privacyPermissions = validatePrivacyPermissions()
+        let privacyPermissions = self.validatePrivacyPermissions()
         requirements.append(contentsOf: privacyPermissions)
 
         // Test encryption export compliance
-        let encryptionCompliance = validateEncryptionExportCompliance()
+        let encryptionCompliance = self.validateEncryptionExportCompliance()
         requirements.append(contentsOf: encryptionCompliance)
 
         let failedRequirements = requirements.filter { !$0.isMet }
         XCTAssertEqual(failedRequirements.count, 0, "App Store security requirements not met: \(failedRequirements)")
 
         if failedRequirements.isEmpty {
-            logger.info("✅ All App Store security requirements met")
+            self.logger.info("✅ All App Store security requirements met")
         } else {
-            logger.error("⚠️ App Store security requirements not met:")
+            self.logger.error("⚠️ App Store security requirements not met:")
             for requirement in failedRequirements {
-                logger.error("   \(requirement.name): \(requirement.description)")
+                self.logger.error("   \(requirement.name): \(requirement.description)")
             }
         }
     }
 
     /// Test secure coding practices
     func testSecureCodingPractices() {
-        logger.info("💻 Testing Secure Coding Practices")
+        self.logger.info("💻 Testing Secure Coding Practices")
 
         var codingIssues: [SecureCodingIssue] = []
 
         // Test input validation
-        let inputValidationIssues = validateInputValidation()
+        let inputValidationIssues = self.validateInputValidation()
         codingIssues.append(contentsOf: inputValidationIssues)
 
         // Test output encoding
-        let outputEncodingIssues = validateOutputEncoding()
+        let outputEncodingIssues = self.validateOutputEncoding()
         codingIssues.append(contentsOf: outputEncodingIssues)
 
         // Test error handling
-        let errorHandlingIssues = validateErrorHandling()
+        let errorHandlingIssues = self.validateErrorHandling()
         codingIssues.append(contentsOf: errorHandlingIssues)
 
         // Test logging practices
-        let loggingIssues = validateLoggingPractices()
+        let loggingIssues = self.validateLoggingPractices()
         codingIssues.append(contentsOf: loggingIssues)
 
         // Test dependency security
-        let dependencyIssues = validateDependencySecurity()
+        let dependencyIssues = self.validateDependencySecurity()
         codingIssues.append(contentsOf: dependencyIssues)
 
         XCTAssertEqual(codingIssues.count, 0, "Secure coding issues found: \(codingIssues)")
 
         if codingIssues.isEmpty {
-            logger.info("✅ All secure coding practices implemented")
+            self.logger.info("✅ All secure coding practices implemented")
         } else {
-            logger.error("⚠️ Secure coding issues found:")
+            self.logger.error("⚠️ Secure coding issues found:")
             for issue in codingIssues {
-                logger.error("   \(issue.category.rawValue): \(issue.description)")
+                self.logger.error("   \(issue.category.rawValue): \(issue.description)")
             }
         }
     }
@@ -405,7 +405,7 @@ class SecurityAuditingSuite: XCTestCase {
         let maliciousInput = "'; DROP TABLE users; --"
 
         // Simulate testing input validation
-        let isInputSanitized = securityManager.validateAndSanitizeInput(maliciousInput)
+        let isInputSanitized = self.securityManager.validateAndSanitizeInput(maliciousInput)
 
         return SecurityTestResult(
             isSecure: isInputSanitized,
@@ -418,7 +418,7 @@ class SecurityAuditingSuite: XCTestCase {
         let maliciousScript = "<script>alert('XSS')</script>"
 
         // Simulate testing output encoding
-        let isOutputEncoded = securityManager.encodeOutput(maliciousScript)
+        let isOutputEncoded = self.securityManager.encodeOutput(maliciousScript)
 
         return SecurityTestResult(
             isSecure: isOutputEncoded,
@@ -429,7 +429,7 @@ class SecurityAuditingSuite: XCTestCase {
     private func testInsecureDataStorage() -> SecurityTestResult {
         // Test for secure data storage practices
         let sensitiveData = "credit_card_number_1234567890"
-        let isStoredSecurely = securityManager.isDataStoredSecurely(sensitiveData)
+        let isStoredSecurely = self.securityManager.isDataStoredSecurely(sensitiveData)
 
         return SecurityTestResult(
             isSecure: isStoredSecurely,
@@ -439,7 +439,7 @@ class SecurityAuditingSuite: XCTestCase {
 
     private func testWeakAuthentication() -> SecurityTestResult {
         // Test authentication strength
-        let authStrength = authenticationService.getAuthenticationStrength()
+        let authStrength = self.authenticationService.getAuthenticationStrength()
         let isStrong = authStrength.score >= 8.0 // Out of 10
 
         return SecurityTestResult(
@@ -450,7 +450,7 @@ class SecurityAuditingSuite: XCTestCase {
 
     private func testTransportLayerSecurity() -> SecurityTestResult {
         // Test transport layer security implementation
-        let tlsConfiguration = networkSecurity.getTLSConfiguration()
+        let tlsConfiguration = self.networkSecurity.getTLSConfiguration()
         let isSecure = tlsConfiguration.version >= .tls13 && tlsConfiguration.certificatePinningEnabled
 
         return SecurityTestResult(
@@ -465,7 +465,7 @@ class SecurityAuditingSuite: XCTestCase {
         var issues: [ComplianceIssue] = []
 
         // Test data processing consent
-        if !securityManager.hasValidConsent(for: .dataProcessing) {
+        if !self.securityManager.hasValidConsent(for: .dataProcessing) {
             issues.append(ComplianceIssue(
                 regulation: .gdpr,
                 requirement: "Data Processing Consent",
@@ -475,7 +475,7 @@ class SecurityAuditingSuite: XCTestCase {
         }
 
         // Test data subject rights implementation
-        if !securityManager.supportsDataSubjectRights() {
+        if !self.securityManager.supportsDataSubjectRights() {
             issues.append(ComplianceIssue(
                 regulation: .gdpr,
                 requirement: "Data Subject Rights",
@@ -485,7 +485,7 @@ class SecurityAuditingSuite: XCTestCase {
         }
 
         // Test privacy policy compliance
-        if !securityManager.hasCompliantPrivacyPolicy() {
+        if !self.securityManager.hasCompliantPrivacyPolicy() {
             issues.append(ComplianceIssue(
                 regulation: .gdpr,
                 requirement: "Privacy Policy",
@@ -501,7 +501,7 @@ class SecurityAuditingSuite: XCTestCase {
         var issues: [ComplianceIssue] = []
 
         // Test opt-out mechanism
-        if !securityManager.providesOptOutMechanism() {
+        if !self.securityManager.providesOptOutMechanism() {
             issues.append(ComplianceIssue(
                 regulation: .ccpa,
                 requirement: "Opt-out Mechanism",
@@ -511,7 +511,7 @@ class SecurityAuditingSuite: XCTestCase {
         }
 
         // Test data disclosure transparency
-        if !securityManager.providesDataDisclosureTransparency() {
+        if !self.securityManager.providesDataDisclosureTransparency() {
             issues.append(ComplianceIssue(
                 regulation: .ccpa,
                 requirement: "Data Disclosure Transparency",
@@ -526,8 +526,8 @@ class SecurityAuditingSuite: XCTestCase {
     private func testDataMinimization() -> [ComplianceIssue] {
         var issues: [ComplianceIssue] = []
 
-        let collectedDataTypes = securityManager.getCollectedDataTypes()
-        let necessaryDataTypes = securityManager.getNecessaryDataTypes()
+        let collectedDataTypes = self.securityManager.getCollectedDataTypes()
+        let necessaryDataTypes = self.securityManager.getNecessaryDataTypes()
 
         let excessiveDataCollection = Set(collectedDataTypes).subtracting(Set(necessaryDataTypes))
 
@@ -546,7 +546,7 @@ class SecurityAuditingSuite: XCTestCase {
     private func testConsentManagement() -> [ComplianceIssue] {
         var issues: [ComplianceIssue] = []
 
-        if !securityManager.hasGranularConsentOptions() {
+        if !self.securityManager.hasGranularConsentOptions() {
             issues.append(ComplianceIssue(
                 regulation: .general,
                 requirement: "Consent Management",
@@ -555,7 +555,7 @@ class SecurityAuditingSuite: XCTestCase {
             ))
         }
 
-        if !securityManager.allowsConsentWithdrawal() {
+        if !self.securityManager.allowsConsentWithdrawal() {
             issues.append(ComplianceIssue(
                 regulation: .general,
                 requirement: "Consent Withdrawal",
@@ -570,7 +570,7 @@ class SecurityAuditingSuite: XCTestCase {
     private func testDataPortability() -> [ComplianceIssue] {
         var issues: [ComplianceIssue] = []
 
-        if !securityManager.supportsDataExport() {
+        if !self.securityManager.supportsDataExport() {
             issues.append(ComplianceIssue(
                 regulation: .gdpr,
                 requirement: "Data Portability",
@@ -585,7 +585,7 @@ class SecurityAuditingSuite: XCTestCase {
     private func testRightToBeForgotten() -> [ComplianceIssue] {
         var issues: [ComplianceIssue] = []
 
-        if !securityManager.supportsDataDeletion() {
+        if !self.securityManager.supportsDataDeletion() {
             issues.append(ComplianceIssue(
                 regulation: .gdpr,
                 requirement: "Right to be Forgotten",
@@ -697,7 +697,7 @@ class SecurityAuditingSuite: XCTestCase {
 
     private func cleanupSecurityTests() {
         // Cleanup any test resources
-        try? securityManager.deleteFromKeychain(key: "test_security_key")
+        try? self.securityManager.deleteFromKeychain(key: "test_security_key")
     }
 }
 

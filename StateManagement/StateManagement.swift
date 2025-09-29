@@ -272,9 +272,10 @@ public struct GoalProgress {
         self.goalId = goalId
         self.currentProgress = currentProgress
         self.targetValue = targetValue
-        progressPercentage = targetValue > 0 ? (currentProgress / targetValue) * 100 : 0
+        self.progressPercentage = targetValue > 0 ? (currentProgress / targetValue) * 100 : 0
         self.estimatedCompletion = estimatedCompletion
-        onTrack = progressPercentage >= 95 || (estimatedCompletion != nil && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
+        self.onTrack = self
+            .progressPercentage >= 95 || (estimatedCompletion != nil && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
     }
 }
 
@@ -338,8 +339,7 @@ public class MockHabitService: HabitServiceProtocol {
 
 public class MockFinancialService: FinancialServiceProtocol {
     public func createTransaction(_ transaction: any EnhancedFinancialTransactionProtocol) async throws
-        -> any EnhancedFinancialTransactionProtocol
-    {
+        -> any EnhancedFinancialTransactionProtocol {
         transaction
     }
 
@@ -542,34 +542,34 @@ public class GenericStateManager<T: Identifiable>: ObservableObject, StateManage
         self.stateId = stateId
         // Initialize with mock service
         _analyticsService = MockInjected(wrappedValue: MockAnalyticsService())
-        setupObservation()
+        self.setupObservation()
     }
 
     // MARK: - StateManagerProtocol Implementation
 
     public func initialize() async throws {
-        await analyticsService.track(
+        await self.analyticsService.track(
             event: "state_manager_initialized",
-            properties: ["state_id": stateId],
+            properties: ["state_id": self.stateId],
             userId: nil as String?
         )
     }
 
     public func reset() async {
-        items = []
-        error = nil
-        lastUpdated = nil
-        await analyticsService.track(event: "state_manager_reset", properties: ["state_id": stateId], userId: nil as String?)
+        self.items = []
+        self.error = nil
+        self.lastUpdated = nil
+        await self.analyticsService.track(event: "state_manager_reset", properties: ["state_id": self.stateId], userId: nil as String?)
     }
 
     public func cleanup() async {
-        cancellables.removeAll()
-        await analyticsService.track(event: "state_manager_cleaned_up", properties: ["state_id": stateId], userId: nil as String?)
+        self.cancellables.removeAll()
+        await self.analyticsService.track(event: "state_manager_cleaned_up", properties: ["state_id": self.stateId], userId: nil as String?)
     }
 
     public func getStateHealth() async -> StateHealthStatus {
-        if error != nil {
-            return .error(error!)
+        if self.error != nil {
+            return .error(self.error!)
         }
 
         if let lastUpdated, Date().timeIntervalSince(lastUpdated) > 300 {
@@ -582,37 +582,37 @@ public class GenericStateManager<T: Identifiable>: ObservableObject, StateManage
     // MARK: - State Management Operations
 
     public func setItems(_ newItems: [T]) {
-        items = newItems
-        lastUpdated = Date()
-        error = nil
+        self.items = newItems
+        self.lastUpdated = Date()
+        self.error = nil
     }
 
     public func addItem(_ item: T) {
-        items.append(item)
-        lastUpdated = Date()
-        error = nil
+        self.items.append(item)
+        self.lastUpdated = Date()
+        self.error = nil
     }
 
     public func updateItem(_ item: T) {
         if let index = items.firstIndex(where: { $0.id == item.id }) {
-            items[index] = item
-            lastUpdated = Date()
-            error = nil
+            self.items[index] = item
+            self.lastUpdated = Date()
+            self.error = nil
         }
     }
 
     public func removeItem(withId id: UUID) {
-        items.removeAll { $0.id == id }
-        lastUpdated = Date()
-        error = nil
+        self.items.removeAll { $0.id == id }
+        self.lastUpdated = Date()
+        self.error = nil
     }
 
     public func findItem(withId id: UUID) -> T? {
-        items.first { $0.id == id }
+        self.items.first { $0.id == id }
     }
 
     public func setLoading(_ loading: Bool) {
-        isLoading = loading
+        self.isLoading = loading
     }
 
     public func setError(_ error: Error?) {
@@ -627,7 +627,7 @@ public class GenericStateManager<T: Identifiable>: ObservableObject, StateManage
     // MARK: - Private Methods
 
     private func setupObservation() {
-        $items
+        self.$items
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self else { return }
@@ -639,7 +639,7 @@ public class GenericStateManager<T: Identifiable>: ObservableObject, StateManage
                     )
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
     }
 }
 
@@ -673,32 +673,32 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
     // MARK: - Initialization
 
     public init() {
-        setupObservation()
+        self.setupObservation()
     }
 
     // MARK: - StateManagerProtocol Implementation
 
     public func initialize() async throws {
-        try await loadState()
-        await analyticsService.track(event: "habit_state_manager_initialized", properties: nil, userId: nil)
+        try await self.loadState()
+        await self.analyticsService.track(event: "habit_state_manager_initialized", properties: nil, userId: nil)
     }
 
     public func reset() async {
-        habits.removeAll()
-        habitLogs.removeAll()
-        achievements.removeAll()
-        streaks.removeAll()
-        insights.removeAll()
-        error = nil
-        lastSyncDate = nil
+        self.habits.removeAll()
+        self.habitLogs.removeAll()
+        self.achievements.removeAll()
+        self.streaks.removeAll()
+        self.insights.removeAll()
+        self.error = nil
+        self.lastSyncDate = nil
 
-        await analyticsService.track(event: "habit_state_reset", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "habit_state_reset", properties: nil, userId: nil)
     }
 
     public func cleanup() async {
-        cancellables.removeAll()
-        try? await saveState()
-        await analyticsService.track(event: "habit_state_cleaned_up", properties: nil, userId: nil)
+        self.cancellables.removeAll()
+        try? await self.saveState()
+        await self.analyticsService.track(event: "habit_state_cleaned_up", properties: nil, userId: nil)
     }
 
     public func getStateHealth() async -> StateHealthStatus {
@@ -716,21 +716,21 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
     // MARK: - Habit Management
 
     public func createHabit(_ habit: EnhancedHabitProtocol) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             let createdHabit = try await habitService.createHabit(habit)
-            habits[createdHabit.id] = createdHabit
+            self.habits[createdHabit.id] = createdHabit
 
-            addPendingChange(StateChange(
+            self.addPendingChange(StateChange(
                 sourceProject: .habitQuest,
-                stateManager: stateId,
+                stateManager: self.stateId,
                 changeType: .create,
                 payload: ["habit_id": createdHabit.id.uuidString, "name": createdHabit.name]
             ))
 
-            await analyticsService.track(event: "habit_created", properties: ["habit_id": createdHabit.id.uuidString], userId: nil)
+            await self.analyticsService.track(event: "habit_created", properties: ["habit_id": createdHabit.id.uuidString], userId: nil)
         } catch {
             self.error = error
             throw error
@@ -738,59 +738,59 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
     }
 
     public func updateHabit(_ habit: EnhancedHabitProtocol) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
-        habits[habit.id] = habit
+        self.habits[habit.id] = habit
 
-        addPendingChange(StateChange(
+        self.addPendingChange(StateChange(
             sourceProject: .habitQuest,
-            stateManager: stateId,
+            stateManager: self.stateId,
             changeType: .update,
             payload: ["habit_id": habit.id.uuidString, "name": habit.name]
         ))
 
-        await analyticsService.track(event: "habit_updated", properties: ["habit_id": habit.id.uuidString], userId: nil)
+        await self.analyticsService.track(event: "habit_updated", properties: ["habit_id": habit.id.uuidString], userId: nil)
     }
 
     public func deleteHabit(withId habitId: UUID) async throws {
-        habits.removeValue(forKey: habitId)
-        habitLogs.removeValue(forKey: habitId)
-        achievements.removeValue(forKey: habitId)
-        streaks.removeValue(forKey: habitId)
-        insights.removeValue(forKey: habitId)
+        self.habits.removeValue(forKey: habitId)
+        self.habitLogs.removeValue(forKey: habitId)
+        self.achievements.removeValue(forKey: habitId)
+        self.streaks.removeValue(forKey: habitId)
+        self.insights.removeValue(forKey: habitId)
 
-        addPendingChange(StateChange(
+        self.addPendingChange(StateChange(
             sourceProject: .habitQuest,
-            stateManager: stateId,
+            stateManager: self.stateId,
             changeType: .delete,
             payload: ["habit_id": habitId.uuidString]
         ))
 
-        await analyticsService.track(event: "habit_deleted", properties: ["habit_id": habitId.uuidString], userId: nil)
+        await self.analyticsService.track(event: "habit_deleted", properties: ["habit_id": habitId.uuidString], userId: nil)
     }
 
     public func logHabitCompletion(_ habitId: UUID, value: Double?, mood: MoodRating?, notes: String?) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             let habitLog = try await habitService.logHabitCompletion(habitId, value: value, mood: mood, notes: notes)
 
-            if habitLogs[habitId] == nil {
-                habitLogs[habitId] = []
+            if self.habitLogs[habitId] == nil {
+                self.habitLogs[habitId] = []
             }
-            habitLogs[habitId]?.append(habitLog)
+            self.habitLogs[habitId]?.append(habitLog)
 
             // Update streak
             let currentStreak = try await habitService.calculateStreak(for: habitId)
-            streaks[habitId] = currentStreak
+            self.streaks[habitId] = currentStreak
 
             // Check for achievements
             let newAchievements = try await habitService.checkAchievements(for: habitId)
-            achievements[habitId] = newAchievements
+            self.achievements[habitId] = newAchievements
 
-            await analyticsService.track(event: "habit_completed", properties: [
+            await self.analyticsService.track(event: "habit_completed", properties: [
                 "habit_id": habitId.uuidString,
                 "value": value ?? 0,
                 "mood": mood?.rawValue ?? 0,
@@ -805,9 +805,9 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
     public func getHabitInsights(for habitId: UUID, timeRange: DateInterval) async throws {
         do {
             let habitInsights = try await habitService.getHabitInsights(for: habitId, timeRange: timeRange)
-            insights[habitId] = habitInsights
+            self.insights[habitId] = habitInsights
 
-            await analyticsService.track(event: "habit_insights_loaded", properties: [
+            await self.analyticsService.track(event: "habit_insights_loaded", properties: [
                 "habit_id": habitId.uuidString,
                 "completion_rate": habitInsights.completionRate,
             ], userId: nil)
@@ -825,48 +825,48 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
 
         // This would save to persistent storage in a real implementation
         // For now, we'll use UserDefaults as an example
-        let habitIds = habits.keys.map(\.uuidString)
+        let habitIds = self.habits.keys.map(\.uuidString)
         UserDefaults.standard.set(habitIds, forKey: "saved_habit_ids")
         UserDefaults.standard.set(Date(), forKey: "last_state_save_date")
 
-        await analyticsService.track(event: "habit_state_saved", properties: ["habit_count": habits.count], userId: nil)
+        await self.analyticsService.track(event: "habit_state_saved", properties: ["habit_count": self.habits.count], userId: nil)
     }
 
     public func loadState() async throws {
         // This would load from persistent storage in a real implementation
         if let savedDate = UserDefaults.standard.object(forKey: "last_state_save_date") as? Date {
-            lastSyncDate = savedDate
+            self.lastSyncDate = savedDate
         }
 
-        await analyticsService.track(event: "habit_state_loaded", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "habit_state_loaded", properties: nil, userId: nil)
     }
 
     public func clearPersistedState() async throws {
         UserDefaults.standard.removeObject(forKey: "saved_habit_ids")
         UserDefaults.standard.removeObject(forKey: "last_state_save_date")
 
-        await analyticsService.track(event: "habit_state_cleared", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "habit_state_cleared", properties: nil, userId: nil)
     }
 
     // MARK: - StateSynchronizable Implementation
 
     public func syncState(with projects: [ProjectType]) async throws {
         for project in projects {
-            await analyticsService.track(
+            await self.analyticsService.track(
                 event: "habit_state_sync_requested",
                 properties: ["target_project": project.rawValue],
                 userId: nil
             )
         }
 
-        lastSyncDate = Date()
+        self.lastSyncDate = Date()
     }
 
     public func handleExternalStateChange(_ change: StateChange) async {
         switch change.changeType {
         case .create, .update:
             // Handle external habit changes
-            await analyticsService.track(event: "external_habit_change_received", properties: [
+            await self.analyticsService.track(event: "external_habit_change_received", properties: [
                 "source_project": change.sourceProject.rawValue,
                 "change_type": change.changeType.description,
             ], userId: change.userId)
@@ -874,9 +874,8 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
         case .delete:
             // Handle external deletions
             if let habitIdString = change.payload["habit_id"] as? String,
-               let habitId = UUID(uuidString: habitIdString)
-            {
-                habits.removeValue(forKey: habitId)
+               let habitId = UUID(uuidString: habitIdString) {
+                self.habits.removeValue(forKey: habitId)
             }
 
         case .sync, .reset:
@@ -886,15 +885,15 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
     }
 
     public func getPendingStateChanges() async -> [StateChange] {
-        let changes = pendingChanges
-        pendingChanges.removeAll()
+        let changes = self.pendingChanges
+        self.pendingChanges.removeAll()
         return changes
     }
 
     // MARK: - Private Methods
 
     private func setupObservation() {
-        $habits
+        self.$habits
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self else { return }
@@ -902,11 +901,11 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
                     try? await self.saveState()
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
     }
 
     private func addPendingChange(_ change: StateChange) {
-        pendingChanges.append(change)
+        self.pendingChanges.append(change)
     }
 }
 
@@ -940,32 +939,32 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
     // MARK: - Initialization
 
     public init() {
-        setupObservation()
+        self.setupObservation()
     }
 
     // MARK: - StateManagerProtocol Implementation
 
     public func initialize() async throws {
-        try await loadState()
-        await analyticsService.track(event: "financial_state_manager_initialized", properties: nil, userId: nil)
+        try await self.loadState()
+        await self.analyticsService.track(event: "financial_state_manager_initialized", properties: nil, userId: nil)
     }
 
     public func reset() async {
-        accounts.removeAll()
-        transactions.removeAll()
-        budgets.removeAll()
-        netWorth = nil
-        recommendations.removeAll()
-        error = nil
-        lastSyncDate = nil
+        self.accounts.removeAll()
+        self.transactions.removeAll()
+        self.budgets.removeAll()
+        self.netWorth = nil
+        self.recommendations.removeAll()
+        self.error = nil
+        self.lastSyncDate = nil
 
-        await analyticsService.track(event: "financial_state_reset", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "financial_state_reset", properties: nil, userId: nil)
     }
 
     public func cleanup() async {
-        cancellables.removeAll()
-        try? await saveState()
-        await analyticsService.track(event: "financial_state_cleaned_up", properties: nil, userId: nil)
+        self.cancellables.removeAll()
+        try? await self.saveState()
+        await self.analyticsService.track(event: "financial_state_cleaned_up", properties: nil, userId: nil)
     }
 
     public func getStateHealth() async -> StateHealthStatus {
@@ -973,7 +972,7 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
             return .error(error)
         }
 
-        if transactions.isEmpty, accounts.isEmpty {
+        if self.transactions.isEmpty, self.accounts.isEmpty {
             return .warning("No financial data loaded")
         }
 
@@ -983,21 +982,21 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
     // MARK: - Financial Operations
 
     public func createTransaction(_ transaction: EnhancedFinancialTransactionProtocol) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             let createdTransaction = try await financialService.createTransaction(transaction)
-            transactions.append(createdTransaction)
+            self.transactions.append(createdTransaction)
 
-            addPendingChange(StateChange(
+            self.addPendingChange(StateChange(
                 sourceProject: .momentumFinance,
-                stateManager: stateId,
+                stateManager: self.stateId,
                 changeType: .create,
                 payload: ["transaction_id": createdTransaction.id.uuidString, "amount": createdTransaction.amount]
             ))
 
-            await analyticsService.track(event: "transaction_created", properties: [
+            await self.analyticsService.track(event: "transaction_created", properties: [
                 "transaction_id": createdTransaction.id.uuidString,
                 "amount": createdTransaction.amount,
             ], userId: nil)
@@ -1008,14 +1007,14 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
     }
 
     public func calculateNetWorth(for userId: String) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             let netWorthSummary = try await financialService.calculateNetWorth(for: userId, asOf: Date())
-            netWorth = netWorthSummary
+            self.netWorth = netWorthSummary
 
-            await analyticsService.track(event: "net_worth_calculated", properties: [
+            await self.analyticsService.track(event: "net_worth_calculated", properties: [
                 "user_id": userId,
                 "net_worth": netWorthSummary.netWorth,
             ], userId: userId)
@@ -1026,14 +1025,14 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
     }
 
     public func generateRecommendations(for userId: String) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             let newRecommendations = try await financialService.generateFinancialRecommendations(for: userId)
-            recommendations = newRecommendations
+            self.recommendations = newRecommendations
 
-            await analyticsService.track(event: "financial_recommendations_generated", properties: [
+            await self.analyticsService.track(event: "financial_recommendations_generated", properties: [
                 "user_id": userId,
                 "recommendation_count": newRecommendations.count,
             ], userId: userId)
@@ -1047,49 +1046,49 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
 
     public func saveState() async throws {
         UserDefaults.standard.set(Date(), forKey: "financial_last_save_date")
-        await analyticsService.track(
+        await self.analyticsService.track(
             event: "financial_state_saved",
-            properties: ["transaction_count": transactions.count],
+            properties: ["transaction_count": self.transactions.count],
             userId: nil
         )
     }
 
     public func loadState() async throws {
         if let savedDate = UserDefaults.standard.object(forKey: "financial_last_save_date") as? Date {
-            lastSyncDate = savedDate
+            self.lastSyncDate = savedDate
         }
-        await analyticsService.track(event: "financial_state_loaded", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "financial_state_loaded", properties: nil, userId: nil)
     }
 
     public func clearPersistedState() async throws {
         UserDefaults.standard.removeObject(forKey: "financial_last_save_date")
-        await analyticsService.track(event: "financial_state_cleared", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "financial_state_cleared", properties: nil, userId: nil)
     }
 
     // MARK: - StateSynchronizable Implementation
 
     public func syncState(with projects: [ProjectType]) async throws {
-        lastSyncDate = Date()
-        await analyticsService.track(event: "financial_state_synced", properties: ["project_count": projects.count], userId: nil)
+        self.lastSyncDate = Date()
+        await self.analyticsService.track(event: "financial_state_synced", properties: ["project_count": projects.count], userId: nil)
     }
 
     public func handleExternalStateChange(_ change: StateChange) async {
-        await analyticsService.track(event: "external_financial_change_received", properties: [
+        await self.analyticsService.track(event: "external_financial_change_received", properties: [
             "source_project": change.sourceProject.rawValue,
             "change_type": change.changeType.description,
         ], userId: change.userId)
     }
 
     public func getPendingStateChanges() async -> [StateChange] {
-        let changes = pendingChanges
-        pendingChanges.removeAll()
+        let changes = self.pendingChanges
+        self.pendingChanges.removeAll()
         return changes
     }
 
     // MARK: - Private Methods
 
     private func setupObservation() {
-        $transactions
+        self.$transactions
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self else { return }
@@ -1097,11 +1096,11 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
                     try? await self.saveState()
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
     }
 
     private func addPendingChange(_ change: StateChange) {
-        pendingChanges.append(change)
+        self.pendingChanges.append(change)
     }
 }
 
@@ -1135,32 +1134,32 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
     // MARK: - Initialization
 
     public init() {
-        setupObservation()
+        self.setupObservation()
     }
 
     // MARK: - StateManagerProtocol Implementation
 
     public func initialize() async throws {
-        try await loadState()
-        await analyticsService.track(event: "planner_state_manager_initialized", properties: nil, userId: nil)
+        try await self.loadState()
+        await self.analyticsService.track(event: "planner_state_manager_initialized", properties: nil, userId: nil)
     }
 
     public func reset() async {
-        tasks.removeAll()
-        goals.removeAll()
-        scheduleOptimization = nil
-        productivityInsights = nil
-        recommendations.removeAll()
-        error = nil
-        lastSyncDate = nil
+        self.tasks.removeAll()
+        self.goals.removeAll()
+        self.scheduleOptimization = nil
+        self.productivityInsights = nil
+        self.recommendations.removeAll()
+        self.error = nil
+        self.lastSyncDate = nil
 
-        await analyticsService.track(event: "planner_state_reset", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "planner_state_reset", properties: nil, userId: nil)
     }
 
     public func cleanup() async {
-        cancellables.removeAll()
-        try? await saveState()
-        await analyticsService.track(event: "planner_state_cleaned_up", properties: nil, userId: nil)
+        self.cancellables.removeAll()
+        try? await self.saveState()
+        await self.analyticsService.track(event: "planner_state_cleaned_up", properties: nil, userId: nil)
     }
 
     public func getStateHealth() async -> StateHealthStatus {
@@ -1168,7 +1167,7 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
             return .error(error)
         }
 
-        if tasks.isEmpty {
+        if self.tasks.isEmpty {
             return .warning("No tasks loaded")
         }
 
@@ -1178,21 +1177,21 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
     // MARK: - Task Management
 
     public func createTask(_ task: EnhancedTaskProtocol) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             let createdTask = try await plannerService.createTask(task)
-            tasks[createdTask.id] = createdTask
+            self.tasks[createdTask.id] = createdTask
 
-            addPendingChange(StateChange(
+            self.addPendingChange(StateChange(
                 sourceProject: .plannerApp,
-                stateManager: stateId,
+                stateManager: self.stateId,
                 changeType: .create,
                 payload: ["task_id": createdTask.id.uuidString, "title": createdTask.title]
             ))
 
-            await analyticsService.track(event: "task_created", properties: [
+            await self.analyticsService.track(event: "task_created", properties: [
                 "task_id": createdTask.id.uuidString,
                 "title": createdTask.title,
             ], userId: nil)
@@ -1203,14 +1202,14 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
     }
 
     public func updateTaskProgress(_ taskId: UUID, progress: Double) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             let updatedTask = try await plannerService.updateTaskProgress(taskId, progress: progress)
-            tasks[taskId] = updatedTask
+            self.tasks[taskId] = updatedTask
 
-            await analyticsService.track(event: "task_progress_updated", properties: [
+            await self.analyticsService.track(event: "task_progress_updated", properties: [
                 "task_id": taskId.uuidString,
                 "progress": progress,
             ], userId: nil)
@@ -1221,14 +1220,14 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
     }
 
     public func optimizeSchedule(for userId: String, timeRange: DateInterval) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             let optimization = try await plannerService.optimizeSchedule(for: userId, timeRange: timeRange)
-            scheduleOptimization = optimization
+            self.scheduleOptimization = optimization
 
-            await analyticsService.track(event: "schedule_optimized", properties: [
+            await self.analyticsService.track(event: "schedule_optimized", properties: [
                 "user_id": userId,
                 "efficiency": optimization.efficiency,
                 "task_count": optimization.optimizedTasks.count,
@@ -1240,14 +1239,14 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
     }
 
     public func getProductivityInsights(for userId: String, timeRange: DateInterval) async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             let insights = try await plannerService.getProductivityInsights(for: userId, timeRange: timeRange)
-            productivityInsights = insights
+            self.productivityInsights = insights
 
-            await analyticsService.track(event: "productivity_insights_loaded", properties: [
+            await self.analyticsService.track(event: "productivity_insights_loaded", properties: [
                 "user_id": userId,
                 "completion_rate": insights.completionRate,
             ], userId: userId)
@@ -1261,45 +1260,45 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
 
     public func saveState() async throws {
         UserDefaults.standard.set(Date(), forKey: "planner_last_save_date")
-        await analyticsService.track(event: "planner_state_saved", properties: ["task_count": tasks.count], userId: nil)
+        await self.analyticsService.track(event: "planner_state_saved", properties: ["task_count": self.tasks.count], userId: nil)
     }
 
     public func loadState() async throws {
         if let savedDate = UserDefaults.standard.object(forKey: "planner_last_save_date") as? Date {
-            lastSyncDate = savedDate
+            self.lastSyncDate = savedDate
         }
-        await analyticsService.track(event: "planner_state_loaded", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "planner_state_loaded", properties: nil, userId: nil)
     }
 
     public func clearPersistedState() async throws {
         UserDefaults.standard.removeObject(forKey: "planner_last_save_date")
-        await analyticsService.track(event: "planner_state_cleared", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "planner_state_cleared", properties: nil, userId: nil)
     }
 
     // MARK: - StateSynchronizable Implementation
 
     public func syncState(with projects: [ProjectType]) async throws {
-        lastSyncDate = Date()
-        await analyticsService.track(event: "planner_state_synced", properties: ["project_count": projects.count], userId: nil)
+        self.lastSyncDate = Date()
+        await self.analyticsService.track(event: "planner_state_synced", properties: ["project_count": projects.count], userId: nil)
     }
 
     public func handleExternalStateChange(_ change: StateChange) async {
-        await analyticsService.track(event: "external_planner_change_received", properties: [
+        await self.analyticsService.track(event: "external_planner_change_received", properties: [
             "source_project": change.sourceProject.rawValue,
             "change_type": change.changeType.description,
         ], userId: change.userId)
     }
 
     public func getPendingStateChanges() async -> [StateChange] {
-        let changes = pendingChanges
-        pendingChanges.removeAll()
+        let changes = self.pendingChanges
+        self.pendingChanges.removeAll()
         return changes
     }
 
     // MARK: - Private Methods
 
     private func setupObservation() {
-        $tasks
+        self.$tasks
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self else { return }
@@ -1307,11 +1306,11 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
                     try? await self.saveState()
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
     }
 
     private func addPendingChange(_ change: StateChange) {
-        pendingChanges.append(change)
+        self.pendingChanges.append(change)
     }
 }
 
@@ -1344,54 +1343,54 @@ public final class GlobalStateCoordinator: ObservableObject {
     // MARK: - Initialization
 
     private init() {
-        setupGlobalObservation()
+        self.setupGlobalObservation()
     }
 
     // MARK: - Lifecycle Methods
 
     public func initialize() async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         do {
             // Initialize all state managers
-            try await habitState.initialize()
-            try await financialState.initialize()
-            try await plannerState.initialize()
+            try await self.habitState.initialize()
+            try await self.financialState.initialize()
+            try await self.plannerState.initialize()
 
-            isInitialized = true
+            self.isInitialized = true
 
-            await analyticsService.track(event: "global_state_initialized", properties: nil, userId: nil)
+            await self.analyticsService.track(event: "global_state_initialized", properties: nil, userId: nil)
         } catch {
-            globalError = error
+            self.globalError = error
             throw error
         }
     }
 
     public func cleanup() async {
-        await habitState.cleanup()
-        await financialState.cleanup()
-        await plannerState.cleanup()
+        await self.habitState.cleanup()
+        await self.financialState.cleanup()
+        await self.plannerState.cleanup()
 
-        cancellables.removeAll()
-        isInitialized = false
+        self.cancellables.removeAll()
+        self.isInitialized = false
 
-        await analyticsService.track(event: "global_state_cleaned_up", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "global_state_cleaned_up", properties: nil, userId: nil)
     }
 
     // MARK: - Cross-Project Synchronization
 
     public func syncAllProjects() async throws {
-        isLoading = true
+        self.isLoading = true
         defer { isLoading = false }
 
         let allProjects: [ProjectType] = [.habitQuest, .momentumFinance, .plannerApp, .codingReviewer, .avoidObstaclesGame]
 
         do {
             // Sync each state manager with all projects
-            try await habitState.syncState(with: allProjects)
-            try await financialState.syncState(with: allProjects)
-            try await plannerState.syncState(with: allProjects)
+            try await self.habitState.syncState(with: allProjects)
+            try await self.financialState.syncState(with: allProjects)
+            try await self.plannerState.syncState(with: allProjects)
 
             // Get and process pending changes
             let habitChanges = await habitState.getPendingStateChanges()
@@ -1402,18 +1401,18 @@ public final class GlobalStateCoordinator: ObservableObject {
 
             // Distribute changes to relevant state managers
             for change in allChanges {
-                await distributeStateChange(change)
+                await self.distributeStateChange(change)
             }
 
-            lastGlobalSync = Date()
+            self.lastGlobalSync = Date()
 
-            await analyticsService.track(event: "global_state_synced", properties: [
+            await self.analyticsService.track(event: "global_state_synced", properties: [
                 "change_count": allChanges.count,
                 "projects_synced": allProjects.count,
             ], userId: nil)
 
         } catch {
-            globalError = error
+            self.globalError = error
             throw error
         }
     }
@@ -1421,51 +1420,51 @@ public final class GlobalStateCoordinator: ObservableObject {
     public func getGlobalHealthStatus() async -> [String: StateHealthStatus] {
         var healthStatuses: [String: StateHealthStatus] = [:]
 
-        healthStatuses[habitState.stateId] = await habitState.getStateHealth()
-        healthStatuses[financialState.stateId] = await financialState.getStateHealth()
-        healthStatuses[plannerState.stateId] = await plannerState.getStateHealth()
+        healthStatuses[self.habitState.stateId] = await self.habitState.getStateHealth()
+        healthStatuses[self.financialState.stateId] = await self.financialState.getStateHealth()
+        healthStatuses[self.plannerState.stateId] = await self.plannerState.getStateHealth()
 
         return healthStatuses
     }
 
     public func resetAllState() async {
-        await habitState.reset()
-        await financialState.reset()
-        await plannerState.reset()
+        await self.habitState.reset()
+        await self.financialState.reset()
+        await self.plannerState.reset()
 
-        globalError = nil
-        lastGlobalSync = nil
+        self.globalError = nil
+        self.lastGlobalSync = nil
 
-        await analyticsService.track(event: "global_state_reset", properties: nil, userId: nil)
+        await self.analyticsService.track(event: "global_state_reset", properties: nil, userId: nil)
     }
 
     // MARK: - Private Methods
 
     private func setupGlobalObservation() {
         // Observe changes in individual state managers
-        habitState.$error
+        self.habitState.$error
             .sink { [weak self] error in
                 if error != nil {
                     self?.globalError = error
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
 
-        financialState.$error
+        self.financialState.$error
             .sink { [weak self] error in
                 if error != nil {
                     self?.globalError = error
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
 
-        plannerState.$error
+        self.plannerState.$error
             .sink { [weak self] error in
                 if error != nil {
                     self?.globalError = error
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
 
         // Set up periodic sync
         Timer.publish(every: 300, on: .main, in: .common) // 5 minutes
@@ -1475,25 +1474,25 @@ public final class GlobalStateCoordinator: ObservableObject {
                     try? await self?.syncAllProjects()
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &self.cancellables)
     }
 
     private func distributeStateChange(_ change: StateChange) async {
         switch change.stateManager {
-        case habitState.stateId:
+        case self.habitState.stateId:
             // Distribute habit changes to financial and planner states
-            await financialState.handleExternalStateChange(change)
-            await plannerState.handleExternalStateChange(change)
+            await self.financialState.handleExternalStateChange(change)
+            await self.plannerState.handleExternalStateChange(change)
 
-        case financialState.stateId:
+        case self.financialState.stateId:
             // Distribute financial changes to habit and planner states
-            await habitState.handleExternalStateChange(change)
-            await plannerState.handleExternalStateChange(change)
+            await self.habitState.handleExternalStateChange(change)
+            await self.plannerState.handleExternalStateChange(change)
 
-        case plannerState.stateId:
+        case self.plannerState.stateId:
             // Distribute planner changes to habit and financial states
-            await habitState.handleExternalStateChange(change)
-            await financialState.handleExternalStateChange(change)
+            await self.habitState.handleExternalStateChange(change)
+            await self.financialState.handleExternalStateChange(change)
 
         default:
             break

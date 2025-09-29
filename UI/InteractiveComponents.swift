@@ -63,7 +63,7 @@ public struct NeumorphicButton<Label: View>: View {
                 .scaleEffect(self.isAnimating ? 0.95 : 1.0)
         }
         .buttonStyle(PlainButtonStyle())
-        .animation(AnimationTiming.quick, value: isAnimating)
+        .animation(AnimationTiming.quick, value: self.isAnimating)
     }
 }
 
@@ -208,15 +208,15 @@ public struct InteractiveCard<Content: View>: View {
     }
 
     public var body: some View {
-        content
+        self.content
             .padding()
             .background(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(backgroundColor)
-                    .shadow(color: Color.black.opacity(0.1), radius: shadowRadius, x: 0, y: 4)
+                RoundedRectangle(cornerRadius: self.cornerRadius)
+                    .fill(self.backgroundColor)
+                    .shadow(color: Color.black.opacity(0.1), radius: self.shadowRadius, x: 0, y: 4)
             )
-            .scaleEffect(isPressed ? 0.98 : 1.0)
-            .offset(dragOffset)
+            .scaleEffect(self.isPressed ? 0.98 : 1.0)
+            .offset(self.dragOffset)
             .gesture(
                 DragGesture()
                     .onChanged { value in
@@ -238,7 +238,7 @@ public struct InteractiveCard<Content: View>: View {
             }, perform: {
                 self.onLongPress?()
             })
-            .animation(AnimationTiming.springSmooth, value: isPressed)
+            .animation(AnimationTiming.springSmooth, value: self.isPressed)
     }
 }
 
@@ -334,7 +334,7 @@ private struct SwipeActionView: View {
     let action: SwipeAction
 
     var body: some View {
-        Button(action: action.action) {
+        Button(action: self.action.action) {
             VStack(spacing: 4) {
                 self.action.icon
                     .font(.title3)
@@ -411,7 +411,7 @@ public struct InteractiveProgressBar: View {
                 }
             }
         }
-        .frame(height: height)
+        .frame(height: self.height)
     }
 }
 
@@ -470,7 +470,7 @@ public struct RadialProgressIndicator: View {
                 self.animatedProgress = self.progress
             }
         }
-        .onChange(of: progress) { newProgress in
+        .onChange(of: self.progress) { newProgress in
             withAnimation(AnimationTiming.easeOut) {
                 self.animatedProgress = newProgress
             }
@@ -564,7 +564,7 @@ public struct InteractiveSlider: View {
                     .animation(AnimationTiming.springSmooth, value: self.isDragging)
             }
         }
-        .frame(height: max(trackHeight, thumbSize))
+        .frame(height: max(self.trackHeight, self.thumbSize))
     }
 }
 
@@ -672,7 +672,7 @@ public struct TabBarItem: View {
                 self.isPressed = pressing
             }
         }, perform: {})
-        .animation(AnimationTiming.springSmooth, value: isSelected)
+        .animation(AnimationTiming.springSmooth, value: self.isSelected)
     }
 }
 
@@ -711,8 +711,8 @@ public struct InteractiveTabBar: View {
         }
         .padding(.vertical, 8)
         .background(
-            backgroundColor
-                .shadow(color: shadowColor, radius: 8, x: 0, y: -2)
+            self.backgroundColor
+                .shadow(color: self.shadowColor, radius: 8, x: 0, y: -2)
         )
     }
 }

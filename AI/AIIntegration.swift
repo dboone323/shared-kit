@@ -5,13 +5,13 @@ import NaturalLanguage
 import SwiftUI
 import Vision
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 
-    typealias PlatformImage = UIImage
+typealias PlatformImage = UIImage
 #elseif canImport(AppKit)
-    import AppKit
+import AppKit
 
-    typealias PlatformImage = NSImage
+typealias PlatformImage = NSImage
 #endif
 
 // MARK: - AI/ML Integration Framework
@@ -32,15 +32,15 @@ public class CoreMLManager: ObservableObject {
     private let processingQueue = DispatchQueue(label: "coreml.processing", qos: .userInitiated)
 
     private init() {
-        setupModelCache()
-        discoverAvailableModels()
+        self.setupModelCache()
+        self.discoverAvailableModels()
     }
 
     // MARK: - Model Management
 
     private func setupModelCache() {
-        modelCache.countLimit = 5 // Cache up to 5 models
-        modelCache.totalCostLimit = 100 * 1024 * 1024 // 100MB limit
+        self.modelCache.countLimit = 5 // Cache up to 5 models
+        self.modelCache.totalCostLimit = 100 * 1024 * 1024 // 100MB limit
     }
 
     private func discoverAvailableModels() {
@@ -156,13 +156,13 @@ public class CoreMLManager: ObservableObject {
     }
 
     public func unloadModel(_ modelId: String) {
-        loadedModels.removeValue(forKey: modelId)
-        modelCache.removeObject(forKey: modelId as NSString)
+        self.loadedModels.removeValue(forKey: modelId)
+        self.modelCache.removeObject(forKey: modelId as NSString)
     }
 
     public func unloadAllModels() {
-        loadedModels.removeAll()
-        modelCache.removeAllObjects()
+        self.loadedModels.removeAll()
+        self.modelCache.removeAllObjects()
     }
 }
 
@@ -278,10 +278,10 @@ public class NaturalLanguageProcessor: ObservableObject {
     }
 
     private func countWords(_ text: String) -> Int {
-        tokenizer.string = text
+        self.tokenizer.string = text
         var wordCount = 0
 
-        tokenizer.enumerateTokens(in: text.startIndex ..< text.endIndex) { _, _ in
+        self.tokenizer.enumerateTokens(in: text.startIndex ..< text.endIndex) { _, _ in
             wordCount += 1
             return true
         }
@@ -292,11 +292,11 @@ public class NaturalLanguageProcessor: ObservableObject {
     // MARK: - Language Detection
 
     public func detectLanguage(_ text: String) -> LanguageInfo {
-        languageRecognizer.reset()
-        languageRecognizer.processString(text)
+        self.languageRecognizer.reset()
+        self.languageRecognizer.processString(text)
 
-        let dominantLanguage = languageRecognizer.dominantLanguage
-        let languageHypotheses = languageRecognizer.languageHypotheses(withMaximum: 3)
+        let dominantLanguage = self.languageRecognizer.dominantLanguage
+        let languageHypotheses = self.languageRecognizer.languageHypotheses(withMaximum: 3)
 
         return LanguageInfo(
             dominantLanguage: dominantLanguage,
@@ -343,8 +343,7 @@ public class NaturalLanguageProcessor: ObservableObject {
 
         tagger.enumerateTokens(in: text.startIndex ..< text.endIndex, unit: .word, scheme: .lexicalClass) { tokenRange, tag in
             if let tag,
-               tag == .noun || tag == .adjective || tag == .verb
-            {
+               tag == .noun || tag == .adjective || tag == .verb {
                 let word = String(text[tokenRange]).lowercased()
                 if word.count > 3 { // Filter out short words
                     keywords[word, default: 0] += 1
@@ -386,15 +385,15 @@ public class ComputerVisionProcessor: ObservableObject {
                 }
 
                 #if canImport(UIKit)
-                    guard let cgImage = image.cgImage else {
-                        continuation.resume(throwing: AIError.imageProcessingFailed)
-                        return
-                    }
+                guard let cgImage = image.cgImage else {
+                    continuation.resume(throwing: AIError.imageProcessingFailed)
+                    return
+                }
                 #else
-                    guard let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
-                        continuation.resume(throwing: AIError.imageProcessingFailed)
-                        return
-                    }
+                guard let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+                    continuation.resume(throwing: AIError.imageProcessingFailed)
+                    return
+                }
                 #endif
 
                 let request = VNClassifyImageRequest { request, error in
@@ -590,9 +589,9 @@ public class PredictiveAnalyticsEngine: ObservableObject {
 
     private func extractHabitFeatures(habit: HabitData, history: [HabitCompletionRecord]) -> HabitFeatures {
         let completionRate = history.isEmpty ? 0.5 : Double(history.count(where: { $0.completed })) / Double(history.count)
-        let streakLength = calculateCurrentStreak(history)
-        let timeOfDayConsistency = calculateTimeConsistency(history)
-        let dayOfWeekPattern = analyzeDayOfWeekPattern(history)
+        let streakLength = self.calculateCurrentStreak(history)
+        let timeOfDayConsistency = self.calculateTimeConsistency(history)
+        let dayOfWeekPattern = self.analyzeDayOfWeekPattern(history)
 
         return HabitFeatures(
             completionRate: completionRate,
@@ -633,13 +632,13 @@ public class PredictiveAnalyticsEngine: ObservableObject {
 
         successProbability = max(0.1, min(0.95, successProbability))
 
-        let confidence = calculatePredictionConfidence(features: features)
-        let recommendations = generateHabitRecommendations(features: features, prediction: successProbability)
+        let confidence = self.calculatePredictionConfidence(features: features)
+        let recommendations = self.generateHabitRecommendations(features: features, prediction: successProbability)
 
         return HabitPrediction(
             successProbability: successProbability,
             confidence: confidence,
-            factors: analyzePredictionFactors(features: features),
+            factors: self.analyzePredictionFactors(features: features),
             recommendations: recommendations,
             timestamp: Date()
         )
@@ -855,7 +854,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
             predictedCategory: topCategory?.key ?? "Other",
             confidence: topCategory?.value ?? 0.5,
             alternativeCategories: Array(categoryScores.sorted { $0.value > $1.value }.prefix(3)),
-            reasoning: generateExpenseReasoning(features: features, prediction: topCategory?.key ?? "Other"),
+            reasoning: self.generateExpenseReasoning(features: features, prediction: topCategory?.key ?? "Other"),
             timestamp: Date()
         )
     }
@@ -1148,7 +1147,7 @@ public class AICoordinator: ObservableObject {
     public let predictiveEngine = PredictiveAnalyticsEngine.shared
 
     private init() {
-        initializeAI()
+        self.initializeAI()
     }
 
     private func initializeAI() {
@@ -1182,7 +1181,7 @@ public class AICoordinator: ObservableObject {
     }
 
     public func isFeatureAvailable(_ feature: AIFeature) -> Bool {
-        availableFeatures.contains(feature)
+        self.availableFeatures.contains(feature)
     }
 }
 

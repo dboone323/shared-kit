@@ -12,11 +12,11 @@ public enum OllamaIntegration {
 
     /// Replace the shared manager with a custom configuration.
     public static func configureShared(config: OllamaConfig) {
-        shared = OllamaIntegrationManager(config: config)
+        self.shared = OllamaIntegrationManager(config: config)
     }
 
     /// Perform a quick service health check using the shared manager.
     public static func healthCheck() async -> ServiceHealth {
-        await shared.checkServiceHealth()
+        await self.shared.checkServiceHealth()
     }
 }

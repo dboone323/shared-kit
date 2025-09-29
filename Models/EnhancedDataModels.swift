@@ -87,12 +87,12 @@ public struct ExternalReference: Codable, Identifiable {
     public let createdAt: Date
 
     public init(projectContext: ProjectContext, modelType: String, modelId: String, relationshipType: String) {
-        id = UUID()
+        self.id = UUID()
         self.projectContext = projectContext
         self.modelType = modelType
         self.modelId = modelId
         self.relationshipType = relationshipType
-        createdAt = Date()
+        self.createdAt = Date()
     }
 }
 
@@ -158,7 +158,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
 
     public var completionRate: Double {
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-        let recentLogs = logs.filter { $0.completionDate >= thirtyDaysAgo }
+        let recentLogs = self.logs.filter { $0.completionDate >= thirtyDaysAgo }
         guard !recentLogs.isEmpty else { return 0.0 }
         let completedCount = recentLogs.count(where: { $0.isCompleted })
         return Double(completedCount) / Double(recentLogs.count)
@@ -166,7 +166,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
 
     public var weeklyCompletionRate: Double {
         let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
-        let weekLogs = logs.filter { $0.completionDate >= weekAgo }
+        let weekLogs = self.logs.filter { $0.completionDate >= weekAgo }
         guard !weekLogs.isEmpty else { return 0.0 }
         let completedCount = weekLogs.count(where: { $0.isCompleted })
         return Double(completedCount) / Double(weekLogs.count)
@@ -174,18 +174,18 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
 
     public var averageDailyCompletions: Double {
         let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-        let recentLogs = logs.filter { $0.completionDate >= thirtyDaysAgo }
+        let recentLogs = self.logs.filter { $0.completionDate >= thirtyDaysAgo }
         let completedLogs = recentLogs.filter(\.isCompleted)
         return Double(completedLogs.count) / 30.0
     }
 
     public var streakPercentage: Double {
-        guard streakGoal > 0 else { return 0.0 }
-        return min(Double(streak) / Double(streakGoal), 1.0) * 100.0
+        guard self.streakGoal > 0 else { return 0.0 }
+        return min(Double(self.streak) / Double(self.streakGoal), 1.0) * 100.0
     }
 
     public var nextMilestone: HabitMilestone? {
-        milestones.filter { !$0.isAchieved }.sorted { $0.targetValue < $1.targetValue }.first
+        self.milestones.filter { !$0.isAchieved }.sorted { $0.targetValue < $1.targetValue }.first
     }
 
     // Initialization
@@ -203,80 +203,80 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         priority: Int = 3,
         streakGoal: Int = 30
     ) {
-        id = UUID()
+        self.id = UUID()
         self.name = name
         self.habitDescription = habitDescription
         self.frequency = frequency
-        creationDate = Date()
+        self.creationDate = Date()
         self.xpValue = xpValue
-        streak = 0
-        isActive = true
+        self.streak = 0
+        self.isActive = true
         self.category = category
         self.difficulty = difficulty
 
         self.tags = tags
-        reminderTimes = []
+        self.reminderTimes = []
         self.estimatedDurationMinutes = estimatedDurationMinutes
         self.color = color
         self.iconName = iconName
-        notes = ""
-        isArchived = false
+        self.notes = ""
+        self.isArchived = false
         self.priority = priority
         self.streakGoal = streakGoal
 
-        totalCompletions = 0
-        totalMissedDays = 0
-        averageCompletionTime = 0.0
-        bestStreak = 0
-        monthlyGoal = 20
+        self.totalCompletions = 0
+        self.totalMissedDays = 0
+        self.averageCompletionTime = 0.0
+        self.bestStreak = 0
+        self.monthlyGoal = 20
 
-        globalId = "habit_\(id.uuidString)"
-        projectContext = ProjectContext.habitQuest.rawValue
-        externalReferences = []
+        self.globalId = "habit_\(self.id.uuidString)"
+        self.projectContext = ProjectContext.habitQuest.rawValue
+        self.externalReferences = []
     }
 
     // MARK: - Validatable Implementation
 
     @MainActor
     public func validate() throws {
-        let errors = validationErrors
+        let errors = self.validationErrors
         if !errors.isEmpty {
             throw errors.first!
         }
     }
 
     public var isValid: Bool {
-        validationErrors.isEmpty
+        self.validationErrors.isEmpty
     }
 
     public var validationErrors: [ValidationError] {
         var errors: [ValidationError] = []
 
-        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if self.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             errors.append(.required(field: "name"))
         }
 
-        if name.count > 100 {
+        if self.name.count > 100 {
             errors.append(.invalid(field: "name", reason: "must be 100 characters or less"))
         }
 
-        if habitDescription.count > 500 {
+        if self.habitDescription.count > 500 {
             errors.append(.invalid(field: "habitDescription", reason: "must be 500 characters or less"))
         }
 
-        if xpValue < 1 || xpValue > 100 {
+        if self.xpValue < 1 || self.xpValue > 100 {
             errors.append(.outOfRange(field: "xpValue", min: 1, max: 100))
         }
 
-        if priority < 1 || priority > 5 {
+        if self.priority < 1 || self.priority > 5 {
             errors.append(.outOfRange(field: "priority", min: 1, max: 5))
         }
 
-        if estimatedDurationMinutes < 1 || estimatedDurationMinutes > 480 {
+        if self.estimatedDurationMinutes < 1 || self.estimatedDurationMinutes > 480 {
             errors.append(.outOfRange(field: "estimatedDurationMinutes", min: 1, max: 480))
         }
 
-        if streakGoal < 1 || streakGoal > 365 {
+        if self.streakGoal < 1 || self.streakGoal > 365 {
             errors.append(.outOfRange(field: "streakGoal", min: 1, max: 365))
         }
 
@@ -286,30 +286,30 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     // MARK: - Trackable Implementation
 
     public var trackingId: String {
-        "habit_\(id.uuidString)"
+        "habit_\(self.id.uuidString)"
     }
 
     public var analyticsMetadata: [String: Any] {
         [
-            "category": category.rawValue,
-            "difficulty": difficulty.rawValue,
-            "frequency": frequency.rawValue,
-            "xpValue": xpValue,
-            "priority": priority,
-            "streak": streak,
-            "completionRate": completionRate,
-            "isActive": isActive,
+            "category": self.category.rawValue,
+            "difficulty": self.difficulty.rawValue,
+            "frequency": self.frequency.rawValue,
+            "xpValue": self.xpValue,
+            "priority": self.priority,
+            "streak": self.streak,
+            "completionRate": self.completionRate,
+            "isActive": self.isActive,
         ]
     }
 
     public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
-        var eventParameters = analyticsMetadata
+        var eventParameters = self.analyticsMetadata
         parameters?.forEach { key, value in
             eventParameters[key] = value
         }
 
         // Implementation would integrate with analytics service
-        print("Tracking event: \(event) for habit: \(name) with parameters: \(eventParameters)")
+        print("Tracking event: \(event) for habit: \(self.name) with parameters: \(eventParameters)")
     }
 
     // MARK: - Business Logic Methods
@@ -333,43 +333,43 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
                 notes: notes,
                 mood: mood
             )
-            logs.append(log)
+            self.logs.append(log)
         }
 
         // Update analytics
-        totalCompletions += 1
-        updateStreak()
-        updateAverageCompletionTime(duration)
-        lastCompletionDate = today
+        self.totalCompletions += 1
+        self.updateStreak()
+        self.updateAverageCompletionTime(duration)
+        self.lastCompletionDate = today
 
         // Track event
-        trackEvent("habit_completed", parameters: [
+        self.trackEvent("habit_completed", parameters: [
             "duration": duration ?? 0,
-            "streak": streak,
-            "consecutive_days": streak,
+            "streak": self.streak,
+            "consecutive_days": self.streak,
         ])
 
         // Check for achievements
-        checkAchievements()
+        self.checkAchievements()
     }
 
     @MainActor
     public func missDay() {
-        totalMissedDays += 1
-        streak = 0
-        trackEvent("habit_missed")
+        self.totalMissedDays += 1
+        self.streak = 0
+        self.trackEvent("habit_missed")
     }
 
     private func updateStreak() {
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-        let wasCompletedYesterday = logs.contains {
+        let wasCompletedYesterday = self.logs.contains {
             Calendar.current.isDate($0.completionDate, inSameDayAs: yesterday) && $0.isCompleted
         }
 
-        if wasCompletedYesterday || streak == 0 {
-            streak += 1
-            if streak > bestStreak {
-                bestStreak = streak
+        if wasCompletedYesterday || self.streak == 0 {
+            self.streak += 1
+            if self.streak > self.bestStreak {
+                self.bestStreak = self.streak
             }
         }
     }
@@ -377,13 +377,13 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     private func updateAverageCompletionTime(_ duration: TimeInterval?) {
         guard let duration else { return }
         let durationMinutes = duration / 60
-        averageCompletionTime = (averageCompletionTime * Double(totalCompletions - 1) + durationMinutes) /
-            Double(totalCompletions)
+        self.averageCompletionTime = (self.averageCompletionTime * Double(self.totalCompletions - 1) + durationMinutes) /
+            Double(self.totalCompletions)
     }
 
     private func checkAchievements() {
         // Check milestone achievements
-        for milestone in milestones where !milestone.isAchieved {
+        for milestone in self.milestones where !milestone.isAchieved {
             switch milestone.type {
             case .streak:
                 if streak >= milestone.targetValue {
@@ -403,21 +403,21 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
 
     @MainActor
     public func addReminder(at time: Date) {
-        reminderTimes.append(time)
-        trackEvent("reminder_added")
+        self.reminderTimes.append(time)
+        self.trackEvent("reminder_added")
     }
 
     @MainActor
     public func removeReminder(at index: Int) {
-        guard index < reminderTimes.count else { return }
-        reminderTimes.remove(at: index)
-        trackEvent("reminder_removed")
+        guard index < self.reminderTimes.count else { return }
+        self.reminderTimes.remove(at: index)
+        self.trackEvent("reminder_removed")
     }
 
     @MainActor
     public func addExternalReference(_ reference: ExternalReference) {
-        externalReferences.append(reference)
-        trackEvent("external_reference_added", parameters: [
+        self.externalReferences.append(reference)
+        self.trackEvent("external_reference_added", parameters: [
             "project": reference.projectContext.rawValue,
             "model_type": reference.modelType,
         ])
@@ -451,21 +451,21 @@ public final class EnhancedHabitLog {
         notes: String? = nil,
         mood: MoodRating? = nil
     ) {
-        id = UUID()
+        self.id = UUID()
         self.habit = habit
         self.completionDate = completionDate
         self.isCompleted = isCompleted
         self.notes = notes
-        xpEarned = 0 // Will be calculated after initialization
+        self.xpEarned = 0 // Will be calculated after initialization
         self.mood = mood
-        completionTime = isCompleted ? Date() : nil
+        self.completionTime = isCompleted ? Date() : nil
         self.actualDurationMinutes = actualDurationMinutes
     }
 
     @MainActor
     public func calculateXpEarned() {
         guard let habit else { return }
-        xpEarned = isCompleted ? habit.xpValue * habit.difficulty.xpMultiplier : 0
+        self.xpEarned = self.isCompleted ? habit.xpValue * habit.difficulty.xpMultiplier : 0
     }
 }
 
@@ -482,18 +482,18 @@ public final class HabitAchievement {
     public var xpReward: Int
 
     public init(title: String, description: String, iconName: String, xpReward: Int) {
-        id = UUID()
+        self.id = UUID()
         self.title = title
-        achievementDescription = description
+        self.achievementDescription = description
         self.iconName = iconName
         self.xpReward = xpReward
-        isAchieved = false
+        self.isAchieved = false
     }
 
     @MainActor
     public func achieve() {
-        isAchieved = true
-        achievedDate = Date()
+        self.isAchieved = true
+        self.achievedDate = Date()
     }
 }
 
@@ -513,17 +513,17 @@ public final class HabitMilestone {
     }
 
     public init(title: String, type: MilestoneType, targetValue: Int) {
-        id = UUID()
+        self.id = UUID()
         self.title = title
         self.type = type
         self.targetValue = targetValue
-        isAchieved = false
+        self.isAchieved = false
     }
 
     @MainActor
     public func achieve() {
-        isAchieved = true
-        achievedDate = Date()
+        self.isAchieved = true
+        self.achievedDate = Date()
     }
 }
 
