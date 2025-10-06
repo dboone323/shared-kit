@@ -588,6 +588,57 @@ quantum_main() {
 # Backup and restore functions
 create_backup() {
   local project_path="$1"
+  local project_name
+  project_name=$(basename "${project_path}")
+
+  # Backup deduplication: Check if recent backup exists (within 1 hour)
+  local backup_cooldown=3600 # 1 hour in seconds
+  local last_backup_marker="${BACKUP_DIR}/.last_backup_${project_name}"
+  local should_backup=true
+
+  if [[ -f "${last_backup_marker}" ]]; then
+    local last_backup_time
+    last_backup_time=$(cat "${last_backup_marker}")
+    
+    # Validate that last_backup_time is a non-empty integer
+    if [[ ! "${last_backup_time}" =~ ^[0-9]+$ ]]; then
+      print_warning "Invalid timestamp in marker file (${last_backup_marker}), ignoring and proceeding with backup."
+    else
+      local current_time
+      current_time=$(date +%s)
+      local time_since_backup=$((current_time - last_backup_time))
+
+      if [[ ${time_since_backup} -lt ${backup_cooldown} ]]; then
+        print_status "Recent backup exists (${time_since_backup}s ago), skipping backup (cooldown: ${backup_cooldown}s)"
+        return 0
+      fi
+    fi
+  fi
+
+  # Size-based throttling: Check if project changed significantly
+  local latest_backup
+  latest_backup=$(find "${BACKUP_DIR}" -maxdepth 1 -type d -name "${project_name}_*" 2>/dev/null | sort -r | head -1)
+
+  if [[ -n "${latest_backup}" ]]; then
+    local current_size
+    current_size=$(du -sk "${project_path}" 2>/dev/null | awk '{print $1}')
+    local last_size
+    last_size=$(du -sk "${latest_backup}" 2>/dev/null | awk '{print $1}')
+
+    # Check for division by zero before calculating percentage
+    if [[ ${last_size} -gt 0 ]]; then
+      local size_diff
+      size_diff=$(((current_size - last_size) * 100 / last_size))
+      size_diff=${size_diff#-} # Absolute value
+
+      if [[ ${size_diff} -lt 5 ]]; then
+        print_status "No significant changes (<5% size difference), skipping backup"
+        return 0
+      fi
+    fi
+  fi
+
+  # Create backup
   local timestamp
   timestamp="$(date +%Y%m%d_%H%M%S)"
   local backup_path
@@ -596,6 +647,7 @@ create_backup() {
   print_status "Creating backup: ${backup_path}"
   cp -r "${project_path}" "${backup_path}"
   echo "${backup_path}" >"${project_path}/.autofix_backup"
+  date +%s >"${last_backup_marker}"
   print_success "Backup created successfully"
 }
 

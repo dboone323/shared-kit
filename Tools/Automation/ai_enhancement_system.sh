@@ -559,15 +559,61 @@ auto_apply_enhancements() {
 
   print_header "Auto-applying safe enhancements for ${project_name}"
 
-  # Use the existing backup system from intelligent_autofix.sh
+  # Use the existing backup system from intelligent_autofix.sh with deduplication
   if [[ -f "${CODE_DIR}/Tools/Automation/intelligent_autofix.sh" ]]; then
-    print_status "Creating backup before applying enhancements..."
-    local timestamp
-    timestamp="$(date +%Y%m%d_%H%M%S)"
-    local backup_path="${CODE_DIR}/.autofix_backups/${project_name}_enhancement_${timestamp}"
-    cp -r "${project_path}" "${backup_path}"
-    echo "${backup_path}" >"${project_path}/.enhancement_backup"
-    print_success "Backup created: ${backup_path}"
+    # Backup deduplication: Check if recent backup exists (within 1 hour)
+    local backup_cooldown=3600 # 1 hour in seconds
+    local last_backup_marker="${CODE_DIR}/.autofix_backups/.last_backup_${project_name}"
+    local should_backup=true
+
+    if [[ -f "${last_backup_marker}" ]]; then
+      local last_backup_time
+      last_backup_time=$(cat "${last_backup_marker}")
+      local current_time
+      current_time=$(date +%s)
+      local time_since_backup=$((current_time - last_backup_time))
+
+      if [[ ${time_since_backup} -lt ${backup_cooldown} ]]; then
+        print_status "Recent backup exists (${time_since_backup}s ago), skipping backup (cooldown: ${backup_cooldown}s)"
+        should_backup=false
+      fi
+    fi
+
+    if [[ "${should_backup}" == "true" ]]; then
+      print_status "Creating backup before applying enhancements..."
+      local timestamp
+      timestamp="$(date +%Y%m%d_%H%M%S)"
+      local backup_path="${CODE_DIR}/.autofix_backups/${project_name}_enhancement_${timestamp}"
+
+      # Size-based throttling: Check if project changed significantly
+      local latest_backup
+      latest_backup=$(find "${CODE_DIR}/.autofix_backups" -maxdepth 1 -type d -name "${project_name}_*" 2>/dev/null | sort -r | head -1)
+
+      if [[ -n "${latest_backup}" ]]; then
+        local current_size
+        current_size=$(du -sk "${project_path}" 2>/dev/null | awk '{print $1}')
+        local last_size
+        last_size=$(du -sk "${latest_backup}" 2>/dev/null | awk '{print $1}')
+
+        if [[ ${last_size} -gt 0 ]]; then
+          local size_diff
+          size_diff=$(((current_size - last_size) * 100 / last_size))
+          size_diff=${size_diff#-} # Absolute value
+
+          if [[ ${size_diff} -lt 5 ]]; then
+            print_status "No significant changes (<5% size difference), skipping backup"
+            should_backup=false
+          fi
+        fi
+      fi
+    fi
+
+    if [[ "${should_backup}" == "true" ]]; then
+      cp -r "${project_path}" "${backup_path}"
+      echo "${backup_path}" >"${project_path}/.enhancement_backup"
+      date +%s >"${last_backup_marker}"
+      print_success "Backup created: ${backup_path}"
+    fi
   fi
 
   # Apply enhancements
