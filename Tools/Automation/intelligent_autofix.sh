@@ -599,7 +599,7 @@ create_backup() {
   if [[ -f "${last_backup_marker}" ]]; then
     local last_backup_time
     last_backup_time=$(cat "${last_backup_marker}")
-    
+
     # Validate that last_backup_time is a non-empty integer
     if [[ ! "${last_backup_time}" =~ ^[0-9]+$ ]]; then
       print_warning "Invalid timestamp in marker file (${last_backup_marker}), ignoring and proceeding with backup."
