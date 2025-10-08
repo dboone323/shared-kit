@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import SwiftUI
 
 // MARK: - Enhanced Financial Account
 
@@ -92,9 +91,9 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         case .checking, .savings, .cash:
             self.balance
         case .credit:
-            -self.balance // Credit card balances are liabilities
+            -self.balance  // Credit card balances are liabilities
         case .investment:
-            self.balance // Investment accounts are assets
+            self.balance  // Investment accounts are assets
         }
     }
 
@@ -204,7 +203,9 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
             eventParameters[key] = value
         }
 
-        print("Tracking event: \(event) for account: \(self.name) with parameters: \(eventParameters)")
+        print(
+            "Tracking event: \(event) for account: \(self.name) with parameters: \(eventParameters)"
+        )
     }
 
     // MARK: - Business Logic Methods
@@ -229,12 +230,14 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         self.updateBalanceAnalytics()
         self.lastTransactionDate = transaction.date
 
-        self.trackEvent("balance_updated", parameters: [
-            "previousBalance": previousBalance,
-            "newBalance": self.balance,
-            "change": self.balance - previousBalance,
-            "transactionType": transaction.transactionType.rawValue,
-        ])
+        self.trackEvent(
+            "balance_updated",
+            parameters: [
+                "previousBalance": previousBalance,
+                "newBalance": self.balance,
+                "change": self.balance - previousBalance,
+                "transactionType": transaction.transactionType.rawValue,
+            ])
     }
 
     private func updateBalanceAnalytics() {
@@ -253,16 +256,21 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
     @MainActor
     public func addExternalReference(_ reference: ExternalReference) {
         self.externalReferences.append(reference)
-        self.trackEvent("external_reference_added", parameters: [
-            "project": reference.projectContext.rawValue,
-            "model_type": reference.modelType,
-        ])
+        self.trackEvent(
+            "external_reference_added",
+            parameters: [
+                "project": reference.projectContext.rawValue,
+                "model_type": reference.modelType,
+            ])
     }
 
     public func getSpendingByCategory(for period: DatePeriod = .thisMonth) -> [String: Double] {
         let dateRange = period.dateRange
         let expenses = self.transactions
-            .filter { $0.transactionType == .expense && $0.date >= dateRange.start && $0.date <= dateRange.end }
+            .filter {
+                $0.transactionType == .expense && $0.date >= dateRange.start
+                    && $0.date <= dateRange.end
+            }
 
         var categorySpending: [String: Double] = [:]
         for transaction in expenses {
@@ -297,7 +305,7 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
     public var notes: String
     public var isRecurring: Bool
     public var recurringGroupId: String?
-    public var confidence: Double // For imported transactions
+    public var confidence: Double  // For imported transactions
     public var exchangeRate: Double?
     public var originalAmount: Double?
     public var originalCurrency: String?
@@ -403,8 +411,9 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
             errors.append(.required(field: "description"))
         }
 
-        if self.date > Date().addingTimeInterval(86400) { // Allow 1 day in future
-            errors.append(.invalid(field: "date", reason: "cannot be more than 1 day in the future"))
+        if self.date > Date().addingTimeInterval(86400) {  // Allow 1 day in future
+            errors.append(
+                .invalid(field: "date", reason: "cannot be more than 1 day in the future"))
         }
 
         if let exchangeRate, exchangeRate <= 0 {
@@ -439,7 +448,9 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
             eventParameters[key] = value
         }
 
-        print("Tracking event: \(event) for transaction: \(self.transactionDescription) with parameters: \(eventParameters)")
+        print(
+            "Tracking event: \(event) for transaction: \(self.transactionDescription) with parameters: \(eventParameters)"
+        )
     }
 }
 
@@ -459,15 +470,15 @@ public final class EnhancedBudget: Validatable, Trackable {
 
     // Enhanced Properties
     public var budgetType: BudgetType
-    public var alertThreshold: Double // Percentage (0-100)
+    public var alertThreshold: Double  // Percentage (0-100)
     public var color: String
     public var iconName: String
     public var notes: String
     public var tags: [String]
     public var autoRenew: Bool
-    public var carryover: Bool // Allow unused budget to carry over
-    public var parentBudgetId: String? // For sub-budgets
-    public var priority: Int // 1-5 scale
+    public var carryover: Bool  // Allow unused budget to carry over
+    public var parentBudgetId: String?  // For sub-budgets
+    public var priority: Int  // 1-5 scale
 
     // Analytics Properties
     public var totalSpent: Double
@@ -538,15 +549,6 @@ public final class EnhancedBudget: Validatable, Trackable {
         case onTrack = "On Track"
         case warning = "Warning"
         case exceeded = "Exceeded"
-
-        public var color: Color {
-            switch self {
-            case .underSpent: .green
-            case .onTrack: .blue
-            case .warning: .orange
-            case .exceeded: .red
-            }
-        }
     }
 
     // Initialization
@@ -572,15 +574,20 @@ public final class EnhancedBudget: Validatable, Trackable {
 
         switch period {
         case .weekly:
-            self.endDate = calendar.date(byAdding: .weekOfYear, value: 1, to: self.startDate) ?? self.startDate
+            self.endDate =
+                calendar.date(byAdding: .weekOfYear, value: 1, to: self.startDate) ?? self.startDate
         case .monthly:
-            self.endDate = calendar.date(byAdding: .month, value: 1, to: self.startDate) ?? self.startDate
+            self.endDate =
+                calendar.date(byAdding: .month, value: 1, to: self.startDate) ?? self.startDate
         case .quarterly:
-            self.endDate = calendar.date(byAdding: .month, value: 3, to: self.startDate) ?? self.startDate
+            self.endDate =
+                calendar.date(byAdding: .month, value: 3, to: self.startDate) ?? self.startDate
         case .yearly:
-            self.endDate = calendar.date(byAdding: .year, value: 1, to: self.startDate) ?? self.startDate
+            self.endDate =
+                calendar.date(byAdding: .year, value: 1, to: self.startDate) ?? self.startDate
         case .custom:
-            self.endDate = calendar.date(byAdding: .month, value: 1, to: self.startDate) ?? self.startDate
+            self.endDate =
+                calendar.date(byAdding: .month, value: 1, to: self.startDate) ?? self.startDate
         }
 
         self.alertThreshold = 80.0
@@ -663,7 +670,8 @@ public final class EnhancedBudget: Validatable, Trackable {
             eventParameters[key] = value
         }
 
-        print("Tracking event: \(event) for budget: \(self.name) with parameters: \(eventParameters)")
+        print(
+            "Tracking event: \(event) for budget: \(self.name) with parameters: \(eventParameters)")
     }
 }
 
@@ -830,14 +838,6 @@ public enum TransactionType: String, CaseIterable, Codable {
     case transfer = "Transfer"
 
     public var displayName: String { rawValue }
-
-    public var color: Color {
-        switch self {
-        case .income: .green
-        case .expense: .red
-        case .transfer: .blue
-        }
-    }
 }
 
 public enum DatePeriod {
@@ -880,7 +880,7 @@ public enum DatePeriod {
         case .last365Days:
             let start = calendar.date(byAdding: .day, value: -365, to: now) ?? now
             return (start, now)
-        case let .custom(start, end):
+        case .custom(let start, let end):
             return (start, end)
         }
     }

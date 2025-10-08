@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import SwiftUI
 
 // MARK: - Enhanced Core Data Protocols
 
@@ -58,13 +57,13 @@ public enum ValidationError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case let .required(field):
+        case .required(let field):
             "\(field) is required"
-        case let .invalid(field, reason):
+        case .invalid(let field, let reason):
             "\(field) is invalid: \(reason)"
-        case let .outOfRange(field, min, max):
+        case .outOfRange(let field, let min, let max):
             "\(field) is out of range (\(min ?? "nil") - \(max ?? "nil"))"
-        case let .custom(message):
+        case .custom(let message):
             message
         }
     }
@@ -86,7 +85,9 @@ public struct ExternalReference: Codable, Identifiable {
     public let relationshipType: String
     public let createdAt: Date
 
-    public init(projectContext: ProjectContext, modelType: String, modelId: String, relationshipType: String) {
+    public init(
+        projectContext: ProjectContext, modelType: String, modelId: String, relationshipType: String
+    ) {
         self.id = UUID()
         self.projectContext = projectContext
         self.modelType = modelType
@@ -121,14 +122,14 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     public var iconName: String
     public var notes: String
     public var isArchived: Bool
-    public var priority: Int // 1-5 scale
+    public var priority: Int  // 1-5 scale
     public var streakGoal: Int
     public var completionReward: String?
 
     // Analytics Properties
     public var totalCompletions: Int
     public var totalMissedDays: Int
-    public var averageCompletionTime: Double // in minutes
+    public var averageCompletionTime: Double  // in minutes
     public var lastCompletionDate: Date?
     public var bestStreak: Int
     public var monthlyGoal: Int
@@ -150,7 +151,9 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
 
     // Computed Properties
     public var isCompletedToday: Bool {
-        guard let todaysLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) }) else {
+        guard
+            let todaysLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) })
+        else {
             return false
         }
         return todaysLog.isCompleted
@@ -261,7 +264,8 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         }
 
         if self.habitDescription.count > 500 {
-            errors.append(.invalid(field: "habitDescription", reason: "must be 500 characters or less"))
+            errors.append(
+                .invalid(field: "habitDescription", reason: "must be 500 characters or less"))
         }
 
         if self.xpValue < 1 || self.xpValue > 100 {
@@ -309,17 +313,21 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         }
 
         // Implementation would integrate with analytics service
-        print("Tracking event: \(event) for habit: \(self.name) with parameters: \(eventParameters)")
+        print(
+            "Tracking event: \(event) for habit: \(self.name) with parameters: \(eventParameters)")
     }
 
     // MARK: - Business Logic Methods
 
     @MainActor
-    public func completeToday(duration: TimeInterval? = nil, notes: String? = nil, mood: MoodRating? = nil) {
+    public func completeToday(
+        duration: TimeInterval? = nil, notes: String? = nil, mood: MoodRating? = nil
+    ) {
         let today = Date()
 
         // Check if already completed today
-        if let existingLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) }) {
+        if let existingLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) }
+        ) {
             existingLog.isCompleted = true
             existingLog.actualDurationMinutes = duration.map { Int($0 / 60) }
             existingLog.notes = notes
@@ -343,11 +351,13 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         self.lastCompletionDate = today
 
         // Track event
-        self.trackEvent("habit_completed", parameters: [
-            "duration": duration ?? 0,
-            "streak": self.streak,
-            "consecutive_days": self.streak,
-        ])
+        self.trackEvent(
+            "habit_completed",
+            parameters: [
+                "duration": duration ?? 0,
+                "streak": self.streak,
+                "consecutive_days": self.streak,
+            ])
 
         // Check for achievements
         self.checkAchievements()
@@ -377,8 +387,9 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     private func updateAverageCompletionTime(_ duration: TimeInterval?) {
         guard let duration else { return }
         let durationMinutes = duration / 60
-        self.averageCompletionTime = (self.averageCompletionTime * Double(self.totalCompletions - 1) + durationMinutes) /
-            Double(self.totalCompletions)
+        self.averageCompletionTime =
+            (self.averageCompletionTime * Double(self.totalCompletions - 1) + durationMinutes)
+            / Double(self.totalCompletions)
     }
 
     private func checkAchievements() {
@@ -417,10 +428,12 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     @MainActor
     public func addExternalReference(_ reference: ExternalReference) {
         self.externalReferences.append(reference)
-        self.trackEvent("external_reference_added", parameters: [
-            "project": reference.projectContext.rawValue,
-            "model_type": reference.modelType,
-        ])
+        self.trackEvent(
+            "external_reference_added",
+            parameters: [
+                "project": reference.projectContext.rawValue,
+                "model_type": reference.modelType,
+            ])
     }
 }
 
@@ -438,7 +451,7 @@ public final class EnhancedHabitLog {
     public var actualDurationMinutes: Int?
     public var location: String?
     public var weather: String?
-    public var energyLevel: Int? // 1-10 scale
+    public var energyLevel: Int?  // 1-10 scale
 
     // Relationship
     public var habit: EnhancedHabit?
@@ -456,7 +469,7 @@ public final class EnhancedHabitLog {
         self.completionDate = completionDate
         self.isCompleted = isCompleted
         self.notes = notes
-        self.xpEarned = 0 // Will be calculated after initialization
+        self.xpEarned = 0  // Will be calculated after initialization
         self.mood = mood
         self.completionTime = isCompleted ? Date() : nil
         self.actualDurationMinutes = actualDurationMinutes
@@ -579,7 +592,7 @@ public enum HabitFrequency: String, CaseIterable, Codable {
         case .weekly: 4
         case .biweekly: 2
         case .monthly: 1
-        case .custom: 15 // default estimate
+        case .custom: 15  // default estimate
         }
     }
 }
@@ -654,16 +667,6 @@ public enum HabitDifficulty: String, CaseIterable, Codable {
         case .medium: 3
         case .hard: 5
         case .extreme: 8
-        }
-    }
-
-    public var color: Color {
-        switch self {
-        case .trivial: .gray
-        case .easy: .green
-        case .medium: .blue
-        case .hard: .orange
-        case .extreme: .red
         }
     }
 }
