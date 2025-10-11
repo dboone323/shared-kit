@@ -1,5 +1,5 @@
 import Foundation
-import HuggingFaceClient
+// import SharedKit // Will be available when integrated into package
 
 /// Unified Ollama Integration Framework
 /// Provides a clean, unified interface for all Ollama-powered automation
@@ -7,30 +7,88 @@ import HuggingFaceClient
 
 // MARK: - Core Integration Manager
 
-public class OllamaIntegrationManager {
+public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisService, AICodeGenerationService, AICachingService, AIPerformanceMonitoring {
     private let client: OllamaClient
     private let config: OllamaConfig
     private let logger = IntegrationLogger()
+    private let cache = AIResponseCache()
+    private let performanceMonitor = AIOperationMonitor()
+    private let healthMonitor = AIHealthMonitor()
+    private let retryManager = RetryManager()
 
     public init(config: OllamaConfig = .default) {
         self.config = config
         self.client = OllamaClient(config: config)
     }
 
-    // MARK: - Service Status
+    // MARK: - AITextGenerationService Protocol
 
-    public func checkServiceHealth() async -> ServiceHealth {
+    public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
+        let startTime = Date()
+        let cacheKey = cache.generateKey(for: prompt, model: "llama2", maxTokens: maxTokens, temperature: temperature)
+
+        // Check cache first
+        if let cachedResponse = await cache.getCachedResponse(key: cacheKey) {
+            await performanceMonitor.recordOperation(
+                operation: "generateText",
+                duration: Date().timeIntervalSince(startTime),
+                success: true,
+                metadata: ["cached": true, "cacheKey": cacheKey]
+            )
+            return cachedResponse
+        }
+
+        // Use retry manager for robust error handling
+        let result = try await retryManager.retry {
+            try await self.client.generate(
+                model: "llama2",
+                prompt: prompt,
+                temperature: temperature,
+                maxTokens: maxTokens
+            )
+        }
+
+        // Cache the result
+        await cache.cacheResponse(key: cacheKey, response: result, metadata: [
+            "operation": "generateText",
+            "model": "llama2",
+            "maxTokens": maxTokens,
+            "temperature": temperature
+        ])
+
+        await performanceMonitor.recordOperation(
+            operation: "generateText",
+            duration: Date().timeIntervalSince(startTime),
+            success: true,
+            metadata: ["cached": false, "cacheKey": cacheKey]
+        )
+
+        return result
+    }
+
+    public func isAvailable() async -> Bool {
+        let health = await getHealthStatus()
+        return health.isRunning
+    }
+
+    public func getHealthStatus() async -> ServiceHealth {
+        let startTime = Date()
         let serverStatus = await client.getServerStatus()
         let llama2Available = await client.checkModelAvailability("llama2")
         let codellamaAvailable = await client.checkModelAvailability("codellama")
         let availableModels = llama2Available && codellamaAvailable
 
-        return ServiceHealth(
-            ollamaRunning: serverStatus.running,
+        let health = ServiceHealth(
+            serviceName: "Ollama",
+            isRunning: serverStatus.running,
             modelsAvailable: availableModels,
-            modelCount: serverStatus.modelCount,
-            recommendedActions: self.generateHealthRecommendations(serverStatus, availableModels)
+            responseTime: Date().timeIntervalSince(startTime),
+            errorRate: await performanceMonitor.getErrorRate(for: "ollama"),
+            lastChecked: Date(),
+            recommendations: generateHealthRecommendations(serverStatus, availableModels)
         )
+
+        return health
     }
 
     private func generateHealthRecommendations(_ status: OllamaServerStatus, _ modelsAvailable: Bool) -> [String] {
@@ -51,30 +109,204 @@ public class OllamaIntegrationManager {
         return recommendations
     }
 
-    // MARK: - Code Generation
+    // MARK: - AICodeAnalysisService Protocol
 
-    public func generateCode(
-        description: String,
-        language: String,
-        context: String? = nil,
-        complexity: CodeComplexity = .standard
-    ) async throws -> CodeGenerationResult {
-        let prompt = self.buildCodeGenerationPrompt(description, language, context, complexity)
-        let generatedCode = try await client.generate(
-            model: "codellama",
-            prompt: prompt,
-            temperature: complexity.temperature,
-            maxTokens: complexity.maxTokens
+    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws -> CodeAnalysisResult {
+        let startTime = Date()
+        let cacheKey = cache.generateKey(for: code, model: "llama2", analysisType: analysisType.rawValue)
+
+        // Check cache first
+        if let cachedResponse = await cache.getCachedResponse(key: cacheKey) {
+            await performanceMonitor.recordOperation(
+                operation: "analyzeCode",
+                duration: Date().timeIntervalSince(startTime),
+                success: true,
+                metadata: ["cached": true, "language": language, "analysisType": analysisType.rawValue]
+            )
+            // Parse cached response back to CodeAnalysisResult
+            return try parseAnalysisResult(from: cachedResponse, language: language, analysisType: analysisType)
+        }
+
+        // Use retry manager for robust error handling
+        let result = try await retryManager.retry {
+            try await self.analyzeCodebase(code: code, language: language, analysisType: analysisType)
+        }
+
+        // Cache the result as JSON string
+        let jsonData = try JSONEncoder().encode(result)
+        let jsonString = String(data: jsonData, encoding: .utf8) ?? ""
+        await cache.cacheResponse(key: cacheKey, response: jsonString, metadata: [
+            "operation": "analyzeCode",
+            "language": language,
+            "analysisType": analysisType.rawValue
+        ])
+
+        await performanceMonitor.recordOperation(
+            operation: "analyzeCode",
+            duration: Date().timeIntervalSince(startTime),
+            success: true,
+            metadata: ["cached": false, "language": language, "analysisType": analysisType.rawValue]
         )
 
-        let analysis = try await analyzeGeneratedCode(generatedCode, language)
+        return result
+    }
 
-        return CodeGenerationResult(
-            code: generatedCode,
-            analysis: analysis,
-            language: language,
-            complexity: complexity
-        )
+    public func generateDocumentation(code: String, language: String) async throws -> String {
+        let startTime = Date()
+        let cacheKey = cache.generateKey(for: code, model: "llama2", operation: "documentation")
+
+        if let cachedResponse = await cache.getCachedResponse(key: cacheKey) {
+            await performanceMonitor.recordOperation(
+                operation: "generateDocumentation",
+                duration: Date().timeIntervalSince(startTime),
+                success: true,
+                metadata: ["cached": true, "language": language]
+            )
+            return cachedResponse
+        }
+
+        do {
+            let result = try await generateDocumentation(code: code, language: language).documentation
+
+            await cache.cacheResponse(key: cacheKey, response: result, metadata: [
+                "operation": "generateDocumentation",
+                "language": language
+            ])
+
+            await performanceMonitor.recordOperation(
+                operation: "generateDocumentation",
+                duration: Date().timeIntervalSince(startTime),
+                success: true,
+                metadata: ["cached": false, "language": language]
+            )
+
+            return result
+        } catch {
+            await performanceMonitor.recordOperation(
+                operation: "generateDocumentation",
+                duration: Date().timeIntervalSince(startTime),
+                success: false,
+                metadata: ["error": error.localizedDescription, "language": language]
+            )
+            throw error
+        }
+    }
+
+    public func generateTests(code: String, language: String) async throws -> String {
+        let startTime = Date()
+        let cacheKey = cache.generateKey(for: code, model: "codellama", operation: "tests")
+
+        if let cachedResponse = await cache.getCachedResponse(key: cacheKey) {
+            await performanceMonitor.recordOperation(
+                operation: "generateTests",
+                duration: Date().timeIntervalSince(startTime),
+                success: true,
+                metadata: ["cached": true, "language": language]
+            )
+            return cachedResponse
+        }
+
+        do {
+            let result = try await generateTests(code: code, language: language).testCode
+
+            await cache.cacheResponse(key: cacheKey, response: result, metadata: [
+                "operation": "generateTests",
+                "language": language
+            ])
+
+            await performanceMonitor.recordOperation(
+                operation: "generateTests",
+                duration: Date().timeIntervalSince(startTime),
+                success: true,
+                metadata: ["cached": false, "language": language]
+            )
+
+            return result
+        } catch {
+            await performanceMonitor.recordOperation(
+                operation: "generateTests",
+                duration: Date().timeIntervalSince(startTime),
+                success: false,
+                metadata: ["error": error.localizedDescription, "language": language]
+            )
+            throw error
+        }
+    }
+
+    // MARK: - AICodeGenerationService Protocol
+
+    public func generateCode(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+        let startTime = Date()
+        let cacheKey = cache.generateKey(for: description, model: "codellama", context: context)
+
+        if let cachedResponse = await cache.getCachedResponse(key: cacheKey) {
+            await performanceMonitor.recordOperation(
+                operation: "generateCode",
+                duration: Date().timeIntervalSince(startTime),
+                success: true,
+                metadata: ["cached": true, "language": language]
+            )
+            return try parseCodeGenerationResult(from: cachedResponse, language: language)
+        }
+
+        do {
+            let result = try await generateCode(
+                description: description,
+                language: language,
+                context: context,
+                complexity: .standard
+            )
+
+            // Cache the result
+            let jsonData = try JSONEncoder().encode(result)
+            let jsonString = String(data: jsonData, encoding: .utf8) ?? ""
+            await cache.cacheResponse(key: cacheKey, response: jsonString, metadata: [
+                "operation": "generateCode",
+                "language": language,
+                "context": context ?? ""
+            ])
+
+            await performanceMonitor.recordOperation(
+                operation: "generateCode",
+                duration: Date().timeIntervalSince(startTime),
+                success: true,
+                metadata: ["cached": false, "language": language]
+            )
+
+            return result
+        } catch {
+            await performanceMonitor.recordOperation(
+                operation: "generateCode",
+                duration: Date().timeIntervalSince(startTime),
+                success: false,
+                metadata: ["error": error.localizedDescription, "language": language]
+            )
+            throw error
+        }
+    }
+
+    public func generateCodeWithFallback(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+        do {
+            return try await generateCode(description: description, language: language, context: context)
+        } catch {
+            logger.log("Ollama code generation failed, trying Hugging Face fallback: \(error.localizedDescription)")
+
+            // Fallback to Hugging Face
+            let prompt = buildCodeGenerationPrompt(description, language, context, .standard)
+            let fallbackResult = try await HuggingFaceClient.shared.generateWithFallback(
+                prompt: prompt,
+                maxTokens: 500,
+                temperature: 0.3,
+                taskType: .codeGeneration
+            )
+
+            return CodeGenerationResult(
+                code: fallbackResult,
+                analysis: "Generated via Hugging Face fallback",
+                language: language,
+                complexity: .standard
+            )
+        }
     }
 
     private func buildCodeGenerationPrompt(
@@ -368,9 +600,37 @@ private class IntegrationLogger {
     }
 }
 
-// MARK: - Fallback Integration with Hugging Face
+    // MARK: - AICachingService Protocol
 
-public extension OllamaIntegrationManager {
+    public func cacheResponse(key: String, response: String, metadata: [String: Any]?) async {
+        await cache.cacheResponse(key: key, response: response, metadata: metadata)
+    }
+
+    public func getCachedResponse(key: String) async -> String? {
+        await cache.getCachedResponse(key: key)
+    }
+
+    public func clearCache() async {
+        await cache.clearCache()
+    }
+
+    public func getCacheStats() async -> CacheStats {
+        await cache.getCacheStats()
+    }
+
+    // MARK: - AIPerformanceMonitoring Protocol
+
+    public func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?) async {
+        await performanceMonitor.recordOperation(operation: operation, duration: duration, success: success, metadata: metadata)
+    }
+
+    public func getPerformanceMetrics() async -> PerformanceMetrics {
+        await performanceMonitor.getPerformanceMetrics()
+    }
+
+    public func resetMetrics() async {
+        await performanceMonitor.resetMetrics()
+    }
     /// Generate text with Ollama primary, Hugging Face fallback
     func generateWithFallback(
         prompt: String,
@@ -462,6 +722,8 @@ public extension OllamaIntegrationManager {
 }
 
 /// Health monitoring for AI services
+
+/// Health monitoring for AI services
 public class AIHealthMonitor {
     public static let shared = AIHealthMonitor()
 
@@ -541,4 +803,321 @@ public struct CurrentHealth {
     public let ollamaHealthy: Bool
     public let huggingFaceHealthy: Bool
     public let anyServiceAvailable: Bool
+}
+
+// MARK: - Retry Manager
+
+/// Intelligent retry manager with exponential backoff and circuit breaker pattern
+private actor RetryManager {
+    private var failureCounts: [String: Int] = [:]
+    private var lastFailureTimes: [String: Date] = [:]
+    private let maxRetries = 3
+    private let baseDelay: TimeInterval = 1.0
+    private let circuitBreakerThreshold = 5
+    private let circuitBreakerTimeout: TimeInterval = 60.0 // 1 minute
+
+    func retry<T>(
+        operation: String = "unknown",
+        _ block: @escaping () async throws -> T
+    ) async throws -> T {
+        let circuitBreakerKey = operation
+
+        // Check circuit breaker
+        if isCircuitBreakerOpen(for: circuitBreakerKey) {
+            throw AIError.serviceUnavailable("Circuit breaker open for operation: \(operation)")
+        }
+
+        var lastError: Error?
+        var attempt = 0
+
+        while attempt < maxRetries {
+            do {
+                let result = try await block()
+                // Success - reset failure count
+                await resetFailureCount(for: circuitBreakerKey)
+                return result
+            } catch {
+                lastError = error
+                attempt += 1
+
+                // Record failure for circuit breaker
+                await recordFailure(for: circuitBreakerKey)
+
+                // Don't retry on certain errors
+                if shouldNotRetry(error) {
+                    break
+                }
+
+                // Calculate delay with exponential backoff and jitter
+                if attempt < maxRetries {
+                    let delay = calculateDelay(for: attempt)
+                    try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                }
+            }
+        }
+
+        throw lastError ?? AIError.operationFailed("All retry attempts failed for operation: \(operation)")
+    }
+
+    private func shouldNotRetry(_ error: Error) -> Bool {
+        // Don't retry authentication or configuration errors
+        if let aiError = error as? AIError {
+            switch aiError {
+            case .authenticationFailed, .invalidConfiguration:
+                return true
+            default:
+                return false
+            }
+        }
+        return false
+    }
+
+    private func calculateDelay(for attempt: Int) -> TimeInterval {
+        let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
+        let jitter = Double.random(in: 0...0.1) * exponentialDelay
+        return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
+    }
+
+    private func isCircuitBreakerOpen(for key: String) -> Bool {
+        guard let failureCount = failureCounts[key],
+              let lastFailure = lastFailureTimes[key] else {
+            return false
+        }
+
+        if failureCount >= circuitBreakerThreshold {
+            let timeSinceLastFailure = Date().timeIntervalSince(lastFailure)
+            return timeSinceLastFailure < circuitBreakerTimeout
+        }
+
+        return false
+    }
+
+    private func recordFailure(for key: String) {
+        failureCounts[key, default: 0] += 1
+        lastFailureTimes[key] = Date()
+    }
+
+    private func resetFailureCount(for key: String) {
+        failureCounts[key] = 0
+        lastFailureTimes.removeValue(forKey: key)
+    }
+}
+
+// MARK: - Private Helper Classes
+
+/// Enhanced AI response caching with TTL and metadata support
+private actor AIResponseCache {
+    private var cache: [String: CachedResponse] = [:]
+    private var accessOrder: [String] = [] // For LRU eviction
+    private let maxCacheSize = 200
+    private let defaultExpiration: TimeInterval = 1800 // 30 minutes
+    private var accessCounts: [String: Int] = [:]
+    private var hitCount = 0
+    private var missCount = 0
+
+    struct CachedResponse {
+        let response: String
+        let metadata: [String: Any]?
+        let timestamp: Date
+        let expirationDate: Date
+        let accessCount: Int
+        let size: Int // Response size in bytes
+    }
+
+    func generateKey(for prompt: String, model: String, maxTokens: Int? = nil, temperature: Double? = nil, analysisType: String? = nil, context: String? = nil, operation: String? = nil) -> String {
+        var components = [prompt, model]
+        if let maxTokens { components.append(String(maxTokens)) }
+        if let temperature { components.append(String(temperature)) }
+        if let analysisType { components.append(analysisType) }
+        if let context { components.append(context) }
+        if let operation { components.append(operation) }
+        return components.joined(separator: "|").hashValue.description
+    }
+
+    func cacheResponse(key: String, response: String, metadata: [String: Any]? = nil, expiration: TimeInterval? = nil) {
+        let expirationDate = Date().addingTimeInterval(expiration ?? defaultExpiration)
+        let size = response.utf8.count
+        let accessCount = accessCounts[key, default: 0]
+
+        let cachedResponse = CachedResponse(
+            response: response,
+            metadata: metadata,
+            timestamp: Date(),
+            expirationDate: expirationDate,
+            accessCount: accessCount,
+            size: size
+        )
+
+        // Clean up expired entries first
+        cleanup()
+
+        // Remove existing entry if present
+        if let existingIndex = accessOrder.firstIndex(of: key) {
+            accessOrder.remove(at: existingIndex)
+        }
+
+        // Check cache size and evict if necessary
+        while cache.count >= maxCacheSize {
+            evictLRU()
+        }
+
+        cache[key] = cachedResponse
+        accessOrder.append(key) // Most recently used
+        accessCounts[key, default: 0] += 1
+    }
+
+    func getCachedResponse(key: String) -> String? {
+        guard let cached = cache[key] else {
+            missCount += 1
+            return nil
+        }
+
+        // Check if expired
+        if Date() > cached.expirationDate {
+            cache.removeValue(forKey: key)
+            accessCounts.removeValue(forKey: key)
+            if let index = accessOrder.firstIndex(of: key) {
+                accessOrder.remove(at: index)
+            }
+            missCount += 1
+            return nil
+        }
+
+        // Update LRU order
+        if let index = accessOrder.firstIndex(of: key) {
+            accessOrder.remove(at: index)
+        }
+        accessOrder.append(key)
+
+        accessCounts[key, default: 0] += 1
+        hitCount += 1
+        return cached.response
+    }
+
+    func clearCache() {
+        cache.removeAll()
+        accessCounts.removeAll()
+    }
+
+    func getCacheStats() -> CacheStats {
+        cleanup()
+
+        let totalEntries = cache.count
+        let totalRequests = hitCount + missCount
+        let hitRate = totalRequests > 0 ? Double(hitCount) / Double(totalRequests) : 0.0
+
+        let responseTimes = cache.values.map { Date().timeIntervalSince($0.timestamp) }
+        let averageResponseTime = responseTimes.isEmpty ? 0.0 : responseTimes.reduce(0, +) / Double(responseTimes.count)
+
+        let cacheSize = cache.values.reduce(0) { $0 + $1.size }
+
+        return CacheStats(
+            totalEntries: totalEntries,
+            hitRate: hitRate,
+            averageResponseTime: averageResponseTime,
+            cacheSize: cacheSize,
+            lastCleanup: Date()
+        )
+    }
+
+    private func evictLRU() {
+        // Remove least recently used item
+        if let lruKey = accessOrder.first {
+            cache.removeValue(forKey: lruKey)
+            accessCounts.removeValue(forKey: lruKey)
+            accessOrder.removeFirst()
+        }
+    }
+
+    private func cleanup() {
+        let now = Date()
+        let expiredKeys = cache.filter { now > $0.value.expirationDate }.keys
+        for key in expiredKeys {
+            cache.removeValue(forKey: key)
+            accessCounts.removeValue(forKey: key)
+            if let index = accessOrder.firstIndex(of: key) {
+                accessOrder.remove(at: index)
+            }
+        }
+    }
+}
+
+/// Performance monitoring for AI operations
+private actor AIOperationMonitor {
+    private var operations: [String: [OperationRecord]] = [:]
+    private let maxHistorySize = 1000
+    private var startTime: Date = Date()
+
+    struct OperationRecord {
+        let duration: TimeInterval
+        let success: Bool
+        let timestamp: Date
+        let metadata: [String: Any]?
+    }
+
+    func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]? = nil) {
+        let record = OperationRecord(
+            duration: duration,
+            success: success,
+            timestamp: Date(),
+            metadata: metadata
+        )
+
+        operations[operation, default: []].append(record)
+
+        // Keep only recent history
+        if operations[operation]!.count > maxHistorySize {
+            operations[operation]!.removeFirst(operations[operation]!.count - maxHistorySize)
+        }
+    }
+
+    func getPerformanceMetrics() -> PerformanceMetrics {
+        let allRecords = operations.values.flatMap { $0 }
+        let totalOperations = allRecords.count
+        let successfulOperations = allRecords.filter { $0.success }.count
+        let successRate = totalOperations > 0 ? Double(successfulOperations) / Double(totalOperations) : 0.0
+
+        let durations = allRecords.map { $0.duration }
+        let averageResponseTime = durations.isEmpty ? 0.0 : durations.reduce(0, +) / Double(durations.count)
+
+        let errorBreakdown = operations.mapValues { records in
+            records.filter { !$0.success }.count
+        }
+
+        let peakConcurrent = 1 // Simplified - would need more sophisticated tracking
+
+        return PerformanceMetrics(
+            totalOperations: totalOperations,
+            successRate: successRate,
+            averageResponseTime: averageResponseTime,
+            errorBreakdown: errorBreakdown,
+            peakConcurrentOperations: peakConcurrent,
+            uptime: Date().timeIntervalSince(startTime)
+        )
+    }
+
+    func getErrorRate(for operation: String) -> Double {
+        guard let records = operations[operation], !records.isEmpty else { return 0.0 }
+        let failedOperations = records.filter { !$0.success }.count
+        return Double(failedOperations) / Double(records.count)
+    }
+
+    func resetMetrics() {
+        operations.removeAll()
+        startTime = Date()
+    }
+}
+
+// MARK: - Helper Methods
+
+extension OllamaIntegrationManager {
+    private func parseAnalysisResult(from jsonString: String, language: String, analysisType: AnalysisType) throws -> CodeAnalysisResult {
+        let jsonData = jsonString.data(using: .utf8) ?? Data()
+        return try JSONDecoder().decode(CodeAnalysisResult.self, from: jsonData)
+    }
+
+    private func parseCodeGenerationResult(from jsonString: String, language: String) throws -> CodeGenerationResult {
+        let jsonData = jsonString.data(using: .utf8) ?? Data()
+        return try JSONDecoder().decode(CodeGenerationResult.self, from: jsonData)
+    }
 }
