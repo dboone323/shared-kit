@@ -502,7 +502,7 @@ public struct RateLimit: Codable, Sendable {
 }
 
 /// Type-erased codable wrapper for Any values
-public struct AnyCodable: Codable, Sendable {
+public struct AnyCodable: Codable, @unchecked Sendable {
     public let value: Any
 
     public init(_ value: Any) {
