@@ -13,6 +13,13 @@ let package = Package(
     targets: [
         // Minimal package for now; sources live under Sources/SharedKit
         .target(name: "SharedKit", path: "Sources/SharedKit"),
+        // Conscious AI executable target
+        .executableTarget(
+            name: "ConsciousAI",
+            dependencies: [],
+            path: ".",
+            sources: ["ConsciousAI.swift", "ConsciousAIDemo.swift"]
+        ),
         // Utilities intended for use from XCTest targets in app projects
         .target(
             name: "SharedTestSupport", dependencies: ["SharedKit"],
