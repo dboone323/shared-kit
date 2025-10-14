@@ -1,5 +1,3 @@
-#!/usr/bin/env swift
-
 import Foundation
 
 // MARK: - Example Usage Functions
@@ -13,7 +11,9 @@ func exampleCodeGeneration() async {
     do {
         // Check if Ollama is running and models are available
         let health = await manager.checkServiceHealth()
-        print("Ollama Status: running=\(health.ollamaRunning), modelsAvailable=\(health.modelsAvailable), modelCount=\(health.modelCount)")
+        print(
+            "Ollama Status: running=\(health.ollamaRunning), modelsAvailable=\(health.modelsAvailable), modelCount=\(health.modelCount)"
+        )
 
         if !health.recommendedActions.isEmpty {
             print("Recommended actions: \(health.recommendedActions.joined(separator: ", "))")
@@ -26,7 +26,8 @@ func exampleCodeGeneration() async {
 
         // Generate Swift code for a simple calculator
         let result = try await manager.generateCode(
-            description: "Create a Swift class for a basic calculator with add, subtract, multiply, and divide operations",
+            description:
+                "Create a Swift class for a basic calculator with add, subtract, multiply, and divide operations",
             language: "Swift",
             complexity: .standard
         )
@@ -48,14 +49,14 @@ func exampleCodeAnalysis() async {
     let manager = OllamaIntegrationManager()
 
     let sampleCode = """
-    func calculateTotal(items: [Double]) -> Double {
-        var total = 0.0
-        for item in items {
-            total = total + item
+        func calculateTotal(items: [Double]) -> Double {
+            var total = 0.0
+            for item in items {
+                total = total + item
+            }
+            return total
         }
-        return total
-    }
-    """
+        """
 
     do {
         let result = try await manager.analyzeCodebase(
@@ -89,22 +90,22 @@ func exampleDocumentation() async {
     let manager = OllamaIntegrationManager()
 
     let sampleCode = """
-    struct User {
-        let id: Int
-        let name: String
-        let email: String
+        struct User {
+            let id: Int
+            let name: String
+            let email: String
 
-        init(id: Int, name: String, email: String) {
-            self.id = id
-            self.name = name
-            self.email = email
-        }
+            init(id: Int, name: String, email: String) {
+                self.id = id
+                self.name = name
+                self.email = email
+            }
 
-        func displayName() -> String {
-            return name.capitalized
+            func displayName() -> String {
+                return name.capitalized
+            }
         }
-    }
-    """
+        """
 
     do {
         let result = try await manager.generateDocumentation(
@@ -211,5 +212,5 @@ func runExamples() async {
     print("4. Handle errors appropriately")
 }
 
-// Run the examples
-await runExamples()
+// Note: This file provides example functions only. Intentionally no top-level execution
+// to keep Shared building as a library. Call `runExamples()` from an app target or test.

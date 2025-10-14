@@ -14,8 +14,9 @@ public class QuantumInternet: ObservableObject {
     @Published public var hybridNetworkIntegration: HybridNetworkIntegration
 
     public init() {
-        self.entanglementNetwork = EntanglementNetwork()
-        self.quantumRepeater = QuantumRepeater()
+        self.entanglementNetwork = EntanglementNetwork(
+            id: "quantum_internet", nodes: ["alice", "bob", "charlie"], entanglementPairs: [])
+        self.quantumRepeater = QuantumRepeater(id: "repeater_001", location: "center")
         self.quantumKeyDistribution = QuantumKeyDistribution()
         self.quantumTeleportation = QuantumTeleportation()
         self.quantumNetworkRouting = QuantumNetworkRouting()
@@ -108,14 +109,16 @@ public class QuantumInternet: ObservableObject {
         print("---------------------------")
 
         // Distribute key using BB84
-        let bb84Result = await quantumKeyDistribution.distributeKeyBB84(between: "alice", and: "bob", keyLength: 256)
+        let bb84Result = await quantumKeyDistribution.distributeKeyBB84(
+            between: "alice", and: "bob", keyLength: 256)
         print("BB84 Key Distribution:")
         print("- Key Length: \(bb84Result.keyLength) bits")
         print("- Security Level: \(bb84Result.securityLevel.rawValue)")
         print("- Error Rate: \(String(format: "%.4f", bb84Result.errorRate))")
 
         // Distribute key using E91
-        let e91Result = await quantumKeyDistribution.distributeKeyE91(between: "charlie", and: "diana", keyLength: 256)
+        let e91Result = await quantumKeyDistribution.distributeKeyE91(
+            between: "charlie", and: "diana", keyLength: 256)
         print("E91 Key Distribution:")
         print("- Key Length: \(e91Result.keyLength) bits")
         print("- Security Level: \(e91Result.securityLevel.rawValue)")
@@ -135,12 +138,13 @@ public class QuantumInternet: ObservableObject {
         let originalState = QuantumState(amplitude: 0.707, phase: 0.0, polarization: .horizontal)
 
         // Teleport the state
-        let teleportResult = await quantumTeleportation.teleportState(originalState, from: "alice", to: "bob")
+        let teleportResult = await quantumTeleportation.teleportState(
+            originalState, from: "alice", to: "bob")
         print("Quantum Teleportation:")
         print("- Original state amplitude: \(String(format: "%.3f", originalState.amplitude))")
         print("- Teleported fidelity: \(String(format: "%.4f", teleportResult.fidelity))")
-        print("- Success: \(teleportResult.success)")
-        print("- Classical bits transmitted: \(teleportResult.classicalBitsTransmitted)")
+        print("- Success rate: \(String(format: "%.2f", teleportResult.successRate))")
+        print("- Classical bits used: \(teleportResult.classicalBitsTransmitted)")
 
         // Get teleportation statistics
         let teleportStats = await quantumTeleportation.getTeleportationStatistics()
@@ -162,7 +166,8 @@ public class QuantumInternet: ObservableObject {
         )
 
         // Find optimal route
-        let routingResult = await quantumNetworkRouting.findOptimalPath(from: "alice", to: "eve", constraints: constraints)
+        let routingResult = await quantumNetworkRouting.findOptimalPath(
+            from: "alice", to: "eve", constraints: constraints)
         print("Quantum Network Routing:")
         print("- Success: \(routingResult.success)")
         if routingResult.success {
@@ -203,7 +208,9 @@ public class QuantumInternet: ObservableObject {
         let protocolStats = await quantumInternetProtocols.getProtocolStatistics()
         print("- Total sessions: \(protocolStats.totalSessions)")
         print("- Active sessions: \(protocolStats.activeSessions)")
-        print("- Error correction efficiency: \(String(format: "%.2f", protocolStats.errorCorrectionEfficiency))")
+        print(
+            "- Error correction efficiency: \(String(format: "%.2f", protocolStats.errorCorrectionEfficiency))"
+        )
     }
 
     private func demonstrateHybridCommunication() async {
@@ -220,7 +227,8 @@ public class QuantumInternet: ObservableObject {
         )
 
         // Route data through hybrid network
-        let routingDecision = await hybridNetworkIntegration.routeData(packet, from: "alice", to: "bob")
+        let routingDecision = await hybridNetworkIntegration.routeData(
+            packet, from: "alice", to: "bob")
         print("Hybrid Network Routing:")
         print("- Packet ID: \(routingDecision.packetId)")
         print("- Network type: \(routingDecision.networkType.rawValue)")
@@ -229,7 +237,8 @@ public class QuantumInternet: ObservableObject {
         print("- Estimated cost: \(String(format: "%.4f", routingDecision.estimatedCost)) credits")
 
         // Transmit data
-        let transmissionResult = await hybridNetworkIntegration.transmitHybridData([packet], from: "alice", to: "bob")
+        let transmissionResult = await hybridNetworkIntegration.transmitHybridData(
+            [packet], from: "alice", to: "bob")
         print("Hybrid Data Transmission:")
         print("- Total packets: \(transmissionResult.totalPackets)")
         print("- Success rate: \(String(format: "%.2f", transmissionResult.successRate))")

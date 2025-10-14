@@ -6,12 +6,11 @@
 //  Advanced CI/CD optimization using quantum algorithms and AI-driven decision making
 //
 
-import Foundation
 import Combine
+import Foundation
 
-/// Quantum-optimized CI/CD enhancement system
-@MainActor
-public final class QuantumCICDOptimization: ObservableObject {
+/// Quantum CI/CD Optimization Engine
+public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObject {
     // MARK: - Properties
 
     /// Shared instance
@@ -36,10 +35,10 @@ public final class QuantumCICDOptimization: ObservableObject {
     private let predictiveAnalytics: PredictiveAnalytics
 
     /// Workflow evolution system
-    private let workflowEvolution: WorkflowEvolution
+    private let workflowEvolution: WorkflowEvolutionManager
 
     /// Performance monitoring
-    private let performanceMonitor: PerformanceMonitor
+    private let performanceMonitor: CICDPerformanceMonitor
 
     /// Task execution queue
     private let taskQueue: TaskQueue
@@ -53,8 +52,8 @@ public final class QuantumCICDOptimization: ObservableObject {
         self.quantumEngine = QuantumOptimizationEngine()
         self.aiDecisionEngine = AIDecisionEngine()
         self.predictiveAnalytics = PredictiveAnalytics()
-        self.workflowEvolution = WorkflowEvolution()
-        self.performanceMonitor = PerformanceMonitor()
+        self.workflowEvolution = WorkflowEvolutionManager()
+        self.performanceMonitor = CICDPerformanceMonitor()
         self.taskQueue = TaskQueue()
 
         setupOptimizationPipeline()
@@ -96,7 +95,10 @@ public final class QuantumCICDOptimization: ObservableObject {
             id: UUID(),
             project: project,
             level: optimizationLevel,
-            startTime: Date()
+            startTime: Date(),
+            type: .parallelBuilds,
+            target: "build",
+            parameters: [:]
         )
 
         activeOptimizations.append(optimization)
@@ -122,7 +124,7 @@ public final class QuantumCICDOptimization: ObservableObject {
 
         // Phase 4: Apply optimizations
         let appliedOptimizations = try await applyOptimizations(
-            aiDecisions.selectedOptimizations,
+            aiDecisions,
             to: project
         )
 
@@ -147,7 +149,7 @@ public final class QuantumCICDOptimization: ObservableObject {
     /// Predict pipeline failures
     public func predictPipelineFailures(
         for project: String,
-        timeWindow: TimeInterval = 3600 // 1 hour
+        timeWindow: TimeInterval = 3600  // 1 hour
     ) async throws -> FailurePredictionResult {
         let historicalData = try await gatherHistoricalData(for: project)
 
@@ -182,17 +184,17 @@ public final class QuantumCICDOptimization: ObservableObject {
             project: project,
             originalWorkflow: currentWorkflow,
             appliedChanges: appliedChanges,
-            performanceImprovement: evolution.expectedImprovement
+            performanceImprovement: evolution.performanceImprovement
         )
     }
 
     /// Get optimization status and metrics
-    public func getOptimizationStatus() -> OptimizationStatus {
+    public func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             state: state,
             activeOptimizations: activeOptimizations,
             metrics: metrics,
-            systemHealth: assessSystemHealth()
+            systemHealth: await assessSystemHealth()
         )
     }
 
@@ -229,7 +231,7 @@ public final class QuantumCICDOptimization: ObservableObject {
         Task {
             while !Task.isCancelled {
                 await performAutonomousOptimization()
-                try? await Task.sleep(nanoseconds: 60_000_000_000) // 60 seconds
+                try? await Task.sleep(nanoseconds: 60_000_000_000)  // 60 seconds
             }
         }
     }
@@ -281,7 +283,7 @@ public final class QuantumCICDOptimization: ObservableObject {
     }
 
     private func applyOptimizations(
-        _ optimizations: [Optimization],
+        _ optimizations: [CICDOptimization],
         to project: String
     ) async throws -> [AppliedOptimization] {
         var applied: [AppliedOptimization] = []
@@ -295,7 +297,7 @@ public final class QuantumCICDOptimization: ObservableObject {
     }
 
     private func applySingleOptimization(
-        _ optimization: Optimization,
+        _ optimization: CICDOptimization,
         to project: String
     ) async throws -> AppliedOptimization {
         print("⚡ Applying optimization: \(optimization.type)")
@@ -347,7 +349,8 @@ public final class QuantumCICDOptimization: ObservableObject {
             after: afterMetrics.deploymentTime
         )
 
-        let overallImprovement = (buildTimeImprovement + testTimeImprovement + deploymentTimeImprovement) / 3.0
+        let overallImprovement =
+            (buildTimeImprovement + testTimeImprovement + deploymentTimeImprovement) / 3.0
 
         return OptimizationValidation(
             success: overallImprovement > 0,
@@ -364,7 +367,7 @@ public final class QuantumCICDOptimization: ObservableObject {
         metrics.completedTasks += 1
 
         // Log completion
-        print("✅ Optimization task completed: \(task.type.rawValue)")
+        print("✅ Optimization task completed: \(task.type)")
     }
 
     private func assessSystemHealth() async -> SystemHealth {
@@ -420,19 +423,26 @@ public final class QuantumCICDOptimization: ObservableObject {
         buildMetrics: BuildMetrics,
         testMetrics: TestMetrics,
         deploymentMetrics: DeploymentMetrics
-    ) async throws -> [Bottleneck] {
-        var bottlenecks: [Bottleneck] = []
+    ) async throws -> [CICDBottleneck] {
+        var bottlenecks: [CICDBottleneck] = []
 
         if buildMetrics.averageBuildTime > 300.0 {
-            bottlenecks.append(Bottleneck(type: .buildTime, severity: .high, description: "Build time exceeds 5 minutes"))
+            bottlenecks.append(
+                CICDBottleneck(
+                    type: .buildTime, severity: .high, description: "Build time exceeds 5 minutes"))
         }
 
         if testMetrics.averageTestTime > 180.0 {
-            bottlenecks.append(Bottleneck(type: .testTime, severity: .medium, description: "Test execution exceeds 3 minutes"))
+            bottlenecks.append(
+                CICDBottleneck(
+                    type: .testTime, severity: .medium,
+                    description: "Test execution exceeds 3 minutes"))
         }
 
         if buildMetrics.cacheHitRate < 0.5 {
-            bottlenecks.append(Bottleneck(type: .caching, severity: .medium, description: "Low cache hit rate"))
+            bottlenecks.append(
+                CICDBottleneck(type: .caching, severity: .medium, description: "Low cache hit rate")
+            )
         }
 
         return bottlenecks
@@ -443,9 +453,11 @@ public final class QuantumCICDOptimization: ObservableObject {
         testMetrics: TestMetrics,
         deploymentMetrics: DeploymentMetrics
     ) -> PipelineEfficiency {
-        let buildEfficiency = buildMetrics.successRate * (1.0 - buildMetrics.averageBuildTime / 300.0)
+        let buildEfficiency =
+            buildMetrics.successRate * (1.0 - buildMetrics.averageBuildTime / 300.0)
         let testEfficiency = testMetrics.testCoverage * (1.0 - testMetrics.averageTestTime / 180.0)
-        let deploymentEfficiency = deploymentMetrics.successRate * (1.0 - deploymentMetrics.averageDeploymentTime / 60.0)
+        let deploymentEfficiency =
+            deploymentMetrics.successRate * (1.0 - deploymentMetrics.averageDeploymentTime / 60.0)
 
         let overallEfficiency = (buildEfficiency + testEfficiency + deploymentEfficiency) / 3.0
 
@@ -457,7 +469,8 @@ public final class QuantumCICDOptimization: ObservableObject {
         )
     }
 
-    private func gatherHistoricalData(for project: String) async throws -> [HistoricalPipelineData] {
+    private func gatherHistoricalData(for project: String) async throws -> [HistoricalPipelineData]
+    {
         // Gather historical pipeline data
         // This would query CI/CD system history
         return []
@@ -472,12 +485,12 @@ public final class QuantumCICDOptimization: ObservableObject {
             steps: [],
             triggers: [],
             successCriteria: [],
-            failureHandling: .default
+            failureHandling: "default"
         )
     }
 
     private func applyWorkflowEvolution(
-        _ evolution: WorkflowEvolution,
+        _ evolution: WorkflowEvolutionResult,
         to project: String
     ) async throws -> [WorkflowChange] {
         // Apply workflow evolution changes
@@ -500,27 +513,37 @@ public final class QuantumCICDOptimization: ObservableObject {
 
     // MARK: - Optimization Application Methods
 
-    private func applyParallelBuildsOptimization(_ optimization: Optimization, project: String) async throws {
+    private func applyParallelBuildsOptimization(_ optimization: CICDOptimization, project: String)
+        async throws
+    {
         // Implement parallel builds optimization
         print("   Applying parallel builds optimization")
     }
 
-    private func applyCachingOptimization(_ optimization: Optimization, project: String) async throws {
+    private func applyCachingOptimization(_ optimization: CICDOptimization, project: String)
+        async throws
+    {
         // Implement caching optimization
         print("   Applying caching optimization")
     }
 
-    private func applyTestOptimization(_ optimization: Optimization, project: String) async throws {
+    private func applyTestOptimization(_ optimization: CICDOptimization, project: String)
+        async throws
+    {
         // Implement test optimization
         print("   Applying test optimization")
     }
 
-    private func applyResourceAllocationOptimization(_ optimization: Optimization, project: String) async throws {
+    private func applyResourceAllocationOptimization(
+        _ optimization: CICDOptimization, project: String
+    ) async throws {
         // Implement resource allocation optimization
         print("   Applying resource allocation optimization")
     }
 
-    private func applyWorkflowSimplificationOptimization(_ optimization: Optimization, project: String) async throws {
+    private func applyWorkflowSimplificationOptimization(
+        _ optimization: CICDOptimization, project: String
+    ) async throws {
         // Implement workflow simplification
         print("   Applying workflow simplification optimization")
     }
@@ -542,6 +565,9 @@ public struct CICDOptimization: Identifiable {
     public let project: String
     public let level: OptimizationLevel
     public let startTime: Date
+    public let type: CICDOptimizationType
+    public let target: String
+    public let parameters: [String: Any]
 }
 
 /// Optimization levels
@@ -550,6 +576,15 @@ public enum OptimizationLevel {
     case standard
     case comprehensive
     case quantum
+}
+
+/// CI/CD optimization types
+public enum CICDOptimizationType {
+    case parallelBuilds
+    case caching
+    case testOptimization
+    case resourceAllocation
+    case workflowSimplification
 }
 
 /// CI/CD metrics
@@ -576,7 +611,7 @@ public struct PipelineAnalysis {
     public let buildMetrics: BuildMetrics
     public let testMetrics: TestMetrics
     public let deploymentMetrics: DeploymentMetrics
-    public let bottlenecks: [Bottleneck]
+    public let bottlenecks: [CICDBottleneck]
     public let efficiency: PipelineEfficiency
     public let analysisTime: Date
 }
@@ -604,15 +639,15 @@ public struct DeploymentMetrics {
     public let rollbackRate: Double
 }
 
-/// Bottleneck identification
-public struct Bottleneck {
-    public let type: BottleneckType
-    public let severity: BottleneckSeverity
+/// CI/CD Bottleneck identification
+public struct CICDBottleneck {
+    public let type: CICDBottleneckType
+    public let severity: CICDBottleneckSeverity
     public let description: String
 }
 
-/// Bottleneck types
-public enum BottleneckType {
+/// CI/CD Bottleneck types
+public enum CICDBottleneckType {
     case buildTime
     case testTime
     case caching
@@ -620,8 +655,8 @@ public enum BottleneckType {
     case deployment
 }
 
-/// Bottleneck severity
-public enum BottleneckSeverity {
+/// CI/CD Bottleneck severity
+public enum CICDBottleneckSeverity {
     case low
     case medium
     case high
@@ -638,7 +673,7 @@ public struct PipelineEfficiency {
 
 /// Applied optimization
 public struct AppliedOptimization {
-    public let optimization: Optimization
+    public let optimization: CICDOptimization
     public let appliedAt: Date
     public let success: Bool
 }
@@ -665,7 +700,7 @@ public struct FailurePredictionResult {
 public struct FailurePredictions {
     public let predictedFailures: [PredictedFailure]
     public let confidence: Double
-    public let riskLevel: RiskLevel
+    public let riskLevel: CICDRiskLevel
 }
 
 /// Predicted failure
@@ -739,46 +774,98 @@ public struct TestResults {
 
 // MARK: - Placeholder Classes
 
-private class QuantumOptimizationEngine {
+/// Workflow evolution strategy
+public enum WorkflowEvolutionStrategy {
+    case intelligent
+}
+
+/// Workflow structure
+public struct Workflow {
+    public let id: String
+    public let name: String
+    public let description: String
+    public let steps: [String]
+    public let triggers: [String]
+    public let successCriteria: [String]
+    public let failureHandling: String
+}
+
+/// AI Decision Engine
+private class AIDecisionEngine: @unchecked Sendable {
     func initialize() async throws {}
-    func establishBaseline() async throws {}
-    func generateOptimizations(basedOn analysis: PipelineAnalysis, level: OptimizationLevel) async throws -> [Optimization] {
-        [Optimization(type: .parallelBuilds, target: "build", parameters: [:])]
+    func evaluateOptimizationOptions(_ optimizations: [CICDOptimization], context: PipelineAnalysis)
+        async throws -> [CICDOptimization]
+    {
+        optimizations
     }
 }
 
-private class PredictiveAnalytics {
+/// Task Queue
+private class TaskQueue: @unchecked Sendable {
     func initialize() async throws {}
-    func predictFailures(historicalData: [HistoricalPipelineData], timeWindow: TimeInterval) async throws -> FailurePredictions {
+    var taskCompletedPublisher: AnyPublisher<AutomationTask, Never> {
+        Empty().eraseToAnyPublisher()
+    }
+}
+
+/// Performance Monitor
+private class CICDPerformanceMonitor: @unchecked Sendable {
+    func initialize() async throws {}
+    var metricsPublisher: AnyPublisher<CICDMetrics, Never> {
+        Empty().eraseToAnyPublisher()
+    }
+}
+
+/// System Health
+public struct SystemHealth {
+    public let overallScore: Double
+    public let subsystemHealth: [String: Double]
+}
+
+/// Automation Task
+public struct AutomationTask {
+    public let type: String
+    public let id: String
+}
+
+/// Risk Level
+public enum CICDRiskLevel {
+    case low, medium, high, critical
+}
+
+private class QuantumOptimizationEngine: @unchecked Sendable {
+    func initialize() async throws {}
+    func establishBaseline() async throws {}
+    func generateOptimizations(basedOn analysis: PipelineAnalysis, level: OptimizationLevel)
+        async throws -> [CICDOptimization]
+    {
+        [
+            CICDOptimization(
+                id: UUID(), project: analysis.project, level: level, startTime: Date(),
+                type: .parallelBuilds, target: "build", parameters: [:])
+        ]
+    }
+}
+
+private class PredictiveAnalytics: @unchecked Sendable {
+    func initialize() async throws {}
+    func predictFailures(historicalData: [HistoricalPipelineData], timeWindow: TimeInterval)
+        async throws -> FailurePredictions
+    {
         FailurePredictions(predictedFailures: [], confidence: 0.8, riskLevel: .low)
     }
 }
 
-private class WorkflowEvolution {
+private class WorkflowEvolutionManager: @unchecked Sendable {
     func initialize() async throws {}
-    func generateEvolution(for workflow: Workflow, strategy: WorkflowEvolutionStrategy) async throws -> WorkflowEvolution {
-        WorkflowEvolution(expectedImprovement: 0.1)
+    func generateEvolution(for workflow: Workflow, strategy: WorkflowEvolutionStrategy) async throws
+        -> WorkflowEvolutionResult
+    {
+        WorkflowEvolutionResult(
+            project: "unknown",
+            originalWorkflow: workflow,
+            appliedChanges: [],
+            performanceImprovement: 0.1
+        )
     }
-}
-
-private struct WorkflowEvolution {
-    let expectedImprovement: Double
-}
-
-private enum WorkflowEvolutionStrategy {
-    case intelligent
-}
-
-private struct Optimization {
-    let type: OptimizationType
-    let target: String
-    let parameters: [String: Any]
-}
-
-private enum OptimizationType {
-    case parallelBuilds
-    case caching
-    case testOptimization
-    case resourceAllocation
-    case workflowSimplification
 }

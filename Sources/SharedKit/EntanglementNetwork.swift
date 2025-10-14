@@ -22,6 +22,12 @@ public class EntanglementNetwork: ObservableObject {
         initializeChannelCharacteristics()
     }
 
+    /// Initialize the entanglement network
+    public func initialize() async {
+        // Network is already initialized in init, but this provides async initialization point
+        await generateEntanglementPairs()
+    }
+
     private func initializeNetworkTopology() {
         // Create a mesh network topology
         for node in nodes {
@@ -34,10 +40,10 @@ public class EntanglementNetwork: ObservableObject {
         for sourceNode in nodes {
             for targetNode in networkTopology[sourceNode] ?? [] {
                 let channelId = "\(sourceNode)_\(targetNode)"
-                let distance = Double.random(in: 10...1000) // km
-                let lossRate = min(0.01 * distance / 100.0, 0.5) // Loss increases with distance
+                let distance = Double.random(in: 10...1000)  // km
+                let lossRate = min(0.01 * distance / 100.0, 0.5)  // Loss increases with distance
                 let noiseLevel = Double.random(in: 0.001...0.01)
-                let capacity = 1000.0 / (1.0 + lossRate) // Capacity decreases with loss
+                let capacity = 1000.0 / (1.0 + lossRate)  // Capacity decreases with loss
 
                 channelCharacteristics[channelId] = QuantumChannel(
                     lossRate: lossRate,
@@ -59,7 +65,8 @@ public class EntanglementNetwork: ObservableObject {
             for targetNode in networkTopology[sourceNode] ?? [] {
                 let channelId = "\(sourceNode)_\(targetNode)"
                 if let channel = channelCharacteristics[channelId] {
-                    let pair = await createEntanglementPair(between: sourceNode, and: targetNode, channel: channel)
+                    let pair = await createEntanglementPair(
+                        between: sourceNode, and: targetNode, channel: channel)
                     newPairs.append(pair)
                 }
             }
@@ -70,22 +77,28 @@ public class EntanglementNetwork: ObservableObject {
     }
 
     /// Create an entanglement pair between two nodes
-    public func createEntanglementPair(between nodeA: String, and nodeB: String) async -> EntanglementPair {
+    public func createEntanglementPair(between nodeA: String, and nodeB: String) async
+        -> EntanglementPair
+    {
         let channelId = "\(nodeA)_\(nodeB)"
-        let channel = channelCharacteristics[channelId] ?? QuantumChannel(
-            lossRate: 0.01,
-            noiseLevel: 0.005,
-            capacity: 1000.0,
-            maxDistance: 100.0
-        )
+        let channel =
+            channelCharacteristics[channelId]
+            ?? QuantumChannel(
+                lossRate: 0.01,
+                noiseLevel: 0.005,
+                capacity: 1000.0,
+                maxDistance: 100.0
+            )
 
         return await createEntanglementPair(between: nodeA, and: nodeB, channel: channel)
     }
 
-    private func createEntanglementPair(between nodeA: String, and nodeB: String, channel: QuantumChannel) async -> EntanglementPair {
+    private func createEntanglementPair(
+        between nodeA: String, and nodeB: String, channel: QuantumChannel
+    ) async -> EntanglementPair {
         // Simulate entanglement generation process
         let baseFidelity = Double.random(in: 0.85...0.98)
-        let distanceFactor = 1.0 - (channel.maxDistance / 2000.0) // Fidelity decreases with distance
+        let distanceFactor = 1.0 - (channel.maxDistance / 2000.0)  // Fidelity decreases with distance
         let fidelity = max(0.1, baseFidelity * distanceFactor)
 
         let decoherenceRate = channel.noiseLevel + (channel.lossRate * 0.1)
@@ -106,10 +119,12 @@ public class EntanglementNetwork: ObservableObject {
     public func distributeEntanglement(to node: String) async -> EntanglementPair? {
         // Find available entanglement pairs for the node
         let availablePairs = entanglementPairs.filter { pair in
-            (pair.nodeA == node || pair.nodeB == node) && !pair.isExpired && pair.currentFidelity > 0.7
+            (pair.nodeA == node || pair.nodeB == node) && !pair.isExpired
+                && pair.currentFidelity > 0.7
         }
 
-        guard let bestPair = availablePairs.max(by: { $0.currentFidelity < $1.currentFidelity }) else {
+        guard let bestPair = availablePairs.max(by: { $0.currentFidelity < $1.currentFidelity })
+        else {
             // Generate new entanglement if none available
             return await generateNewEntanglement(for: node)
         }
@@ -158,7 +173,7 @@ public class EntanglementNetwork: ObservableObject {
 
     private func refreshEntanglementPair(_ pair: EntanglementPair) async -> EntanglementPair? {
         // Simulate entanglement refresh process
-        let refreshSuccess = Double.random(in: 0...1) > 0.3 // 70% success rate
+        let refreshSuccess = Double.random(in: 0...1) > 0.3  // 70% success rate
 
         if refreshSuccess {
             return await createEntanglementPair(between: pair.nodeA, and: pair.nodeB)
@@ -171,9 +186,13 @@ public class EntanglementNetwork: ObservableObject {
     public func getNetworkStatistics() async -> EntanglementNetworkStatistics {
         let totalPairs = entanglementPairs.count
         let activePairs = entanglementPairs.filter { !$0.isExpired }.count
-        let averageFidelity = entanglementPairs.map { $0.currentFidelity }.reduce(0, +) / Double(max(1, entanglementPairs.count))
+        let averageFidelity =
+            entanglementPairs.map { $0.currentFidelity }.reduce(0, +)
+            / Double(max(1, entanglementPairs.count))
         let totalNodes = nodes.count
-        let averageConnectivity = Double(networkTopology.values.map { $0.count }.reduce(0, +)) / Double(max(1, networkTopology.count))
+        let averageConnectivity =
+            Double(networkTopology.values.map { $0.count }.reduce(0, +))
+            / Double(max(1, networkTopology.count))
 
         return EntanglementNetworkStatistics(
             totalPairs: totalPairs,

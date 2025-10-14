@@ -30,7 +30,9 @@ public class HybridNetworkIntegration: ObservableObject {
     }
 
     /// Route data through optimal network path (classical or quantum)
-    public func routeData(_ data: DataPacket, from source: String, to destination: String) async -> RoutingDecision {
+    public func routeData(_ data: DataPacket, from source: String, to destination: String) async
+        -> RoutingDecision
+    {
         print("📦 Routing data from \(source) to \(destination)")
 
         // Analyze data requirements
@@ -71,7 +73,9 @@ public class HybridNetworkIntegration: ObservableObject {
     }
 
     /// Transmit data using hybrid routing
-    public func transmitHybridData(_ packets: [DataPacket], from source: String, to destination: String) async -> TransmissionBatchResult {
+    public func transmitHybridData(
+        _ packets: [DataPacket], from source: String, to destination: String
+    ) async -> TransmissionBatchResult {
         print("📤 Transmitting \(packets.count) packets via hybrid routing")
 
         var results: [TransmissionResult] = []
@@ -85,12 +89,15 @@ public class HybridNetworkIntegration: ObservableObject {
 
             switch routingDecision.networkType {
             case .classical:
-                transmissionResult = await classicalNetwork.transmitPacket(packet, via: routingDecision.chosenPath)
+                transmissionResult = await classicalNetwork.transmitPacket(
+                    packet, via: routingDecision.chosenPath)
             case .quantum:
-                transmissionResult = await quantumNetwork.transmitPacket(packet, via: routingDecision.chosenPath)
+                transmissionResult = await quantumNetwork.transmitPacket(
+                    packet, via: routingDecision.chosenPath)
             case .hybrid:
                 // Split transmission across networks
-                transmissionResult = await transmitHybridPacket(packet, routingDecision: routingDecision)
+                transmissionResult = await transmitHybridPacket(
+                    packet, routingDecision: routingDecision)
             }
 
             results.append(transmissionResult)
@@ -128,7 +135,8 @@ public class HybridNetworkIntegration: ObservableObject {
         let quantumStats = await quantumNetwork.getNetworkStatistics()
 
         // Identify bottlenecks
-        let bottlenecks = await identifyBottlenecks(classicalStats: classicalStats, quantumStats: quantumStats)
+        let bottlenecks = await identifyBottlenecks(
+            classicalStats: classicalStats, quantumStats: quantumStats)
 
         // Apply optimizations
         let optimizations = await applyNetworkOptimizations(bottlenecks: bottlenecks)
@@ -145,7 +153,9 @@ public class HybridNetworkIntegration: ObservableObject {
 
         print("✅ Network optimization complete:")
         print("- Optimizations applied: \(result.optimizationsApplied)")
-        print("- Performance improvement: \(String(format: "%.1f", result.performanceImprovement * 100))%")
+        print(
+            "- Performance improvement: \(String(format: "%.1f", result.performanceImprovement * 100))%"
+        )
         print("- Bottlenecks resolved: \(result.bottlenecksResolved)")
 
         return result
@@ -167,7 +177,8 @@ public class HybridNetworkIntegration: ObservableObject {
             averageLatency: averageLatency,
             classicalNetworkStats: classicalStats,
             quantumNetworkStats: quantumStats,
-            hybridEfficiency: calculateHybridEfficiency(classicalStats: classicalStats, quantumStats: quantumStats)
+            hybridEfficiency: calculateHybridEfficiency(
+                classicalStats: classicalStats, quantumStats: quantumStats)
         )
     }
 
@@ -188,15 +199,20 @@ public class HybridNetworkIntegration: ObservableObject {
         )
     }
 
-    private func transmitHybridPacket(_ packet: DataPacket, routingDecision: RoutingDecision) async -> TransmissionResult {
+    private func transmitHybridPacket(_ packet: DataPacket, routingDecision: RoutingDecision) async
+        -> TransmissionResult
+    {
         // Split packet transmission across networks
         // This is a simplified implementation
 
-        let classicalResult = await classicalNetwork.transmitPacket(packet, via: routingDecision.chosenPath)
-        let quantumResult = await quantumNetwork.transmitPacket(packet, via: routingDecision.chosenPath)
+        let classicalResult = await classicalNetwork.transmitPacket(
+            packet, via: routingDecision.chosenPath)
+        let quantumResult = await quantumNetwork.transmitPacket(
+            packet, via: routingDecision.chosenPath)
 
         // Combine results (take the better one)
-        let betterResult = classicalResult.latency < quantumResult.latency ? classicalResult : quantumResult
+        let betterResult =
+            classicalResult.latency < quantumResult.latency ? classicalResult : quantumResult
 
         return TransmissionResult(
             success: betterResult.success,
@@ -210,38 +226,51 @@ public class HybridNetworkIntegration: ObservableObject {
     private func getNetworkDistribution(_ results: [TransmissionResult]) -> [NetworkType: Int] {
         // This would need to be tracked during transmission
         // For now, return a sample distribution
-        return [.classical: results.count / 2, .quantum: results.count / 4, .hybrid: results.count / 4]
+        return [
+            .classical: results.count / 2, .quantum: results.count / 4, .hybrid: results.count / 4,
+        ]
     }
 
-    private func identifyBottlenecks(classicalStats: NetworkStatistics, quantumStats: NetworkStatistics) async -> [Bottleneck] {
-        var bottlenecks: [Bottleneck] = []
+    private func identifyBottlenecks(
+        classicalStats: NetworkStatistics, quantumStats: NetworkStatistics
+    ) async -> [NetworkBottleneck] {
+        var bottlenecks: [NetworkBottleneck] = []
 
         if classicalStats.utilization > 0.8 {
-            bottlenecks.append(Bottleneck(type: .capacity, network: .classical, severity: .high))
+            bottlenecks.append(
+                NetworkBottleneck(type: .capacity, network: .classical, severity: .high))
         }
 
         if quantumStats.averageLatency > 10.0 {
-            bottlenecks.append(Bottleneck(type: .latency, network: .quantum, severity: .medium))
+            bottlenecks.append(
+                NetworkBottleneck(type: .latency, network: .quantum, severity: .medium))
         }
 
         if quantumStats.errorRate > 0.05 {
-            bottlenecks.append(Bottleneck(type: .reliability, network: .quantum, severity: .high))
+            bottlenecks.append(
+                NetworkBottleneck(type: .reliability, network: .quantum, severity: .high))
         }
 
         return bottlenecks
     }
 
-    private func applyNetworkOptimizations(bottlenecks: [Bottleneck]) async -> [Optimization] {
-        var optimizations: [Optimization] = []
+    private func applyNetworkOptimizations(bottlenecks: [NetworkBottleneck]) async
+        -> [NetworkOptimization]
+    {
+        var optimizations: [NetworkOptimization] = []
 
         for bottleneck in bottlenecks {
             switch bottleneck.type {
             case .capacity:
-                optimizations.append(Optimization(type: .loadBalancing, description: "Implement load balancing"))
+                optimizations.append(
+                    NetworkOptimization(
+                        type: .loadBalancing, description: "Implement load balancing"))
             case .latency:
-                optimizations.append(Optimization(type: .caching, description: "Add edge caching"))
+                optimizations.append(
+                    NetworkOptimization(type: .caching, description: "Add edge caching"))
             case .reliability:
-                optimizations.append(Optimization(type: .redundancy, description: "Increase redundancy"))
+                optimizations.append(
+                    NetworkOptimization(type: .redundancy, description: "Increase redundancy"))
             }
         }
 
@@ -250,7 +279,7 @@ public class HybridNetworkIntegration: ObservableObject {
 
     private func measurePerformanceImprovement() async -> Double {
         // Simulate performance measurement
-        return Double.random(in: 0.05...0.25) // 5-25% improvement
+        return Double.random(in: 0.05...0.25)  // 5-25% improvement
     }
 
     private func generateOptimizationRecommendations() -> [String] {
@@ -258,13 +287,16 @@ public class HybridNetworkIntegration: ObservableObject {
             "Implement adaptive routing based on real-time network conditions",
             "Add quantum-classical network gateways for seamless integration",
             "Deploy additional quantum repeaters to reduce latency",
-            "Implement predictive resource allocation using AI"
+            "Implement predictive resource allocation using AI",
         ]
     }
 
-    private func calculateHybridEfficiency(classicalStats: NetworkStatistics, quantumStats: NetworkStatistics) -> Double {
+    private func calculateHybridEfficiency(
+        classicalStats: NetworkStatistics, quantumStats: NetworkStatistics
+    ) -> Double {
         // Calculate efficiency based on combined performance
-        let classicalEfficiency = (1.0 - classicalStats.utilization) * (1.0 - classicalStats.errorRate)
+        let classicalEfficiency =
+            (1.0 - classicalStats.utilization) * (1.0 - classicalStats.errorRate)
         let quantumEfficiency = (1.0 - quantumStats.utilization) * (1.0 - quantumStats.errorRate)
 
         return (classicalEfficiency + quantumEfficiency) / 2.0
@@ -284,15 +316,17 @@ public class ClassicalNetworkManager: ObservableObject {
         print("🌐 Classical Network Manager initialized")
     }
 
-    public func getAvailablePaths(from source: String, to destination: String) async -> [NetworkPath] {
+    public func getAvailablePaths(from source: String, to destination: String) async
+        -> [NetworkPath]
+    {
         // Return sample classical paths
         return [
             NetworkPath(
                 id: "classical_path_1",
                 nodes: [source, "router_1", destination],
-                capacity: 1000.0, // Mbps
-                latency: 5.0, // ms
-                cost: 0.01, // credits per MB
+                capacity: 1000.0,  // Mbps
+                latency: 5.0,  // ms
+                cost: 0.01,  // credits per MB
                 reliability: 0.99
             ),
             NetworkPath(
@@ -302,11 +336,13 @@ public class ClassicalNetworkManager: ObservableObject {
                 latency: 8.0,
                 cost: 0.02,
                 reliability: 0.95
-            )
+            ),
         ]
     }
 
-    public func transmitPacket(_ packet: DataPacket, via path: NetworkPath) async -> TransmissionResult {
+    public func transmitPacket(_ packet: DataPacket, via path: NetworkPath) async
+        -> TransmissionResult
+    {
         // Simulate classical transmission
         let success = Bool.random(withProbability: path.reliability)
         let latency = path.latency + Double.random(in: -1...1)
@@ -323,9 +359,9 @@ public class ClassicalNetworkManager: ObservableObject {
     public func getNetworkStatistics() async -> NetworkStatistics {
         return NetworkStatistics(
             totalNodes: 100,
-            totalCapacity: 10000.0, // Mbps
+            totalCapacity: 10000.0,  // Mbps
             utilization: Double.random(in: 0.3...0.7),
-            averageLatency: 10.0, // ms
+            averageLatency: 10.0,  // ms
             errorRate: 0.005,
             activeConnections: activeConnections.count
         )
@@ -345,15 +381,17 @@ public class QuantumNetworkManager: ObservableObject {
         print("⚛️ Quantum Network Manager initialized")
     }
 
-    public func getAvailablePaths(from source: String, to destination: String) async -> [NetworkPath] {
+    public func getAvailablePaths(from source: String, to destination: String) async
+        -> [NetworkPath]
+    {
         // Return sample quantum paths
         return [
             NetworkPath(
                 id: "quantum_path_1",
                 nodes: [source, destination],
-                capacity: 100.0, // qubits per second
-                latency: 1.0, // ms
-                cost: 1.0, // credits per qubit
+                capacity: 100.0,  // qubits per second
+                latency: 1.0,  // ms
+                cost: 1.0,  // credits per qubit
                 reliability: 0.95
             ),
             NetworkPath(
@@ -363,11 +401,13 @@ public class QuantumNetworkManager: ObservableObject {
                 latency: 3.0,
                 cost: 2.0,
                 reliability: 0.90
-            )
+            ),
         ]
     }
 
-    public func transmitPacket(_ packet: DataPacket, via path: NetworkPath) async -> TransmissionResult {
+    public func transmitPacket(_ packet: DataPacket, via path: NetworkPath) async
+        -> TransmissionResult
+    {
         // Simulate quantum transmission
         let success = Bool.random(withProbability: path.reliability)
         let latency = path.latency + Double.random(in: -0.5...0.5)
@@ -384,9 +424,9 @@ public class QuantumNetworkManager: ObservableObject {
     public func getNetworkStatistics() async -> NetworkStatistics {
         return NetworkStatistics(
             totalNodes: 20,
-            totalCapacity: 1000.0, // qubits per second
+            totalCapacity: 1000.0,  // qubits per second
             utilization: Double.random(in: 0.1...0.4),
-            averageLatency: 2.0, // ms
+            averageLatency: 2.0,  // ms
             errorRate: 0.03,
             activeConnections: activeEntanglements.count
         )
@@ -416,7 +456,7 @@ public class HybridRouter: ObservableObject {
                     chosenPath: path,
                     networkType: .quantum,
                     estimatedLatency: path.latency,
-                    estimatedCost: Double(dataAnalysis.dataSize) * path.cost / 1_000_000, // Convert to MB
+                    estimatedCost: Double(dataAnalysis.dataSize) * path.cost / 1_000_000,  // Convert to MB
                     securityLevel: .quantum,
                     reason: "Quantum security required"
                 )
@@ -428,7 +468,8 @@ public class HybridRouter: ObservableObject {
             let allPaths = classicalPaths + quantumPaths
             let bestPath = allPaths.min { $0.latency < $1.latency }
             if let path = bestPath {
-                let networkType: NetworkType = classicalPaths.contains(where: { $0.id == path.id }) ? .classical : .quantum
+                let networkType: NetworkType =
+                    classicalPaths.contains(where: { $0.id == path.id }) ? .classical : .quantum
                 return RoutingDecisionResult(
                     chosenPath: path,
                     networkType: networkType,
@@ -480,14 +521,14 @@ public class ResourceAllocator: ObservableObject {
 
     public func allocateResources(for decision: RoutingDecisionResult) async -> ResourceAllocation {
         // Simulate resource allocation
-        let bandwidth = decision.networkType == .quantum ? 10.0 : 100.0 // qubits/s or Mbps
+        let bandwidth = decision.networkType == .quantum ? 10.0 : 100.0  // qubits/s or Mbps
         let priority = decision.chosenPath.capacity > 500 ? ResourcePriority.high : .normal
 
         let allocation = ResourceAllocation(
             bandwidth: bandwidth,
             priority: priority,
-            timeSlot: Date().addingTimeInterval(Double.random(in: 0...60)), // Next minute
-            duration: Double.random(in: 1...10) // seconds
+            timeSlot: Date().addingTimeInterval(Double.random(in: 0...60)),  // Next minute
+            duration: Double.random(in: 1...10)  // seconds
         )
 
         allocatedResources[UUID().uuidString] = allocation
@@ -503,7 +544,7 @@ public enum NetworkType: String {
 
 public struct DataPacket {
     public let id: String
-    public let size: Int // bytes
+    public let size: Int  // bytes
     public let priority: PacketPriority
     public let securityLevel: SecurityLevel
     public let data: Data
@@ -597,26 +638,26 @@ public enum ResourcePriority {
     case low, normal, high
 }
 
-public struct Bottleneck {
-    public let type: BottleneckType
+public struct NetworkBottleneck {
+    public let type: NetworkBottleneckType
     public let network: NetworkType
-    public let severity: BottleneckSeverity
+    public let severity: NetworkBottleneckSeverity
 }
 
-public enum BottleneckType {
+public enum NetworkBottleneckType {
     case capacity, latency, reliability
 }
 
-public enum BottleneckSeverity {
+public enum NetworkBottleneckSeverity {
     case low, medium, high
 }
 
-public struct Optimization {
-    public let type: OptimizationType
+public struct NetworkOptimization {
+    public let type: NetworkOptimizationType
     public let description: String
 }
 
-public enum OptimizationType {
+public enum NetworkOptimizationType {
     case loadBalancing, caching, redundancy
 }
 

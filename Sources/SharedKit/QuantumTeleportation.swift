@@ -26,7 +26,9 @@ public class QuantumTeleportation: ObservableObject {
     }
 
     /// Teleport a quantum state between two nodes
-    public func teleportState(_ state: QuantumState, from source: String, to destination: String) async -> TeleportationResult {
+    public func teleportState(_ state: QuantumState, from source: String, to destination: String)
+        async -> TeleportationResult
+    {
         print("⚡ Teleporting quantum state from \(source) to \(destination)")
 
         let teleportId = "teleport_\(source)_\(destination)_\(Date().timeIntervalSince1970)"
@@ -35,16 +37,19 @@ public class QuantumTeleportation: ObservableObject {
         let entangledPair = await generateTeleportationPair()
 
         // Perform Bell measurement on source qubit and entangled particle
-        let bellMeasurement = await performBellMeasurement(state: state, entangledParticle: entangledPair.nodeA)
+        let bellMeasurement = await performBellMeasurement(
+            state: state, entangledParticle: entangledPair.nodeA)
 
         // Transmit classical bits to destination
         let classicalBits = await extractClassicalBits(bellMeasurement: bellMeasurement)
 
         // Apply corrections at destination
-        let teleportedState = await reconstructState(at: destination, using: classicalBits, entangledParticle: entangledPair.nodeB)
+        let teleportedState = await reconstructState(
+            at: destination, using: classicalBits, entangledParticle: entangledPair.nodeB)
 
         // Measure fidelity of teleportation
-        let fidelity = await fidelityMonitor.measureFidelity(originalState: state, teleportedState: teleportedState)
+        let fidelity = await fidelityMonitor.measureFidelity(
+            originalState: state, teleportedState: teleportedState)
 
         let result = TeleportationResult(
             teleportId: teleportId,
@@ -53,9 +58,12 @@ public class QuantumTeleportation: ObservableObject {
             originalState: state,
             teleportedState: teleportedState,
             fidelity: fidelity,
-            success: fidelity > 0.9, // 90% fidelity threshold
+            success: fidelity > 0.9,  // 90% fidelity threshold
+            successRate: fidelity > 0.9 ? 1.0 : 0.0,
+            distance: 0.0,  // Local teleportation
+            latency: 0.001,  // 1ms latency
             classicalBitsTransmitted: classicalBits.count,
-            entangledPairUsed: entangledPair,
+            entangledPairUsed: true,
             timestamp: Date()
         )
 
@@ -70,7 +78,9 @@ public class QuantumTeleportation: ObservableObject {
     }
 
     /// Teleport multiple qubits simultaneously
-    public func teleportMultipleStates(_ states: [QuantumState], from source: String, to destination: String) async -> [TeleportationResult] {
+    public func teleportMultipleStates(
+        _ states: [QuantumState], from source: String, to destination: String
+    ) async -> [TeleportationResult] {
         print("⚡ Teleporting \(states.count) quantum states from \(source) to \(destination)")
 
         var results: [TeleportationResult] = []
@@ -80,7 +90,7 @@ public class QuantumTeleportation: ObservableObject {
             results.append(result)
 
             // Small delay to simulate realistic timing
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+            try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
         }
 
         let averageFidelity = results.map { $0.fidelity }.reduce(0, +) / Double(results.count)
@@ -94,7 +104,9 @@ public class QuantumTeleportation: ObservableObject {
     }
 
     /// Optimize teleportation fidelity through error correction
-    public func optimizeTeleportationFidelity(for result: TeleportationResult) async -> TeleportationResult {
+    public func optimizeTeleportationFidelity(for result: TeleportationResult) async
+        -> TeleportationResult
+    {
         guard !result.success else { return result }
 
         print("🔧 Optimizing teleportation fidelity for \(result.teleportId)")
@@ -116,6 +128,9 @@ public class QuantumTeleportation: ObservableObject {
             teleportedState: correctedState,
             fidelity: newFidelity,
             success: newFidelity > 0.9,
+            successRate: newFidelity > 0.9 ? 1.0 : 0.0,
+            distance: result.distance,
+            latency: result.latency,
             classicalBitsTransmitted: result.classicalBitsTransmitted,
             entangledPairUsed: result.entangledPairUsed,
             timestamp: Date()
@@ -134,11 +149,17 @@ public class QuantumTeleportation: ObservableObject {
     public func getTeleportationStatistics() async -> TeleportationStatistics {
         let totalTeleports = activeTeleports.count
         let successfulTeleports = activeTeleports.values.filter { $0.success }.count
-        let averageFidelity = activeTeleports.values.map { $0.fidelity }.reduce(0, +) / Double(max(1, activeTeleports.count))
-        let averageClassicalBits = activeTeleports.values.map { Double($0.classicalBitsTransmitted) }.reduce(0, +) / Double(max(1, activeTeleports.count))
+        let averageFidelity =
+            activeTeleports.values.map { $0.fidelity }.reduce(0, +)
+            / Double(max(1, activeTeleports.count))
+        let averageClassicalBits =
+            activeTeleports.values.map { Double($0.classicalBitsTransmitted) }.reduce(0, +)
+            / Double(max(1, activeTeleports.count))
 
-        let fidelityDistribution = Dictionary(grouping: activeTeleports.values, by: { Int($0.fidelity * 10) })
-            .mapValues { $0.count }
+        let fidelityDistribution = Dictionary(
+            grouping: activeTeleports.values, by: { Int($0.fidelity * 10) }
+        )
+        .mapValues { $0.count }
 
         return TeleportationStatistics(
             totalTeleports: totalTeleports,
@@ -164,10 +185,12 @@ public class QuantumTeleportation: ObservableObject {
         )
     }
 
-    private func performBellMeasurement(state: QuantumState, entangledParticle: String) async -> BellMeasurement {
+    private func performBellMeasurement(state: QuantumState, entangledParticle: String) async
+        -> BellMeasurement
+    {
         // Simulate Bell measurement of source qubit and entangled particle
         let measurementBasis = ["00", "01", "10", "11"].randomElement()!
-        let probability = Double.random(in: 0.2...0.3) // Equal probability for Bell states
+        let probability = Double.random(in: 0.2...0.3)  // Equal probability for Bell states
 
         return BellMeasurement(
             basis: measurementBasis,
@@ -181,7 +204,9 @@ public class QuantumTeleportation: ObservableObject {
         return bellMeasurement.basis.map { $0 == "1" }
     }
 
-    private func reconstructState(at destination: String, using classicalBits: [Bool], entangledParticle: String) async -> QuantumState {
+    private func reconstructState(
+        at destination: String, using classicalBits: [Bool], entangledParticle: String
+    ) async -> QuantumState {
         // Apply Pauli corrections based on classical bits
         var reconstructedState = QuantumState(amplitude: 0.5, phase: 0.0, polarization: .horizontal)
 
@@ -219,7 +244,7 @@ public class QuantumTeleportation: ObservableObject {
     private func applyErrorCorrection(to state: QuantumState) async -> QuantumState {
         // Apply basic quantum error correction (simplified)
         let correctedAmplitude = min(1.0, state.amplitude + Double.random(in: -0.05...0.05))
-        let correctedPhase = state.phase + Double.random(in: -.pi/10...(.pi/10))
+        let correctedPhase = state.phase + Double.random(in: -.pi / 10...(.pi / 10))
 
         return QuantumState(
             amplitude: correctedAmplitude,
@@ -260,14 +285,18 @@ public class FidelityMonitor: ObservableObject {
         print("📊 Fidelity Monitor initialized")
     }
 
-    public func measureFidelity(originalState: QuantumState, teleportedState: QuantumState) async -> Double {
+    public func measureFidelity(originalState: QuantumState, teleportedState: QuantumState) async
+        -> Double
+    {
         // Calculate quantum state fidelity using inner product
         let amplitudeDiff = abs(originalState.amplitude - teleportedState.amplitude)
         let phaseDiff = abs(originalState.phase - teleportedState.phase)
-        let polarizationMatch = originalState.polarization == teleportedState.polarization ? 1.0 : 0.0
+        let polarizationMatch =
+            originalState.polarization == teleportedState.polarization ? 1.0 : 0.0
 
         // Simplified fidelity calculation
-        let fidelity = 1.0 - (amplitudeDiff + phaseDiff / .pi) * 0.3 - (1.0 - polarizationMatch) * 0.2
+        let fidelity =
+            1.0 - (amplitudeDiff + phaseDiff / .pi) * 0.3 - (1.0 - polarizationMatch) * 0.2
         return max(0.0, min(1.0, fidelity))
     }
 
@@ -282,20 +311,6 @@ public class FidelityMonitor: ObservableObject {
         guard let history = fidelityHistory[teleportId], !history.isEmpty else { return 0.0 }
         return history.reduce(0, +) / Double(history.count)
     }
-}
-
-/// Teleportation result structure
-public struct TeleportationResult {
-    public let teleportId: String
-    public let source: String
-    public let destination: String
-    public let originalState: QuantumState
-    public let teleportedState: QuantumState
-    public let fidelity: Double
-    public let success: Bool
-    public let classicalBitsTransmitted: Int
-    public let entangledPairUsed: EntanglementPair
-    public let timestamp: Date
 }
 
 /// Bell measurement result

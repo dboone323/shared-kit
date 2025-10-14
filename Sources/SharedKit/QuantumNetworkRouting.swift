@@ -29,7 +29,9 @@ public class QuantumNetworkRouting: ObservableObject {
     }
 
     /// Find optimal routing path for quantum information
-    public func findOptimalPath(from source: String, to destination: String, constraints: RoutingConstraints) async -> RoutingResult {
+    public func findOptimalPath(
+        from source: String, to destination: String, constraints: RoutingConstraints
+    ) async -> RoutingResult {
         print("🔍 Finding optimal quantum path from \(source) to \(destination)")
 
         // Get available paths
@@ -39,7 +41,10 @@ public class QuantumNetworkRouting: ObservableObject {
         let evaluatedPaths = await evaluatePaths(availablePaths, constraints: constraints)
 
         // Select best path
-        guard let bestPath = await pathSelector.selectBestPath(evaluatedPaths, constraints: constraints) else {
+        guard
+            let bestPath = await pathSelector.selectBestPath(
+                evaluatedPaths, constraints: constraints)
+        else {
             return RoutingResult(
                 path: nil,
                 totalFidelity: 0.0,
@@ -65,7 +70,8 @@ public class QuantumNetworkRouting: ObservableObject {
         )
 
         // Cache routing result
-        let routeKey = "\(source)_\(destination)_\(constraints.hashValue)"
+        let routeKey =
+            "\(source)_\(destination)_\(constraints.minFidelity)_\(constraints.maxDistance)_\(constraints.maxHops)"
         routingTable[routeKey] = optimizedPath
 
         print("✅ Optimal path found:")
@@ -93,7 +99,8 @@ public class QuantumNetworkRouting: ObservableObject {
                     priority: .fidelity
                 )
 
-                let result = await findOptimalPath(from: source, to: destination, constraints: constraints)
+                let result = await findOptimalPath(
+                    from: source, to: destination, constraints: constraints)
                 if result.success {
                     updatedRoutes += 1
                 }
@@ -124,12 +131,20 @@ public class QuantumNetworkRouting: ObservableObject {
     /// Get routing statistics
     public func getRoutingStatistics() async -> RoutingStatistics {
         let totalRoutes = routingTable.count
-        let averageFidelity = routingTable.values.map { $0.expectedFidelity }.reduce(0, +) / Double(max(1, routingTable.count))
-        let averageDistance = routingTable.values.map { $0.totalDistance }.reduce(0, +) / Double(max(1, routingTable.count))
-        let averageHops = routingTable.values.map { Double($0.hops.count) }.reduce(0, +) / Double(max(1, routingTable.count))
+        let averageFidelity =
+            routingTable.values.map { $0.expectedFidelity }.reduce(0, +)
+            / Double(max(1, routingTable.count))
+        let averageDistance =
+            routingTable.values.map { $0.totalDistance }.reduce(0, +)
+            / Double(max(1, routingTable.count))
+        let averageHops =
+            routingTable.values.map { Double($0.hops.count) }.reduce(0, +)
+            / Double(max(1, routingTable.count))
 
-        let fidelityRanges = Dictionary(grouping: routingTable.values, by: { Int($0.expectedFidelity * 10) })
-            .mapValues { $0.count }
+        let fidelityRanges = Dictionary(
+            grouping: routingTable.values, by: { Int($0.expectedFidelity * 10) }
+        )
+        .mapValues { $0.count }
 
         return RoutingStatistics(
             totalRoutes: totalRoutes,
@@ -144,7 +159,9 @@ public class QuantumNetworkRouting: ObservableObject {
 
     // MARK: - Private Methods
 
-    private func evaluatePaths(_ paths: [RoutingPath], constraints: RoutingConstraints) async -> [EvaluatedPath] {
+    private func evaluatePaths(_ paths: [RoutingPath], constraints: RoutingConstraints) async
+        -> [EvaluatedPath]
+    {
         var evaluatedPaths: [EvaluatedPath] = []
 
         for path in paths {
@@ -156,7 +173,9 @@ public class QuantumNetworkRouting: ObservableObject {
         return evaluatedPaths.sorted { $0.score > $1.score }
     }
 
-    private func calculatePathScore(_ path: RoutingPath, constraints: RoutingConstraints) async -> Double {
+    private func calculatePathScore(_ path: RoutingPath, constraints: RoutingConstraints) async
+        -> Double
+    {
         var score = 0.0
 
         // Fidelity component (40% weight)
@@ -172,7 +191,7 @@ public class QuantumNetworkRouting: ObservableObject {
         score += hopScore
 
         // Time component (10% weight) - inverse relationship
-        let timeScore = (1.0 - min(path.estimatedTime / 10.0, 1.0)) * 0.1 // 10ms max
+        let timeScore = (1.0 - min(path.estimatedTime / 10.0, 1.0)) * 0.1  // 10ms max
         score += timeScore
 
         return score
@@ -195,7 +214,9 @@ public class NetworkTopology: ObservableObject {
         await generateSampleTopology()
     }
 
-    public func getAvailablePaths(from source: String, to destination: String) async -> [RoutingPath] {
+    public func getAvailablePaths(from source: String, to destination: String) async
+        -> [RoutingPath]
+    {
         // Simplified path finding using Dijkstra-like algorithm
         var paths: [RoutingPath] = []
 
@@ -221,10 +242,10 @@ public class NetworkTopology: ObservableObject {
                 totalDistance: Double.random(in: 50...200),
                 estimatedTime: Double.random(in: 0.5...2),
                 channels: []
-            )
+            ),
         ]
 
-        return samplePaths.filter { $0.expectedFidelity >= 0.5 } // Minimum fidelity threshold
+        return samplePaths.filter { $0.expectedFidelity >= 0.5 }  // Minimum fidelity threshold
     }
 
     public func getAllNodes() async -> [String] {
@@ -250,12 +271,12 @@ public class NetworkTopology: ObservableObject {
 
     public func getNetworkDiameter() async -> Double {
         // Simplified calculation
-        return 1000.0 // km
+        return 1000.0  // km
     }
 
     public func getConnectedComponents() async -> Int {
         // Simplified calculation
-        return 1 // Assume fully connected for now
+        return 1  // Assume fully connected for now
     }
 
     private func generateSampleTopology() async {
@@ -264,7 +285,8 @@ public class NetworkTopology: ObservableObject {
         for node in sampleNodes {
             nodes[node] = NetworkNode(
                 id: node,
-                location: Location(latitude: Double.random(in: -90...90), longitude: Double.random(in: -180...180)),
+                location: Location(
+                    latitude: Double.random(in: -90...90), longitude: Double.random(in: -180...180)),
                 status: .active,
                 capabilities: [.entanglement, .teleportation, .routing]
             )
@@ -292,7 +314,7 @@ public class FidelityOptimizer: ObservableObject {
         optimizedPath.expectedFidelity *= 0.95
 
         // Decoherence compensation
-        let decoherenceFactor = exp(-path.totalDistance / 1000.0) // Exponential decay
+        let decoherenceFactor = exp(-path.totalDistance / 1000.0)  // Exponential decay
         optimizedPath.expectedFidelity *= decoherenceFactor
 
         // Ensure fidelity doesn't exceed 1.0
@@ -311,12 +333,14 @@ public class PathSelector: ObservableObject {
         print("🎯 Path Selector initialized")
     }
 
-    public func selectBestPath(_ evaluatedPaths: [EvaluatedPath], constraints: RoutingConstraints) async -> RoutingPath? {
+    public func selectBestPath(_ evaluatedPaths: [EvaluatedPath], constraints: RoutingConstraints)
+        async -> RoutingPath?
+    {
         // Filter paths meeting minimum constraints
         let validPaths = evaluatedPaths.filter { path in
-            path.path.expectedFidelity >= constraints.minFidelity &&
-            path.path.totalDistance <= constraints.maxDistance &&
-            path.path.hops.count <= constraints.maxHops
+            path.path.expectedFidelity >= constraints.minFidelity
+                && path.path.totalDistance <= constraints.maxDistance
+                && path.path.hops.count <= constraints.maxHops
         }
 
         guard !validPaths.isEmpty else { return nil }
@@ -330,6 +354,10 @@ public class PathSelector: ObservableObject {
         case .speed:
             return validPaths.min { $0.path.estimatedTime < $1.path.estimatedTime }?.path
         case .reliability:
+            return validPaths.max { $0.score < $1.score }?.path
+        case .latency:
+            return validPaths.min { $0.path.estimatedTime < $1.path.estimatedTime }?.path
+        case .security:
             return validPaths.max { $0.score < $1.score }?.path
         }
     }
@@ -356,7 +384,7 @@ public enum NodeCapability {
     case entanglement, teleportation, routing, repeater
 }
 
-public enum TopologyChangeType {
+public enum TopologyChangeType: String {
     case nodeAdded, nodeRemoved, channelFailed, channelRestored
 }
 

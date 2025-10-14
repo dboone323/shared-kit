@@ -92,7 +92,7 @@ class BaseViewModelTestCase<ViewModelType: BaseViewModel>: XCTestCase {
         expectedState: T,
         keyPath: KeyPath<ViewModelType.State, T>,
         timeout: TimeInterval = 2.0,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         let initialState = viewModel.state[keyPath: keyPath]
@@ -120,7 +120,7 @@ class BaseViewModelTestCase<ViewModelType: BaseViewModel>: XCTestCase {
     func assertActionCompletes(
         action: ViewModelType.Action,
         timeout: TimeInterval = 5.0,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         let expectation = XCTestExpectation(description: "Action completion")
