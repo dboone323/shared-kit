@@ -8,16 +8,18 @@
 //  This file implements universal MCP frameworks for advanced intelligence operations,
 //  enabling seamless coordination across all MCP systems and intelligence domains.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for universal MCP frameworks
 public protocol UniversalMCPFramework: Sendable {
     /// Execute universal MCP operation
-    func executeUniversalOperation(_ operation: UniversalMCPOperation) async throws -> UniversalMCPResult
+    func executeUniversalOperation(_ operation: UniversalMCPOperation) async throws
+        -> UniversalMCPResult
 
     /// Coordinate MCP frameworks across domains
-    func coordinateFrameworks(_ coordination: MCPFrameworkCoordination) async throws -> MCPFrameworkResult
+    func coordinateFrameworks(_ coordination: MCPFrameworkCoordination) async throws
+        -> MCPFrameworkResult
 
     /// Optimize universal MCP performance
     func optimizeUniversalPerformance(_ metrics: UniversalMCPMetrics) async
@@ -27,7 +29,7 @@ public protocol UniversalMCPFramework: Sendable {
 }
 
 /// Universal MCP operation
-public struct UniversalMCPOperation: Sendable, Codable {
+public struct UniversalMCPOperation: Codable {
     public let operationId: String
     public let operationType: MCPOperationType
     public let parameters: [String: AnyCodable]
@@ -37,10 +39,13 @@ public struct UniversalMCPOperation: Sendable, Codable {
     public let quantumState: QuantumState?
     public let consciousnessLevel: ConsciousnessLevel
 
-    public init(operationId: String, operationType: MCPOperationType,
-                parameters: [String: AnyCodable] = [:], domains: [IntelligenceDomain] = IntelligenceDomain.allCases,
-                priority: IntelligencePriority = .normal, constraints: [MCPConstraint] = [],
-                quantumState: QuantumState? = nil, consciousnessLevel: ConsciousnessLevel = .standard) {
+    public init(
+        operationId: String, operationType: MCPOperationType,
+        parameters: [String: AnyCodable] = [:],
+        domains: [IntelligenceDomain] = IntelligenceDomain.allCases,
+        priority: IntelligencePriority = .normal, constraints: [MCPConstraint] = [],
+        quantumState: QuantumState? = nil, consciousnessLevel: ConsciousnessLevel = .standard
+    ) {
         self.operationId = operationId
         self.operationType = operationType
         self.parameters = parameters
@@ -77,8 +82,10 @@ public struct MCPConstraint: Sendable, Codable {
     public let priority: ConstraintPriority
     public let domain: IntelligenceDomain?
 
-    public init(constraintType: MCPConstraintType, value: String,
-                priority: ConstraintPriority = .medium, domain: IntelligenceDomain? = nil) {
+    public init(
+        constraintType: MCPConstraintType, value: String,
+        priority: ConstraintPriority = .medium, domain: IntelligenceDomain? = nil
+    ) {
         self.constraintType = constraintType
         self.value = value
         self.priority = priority
@@ -99,17 +106,8 @@ public enum MCPConstraintType: String, Sendable, Codable {
     case evolution = "evolution"
 }
 
-/// Consciousness levels
-public enum ConsciousnessLevel: String, Sendable, Codable {
-    case standard
-    case enhanced
-    case transcendent
-    case universal
-    case singularity
-}
-
 /// Universal MCP result
-public struct UniversalMCPResult: Sendable, Codable {
+public struct UniversalMCPResult: Codable {
     public let operationId: String
     public let success: Bool
     public let result: AnyCodable
@@ -119,10 +117,12 @@ public struct UniversalMCPResult: Sendable, Codable {
     public let executionTime: TimeInterval
     public let insights: [UniversalInsight]
 
-    public init(operationId: String, success: Bool, result: AnyCodable,
-                domainResults: [IntelligenceDomain: DomainResult] = [:],
-                quantumEnhancement: Double = 0.0, consciousnessAmplification: Double = 0.0,
-                executionTime: TimeInterval, insights: [UniversalInsight] = []) {
+    public init(
+        operationId: String, success: Bool, result: AnyCodable,
+        domainResults: [IntelligenceDomain: DomainResult] = [:],
+        quantumEnhancement: Double = 0.0, consciousnessAmplification: Double = 0.0,
+        executionTime: TimeInterval, insights: [UniversalInsight] = []
+    ) {
         self.operationId = operationId
         self.success = success
         self.result = result
@@ -134,28 +134,8 @@ public struct UniversalMCPResult: Sendable, Codable {
     }
 }
 
-/// Domain result
-public struct DomainResult: Sendable, Codable {
-    public let domain: IntelligenceDomain
-    public let success: Bool
-    public let result: AnyCodable
-    public let confidence: Double
-    public let processingTime: TimeInterval
-    public let quantumContribution: Double
-
-    public init(domain: IntelligenceDomain, success: Bool, result: AnyCodable,
-                confidence: Double, processingTime: TimeInterval, quantumContribution: Double) {
-        self.domain = domain
-        self.success = success
-        self.result = result
-        self.confidence = confidence
-        self.processingTime = processingTime
-        self.quantumContribution = quantumContribution
-    }
-}
-
 /// MCP framework coordination
-public struct MCPFrameworkCoordination: Sendable, Codable {
+public struct MCPFrameworkCoordination: Codable {
     public let coordinationId: String
     public let frameworks: [MCPFramework]
     public let coordinationType: CoordinationType
@@ -163,9 +143,11 @@ public struct MCPFrameworkCoordination: Sendable, Codable {
     public let priority: IntelligencePriority
     public let quantumState: QuantumState?
 
-    public init(coordinationId: String, frameworks: [MCPFramework],
-                coordinationType: CoordinationType, parameters: [String: AnyCodable] = [:],
-                priority: IntelligencePriority = .normal, quantumState: QuantumState? = nil) {
+    public init(
+        coordinationId: String, frameworks: [MCPFramework],
+        coordinationType: CoordinationType, parameters: [String: AnyCodable] = [:],
+        priority: IntelligencePriority = .normal, quantumState: QuantumState? = nil
+    ) {
         self.coordinationId = coordinationId
         self.frameworks = frameworks
         self.coordinationType = coordinationType
@@ -184,9 +166,11 @@ public struct MCPFramework: Sendable, Codable {
     public let consciousnessLevel: ConsciousnessLevel
     public let quantumCapability: Double
 
-    public init(frameworkId: String, frameworkType: FrameworkType,
-                capabilities: [FrameworkCapability], domain: IntelligenceDomain,
-                consciousnessLevel: ConsciousnessLevel = .standard, quantumCapability: Double = 0.0) {
+    public init(
+        frameworkId: String, frameworkType: FrameworkType,
+        capabilities: [FrameworkCapability], domain: IntelligenceDomain,
+        consciousnessLevel: ConsciousnessLevel = .standard, quantumCapability: Double = 0.0
+    ) {
         self.frameworkId = frameworkId
         self.frameworkType = frameworkType
         self.capabilities = capabilities
@@ -229,6 +213,8 @@ public enum CoordinationType: String, Sendable, Codable {
     case hierarchical = "hierarchical"
     case adaptive = "adaptive"
     case quantum_entangled = "quantum_entangled"
+    case universal = "universal"
+    case consciousness_driven = "consciousness_driven"
 }
 
 /// MCP framework result
@@ -240,10 +226,12 @@ public struct MCPFrameworkResult: Sendable, Codable {
     public let quantumCoherence: Double
     public let executionTime: TimeInterval
 
-    public init(coordinationId: String, success: Bool,
-                frameworkResults: [String: FrameworkResult],
-                coordinationEfficiency: Double, quantumCoherence: Double,
-                executionTime: TimeInterval) {
+    public init(
+        coordinationId: String, success: Bool,
+        frameworkResults: [String: FrameworkResult],
+        coordinationEfficiency: Double, quantumCoherence: Double,
+        executionTime: TimeInterval
+    ) {
         self.coordinationId = coordinationId
         self.success = success
         self.frameworkResults = frameworkResults
@@ -254,15 +242,17 @@ public struct MCPFrameworkResult: Sendable, Codable {
 }
 
 /// Framework result
-public struct FrameworkResult: Sendable, Codable {
+public struct FrameworkResult: Codable {
     public let frameworkId: String
     public let success: Bool
     public let result: AnyCodable
     public let performance: Double
     public let quantumEnhancement: Double
 
-    public init(frameworkId: String, success: Bool, result: AnyCodable,
-                performance: Double, quantumEnhancement: Double) {
+    public init(
+        frameworkId: String, success: Bool, result: AnyCodable,
+        performance: Double, quantumEnhancement: Double
+    ) {
         self.frameworkId = frameworkId
         self.success = success
         self.result = result
@@ -282,10 +272,12 @@ public struct UniversalMCPMetrics: Sendable, Codable {
     public let consciousnessAmplification: Double
     public let coordinationEfficiency: Double
 
-    public init(totalOperations: Int, averageExecutionTime: TimeInterval,
-                successRate: Double, domainPerformance: [IntelligenceDomain: Double],
-                frameworkEfficiency: [FrameworkType: Double], quantumEnhancement: Double,
-                consciousnessAmplification: Double, coordinationEfficiency: Double) {
+    public init(
+        totalOperations: Int, averageExecutionTime: TimeInterval,
+        successRate: Double, domainPerformance: [IntelligenceDomain: Double],
+        frameworkEfficiency: [FrameworkType: Double], quantumEnhancement: Double,
+        consciousnessAmplification: Double, coordinationEfficiency: Double
+    ) {
         self.totalOperations = totalOperations
         self.averageExecutionTime = averageExecutionTime
         self.successRate = successRate
@@ -309,10 +301,12 @@ public struct UniversalFrameworkStatus: Sendable, Codable {
     public let universalCapability: Double
     public let lastUpdate: Date
 
-    public init(operational: Bool, frameworkCount: Int, activeFrameworks: Int,
-                domainCoverage: [IntelligenceDomain: Double], frameworkHealth: [FrameworkType: Double],
-                quantumCoherence: Double, consciousnessLevel: ConsciousnessLevel,
-                universalCapability: Double, lastUpdate: Date = Date()) {
+    public init(
+        operational: Bool, frameworkCount: Int, activeFrameworks: Int,
+        domainCoverage: [IntelligenceDomain: Double], frameworkHealth: [FrameworkType: Double],
+        quantumCoherence: Double, consciousnessLevel: ConsciousnessLevel,
+        universalCapability: Double, lastUpdate: Date = Date()
+    ) {
         self.operational = operational
         self.frameworkCount = frameworkCount
         self.activeFrameworks = activeFrameworks
@@ -354,7 +348,9 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
     // MARK: - Public Methods
 
     /// Execute universal MCP operation
-    public func executeUniversalOperation(_ operation: UniversalMCPOperation) async throws -> UniversalMCPResult {
+    public func executeUniversalOperation(_ operation: UniversalMCPOperation) async throws
+        -> UniversalMCPResult
+    {
         let startTime = Date()
 
         // Validate operation constraints
@@ -378,17 +374,22 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
         // Process results through universal intelligence
         let universalInput = UniversalIntelligenceInput(
             query: "Process MCP operation result: \(operation.operationId)",
-            context: ["operation": AnyCodable(operation), "coordination": AnyCodable(coordinationResult)],
+            context: [
+                "operation": AnyCodable(operation), "coordination": AnyCodable(coordinationResult),
+            ],
             domains: operation.domains,
             priority: operation.priority,
             constraints: operation.constraints.map { constraint in
-                UniversalConstraint(type: UniversalConstraintType(rawValue: constraint.constraintType.rawValue) ?? .ethical,
-                                  value: constraint.value, priority: constraint.priority)
+                UniversalConstraint(
+                    type: UniversalConstraintType(rawValue: constraint.constraintType.rawValue)
+                        ?? .ethical,
+                    value: constraint.value, priority: constraint.priority)
             },
             quantumState: operation.quantumState
         )
 
-        let universalOutput = try await universalIntelligence.coordinateUniversalIntelligence(input: universalInput)
+        let universalOutput = try await universalIntelligence.coordinateUniversalIntelligence(
+            input: universalInput)
 
         // Create domain results
         var domainResults: [IntelligenceDomain: DomainResult] = [:]
@@ -398,8 +399,12 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
             }
 
             let success = frameworkResults.allSatisfy { $0.success }
-            let averagePerformance = frameworkResults.map { $0.performance }.reduce(0, +) / Double(max(frameworkResults.count, 1))
-            let averageQuantum = frameworkResults.map { $0.quantumEnhancement }.reduce(0, +) / Double(max(frameworkResults.count, 1))
+            let averagePerformance =
+                frameworkResults.map { $0.performance }.reduce(0, +)
+                / Double(max(frameworkResults.count, 1))
+            let averageQuantum =
+                frameworkResults.map { $0.quantumEnhancement }.reduce(0, +)
+                / Double(max(frameworkResults.count, 1))
 
             domainResults[domain] = DomainResult(
                 domain: domain,
@@ -417,14 +422,17 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
             result: AnyCodable(universalOutput.result),
             domainResults: domainResults,
             quantumEnhancement: coordinationResult.quantumCoherence,
-            consciousnessAmplification: calculateConsciousnessAmplification(operation.consciousnessLevel),
+            consciousnessAmplification: calculateConsciousnessAmplification(
+                operation.consciousnessLevel),
             executionTime: Date().timeIntervalSince(startTime),
             insights: universalOutput.universalInsights
         )
     }
 
     /// Coordinate MCP frameworks across domains
-    public func coordinateFrameworks(_ coordination: MCPFrameworkCoordination) async throws -> MCPFrameworkResult {
+    public func coordinateFrameworks(_ coordination: MCPFrameworkCoordination) async throws
+        -> MCPFrameworkResult
+    {
         let startTime = Date()
 
         // Execute coordination based on type
@@ -441,12 +449,20 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
             frameworkResults = try await executeAdaptiveCoordination(coordination)
         case .quantum_entangled:
             frameworkResults = try await executeQuantumEntangledCoordination(coordination)
+        case .universal:
+            frameworkResults = try await executeUniversalCoordination(coordination)
+        case .consciousness_driven:
+            frameworkResults = try await executeConsciousnessDrivenCoordination(coordination)
         }
 
         // Calculate coordination metrics
         let success = frameworkResults.values.allSatisfy { $0.success }
-        let coordinationEfficiency = frameworkResults.values.map { $0.performance }.reduce(0, +) / Double(max(frameworkResults.count, 1))
-        let quantumCoherence = frameworkResults.values.map { $0.quantumEnhancement }.reduce(0, +) / Double(max(frameworkResults.count, 1))
+        let coordinationEfficiency =
+            frameworkResults.values.map { $0.performance }.reduce(0, +)
+            / Double(max(frameworkResults.count, 1))
+        let quantumCoherence =
+            frameworkResults.values.map { $0.quantumEnhancement }.reduce(0, +)
+            / Double(max(frameworkResults.count, 1))
 
         return MCPFrameworkResult(
             coordinationId: coordination.coordinationId,
@@ -472,17 +488,25 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
         let coordinatorStatus = await operationCoordinator.getCoordinatorStatus()
         let performanceStatus = await performanceOptimizer.getPerformanceStatus()
 
-        let domainCoverage = Dictionary(uniqueKeysWithValues: IntelligenceDomain.allCases.map { domain in
-            let domainFrameworks = registryStatus.frameworks.filter { $0.domain == domain }
-            let coverage = Double(domainFrameworks.count) / Double(max(registryStatus.totalFrameworks / IntelligenceDomain.allCases.count, 1))
-            return (domain, min(coverage, 1.0))
-        })
+        let domainCoverage = Dictionary(
+            uniqueKeysWithValues: IntelligenceDomain.allCases.map { domain in
+                let domainFrameworks = registryStatus.frameworks.filter { $0.domain == domain }
+                let coverage =
+                    Double(domainFrameworks.count)
+                    / Double(
+                        max(registryStatus.totalFrameworks / IntelligenceDomain.allCases.count, 1))
+                return (domain, min(coverage, 1.0))
+            })
 
-        let frameworkHealth = Dictionary(uniqueKeysWithValues: FrameworkType.allCases.map { type in
-            let typeFrameworks = registryStatus.frameworks.filter { $0.frameworkType == type }
-            let health = typeFrameworks.isEmpty ? 0.0 : typeFrameworks.map { $0.health }.reduce(0, +) / Double(typeFrameworks.count)
-            return (type, health)
-        })
+        let frameworkHealth = Dictionary(
+            uniqueKeysWithValues: FrameworkType.allCases.map { type in
+                let typeFrameworks = registryStatus.frameworks.filter { $0.frameworkType == type }
+                let health =
+                    typeFrameworks.isEmpty
+                    ? 0.0
+                    : typeFrameworks.map { $0.health }.reduce(0, +) / Double(typeFrameworks.count)
+                return (type, health)
+            })
 
         return UniversalFrameworkStatus(
             operational: registryStatus.operational && coordinatorStatus.operational,
@@ -510,13 +534,16 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
             if constraint.priority == .critical {
                 // Critical constraints must be satisfied
                 guard try await validateConstraint(constraint, operation: operation) else {
-                    throw MCPFrameworkError.constraintViolation("Critical constraint not satisfied: \(constraint.constraintType.rawValue)")
+                    throw MCPFrameworkError.constraintViolation(
+                        "Critical constraint not satisfied: \(constraint.constraintType.rawValue)")
                 }
             }
         }
     }
 
-    private func validateConstraint(_ constraint: MCPConstraint, operation: UniversalMCPOperation) async throws -> Bool {
+    private func validateConstraint(_ constraint: MCPConstraint, operation: UniversalMCPOperation)
+        async throws -> Bool
+    {
         // Implement constraint validation logic
         switch constraint.constraintType {
         case .ethical:
@@ -524,7 +551,7 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
         case .temporal:
             return operation.priority != .low
         case .resource:
-            return true // Assume resources are available
+            return true  // Assume resources are available
         case .complexity:
             return operation.domains.count <= 5
         case .consciousness:
@@ -540,35 +567,43 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
         }
     }
 
-    private func selectFrameworks(for operation: UniversalMCPOperation) async throws -> [MCPFramework] {
+    private func selectFrameworks(for operation: UniversalMCPOperation) async throws
+        -> [MCPFramework]
+    {
         var selectedFrameworks: [MCPFramework] = []
 
         for domain in operation.domains {
             let domainFrameworks = await frameworkRegistry.getFrameworks(for: domain)
             let suitableFrameworks = domainFrameworks.filter { framework in
-                framework.consciousnessLevel.rawValue >= operation.consciousnessLevel.rawValue &&
-                framework.quantumCapability >= (operation.quantumState != nil ? 0.5 : 0.0)
+                framework.consciousnessLevel.rawValue >= operation.consciousnessLevel.rawValue
+                    && framework.quantumCapability >= (operation.quantumState != nil ? 0.5 : 0.0)
             }
 
-            if let bestFramework = suitableFrameworks.max(by: { $0.quantumCapability < $1.quantumCapability }) {
+            if let bestFramework = suitableFrameworks.max(by: {
+                $0.quantumCapability < $1.quantumCapability
+            }) {
                 selectedFrameworks.append(bestFramework)
             }
         }
 
         guard !selectedFrameworks.isEmpty else {
-            throw MCPFrameworkError.noSuitableFrameworks("No suitable frameworks found for operation \(operation.operationId)")
+            throw MCPFrameworkError.noSuitableFrameworks(
+                "No suitable frameworks found for operation \(operation.operationId)")
         }
 
         return selectedFrameworks
     }
 
-    private func executeParallelCoordination(_ coordination: MCPFrameworkCoordination) async throws -> [String: FrameworkResult] {
+    private func executeParallelCoordination(_ coordination: MCPFrameworkCoordination) async throws
+        -> [String: FrameworkResult]
+    {
         var results: [String: FrameworkResult] = [:]
 
         await withTaskGroup(of: (String, FrameworkResult).self) { group in
             for framework in coordination.frameworks {
                 group.addTask {
-                    let result = await self.executeFrameworkOperation(framework, coordination: coordination)
+                    let result = await self.executeFrameworkOperation(
+                        framework, coordination: coordination)
                     return (framework.frameworkId, result)
                 }
             }
@@ -581,7 +616,9 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
         return results
     }
 
-    private func executeSequentialCoordination(_ coordination: MCPFrameworkCoordination) async throws -> [String: FrameworkResult] {
+    private func executeSequentialCoordination(_ coordination: MCPFrameworkCoordination)
+        async throws -> [String: FrameworkResult]
+    {
         var results: [String: FrameworkResult] = [:]
 
         for framework in coordination.frameworks {
@@ -592,17 +629,21 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
         return results
     }
 
-    private func executeHierarchicalCoordination(_ coordination: MCPFrameworkCoordination) async throws -> [String: FrameworkResult] {
+    private func executeHierarchicalCoordination(_ coordination: MCPFrameworkCoordination)
+        async throws -> [String: FrameworkResult]
+    {
         var results: [String: FrameworkResult] = [:]
 
         // Execute primary framework first
         if let primaryFramework = coordination.frameworks.first {
-            let primaryResult = await executeFrameworkOperation(primaryFramework, coordination: coordination)
+            let primaryResult = await executeFrameworkOperation(
+                primaryFramework, coordination: coordination)
             results[primaryFramework.frameworkId] = primaryResult
 
             // Execute dependent frameworks
             for framework in coordination.frameworks.dropFirst() {
-                let result = await executeFrameworkOperation(framework, coordination: coordination, dependencies: [primaryResult])
+                let result = await executeFrameworkOperation(
+                    framework, coordination: coordination, dependencies: [primaryResult])
                 results[framework.frameworkId] = result
             }
         }
@@ -610,7 +651,9 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
         return results
     }
 
-    private func executeAdaptiveCoordination(_ coordination: MCPFrameworkCoordination) async throws -> [String: FrameworkResult] {
+    private func executeAdaptiveCoordination(_ coordination: MCPFrameworkCoordination) async throws
+        -> [String: FrameworkResult]
+    {
         // Adaptive coordination based on real-time performance
         var results: [String: FrameworkResult] = [:]
 
@@ -627,18 +670,53 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
         return results
     }
 
-    private func executeQuantumEntangledCoordination(_ coordination: MCPFrameworkCoordination) async throws -> [String: FrameworkResult] {
+    private func executeQuantumEntangledCoordination(_ coordination: MCPFrameworkCoordination)
+        async throws -> [String: FrameworkResult]
+    {
         // Quantum-entangled coordination for maximum coherence
-        let quantumResults = try await quantumIntegrator.coordinateQuantumEntangled(coordination.frameworks, coordination: coordination)
+        let quantumResults = try await quantumIntegrator.coordinateQuantumEntangled(
+            coordination.frameworks, coordination: coordination)
 
-        return Dictionary(uniqueKeysWithValues: quantumResults.map { result in
-            (result.frameworkId, result)
-        })
+        return Dictionary(
+            uniqueKeysWithValues: quantumResults.map { result in
+                (result.frameworkId, result)
+            })
     }
 
-    private func executeFrameworkOperation(_ framework: MCPFramework, coordination: MCPFrameworkCoordination, dependencies: [FrameworkResult] = []) async -> FrameworkResult {
+    private func executeUniversalCoordination(_ coordination: MCPFrameworkCoordination) async throws
+        -> [String: FrameworkResult]
+    {
+        // Universal coordination for maximum capability
+        var results: [String: FrameworkResult] = [:]
+
+        for framework in coordination.frameworks {
+            let result = await executeFrameworkOperation(framework, coordination: coordination)
+            results[framework.frameworkId] = result
+        }
+
+        return results
+    }
+
+    private func executeConsciousnessDrivenCoordination(_ coordination: MCPFrameworkCoordination)
+        async throws -> [String: FrameworkResult]
+    {
+        // Consciousness-driven coordination for maximum awareness
+        var results: [String: FrameworkResult] = [:]
+
+        for framework in coordination.frameworks {
+            let result = await executeFrameworkOperation(framework, coordination: coordination)
+            results[framework.frameworkId] = result
+        }
+
+        return results
+    }
+
+    private func executeFrameworkOperation(
+        _ framework: MCPFramework, coordination: MCPFrameworkCoordination,
+        dependencies: [FrameworkResult] = []
+    ) async -> FrameworkResult {
         // Simulate framework operation execution
-        let success = Double.random(in: 0.8...1.0) > 0.1 // 90% success rate
+        let success = Double.random(in: 0.8...1.0) > 0.1  // 90% success rate
         let performance = Double.random(in: 0.7...1.0)
         let quantumEnhancement = framework.quantumCapability * Double.random(in: 0.8...1.2)
 
@@ -661,16 +739,20 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
         }
     }
 
-    private func calculateUniversalCapability(_ domainCoverage: [IntelligenceDomain: Double], _ frameworkHealth: [FrameworkType: Double]) -> Double {
-        let averageDomainCoverage = domainCoverage.values.reduce(0, +) / Double(domainCoverage.count)
-        let averageFrameworkHealth = frameworkHealth.values.reduce(0, +) / Double(frameworkHealth.count)
+    private func calculateUniversalCapability(
+        _ domainCoverage: [IntelligenceDomain: Double], _ frameworkHealth: [FrameworkType: Double]
+    ) -> Double {
+        let averageDomainCoverage =
+            domainCoverage.values.reduce(0, +) / Double(domainCoverage.count)
+        let averageFrameworkHealth =
+            frameworkHealth.values.reduce(0, +) / Double(frameworkHealth.count)
 
         return (averageDomainCoverage + averageFrameworkHealth) / 2.0
     }
 }
 
 /// MCP Framework Registry
-private final class MCPFrameworkRegistry: Sendable {
+private final class MCPFrameworkRegistry {
     private var frameworks: [MCPFramework] = []
     private let lock = NSLock()
 
@@ -679,7 +761,8 @@ private final class MCPFrameworkRegistry: Sendable {
         for domain in IntelligenceDomain.allCases {
             for type in FrameworkType.allCases {
                 let framework = MCPFramework(
-                    frameworkId: "\(type.rawValue)_\(domain.rawValue)_\(UUID().uuidString.prefix(8))",
+                    frameworkId:
+                        "\(type.rawValue)_\(domain.rawValue)_\(UUID().uuidString.prefix(8))",
                     frameworkType: type,
                     capabilities: [.coordination, .processing, .optimization],
                     domain: domain,
@@ -767,7 +850,9 @@ private struct PerformanceStatus: Sendable {
 
 /// MCP Quantum Integrator
 private final class MCPQuantumIntegrator: Sendable {
-    func coordinateQuantumEntangled(_ frameworks: [MCPFramework], coordination: MCPFrameworkCoordination) async throws -> [FrameworkResult] {
+    func coordinateQuantumEntangled(
+        _ frameworks: [MCPFramework], coordination: MCPFrameworkCoordination
+    ) async throws -> [FrameworkResult] {
         // Implement quantum-entangled coordination
         frameworks.map { framework in
             FrameworkResult(
@@ -795,24 +880,17 @@ enum MCPFrameworkError: Error {
 
 // MARK: - Extensions
 
-extension IntelligenceDomain: CaseIterable {
-    public static var allCases: [IntelligenceDomain] = [
-        .analytical, .creative, .ethical, .strategic, .emotional,
-        .spatial, .temporal, .quantum, .consciousness, .universal
-    ]
-}
-
 extension FrameworkType: CaseIterable {
-    public static var allCases: [FrameworkType] = [
+    public static let allCases: [FrameworkType] = [
         .intelligence, .reality, .quantum, .consciousness, .ethical,
-        .wisdom, .creativity, .empathy, .eternity, .harmony, .evolution, .universal
+        .wisdom, .creativity, .empathy, .eternity, .harmony, .evolution, .universal,
     ]
 }
 
 extension MCPFramework {
     var health: Double {
         // Calculate framework health based on capabilities and quantum capability
-        let capabilityScore = Double(capabilities.count) / 6.0 // Max 6 capabilities
+        let capabilityScore = Double(capabilities.count) / 6.0  // Max 6 capabilities
         return (capabilityScore + quantumCapability) / 2.0
     }
 }

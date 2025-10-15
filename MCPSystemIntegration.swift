@@ -283,12 +283,13 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
         startMonitoring()
 
         // Publish system start event
-        await publishSystemEvent(MCPSystemEvent(
-            type: .systemStarted,
-            componentId: "system",
-            message: "MCP System initialized successfully",
-            data: ["version": .init("9.0.0")]
-        ))
+        await publishSystemEvent(
+            MCPSystemEvent(
+                type: .systemStarted,
+                componentId: "system",
+                message: "MCP System initialized successfully",
+                data: ["version": .init("9.0.0")]
+            ))
     }
 
     public func shutdownSystem() async throws {
@@ -312,11 +313,12 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
         components.removeAll()
 
         // Publish system stop event
-        await publishSystemEvent(MCPSystemEvent(
-            type: .systemStopped,
-            componentId: "system",
-            message: "MCP System shut down successfully"
-        ))
+        await publishSystemEvent(
+            MCPSystemEvent(
+                type: .systemStopped,
+                componentId: "system",
+                message: "MCP System shut down successfully"
+            ))
     }
 
     public func getSystemStatus() async -> MCPSystemStatus {
@@ -338,12 +340,13 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
             self.components[component.id] = component
         }
 
-        await publishSystemEvent(MCPSystemEvent(
-            type: .componentRegistered,
-            componentId: component.id,
-            message: "Component \(component.name) registered successfully",
-            data: ["type": .init(component.type.rawValue)]
-        ))
+        await publishSystemEvent(
+            MCPSystemEvent(
+                type: .componentRegistered,
+                componentId: component.id,
+                message: "Component \(component.name) registered successfully",
+                data: ["type": .init(component.type.rawValue)]
+            ))
     }
 
     public func unregisterComponent(_ componentId: String) async throws {
@@ -357,11 +360,12 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
             self.components.removeValue(forKey: componentId)
         }
 
-        await publishSystemEvent(MCPSystemEvent(
-            type: .componentUnregistered,
-            componentId: componentId,
-            message: "Component \(component.name) unregistered successfully"
-        ))
+        await publishSystemEvent(
+            MCPSystemEvent(
+                type: .componentUnregistered,
+                componentId: componentId,
+                message: "Component \(component.name) unregistered successfully"
+            ))
     }
 
     public func getComponent(_ componentId: String) async -> MCPSystemComponent? {
@@ -381,7 +385,7 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
             MCPSchedulerComponent(scheduler: workflowScheduler),
             MCPMonitorComponent(monitor: workflowMonitor),
             MCPOptimizerComponent(optimizer: workflowOptimizer),
-            MCPIntegrationComponent(integration: integrationManager)
+            MCPIntegrationComponent(integration: integrationManager),
         ]
 
         for component in coreComponents {
@@ -400,15 +404,17 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
                     await collectSystemMetrics()
 
                     // Wait for next monitoring interval
-                    try await Task.sleep(nanoseconds: UInt64(configuration.monitoringInterval * 1_000_000_000))
+                    try await Task.sleep(
+                        nanoseconds: UInt64(configuration.monitoringInterval * 1_000_000_000))
                 } catch {
                     if !Task.isCancelled {
-                        await publishSystemEvent(MCPSystemEvent(
-                            type: .errorOccurred,
-                            componentId: "system",
-                            message: "Monitoring error: \(error.localizedDescription)",
-                            severity: .error
-                        ))
+                        await publishSystemEvent(
+                            MCPSystemEvent(
+                                type: .errorOccurred,
+                                componentId: "system",
+                                message: "Monitoring error: \(error.localizedDescription)",
+                                severity: .error
+                            ))
                     }
                 }
             }
@@ -423,13 +429,14 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
                 // Check if health changed
                 let previousStatus = component.status
                 if health.status != .healthy && previousStatus != .error {
-                    await publishSystemEvent(MCPSystemEvent(
-                        type: .componentHealthChanged,
-                        componentId: component.id,
-                        message: "Component health changed to \(health.status)",
-                        data: ["previous_status": .init(previousStatus.rawValue)],
-                        severity: health.status == .unhealthy ? .error : .warning
-                    ))
+                    await publishSystemEvent(
+                        MCPSystemEvent(
+                            type: .componentHealthChanged,
+                            componentId: component.id,
+                            message: "Component health changed to \(health.status)",
+                            data: ["previous_status": .init(previousStatus.rawValue)],
+                            severity: health.status == .unhealthy ? .error : .warning
+                        ))
                 }
 
                 // Update component status
@@ -437,12 +444,13 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
                 updatedComponent.status = health.status == .healthy ? .running : .error
 
             } catch {
-                await publishSystemEvent(MCPSystemEvent(
-                    type: .errorOccurred,
-                    componentId: component.id,
-                    message: "Health check failed: \(error.localizedDescription)",
-                    severity: .error
-                ))
+                await publishSystemEvent(
+                    MCPSystemEvent(
+                        type: .errorOccurred,
+                        componentId: component.id,
+                        message: "Health check failed: \(error.localizedDescription)",
+                        severity: .error
+                    ))
             }
         }
     }
@@ -476,7 +484,9 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
         return healthMap
     }
 
-    private func calculateOverallHealth(_ componentHealth: [String: MCPComponentHealth]) -> MCPComponentHealthStatus {
+    private func calculateOverallHealth(_ componentHealth: [String: MCPComponentHealth])
+        -> MCPComponentHealthStatus
+    {
         let statuses = componentHealth.values.map { $0.status }
 
         if statuses.contains(.unhealthy) {
@@ -492,13 +502,14 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
 
     private func publishSystemEvent(_ event: MCPSystemEvent) async {
         // Publish to integration manager's event system
-        await integrationManager.eventSystem.publish(MCPEvent(
-            id: event.id,
-            type: .serviceRegistered, // Map to existing event type
-            source: event.componentId,
-            data: event.data ?? [:],
-            severity: event.severity
-        ))
+        await integrationManager.eventSystem.publish(
+            MCPEvent(
+                id: event.id,
+                type: .serviceRegistered,  // Map to existing event type
+                source: event.componentId,
+                data: event.data ?? [:],
+                severity: event.severity
+            ))
     }
 }
 
@@ -519,11 +530,11 @@ public struct MCPOrchestratorComponent: MCPSystemComponent {
         self.orchestrator = orchestrator
     }
 
-    public func initialize() async throws {
+    public mutating func initialize() async throws {
         status = .ready
     }
 
-    public func shutdown() async throws {
+    public mutating func shutdown() async throws {
         status = .stopped
     }
 
@@ -548,11 +559,11 @@ public struct MCPSchedulerComponent: MCPSystemComponent {
         self.scheduler = scheduler
     }
 
-    public func initialize() async throws {
+    public mutating func initialize() async throws {
         status = .ready
     }
 
-    public func shutdown() async throws {
+    public mutating func shutdown() async throws {
         status = .stopped
     }
 
@@ -576,11 +587,11 @@ public struct MCPMonitorComponent: MCPSystemComponent {
         self.monitor = monitor
     }
 
-    public func initialize() async throws {
+    public mutating func initialize() async throws {
         status = .ready
     }
 
-    public func shutdown() async throws {
+    public mutating func shutdown() async throws {
         status = .stopped
     }
 
@@ -604,11 +615,11 @@ public struct MCPOptimizerComponent: MCPSystemComponent {
         self.optimizer = optimizer
     }
 
-    public func initialize() async throws {
+    public mutating func initialize() async throws {
         status = .ready
     }
 
-    public func shutdown() async throws {
+    public mutating func shutdown() async throws {
         status = .stopped
     }
 
@@ -632,11 +643,11 @@ public struct MCPIntegrationComponent: MCPSystemComponent {
         self.integration = integration
     }
 
-    public func initialize() async throws {
+    public mutating func initialize() async throws {
         status = .ready
     }
 
-    public func shutdown() async throws {
+    public mutating func shutdown() async throws {
         status = .stopped
     }
 
@@ -692,25 +703,33 @@ extension MCPCompleteSystemIntegration {
     }
 
     /// Optimize and execute workflow
-    public func optimizeAndExecuteWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult {
+    public func optimizeAndExecuteWorkflow(_ workflow: MCPWorkflow) async throws
+        -> MCPWorkflowResult
+    {
         let optimization = try await workflowOptimizer.optimizeWorkflow(workflow)
         return try await executeWorkflow(optimization.optimizedWorkflow)
     }
 
     /// Schedule optimized workflow
-    public func scheduleOptimizedWorkflow(_ workflow: MCPWorkflow, schedule: MCPWorkflowSchedule) async throws -> String {
+    public func scheduleOptimizedWorkflow(_ workflow: MCPWorkflow, schedule: MCPWorkflowSchedule)
+        async throws -> String
+    {
         let optimization = try await workflowOptimizer.optimizeWorkflow(workflow)
-        return try await workflowScheduler.scheduleRecurringWorkflow(optimization.optimizedWorkflow, schedule: schedule)
+        return try await workflowScheduler.scheduleRecurringWorkflow(
+            optimization.optimizedWorkflow, schedule: schedule)
     }
 }
 
 // MARK: - Global System Instance
 
 /// Global MCP system instance
+@MainActor
 public let mcpSystem = MCPCompleteSystemIntegration()
 
 /// Convenience function to initialize the MCP system
-public func initializeMCPSystem(configuration: MCPSystemConfiguration = MCPSystemConfiguration()) async throws {
+public func initializeMCPSystem(configuration: MCPSystemConfiguration = MCPSystemConfiguration())
+    async throws
+{
     try await mcpSystem.initializeSystem()
 }
 

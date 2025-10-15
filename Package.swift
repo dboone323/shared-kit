@@ -15,6 +15,22 @@
         targets: [
             // Minimal package for now; sources live under Sources/SharedKit
             .target(name: "SharedKit", path: "Sources/SharedKit"),
+            // Add all MCP framework files
+            .target(
+                name: "MCPFrameworks", dependencies: [], path: ".",
+                sources: [
+                    "MCPSharedTypes.swift",
+                    "EnhancedMCPIntegration.swift",
+                    "UniversalMCPFrameworks.swift",
+                    "MCPIntelligenceSynthesis.swift",
+                    "MCPCoordinationSystems.swift",
+                    "QuantumOrchestrationFrameworks.swift",
+                    "ComprehensiveSupportingArchitectures.swift",
+                    "MCPSystemIntegration.swift",
+                    "MCPUniversalIntelligence.swift",
+                    "MCPIntegrationAPIs.swift",
+                    "UniversalAgentEraCompletion.swift",
+                ]),
             // Phase 8G minimal demo executable (builds only the decoupled QSE↔QEN composition)
             .executableTarget(
                 name: "Phase8GDemo",

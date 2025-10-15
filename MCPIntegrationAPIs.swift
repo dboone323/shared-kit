@@ -38,7 +38,8 @@ public protocol MCPServiceDiscovery {
 /// Protocol for MCP event system
 public protocol MCPEventSystem {
     func publish(_ event: MCPEvent) async
-    func subscribe(to eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void) -> MCPSubscription
+    func subscribe(to eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void)
+        -> MCPSubscription
     func unsubscribe(_ subscription: MCPSubscription) async
 }
 
@@ -62,7 +63,6 @@ public struct MCPServiceInfo: Codable, Sendable {
     public let capabilities: [MCPToolCapability]
     public let healthCheckEndpoint: String?
     public let metadata: [String: String]
-    public let registeredAt: Date
 
     public init(
         id: String,
@@ -72,8 +72,7 @@ public struct MCPServiceInfo: Codable, Sendable {
         endpoint: String,
         capabilities: [MCPToolCapability] = [],
         healthCheckEndpoint: String? = nil,
-        metadata: [String: String] = [:],
-        registeredAt: Date = Date()
+        metadata: [String: String] = [:]
     ) {
         self.id = id
         self.name = name
@@ -83,7 +82,6 @@ public struct MCPServiceInfo: Codable, Sendable {
         self.capabilities = capabilities
         self.healthCheckEndpoint = healthCheckEndpoint
         self.metadata = metadata
-        self.registeredAt = registeredAt
     }
 }
 
@@ -91,7 +89,7 @@ public struct MCPServiceInfo: Codable, Sendable {
 public struct MCPAPIRequest: MCPAPIEndpoint {
     public let path: String
     public let method: String
-    public let parameters: [String: Any]?
+    public let parameters: [String: AnyCodable]?
     public let headers: [String: String]?
     public let body: Data?
     public let timeout: TimeInterval
@@ -99,7 +97,7 @@ public struct MCPAPIRequest: MCPAPIEndpoint {
     public init(
         path: String,
         method: String = "GET",
-        parameters: [String: Any]? = nil,
+        parameters: [String: AnyCodable]? = nil,
         headers: [String: String]? = nil,
         body: Data? = nil,
         timeout: TimeInterval = 30.0
@@ -219,7 +217,10 @@ public struct MCPSubscription {
     public let eventType: MCPEventType
     public let handler: (MCPEvent) -> Void
 
-    public init(id: String = UUID().uuidString, eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void) {
+    public init(
+        id: String = UUID().uuidString, eventType: MCPEventType,
+        handler: @escaping (MCPEvent) -> Void
+    ) {
         self.id = id
         self.eventType = eventType
         self.handler = handler
@@ -290,7 +291,9 @@ public struct MCPHealthIssue: Codable {
     public let severity: MCPEventSeverity
     public let timestamp: Date
 
-    public init(serviceId: String, issue: String, severity: MCPEventSeverity, timestamp: Date = Date()) {
+    public init(
+        serviceId: String, issue: String, severity: MCPEventSeverity, timestamp: Date = Date()
+    ) {
         self.serviceId = serviceId
         self.issue = issue
         self.severity = severity
@@ -359,7 +362,8 @@ public struct MCPBottleneck: Codable {
     public let severity: MCPEventSeverity
     public let description: String
 
-    public init(serviceId: String, metric: String, severity: MCPEventSeverity, description: String) {
+    public init(serviceId: String, metric: String, severity: MCPEventSeverity, description: String)
+    {
         self.serviceId = serviceId
         self.metric = metric
         self.severity = severity
@@ -392,7 +396,9 @@ public final class MCPHTTPClient: MCPAPIClient {
     public func execute<T: Decodable>(_ endpoint: MCPAPIEndpoint) async throws -> T {
         let response: MCPAPIResponse<T> = try await execute(endpoint)
         guard response.success, let data = response.data else {
-            throw MCPAPIError(code: response.error?.code ?? "unknown", message: response.error?.message ?? "Unknown error")
+            throw MCPAPIError(
+                code: response.error?.code ?? "unknown",
+                message: response.error?.message ?? "Unknown error")
         }
         return data
     }
@@ -429,7 +435,8 @@ public final class MCPHTTPClient: MCPAPIClient {
         }
 
         guard (200...299).contains(httpResponse.statusCode) else {
-            throw MCPAPIError(code: "http_\(httpResponse.statusCode)", message: "HTTP \(httpResponse.statusCode)")
+            throw MCPAPIError(
+                code: "http_\(httpResponse.statusCode)", message: "HTTP \(httpResponse.statusCode)")
         }
 
         let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any]
@@ -456,8 +463,10 @@ public final class MCPHTTPClient: MCPAPIClient {
                     let (bytes, response) = try await session.bytes(for: request)
 
                     guard let httpResponse = response as? HTTPURLResponse,
-                          (200...299).contains(httpResponse.statusCode) else {
-                        throw MCPAPIError(code: "stream_error", message: "Failed to establish stream")
+                        (200...299).contains(httpResponse.statusCode)
+                    else {
+                        throw MCPAPIError(
+                            code: "stream_error", message: "Failed to establish stream")
                     }
 
                     continuation.yield(["status": "connected", "timestamp": Date()])
@@ -466,7 +475,9 @@ public final class MCPHTTPClient: MCPAPIClient {
                         if line.hasPrefix("data: ") {
                             let jsonString = String(line.dropFirst(6))
                             if let data = jsonString.data(using: .utf8),
-                               let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                                let jsonObject = try? JSONSerialization.jsonObject(with: data)
+                                    as? [String: Any]
+                            {
                                 continuation.yield(jsonObject)
                             }
                         }
@@ -534,7 +545,9 @@ public final class MCPInMemoryEventSystem: MCPEventSystem {
         }
     }
 
-    public func subscribe(to eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void) -> MCPSubscription {
+    public func subscribe(to eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void)
+        -> MCPSubscription
+    {
         let subscription = MCPSubscription(eventType: eventType, handler: handler)
         queue.async(flags: .barrier) {
             self.subscriptions[subscription.id] = subscription
@@ -571,15 +584,14 @@ public final class MCPInMemoryMetricsSystem: MCPMetricsSystem {
     public func getMetrics(for serviceId: String, timeRange: DateInterval) async -> [MCPMetric] {
         queue.sync {
             metrics.filter { metric in
-                metric.serviceId == serviceId &&
-                timeRange.contains(metric.timestamp)
+                metric.serviceId == serviceId && timeRange.contains(metric.timestamp)
             }
         }
     }
 
     public func getHealthStatus() async -> MCPHealthStatus {
         let recentMetrics = queue.sync {
-            metrics.filter { $0.timestamp > Date().addingTimeInterval(-300) } // Last 5 minutes
+            metrics.filter { $0.timestamp > Date().addingTimeInterval(-300) }  // Last 5 minutes
         }
 
         var serviceHealth: [String: MCPHealthState] = [:]
@@ -594,25 +606,28 @@ public final class MCPInMemoryMetricsSystem: MCPMetricsSystem {
 
             if errorRate > 0.5 {
                 serviceHealth[serviceId] = .unhealthy
-                issues.append(MCPHealthIssue(
-                    serviceId: serviceId,
-                    issue: "High error rate: \(String(format: "%.1f%%", errorRate * 100))",
-                    severity: .error
-                ))
+                issues.append(
+                    MCPHealthIssue(
+                        serviceId: serviceId,
+                        issue: "High error rate: \(String(format: "%.1f%%", errorRate * 100))",
+                        severity: .error
+                    ))
             } else if errorRate > 0.1 {
                 serviceHealth[serviceId] = .degraded
-                issues.append(MCPHealthIssue(
-                    serviceId: serviceId,
-                    issue: "Elevated error rate: \(String(format: "%.1f%%", errorRate * 100))",
-                    severity: .warning
-                ))
+                issues.append(
+                    MCPHealthIssue(
+                        serviceId: serviceId,
+                        issue: "Elevated error rate: \(String(format: "%.1f%%", errorRate * 100))",
+                        severity: .warning
+                    ))
             } else {
                 serviceHealth[serviceId] = .healthy
             }
         }
 
-        let overallHealth = serviceHealth.values.contains(.unhealthy) ? .unhealthy :
-                           serviceHealth.values.contains(.degraded) ? .degraded : .healthy
+        let overallHealth =
+            serviceHealth.values.contains(.unhealthy)
+            ? .unhealthy : serviceHealth.values.contains(.degraded) ? .degraded : .healthy
 
         return MCPHealthStatus(
             overall: overallHealth,
@@ -637,7 +652,8 @@ public final class MCPInMemoryMetricsSystem: MCPMetricsSystem {
             let average = values.reduce(0, +) / Double(values.count)
             let minimum = values.min() ?? 0
             let maximum = values.max() ?? 0
-            let percentile95 = values.count > 20 ? values[Int(Double(values.count) * 0.95)] : maximum
+            let percentile95 =
+                values.count > 20 ? values[Int(Double(values.count) * 0.95)] : maximum
 
             // Simple trend calculation
             let trend: MCPTrend
@@ -658,25 +674,28 @@ public final class MCPInMemoryMetricsSystem: MCPMetricsSystem {
                 trend = .unknown
             }
 
-            summaries.append(MCPMetricSummary(
-                name: name,
-                average: average,
-                minimum: minimum,
-                maximum: maximum,
-                percentile95: percentile95,
-                trend: trend
-            ))
+            summaries.append(
+                MCPMetricSummary(
+                    name: name,
+                    average: average,
+                    minimum: minimum,
+                    maximum: maximum,
+                    percentile95: percentile95,
+                    trend: trend
+                ))
         }
 
         // Identify bottlenecks (simplified)
         var bottlenecks: [MCPBottleneck] = []
         for summary in summaries where summary.maximum > summary.average * 2 {
-            bottlenecks.append(MCPBottleneck(
-                serviceId: "unknown", // Would need service mapping
-                metric: summary.name,
-                severity: .warning,
-                description: "High variance in \(summary.name): max \(String(format: "%.2f", summary.maximum)) vs avg \(String(format: "%.2f", summary.average))"
-            ))
+            bottlenecks.append(
+                MCPBottleneck(
+                    serviceId: "unknown",  // Would need service mapping
+                    metric: summary.name,
+                    severity: .warning,
+                    description:
+                        "High variance in \(summary.name): max \(String(format: "%.2f", summary.maximum)) vs avg \(String(format: "%.2f", summary.average))"
+                ))
         }
 
         // Generate recommendations
@@ -746,15 +765,18 @@ public final class MCPIntegrationManager {
         try await serviceDiscovery.registerService(serviceInfo)
 
         // Publish registration event
-        await eventSystem.publish(MCPEvent(
-            type: .serviceRegistered,
-            source: "MCPIntegrationManager",
-            data: ["service_id": .init(serviceInfo.id)]
-        ))
+        await eventSystem.publish(
+            MCPEvent(
+                type: .serviceRegistered,
+                source: "MCPIntegrationManager",
+                data: ["service_id": .init(serviceInfo.id)]
+            ))
     }
 
     /// Execute a tool by ID
-    public func executeTool(_ toolId: String, parameters: [String: Any]) async throws -> MCPToolResult {
+    public func executeTool(_ toolId: String, parameters: [String: AnyCodable]) async throws
+        -> MCPToolResult
+    {
         let startTime = Date()
 
         do {
@@ -762,30 +784,33 @@ public final class MCPIntegrationManager {
             let executionTime = Date().timeIntervalSince(startTime)
 
             // Record metrics
-            await metricsSystem.recordMetric(MCPMetric(
-                serviceId: toolId,
-                name: "execution_time",
-                value: executionTime,
-                unit: "seconds"
-            ))
+            await metricsSystem.recordMetric(
+                MCPMetric(
+                    serviceId: toolId,
+                    name: "execution_time",
+                    value: executionTime,
+                    unit: "seconds"
+                ))
 
-            await metricsSystem.recordMetric(MCPMetric(
-                serviceId: toolId,
-                name: "execution_success",
-                value: 1.0,
-                unit: "count"
-            ))
+            await metricsSystem.recordMetric(
+                MCPMetric(
+                    serviceId: toolId,
+                    name: "execution_success",
+                    value: 1.0,
+                    unit: "count"
+                ))
 
             // Publish execution event
-            await eventSystem.publish(MCPEvent(
-                type: .toolExecuted,
-                source: "MCPIntegrationManager",
-                data: [
-                    "tool_id": .init(toolId),
-                    "success": .init(result.success),
-                    "execution_time": .init(executionTime)
-                ]
-            ))
+            await eventSystem.publish(
+                MCPEvent(
+                    type: .toolExecuted,
+                    source: "MCPIntegrationManager",
+                    data: [
+                        "tool_id": .init(toolId),
+                        "success": .init(result.success),
+                        "execution_time": .init(executionTime),
+                    ]
+                ))
 
             return result
 
@@ -793,24 +818,26 @@ public final class MCPIntegrationManager {
             let executionTime = Date().timeIntervalSince(startTime)
 
             // Record error metrics
-            await metricsSystem.recordMetric(MCPMetric(
-                serviceId: toolId,
-                name: "execution_error",
-                value: 1.0,
-                unit: "count"
-            ))
+            await metricsSystem.recordMetric(
+                MCPMetric(
+                    serviceId: toolId,
+                    name: "execution_error",
+                    value: 1.0,
+                    unit: "count"
+                ))
 
             // Publish error event
-            await eventSystem.publish(MCPEvent(
-                type: .errorOccurred,
-                source: "MCPIntegrationManager",
-                data: [
-                    "tool_id": .init(toolId),
-                    "error": .init(error.localizedDescription),
-                    "execution_time": .init(executionTime)
-                ],
-                severity: .error
-            ))
+            await eventSystem.publish(
+                MCPEvent(
+                    type: .errorOccurred,
+                    source: "MCPIntegrationManager",
+                    data: [
+                        "tool_id": .init(toolId),
+                        "error": .init(error.localizedDescription),
+                        "execution_time": .init(executionTime),
+                    ],
+                    severity: .error
+                ))
 
             throw error
         }
@@ -832,7 +859,9 @@ public final class MCPIntegrationManager {
     }
 
     /// Subscribe to events
-    public func subscribeToEvents(_ eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void) -> MCPSubscription {
+    public func subscribeToEvents(_ eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void)
+        -> MCPSubscription
+    {
         eventSystem.subscribe(to: eventType, handler: handler)
     }
 
