@@ -30,7 +30,7 @@ print_project_quantum_status() {
 	local project_name="$1"
 	local project_path="${PROJECTS_DIR}/${project_name}"
 
-	echo -e "${CYAN}ðŸ${± ${project_n}}ame${NC}"
+	echo -e "${CYAN}ï¿½${ï¿½ ${project_n}}ame${NC}"
 
 	# Quantum automation status
 	if [[ -d "${project_path}/Tools/Automation" ]]; then
@@ -161,7 +161,7 @@ main() {
 			fi
 
 			case "${project_name}" in
-			".DS_Store" | "scripts" | "Tools" | ".git" | ".github" | ".vscode" | ".quantum_models" | ".husky" | ".trunk" | ".devcontainer" | *".md" | *".json" | *".yml" | *".yaml" | *".js" | *".cjs" | *".lock" | *".config")
+			".DS_Store" | "scripts" | "Tools" | ".git" | ".github" | ".vscode" | ".quantum_models" | ".husky" | ".devcontainer" | *".md" | *".json" | *".yml" | *".yaml" | *".js" | *".cjs" | *".lock" | *".config")
 				continue
 				;;
 			esac
