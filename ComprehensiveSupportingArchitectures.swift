@@ -30,7 +30,7 @@ public protocol ComprehensiveSupportingArchitecture: Sendable {
 }
 
 /// Unified architecture integration
-public struct UnifiedArchitectureIntegration {
+public struct UnifiedArchitectureIntegration: Sendable {
     public let integrationId: String
     public let universalFrameworks: [UniversalMCPFramework]
     public let intelligenceSynthesizers: [MCPIntelligenceSynthesis]
@@ -234,7 +234,7 @@ public struct ArchitectureIntegrationMetrics: Sendable, Codable {
 }
 
 /// Comprehensive workflow orchestration
-public struct ComprehensiveWorkflowOrchestration: Codable {
+public struct ComprehensiveWorkflowOrchestration: Sendable, Codable {
     public let orchestrationId: String
     public let workflows: [ComprehensiveWorkflow]
     public let orchestrationStrategy: WorkflowOrchestrationStrategy
@@ -399,7 +399,7 @@ public struct ComprehensiveOrchestrationMetrics: Sendable, Codable {
 }
 
 /// Universal ecosystem optimization
-public struct UniversalEcosystemOptimization: Codable {
+public struct UniversalEcosystemOptimization: Sendable, Codable {
     public let optimizationId: String
     public let ecosystemComponents: [EcosystemComponent]
     public let optimizationStrategy: EcosystemOptimizationStrategy
@@ -646,8 +646,8 @@ public struct ComprehensiveArchitectureStatus: Sendable, Codable {
 /// Comprehensive Supporting Architectures Coordinator
 /// Integrates all MCP universal intelligence systems into a cohesive ecosystem
 @available(macOS 12.0, *)
-public final class ComprehensiveSupportingArchitecturesCoordinator:
-    ComprehensiveSupportingArchitecture, Sendable
+public actor ComprehensiveSupportingArchitecturesCoordinator:
+    ComprehensiveSupportingArchitecture
 {
     public static let shared = ComprehensiveSupportingArchitecturesCoordinator()
 
@@ -657,7 +657,6 @@ public final class ComprehensiveSupportingArchitecturesCoordinator:
     private var quantumCoordinator: QuantumOrchestrationFrameworksCoordinator?
 
     private var architectureStatus: ComprehensiveArchitectureStatus
-    private let statusLock = NSLock()
 
     private init() {
         self.architectureStatus = ComprehensiveArchitectureStatus(
@@ -828,7 +827,11 @@ public final class ComprehensiveSupportingArchitecturesCoordinator:
                 // Execute operations in stage
                 var operationResults: [UniversalMCPResult] = []
                 for operation in stage.operations {
-                    let result = try await universalCoordinator.executeUniversalOperation(operation)
+                    guard let coordinator = universalCoordinator else {
+                        throw ComprehensiveArchitectureError.coordinatorNotInitialized(
+                            "Universal coordinator not initialized")
+                    }
+                    let result = try await coordinator.executeUniversalOperation(operation)
                     operationResults.append(result)
                 }
 
@@ -1083,4 +1086,12 @@ public final class ComprehensiveSupportingArchitecturesCoordinator:
             ]
         }
     }
+}
+
+/// Comprehensive architecture errors
+enum ComprehensiveArchitectureError: Error {
+    case coordinatorNotInitialized(String)
+    case workflowExecutionFailed(String)
+    case optimizationFailed(String)
+    case integrationFailed(String)
 }

@@ -30,7 +30,7 @@ public protocol QuantumOrchestrationFramework: Sendable {
 }
 
 /// Quantum orchestration
-public struct QuantumOrchestration: Codable {
+public struct QuantumOrchestration: Codable, Sendable {
     public let orchestrationId: String
     public let quantumOperations: [QuantumOperation]
     public let orchestrationStrategy: QuantumOrchestrationStrategy
@@ -59,7 +59,7 @@ public struct QuantumOrchestration: Codable {
 }
 
 /// Quantum operation
-public struct QuantumOperation: Codable {
+public struct QuantumOperation: Codable, Sendable {
     public let operationId: String
     public let operationType: QuantumOperationType
     public let quantumParameters: [String: AnyCodable]
@@ -167,7 +167,7 @@ public struct QuantumOrchestrationResult: Sendable, Codable {
 }
 
 /// Quantum operation result
-public struct QuantumOperationResult: Codable {
+public struct QuantumOperationResult: Codable, Sendable {
     public let operationId: String
     public let success: Bool
     public let quantumResult: AnyCodable
@@ -484,15 +484,13 @@ public struct QuantumOrchestrationStatus: Sendable, Codable {
 
 /// Main Quantum Orchestration Frameworks coordinator
 @available(macOS 12.0, *)
-public final class QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFramework,
-    Sendable
-{
+public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFramework {
 
     // MARK: - Properties
 
     private let coordinationSystems: MCPCoordinationSystemsCoordinator
     private let intelligenceSynthesis: MCPIntelligenceSynthesisCoordinator
-    private let quantumProcessor: QuantumProcessor
+    private let quantumProcessor: QuantumOrchestrationProcessor
     private let entanglementCoordinator: EntanglementCoordinator
     private let coherenceOptimizer: CoherenceOptimizer
     private let superpositionManager: SuperpositionManager
@@ -502,7 +500,7 @@ public final class QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrati
     public init() async throws {
         self.coordinationSystems = try await MCPCoordinationSystemsCoordinator()
         self.intelligenceSynthesis = try await MCPIntelligenceSynthesisCoordinator()
-        self.quantumProcessor = QuantumProcessor()
+        self.quantumProcessor = QuantumOrchestrationProcessor()
         self.entanglementCoordinator = EntanglementCoordinator()
         self.coherenceOptimizer = CoherenceOptimizer()
         self.superpositionManager = SuperpositionManager()
@@ -1252,8 +1250,8 @@ public final class QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrati
     }
 }
 
-/// Quantum Processor
-private final class QuantumProcessor: Sendable {
+/// Quantum Orchestration Processor
+private final class QuantumOrchestrationProcessor: Sendable {
     func initializeProcessor() async throws {
         // Initialize quantum processor
     }

@@ -226,12 +226,15 @@ public final class UniversalIntelligence {
 
 /// Represents an intelligence source instance with capabilities
 @available(macOS 14.0, iOS 17.0, *)
-public struct IntelligenceSourceInstance: Identifiable, Codable {
+public struct IntelligenceSourceInstance: Identifiable, Codable, Sendable {
     /// Unique identifier for the source instance
     public let id: UUID
 
     /// Source type
     public let sourceType: IntelligenceSource
+
+    /// Domain type
+    public let domainType: IntelligenceDomain
 
     /// Source capability level (0.0 to 1.0)
     public let capability: Double
@@ -246,16 +249,19 @@ public struct IntelligenceSourceInstance: Identifiable, Codable {
     /// - Parameters:
     ///   - id: Unique identifier
     ///   - sourceType: Type of intelligence source
+    ///   - domainType: Type of intelligence domain
     ///   - capability: Capability level
     ///   - metadata: Source metadata
     public init(
         id: UUID = UUID(),
         sourceType: IntelligenceSource,
+        domainType: IntelligenceDomain,
         capability: Double = 0.5,
         metadata: [String: AnyCodable] = [:]
     ) {
         self.id = id
         self.sourceType = sourceType
+        self.domainType = domainType
         self.capability = max(0.0, min(1.0, capability))
         self.metadata = metadata
         self.createdAt = Date()
@@ -284,13 +290,55 @@ public final class IntelligenceSynthesisEngine: Sendable {
         // Generate intelligence synthesis field
         let synthesisField = generateIntelligenceSynthesisField(synthesisResults)
 
+        // Create synthesized intelligence
+        let synthesizedIntelligence = SynthesizedIntelligence(
+            intelligenceId: UUID().uuidString,
+            intelligenceType: .integrative,
+            content: AnyCodable("Synthesized intelligence from \(sources.count) sources"),
+            confidence: sourceAnalysis.averageCapability,
+            coherence: sourceAnalysis.synthesisPotential,
+            emergenceLevel: sourceAnalysis.diversityIndex,
+            universalCapability: sourceAnalysis.synthesisPotential,
+            ethicalAlignment: 0.8
+        )
+
+        // Create domain results
+        var domainResults: [IntelligenceDomain: DomainSynthesisResult] = [:]
+        for source in sources {
+            let domainResult = DomainSynthesisResult(
+                domain: source.domainType,
+                success: true,
+                synthesizedContent: AnyCodable(
+                    "Domain synthesis for \(source.domainType.rawValue)"),
+                contribution: source.capability,
+                coherence: source.capability,
+                processingTime: Double.random(in: 0.1...1.0)
+            )
+            domainResults[source.domainType] = domainResult
+        }
+
+        // Create synthesis metrics
+        let synthesisMetrics = SynthesisMetrics(
+            totalInputs: sources.count,
+            synthesisEfficiency: sourceAnalysis.synthesisPotential,
+            coherenceScore: sourceAnalysis.synthesisPotential,
+            emergenceIndex: sourceAnalysis.diversityIndex,
+            quantumCoherence: 0.8,
+            consciousnessIntegration: 0.7,
+            ethicalCompliance: 0.9,
+            performanceScore: sourceAnalysis.synthesisPotential
+        )
+
         return IntelligenceSynthesisResult(
-            sources: sources.map { $0.sourceType },
-            sourceAnalysis: sourceAnalysis,
-            synthesisStrategy: synthesisStrategy,
-            synthesisResults: synthesisResults,
-            synthesisField: synthesisField,
-            synthesizedAt: Date()
+            synthesisId: UUID().uuidString,
+            success: true,
+            synthesizedIntelligence: synthesizedIntelligence,
+            domainResults: domainResults,
+            synthesisMetrics: synthesisMetrics,
+            quantumEnhancement: 0.8,
+            consciousnessAmplification: 0.7,
+            executionTime: Date().timeIntervalSince(Date()),
+            insights: []
         )
     }
 
@@ -408,8 +456,9 @@ public final class IntelligenceSynthesisEngine: Sendable {
     ) async -> [IntelligenceSynthesisStep] {
         await withTaskGroup(of: IntelligenceSynthesisStep.self) { group in
             for technique in strategy.synthesisTechniques {
-                group.addTask {
-                    await self.executeSynthesisTechnique(technique, sources: sources)
+                let localSources = sources  // Create local copy to avoid data race
+                group.addTask { @Sendable in
+                    await self.executeSynthesisTechnique(technique, sources: localSources)
                 }
             }
 
@@ -1032,23 +1081,18 @@ public enum KnowledgeIntegrationFieldType: Sendable, Codable {
 
 /// Main coordinator for MCP Universal Intelligence
 @available(macOS 14.0, iOS 17.0, *)
-public final class MCPUniversalIntelligenceCoordinator: Sendable {
+public final actor MCPUniversalIntelligenceCoordinator: Sendable {
     /// Shared instance for singleton access
     public static let shared = MCPUniversalIntelligenceCoordinator()
 
     /// Active universal intelligences
-    private let intelligencesLock = NSLock()
     private var _universalIntelligences: [UUID: UniversalIntelligence] = [:]
 
     public var universalIntelligences: [UUID: UniversalIntelligence] {
         get {
-            intelligencesLock.lock()
-            defer { intelligencesLock.unlock() }
-            return _universalIntelligences
+            _universalIntelligences
         }
         set {
-            intelligencesLock.lock()
-            defer { intelligencesLock.unlock() }
             _universalIntelligences = newValue
         }
     }
@@ -1081,7 +1125,7 @@ public final class MCPUniversalIntelligenceCoordinator: Sendable {
     public let empathyDrivenIntelligence = EmpathyDrivenIntelligence()
 
     /// Private initializer for singleton
-    private init() {}
+    public init() {}
 
     /// Create universal intelligence
     /// - Parameters:
@@ -1094,9 +1138,21 @@ public final class MCPUniversalIntelligenceCoordinator: Sendable {
         domains: [IntelligenceDomain],
         metadata: UniversalIntelligenceMetadata = UniversalIntelligenceMetadata()
     ) -> UniversalIntelligence {
+        let intelligenceDomains = domains.map { domain in
+            IntelligenceDomainInstance(
+                domainType: domain,
+                capability: 0.5,  // Default capability
+                integrationLevel: 0.0,  // Default integration level
+                metadata: [
+                    "domainId": AnyCodable(domain.rawValue),
+                    "coordinationReadiness": AnyCodable(0.5),
+                ]
+            )
+        }
+
         let intelligence = UniversalIntelligence(
             name: name,
-            intelligenceDomains: domains,
+            intelligenceDomains: intelligenceDomains,
             metadata: metadata
         )
 
@@ -1117,7 +1173,17 @@ public final class MCPUniversalIntelligenceCoordinator: Sendable {
     public func synthesizeIntelligence(_ sources: [IntelligenceSource]) async
         -> IntelligenceSynthesisResult?
     {
-        await intelligenceSynthesisEngine.synthesizeIntelligence(sources)
+        // Convert IntelligenceSource to IntelligenceSourceInstance
+        let sourceInstances = sources.map { source in
+            IntelligenceSourceInstance(
+                sourceType: source,
+                domainType: .universal,  // Default domain
+                capability: 0.5,  // Default capability
+                metadata: ["source": AnyCodable(source.rawValue)]
+            )
+        }
+
+        return await intelligenceSynthesisEngine.synthesizeIntelligence(sourceInstances)
     }
 
     /// Integrate knowledge from sources

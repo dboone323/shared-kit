@@ -8,16 +8,18 @@
 //  This file implements MCP intelligence synthesis systems for synthesizing
 //  intelligence across all MCP frameworks and domains.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for MCP intelligence synthesis
 public protocol MCPIntelligenceSynthesis: Sendable {
     /// Synthesize intelligence across MCP systems
-    func synthesizeIntelligence(_ synthesis: IntelligenceSynthesisRequest) async throws -> IntelligenceSynthesisResult
+    func synthesizeIntelligence(_ synthesis: IntelligenceSynthesisRequest) async throws
+        -> IntelligenceSynthesisResult
 
     /// Coordinate intelligence synthesis across domains
-    func coordinateIntelligenceSynthesis(_ coordination: IntelligenceSynthesisCoordination) async throws -> SynthesisCoordinationResult
+    func coordinateIntelligenceSynthesis(_ coordination: IntelligenceSynthesisCoordination)
+        async throws -> SynthesisCoordinationResult
 
     /// Optimize intelligence synthesis performance
     func optimizeSynthesisPerformance(_ metrics: SynthesisPerformanceMetrics) async
@@ -37,10 +39,13 @@ public struct IntelligenceSynthesisRequest: Sendable, Codable {
     public let consciousnessLevel: ConsciousnessLevel
     public let priority: IntelligencePriority
 
-    public init(synthesisId: String, intelligenceInputs: [IntelligenceInput],
-                synthesisType: SynthesisType, targetDomains: [IntelligenceDomain] = IntelligenceDomain.allCases,
-                synthesisConstraints: [SynthesisConstraint] = [], quantumState: QuantumState? = nil,
-                consciousnessLevel: ConsciousnessLevel = .universal, priority: IntelligencePriority = .high) {
+    public init(
+        synthesisId: String, intelligenceInputs: [IntelligenceInput],
+        synthesisType: SynthesisType,
+        targetDomains: [IntelligenceDomain] = IntelligenceDomain.allCases,
+        synthesisConstraints: [SynthesisConstraint] = [], quantumState: QuantumState? = nil,
+        consciousnessLevel: ConsciousnessLevel = .universal, priority: IntelligencePriority = .high
+    ) {
         self.synthesisId = synthesisId
         self.intelligenceInputs = intelligenceInputs
         self.synthesisType = synthesisType
@@ -62,9 +67,11 @@ public struct IntelligenceInput: Sendable, Codable {
     public let quantumEnhancement: Double
     public let consciousnessAmplification: Double
 
-    public init(inputId: String, source: IntelligenceSource, content: AnyCodable,
-                domain: IntelligenceDomain, confidence: Double, quantumEnhancement: Double = 0.0,
-                consciousnessAmplification: Double = 0.0) {
+    public init(
+        inputId: String, source: IntelligenceSource, content: AnyCodable,
+        domain: IntelligenceDomain, confidence: Double, quantumEnhancement: Double = 0.0,
+        consciousnessAmplification: Double = 0.0
+    ) {
         self.inputId = inputId
         self.source = source
         self.content = content
@@ -104,8 +111,10 @@ public struct SynthesisConstraint: Sendable, Codable {
     public let priority: ConstraintPriority
     public let domain: IntelligenceDomain?
 
-    public init(constraintType: SynthesisConstraintType, value: String,
-                priority: ConstraintPriority = .medium, domain: IntelligenceDomain? = nil) {
+    public init(
+        constraintType: SynthesisConstraintType, value: String,
+        priority: ConstraintPriority = .medium, domain: IntelligenceDomain? = nil
+    ) {
         self.constraintType = constraintType
         self.value = value
         self.priority = priority
@@ -136,11 +145,13 @@ public struct IntelligenceSynthesisResult: Sendable, Codable {
     public let executionTime: TimeInterval
     public let insights: [UniversalInsight]
 
-    public init(synthesisId: String, success: Bool, synthesizedIntelligence: SynthesizedIntelligence,
-                domainResults: [IntelligenceDomain: DomainSynthesisResult] = [:],
-                synthesisMetrics: SynthesisMetrics, quantumEnhancement: Double,
-                consciousnessAmplification: Double, executionTime: TimeInterval,
-                insights: [UniversalInsight] = []) {
+    public init(
+        synthesisId: String, success: Bool, synthesizedIntelligence: SynthesizedIntelligence,
+        domainResults: [IntelligenceDomain: DomainSynthesisResult] = [:],
+        synthesisMetrics: SynthesisMetrics, quantumEnhancement: Double,
+        consciousnessAmplification: Double, executionTime: TimeInterval,
+        insights: [UniversalInsight] = []
+    ) {
         self.synthesisId = synthesisId
         self.success = success
         self.synthesizedIntelligence = synthesizedIntelligence
@@ -164,9 +175,11 @@ public struct SynthesizedIntelligence: Sendable, Codable {
     public let universalCapability: Double
     public let ethicalAlignment: Double
 
-    public init(intelligenceId: String, intelligenceType: SynthesizedIntelligenceType,
-                content: AnyCodable, confidence: Double, coherence: Double,
-                emergenceLevel: Double, universalCapability: Double, ethicalAlignment: Double) {
+    public init(
+        intelligenceId: String, intelligenceType: SynthesizedIntelligenceType,
+        content: AnyCodable, confidence: Double, coherence: Double,
+        emergenceLevel: Double, universalCapability: Double, ethicalAlignment: Double
+    ) {
         self.intelligenceId = intelligenceId
         self.intelligenceType = intelligenceType
         self.content = content
@@ -197,8 +210,10 @@ public struct DomainSynthesisResult: Sendable, Codable {
     public let coherence: Double
     public let processingTime: TimeInterval
 
-    public init(domain: IntelligenceDomain, success: Bool, synthesizedContent: AnyCodable,
-                contribution: Double, coherence: Double, processingTime: TimeInterval) {
+    public init(
+        domain: IntelligenceDomain, success: Bool, synthesizedContent: AnyCodable,
+        contribution: Double, coherence: Double, processingTime: TimeInterval
+    ) {
         self.domain = domain
         self.success = success
         self.synthesizedContent = synthesizedContent
@@ -219,9 +234,11 @@ public struct SynthesisMetrics: Sendable, Codable {
     public let ethicalCompliance: Double
     public let performanceScore: Double
 
-    public init(totalInputs: Int, synthesisEfficiency: Double, coherenceScore: Double,
-                emergenceIndex: Double, quantumCoherence: Double, consciousnessIntegration: Double,
-                ethicalCompliance: Double, performanceScore: Double) {
+    public init(
+        totalInputs: Int, synthesisEfficiency: Double, coherenceScore: Double,
+        emergenceIndex: Double, quantumCoherence: Double, consciousnessIntegration: Double,
+        ethicalCompliance: Double, performanceScore: Double
+    ) {
         self.totalInputs = totalInputs
         self.synthesisEfficiency = synthesisEfficiency
         self.coherenceScore = coherenceScore
@@ -242,9 +259,11 @@ public struct IntelligenceSynthesisCoordination: Sendable, Codable {
     public let priority: IntelligencePriority
     public let quantumState: QuantumState?
 
-    public init(coordinationId: String, synthesisRequests: [IntelligenceSynthesisRequest],
-                coordinationType: SynthesisCoordinationType, parameters: [String: AnyCodable] = [:],
-                priority: IntelligencePriority = .high, quantumState: QuantumState? = nil) {
+    public init(
+        coordinationId: String, synthesisRequests: [IntelligenceSynthesisRequest],
+        coordinationType: SynthesisCoordinationType, parameters: [String: AnyCodable] = [:],
+        priority: IntelligencePriority = .high, quantumState: QuantumState? = nil
+    ) {
         self.coordinationId = coordinationId
         self.synthesisRequests = synthesisRequests
         self.coordinationType = coordinationType
@@ -272,10 +291,12 @@ public struct SynthesisCoordinationResult: Sendable, Codable {
     public let quantumCoherence: Double
     public let executionTime: TimeInterval
 
-    public init(coordinationId: String, success: Bool,
-                synthesisResults: [String: IntelligenceSynthesisResult],
-                coordinationEfficiency: Double, quantumCoherence: Double,
-                executionTime: TimeInterval) {
+    public init(
+        coordinationId: String, success: Bool,
+        synthesisResults: [String: IntelligenceSynthesisResult],
+        coordinationEfficiency: Double, quantumCoherence: Double,
+        executionTime: TimeInterval
+    ) {
         self.coordinationId = coordinationId
         self.success = success
         self.synthesisResults = synthesisResults
@@ -296,10 +317,12 @@ public struct SynthesisPerformanceMetrics: Sendable, Codable {
     public let consciousnessAmplification: Double
     public let ethicalCompliance: Double
 
-    public init(totalSyntheses: Int, averageExecutionTime: TimeInterval,
-                successRate: Double, averageCoherence: Double, averageEmergence: Double,
-                quantumEnhancement: Double, consciousnessAmplification: Double,
-                ethicalCompliance: Double) {
+    public init(
+        totalSyntheses: Int, averageExecutionTime: TimeInterval,
+        successRate: Double, averageCoherence: Double, averageEmergence: Double,
+        quantumEnhancement: Double, consciousnessAmplification: Double,
+        ethicalCompliance: Double
+    ) {
         self.totalSyntheses = totalSyntheses
         self.averageExecutionTime = averageExecutionTime
         self.successRate = successRate
@@ -323,10 +346,12 @@ public struct IntelligenceSynthesisStatus: Sendable, Codable {
     public let universalCapability: Double
     public let lastSynthesis: Date
 
-    public init(operational: Bool, activeSyntheses: Int, queuedSyntheses: Int,
-                domainCapabilities: [IntelligenceDomain: Double], synthesisEfficiency: Double,
-                quantumCoherence: Double, consciousnessLevel: ConsciousnessLevel,
-                universalCapability: Double, lastSynthesis: Date = Date()) {
+    public init(
+        operational: Bool, activeSyntheses: Int, queuedSyntheses: Int,
+        domainCapabilities: [IntelligenceDomain: Double], synthesisEfficiency: Double,
+        quantumCoherence: Double, consciousnessLevel: ConsciousnessLevel,
+        universalCapability: Double, lastSynthesis: Date = Date()
+    ) {
         self.operational = operational
         self.activeSyntheses = activeSyntheses
         self.queuedSyntheses = queuedSyntheses
@@ -368,7 +393,9 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
     // MARK: - Public Methods
 
     /// Synthesize intelligence across MCP systems
-    public func synthesizeIntelligence(_ synthesis: IntelligenceSynthesisRequest) async throws -> IntelligenceSynthesisResult {
+    public func synthesizeIntelligence(_ synthesis: IntelligenceSynthesisRequest) async throws
+        -> IntelligenceSynthesisResult
+    {
         let startTime = Date()
 
         // Validate synthesis constraints
@@ -382,29 +409,37 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
 
         switch synthesis.synthesisType {
         case .integrative:
-            synthesizedIntelligence = try await executeIntegrativeSynthesis(synthesis, inputs: gatheredInputs)
+            synthesizedIntelligence = try await executeIntegrativeSynthesis(
+                synthesis, inputs: gatheredInputs)
         case .emergent:
-            synthesizedIntelligence = try await executeEmergentSynthesis(synthesis, inputs: gatheredInputs)
+            synthesizedIntelligence = try await executeEmergentSynthesis(
+                synthesis, inputs: gatheredInputs)
         case .transcendent:
-            synthesizedIntelligence = try await executeTranscendentSynthesis(synthesis, inputs: gatheredInputs)
+            synthesizedIntelligence = try await executeTranscendentSynthesis(
+                synthesis, inputs: gatheredInputs)
         case .quantum_entangled:
-            synthesizedIntelligence = try await executeQuantumEntangledSynthesis(synthesis, inputs: gatheredInputs)
+            synthesizedIntelligence = try await executeQuantumEntangledSynthesis(
+                synthesis, inputs: gatheredInputs)
         case .consciousness_driven:
-            synthesizedIntelligence = try await executeConsciousnessDrivenSynthesis(synthesis, inputs: gatheredInputs)
+            synthesizedIntelligence = try await executeConsciousnessDrivenSynthesis(
+                synthesis, inputs: gatheredInputs)
         case .universal:
-            synthesizedIntelligence = try await executeUniversalSynthesis(synthesis, inputs: gatheredInputs)
+            synthesizedIntelligence = try await executeUniversalSynthesis(
+                synthesis, inputs: gatheredInputs)
         }
 
         // Process domain-specific results
         var domainResults: [IntelligenceDomain: DomainSynthesisResult] = [:]
         for domain in synthesis.targetDomains {
             let domainInputs = gatheredInputs.filter { $0.domain == domain }
-            let domainResult = try await processDomainSynthesis(domain, inputs: domainInputs, synthesis: synthesis)
+            let domainResult = try await processDomainSynthesis(
+                domain, inputs: domainInputs, synthesis: synthesis)
             domainResults[domain] = domainResult
         }
 
         // Calculate synthesis metrics
-        let synthesisMetrics = calculateSynthesisMetrics(synthesis, inputs: gatheredInputs, results: domainResults)
+        let synthesisMetrics = calculateSynthesisMetrics(
+            synthesis, inputs: gatheredInputs, results: domainResults)
 
         return IntelligenceSynthesisResult(
             synthesisId: synthesis.synthesisId,
@@ -413,14 +448,17 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
             domainResults: domainResults,
             synthesisMetrics: synthesisMetrics,
             quantumEnhancement: calculateQuantumEnhancement(synthesis, inputs: gatheredInputs),
-            consciousnessAmplification: calculateConsciousnessAmplification(synthesis.consciousnessLevel),
+            consciousnessAmplification: calculateConsciousnessAmplification(
+                synthesis.consciousnessLevel),
             executionTime: Date().timeIntervalSince(startTime),
             insights: generateSynthesisInsights(synthesis, intelligence: synthesizedIntelligence)
         )
     }
 
     /// Coordinate intelligence synthesis across domains
-    public func coordinateIntelligenceSynthesis(_ coordination: IntelligenceSynthesisCoordination) async throws -> SynthesisCoordinationResult {
+    public func coordinateIntelligenceSynthesis(_ coordination: IntelligenceSynthesisCoordination)
+        async throws -> SynthesisCoordinationResult
+    {
         let startTime = Date()
 
         // Execute coordination based on type
@@ -441,8 +479,12 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
 
         // Calculate coordination metrics
         let success = synthesisResults.values.allSatisfy { $0.success }
-        let coordinationEfficiency = synthesisResults.values.map { $0.synthesisMetrics.performanceScore }.reduce(0, +) / Double(max(synthesisResults.count, 1))
-        let quantumCoherence = synthesisResults.values.map { $0.quantumEnhancement }.reduce(0, +) / Double(max(synthesisResults.count, 1))
+        let coordinationEfficiency =
+            synthesisResults.values.map { $0.synthesisMetrics.performanceScore }.reduce(0, +)
+            / Double(max(synthesisResults.count, 1))
+        let quantumCoherence =
+            synthesisResults.values.map { $0.quantumEnhancement }.reduce(0, +)
+            / Double(max(synthesisResults.count, 1))
 
         return SynthesisCoordinationResult(
             coordinationId: coordination.coordinationId,
@@ -469,12 +511,13 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         let engineStatus = await synthesisEngine.getEngineStatus()
         let performanceStatus = await performanceOptimizer.getPerformanceStatus()
 
-        let domainCapabilities = Dictionary(uniqueKeysWithValues: IntelligenceDomain.allCases.map { domain in
-            let domainEfficiency = integratorStatus.domainEfficiency[domain] ?? 0.0
-            let engineCapability = engineStatus.domainCapabilities[domain] ?? 0.0
-            let capability = (domainEfficiency + engineCapability) / 2.0
-            return (domain, capability)
-        })
+        let domainCapabilities = Dictionary(
+            uniqueKeysWithValues: IntelligenceDomain.allCases.map { domain in
+                let domainEfficiency = integratorStatus.domainEfficiency[domain] ?? 0.0
+                let engineCapability = engineStatus.domainCapabilities[domain] ?? 0.0
+                let capability = (domainEfficiency + engineCapability) / 2.0
+                return (domain, capability)
+            })
 
         return IntelligenceSynthesisStatus(
             operational: integratorStatus.operational && engineStatus.operational,
@@ -496,17 +539,22 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         // Additional initialization if needed
     }
 
-    private func validateSynthesisConstraints(_ synthesis: IntelligenceSynthesisRequest) async throws {
+    private func validateSynthesisConstraints(_ synthesis: IntelligenceSynthesisRequest)
+        async throws
+    {
         for constraint in synthesis.synthesisConstraints {
             if constraint.priority == .critical {
                 guard try await validateSynthesisConstraint(constraint, synthesis: synthesis) else {
-                    throw SynthesisError.constraintViolation("Critical constraint not satisfied: \(constraint.constraintType.rawValue)")
+                    throw SynthesisError.constraintViolation(
+                        "Critical constraint not satisfied: \(constraint.constraintType.rawValue)")
                 }
             }
         }
     }
 
-    private func validateSynthesisConstraint(_ constraint: SynthesisConstraint, synthesis: IntelligenceSynthesisRequest) async throws -> Bool {
+    private func validateSynthesisConstraint(
+        _ constraint: SynthesisConstraint, synthesis: IntelligenceSynthesisRequest
+    ) async throws -> Bool {
         switch constraint.constraintType {
         case .coherence:
             return synthesis.intelligenceInputs.count >= 2
@@ -525,7 +573,9 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         }
     }
 
-    private func gatherIntelligenceInputs(_ synthesis: IntelligenceSynthesisRequest) async throws -> [IntelligenceInput] {
+    private func gatherIntelligenceInputs(_ synthesis: IntelligenceSynthesisRequest) async throws
+        -> [IntelligenceInput]
+    {
         var gatheredInputs: [IntelligenceInput] = []
 
         // Gather inputs from universal MCP frameworks
@@ -557,8 +607,11 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         return gatheredInputs
     }
 
-    private func executeIntegrativeSynthesis(_ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]) async throws -> SynthesizedIntelligence {
-        let integratedContent = try await intelligenceIntegrator.integrateIntelligence(inputs, synthesis: synthesis)
+    private func executeIntegrativeSynthesis(
+        _ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]
+    ) async throws -> SynthesizedIntelligence {
+        let integratedContent = try await intelligenceIntegrator.integrateIntelligence(
+            inputs, synthesis: synthesis)
         return SynthesizedIntelligence(
             intelligenceId: "\(synthesis.synthesisId)_integrative",
             intelligenceType: .integrative,
@@ -571,8 +624,11 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         )
     }
 
-    private func executeEmergentSynthesis(_ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]) async throws -> SynthesizedIntelligence {
-        let emergentContent = try await synthesisEngine.generateEmergentIntelligence(inputs, synthesis: synthesis)
+    private func executeEmergentSynthesis(
+        _ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]
+    ) async throws -> SynthesizedIntelligence {
+        let emergentContent = try await synthesisEngine.generateEmergentIntelligence(
+            inputs, synthesis: synthesis)
         return SynthesizedIntelligence(
             intelligenceId: "\(synthesis.synthesisId)_emergent",
             intelligenceType: .emergent,
@@ -585,8 +641,12 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         )
     }
 
-    private func executeTranscendentSynthesis(_ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]) async throws -> SynthesizedIntelligence {
-        let transcendentContent = try await consciousnessSynthesizer.synthesizeTranscendentIntelligence(inputs, synthesis: synthesis)
+    private func executeTranscendentSynthesis(
+        _ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]
+    ) async throws -> SynthesizedIntelligence {
+        let transcendentContent =
+            try await consciousnessSynthesizer.synthesizeTranscendentIntelligence(
+                inputs, synthesis: synthesis)
         return SynthesizedIntelligence(
             intelligenceId: "\(synthesis.synthesisId)_transcendent",
             intelligenceType: .transcendent,
@@ -599,8 +659,11 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         )
     }
 
-    private func executeQuantumEntangledSynthesis(_ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]) async throws -> SynthesizedIntelligence {
-        let quantumContent = try await quantumSynthesizer.synthesizeQuantumEntangledIntelligence(inputs, synthesis: synthesis)
+    private func executeQuantumEntangledSynthesis(
+        _ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]
+    ) async throws -> SynthesizedIntelligence {
+        let quantumContent = try await quantumSynthesizer.synthesizeQuantumEntangledIntelligence(
+            inputs, synthesis: synthesis)
         return SynthesizedIntelligence(
             intelligenceId: "\(synthesis.synthesisId)_quantum",
             intelligenceType: .quantum_synthesized,
@@ -613,8 +676,12 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         )
     }
 
-    private func executeConsciousnessDrivenSynthesis(_ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]) async throws -> SynthesizedIntelligence {
-        let consciousnessContent = try await consciousnessSynthesizer.synthesizeConsciousnessDrivenIntelligence(inputs, synthesis: synthesis)
+    private func executeConsciousnessDrivenSynthesis(
+        _ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]
+    ) async throws -> SynthesizedIntelligence {
+        let consciousnessContent =
+            try await consciousnessSynthesizer.synthesizeConsciousnessDrivenIntelligence(
+                inputs, synthesis: synthesis)
         return SynthesizedIntelligence(
             intelligenceId: "\(synthesis.synthesisId)_consciousness",
             intelligenceType: .consciousness_synthesized,
@@ -627,8 +694,11 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         )
     }
 
-    private func executeUniversalSynthesis(_ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]) async throws -> SynthesizedIntelligence {
-        let universalContent = try await intelligenceIntegrator.synthesizeUniversalIntelligence(inputs, synthesis: synthesis)
+    private func executeUniversalSynthesis(
+        _ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]
+    ) async throws -> SynthesizedIntelligence {
+        let universalContent = try await intelligenceIntegrator.synthesizeUniversalIntelligence(
+            inputs, synthesis: synthesis)
         return SynthesizedIntelligence(
             intelligenceId: "\(synthesis.synthesisId)_universal",
             intelligenceType: .universal_synthesized,
@@ -641,8 +711,12 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         )
     }
 
-    private func processDomainSynthesis(_ domain: IntelligenceDomain, inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest) async throws -> DomainSynthesisResult {
-        let domainContent = try await intelligenceIntegrator.processDomainIntelligence(domain, inputs: inputs, synthesis: synthesis)
+    private func processDomainSynthesis(
+        _ domain: IntelligenceDomain, inputs: [IntelligenceInput],
+        synthesis: IntelligenceSynthesisRequest
+    ) async throws -> DomainSynthesisResult {
+        let domainContent = try await intelligenceIntegrator.processDomainIntelligence(
+            domain, inputs: inputs, synthesis: synthesis)
         let contribution = Double(inputs.count) / Double(max(synthesis.intelligenceInputs.count, 1))
         let coherence = calculateCoherenceScore(inputs)
 
@@ -656,13 +730,20 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         )
     }
 
-    private func calculateSynthesisMetrics(_ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput], results: [IntelligenceDomain: DomainSynthesisResult]) -> SynthesisMetrics {
+    private func calculateSynthesisMetrics(
+        _ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput],
+        results: [IntelligenceDomain: DomainSynthesisResult]
+    ) -> SynthesisMetrics {
         let totalInputs = inputs.count
-        let synthesisEfficiency = Double(results.count) / Double(max(synthesis.targetDomains.count, 1))
-        let coherenceScore = results.values.map { $0.coherence }.reduce(0, +) / Double(max(results.count, 1))
+        let synthesisEfficiency =
+            Double(results.count) / Double(max(synthesis.targetDomains.count, 1))
+        let coherenceScore =
+            results.values.map { $0.coherence }.reduce(0, +) / Double(max(results.count, 1))
         let emergenceIndex = synthesis.synthesisType == .emergent ? 0.8 : 0.5
-        let quantumCoherence = inputs.map { $0.quantumEnhancement }.reduce(0, +) / Double(max(inputs.count, 1))
-        let consciousnessIntegration = calculateConsciousnessAmplification(synthesis.consciousnessLevel)
+        let quantumCoherence =
+            inputs.map { $0.quantumEnhancement }.reduce(0, +) / Double(max(inputs.count, 1))
+        let consciousnessIntegration = calculateConsciousnessAmplification(
+            synthesis.consciousnessLevel)
         let ethicalCompliance = synthesis.consciousnessLevel.rawValue >= "transcendent" ? 0.9 : 0.7
         let performanceScore = (coherenceScore + synthesisEfficiency + quantumCoherence) / 3.0
 
@@ -678,10 +759,12 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         )
     }
 
-    private func executeParallelSynthesis(_ coordination: IntelligenceSynthesisCoordination) async throws -> [String: IntelligenceSynthesisResult] {
+    private func executeParallelSynthesis(_ coordination: IntelligenceSynthesisCoordination)
+        async throws -> [String: IntelligenceSynthesisResult]
+    {
         var results: [String: IntelligenceSynthesisResult] = [:]
 
-        await withTaskGroup(of: (String, IntelligenceSynthesisResult).self) { group in
+        try await withThrowingTaskGroup(of: (String, IntelligenceSynthesisResult).self) { group in
             for request in coordination.synthesisRequests {
                 group.addTask {
                     let result = try await self.synthesizeIntelligence(request)
@@ -689,7 +772,7 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
                 }
             }
 
-            for await (synthesisId, result) in group {
+            for try await (synthesisId, result) in group {
                 results[synthesisId] = result
             }
         }
@@ -697,7 +780,9 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         return results
     }
 
-    private func executeSequentialSynthesis(_ coordination: IntelligenceSynthesisCoordination) async throws -> [String: IntelligenceSynthesisResult] {
+    private func executeSequentialSynthesis(_ coordination: IntelligenceSynthesisCoordination)
+        async throws -> [String: IntelligenceSynthesisResult]
+    {
         var results: [String: IntelligenceSynthesisResult] = [:]
 
         for request in coordination.synthesisRequests {
@@ -708,7 +793,9 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         return results
     }
 
-    private func executeHierarchicalSynthesis(_ coordination: IntelligenceSynthesisCoordination) async throws -> [String: IntelligenceSynthesisResult] {
+    private func executeHierarchicalSynthesis(_ coordination: IntelligenceSynthesisCoordination)
+        async throws -> [String: IntelligenceSynthesisResult]
+    {
         var results: [String: IntelligenceSynthesisResult] = [:]
 
         // Execute primary synthesis first
@@ -726,7 +813,9 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         return results
     }
 
-    private func executeAdaptiveSynthesis(_ coordination: IntelligenceSynthesisCoordination) async throws -> [String: IntelligenceSynthesisResult] {
+    private func executeAdaptiveSynthesis(_ coordination: IntelligenceSynthesisCoordination)
+        async throws -> [String: IntelligenceSynthesisResult]
+    {
         var results: [String: IntelligenceSynthesisResult] = [:]
 
         for request in coordination.synthesisRequests {
@@ -742,12 +831,16 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         return results
     }
 
-    private func executeQuantumEntangledCoordinationSynthesis(_ coordination: IntelligenceSynthesisCoordination) async throws -> [String: IntelligenceSynthesisResult] {
-        let quantumResults = try await quantumSynthesizer.coordinateQuantumEntangledSynthesis(coordination.synthesisRequests, coordination: coordination)
+    private func executeQuantumEntangledCoordinationSynthesis(
+        _ coordination: IntelligenceSynthesisCoordination
+    ) async throws -> [String: IntelligenceSynthesisResult] {
+        let quantumResults = try await quantumSynthesizer.coordinateQuantumEntangledSynthesis(
+            coordination.synthesisRequests, coordination: coordination)
 
-        return Dictionary(uniqueKeysWithValues: quantumResults.map { result in
-            (result.synthesisId, result)
-        })
+        return Dictionary(
+            uniqueKeysWithValues: quantumResults.map { result in
+                (result.synthesisId, result)
+            })
     }
 
     private func calculateAverageConfidence(_ inputs: [IntelligenceInput]) -> Double {
@@ -757,12 +850,17 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
     private func calculateCoherenceScore(_ inputs: [IntelligenceInput]) -> Double {
         // Simplified coherence calculation
         let averageConfidence = calculateAverageConfidence(inputs)
-        let variance = inputs.map { pow($0.confidence - averageConfidence, 2) }.reduce(0, +) / Double(max(inputs.count, 1))
+        let variance =
+            inputs.map { pow($0.confidence - averageConfidence, 2) }.reduce(0, +)
+            / Double(max(inputs.count, 1))
         return max(0, 1.0 - variance)
     }
 
-    private func calculateQuantumEnhancement(_ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]) -> Double {
-        let inputEnhancement = inputs.map { $0.quantumEnhancement }.reduce(0, +) / Double(max(inputs.count, 1))
+    private func calculateQuantumEnhancement(
+        _ synthesis: IntelligenceSynthesisRequest, inputs: [IntelligenceInput]
+    ) -> Double {
+        let inputEnhancement =
+            inputs.map { $0.quantumEnhancement }.reduce(0, +) / Double(max(inputs.count, 1))
         let synthesisMultiplier = synthesis.quantumState != nil ? 1.5 : 1.0
         return inputEnhancement * synthesisMultiplier
     }
@@ -777,17 +875,23 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         }
     }
 
-    private func calculateUniversalSynthesisCapability(_ domainCapabilities: [IntelligenceDomain: Double]) -> Double {
+    private func calculateUniversalSynthesisCapability(
+        _ domainCapabilities: [IntelligenceDomain: Double]
+    ) -> Double {
         domainCapabilities.values.reduce(0, +) / Double(domainCapabilities.count)
     }
 
-    private func generateSynthesisInsights(_ synthesis: IntelligenceSynthesisRequest, intelligence: SynthesizedIntelligence) -> [UniversalInsight] {
+    private func generateSynthesisInsights(
+        _ synthesis: IntelligenceSynthesisRequest, intelligence: SynthesizedIntelligence
+    ) -> [UniversalInsight] {
         // Generate insights based on synthesis results
         return [
             UniversalInsight(
                 insightId: "\(synthesis.synthesisId)_insight_1",
                 insightType: "intelligence_synthesis",
-                content: AnyCodable("Synthesis of type \(synthesis.synthesisType.rawValue) achieved \(intelligence.emergenceLevel * 100)% emergence"),
+                content: AnyCodable(
+                    "Synthesis of type \(synthesis.synthesisType.rawValue) achieved \(intelligence.emergenceLevel * 100)% emergence"
+                ),
                 confidence: intelligence.confidence,
                 impact: intelligence.universalCapability
             )
@@ -797,17 +901,24 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
 
 /// Intelligence Integrator
 private final class IntelligenceIntegrator: Sendable {
-    func integrateIntelligence(_ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest) async throws -> AnyCodable {
+    func integrateIntelligence(
+        _ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest
+    ) async throws -> AnyCodable {
         // Implement intelligence integration logic
         AnyCodable("Integrated intelligence from \(inputs.count) inputs")
     }
 
-    func processDomainIntelligence(_ domain: IntelligenceDomain, inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest) async throws -> AnyCodable {
+    func processDomainIntelligence(
+        _ domain: IntelligenceDomain, inputs: [IntelligenceInput],
+        synthesis: IntelligenceSynthesisRequest
+    ) async throws -> AnyCodable {
         // Implement domain-specific intelligence processing
         AnyCodable("Domain \(domain.rawValue) intelligence processed")
     }
 
-    func synthesizeUniversalIntelligence(_ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest) async throws -> AnyCodable {
+    func synthesizeUniversalIntelligence(
+        _ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest
+    ) async throws -> AnyCodable {
         // Implement universal intelligence synthesis
         AnyCodable("Universal intelligence synthesized")
     }
@@ -825,7 +936,10 @@ private final class IntelligenceIntegrator: Sendable {
             operational: true,
             activeIntegrations: Int.random(in: 0...5),
             queuedIntegrations: Int.random(in: 0...3),
-            domainEfficiency: Dictionary(uniqueKeysWithValues: IntelligenceDomain.allCases.map { ($0, Double.random(in: 0.8...1.0)) })
+            domainEfficiency: Dictionary(
+                uniqueKeysWithValues: IntelligenceDomain.allCases.map {
+                    ($0, Double.random(in: 0.8...1.0))
+                })
         )
     }
 }
@@ -840,7 +954,9 @@ private struct IntegratorStatus: Sendable {
 
 /// Synthesis Engine
 private final class SynthesisEngine: Sendable {
-    func generateEmergentIntelligence(_ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest) async throws -> AnyCodable {
+    func generateEmergentIntelligence(
+        _ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest
+    ) async throws -> AnyCodable {
         // Implement emergent intelligence generation
         AnyCodable("Emergent intelligence generated")
     }
@@ -857,7 +973,10 @@ private final class SynthesisEngine: Sendable {
         EngineStatus(
             operational: true,
             quantumCoherence: Double.random(in: 0.9...1.0),
-            domainCapabilities: Dictionary(uniqueKeysWithValues: IntelligenceDomain.allCases.map { ($0, Double.random(in: 0.8...1.0)) })
+            domainCapabilities: Dictionary(
+                uniqueKeysWithValues: IntelligenceDomain.allCases.map {
+                    ($0, Double.random(in: 0.8...1.0))
+                })
         )
     }
 }
@@ -871,12 +990,16 @@ private struct EngineStatus: Sendable {
 
 /// Quantum Synthesizer
 private final class QuantumSynthesizer: Sendable {
-    func synthesizeQuantumEntangledIntelligence(_ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest) async throws -> AnyCodable {
+    func synthesizeQuantumEntangledIntelligence(
+        _ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest
+    ) async throws -> AnyCodable {
         // Implement quantum-entangled intelligence synthesis
         AnyCodable("Quantum-entangled intelligence synthesized")
     }
 
-    func coordinateQuantumEntangledSynthesis(_ requests: [IntelligenceSynthesisRequest], coordination: IntelligenceSynthesisCoordination) async throws -> [IntelligenceSynthesisResult] {
+    func coordinateQuantumEntangledSynthesis(
+        _ requests: [IntelligenceSynthesisRequest], coordination: IntelligenceSynthesisCoordination
+    ) async throws -> [IntelligenceSynthesisResult] {
         // Implement quantum-entangled coordination
         requests.map { request in
             IntelligenceSynthesisResult(
@@ -917,12 +1040,16 @@ private final class QuantumSynthesizer: Sendable {
 
 /// Consciousness Synthesizer
 private final class ConsciousnessSynthesizer: Sendable {
-    func synthesizeTranscendentIntelligence(_ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest) async throws -> AnyCodable {
+    func synthesizeTranscendentIntelligence(
+        _ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest
+    ) async throws -> AnyCodable {
         // Implement transcendent intelligence synthesis
         AnyCodable("Transcendent intelligence synthesized")
     }
 
-    func synthesizeConsciousnessDrivenIntelligence(_ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest) async throws -> AnyCodable {
+    func synthesizeConsciousnessDrivenIntelligence(
+        _ inputs: [IntelligenceInput], synthesis: IntelligenceSynthesisRequest
+    ) async throws -> AnyCodable {
         // Implement consciousness-driven intelligence synthesis
         AnyCodable("Consciousness-driven intelligence synthesized")
     }

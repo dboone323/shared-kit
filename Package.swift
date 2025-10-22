@@ -30,6 +30,8 @@
                     "MCPUniversalIntelligence.swift",
                     "MCPIntegrationAPIs.swift",
                     "UniversalAgentEraCompletion.swift",
+                    "MCPOrchestrationFramework.swift",
+                    "AnyCodable.swift",
                 ]),
             // Phase 8G minimal demo executable (builds only the decoupled QSE↔QEN composition)
             .executableTarget(

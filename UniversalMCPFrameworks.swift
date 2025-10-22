@@ -29,7 +29,7 @@ public protocol UniversalMCPFramework: Sendable {
 }
 
 /// Universal MCP operation
-public struct UniversalMCPOperation: Codable {
+public struct UniversalMCPOperation: Sendable, Codable {
     public let operationId: String
     public let operationType: MCPOperationType
     public let parameters: [String: AnyCodable]
@@ -107,7 +107,7 @@ public enum MCPConstraintType: String, Sendable, Codable {
 }
 
 /// Universal MCP result
-public struct UniversalMCPResult: Codable {
+public struct UniversalMCPResult: Sendable, Codable {
     public let operationId: String
     public let success: Bool
     public let result: AnyCodable
@@ -135,7 +135,7 @@ public struct UniversalMCPResult: Codable {
 }
 
 /// MCP framework coordination
-public struct MCPFrameworkCoordination: Codable {
+public struct MCPFrameworkCoordination: Sendable, Codable {
     public let coordinationId: String
     public let frameworks: [MCPFramework]
     public let coordinationType: CoordinationType
@@ -242,7 +242,7 @@ public struct MCPFrameworkResult: Sendable, Codable {
 }
 
 /// Framework result
-public struct FrameworkResult: Codable {
+public struct FrameworkResult: Codable, Sendable {
     public let frameworkId: String
     public let success: Bool
     public let result: AnyCodable
@@ -321,7 +321,7 @@ public struct UniversalFrameworkStatus: Sendable, Codable {
 
 /// Main Universal MCP Frameworks coordinator
 @available(macOS 12.0, *)
-public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sendable {
+public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
 
     // MARK: - Properties
 
@@ -336,7 +336,7 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
 
     public init() async throws {
         self.mcpSystem = MCPCompleteSystemIntegration()
-        self.universalIntelligence = try await MCPUniversalIntelligenceCoordinator()
+        self.universalIntelligence = MCPUniversalIntelligenceCoordinator()
         self.frameworkRegistry = MCPFrameworkRegistry()
         self.operationCoordinator = MCPOperationCoordinator()
         self.performanceOptimizer = MCPPerformanceOptimizer()
@@ -752,9 +752,8 @@ public final class UniversalMCPFrameworksCoordinator: UniversalMCPFramework, Sen
 }
 
 /// MCP Framework Registry
-private final class MCPFrameworkRegistry {
+private final actor MCPFrameworkRegistry {
     private var frameworks: [MCPFramework] = []
-    private let lock = NSLock()
 
     func initializeRegistry() async {
         // Initialize with default frameworks for all domains and types
@@ -769,28 +768,22 @@ private final class MCPFrameworkRegistry {
                     consciousnessLevel: .universal,
                     quantumCapability: Double.random(in: 0.7...1.0)
                 )
-                lock.withLock {
-                    frameworks.append(framework)
-                }
+                frameworks.append(framework)
             }
         }
     }
 
     func getFrameworks(for domain: IntelligenceDomain) async -> [MCPFramework] {
-        lock.withLock {
-            frameworks.filter { $0.domain == domain }
-        }
+        frameworks.filter { $0.domain == domain }
     }
 
     func getRegistryStatus() async -> RegistryStatus {
-        lock.withLock {
-            RegistryStatus(
-                operational: true,
-                totalFrameworks: frameworks.count,
-                activeFrameworks: frameworks.count,
-                frameworks: frameworks
-            )
-        }
+        RegistryStatus(
+            operational: true,
+            totalFrameworks: frameworks.count,
+            activeFrameworks: frameworks.count,
+            frameworks: frameworks
+        )
     }
 
     func optimizeRegistry(_ metrics: UniversalMCPMetrics) async {

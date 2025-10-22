@@ -9,58 +9,6 @@
 
 import Foundation
 
-/// AnyCodable type for flexible JSON encoding/decoding
-public struct AnyCodable: Codable {
-    public let value: Any
-
-    public init(_ value: Any) {
-        self.value = value
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let intValue = try? container.decode(Int.self) {
-            value = intValue
-        } else if let doubleValue = try? container.decode(Double.self) {
-            value = doubleValue
-        } else if let stringValue = try? container.decode(String.self) {
-            value = stringValue
-        } else if let boolValue = try? container.decode(Bool.self) {
-            value = boolValue
-        } else if let arrayValue = try? container.decode([AnyCodable].self) {
-            value = arrayValue
-        } else if let dictValue = try? container.decode([String: AnyCodable].self) {
-            value = dictValue
-        } else {
-            throw DecodingError.dataCorruptedError(
-                in: container, debugDescription: "Unsupported type")
-        }
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch value {
-        case let intValue as Int:
-            try container.encode(intValue)
-        case let doubleValue as Double:
-            try container.encode(doubleValue)
-        case let stringValue as String:
-            try container.encode(stringValue)
-        case let boolValue as Bool:
-            try container.encode(boolValue)
-        case let arrayValue as [AnyCodable]:
-            try container.encode(arrayValue)
-        case let dictValue as [String: AnyCodable]:
-            try container.encode(dictValue)
-        default:
-            throw EncodingError.invalidValue(
-                value,
-                EncodingError.Context(
-                    codingPath: container.codingPath, debugDescription: "Unsupported type"))
-        }
-    }
-}
-
 /// Intelligence priority levels
 public enum IntelligencePriority: String, Sendable, Codable {
     case low = "low"
@@ -120,7 +68,7 @@ public enum ConstraintPriority: String, Sendable, Codable {
 }
 
 /// Universal insight
-public struct UniversalInsight: Codable {
+public struct UniversalInsight: Codable, Sendable {
     public let insightId: String
     public let insightType: String
     public let content: AnyCodable
@@ -165,7 +113,7 @@ public struct UniversalIntelligenceInput: Codable {
 }
 
 /// Universal intelligence output
-public struct UniversalIntelligenceOutput: Codable {
+public struct UniversalIntelligenceOutput: Codable, Sendable {
     public let result: AnyCodable
     public let universalInsights: [UniversalInsight]
     public let processingMetrics: [String: Double]
@@ -216,7 +164,7 @@ public enum UniversalConstraintType: String, Sendable, Codable {
 }
 
 /// Domain result
-public struct DomainResult: Codable {
+public struct DomainResult: Codable, Sendable {
     public let domain: IntelligenceDomain
     public let success: Bool
     public let result: AnyCodable
@@ -238,7 +186,7 @@ public struct DomainResult: Codable {
 }
 
 /// Workflow success criterion
-public struct WorkflowSuccessCriterion: Codable {
+public struct WorkflowSuccessCriterion: Codable, Sendable {
     public let criterionId: String
     public let criterionType: String
     public let threshold: Double

@@ -23,7 +23,7 @@ public protocol MCPSystemIntegration {
 }
 
 /// Protocol for MCP system component
-public protocol MCPSystemComponent {
+@preconcurrency public protocol MCPSystemComponent: AnyObject, Sendable {
     var id: String { get }
     var name: String { get }
     var type: MCPComponentType { get }
@@ -37,7 +37,7 @@ public protocol MCPSystemComponent {
 }
 
 /// MCP component type
-public enum MCPComponentType: String, Codable {
+public enum MCPComponentType: String, Codable, Sendable {
     case orchestrator
     case tool
     case workflow
@@ -50,7 +50,7 @@ public enum MCPComponentType: String, Codable {
 }
 
 /// MCP component status
-public enum MCPComponentStatus: String, Codable {
+public enum MCPComponentStatus: String, Codable, Sendable {
     case uninitialized
     case initializing
     case ready
@@ -61,7 +61,7 @@ public enum MCPComponentStatus: String, Codable {
 }
 
 /// MCP component health
-public struct MCPComponentHealth {
+public struct MCPComponentHealth: Sendable {
     public let status: MCPComponentHealthStatus
     public let message: String?
     public let lastChecked: Date
@@ -81,7 +81,7 @@ public struct MCPComponentHealth {
 }
 
 /// MCP component health status
-public enum MCPComponentHealthStatus: String, Codable {
+public enum MCPComponentHealthStatus: String, Codable, Sendable {
     case healthy
     case degraded
     case unhealthy
@@ -89,30 +89,33 @@ public enum MCPComponentHealthStatus: String, Codable {
 }
 
 /// MCP system status
-public struct MCPSystemStatus {
+public struct MCPSystemStatus: Sendable {
     public let overallHealth: MCPComponentHealthStatus
     public let components: [String: MCPComponentHealth]
-    public let uptime: TimeInterval
-    public let version: String
-    public let lastUpdate: Date
+    public let systemStartTime: Date
+    public let lastHealthCheck: Date
+    public let activeComponents: Int
+    public let totalComponents: Int
 
     public init(
         overallHealth: MCPComponentHealthStatus,
         components: [String: MCPComponentHealth],
-        uptime: TimeInterval,
-        version: String = "9.0.0",
-        lastUpdate: Date = Date()
+        systemStartTime: Date,
+        lastHealthCheck: Date,
+        activeComponents: Int,
+        totalComponents: Int
     ) {
         self.overallHealth = overallHealth
         self.components = components
-        self.uptime = uptime
-        self.version = version
-        self.lastUpdate = lastUpdate
+        self.systemStartTime = systemStartTime
+        self.lastHealthCheck = lastHealthCheck
+        self.activeComponents = activeComponents
+        self.totalComponents = totalComponents
     }
 }
 
 /// MCP system configuration
-public struct MCPSystemConfiguration {
+public struct MCPSystemConfiguration: Sendable {
     public let maxConcurrentWorkflows: Int
     public let maxToolExecutionTime: TimeInterval
     public let enableMetrics: Bool
@@ -144,7 +147,7 @@ public struct MCPSystemConfiguration {
 }
 
 /// MCP log level
-public enum MCPLogLevel: String, Codable {
+public enum MCPLogLevel: String, Codable, Sendable {
     case debug
     case info
     case warning
@@ -153,7 +156,7 @@ public enum MCPLogLevel: String, Codable {
 }
 
 /// MCP system event
-public struct MCPSystemEvent {
+public struct MCPSystemEvent: Sendable {
     public let id: String
     public let type: MCPSystemEventType
     public let componentId: String
@@ -182,7 +185,7 @@ public struct MCPSystemEvent {
 }
 
 /// MCP system event type
-public enum MCPSystemEventType: String, Codable {
+public enum MCPSystemEventType: String, Codable, Sendable {
     case systemStarted
     case systemStopped
     case componentRegistered
@@ -196,7 +199,7 @@ public enum MCPSystemEventType: String, Codable {
 }
 
 /// MCP system metrics
-public struct MCPSystemMetrics {
+public struct MCPSystemMetrics: Sendable {
     public let activeWorkflows: Int
     public let totalWorkflowsExecuted: Int
     public let averageWorkflowExecutionTime: TimeInterval
@@ -236,7 +239,7 @@ public struct MCPSystemMetrics {
 // MARK: - MCP System Integration Implementation
 
 /// Complete MCP system integration
-public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
+public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
     public let configuration: MCPSystemConfiguration
     public let integrationManager: MCPIntegrationManager
     public let workflowOrchestrator: AdvancedMCPWorkflowOrchestrator
@@ -244,11 +247,10 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
     public let workflowMonitor: BasicMCPWorkflowMonitor
     public let workflowOptimizer: BasicMCPWorkflowOptimizer
 
-    private var components: [String: MCPSystemComponent] = [:]
-    private var systemStartTime: Date?
-    private var isRunning = false
-    private let queue = DispatchQueue(label: "mcp.system.integration", attributes: .concurrent)
-    private var monitoringTask: Task<Void, Never>?
+    private var _components: [String: MCPSystemComponent] = [:]
+    private var _systemStartTime: Date?
+    private var _isRunning = false
+    private var _monitoringTask: Task<Void, Never>?
 
     public init(configuration: MCPSystemConfiguration = MCPSystemConfiguration()) {
         self.configuration = configuration
@@ -271,10 +273,10 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
     }
 
     public func initializeSystem() async throws {
-        guard !isRunning else { return }
+        guard !_isRunning else { return }
 
-        systemStartTime = Date()
-        isRunning = true
+        _systemStartTime = Date()
+        _isRunning = true
 
         // Initialize core components
         try await initializeCoreComponents()
@@ -293,24 +295,25 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
     }
 
     public func shutdownSystem() async throws {
-        guard isRunning else { return }
+        guard _isRunning else { return }
 
-        isRunning = false
+        _isRunning = false
+        let taskToCancel = _monitoringTask
+        _monitoringTask = nil
+        let currentComponents = _components
+        _components = [:]
 
         // Stop monitoring
-        monitoringTask?.cancel()
-        monitoringTask = nil
+        taskToCancel?.cancel()
 
         // Shutdown all components
-        for component in components.values {
+        for component in currentComponents.values {
             do {
                 try await component.shutdown()
             } catch {
                 print("Error shutting down component \(component.id): \(error)")
             }
         }
-
-        components.removeAll()
 
         // Publish system stop event
         await publishSystemEvent(
@@ -324,21 +327,23 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
     public func getSystemStatus() async -> MCPSystemStatus {
         let componentHealth = await getAllComponentHealth()
         let overallHealth = calculateOverallHealth(componentHealth)
-        let uptime = systemStartTime?.timeIntervalSinceNow ?? 0
+        let activeComponents = componentHealth.values.filter { $0.status == .healthy }.count
+        let totalComponents = componentHealth.count
 
         return MCPSystemStatus(
             overallHealth: overallHealth,
             components: componentHealth,
-            uptime: abs(uptime)
+            systemStartTime: _systemStartTime ?? Date(),
+            lastHealthCheck: Date(),
+            activeComponents: activeComponents,
+            totalComponents: totalComponents
         )
     }
 
     public func registerComponent(_ component: MCPSystemComponent) async throws {
         try await component.initialize()
 
-        queue.async(flags: .barrier) {
-            self.components[component.id] = component
-        }
+        _components[component.id] = component
 
         await publishSystemEvent(
             MCPSystemEvent(
@@ -350,15 +355,12 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
     }
 
     public func unregisterComponent(_ componentId: String) async throws {
-        guard let component = await getComponent(componentId) else {
+        guard let component = _components[componentId] else {
             throw MCPSystemError.componentNotFound(componentId)
         }
+        _components.removeValue(forKey: componentId)
 
         try await component.shutdown()
-
-        queue.async(flags: .barrier) {
-            self.components.removeValue(forKey: componentId)
-        }
 
         await publishSystemEvent(
             MCPSystemEvent(
@@ -369,11 +371,11 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
     }
 
     public func getComponent(_ componentId: String) async -> MCPSystemComponent? {
-        queue.sync { components[componentId] }
+        return _components[componentId]
     }
 
     public func listComponents() async -> [MCPSystemComponent] {
-        queue.sync { Array(components.values) }
+        return Array(_components.values)
     }
 
     // MARK: - Private Methods
@@ -394,8 +396,10 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
     }
 
     private func startMonitoring() {
-        monitoringTask = Task {
-            while isRunning && !Task.isCancelled {
+        let task = Task {
+            while !Task.isCancelled {
+                guard _isRunning else { break }
+
                 do {
                     // Perform health checks
                     await performHealthChecks()
@@ -419,6 +423,8 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
                 }
             }
         }
+
+        _monitoringTask = task
     }
 
     private func performHealthChecks() async {
@@ -440,8 +446,7 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
                 }
 
                 // Update component status
-                var updatedComponent = component
-                updatedComponent.status = health.status == .healthy ? .running : .error
+                component.status = health.status == .healthy ? .running : .error
 
             } catch {
                 await publishSystemEvent(
@@ -458,8 +463,10 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
     private func collectSystemMetrics() async {
         // This would collect actual system metrics
         // For now, we'll use placeholder values
+        let uptime = abs(_systemStartTime?.timeIntervalSinceNow ?? 0)
+
         let metrics = MCPSystemMetrics(
-            systemUptime: abs(systemStartTime?.timeIntervalSinceNow ?? 0)
+            systemUptime: uptime
         )
 
         // Store metrics for monitoring
@@ -467,9 +474,10 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
     }
 
     private func getAllComponentHealth() async -> [String: MCPComponentHealth] {
+        let components = await listComponents()
         var healthMap: [String: MCPComponentHealth] = [:]
 
-        for component in await listComponents() {
+        for component in components {
             do {
                 let health = await component.healthCheck()
                 healthMap[component.id] = health
@@ -516,13 +524,28 @@ public final class MCPCompleteSystemIntegration: MCPSystemIntegration {
 // MARK: - MCP System Components
 
 /// MCP orchestrator component
-public struct MCPOrchestratorComponent: MCPSystemComponent {
+public final class MCPOrchestratorComponent: MCPSystemComponent {
     public let id = "orchestrator"
     public let name = "Workflow Orchestrator"
     public let type = MCPComponentType.orchestrator
     public let version = "9.0.0"
     public let dependencies: [String] = ["security", "workflow_manager"]
-    public var status: MCPComponentStatus = .uninitialized
+
+    private var _status: MCPComponentStatus = .uninitialized
+    private let statusLock = NSLock()
+
+    public var status: MCPComponentStatus {
+        get {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            return _status
+        }
+        set {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            _status = newValue
+        }
+    }
 
     private let orchestrator: AdvancedMCPWorkflowOrchestrator
 
@@ -530,11 +553,11 @@ public struct MCPOrchestratorComponent: MCPSystemComponent {
         self.orchestrator = orchestrator
     }
 
-    public mutating func initialize() async throws {
+    public func initialize() async throws {
         status = .ready
     }
 
-    public mutating func shutdown() async throws {
+    public func shutdown() async throws {
         status = .stopped
     }
 
@@ -545,13 +568,28 @@ public struct MCPOrchestratorComponent: MCPSystemComponent {
 }
 
 /// MCP scheduler component
-public struct MCPSchedulerComponent: MCPSystemComponent {
+public final class MCPSchedulerComponent: MCPSystemComponent {
     public let id = "scheduler"
     public let name = "Workflow Scheduler"
     public let type = MCPComponentType.scheduler
     public let version = "9.0.0"
     public let dependencies: [String] = ["orchestrator"]
-    public var status: MCPComponentStatus = .uninitialized
+
+    private var _status: MCPComponentStatus = .uninitialized
+    private let statusLock = NSLock()
+
+    public var status: MCPComponentStatus {
+        get {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            return _status
+        }
+        set {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            _status = newValue
+        }
+    }
 
     private let scheduler: BasicMCPWorkflowScheduler
 
@@ -559,11 +597,11 @@ public struct MCPSchedulerComponent: MCPSystemComponent {
         self.scheduler = scheduler
     }
 
-    public mutating func initialize() async throws {
+    public func initialize() async throws {
         status = .ready
     }
 
-    public mutating func shutdown() async throws {
+    public func shutdown() async throws {
         status = .stopped
     }
 
@@ -573,13 +611,28 @@ public struct MCPSchedulerComponent: MCPSystemComponent {
 }
 
 /// MCP monitor component
-public struct MCPMonitorComponent: MCPSystemComponent {
+public final class MCPMonitorComponent: MCPSystemComponent {
     public let id = "monitor"
     public let name = "Workflow Monitor"
     public let type = MCPComponentType.monitoring
     public let version = "9.0.0"
     public let dependencies: [String] = []
-    public var status: MCPComponentStatus = .uninitialized
+
+    private var _status: MCPComponentStatus = .uninitialized
+    private let statusLock = NSLock()
+
+    public var status: MCPComponentStatus {
+        get {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            return _status
+        }
+        set {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            _status = newValue
+        }
+    }
 
     private let monitor: BasicMCPWorkflowMonitor
 
@@ -587,11 +640,11 @@ public struct MCPMonitorComponent: MCPSystemComponent {
         self.monitor = monitor
     }
 
-    public mutating func initialize() async throws {
+    public func initialize() async throws {
         status = .ready
     }
 
-    public mutating func shutdown() async throws {
+    public func shutdown() async throws {
         status = .stopped
     }
 
@@ -601,13 +654,28 @@ public struct MCPMonitorComponent: MCPSystemComponent {
 }
 
 /// MCP optimizer component
-public struct MCPOptimizerComponent: MCPSystemComponent {
+public final class MCPOptimizerComponent: MCPSystemComponent {
     public let id = "optimizer"
     public let name = "Workflow Optimizer"
     public let type = MCPComponentType.optimizer
     public let version = "9.0.0"
-    public let dependencies: [String] = ["monitor"]
-    public var status: MCPComponentStatus = .uninitialized
+    public let dependencies: [String] = []
+
+    private var _status: MCPComponentStatus = .uninitialized
+    private let statusLock = NSLock()
+
+    public var status: MCPComponentStatus {
+        get {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            return _status
+        }
+        set {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            _status = newValue
+        }
+    }
 
     private let optimizer: BasicMCPWorkflowOptimizer
 
@@ -615,11 +683,11 @@ public struct MCPOptimizerComponent: MCPSystemComponent {
         self.optimizer = optimizer
     }
 
-    public mutating func initialize() async throws {
+    public func initialize() async throws {
         status = .ready
     }
 
-    public mutating func shutdown() async throws {
+    public func shutdown() async throws {
         status = .stopped
     }
 
@@ -629,13 +697,28 @@ public struct MCPOptimizerComponent: MCPSystemComponent {
 }
 
 /// MCP integration component
-public struct MCPIntegrationComponent: MCPSystemComponent {
+public final class MCPIntegrationComponent: MCPSystemComponent {
     public let id = "integration"
     public let name = "System Integration"
     public let type = MCPComponentType.integration
     public let version = "9.0.0"
-    public let dependencies: [String] = ["orchestrator", "security"]
-    public var status: MCPComponentStatus = .uninitialized
+    public let dependencies: [String] = []
+
+    private var _status: MCPComponentStatus = .uninitialized
+    private let statusLock = NSLock()
+
+    public var status: MCPComponentStatus {
+        get {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            return _status
+        }
+        set {
+            statusLock.lock()
+            defer { statusLock.unlock() }
+            _status = newValue
+        }
+    }
 
     private let integration: MCPIntegrationManager
 
@@ -643,11 +726,11 @@ public struct MCPIntegrationComponent: MCPSystemComponent {
         self.integration = integration
     }
 
-    public mutating func initialize() async throws {
+    public func initialize() async throws {
         status = .ready
     }
 
-    public mutating func shutdown() async throws {
+    public func shutdown() async throws {
         status = .stopped
     }
 
@@ -694,16 +777,17 @@ extension MCPCompleteSystemIntegration {
         let workflowMetrics = await workflowMonitor.getWorkflowMetrics(
             timeRange: DateInterval(start: Date().addingTimeInterval(-3600), end: Date())
         )
+        let uptime = abs(_systemStartTime?.timeIntervalSinceNow ?? 0)
 
         return MCPSystemMetrics(
             totalWorkflowsExecuted: workflowMetrics.totalExecutions,
             averageWorkflowExecutionTime: workflowMetrics.averageExecutionTime,
-            systemUptime: status.uptime
+            systemUptime: uptime
         )
     }
 
     /// Optimize and execute workflow
-    public func optimizeAndExecuteWorkflow(_ workflow: MCPWorkflow) async throws
+    public nonisolated func optimizeAndExecuteWorkflow(_ workflow: MCPWorkflow) async throws
         -> MCPWorkflowResult
     {
         let optimization = try await workflowOptimizer.optimizeWorkflow(workflow)
@@ -711,7 +795,9 @@ extension MCPCompleteSystemIntegration {
     }
 
     /// Schedule optimized workflow
-    public func scheduleOptimizedWorkflow(_ workflow: MCPWorkflow, schedule: MCPWorkflowSchedule)
+    public nonisolated func scheduleOptimizedWorkflow(
+        _ workflow: MCPWorkflow, schedule: MCPWorkflowSchedule
+    )
         async throws -> String
     {
         let optimization = try await workflowOptimizer.optimizeWorkflow(workflow)

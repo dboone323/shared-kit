@@ -237,7 +237,7 @@ public struct WorkflowResult: Codable {
 
     public init(
         workflowId: String, success: Bool,
-        stageResults: [String: StageResult],
+        stageResults: [StageResult],
         workflowMetrics: WorkflowMetrics, quantumCoherence: Double,
         consciousnessAmplification: Double, executionTime: TimeInterval,
         insights: [UniversalInsight] = []
@@ -576,7 +576,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         return WorkflowResult(
             workflowId: workflow.workflowId,
             success: success,
-            stageResults: stageResults,
+            stageResults: Array(stageResults.values),  // Convert dictionary to array
             workflowMetrics: workflowMetrics,
             quantumCoherence: quantumCoherence,
             consciousnessAmplification: consciousnessAmplification,

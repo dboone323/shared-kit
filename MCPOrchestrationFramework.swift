@@ -12,7 +12,7 @@ import Foundation
 // MARK: - MCP Orchestration Framework
 
 /// Protocol for MCP workflow orchestrator
-public protocol MCPWorkflowOrchestrator {
+@preconcurrency public protocol MCPWorkflowOrchestrator: Sendable {
     func orchestrateWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult
     func validateWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowValidationResult
     func getWorkflowStatus(_ workflowId: String) async -> MCPWorkflowStatus?
@@ -31,11 +31,11 @@ public protocol MCPWorkflowScheduler {
 }
 
 /// Protocol for MCP workflow monitor
-public protocol MCPWorkflowMonitor {
+@preconcurrency public protocol MCPWorkflowMonitor {
     func monitorWorkflow(
-        _ workflowId: String, progressHandler: @escaping (MCPWorkflowProgress) -> Void
+        _ workflowId: UUID, progressHandler: @escaping @Sendable (MCPWorkflowProgress) -> Void
     ) -> MCPWorkflowSubscription
-    func getWorkflowHistory(workflowId: String, limit: Int) async -> [MCPWorkflowExecution]
+    func getWorkflowHistory(workflowId: UUID, limit: Int) async -> [MCPWorkflowExecution]
     func getWorkflowMetrics(timeRange: DateInterval) async -> MCPWorkflowMetrics
 }
 
@@ -48,6 +48,63 @@ public protocol MCPWorkflowOptimizer {
 }
 
 // MARK: - Core MCP Orchestration Types
+
+/// MCP security context
+public struct MCPSecurityContext: Sendable {
+    public let userId: String?
+    public let sessionId: String?
+    public let permissions: Set<String>
+    public let authenticationToken: String?
+    public let securityLevel: MCPSecurityLevel
+
+    public init(
+        userId: String? = nil,
+        sessionId: String? = nil,
+        permissions: Set<String> = [],
+        authenticationToken: String? = nil,
+        securityLevel: MCPSecurityLevel = .standard
+    ) {
+        self.userId = userId
+        self.sessionId = sessionId
+        self.permissions = permissions
+        self.authenticationToken = authenticationToken
+        self.securityLevel = securityLevel
+    }
+}
+
+/// MCP security level
+public enum MCPSecurityLevel: String, Codable, Sendable {
+    case standard
+    case elevated
+    case admin
+    case system
+}
+
+/// MCP workflow execution context
+public struct MCPWorkflowExecutionContext: Sendable {
+    public let workflowId: UUID
+    public let executionId: String
+    public let startTime: Date
+    public var variables: [String: AnyCodable]
+    public var metadata: [String: String]
+    public var securityContext: MCPSecurityContext?
+
+    public init(
+        workflowId: UUID,
+        executionId: String = UUID().uuidString,
+        startTime: Date = Date(),
+        variables: [String: AnyCodable] = [:],
+        metadata: [String: String] = [:],
+        securityContext: MCPSecurityContext? = nil
+    ) {
+        self.workflowId = workflowId
+        self.executionId = executionId
+        self.startTime = startTime
+        self.variables = variables
+        self.metadata = metadata
+        self.securityContext = securityContext
+    }
+}
 
 /// MCP workflow execution context
 public struct MCPWorkflowContext {
@@ -88,7 +145,7 @@ public struct MCPWorkflowContext {
 }
 
 /// MCP workflow step execution state
-public enum MCPWorkflowStepState: String, Codable {
+public enum MCPWorkflowStepState: String, Codable, Sendable {
     case pending
     case running
     case completed
@@ -98,10 +155,10 @@ public enum MCPWorkflowStepState: String, Codable {
 }
 
 /// MCP workflow step result
-public struct MCPWorkflowStepResult {
-    public let stepId: String
+public struct MCPWorkflowStepResult: Sendable {
+    public let stepId: UUID
     public let state: MCPWorkflowStepState
-    public let output: Any?
+    public let output: AnyCodable?
     public let error: Error?
     public let startTime: Date
     public let endTime: Date
@@ -109,9 +166,9 @@ public struct MCPWorkflowStepResult {
     public let retryCount: Int
 
     public init(
-        stepId: String,
+        stepId: UUID,
         state: MCPWorkflowStepState,
-        output: Any? = nil,
+        output: AnyCodable? = nil,
         error: Error? = nil,
         startTime: Date,
         endTime: Date,
@@ -129,23 +186,23 @@ public struct MCPWorkflowStepResult {
 }
 
 /// MCP workflow progress
-public struct MCPWorkflowProgress {
-    public let workflowId: String
+public struct MCPWorkflowProgress: Sendable {
+    public let workflowId: UUID
     public let executionId: String
     public let totalSteps: Int
     public let completedSteps: Int
     public let failedSteps: Int
-    public let currentStep: String?
+    public let currentStep: UUID?
     public let estimatedTimeRemaining: TimeInterval?
     public let progress: Double  // 0.0 to 1.0
 
     public init(
-        workflowId: String,
+        workflowId: UUID,
         executionId: String,
         totalSteps: Int,
         completedSteps: Int,
         failedSteps: Int,
-        currentStep: String? = nil,
+        currentStep: UUID? = nil,
         estimatedTimeRemaining: TimeInterval? = nil
     ) {
         self.workflowId = workflowId
@@ -160,8 +217,8 @@ public struct MCPWorkflowProgress {
 }
 
 /// MCP workflow status
-public struct MCPWorkflowStatus {
-    public let workflowId: String
+public struct MCPWorkflowStatus: Sendable {
+    public let workflowId: UUID
     public let executionId: String
     public let state: MCPWorkflowExecutionState
     public let progress: MCPWorkflowProgress
@@ -171,7 +228,7 @@ public struct MCPWorkflowStatus {
     public let estimatedCompletionTime: Date?
 
     public init(
-        workflowId: String,
+        workflowId: UUID,
         executionId: String,
         state: MCPWorkflowExecutionState,
         progress: MCPWorkflowProgress,
@@ -192,7 +249,7 @@ public struct MCPWorkflowStatus {
 }
 
 /// MCP workflow execution state
-public enum MCPWorkflowExecutionState: String, Codable {
+public enum MCPWorkflowExecutionState: String, Codable, Sendable {
     case pending
     case running
     case paused
@@ -222,13 +279,13 @@ public struct MCPWorkflowValidationResult {
 }
 
 /// MCP workflow validation error
-public struct MCPWorkflowValidationError {
-    public let stepId: String?
+public struct MCPWorkflowValidationError: Sendable {
+    public let stepId: UUID?
     public let message: String
     public let severity: MCPWorkflowValidationSeverity
 
     public init(
-        stepId: String? = nil, message: String, severity: MCPWorkflowValidationSeverity = .error
+        stepId: UUID? = nil, message: String, severity: MCPWorkflowValidationSeverity = .error
     ) {
         self.stepId = stepId
         self.message = message
@@ -237,24 +294,24 @@ public struct MCPWorkflowValidationError {
 }
 
 /// MCP workflow validation warning
-public struct MCPWorkflowValidationWarning {
-    public let stepId: String?
+public struct MCPWorkflowValidationWarning: Sendable {
+    public let stepId: UUID?
     public let message: String
 
-    public init(stepId: String? = nil, message: String) {
+    public init(stepId: UUID? = nil, message: String) {
         self.stepId = stepId
         self.message = message
     }
 }
 
 /// MCP workflow validation severity
-public enum MCPWorkflowValidationSeverity: String, Codable {
+public enum MCPWorkflowValidationSeverity: String, Codable, Sendable {
     case error
     case warning
 }
 
 /// MCP workflow schedule
-public struct MCPWorkflowSchedule {
+public struct MCPWorkflowSchedule: Sendable {
     public let frequency: MCPWorkflowFrequency
     public let interval: Int
     public let startDate: Date?
@@ -277,7 +334,7 @@ public struct MCPWorkflowSchedule {
 }
 
 /// MCP workflow frequency
-public enum MCPWorkflowFrequency: String, Codable {
+public enum MCPWorkflowFrequency: String, Codable, Sendable {
     case hourly
     case daily
     case weekly
@@ -286,7 +343,7 @@ public enum MCPWorkflowFrequency: String, Codable {
 }
 
 /// MCP scheduled workflow
-public struct MCPScheduledWorkflow {
+public struct MCPScheduledWorkflow: Sendable {
     public let id: String
     public let workflow: MCPWorkflow
     public let schedule: MCPWorkflowSchedule
@@ -312,20 +369,20 @@ public struct MCPScheduledWorkflow {
 }
 
 /// MCP workflow subscription
-public struct MCPWorkflowSubscription {
-    public let workflowId: String
-    public let handler: (MCPWorkflowProgress) -> Void
+public struct MCPWorkflowSubscription: Sendable {
+    public let workflowId: UUID
+    public let handler: @Sendable (MCPWorkflowProgress) -> Void
 
-    public init(workflowId: String, handler: @escaping (MCPWorkflowProgress) -> Void) {
+    public init(workflowId: UUID, handler: @escaping @Sendable (MCPWorkflowProgress) -> Void) {
         self.workflowId = workflowId
         self.handler = handler
     }
 }
 
 /// MCP workflow execution record
-public struct MCPWorkflowExecution {
+public struct MCPWorkflowExecution: Sendable {
     public let executionId: String
-    public let workflowId: String
+    public let workflowId: UUID
     public let startTime: Date
     public let endTime: Date?
     public let state: MCPWorkflowExecutionState
@@ -335,7 +392,7 @@ public struct MCPWorkflowExecution {
 
     public init(
         executionId: String,
-        workflowId: String,
+        workflowId: UUID,
         startTime: Date,
         endTime: Date? = nil,
         state: MCPWorkflowExecutionState,
@@ -354,22 +411,22 @@ public struct MCPWorkflowExecution {
 }
 
 /// MCP workflow metrics
-public struct MCPWorkflowMetrics {
+public struct MCPWorkflowMetrics: Sendable {
     public let totalExecutions: Int
     public let successfulExecutions: Int
     public let failedExecutions: Int
     public let averageExecutionTime: TimeInterval
     public let successRate: Double
-    public let mostExecutedWorkflows: [(workflowId: String, count: Int)]
-    public let slowestWorkflows: [(workflowId: String, averageTime: TimeInterval)]
+    public let mostExecutedWorkflows: [(workflowId: UUID, count: Int)]
+    public let slowestWorkflows: [(workflowId: UUID, averageTime: TimeInterval)]
 
     public init(
         totalExecutions: Int,
         successfulExecutions: Int,
         failedExecutions: Int,
         averageExecutionTime: TimeInterval,
-        mostExecutedWorkflows: [(workflowId: String, count: Int)] = [],
-        slowestWorkflows: [(workflowId: String, averageTime: TimeInterval)] = []
+        mostExecutedWorkflows: [(workflowId: UUID, count: Int)] = [],
+        slowestWorkflows: [(workflowId: UUID, averageTime: TimeInterval)] = []
     ) {
         self.totalExecutions = totalExecutions
         self.successfulExecutions = successfulExecutions
@@ -433,13 +490,13 @@ public enum MCPWorkflowOptimizationRisk: String, Codable {
 
 /// MCP workflow analysis
 public struct MCPWorkflowAnalysis {
-    public let workflowId: String
+    public let workflowId: UUID
     public let bottlenecks: [MCPWorkflowBottleneck]
     public let performanceTrends: [MCPWorkflowPerformanceTrend]
     public let recommendations: [String]
 
     public init(
-        workflowId: String,
+        workflowId: UUID,
         bottlenecks: [MCPWorkflowBottleneck] = [],
         performanceTrends: [MCPWorkflowPerformanceTrend] = [],
         recommendations: [String] = []
@@ -453,13 +510,12 @@ public struct MCPWorkflowAnalysis {
 
 /// MCP workflow bottleneck
 public struct MCPWorkflowBottleneck {
-    public let stepId: String
+    public let stepId: UUID
     public let averageExecutionTime: TimeInterval
     public let frequency: Int
     public let impact: Double
 
-    public init(stepId: String, averageExecutionTime: TimeInterval, frequency: Int, impact: Double)
-    {
+    public init(stepId: UUID, averageExecutionTime: TimeInterval, frequency: Int, impact: Double) {
         self.stepId = stepId
         self.averageExecutionTime = averageExecutionTime
         self.frequency = frequency
@@ -594,10 +650,23 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                     totalSteps: workflow.steps.count,
                     completedSteps: result.success
                         ? workflow.steps.count
-                        : result.stepResults.filter { $0.state == .completed }.count,
-                    failedSteps: result.stepResults.filter { $0.state == .failed }.count
+                        : result.stepResults.filter { $0.value.success }.count,
+                    failedSteps: result.stepResults.filter { !$0.value.success }.count
                 ),
-                stepResults: result.stepResults,
+                stepResults: result.stepResults.map { (stepId, toolResult) in
+                    MCPWorkflowStepResult(
+                        stepId: stepId,
+                        state: toolResult.success ? .completed : .failed,
+                        output: toolResult.output != nil ? AnyCodable(toolResult.output!) : nil,
+                        error: toolResult.error != nil
+                            ? NSError(
+                                domain: "MCPWorkflow", code: -1,
+                                userInfo: [NSLocalizedDescriptionKey: toolResult.error!]) : nil,
+                        startTime: context.startTime,
+                        endTime: Date(),
+                        retryCount: 0
+                    )
+                },
                 startTime: context.startTime,
                 estimatedCompletionTime: Date()
             )
@@ -796,10 +865,10 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
     // MARK: - Private Helper Methods
 
     private func hasCircularDependencies(_ workflow: MCPWorkflow) -> Bool {
-        var visited = Set<String>()
-        var recursionStack = Set<String>()
+        var visited = Set<UUID>()
+        var recursionStack = Set<UUID>()
 
-        func hasCycle(_ stepId: String) -> Bool {
+        func hasCycle(_ stepId: UUID) -> Bool {
             visited.insert(stepId)
             recursionStack.insert(stepId)
 
@@ -807,10 +876,10 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                 return false
             }
 
-            for dependency in step.dependencies {
-                if !visited.contains(dependency) && hasCycle(dependency) {
+            for dependencyId in step.dependencies {
+                if !visited.contains(dependencyId) && hasCycle(dependencyId) {
                     return true
-                } else if recursionStack.contains(dependency) {
+                } else if recursionStack.contains(dependencyId) {
                     return true
                 }
             }
@@ -828,9 +897,9 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
         return false
     }
 
-    private func findReachableSteps(_ workflow: MCPWorkflow) -> Set<String> {
-        var reachable = Set<String>()
-        var queue = [String]()
+    private func findReachableSteps(_ workflow: MCPWorkflow) -> Set<UUID> {
+        var reachable = Set<UUID>()
+        var queue = [UUID]()
 
         // Start with steps that have no dependencies
         for step in workflow.steps where step.dependencies.isEmpty {
@@ -860,7 +929,7 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
 // MARK: - MCP Workflow Scheduler Implementation
 
 /// Basic MCP workflow scheduler
-public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler {
+public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler, @unchecked Sendable {
     private var scheduledWorkflows: [String: MCPScheduledWorkflow] = [:]
     private let orchestrator: MCPWorkflowOrchestrator
     private let queue = DispatchQueue(label: "mcp.workflow.scheduler", attributes: .concurrent)
@@ -883,14 +952,22 @@ public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler {
         }
 
         // Schedule execution
-        Task {
+        let localOrchestrator = orchestrator  // Capture locally to avoid data race
+        let localQueue = queue  // Capture locally to avoid data race
+        let localScheduleId = scheduleId  // Capture locally to avoid data race
+        let localWorkflow = workflow  // Capture locally to avoid data race
+
+        Task { @Sendable in
             try await Task.sleep(nanoseconds: UInt64(date.timeIntervalSinceNow * 1_000_000_000))
-            if self.queue.sync(execute: { self.scheduledWorkflows[scheduleId] }) != nil {
+            let scheduledWorkflow = localQueue.sync(execute: { [weak self] in
+                self?.scheduledWorkflows[localScheduleId]
+            })
+            if scheduledWorkflow != nil {
                 do {
-                    _ = try await self.orchestrator.orchestrateWorkflow(workflow)
+                    _ = try await localOrchestrator.orchestrateWorkflow(localWorkflow)
                     // Remove one-time schedule after execution
-                    self.queue.async(flags: .barrier) {
-                        self.scheduledWorkflows.removeValue(forKey: scheduleId)
+                    localQueue.async(flags: .barrier) { [weak self] in
+                        self?.scheduledWorkflows.removeValue(forKey: localScheduleId)
                     }
                 } catch {
                     print("Scheduled workflow execution failed: \(error)")
@@ -918,9 +995,15 @@ public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler {
         }
 
         // Start recurring execution loop
-        Task {
-            while let currentSchedule = self.queue.sync(execute: {
-                self.scheduledWorkflows[scheduleId]
+        let localOrchestrator = orchestrator  // Capture locally to avoid data race
+        let localQueue = queue  // Capture locally to avoid data race
+        let localScheduleId = scheduleId  // Capture locally to avoid data race
+        let localWorkflow = workflow  // Capture locally to avoid data race
+        let localSchedule = schedule  // Capture locally to avoid data race
+
+        Task { @Sendable in
+            while let currentSchedule = localQueue.sync(execute: { [weak self] in
+                self?.scheduledWorkflows[localScheduleId]
             }),
                 currentSchedule.isActive
             {
@@ -928,22 +1011,39 @@ public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler {
                 let now = Date()
                 if now >= currentSchedule.nextExecutionDate {
                     do {
-                        _ = try await self.orchestrator.orchestrateWorkflow(workflow)
+                        _ = try await localOrchestrator.orchestrateWorkflow(localWorkflow)
 
-                        // Calculate next execution
-                        let nextExecution = self.calculateNextExecution(
-                            schedule, from: currentSchedule.nextExecutionDate)
+                        // Calculate next execution (local copy to avoid self capture)
+                        let calendar = Calendar.current
+                        var components = DateComponents()
+                        switch localSchedule.frequency {
+                        case .hourly:
+                            components.hour = localSchedule.interval
+                        case .daily:
+                            components.day = localSchedule.interval
+                        case .weekly:
+                            components.day = 7 * localSchedule.interval
+                        case .monthly:
+                            components.month = localSchedule.interval
+                        case .yearly:
+                            components.year = localSchedule.interval
+                        }
+                        let nextExecution =
+                            calendar.date(
+                                byAdding: components, to: currentSchedule.nextExecutionDate)
+                            ?? currentSchedule.nextExecutionDate.addingTimeInterval(3600)
+
                         let updatedSchedule = MCPScheduledWorkflow(
-                            id: scheduleId,
-                            workflow: workflow,
-                            schedule: schedule,
+                            id: localScheduleId,
+                            workflow: localWorkflow,
+                            schedule: localSchedule,
                             nextExecutionDate: nextExecution,
                             isActive: true,
                             createdAt: currentSchedule.createdAt
                         )
 
-                        self.queue.async(flags: .barrier) {
-                            self.scheduledWorkflows[scheduleId] = updatedSchedule
+                        localQueue.async(flags: .barrier) { [weak self] in
+                            self?.scheduledWorkflows[localScheduleId] = updatedSchedule
                         }
 
                     } catch {
@@ -999,77 +1099,91 @@ public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler {
 // MARK: - MCP Workflow Monitor Implementation
 
 /// Basic MCP workflow monitor
-public final class BasicMCPWorkflowMonitor: MCPWorkflowMonitor {
-    private var subscriptions: [String: MCPWorkflowSubscription] = [:]
-    private var executionHistory: [String: [MCPWorkflowExecution]] = [:]
-    private let queue = DispatchQueue(label: "mcp.workflow.monitor", attributes: .concurrent)
+public final class BasicMCPWorkflowMonitor: MCPWorkflowMonitor, @unchecked Sendable {
+    private var subscriptions: [UUID: MCPWorkflowSubscription] = [:]
+    private var executionHistory: [UUID: [MCPWorkflowExecution]] = [:]
+    private let monitorQueue = DispatchQueue(
+        label: "com.mcp.workflow.monitor", attributes: .concurrent)
 
     public init() {}
 
     public func monitorWorkflow(
-        _ workflowId: String, progressHandler: @escaping (MCPWorkflowProgress) -> Void
+        _ workflowId: UUID, progressHandler: @escaping @Sendable (MCPWorkflowProgress) -> Void
     ) -> MCPWorkflowSubscription {
-        let subscription = MCPWorkflowSubscription(workflowId: workflowId, handler: progressHandler)
-        queue.async(flags: .barrier) {
+        var subscription: MCPWorkflowSubscription!
+        monitorQueue.sync(flags: .barrier) {
+            subscription = MCPWorkflowSubscription(workflowId: workflowId, handler: progressHandler)
             self.subscriptions[workflowId] = subscription
         }
         return subscription
     }
 
-    public func getWorkflowHistory(workflowId: String, limit: Int = 10) async
+    public func getWorkflowHistory(workflowId: UUID, limit: Int = 10) async
         -> [MCPWorkflowExecution]
     {
-        queue.sync {
-            executionHistory[workflowId]?.suffix(limit).reversed() ?? []
+        await withCheckedContinuation { continuation in
+            monitorQueue.async {
+                let history = self.executionHistory[workflowId]?.suffix(limit).reversed() ?? []
+                continuation.resume(returning: history)
+            }
         }
     }
 
     public func getWorkflowMetrics(timeRange: DateInterval) async -> MCPWorkflowMetrics {
-        let allExecutions = queue.sync {
-            executionHistory.values.flatMap { $0 }
-        }
+        await withCheckedContinuation { continuation in
+            monitorQueue.async {
+                let allExecutions = self.executionHistory.values.flatMap { $0 }
+                let relevantExecutions = allExecutions.filter { timeRange.contains($0.startTime) }
 
-        let relevantExecutions = allExecutions.filter { timeRange.contains($0.startTime) }
+                let totalExecutions = relevantExecutions.count
+                let successfulExecutions = relevantExecutions.filter { $0.state == .completed }
+                    .count
+                let failedExecutions = relevantExecutions.filter { $0.state == .failed }.count
 
-        let totalExecutions = relevantExecutions.count
-        let successfulExecutions = relevantExecutions.filter { $0.state == .completed }.count
-        let failedExecutions = relevantExecutions.filter { $0.state == .failed }.count
+                let completedExecutions = relevantExecutions.filter { $0.totalExecutionTime != nil }
+                let averageExecutionTime =
+                    completedExecutions.isEmpty
+                    ? 0
+                    : completedExecutions.reduce(0) { $0 + ($1.totalExecutionTime ?? 0) }
+                        / Double(completedExecutions.count)
 
-        let completedExecutions = relevantExecutions.filter { $0.totalExecutionTime != nil }
-        let averageExecutionTime =
-            completedExecutions.isEmpty
-            ? 0
-            : completedExecutions.reduce(0) { $0 + ($1.totalExecutionTime ?? 0) }
-                / Double(completedExecutions.count)
+                // Calculate most executed workflows
+                let workflowCounts = Dictionary(grouping: relevantExecutions) { $0.workflowId }
+                    .mapValues { $0.count }
+                    .sorted { $0.value > $1.value }
+                    .prefix(5)
 
-        // Calculate most executed workflows
-        let workflowCounts = Dictionary(grouping: relevantExecutions) { $0.workflowId }
-            .mapValues { $0.count }
-            .sorted { $0.value > $1.value }
-            .prefix(5)
+                // Calculate slowest workflows
+                let workflowAverageTimes = Dictionary(grouping: completedExecutions) {
+                    $0.workflowId
+                }
+                .mapValues { executions in
+                    executions.reduce(0) { $0 + ($1.totalExecutionTime ?? 0) }
+                        / Double(executions.count)
+                }
+                .sorted { $0.value > $1.value }
+                .prefix(5)
 
-        // Calculate slowest workflows
-        let workflowAverageTimes = Dictionary(grouping: completedExecutions) { $0.workflowId }
-            .mapValues { executions in
-                executions.reduce(0) { $0 + ($1.totalExecutionTime ?? 0) }
-                    / Double(executions.count)
+                let metrics = MCPWorkflowMetrics(
+                    totalExecutions: totalExecutions,
+                    successfulExecutions: successfulExecutions,
+                    failedExecutions: failedExecutions,
+                    averageExecutionTime: averageExecutionTime,
+                    mostExecutedWorkflows: workflowCounts.map {
+                        (workflowId: $0.key, count: $0.value)
+                    },
+                    slowestWorkflows: workflowAverageTimes.map {
+                        (workflowId: $0.key, averageTime: $0.value)
+                    }
+                )
+                continuation.resume(returning: metrics)
             }
-            .sorted { $0.value > $1.value }
-            .prefix(5)
-
-        return MCPWorkflowMetrics(
-            totalExecutions: totalExecutions,
-            successfulExecutions: successfulExecutions,
-            failedExecutions: failedExecutions,
-            averageExecutionTime: averageExecutionTime,
-            mostExecutedWorkflows: Array(workflowCounts),
-            slowestWorkflows: Array(workflowAverageTimes)
-        )
+        }
     }
 
     /// Internal method to record execution (called by orchestrator)
     func recordExecution(_ execution: MCPWorkflowExecution) {
-        queue.async(flags: .barrier) {
+        monitorQueue.async(flags: .barrier) {
             if self.executionHistory[execution.workflowId] == nil {
                 self.executionHistory[execution.workflowId] = []
             }
@@ -1084,8 +1198,8 @@ public final class BasicMCPWorkflowMonitor: MCPWorkflowMonitor {
 
     /// Internal method to update progress (called by orchestrator)
     func updateProgress(_ progress: MCPWorkflowProgress) {
-        queue.sync {
-            if let subscription = subscriptions[progress.workflowId] {
+        monitorQueue.async(flags: .barrier) {
+            if let subscription = self.subscriptions[progress.workflowId] {
                 subscription.handler(progress)
             }
         }
@@ -1095,7 +1209,7 @@ public final class BasicMCPWorkflowMonitor: MCPWorkflowMonitor {
 // MARK: - MCP Workflow Optimizer Implementation
 
 /// Basic MCP workflow optimizer
-public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer {
+public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
     public init() {}
 
     public func optimizeWorkflow(_ workflow: MCPWorkflow) async throws
@@ -1220,7 +1334,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer {
         }
 
         return MCPWorkflowAnalysis(
-            workflowId: workflowId,
+            workflowId: UUID(uuidString: workflowId) ?? UUID(),
             bottlenecks: bottlenecks,
             performanceTrends: trends,
             recommendations: recommendations
@@ -1272,8 +1386,8 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer {
 
     // MARK: - Private Helper Methods
 
-    private func identifyParallelizableSteps(_ workflow: MCPWorkflow) -> [String] {
-        var parallelizable: [String] = []
+    private func identifyParallelizableSteps(_ workflow: MCPWorkflow) -> [UUID] {
+        var parallelizable: [UUID] = []
 
         for step in workflow.steps {
             // A step can be parallelized if none of its dependents depend on other steps
@@ -1298,7 +1412,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer {
 
     private func consolidateSimilarSteps(_ steps: [MCPWorkflowStep]) -> [MCPWorkflowStep] {
         var consolidated: [MCPWorkflowStep] = []
-        var processedIds = Set<String>()
+        var processedIds = Set<UUID>()
 
         for step in steps {
             if processedIds.contains(step.id) { continue }
@@ -1312,7 +1426,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer {
 
             if similarSteps.count > 1 {
                 // Create consolidated step
-                let consolidatedId = "consolidated_\(UUID().uuidString.prefix(8))"
+                let consolidatedId = UUID()
                 let consolidatedStep = MCPWorkflowStep(
                     id: consolidatedId,
                     toolId: step.toolId,
@@ -1321,7 +1435,9 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer {
                     executionMode: step.executionMode,
                     retryPolicy: step.retryPolicy,
                     timeout: step.timeout,
-                    metadata: ["consolidated_steps": similarSteps.map { $0.id }]
+                    metadata: [
+                        "consolidated_steps": AnyCodable(similarSteps.map { $0.id.uuidString })
+                    ]
                 )
                 consolidated.append(consolidatedStep)
 
@@ -1355,7 +1471,7 @@ extension MCPWorkflowOrchestrator {
     /// Execute workflow with progress monitoring
     func executeWorkflowWithProgress(
         _ workflow: MCPWorkflow,
-        progressHandler: @escaping (MCPWorkflowProgress) -> Void
+        progressHandler: @escaping @Sendable (MCPWorkflowProgress) -> Void
     ) async throws -> MCPWorkflowResult {
         // This would be implemented by concrete orchestrators
         return try await orchestrateWorkflow(workflow)

@@ -8,8 +8,8 @@
 
 import Combine
 import Foundation
-import os.log
 import SwiftUI
+import os.log
 
 // MARK: - Required Imports and Type Definitions
 
@@ -128,7 +128,7 @@ public enum ErrorCategory: String, CaseIterable, Codable {
 // MARK: - Base Error Implementation
 
 /// Base implementation of AppErrorProtocol
-public struct AppError: AppErrorProtocol {
+public struct AppError: AppErrorProtocol, Sendable {
     public let errorId: String
     public let severity: ErrorSeverity
     public let category: ErrorCategory
@@ -165,7 +165,8 @@ public struct AppError: AppErrorProtocol {
     // MARK: - Codable Implementation
 
     private enum CodingKeys: String, CodingKey {
-        case errorId, severity, category, timestamp, userMessage, technicalDetails, recoverySuggestions, shouldReport, isRecoverable
+        case errorId, severity, category, timestamp, userMessage, technicalDetails,
+            recoverySuggestions, shouldReport, isRecoverable
         case contextData
     }
 
@@ -237,7 +238,7 @@ public struct AppError: AppErrorProtocol {
 // MARK: - Specialized Error Types
 
 /// Validation errors for data validation failures
-public struct ValidationError: AppErrorProtocol {
+public struct ValidationError: AppErrorProtocol, Sendable {
     public let errorId: String
     public let severity: ErrorSeverity = .medium
     public let category: ErrorCategory = .validation
@@ -277,8 +278,11 @@ public struct ValidationError: AppErrorProtocol {
         self.expectedFormat = expectedFormat
 
         self.userMessage = userMessage ?? "Invalid value for \(field)"
-        self.technicalDetails = "Validation failed for field '\(field)' with rule '\(validationRule)'"
-        self.recoverySuggestions = recoverySuggestions.isEmpty ? ["Please check the \(field) field and try again"] : recoverySuggestions
+        self.technicalDetails =
+            "Validation failed for field '\(field)' with rule '\(validationRule)'"
+        self.recoverySuggestions =
+            recoverySuggestions.isEmpty
+            ? ["Please check the \(field) field and try again"] : recoverySuggestions
 
         var contextDict: [String: Any] = [
             "field": field,
@@ -332,7 +336,7 @@ public struct ValidationError: AppErrorProtocol {
 }
 
 /// Network errors for connectivity and API failures
-public struct NetworkError: AppErrorProtocol {
+public struct NetworkError: AppErrorProtocol, Sendable {
     public let errorId: String
     public let severity: ErrorSeverity
     public let category: ErrorCategory = .network
@@ -378,11 +382,13 @@ public struct NetworkError: AppErrorProtocol {
         self.userMessage = userMessage ?? NetworkError.generateUserMessage(statusCode: statusCode)
 
         // Generate technical details
-        self.technicalDetails = technicalDetails ?? NetworkError.generateTechnicalDetails(
-            statusCode: statusCode,
-            endpoint: endpoint,
-            httpMethod: httpMethod
-        )
+        self.technicalDetails =
+            technicalDetails
+            ?? NetworkError.generateTechnicalDetails(
+                statusCode: statusCode,
+                endpoint: endpoint,
+                httpMethod: httpMethod
+            )
 
         // Generate recovery suggestions
         self.recoverySuggestions = NetworkError.generateRecoverySuggestions(statusCode: statusCode)
@@ -408,8 +414,8 @@ public struct NetworkError: AppErrorProtocol {
         guard let code = statusCode else { return .medium }
 
         switch code {
-        case 400 ... 499: return .medium
-        case 500 ... 599: return .high
+        case 400...499: return .medium
+        case 500...599: return .high
         default: return .low
         }
     }
@@ -425,12 +431,14 @@ public struct NetworkError: AppErrorProtocol {
         case 403: return "Access denied. You don't have permission to perform this action."
         case 404: return "Resource not found. The requested item may have been moved or deleted."
         case 429: return "Too many requests. Please wait a moment and try again."
-        case 500 ... 599: return "Server error. Please try again later."
+        case 500...599: return "Server error. Please try again later."
         default: return "Network error occurred. Please check your connection and try again."
         }
     }
 
-    private static func generateTechnicalDetails(statusCode: Int?, endpoint: String?, httpMethod: String?) -> String {
+    private static func generateTechnicalDetails(
+        statusCode: Int?, endpoint: String?, httpMethod: String?
+    ) -> String {
         var detailsParts = ["Network request failed"]
 
         if let method = httpMethod, let url = endpoint {
@@ -454,13 +462,24 @@ public struct NetworkError: AppErrorProtocol {
         }
 
         switch code {
-        case 400: return ["Check your input data", "Verify required fields are filled", "Contact support if needed"]
-        case 401: return ["Sign in to your account", "Check your credentials", "Reset password if necessary"]
+        case 400:
+            return [
+                "Check your input data", "Verify required fields are filled",
+                "Contact support if needed",
+            ]
+        case 401:
+            return [
+                "Sign in to your account", "Check your credentials", "Reset password if necessary",
+            ]
         case 403: return ["Contact administrator for access", "Check your account permissions"]
         case 404: return ["Verify the resource exists", "Check the URL", "Try refreshing the page"]
         case 429: return ["Wait a few moments before trying again", "Reduce request frequency"]
-        case 500 ... 599: return ["Try again later", "Check service status", "Contact support if problem persists"]
-        default: return ["Check your internet connection", "Try again", "Contact support if needed"]
+        case 500...599:
+            return [
+                "Try again later", "Check service status", "Contact support if problem persists",
+            ]
+        default:
+            return ["Check your internet connection", "Try again", "Contact support if needed"]
         }
     }
 
@@ -503,7 +522,7 @@ public struct NetworkError: AppErrorProtocol {
 }
 
 /// Business logic errors for domain-specific failures
-public struct BusinessError: AppErrorProtocol {
+public struct BusinessError: AppErrorProtocol, Sendable {
     public let errorId: String
     public let severity: ErrorSeverity = .medium
     public let category: ErrorCategory = .business
@@ -666,7 +685,9 @@ public final class ErrorHandlerManager: ObservableObject {
             userMessage: userMessage ?? error.localizedDescription,
             technicalDetails: "\(error)",
             context: context,
-            recoverySuggestions: ["Try again", "Check your input", "Contact support if the problem persists"],
+            recoverySuggestions: [
+                "Try again", "Check your input", "Contact support if the problem persists",
+            ],
             shouldReport: severity.priority > ErrorSeverity.low.priority,
             isRecoverable: false
         )
@@ -728,7 +749,9 @@ public final class ErrorHandlerManager: ObservableObject {
     }
 
     /// Get recent errors for display in UI
-    public func getRecentErrors(severity: ErrorSeverity? = nil, category: ErrorCategory? = nil) -> [any AppErrorProtocol] {
+    public func getRecentErrors(severity: ErrorSeverity? = nil, category: ErrorCategory? = nil)
+        -> [any AppErrorProtocol]
+    {
         var filteredErrors = self.recentErrors
 
         if let severity {
@@ -764,7 +787,8 @@ public final class ErrorHandlerManager: ObservableObject {
     // MARK: - Recovery Management
 
     /// Register a custom recovery strategy
-    public func registerRecoveryStrategy(_ strategy: RecoveryStrategy, for category: ErrorCategory) {
+    public func registerRecoveryStrategy(_ strategy: RecoveryStrategy, for category: ErrorCategory)
+    {
         if self.recoveryStrategies[category] == nil {
             self.recoveryStrategies[category] = []
         }
@@ -818,7 +842,9 @@ public final class ErrorHandlerManager: ObservableObject {
         case .medium, .low:
             if self.globalErrorState == .normal {
                 // Check if we have multiple recent errors
-                let recentHighSeverityErrors = self.recentErrors.prefix(5).filter { $0.severity.priority >= ErrorSeverity.medium.priority }
+                let recentHighSeverityErrors = self.recentErrors.prefix(5).filter {
+                    $0.severity.priority >= ErrorSeverity.medium.priority
+                }
                 if recentHighSeverityErrors.count >= 3 {
                     self.globalErrorState = .degraded
                 }
@@ -909,20 +935,20 @@ public final class ErrorHandlerManager: ObservableObject {
         self.errorReporters.append(AnalyticsErrorReporter(analyticsService: self.analyticsService))
 
         #if DEBUG
-        self.errorReporters.append(DebugErrorReporter())
+            self.errorReporters.append(DebugErrorReporter())
         #else
-        self.errorReporters.append(CrashReporter())
+            self.errorReporters.append(CrashReporter())
         #endif
     }
 
     private func collectSystemInfo() -> SystemInfo {
         SystemInfo(
-            platform: "iOS", // Would be determined at runtime
+            platform: "iOS",  // Would be determined at runtime
             version: "1.0.0",
-            device: "iPhone", // Would be determined at runtime
+            device: "iPhone",  // Would be determined at runtime
             memory: ProcessInfo.processInfo.physicalMemory,
-            diskSpace: 0, // Would be calculated
-            networkStatus: "Connected", // Would be determined
+            diskSpace: 0,  // Would be calculated
+            networkStatus: "Connected",  // Would be determined
             timestamp: Date()
         )
     }
@@ -1048,7 +1074,7 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
             return statusCode >= 500 || statusCode == 429 || statusCode == 408
         }
 
-        return true // Can retry connection failures
+        return true  // Can retry connection failures
     }
 
     public func attemptRecovery(_ error: any AppErrorProtocol) async throws -> RecoveryResult {
@@ -1057,11 +1083,11 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
         }
 
         // Simulate retry logic
-        for attempt in 1 ... self.maxRetries {
-            try await Task.sleep(nanoseconds: UInt64(attempt * 1_000_000_000)) // Wait 1, 2, 3 seconds
+        for attempt in 1...self.maxRetries {
+            try await Task.sleep(nanoseconds: UInt64(attempt * 1_000_000_000))  // Wait 1, 2, 3 seconds
 
             // In real implementation, would retry the network request
-            let simulatedSuccess = attempt == 2 // Succeed on second attempt
+            let simulatedSuccess = attempt == 2  // Succeed on second attempt
 
             if simulatedSuccess {
                 return RecoveryResult(
@@ -1071,7 +1097,8 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
             }
         }
 
-        return RecoveryResult(success: false, message: "Network retry failed after \(self.maxRetries) attempts")
+        return RecoveryResult(
+            success: false, message: "Network retry failed after \(self.maxRetries) attempts")
     }
 }
 
@@ -1165,8 +1192,8 @@ public struct SystemRestartStrategy: RecoveryStrategy {
 /// Error report structure for export
 public struct ErrorReport: Codable {
     public let generatedAt: Date
-    public let recentErrors: [AppError] // Simplified for Codable
-    public let criticalErrors: [AppError] // Simplified for Codable
+    public let recentErrors: [AppError]  // Simplified for Codable
+    public let criticalErrors: [AppError]  // Simplified for Codable
     public let globalState: GlobalErrorState
     public let systemInfo: SystemInfo
 }

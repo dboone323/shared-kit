@@ -12,22 +12,22 @@ import Foundation
 // MARK: - MCP Integration APIs
 
 /// Protocol for MCP API endpoints
-public protocol MCPAPIEndpoint {
+public protocol MCPAPIEndpoint: Sendable {
     var path: String { get }
     var method: String { get }
-    var parameters: [String: Any]? { get }
+    var parameters: [String: AnyCodable]? { get }
     var headers: [String: String]? { get }
 }
 
 /// Protocol for MCP API client
-public protocol MCPAPIClient {
+public protocol MCPAPIClient: Sendable {
     func execute<T: Decodable>(_ endpoint: MCPAPIEndpoint) async throws -> T
-    func execute(_ endpoint: MCPAPIEndpoint) async throws -> [String: Any]
-    func stream(_ endpoint: MCPAPIEndpoint) -> AsyncThrowingStream<[String: Any], Error>
+    func execute(_ endpoint: MCPAPIEndpoint) async throws -> [String: AnyCodable]
+    func stream(_ endpoint: MCPAPIEndpoint) -> AsyncThrowingStream<[String: AnyCodable], Error>
 }
 
 /// Protocol for MCP service discovery
-public protocol MCPServiceDiscovery {
+public protocol MCPServiceDiscovery: Sendable {
     func discoverServices() async throws -> [MCPServiceInfo]
     func registerService(_ service: MCPServiceInfo) async throws
     func unregisterService(_ serviceId: String) async throws
@@ -36,15 +36,15 @@ public protocol MCPServiceDiscovery {
 }
 
 /// Protocol for MCP event system
-public protocol MCPEventSystem {
+public protocol MCPEventSystem: Sendable {
     func publish(_ event: MCPEvent) async
-    func subscribe(to eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void)
+    func subscribe(to eventType: MCPEventType, handler: @escaping @Sendable (MCPEvent) -> Void)
         -> MCPSubscription
     func unsubscribe(_ subscription: MCPSubscription) async
 }
 
 /// Protocol for MCP metrics and monitoring
-public protocol MCPMetricsSystem {
+public protocol MCPMetricsSystem: Sendable {
     func recordMetric(_ metric: MCPMetric) async
     func getMetrics(for serviceId: String, timeRange: DateInterval) async -> [MCPMetric]
     func getHealthStatus() async -> MCPHealthStatus
@@ -165,7 +165,7 @@ public struct MCPResponseMetadata: Codable {
 }
 
 /// MCP event types
-public enum MCPEventType: String, Codable {
+public enum MCPEventType: String, Codable, Sendable {
     case serviceRegistered
     case serviceUnregistered
     case toolExecuted
@@ -177,7 +177,7 @@ public enum MCPEventType: String, Codable {
 }
 
 /// MCP event
-public struct MCPEvent: Codable {
+public struct MCPEvent: Codable, Sendable {
     public let id: String
     public let type: MCPEventType
     public let source: String
@@ -203,7 +203,7 @@ public struct MCPEvent: Codable {
 }
 
 /// MCP event severity
-public enum MCPEventSeverity: String, Codable {
+public enum MCPEventSeverity: String, Codable, Sendable {
     case debug
     case info
     case warning
@@ -212,14 +212,14 @@ public enum MCPEventSeverity: String, Codable {
 }
 
 /// MCP subscription
-public struct MCPSubscription {
+public struct MCPSubscription: Sendable {
     public let id: String
     public let eventType: MCPEventType
-    public let handler: (MCPEvent) -> Void
+    public let handler: @Sendable (MCPEvent) -> Void
 
     public init(
         id: String = UUID().uuidString, eventType: MCPEventType,
-        handler: @escaping (MCPEvent) -> Void
+        handler: @escaping @Sendable (MCPEvent) -> Void
     ) {
         self.id = id
         self.eventType = eventType
@@ -228,7 +228,7 @@ public struct MCPSubscription {
 }
 
 /// MCP metric
-public struct MCPMetric: Codable {
+public struct MCPMetric: Codable, Sendable {
     public let id: String
     public let serviceId: String
     public let name: String
@@ -257,31 +257,30 @@ public struct MCPMetric: Codable {
 }
 
 /// MCP health status
-public struct MCPHealthStatus: Codable {
+public struct MCPHealthStatus: Codable, Sendable {
     public let overall: MCPHealthState
     public let services: [String: MCPHealthState]
-    public let lastChecked: Date
-    public let issues: [MCPHealthIssue]
+    public let timestamp: Date
+    public let uptime: TimeInterval
 
     public init(
         overall: MCPHealthState,
-        services: [String: MCPHealthState] = [:],
-        lastChecked: Date = Date(),
-        issues: [MCPHealthIssue] = []
+        services: [String: MCPHealthState],
+        timestamp: Date = Date(),
+        uptime: TimeInterval = 0
     ) {
         self.overall = overall
         self.services = services
-        self.lastChecked = lastChecked
-        self.issues = issues
+        self.timestamp = timestamp
+        self.uptime = uptime
     }
 }
 
 /// MCP health state
-public enum MCPHealthState: String, Codable {
+public enum MCPHealthState: String, Codable, Sendable {
     case healthy
     case degraded
     case unhealthy
-    case unknown
 }
 
 /// MCP health issue
@@ -301,49 +300,75 @@ public struct MCPHealthIssue: Codable {
     }
 }
 
+/// MCP performance summary
+public struct MCPPerformanceSummary: Codable, Sendable {
+    public let totalRequests: Int
+    public let successfulRequests: Int
+    public let failedRequests: Int
+    public let averageResponseTime: TimeInterval
+    public let peakResponseTime: TimeInterval
+    public let throughput: Double
+    public let errorRate: Double
+
+    public init(
+        totalRequests: Int,
+        successfulRequests: Int,
+        failedRequests: Int,
+        averageResponseTime: TimeInterval,
+        peakResponseTime: TimeInterval,
+        throughput: Double,
+        errorRate: Double
+    ) {
+        self.totalRequests = totalRequests
+        self.successfulRequests = successfulRequests
+        self.failedRequests = failedRequests
+        self.averageResponseTime = averageResponseTime
+        self.peakResponseTime = peakResponseTime
+        self.throughput = throughput
+        self.errorRate = errorRate
+    }
+}
+
 /// MCP performance report
-public struct MCPPerformanceReport: Codable {
+public struct MCPPerformanceReport: Codable, Sendable {
     public let timeRange: DateInterval
     public let metrics: [MCPMetricSummary]
-    public let bottlenecks: [MCPBottleneck]
+    public let summary: MCPPerformanceSummary
     public let recommendations: [String]
 
     public init(
         timeRange: DateInterval,
-        metrics: [MCPMetricSummary] = [],
-        bottlenecks: [MCPBottleneck] = [],
+        metrics: [MCPMetricSummary],
+        summary: MCPPerformanceSummary,
         recommendations: [String] = []
     ) {
         self.timeRange = timeRange
         self.metrics = metrics
-        self.bottlenecks = bottlenecks
+        self.summary = summary
         self.recommendations = recommendations
     }
 }
 
 /// MCP metric summary
-public struct MCPMetricSummary: Codable {
+public struct MCPMetricSummary: Codable, Sendable {
     public let name: String
     public let average: Double
-    public let minimum: Double
-    public let maximum: Double
-    public let percentile95: Double
-    public let trend: MCPTrend
+    public let min: Double?
+    public let max: Double?
+    public let count: Int
 
     public init(
         name: String,
         average: Double,
-        minimum: Double,
-        maximum: Double,
-        percentile95: Double,
-        trend: MCPTrend
+        min: Double? = nil,
+        max: Double? = nil,
+        count: Int
     ) {
         self.name = name
         self.average = average
-        self.minimum = minimum
-        self.maximum = maximum
-        self.percentile95 = percentile95
-        self.trend = trend
+        self.min = min
+        self.max = max
+        self.count = count
     }
 }
 
@@ -374,7 +399,7 @@ public struct MCPBottleneck: Codable {
 // MARK: - MCP API Client Implementation
 
 /// HTTP-based MCP API client
-public final class MCPHTTPClient: MCPAPIClient {
+public final class MCPHTTPClient: MCPAPIClient, Sendable {
     private let baseURL: URL
     private let session: URLSession
     private let encoder: JSONEncoder
@@ -394,16 +419,24 @@ public final class MCPHTTPClient: MCPAPIClient {
     }
 
     public func execute<T: Decodable>(_ endpoint: MCPAPIEndpoint) async throws -> T {
-        let response: MCPAPIResponse<T> = try await execute(endpoint)
-        guard response.success, let data = response.data else {
-            throw MCPAPIError(
-                code: response.error?.code ?? "unknown",
-                message: response.error?.message ?? "Unknown error")
+        let response: [String: AnyCodable] = try await execute(endpoint)
+        guard let success = response["success"]?.value as? Bool, success,
+            let dataValue = response["data"]
+        else {
+            let errorCode =
+                (response["error"] as? [String: AnyCodable])?["code"]?.value as? String ?? "unknown"
+            let errorMessage =
+                (response["error"] as? [String: AnyCodable])?["message"]?.value as? String
+                ?? "Unknown error"
+            throw MCPAPIError(code: errorCode, message: errorMessage)
         }
-        return data
+
+        // Decode the data using the generic type
+        let data = try JSONEncoder().encode(dataValue.value)
+        return try decoder.decode(T.self, from: data)
     }
 
-    public func execute(_ endpoint: MCPAPIEndpoint) async throws -> [String: Any] {
+    public func execute(_ endpoint: MCPAPIEndpoint) async throws -> [String: AnyCodable] {
         let url = baseURL.appendingPathComponent(endpoint.path)
 
         var request = URLRequest(url: url)
@@ -439,21 +472,25 @@ public final class MCPHTTPClient: MCPAPIClient {
                 code: "http_\(httpResponse.statusCode)", message: "HTTP \(httpResponse.statusCode)")
         }
 
-        let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        return jsonObject ?? [:]
+        // Decode as AnyCodable dictionary
+        let jsonObject = try decoder.decode([String: AnyCodable].self, from: data)
+        return jsonObject
     }
 
-    public func stream(_ endpoint: MCPAPIEndpoint) -> AsyncThrowingStream<[String: Any], Error> {
+    public func stream(_ endpoint: MCPAPIEndpoint) -> AsyncThrowingStream<
+        [String: AnyCodable], Error
+    > {
         AsyncThrowingStream { continuation in
-            Task {
+            Task { @Sendable in
+                let localEndpoint = endpoint  // Create local copy to avoid data race
                 do {
-                    let url = baseURL.appendingPathComponent(endpoint.path)
+                    let url = baseURL.appendingPathComponent(localEndpoint.path)
 
                     var request = URLRequest(url: url)
-                    request.httpMethod = endpoint.method
+                    request.httpMethod = localEndpoint.method
 
                     // Add headers for streaming
-                    if let headers = endpoint.headers {
+                    if let headers = localEndpoint.headers {
                         for (key, value) in headers {
                             request.setValue(value, forHTTPHeaderField: key)
                         }
@@ -469,14 +506,16 @@ public final class MCPHTTPClient: MCPAPIClient {
                             code: "stream_error", message: "Failed to establish stream")
                     }
 
-                    continuation.yield(["status": "connected", "timestamp": Date()])
+                    continuation.yield([
+                        "status": AnyCodable("connected"), "timestamp": AnyCodable(Date()),
+                    ])
 
                     for try await line in bytes.lines {
                         if line.hasPrefix("data: ") {
                             let jsonString = String(line.dropFirst(6))
                             if let data = jsonString.data(using: .utf8),
-                                let jsonObject = try? JSONSerialization.jsonObject(with: data)
-                                    as? [String: Any]
+                                let jsonObject = try? decoder.decode(
+                                    [String: AnyCodable].self, from: data)
                             {
                                 continuation.yield(jsonObject)
                             }
@@ -496,103 +535,87 @@ public final class MCPHTTPClient: MCPAPIClient {
 // MARK: - MCP Service Discovery Implementation
 
 /// In-memory MCP service discovery
-public final class MCPInMemoryServiceDiscovery: MCPServiceDiscovery {
-    private var services: [String: MCPServiceInfo] = [:]
-    private let queue = DispatchQueue(label: "mcp.service.discovery", attributes: .concurrent)
+public actor MCPInMemoryServiceDiscovery: MCPServiceDiscovery {
+    private var _services: [String: MCPServiceInfo] = [:]
 
     public init() {}
 
     public func discoverServices() async throws -> [MCPServiceInfo] {
-        queue.sync { Array(services.values) }
+        return Array(_services.values)
     }
 
     public func registerService(_ service: MCPServiceInfo) async throws {
-        queue.async(flags: .barrier) {
-            self.services[service.id] = service
-        }
+        _services[service.id] = service
     }
 
     public func unregisterService(_ serviceId: String) async throws {
-        queue.async(flags: .barrier) {
-            self.services.removeValue(forKey: serviceId)
-        }
+        _services.removeValue(forKey: serviceId)
     }
 
     public func findService(byId id: String) async -> MCPServiceInfo? {
-        queue.sync { services[id] }
+        return _services[id]
     }
 
     public func findServices(byCapability capability: MCPToolCapability) async -> [MCPServiceInfo] {
-        queue.sync {
-            services.values.filter { $0.capabilities.contains(capability) }
-        }
+        return _services.values.filter { $0.capabilities.contains(capability) }
     }
 }
 
 // MARK: - MCP Event System Implementation
 
 /// In-memory MCP event system
-public final class MCPInMemoryEventSystem: MCPEventSystem {
-    private var subscriptions: [String: MCPSubscription] = [:]
-    private let queue = DispatchQueue(label: "mcp.event.system", attributes: .concurrent)
+public actor MCPInMemoryEventSystem: @preconcurrency MCPEventSystem {
+    private var _subscriptions: [String: MCPSubscription] = [:]
 
     public init() {}
 
     public func publish(_ event: MCPEvent) async {
-        let subs = queue.sync { Array(subscriptions.values) }
+        let subs = Array(_subscriptions.values)
+
         for subscription in subs where subscription.eventType == event.type {
             subscription.handler(event)
         }
     }
 
-    public func subscribe(to eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void)
-        -> MCPSubscription
-    {
+    public func subscribe(
+        to eventType: MCPEventType, handler: @escaping @Sendable (MCPEvent) -> Void
+    ) -> MCPSubscription {
         let subscription = MCPSubscription(eventType: eventType, handler: handler)
-        queue.async(flags: .barrier) {
-            self.subscriptions[subscription.id] = subscription
+        Task {
+            await self._subscriptions[subscription.id] = subscription
         }
         return subscription
     }
 
     public func unsubscribe(_ subscription: MCPSubscription) async {
-        queue.async(flags: .barrier) {
-            self.subscriptions.removeValue(forKey: subscription.id)
-        }
+        _subscriptions.removeValue(forKey: subscription.id)
     }
 }
 
 // MARK: - MCP Metrics System Implementation
 
 /// In-memory MCP metrics system
-public final class MCPInMemoryMetricsSystem: MCPMetricsSystem {
-    private var metrics: [MCPMetric] = []
-    private let queue = DispatchQueue(label: "mcp.metrics.system", attributes: .concurrent)
+public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
+    private var _metrics: [MCPMetric] = []
 
     public init() {}
 
     public func recordMetric(_ metric: MCPMetric) async {
-        queue.async(flags: .barrier) {
-            self.metrics.append(metric)
-            // Keep only recent metrics (last 1000)
-            if self.metrics.count > 1000 {
-                self.metrics.removeFirst(self.metrics.count - 1000)
-            }
+        _metrics.append(metric)
+        // Keep only recent metrics (last 1000)
+        if _metrics.count > 1000 {
+            _metrics.removeFirst(_metrics.count - 1000)
         }
     }
 
     public func getMetrics(for serviceId: String, timeRange: DateInterval) async -> [MCPMetric] {
-        queue.sync {
-            metrics.filter { metric in
-                metric.serviceId == serviceId && timeRange.contains(metric.timestamp)
-            }
+        return _metrics.filter { metric in
+            metric.serviceId == serviceId && timeRange.contains(metric.timestamp)
         }
     }
 
     public func getHealthStatus() async -> MCPHealthStatus {
-        let recentMetrics = queue.sync {
-            metrics.filter { $0.timestamp > Date().addingTimeInterval(-300) }  // Last 5 minutes
-        }
+        let recentMetrics = _metrics.filter { $0.timestamp > Date().addingTimeInterval(-300) }  // Last 5 minutes
 
         var serviceHealth: [String: MCPHealthState] = [:]
         var issues: [MCPHealthIssue] = []
@@ -626,20 +649,19 @@ public final class MCPInMemoryMetricsSystem: MCPMetricsSystem {
         }
 
         let overallHealth =
-            serviceHealth.values.contains(.unhealthy)
-            ? .unhealthy : serviceHealth.values.contains(.degraded) ? .degraded : .healthy
+            serviceHealth.values.contains(MCPHealthState.unhealthy)
+            ? MCPHealthState.unhealthy
+            : serviceHealth.values.contains(MCPHealthState.degraded)
+                ? MCPHealthState.degraded : MCPHealthState.healthy
 
         return MCPHealthStatus(
             overall: overallHealth,
-            services: serviceHealth,
-            issues: issues
+            services: serviceHealth
         )
     }
 
     public func getPerformanceReport(timeRange: DateInterval) async -> MCPPerformanceReport {
-        let relevantMetrics = queue.sync {
-            metrics.filter { timeRange.contains($0.timestamp) }
-        }
+        let relevantMetrics = _metrics.filter { timeRange.contains($0.timestamp) }
 
         // Calculate metric summaries
         let metricsByName = Dictionary(grouping: relevantMetrics) { $0.name }
@@ -678,23 +700,22 @@ public final class MCPInMemoryMetricsSystem: MCPMetricsSystem {
                 MCPMetricSummary(
                     name: name,
                     average: average,
-                    minimum: minimum,
-                    maximum: maximum,
-                    percentile95: percentile95,
-                    trend: trend
+                    min: minimum,
+                    max: maximum,
+                    count: values.count
                 ))
         }
 
         // Identify bottlenecks (simplified)
         var bottlenecks: [MCPBottleneck] = []
-        for summary in summaries where summary.maximum > summary.average * 2 {
+        for summary in summaries where (summary.max ?? 0) > summary.average * 2 {
             bottlenecks.append(
                 MCPBottleneck(
                     serviceId: "unknown",  // Would need service mapping
                     metric: summary.name,
                     severity: .warning,
                     description:
-                        "High variance in \(summary.name): max \(String(format: "%.2f", summary.maximum)) vs avg \(String(format: "%.2f", summary.average))"
+                        "High variance in \(summary.name): max \(String(format: "%.2f", summary.max ?? 0)) vs avg \(String(format: "%.2f", summary.average))"
                 ))
         }
 
@@ -703,17 +724,35 @@ public final class MCPInMemoryMetricsSystem: MCPMetricsSystem {
         if bottlenecks.count > 0 {
             recommendations.append("Address performance bottlenecks in high-variance metrics")
         }
-        if summaries.contains(where: { $0.trend == .degrading }) {
-            recommendations.append("Investigate degrading performance trends")
-        }
         if summaries.isEmpty {
             recommendations.append("Increase metric collection for better performance insights")
         }
 
+        // Create performance summary
+        let totalRequests = relevantMetrics.count
+        let successfulRequests = relevantMetrics.filter { $0.value >= 0 }.count  // Simplified success criteria
+        let failedRequests = totalRequests - successfulRequests
+        let responseTimes = relevantMetrics.map { $0.value }
+        let averageResponseTime =
+            responseTimes.isEmpty ? 0 : responseTimes.reduce(0, +) / Double(responseTimes.count)
+        let peakResponseTime = responseTimes.max() ?? 0
+        let throughput = Double(totalRequests) / timeRange.duration
+        let errorRate = totalRequests > 0 ? Double(failedRequests) / Double(totalRequests) : 0
+
+        let summary = MCPPerformanceSummary(
+            totalRequests: totalRequests,
+            successfulRequests: successfulRequests,
+            failedRequests: failedRequests,
+            averageResponseTime: averageResponseTime,
+            peakResponseTime: peakResponseTime,
+            throughput: throughput,
+            errorRate: errorRate
+        )
+
         return MCPPerformanceReport(
             timeRange: timeRange,
             metrics: summaries,
-            bottlenecks: bottlenecks,
+            summary: summary,
             recommendations: recommendations
         )
     }
@@ -722,15 +761,13 @@ public final class MCPInMemoryMetricsSystem: MCPMetricsSystem {
 // MARK: - MCP Integration Manager
 
 /// Central MCP integration manager
-public final class MCPIntegrationManager {
+public final class MCPIntegrationManager: Sendable {
     public let apiClient: MCPAPIClient
     public let serviceDiscovery: MCPServiceDiscovery
     public let eventSystem: MCPEventSystem
     public let metricsSystem: MCPMetricsSystem
     public let orchestrator: EnhancedMCPOrchestrator
     public let securityManager: MCPSecurityManager
-
-    private var registeredTools: [any MCPTool] = []
 
     public init(
         baseURL: URL = URL(string: "http://localhost:11434")!,
@@ -750,10 +787,10 @@ public final class MCPIntegrationManager {
     /// Register an MCP tool
     public func registerTool(_ tool: any MCPTool) async throws {
         try await orchestrator.registerTool(tool)
-        registeredTools.append(tool)
 
         // Register as a service
-        let toolInfo = await orchestrator.getToolInfo(await tool.id())!
+        let toolId = await tool.id
+        let toolInfo = await orchestrator.getToolInfo(toolId)!
         let serviceInfo = MCPServiceInfo(
             id: toolInfo.id,
             name: toolInfo.name,
@@ -769,7 +806,7 @@ public final class MCPIntegrationManager {
             MCPEvent(
                 type: .serviceRegistered,
                 source: "MCPIntegrationManager",
-                data: ["service_id": .init(serviceInfo.id)]
+                data: ["service_id": AnyCodable(serviceInfo.id)]
             ))
     }
 
@@ -806,9 +843,9 @@ public final class MCPIntegrationManager {
                     type: .toolExecuted,
                     source: "MCPIntegrationManager",
                     data: [
-                        "tool_id": .init(toolId),
-                        "success": .init(result.success),
-                        "execution_time": .init(executionTime),
+                        "tool_id": AnyCodable(toolId),
+                        "success": AnyCodable(result.success),
+                        "execution_time": AnyCodable(executionTime),
                     ]
                 ))
 
@@ -832,9 +869,9 @@ public final class MCPIntegrationManager {
                     type: .errorOccurred,
                     source: "MCPIntegrationManager",
                     data: [
-                        "tool_id": .init(toolId),
-                        "error": .init(error.localizedDescription),
-                        "execution_time": .init(executionTime),
+                        "tool_id": AnyCodable(toolId),
+                        "error": AnyCodable(error.localizedDescription),
+                        "execution_time": AnyCodable(executionTime),
                     ],
                     severity: .error
                 ))
@@ -859,7 +896,9 @@ public final class MCPIntegrationManager {
     }
 
     /// Subscribe to events
-    public func subscribeToEvents(_ eventType: MCPEventType, handler: @escaping (MCPEvent) -> Void)
+    public func subscribeToEvents(
+        _ eventType: MCPEventType, handler: @escaping @Sendable (MCPEvent) -> Void
+    )
         -> MCPSubscription
     {
         eventSystem.subscribe(to: eventType, handler: handler)

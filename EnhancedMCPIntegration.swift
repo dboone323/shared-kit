@@ -12,12 +12,12 @@ import Foundation
 // MARK: - Base MCP Types
 
 /// Base MCP tool protocol
-public protocol MCPTool {
+public protocol MCPTool: Sendable {
     var id: String { get async }
     var name: String { get async }
     var description: String { get async }
 
-    func execute(parameters: [String: Any]) async throws -> Any?
+    func execute(parameters: [String: AnyCodable]) async throws -> Any?
 }
 
 // MARK: - Enhanced MCP Protocols
@@ -26,7 +26,8 @@ public protocol MCPTool {
 public protocol AdvancedMCPOrchestrator {
     func registerTool(_ tool: any MCPTool) async
     func unregisterTool(_ toolId: String) async
-    func executeTool(_ toolId: String, with parameters: [String: Any]) async throws -> MCPToolResult
+    func executeTool(_ toolId: String, with parameters: [String: AnyCodable]) async throws
+        -> MCPToolResult
     func listAvailableTools() async -> [MCPToolInfo]
     func getToolInfo(_ toolId: String) async -> MCPToolInfo?
     func orchestrateWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult
@@ -38,21 +39,21 @@ public protocol EnhancedMCPTool: MCPTool {
     var dependencies: [String] { get }
     var performanceMetrics: MCPToolMetrics { get }
 
-    func validateParameters(_ parameters: [String: Any]) throws
-    func estimateExecutionTime(for parameters: [String: Any]) -> TimeInterval
+    func validateParameters(_ parameters: [String: AnyCodable]) throws
+    func estimateExecutionTime(for parameters: [String: AnyCodable]) -> TimeInterval
     func getOptimizationHints() -> [String]
 }
 
 /// Protocol for MCP workflow management
-public protocol MCPWorkflowManager {
+@preconcurrency public protocol MCPWorkflowManager: Sendable {
     func createWorkflow(name: String, steps: [MCPWorkflowStep]) async -> MCPWorkflow
     func executeWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult
     func optimizeWorkflow(_ workflow: MCPWorkflow) async -> MCPWorkflow
-    func monitorWorkflowExecution(_ workflowId: UUID) -> AsyncStream<MCPWorkflowStatus>
+    func monitorWorkflowExecution(_ workflowId: UUID) -> AsyncStream<MCPWorkflowExecutionStatus>
 }
 
 /// Protocol for MCP security and authentication
-public protocol MCPSecurityManager {
+public protocol MCPSecurityManager: Sendable {
     func authenticateRequest(_ request: MCPRequest) async throws -> MCPAuthenticationResult
     func authorizeToolExecution(toolId: String, by principal: MCPPrincipal) async throws -> Bool
     func auditLogExecution(_ execution: MCPToolExecution) async
@@ -62,7 +63,7 @@ public protocol MCPSecurityManager {
 // MARK: - Core MCP Types
 
 /// Enhanced MCP tool result
-public struct MCPToolResult {
+public struct MCPToolResult: Sendable {
     public let toolId: String
     public let success: Bool
     public let output: AnyCodable?
@@ -88,7 +89,7 @@ public struct MCPToolResult {
 }
 
 /// MCP tool information
-public struct MCPToolInfo: Codable {
+public struct MCPToolInfo: Codable, Sendable {
     public let id: String
     public let name: String
     public let description: String
@@ -137,7 +138,7 @@ public enum MCPToolCapability: String, Codable, Sendable {
 }
 
 /// MCP parameter information
-public struct MCPParameterInfo: Codable {
+public struct MCPParameterInfo: Codable, Sendable {
     public let name: String
     public let type: String
     public let description: String
@@ -213,6 +214,7 @@ public struct MCPWorkflow: Codable, Sendable {
     public let createdAt: Date
     public let modifiedAt: Date
     public let author: String
+    public let metadata: [String: AnyCodable]?
 
     public init(
         id: UUID = UUID(),
@@ -221,7 +223,8 @@ public struct MCPWorkflow: Codable, Sendable {
         steps: [MCPWorkflowStep],
         createdAt: Date = Date(),
         modifiedAt: Date = Date(),
-        author: String = "Quantum-workspace"
+        author: String = "Quantum-workspace",
+        metadata: [String: AnyCodable]? = nil
     ) {
         self.id = id
         self.name = name
@@ -230,32 +233,45 @@ public struct MCPWorkflow: Codable, Sendable {
         self.createdAt = createdAt
         self.modifiedAt = modifiedAt
         self.author = author
+        self.metadata = metadata
     }
 }
 
+/// MCP workflow execution mode
+public enum MCPWorkflowExecutionMode: String, Codable, Sendable {
+    case sequential
+    case parallel
+}
+
 /// MCP workflow step
-public struct MCPWorkflowStep: Codable {
+public struct MCPWorkflowStep: Codable, Sendable {
     public let id: UUID
     public let toolId: String
     public let parameters: [String: AnyCodable]
     public let dependencies: [UUID]
+    public let executionMode: MCPWorkflowExecutionMode
     public let retryPolicy: MCPRetryPolicy?
     public let timeout: TimeInterval?
+    public let metadata: [String: AnyCodable]?
 
     public init(
         id: UUID = UUID(),
         toolId: String,
         parameters: [String: AnyCodable] = [:],
         dependencies: [UUID] = [],
+        executionMode: MCPWorkflowExecutionMode = .sequential,
         retryPolicy: MCPRetryPolicy? = nil,
-        timeout: TimeInterval? = nil
+        timeout: TimeInterval? = nil,
+        metadata: [String: AnyCodable]? = nil
     ) {
         self.id = id
         self.toolId = toolId
         self.parameters = parameters
         self.dependencies = dependencies
+        self.executionMode = executionMode
         self.retryPolicy = retryPolicy
         self.timeout = timeout
+        self.metadata = metadata
     }
 }
 
@@ -276,27 +292,28 @@ public struct MCPRetryPolicy: Codable, Sendable {
     }
 }
 
-/// MCP backoff strategy
+/// MCP backoff strategy for retry policies
 public enum MCPBackoffStrategy: String, Codable, Sendable {
     case fixed
     case linear
     case exponential
+    case fibonacci
 }
 
 /// MCP workflow result
-public struct MCPWorkflowResult {
+public struct MCPWorkflowResult: Sendable {
     public let workflowId: UUID
     public let success: Bool
     public let stepResults: [UUID: MCPToolResult]
     public let executionTime: TimeInterval
-    public let errors: [MCPWorkflowError]
+    public let errors: [MCPWorkflowExecutionError]
 
     public init(
         workflowId: UUID,
         success: Bool,
         stepResults: [UUID: MCPToolResult] = [:],
         executionTime: TimeInterval,
-        errors: [MCPWorkflowError] = []
+        errors: [MCPWorkflowExecutionError] = []
     ) {
         self.workflowId = workflowId
         self.success = success
@@ -306,8 +323,8 @@ public struct MCPWorkflowResult {
     }
 }
 
-/// MCP workflow error
-public struct MCPWorkflowError: Sendable {
+/// MCP workflow execution error
+public struct MCPWorkflowExecutionError: Sendable {
     public let stepId: UUID
     public let toolId: String
     public let message: String
@@ -321,17 +338,17 @@ public struct MCPWorkflowError: Sendable {
     }
 }
 
-/// MCP workflow status
-public struct MCPWorkflowStatus: Sendable {
+/// MCP workflow execution status
+public struct MCPWorkflowExecutionStatus: Sendable {
     public let workflowId: UUID
-    public let status: MCPWorkflowExecutionStatus
+    public let status: MCPWorkflowExecutionState
     public let currentStep: UUID?
     public let progress: Double
     public let estimatedTimeRemaining: TimeInterval?
 
     public init(
         workflowId: UUID,
-        status: MCPWorkflowExecutionStatus,
+        status: MCPWorkflowExecutionState,
         currentStep: UUID? = nil,
         progress: Double = 0.0,
         estimatedTimeRemaining: TimeInterval? = nil
@@ -344,20 +361,10 @@ public struct MCPWorkflowStatus: Sendable {
     }
 }
 
-/// MCP workflow execution status
-public enum MCPWorkflowExecutionStatus: String, Sendable {
-    case pending
-    case running
-    case paused
-    case completed
-    case failed
-    case cancelled
-}
-
 // MARK: - Security Types
 
 /// MCP request for authentication
-public struct MCPRequest {
+public struct MCPRequest: Sendable {
     public let toolId: String
     public let parameters: [String: AnyCodable]
     public let principal: MCPPrincipal
@@ -425,7 +432,7 @@ public struct MCPAuthenticationResult: Sendable {
 }
 
 /// MCP tool execution for auditing
-public struct MCPToolExecution {
+public struct MCPToolExecution: Sendable {
     public let executionId: UUID
     public let toolId: String
     public let principal: MCPPrincipal
@@ -453,9 +460,9 @@ public struct MCPToolExecution {
 // MARK: - Enhanced MCP Orchestrator Implementation
 
 /// Implementation of advanced MCP orchestrator
-public final class EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
-    private var tools: [String: any MCPTool] = [:]
-    private var toolMetrics: [String: MCPToolMetrics] = [:]
+public actor EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
+    private var _tools: [String: any MCPTool] = [:]
+    private var _toolMetrics: [String: MCPToolMetrics] = [:]
     private let securityManager: MCPSecurityManager
     private let workflowManager: MCPWorkflowManager
 
@@ -469,25 +476,25 @@ public final class EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
 
     public func registerTool(_ tool: any MCPTool) async {
         let toolId = await tool.id
-        tools[toolId] = tool
+        _tools[toolId] = tool
 
         // Initialize metrics for the tool
         if let enhancedTool = tool as? any EnhancedMCPTool {
-            toolMetrics[toolId] = enhancedTool.performanceMetrics
+            _toolMetrics[toolId] = enhancedTool.performanceMetrics
         } else {
-            toolMetrics[toolId] = MCPToolMetrics()
+            _toolMetrics[toolId] = MCPToolMetrics()
         }
     }
 
     public func unregisterTool(_ toolId: String) async {
-        tools.removeValue(forKey: toolId)
-        toolMetrics.removeValue(forKey: toolId)
+        _tools.removeValue(forKey: toolId)
+        _toolMetrics.removeValue(forKey: toolId)
     }
 
-    public func executeTool(_ toolId: String, with parameters: [String: Any]) async throws
+    public func executeTool(_ toolId: String, with parameters: [String: AnyCodable]) async throws
         -> MCPToolResult
     {
-        guard let tool = tools[toolId] else {
+        guard let tool = _tools[toolId] else {
             throw MCPError.toolNotFound(toolId)
         }
 
@@ -503,10 +510,23 @@ public final class EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
             let result = try await tool.execute(parameters: parameters)
             let executionTime = Date().timeIntervalSince(startTime)
 
+            let output: AnyCodable?
+            if let stringResult = result as? String {
+                output = AnyCodable(stringResult)
+            } else if let intResult = result as? Int {
+                output = AnyCodable(intResult)
+            } else if let doubleResult = result as? Double {
+                output = AnyCodable(doubleResult)
+            } else if let boolResult = result as? Bool {
+                output = AnyCodable(boolResult)
+            } else {
+                output = AnyCodable(String(describing: result))
+            }
+
             let toolResult = MCPToolResult(
                 toolId: toolId,
                 success: true,
-                output: result,
+                output: output,
                 executionTime: executionTime
             )
 
@@ -533,9 +553,11 @@ public final class EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
     }
 
     public func listAvailableTools() async -> [MCPToolInfo] {
+        let currentTools = _tools
+
         var toolInfos: [MCPToolInfo] = []
 
-        for (toolId, tool) in tools {
+        for (toolId, tool) in currentTools {
             let capabilities: [MCPToolCapability]
             let dependencies: [String]
 
@@ -562,7 +584,9 @@ public final class EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
     }
 
     public func getToolInfo(_ toolId: String) async -> MCPToolInfo? {
-        guard let tool = tools[toolId] else { return nil }
+        guard let tool = _tools[toolId] else {
+            return nil
+        }
 
         let capabilities: [MCPToolCapability]
         let dependencies: [String]
@@ -591,7 +615,9 @@ public final class EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
     // MARK: - Private Methods
 
     private func updateToolMetrics(_ toolId: String, with result: MCPToolResult) async {
-        guard var metrics = toolMetrics[toolId] else { return }
+        guard var metrics = _toolMetrics[toolId] else {
+            return
+        }
 
         // Update execution time (moving average)
         let alpha = 0.1  // Smoothing factor
@@ -610,7 +636,7 @@ public final class EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
         // Update performance score based on various factors
         metrics.performanceScore = calculatePerformanceScore(metrics)
 
-        toolMetrics[toolId] = metrics
+        _toolMetrics[toolId] = metrics
     }
 
     private func calculatePerformanceScore(_ metrics: MCPToolMetrics) -> Double {
@@ -626,16 +652,18 @@ public final class EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
 // MARK: - Basic MCP Security Manager Implementation
 
 /// Basic implementation of MCP security manager
-public final class BasicMCPSecurityManager: MCPSecurityManager {
-    private var authenticatedPrincipals: [String: MCPPrincipal] = [:]
-    private var executionLog: [MCPToolExecution] = []
+public actor BasicMCPSecurityManager: MCPSecurityManager {
+    private var _authenticatedPrincipals: [String: MCPPrincipal] = [:]
+    private var _executionLog: [MCPToolExecution] = []
 
     public func authenticateRequest(_ request: MCPRequest) async throws -> MCPAuthenticationResult {
         // Basic authentication - in practice, this would integrate with proper auth systems
         let principal = request.principal
 
         // Simple validation - check if principal exists
-        if authenticatedPrincipals[principal.id] != nil {
+        let principalExists = _authenticatedPrincipals[principal.id] != nil
+
+        if principalExists {
             return MCPAuthenticationResult(
                 authenticated: true,
                 principal: principal,
@@ -645,7 +673,8 @@ public final class BasicMCPSecurityManager: MCPSecurityManager {
         }
 
         // Auto-register new principals for demo purposes
-        authenticatedPrincipals[principal.id] = principal
+        _authenticatedPrincipals[principal.id] = principal
+
         return MCPAuthenticationResult(
             authenticated: true,
             principal: principal,
@@ -663,7 +692,7 @@ public final class BasicMCPSecurityManager: MCPSecurityManager {
     }
 
     public func auditLogExecution(_ execution: MCPToolExecution) async {
-        executionLog.append(execution)
+        _executionLog.append(execution)
 
         // In practice, this would write to a secure audit log
         print(
@@ -683,64 +712,90 @@ public final class BasicMCPSecurityManager: MCPSecurityManager {
 /// Basic implementation of MCP workflow manager
 public final class BasicMCPWorkflowManager: MCPWorkflowManager {
     private var workflows: [UUID: MCPWorkflow] = [:]
-    private var executionStatuses: [UUID: MCPWorkflowStatus] = [:]
+    private var executionStatuses: [UUID: MCPWorkflowExecutionStatus] = [:]
+    private let workflowQueue = DispatchQueue(
+        label: "com.mcp.workflow.manager", attributes: .concurrent)
 
     public func createWorkflow(name: String, steps: [MCPWorkflowStep]) async -> MCPWorkflow {
-        let workflow = MCPWorkflow(name: name, steps: steps)
-        workflows[workflow.id] = workflow
-        return workflow
+        await withCheckedContinuation { continuation in
+            workflowQueue.async(flags: .barrier) {
+                let workflow = MCPWorkflow(name: name, steps: steps)
+                self.workflows[workflow.id] = workflow
+                continuation.resume(returning: workflow)
+            }
+        }
     }
 
     public func executeWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult {
         let startTime = Date()
         var stepResults: [UUID: MCPToolResult] = [:]
-        var errors: [MCPWorkflowError] = []
+        var errors: [MCPWorkflowExecutionError] = []
 
-        // Update status
-        executionStatuses[workflow.id] = MCPWorkflowStatus(
-            workflowId: workflow.id,
-            status: .running,
-            progress: 0.0
-        )
+        await withCheckedContinuation { continuation in
+            workflowQueue.async(flags: .barrier) {
+                // Update status
+                self.executionStatuses[workflow.id] = MCPWorkflowExecutionStatus(
+                    workflowId: workflow.id,
+                    status: .running,
+                    progress: 0.0
+                )
+                continuation.resume()
+            }
+        }
 
         // Execute steps in dependency order
         let executionOrder = try topologicalSort(workflow.steps)
 
         for (index, step) in executionOrder.enumerated() {
             do {
-                // Update current step
-                executionStatuses[workflow.id] = MCPWorkflowStatus(
-                    workflowId: workflow.id,
-                    status: .running,
-                    currentStep: step.id,
-                    progress: Double(index) / Double(executionOrder.count)
-                )
+                await withCheckedContinuation { continuation in
+                    workflowQueue.async(flags: .barrier) {
+                        // Update current step
+                        self.executionStatuses[workflow.id] = MCPWorkflowExecutionStatus(
+                            workflowId: workflow.id,
+                            status: .running,
+                            currentStep: step.id,
+                            progress: Double(index) / Double(executionOrder.count)
+                        )
+                        continuation.resume()
+                    }
+                }
 
                 // Execute step (this would need actual tool execution)
                 let result = MCPToolResult(
                     toolId: step.toolId,
                     success: true,
-                    output: "Step executed successfully",
+                    output: AnyCodable("Step executed successfully"),
                     executionTime: 1.0
                 )
 
-                stepResults[step.id] = result
+                await withCheckedContinuation { continuation in
+                    workflowQueue.async(flags: .barrier) {
+                        stepResults[step.id] = result
+                        continuation.resume()
+                    }
+                }
 
             } catch {
-                let workflowError = MCPWorkflowError(
+                let workflowError = MCPWorkflowExecutionError(
                     stepId: step.id,
                     toolId: step.toolId,
                     message: error.localizedDescription
                 )
                 errors.append(workflowError)
 
-                // Update status to failed
-                executionStatuses[workflow.id] = MCPWorkflowStatus(
-                    workflowId: workflow.id,
-                    status: .failed,
-                    currentStep: step.id,
-                    progress: Double(index) / Double(executionOrder.count)
-                )
+                await withCheckedContinuation { continuation in
+                    workflowQueue.async(flags: .barrier) {
+                        // Update status to failed
+                        self.executionStatuses[workflow.id] = MCPWorkflowExecutionStatus(
+                            workflowId: workflow.id,
+                            status: .failed,
+                            currentStep: step.id,
+                            progress: Double(index) / Double(executionOrder.count)
+                        )
+                        continuation.resume()
+                    }
+                }
 
                 throw error
             }
@@ -749,12 +804,17 @@ public final class BasicMCPWorkflowManager: MCPWorkflowManager {
         let executionTime = Date().timeIntervalSince(startTime)
         let success = errors.isEmpty
 
-        // Update final status
-        executionStatuses[workflow.id] = MCPWorkflowStatus(
-            workflowId: workflow.id,
-            status: success ? .completed : .failed,
-            progress: 1.0
-        )
+        await withCheckedContinuation { continuation in
+            workflowQueue.async(flags: .barrier) {
+                // Update final status
+                self.executionStatuses[workflow.id] = MCPWorkflowExecutionStatus(
+                    workflowId: workflow.id,
+                    status: success ? .completed : .failed,
+                    progress: 1.0
+                )
+                continuation.resume()
+            }
+        }
 
         return MCPWorkflowResult(
             workflowId: workflow.id,
@@ -777,7 +837,7 @@ public final class BasicMCPWorkflowManager: MCPWorkflowManager {
         if independentSteps.count > 1 {
             let parallelStep = MCPWorkflowStep(
                 toolId: "parallel_executor",
-                parameters: ["steps": independentSteps.map { $0.id.uuidString }],
+                parameters: ["steps": AnyCodable(independentSteps.map { $0.id.uuidString })],
                 dependencies: []
             )
             optimizedSteps = [parallelStep] + dependentSteps
@@ -793,11 +853,20 @@ public final class BasicMCPWorkflowManager: MCPWorkflowManager {
         )
     }
 
-    public func monitorWorkflowExecution(_ workflowId: UUID) -> AsyncStream<MCPWorkflowStatus> {
+    public func monitorWorkflowExecution(_ workflowId: UUID) -> AsyncStream<
+        MCPWorkflowExecutionStatus
+    > {
         AsyncStream { continuation in
             Task {
                 while true {
-                    if let status = executionStatuses[workflowId] {
+                    let status = await withCheckedContinuation { continuation in
+                        self.workflowQueue.async {
+                            let status = self.executionStatuses[workflowId]
+                            continuation.resume(returning: status)
+                        }
+                    }
+
+                    if let status = status {
                         continuation.yield(status)
 
                         if status.status == .completed || status.status == .failed
