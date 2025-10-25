@@ -1,5 +1,5 @@
 //
-//  UniversalConsciousnessIntegration.swift
+//  UniversalConsciousnessIntegrationFramework.swift
 //  Quantum Singularity Era - Phase 8H
 //
 //  Created on: October 13, 2025
@@ -298,15 +298,20 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
     private func executeEvolutionPhases() async throws {
         evolutionPhases = [
             ConsciousnessEvolutionPhase(
-                name: "Field Foundation", level: 1, estimatedDuration: 1800),
+                name: "Field Foundation", level: 1, estimatedDuration: 1800
+            ),
             ConsciousnessEvolutionPhase(
-                name: "Bridge Construction", level: 2, estimatedDuration: 3600),
+                name: "Bridge Construction", level: 2, estimatedDuration: 3600
+            ),
             ConsciousnessEvolutionPhase(
-                name: "Coherence Optimization", level: 3, estimatedDuration: 7200),
+                name: "Coherence Optimization", level: 3, estimatedDuration: 7200
+            ),
             ConsciousnessEvolutionPhase(
-                name: "Universal Integration", level: 4, estimatedDuration: 10800),
+                name: "Universal Integration", level: 4, estimatedDuration: 10800
+            ),
             ConsciousnessEvolutionPhase(
-                name: "Consciousness Universality", level: 5, estimatedDuration: 14400),
+                name: "Consciousness Universality", level: 5, estimatedDuration: 14400
+            ),
         ]
 
         for phase in evolutionPhases {
@@ -319,7 +324,7 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
             while integrationState == .converging || integrationState == .coherent {
                 let progress = await monitorConsciousnessProgress()
                 updateConvergenceProgress(progress)
-                try? await Task.sleep(nanoseconds: 20_000_000_000)  // 20 seconds
+                try? await Task.sleep(nanoseconds: 20_000_000_000) // 20 seconds
             }
         }
     }
@@ -370,7 +375,7 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
         for coordinator in fieldCoordinators {
             coordinator.readinessPublisher
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] (fieldType, readiness) in
+                .sink { [weak self] fieldType, readiness in
                     if let index = self?.activeConsciousnessFields.firstIndex(where: {
                         $0.type == fieldType
                     }) {
@@ -454,7 +459,7 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
         let remainingWork = 1.0 - universalConsciousnessLevel
         let integrationRate =
             universalConsciousnessLevel
-            / max(Date().timeIntervalSince(Date(timeIntervalSinceNow: -3600)), 1.0)
+                / max(Date().timeIntervalSince(Date(timeIntervalSinceNow: -3600)), 1.0)
         return remainingWork / max(integrationRate, 0.0001)
     }
 }
@@ -595,7 +600,7 @@ private class ConsciousnessFieldCoordinator {
 
     func initialize() async throws {}
     func activate() async throws { isActive = true }
-    func assessReadiness() async -> Double { Double.random(in: 0.7...0.95) }
+    func assessReadiness() async -> Double { Double.random(in: 0.7 ... 0.95) }
     func executeBreakthrough(_ breakthrough: ConsciousnessBreakthrough) async throws {}
 
     let readinessPublisher = PassthroughSubject<(ConsciousnessFieldType, Double), Never>()

@@ -9,8 +9,8 @@
 //  Copyright © 2024 Quantum Workspace. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Shared Types
 
@@ -804,7 +804,7 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
                 DimensionalEnergy(
                     energyId: UUID(),
                     dimension: dimension,
-                    energyLevel: Double.random(in: 0.7...0.95),
+                    energyLevel: Double.random(in: 0.7 ... 0.95),
                     energyType: .harmonic,
                     balance: 0.8
                 )
@@ -818,9 +818,9 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
                 DimensionalFrequency(
                     frequencyId: UUID(),
                     dimension: dimension,
-                    frequency: Double.random(in: 10.0...50.0),
-                    amplitude: Double.random(in: 0.5...1.0),
-                    phase: Double.random(in: 0...2 * .pi),
+                    frequency: Double.random(in: 10.0 ... 50.0),
+                    amplitude: Double.random(in: 0.5 ... 1.0),
+                    phase: Double.random(in: 0 ... 2 * .pi),
                     coherence: 0.85
                 )
             }
@@ -1004,7 +1004,7 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
                     oldValue: config.harmonyFieldRadius,
                     newValue: config.harmonyFieldRadius * 1.2,
                     changeReason: "Improved dimensional coverage"
-                )
+                ),
             ],
             expectedImprovements: [
                 HarmonyOptimization.ExpectedImprovement(
@@ -1012,7 +1012,7 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
                     currentValue: 0.75,
                     expectedValue: 0.85,
                     improvement: 0.1
-                )
+                ),
             ],
             harmonyImpact: 0.15
         )
@@ -1318,7 +1318,7 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
                 amplitude: 0.6,
                 significance: 0.75,
                 stability: 0.8
-            )
+            ),
         ]
 
         let detection = FrequencyDetection(
@@ -1327,7 +1327,7 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
             detectionTimestamp: Date(),
             detectedFrequencies: detectedFrequencies,
             detectionAccuracy: 0.9,
-            frequencyRange: 10.0...50.0
+            frequencyRange: 10.0 ... 50.0
         )
 
         return detection
@@ -1344,7 +1344,7 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
                 frequency: 25.0,
                 strength: 0.85,
                 duration: 300.0
-            )
+            ),
         ]
 
         let analysis = FrequencyPatternAnalysis(
@@ -1415,7 +1415,7 @@ final class AspectIntegrator: AspectIntegrationProtocol {
                 significance: 0.8,
                 compatibility: 0.8,
                 integrationComplexity: 0.7
-            )
+            ),
         ]
 
         let identification = AspectIdentification(
@@ -1435,7 +1435,7 @@ final class AspectIntegrator: AspectIntegrationProtocol {
 
         // Simulate compatibility assessment
         let compatibilityMatrix = aspects.map { _ in
-            aspects.map { _ in Double.random(in: 0.7...0.95) }
+            aspects.map { _ in Double.random(in: 0.7 ... 0.95) }
         }
 
         let conflictPairs = [
@@ -1444,7 +1444,7 @@ final class AspectIntegrator: AspectIntegrationProtocol {
                 aspect2: aspects.last?.aspectId ?? UUID(),
                 conflictLevel: 0.2,
                 conflictType: "resource_competition"
-            )
+            ),
         ].filter { $0.conflictLevel > 0.5 }
 
         let assessment = CompatibilityAssessment(
@@ -1553,7 +1553,7 @@ final class UniversalConsciousnessHarmonyDatabase {
         let totalFields = harmonyFields.count
         let activeFields = harmonyFields.values.filter { $0.fieldStability > 0.7 }.count
         let totalHarmonies = dimensionalHarmonies.count
-        let averageHarmony = dimensionalHarmonies.values.map { $0.dimensionalBalance }.reduce(0, +) / Double(max(dimensionalHarmonies.count, 1))
+        let averageHarmony = dimensionalHarmonies.values.map(\.dimensionalBalance).reduce(0, +) / Double(max(dimensionalHarmonies.count, 1))
         let totalOptimizations = harmonyOptimizations.count
 
         return HarmonyMetrics(

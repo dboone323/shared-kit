@@ -23,7 +23,7 @@ public class LIFNeuron: NeuromorphicNeuron {
     }
 
     /// Update membrane potential with leaky integration
-    public override func processSpike(_ spike: NeuromorphicSpike, at time: TimeInterval) -> Bool {
+    override public func processSpike(_ spike: NeuromorphicSpike, at time: TimeInterval) -> Bool {
         // Apply leak
         membranePotential = restingPotential + (membranePotential - restingPotential) * leakRate
 
@@ -60,16 +60,16 @@ public class AdExNeuron: LIFNeuron {
         super.init(threshold: threshold)
     }
 
-    public override func processSpike(_ spike: NeuromorphicSpike, at time: TimeInterval) -> Bool {
+    override public func processSpike(_ spike: NeuromorphicSpike, at time: TimeInterval) -> Bool {
         // Update adaptation current
-        adaptationCurrent *= exp(-0.001 / adaptationTimeConstant)  // dt = 1ms
+        adaptationCurrent *= exp(-0.001 / adaptationTimeConstant) // dt = 1ms
 
         // Exponential term for spike initiation
         let exponentialTerm = slopeFactor * exp((membranePotential - threshold) / slopeFactor)
 
         // Update membrane potential
         let dv = -membranePotential + exponentialTerm - adaptationCurrent
-        membranePotential += dv * 0.001  // dt = 1ms
+        membranePotential += dv * 0.001 // dt = 1ms
 
         // Add synaptic input
         let synapticEffect = spike.weight * exp(-(time - spike.timestamp) / spike.decayTime)
@@ -89,10 +89,10 @@ public class AdExNeuron: LIFNeuron {
 /// Izhikevich neuron model - computationally efficient
 public class IzhikevichNeuron: NeuromorphicNeuron {
     public var recoveryVariable: Double = 0.0
-    public var a: Double  // Recovery time constant
-    public var b: Double  // Recovery sensitivity
-    public var c: Double  // Reset value
-    public var d: Double  // Recovery reset
+    public var a: Double // Recovery time constant
+    public var b: Double // Recovery sensitivity
+    public var c: Double // Reset value
+    public var d: Double // Recovery reset
 
     public init(a: Double = 0.02, b: Double = 0.2, c: Double = -65.0, d: Double = 8.0) {
         self.a = a
@@ -102,14 +102,14 @@ public class IzhikevichNeuron: NeuromorphicNeuron {
         super.init(threshold: 30.0)
     }
 
-    public override func processSpike(_ spike: NeuromorphicSpike, at time: TimeInterval) -> Bool {
+    override public func processSpike(_ spike: NeuromorphicSpike, at time: TimeInterval) -> Bool {
         // Izhikevich model equations
         let dv =
             0.04 * membranePotential * membranePotential + 5.0 * membranePotential + 140.0
-            - recoveryVariable
+                - recoveryVariable
         let du = a * (b * membranePotential - recoveryVariable)
 
-        membranePotential += dv * 0.001  // dt = 1ms
+        membranePotential += dv * 0.001 // dt = 1ms
         recoveryVariable += du * 0.001
 
         // Add synaptic input
@@ -140,7 +140,7 @@ public class FeedforwardSNN: NeuromorphicNetwork {
         for (layerIndex, size) in layerSizes.enumerated() {
             var layer: [NeuromorphicNeuron] = []
 
-            for _ in 0..<size {
+            for _ in 0 ..< size {
                 let neuron: NeuromorphicNeuron
                 switch neuronType {
                 case .lif:
@@ -168,7 +168,7 @@ public class FeedforwardSNN: NeuromorphicNetwork {
         }
 
         // Create connections between layers
-        for i in 0..<(layers.count - 1) {
+        for i in 0 ..< (layers.count - 1) {
             connectLayers(from: layers[i], to: layers[i + 1])
         }
     }
@@ -178,8 +178,8 @@ public class FeedforwardSNN: NeuromorphicNetwork {
     ) {
         for sourceNeuron in sourceLayer {
             for targetNeuron in targetLayer {
-                let weight = Double.random(in: 0.1...0.9)
-                let delay = Double.random(in: 0.001...0.005)
+                let weight = Double.random(in: 0.1 ... 0.9)
+                let delay = Double.random(in: 0.001 ... 0.005)
                 connect(from: sourceNeuron, to: targetNeuron, weight: weight, delay: delay)
             }
         }
@@ -206,13 +206,14 @@ public class RecurrentSNN: NeuromorphicNetwork {
 
         // Add recurrent connections within layers
         for layer in layers {
-            for i in 0..<layer.count {
-                for j in 0..<layer.count {
-                    if i != j && Double.random(in: 0...1) < recurrentProbability {
-                        let weight = Double.random(in: -0.5...0.5)  // Can be inhibitory
-                        let delay = Double.random(in: 0.001...0.01)
+            for i in 0 ..< layer.count {
+                for j in 0 ..< layer.count {
+                    if i != j && Double.random(in: 0 ... 1) < recurrentProbability {
+                        let weight = Double.random(in: -0.5 ... 0.5) // Can be inhibitory
+                        let delay = Double.random(in: 0.001 ... 0.01)
                         let synapse = connect(
-                            from: layer[i], to: layer[j], weight: weight, delay: delay)
+                            from: layer[i], to: layer[j], weight: weight, delay: delay
+                        )
                         recurrentConnections.append(synapse)
                     }
                 }
@@ -226,7 +227,7 @@ public class ConvolutionalSNN: NeuromorphicNetwork {
     public var convLayers: [ConvLayer] = []
 
     public struct ConvLayer {
-        public var kernels: [[NeuromorphicNeuron]]  // 2D array of neurons
+        public var kernels: [[NeuromorphicNeuron]] // 2D array of neurons
         public var kernelSize: (width: Int, height: Int)
         public var stride: Int
         public var inputSize: (width: Int, height: Int)
@@ -257,9 +258,9 @@ public class ConvolutionalSNN: NeuromorphicNetwork {
     ) {
         var kernels: [[NeuromorphicNeuron]] = []
 
-        for _ in 0..<numKernels {
+        for _ in 0 ..< numKernels {
             var kernel: [NeuromorphicNeuron] = []
-            for _ in 0..<(kernelSize.width * kernelSize.height) {
+            for _ in 0 ..< (kernelSize.width * kernelSize.height) {
                 let neuron = LIFNeuron()
                 addNeuron(neuron)
                 kernel.append(neuron)
@@ -271,7 +272,8 @@ public class ConvolutionalSNN: NeuromorphicNetwork {
             kernels: kernels,
             kernelSize: kernelSize,
             stride: stride,
-            inputSize: inputSize)
+            inputSize: inputSize
+        )
         convLayers.append(convLayer)
     }
 
@@ -284,15 +286,15 @@ public class ConvolutionalSNN: NeuromorphicNetwork {
         let (kernelWidth, kernelHeight) = convLayer.kernelSize
         let stride = convLayer.stride
 
-        for kernelIndex in 0..<convLayer.kernels.count {
+        for kernelIndex in 0 ..< convLayer.kernels.count {
             let kernel = convLayer.kernels[kernelIndex]
 
-            for y in stride..<inputHeight where (y - kernelHeight + 1) % stride == 0 {
-                for x in stride..<inputWidth where (x - kernelWidth + 1) % stride == 0 {
+            for y in stride ..< inputHeight where (y - kernelHeight + 1) % stride == 0 {
+                for x in stride ..< inputWidth where (x - kernelWidth + 1) % stride == 0 {
                     // Connect receptive field to kernel neurons
                     var kernelNeuronIndex = 0
-                    for ky in 0..<kernelHeight {
-                        for kx in 0..<kernelWidth {
+                    for ky in 0 ..< kernelHeight {
+                        for kx in 0 ..< kernelWidth {
                             let inputX = x + kx - kernelWidth + 1
                             let inputY = y + ky - kernelHeight + 1
 
@@ -301,11 +303,12 @@ public class ConvolutionalSNN: NeuromorphicNetwork {
                             {
                                 let inputIndex = inputY * inputWidth + inputX
                                 if inputIndex < input.count {
-                                    let weight = Double.random(in: 0.1...0.9)
+                                    let weight = Double.random(in: 0.1 ... 0.9)
                                     connect(
                                         from: input[inputIndex],
                                         to: kernel[kernelNeuronIndex],
-                                        weight: weight)
+                                        weight: weight
+                                    )
                                 }
                             }
                             kernelNeuronIndex += 1
@@ -327,29 +330,29 @@ public class SpikeEventQueue {
     public func enqueue(_ spike: NeuromorphicSpike, at time: TimeInterval) {
         queue.async {
             self.events.append((time: time, spike: spike))
-            self.events.sort { $0.time < $1.time }  // Keep sorted by time
+            self.events.sort { $0.time < $1.time } // Keep sorted by time
         }
     }
 
     public func dequeue() -> (time: TimeInterval, spike: NeuromorphicSpike)? {
-        return queue.sync {
+        queue.sync {
             guard !events.isEmpty else { return nil }
             return events.removeFirst()
         }
     }
 
     public func peek() -> (time: TimeInterval, spike: NeuromorphicSpike)? {
-        return queue.sync {
+        queue.sync {
             events.first
         }
     }
 
     public var isEmpty: Bool {
-        return queue.sync { events.isEmpty }
+        queue.sync { events.isEmpty }
     }
 
     public var count: Int {
-        return queue.sync { events.count }
+        queue.sync { events.count }
     }
 }
 
@@ -358,7 +361,7 @@ public class RealTimeSpikeProcessor {
     public let eventQueue = SpikeEventQueue()
     public var neurons: [UUID: NeuromorphicNeuron] = [:]
     public var currentTime: TimeInterval = 0.0
-    public let timeStep: TimeInterval = 0.001  // 1ms resolution
+    public let timeStep: TimeInterval = 0.001 // 1ms resolution
 
     public func registerNeuron(_ neuron: NeuromorphicNeuron) {
         neurons[neuron.id] = neuron
@@ -367,7 +370,7 @@ public class RealTimeSpikeProcessor {
     public func processTimeStep() {
         // Process events for this time step
         while let event = eventQueue.peek(), event.time <= currentTime {
-            let _ = eventQueue.dequeue()  // Remove from queue
+            _ = eventQueue.dequeue() // Remove from queue
             if let neuron = neurons[event.spike.targetSynapse.postsynapticNeuron.id] {
                 let spiked = neuron.processSpike(event.spike, at: event.time)
                 if spiked {
@@ -420,7 +423,7 @@ public class RealTimeSpikeProcessor {
 
 /// Power-aware spike processing
 public class EnergyEfficientProcessor {
-    public var powerBudget: Double  // Watts
+    public var powerBudget: Double // Watts
     public var currentPower: Double = 0.0
     public var energyEfficiency: Double = 0.0
 
@@ -432,18 +435,17 @@ public class EnergyEfficientProcessor {
     }
 
     /// Calculate power consumption for spike processing
-    public func calculatePowerConsumption(for neuron: NeuromorphicNeuron, spikeCount: Int) -> Double
-    {
+    public func calculatePowerConsumption(for neuron: NeuromorphicNeuron, spikeCount: Int) -> Double {
         // Power model: base power + spike processing power
-        let basePower = 0.001  // 1mW base
-        let spikePower = Double(spikeCount) * 0.01  // 10mW per spike
+        let basePower = 0.001 // 1mW base
+        let spikePower = Double(spikeCount) * 0.01 // 10mW per spike
         return basePower + spikePower
     }
 
     /// Optimize processing based on power constraints
     public func optimizeForPower(_ neurons: [NeuromorphicNeuron]) -> [NeuromorphicNeuron] {
         // Sort neurons by recent activity (prioritize active neurons)
-        let sortedNeurons = neurons.sorted { (n1, n2) -> Bool in
+        let sortedNeurons = neurons.sorted { n1, n2 -> Bool in
             let activity1 = neuronActivity[n1.id, default: 0.0]
             let activity2 = neuronActivity[n2.id, default: 0.0]
             return activity1 > activity2
@@ -482,8 +484,8 @@ public class EnergyEfficientProcessor {
 
             // Remove inactive neurons
             if let lastTime = lastActivityTime[neuronId],
-                Date.timeIntervalSinceReferenceDate - lastTime > 60.0
-            {  // 1 minute
+               Date.timeIntervalSinceReferenceDate - lastTime > 60.0
+            { // 1 minute
                 neuronActivity.removeValue(forKey: neuronId)
                 lastActivityTime.removeValue(forKey: neuronId)
             }
@@ -496,14 +498,14 @@ public class EnergyEfficientProcessor {
 /// Quantum-enhanced spiking neural network
 public class QuantumSNN: FeedforwardSNN {
     public var quantumProcessor: QuantumProcessor?
-    public var quantumLayers: Set<Int> = []  // Layer indices that use quantum processing
+    public var quantumLayers: Set<Int> = [] // Layer indices that use quantum processing
 
     public func enableQuantumLayer(at index: Int) {
         quantumLayers.insert(index)
     }
 
-    public override func processInput(_ inputSpikes: [NeuromorphicSpike]) {
-        guard let quantumProcessor = quantumProcessor else {
+    override public func processInput(_ inputSpikes: [NeuromorphicSpike]) {
+        guard let quantumProcessor else {
             super.processInput(inputSpikes)
             return
         }
@@ -520,7 +522,7 @@ public class QuantumSNN: FeedforwardSNN {
             } else {
                 // Use traditional spiking processing
                 processLayerSpikes(currentSpikes, layer: layer)
-                currentSpikes = []  // Will be populated by layer processing
+                currentSpikes = [] // Will be populated by layer processing
             }
         }
     }
@@ -543,7 +545,8 @@ public class QuantumSNN: FeedforwardSNN {
             if index < targetLayer.count && value > 0.5 {
                 let neuron = targetLayer[index]
                 let dummySynapse = NeuromorphicSynapse(
-                    from: NeuromorphicNeuron(), to: neuron, weight: value)
+                    from: NeuromorphicNeuron(), to: neuron, weight: value
+                )
                 let spike = NeuromorphicSpike(
                     sourceNeuron: dummySynapse.presynapticNeuron,
                     targetSynapse: dummySynapse,
@@ -559,7 +562,7 @@ public class QuantumSNN: FeedforwardSNN {
 
     private func processLayerSpikes(_ spikes: [NeuromorphicSpike], layer: [NeuromorphicNeuron]) {
         for spike in spikes {
-            let _ = spike.targetSynapse.postsynapticNeuron.processSpike(spike, at: spike.timestamp)
+            _ = spike.targetSynapse.postsynapticNeuron.processSpike(spike, at: spike.timestamp)
         }
     }
 }

@@ -341,8 +341,7 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
     private func modelPredictiveWorkflows(
         _ request: AdvancedWorkflowLearningRequest,
         analysis: AdvancedWorkflowPatternAnalysis
-    ) async throws -> PredictiveWorkflowModeling
-    {
+    ) async throws -> PredictiveWorkflowModeling {
         // Model predictive workflows
         let modelingContext = PredictiveWorkflowModelingContext(
             workflowExecutions: request.workflowExecutions,
@@ -366,8 +365,7 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
     private func optimizeLearningCoordination(
         _ request: AdvancedWorkflowLearningRequest,
         modeling: PredictiveWorkflowModeling
-    ) async throws -> LearningCoordinationOptimization
-    {
+    ) async throws -> LearningCoordinationOptimization {
         // Optimize learning coordination
         let optimizationContext = LearningCoordinationOptimizationContext(
             workflowExecutions: request.workflowExecutions,
@@ -391,8 +389,7 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
     private func synthesizeWorkflowIntelligence(
         _ request: AdvancedWorkflowLearningRequest,
         optimization: LearningCoordinationOptimization
-    ) async throws -> WorkflowIntelligenceSynthesis
-    {
+    ) async throws -> WorkflowIntelligenceSynthesis {
         // Synthesize workflow intelligence
         let synthesisContext = WorkflowIntelligenceSynthesisContext(
             workflowExecutions: request.workflowExecutions,
@@ -416,8 +413,7 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
     private func orchestrateAdvancedLearning(
         _ request: AdvancedWorkflowLearningRequest,
         synthesis: WorkflowIntelligenceSynthesis
-    ) async throws -> AdvancedLearningOrchestration
-    {
+    ) async throws -> AdvancedLearningOrchestration {
         // Orchestrate advanced learning
         let orchestrationContext = AdvancedLearningOrchestrationContext(
             workflowExecutions: request.workflowExecutions,
@@ -441,8 +437,7 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
     private func validateAdvancedLearningResults(
         _ learningOrchestration: AdvancedLearningOrchestration,
         session: AdvancedLearningSession
-    ) async throws -> AdvancedLearningValidationResult
-    {
+    ) async throws -> AdvancedLearningValidationResult {
         // Validate advanced learning results
         let performanceComparison = await compareAdvancedLearningPerformance(
             originalExecutions: session.request.workflowExecutions,
@@ -455,7 +450,7 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
         )
 
         let success = performanceComparison.predictiveAccuracy >= session.request.predictiveAccuracyTarget &&
-                     advancedAdvantage.advancedAdvantage >= 0.3
+            advancedAdvantage.advancedAdvantage >= 0.3
 
         let events = generateAdvancedLearningEvents(session, orchestration: learningOrchestration)
 
@@ -574,24 +569,24 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
 
     private func measureLearningEfficiency(_ learnedPatterns: [LearnedWorkflowPattern]) async -> Double {
         // Measure learning efficiency
-        return 0.91
+        0.91
     }
 
     private func measurePatternRecognitionDepth(_ learnedPatterns: [LearnedWorkflowPattern]) async -> Double {
         // Measure pattern recognition depth
-        return 0.92
+        0.92
     }
 
     private func measurePredictiveCapability(_ learnedPatterns: [LearnedWorkflowPattern]) async -> Double {
         // Measure predictive capability
-        return 0.93
+        0.93
     }
 
     private func generateAdvancedLearningEvents(
         _ session: AdvancedLearningSession,
         orchestration: AdvancedLearningOrchestration
     ) -> [AdvancedLearningEvent] {
-        return [
+        [
             AdvancedLearningEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -607,9 +602,9 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
                 data: [
                     "success": true,
                     "predictive_accuracy": orchestration.orchestrationScore,
-                    "learning_efficiency": orchestration.learningEfficiency
+                    "learning_efficiency": orchestration.learningEfficiency,
                 ]
-            )
+            ),
         ]
     }
 
@@ -931,7 +926,7 @@ public struct AdvancedWorkflowLearningMetrics: Sendable, Codable {
     public var averageAdvancedAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Advanced learning metrics
@@ -1429,9 +1424,9 @@ public struct AdvancedLearningOrchestrationResult: Sendable {
 
 // MARK: - Extensions
 
-extension AdvancedWorkflowLearningSystem {
+public extension AdvancedWorkflowLearningSystem {
     /// Create specialized advanced learning system for specific workflow types
-    public static func createSpecializedAdvancedLearningSystem(
+    static func createSpecializedAdvancedLearningSystem(
         for workflowType: WorkflowType
     ) async throws -> AdvancedWorkflowLearningSystem {
         let system = try await AdvancedWorkflowLearningSystem()
@@ -1440,7 +1435,7 @@ extension AdvancedWorkflowLearningSystem {
     }
 
     /// Execute batch advanced learning processing
-    public func executeBatchAdvancedLearning(
+    func executeBatchAdvancedLearning(
         _ learningRequests: [AdvancedWorkflowLearningRequest]
     ) async throws -> BatchAdvancedLearningResult {
 
@@ -1463,8 +1458,8 @@ extension AdvancedWorkflowLearningSystem {
         }
 
         let successRate = Double(results.count) / Double(learningRequests.count)
-        let averageAccuracy = results.map { $0.predictiveAccuracy }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.advancedAdvantage }.reduce(0, +) / Double(results.count)
+        let averageAccuracy = results.map(\.predictiveAccuracy).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.advancedAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchAdvancedLearningResult(
             batchId: batchId,
@@ -1481,7 +1476,7 @@ extension AdvancedWorkflowLearningSystem {
     }
 
     /// Get advanced learning recommendations
-    public func getAdvancedLearningRecommendations() async -> [AdvancedLearningRecommendation] {
+    func getAdvancedLearningRecommendations() async -> [AdvancedLearningRecommendation] {
         var recommendations: [AdvancedLearningRecommendation] = []
 
         let status = await getAdvancedLearningStatus()

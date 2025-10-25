@@ -212,13 +212,13 @@ public final class SelfOptimizingCICD: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     // Configuration
-    private let monitoringInterval: TimeInterval = 60.0  // seconds
-    private let optimizationInterval: TimeInterval = 1800.0  // 30 minutes
+    private let monitoringInterval: TimeInterval = 60.0 // seconds
+    private let optimizationInterval: TimeInterval = 1800.0 // 30 minutes
     private let maxConcurrentPipelines: Int = 10
 
     // AI-driven optimization parameters
     private let learningRate: Double = 0.1
-    private let predictionHorizon: TimeInterval = 3600.0  // 1 hour
+    private let predictionHorizon: TimeInterval = 3600.0 // 1 hour
     private let efficiencyThreshold: Double = 0.8
     private let costOptimizationWeight: Double = 0.3
     private let performanceOptimizationWeight: Double = 0.7
@@ -342,12 +342,12 @@ public final class SelfOptimizingCICD: ObservableObject {
 
     /// Get pipeline status
     public func getPipelineStatus(_ pipelineId: String) -> PipelineStatus? {
-        return activePipelines[pipelineId]?.status
+        activePipelines[pipelineId]?.status
     }
 
     /// Get pipeline metrics
     public func getPipelineMetrics(_ pipelineId: String) -> [PipelineMetrics]? {
-        return activePipelines[pipelineId]?.metrics
+        activePipelines[pipelineId]?.metrics
     }
 
     /// Register a pipeline configuration
@@ -360,12 +360,11 @@ public final class SelfOptimizingCICD: ObservableObject {
     public func getOptimizationRecommendations(for pipelineId: String)
         -> [OptimizationRecommendation]
     {
-        return optimizationRecommendations.filter { $0.pipelineId == pipelineId }
+        optimizationRecommendations.filter { $0.pipelineId == pipelineId }
     }
 
     /// Apply optimization recommendation
-    public func applyOptimizationRecommendation(_ recommendation: OptimizationRecommendation) async
-    {
+    public func applyOptimizationRecommendation(_ recommendation: OptimizationRecommendation) async {
         logger.info(
             "🔧 Applying optimization: \(recommendation.strategy.rawValue) for pipeline \(recommendation.pipelineId)"
         )
@@ -496,9 +495,9 @@ public final class SelfOptimizingCICD: ObservableObject {
             totalPipelines > 0 ? Double(successfulPipelines) / Double(totalPipelines) : 0.0
 
         let averageDuration =
-            pipelineHistory.compactMap { $0.duration }.reduce(0, +) / Double(pipelineHistory.count)
+            pipelineHistory.compactMap(\.duration).reduce(0, +) / Double(pipelineHistory.count)
         let averageCost =
-            pipelineHistory.map { $0.cost }.reduce(0, +) / Double(pipelineHistory.count)
+            pipelineHistory.map(\.cost).reduce(0, +) / Double(pipelineHistory.count)
 
         return [
             "successRate": successRate,
@@ -594,7 +593,7 @@ public final class SelfOptimizingCICD: ObservableObject {
     private func startExecutionLoop() async {
         while isActive && !Task.isCancelled {
             await processActivePipelines()
-            try? await Task.sleep(nanoseconds: UInt64(10 * 1_000_000_000))  // 10 seconds
+            try? await Task.sleep(nanoseconds: UInt64(10 * 1_000_000_000)) // 10 seconds
         }
     }
 
@@ -637,18 +636,18 @@ public final class SelfOptimizingCICD: ObservableObject {
 
     private func analyzePipelineOptimization(pipelineId: String, config: PipelineConfig) async {
         guard let history = performanceHistory[pipelineId], history.count >= 5 else {
-            return  // Need sufficient history for analysis
+            return // Need sufficient history for analysis
         }
 
         let recentMetrics = Array(history.suffix(10))
 
         // Analyze bottlenecks
         let averageDuration =
-            recentMetrics.compactMap { $0.duration }.reduce(0, +) / Double(recentMetrics.count)
+            recentMetrics.compactMap(\.duration).reduce(0, +) / Double(recentMetrics.count)
         let failureRate =
             Double(recentMetrics.filter { $0.status == .failed }.count)
-            / Double(recentMetrics.count)
-        let averageCost = recentMetrics.map { $0.cost }.reduce(0, +) / Double(recentMetrics.count)
+                / Double(recentMetrics.count)
+        let averageCost = recentMetrics.map(\.cost).reduce(0, +) / Double(recentMetrics.count)
 
         // Generate optimization recommendations
         var recommendations = [OptimizationRecommendation]()
@@ -661,7 +660,7 @@ public final class SelfOptimizingCICD: ObservableObject {
                     pipelineId: pipelineId,
                     strategy: .parallelExecution,
                     description:
-                        "Increase parallel jobs from \(config.maxParallelJobs) to \(config.maxParallelJobs + 1)",
+                    "Increase parallel jobs from \(config.maxParallelJobs) to \(config.maxParallelJobs + 1)",
                     expectedImprovement: improvement,
                     confidence: 0.8
                 ))
@@ -716,7 +715,7 @@ public final class SelfOptimizingCICD: ObservableObject {
     }
 
     private func cleanupOldRecommendations() async {
-        let cutoffDate = Date().addingTimeInterval(-86400)  // 24 hours ago
+        let cutoffDate = Date().addingTimeInterval(-86400) // 24 hours ago
 
         await MainActor.run {
             optimizationRecommendations.removeAll { $0.timestamp < cutoffDate }
@@ -872,7 +871,7 @@ public final class SelfOptimizingCICD: ObservableObject {
         }
 
         let endTime = Date()
-        _ = endTime.timeIntervalSince(startTime)  // Duration calculated in PipelineMetrics
+        _ = endTime.timeIntervalSince(startTime) // Duration calculated in PipelineMetrics
 
         return PipelineMetrics(
             pipelineId: context.pipelineId,
@@ -892,7 +891,7 @@ public final class SelfOptimizingCICD: ObservableObject {
         [String: Double], Double, Double
     ) {
         // Simulate checkout operation
-        try await Task.sleep(nanoseconds: UInt64(2_000_000_000))  // 2 seconds
+        try await Task.sleep(nanoseconds: UInt64(2_000_000_000)) // 2 seconds
 
         return (["cpu": 0.1, "memory": 0.5], 0.95, 0.01)
     }
@@ -901,12 +900,12 @@ public final class SelfOptimizingCICD: ObservableObject {
         [String: Double], Double, Double, Int, Int
     ) {
         // Simulate build operation with potential failures
-        let buildTime = Double.random(in: 30...120)
+        let buildTime = Double.random(in: 30 ... 120)
         try await Task.sleep(nanoseconds: UInt64(buildTime * 1_000_000_000))
 
-        let hasErrors = Double.random(in: 0...1) < 0.1  // 10% chance of build errors
-        let errorCount = hasErrors ? Int.random(in: 1...5) : 0
-        let warningCount = Int.random(in: 0...10)
+        let hasErrors = Double.random(in: 0 ... 1) < 0.1 // 10% chance of build errors
+        let errorCount = hasErrors ? Int.random(in: 1 ... 5) : 0
+        let warningCount = Int.random(in: 0 ... 10)
 
         if hasErrors {
             throw CICDError.buildFailed("Build failed with \(errorCount) errors")
@@ -919,12 +918,12 @@ public final class SelfOptimizingCICD: ObservableObject {
         [String: Double], Double, Double, Int, Int
     ) {
         // Simulate test execution
-        let testTime = Double.random(in: 60...300)
+        let testTime = Double.random(in: 60 ... 300)
         try await Task.sleep(nanoseconds: UInt64(testTime * 1_000_000_000))
 
-        let hasFailures = Double.random(in: 0...1) < 0.05  // 5% chance of test failures
-        let errorCount = hasFailures ? Int.random(in: 1...3) : 0
-        let warningCount = Int.random(in: 0...5)
+        let hasFailures = Double.random(in: 0 ... 1) < 0.05 // 5% chance of test failures
+        let errorCount = hasFailures ? Int.random(in: 1 ... 3) : 0
+        let warningCount = Int.random(in: 0 ... 5)
 
         if hasFailures {
             throw CICDError.testsFailed("Tests failed with \(errorCount) failures")
@@ -937,10 +936,10 @@ public final class SelfOptimizingCICD: ObservableObject {
         [String: Double], Double, Double, Int, Int
     ) {
         // Simulate code analysis
-        try await Task.sleep(nanoseconds: UInt64(15_000_000_000))  // 15 seconds
+        try await Task.sleep(nanoseconds: UInt64(15_000_000_000)) // 15 seconds
 
-        let errorCount = Int.random(in: 0...2)
-        let warningCount = Int.random(in: 5...20)
+        let errorCount = Int.random(in: 0 ... 2)
+        let warningCount = Int.random(in: 5 ... 20)
 
         return (["cpu": 1.0, "memory": 1.0], 0.98, 0.1, errorCount, warningCount)
     }
@@ -949,7 +948,7 @@ public final class SelfOptimizingCICD: ObservableObject {
         [String: Double], Double, Double
     ) {
         // Simulate deployment
-        try await Task.sleep(nanoseconds: UInt64(30_000_000_000))  // 30 seconds
+        try await Task.sleep(nanoseconds: UInt64(30_000_000_000)) // 30 seconds
 
         return (["cpu": 0.5, "memory": 1.0], 0.92, 0.2)
     }
@@ -958,7 +957,7 @@ public final class SelfOptimizingCICD: ObservableObject {
         [String: Double], Double, Double
     ) {
         // Simulate monitoring
-        try await Task.sleep(nanoseconds: UInt64(5_000_000_000))  // 5 seconds
+        try await Task.sleep(nanoseconds: UInt64(5_000_000_000)) // 5 seconds
 
         return (["cpu": 0.2, "memory": 0.5], 0.99, 0.05)
     }
@@ -967,7 +966,7 @@ public final class SelfOptimizingCICD: ObservableObject {
         [String: Double], Double, Double
     ) {
         // Simulate rollback
-        try await Task.sleep(nanoseconds: UInt64(20_000_000_000))  // 20 seconds
+        try await Task.sleep(nanoseconds: UInt64(20_000_000_000)) // 20 seconds
 
         return (["cpu": 1.0, "memory": 2.0], 0.85, 0.15)
     }
@@ -975,9 +974,9 @@ public final class SelfOptimizingCICD: ObservableObject {
 
 // MARK: - Extensions
 
-extension SelfOptimizingCICD {
+public extension SelfOptimizingCICD {
     /// Get pipeline execution summary
-    public func getPipelineSummary() -> [String: [String: Any]] {
+    func getPipelineSummary() -> [String: [String: Any]] {
         var summary = [String: [String: Any]]()
 
         for (pipelineId, context) in activePipelines {
@@ -994,22 +993,22 @@ extension SelfOptimizingCICD {
     }
 
     /// Export pipeline metrics for analysis
-    public func exportPipelineMetrics() -> Data? {
+    func exportPipelineMetrics() -> Data? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         return try? encoder.encode(pipelineHistory)
     }
 
     /// Get optimization insights
-    public func getOptimizationInsights() -> [String: Any] {
+    func getOptimizationInsights() -> [String: Any] {
         let totalRecommendations = optimizationRecommendations.count
         let appliedRecommendations = optimizationHistory.count
         let averageConfidence =
-            optimizationRecommendations.map { $0.confidence }.reduce(0, +)
-            / Double(max(1, optimizationRecommendations.count))
+            optimizationRecommendations.map(\.confidence).reduce(0, +)
+                / Double(max(1, optimizationRecommendations.count))
         let averageImprovement =
-            optimizationRecommendations.map { $0.expectedImprovement }.reduce(0, +)
-            / Double(max(1, optimizationRecommendations.count))
+            optimizationRecommendations.map(\.expectedImprovement).reduce(0, +)
+                / Double(max(1, optimizationRecommendations.count))
 
         return [
             "totalRecommendations": totalRecommendations,
@@ -1044,7 +1043,7 @@ public func triggerPipeline(
     branch: String = "main",
     author: String = "automated"
 ) async throws -> String {
-    return try await SelfOptimizingCICD.shared.triggerPipeline(
+    try await SelfOptimizingCICD.shared.triggerPipeline(
         configId: configId,
         trigger: trigger,
         commitHash: commitHash,
@@ -1055,17 +1054,17 @@ public func triggerPipeline(
 
 /// Global function to get CI/CD system status
 public func getCICDSystemStatus() async -> Bool {
-    return await SelfOptimizingCICD.shared.isActive
+    await SelfOptimizingCICD.shared.isActive
 }
 
 /// Global function to get pipeline recommendations
 public func getPipelineOptimizationRecommendations(pipelineId: String) async
     -> [OptimizationRecommendation]
 {
-    return await SelfOptimizingCICD.shared.getOptimizationRecommendations(for: pipelineId)
+    await SelfOptimizingCICD.shared.getOptimizationRecommendations(for: pipelineId)
 }
 
 /// Global function to get system efficiency
 public func getCICDEfficiency() async -> Double {
-    return await SelfOptimizingCICD.shared.systemEfficiency
+    await SelfOptimizingCICD.shared.systemEfficiency
 }

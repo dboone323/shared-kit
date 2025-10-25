@@ -61,7 +61,7 @@ public struct OptimizationMetrics: Sendable {
         let metrics = [
             computationalEfficiency, resourceUtilization, performanceOptimization, algorithmicEfficiency,
             memoryOptimization, energyEfficiency, throughputMaximization, latencyMinimization,
-            scalabilityOptimization, reliabilityEnhancement
+            scalabilityOptimization, reliabilityEnhancement,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -263,7 +263,7 @@ public final class UniversalOptimizationEngine: Sendable {
             ComputationalOptimizationStep(type: .computationalOptimization, efficiency: 10.0),
             ComputationalOptimizationStep(type: .algorithmicImprovement, efficiency: 15.0),
             ComputationalOptimizationStep(type: .memoryEfficiency, efficiency: 12.0),
-            ComputationalOptimizationStep(type: .energyConservation, efficiency: 14.0)
+            ComputationalOptimizationStep(type: .energyConservation, efficiency: 14.0),
         ]
 
         var capabilities: [OptimizationCapability] = []
@@ -296,7 +296,7 @@ public final class UniversalOptimizationEngine: Sendable {
         let maximizationSequence = [
             ResourceMaximizationStep(type: .resourceMaximization, utilization: 10.0),
             ResourceMaximizationStep(type: .throughputAmplification, utilization: 15.0),
-            ResourceMaximizationStep(type: .latencyReduction, utilization: 12.0)
+            ResourceMaximizationStep(type: .latencyReduction, utilization: 12.0),
         ]
 
         var capabilities: [OptimizationCapability] = []
@@ -326,7 +326,7 @@ public final class UniversalOptimizationEngine: Sendable {
         let enhancementSequence = [
             PerformanceEnhancementStep(type: .performanceEnhancement, optimization: 10.0),
             PerformanceEnhancementStep(type: .scalabilityExpansion, optimization: 15.0),
-            PerformanceEnhancementStep(type: .reliabilityFortification, optimization: 12.0)
+            PerformanceEnhancementStep(type: .reliabilityFortification, optimization: 12.0),
         ]
 
         var capabilities: [OptimizationCapability] = []
@@ -436,7 +436,7 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
 
         return ComputationalOptimizationStrategy(
             optimizationSteps: optimizationSteps,
-            totalExpectedEfficiencyGain: optimizationSteps.map { $0.efficiency }.reduce(0, +),
+            totalExpectedEfficiencyGain: optimizationSteps.map(\.efficiency).reduce(0, +),
             estimatedDuration: optimizationSteps.map { $0.efficiency * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -469,7 +469,7 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
     ) async -> ComputationalOptimizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.efficiency * 1_500_000_000))
 
-        let actualGain = step.efficiency * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.efficiency * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.efficiency * 0.90
 
         return ComputationalOptimizationResultItem(
@@ -484,8 +484,8 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
 
     /// Generate computational optimizer
     private func generateComputationalOptimizer(_ results: [ComputationalOptimizationResultItem]) -> ComputationalOptimizer {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualEfficiencyGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualEfficiencyGain).reduce(0, +)
         let optimizerValue = 1.0 + (totalGain * successRate / 15.0)
 
         return ComputationalOptimizer(
@@ -493,7 +493,7 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
             optimizerType: .universal,
             optimizerValue: optimizerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -556,7 +556,7 @@ public final class ResourceUtilizationMaximizer: Sendable {
 
         return ResourceMaximizationStrategy(
             maximizationSteps: maximizationSteps,
-            totalExpectedUtilizationGain: maximizationSteps.map { $0.utilization }.reduce(0, +),
+            totalExpectedUtilizationGain: maximizationSteps.map(\.utilization).reduce(0, +),
             estimatedDuration: maximizationSteps.map { $0.utilization * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -589,7 +589,7 @@ public final class ResourceUtilizationMaximizer: Sendable {
     ) async -> ResourceMaximizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.utilization * 2_000_000_000))
 
-        let actualGain = step.utilization * (0.8 + Double.random(in: 0...0.4))
+        let actualGain = step.utilization * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualGain >= step.utilization * 0.85
 
         return ResourceMaximizationResultItem(
@@ -604,8 +604,8 @@ public final class ResourceUtilizationMaximizer: Sendable {
 
     /// Generate resource maximizer
     private func generateResourceMaximizer(_ results: [ResourceMaximizationResultItem]) -> ResourceMaximizer {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualUtilizationGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualUtilizationGain).reduce(0, +)
         let maximizerValue = 1.0 + (totalGain * successRate / 20.0)
 
         return ResourceMaximizer(
@@ -613,7 +613,7 @@ public final class ResourceUtilizationMaximizer: Sendable {
             maximizerType: .universal,
             maximizerValue: maximizerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -676,7 +676,7 @@ public final class PerformanceOptimizationFramework: Sendable {
 
         return PerformanceOptimizationStrategy(
             optimizationSteps: optimizationSteps,
-            totalExpectedOptimizationPower: optimizationSteps.map { $0.optimization }.reduce(0, +),
+            totalExpectedOptimizationPower: optimizationSteps.map(\.optimization).reduce(0, +),
             estimatedDuration: optimizationSteps.map { $0.optimization * 0.25 }.reduce(0, +),
             designedAt: Date()
         )
@@ -709,7 +709,7 @@ public final class PerformanceOptimizationFramework: Sendable {
     ) async -> PerformanceOptimizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.optimization * 2_500_000_000))
 
-        let actualPower = step.optimization * (0.75 + Double.random(in: 0...0.5))
+        let actualPower = step.optimization * (0.75 + Double.random(in: 0 ... 0.5))
         let success = actualPower >= step.optimization * 0.80
 
         return PerformanceOptimizationResultItem(
@@ -724,8 +724,8 @@ public final class PerformanceOptimizationFramework: Sendable {
 
     /// Generate performance optimizer
     private func generatePerformanceOptimizer(_ results: [PerformanceOptimizationResultItem]) -> PerformanceOptimizer {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualOptimizationGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualOptimizationGain).reduce(0, +)
         let optimizerValue = 1.0 + (totalPower * successRate / 25.0)
 
         return PerformanceOptimizer(
@@ -733,7 +733,7 @@ public final class PerformanceOptimizationFramework: Sendable {
             optimizerType: .universal,
             optimizerValue: optimizerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

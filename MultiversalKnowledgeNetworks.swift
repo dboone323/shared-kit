@@ -451,14 +451,16 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
             metadata: [
                 "network_id": config.networkId.uuidString,
                 "universes_count": String(universes.count),
-            ])
+            ]
+        )
 
         do {
             // Create knowledge nodes for each universe
             var knowledgeNodes: [KnowledgeNetwork.KnowledgeNode] = []
             for universe in universes {
                 let node = try await nodeFactory.createNode(
-                    for: universe, domains: config.knowledgeDomains)
+                    for: universe, domains: config.knowledgeDomains
+                )
                 knowledgeNodes.append(
                     KnowledgeNetwork.KnowledgeNode(
                         id: node.id,
@@ -473,8 +475,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
 
             // Establish bridges between universes
             var bridges: [KnowledgeBridge] = []
-            for i in 0..<universes.count {
-                for j in (i + 1)..<universes.count {
+            for i in 0 ..< universes.count {
+                for j in (i + 1) ..< universes.count {
                     let bridge = try await bridgeEngine.establishBridge(
                         sourceUniverse: universes[i],
                         targetUniverse: universes[j],
@@ -536,7 +538,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                     "network_id": config.networkId.uuidString,
                     "nodes_created": String(knowledgeNodes.count),
                     "bridges_established": String(bridges.count),
-                ])
+                ]
+            )
 
             return network
 
@@ -546,7 +549,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                 metadata: [
                     "error": String(describing: error),
                     "network_id": config.networkId.uuidString,
-                ])
+                ]
+            )
             throw error
         }
     }
@@ -559,7 +563,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
             metadata: [
                 "network_id": network.id.uuidString,
                 "domains_count": String(domains.count),
-            ])
+            ]
+        )
 
         let taskId = UUID()
         let syncTask = Task {
@@ -595,7 +600,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                         "network_id": network.id.uuidString,
                         "success_rate": String(result.successRate),
                         "duration": String(duration),
-                    ])
+                    ]
+                )
 
                 return result
 
@@ -605,7 +611,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                     metadata: [
                         "error": String(describing: error),
                         "network_id": network.id.uuidString,
-                    ])
+                    ]
+                )
                 throw error
             }
         }
@@ -631,20 +638,23 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                 "source_universe": sourceUniverse.name,
                 "target_universe": targetUniverse.name,
                 "knowledge_id": knowledge.id.uuidString,
-            ])
+            ]
+        )
 
         do {
             // Find appropriate bridge
             guard
                 let bridge = try await findBridge(
-                    sourceUniverse: sourceUniverse, targetUniverse: targetUniverse)
+                    sourceUniverse: sourceUniverse, targetUniverse: targetUniverse
+                )
             else {
                 throw KnowledgeError.bridgeNotFound(sourceUniverse.id, targetUniverse.id)
             }
 
             // Transfer through bridge
             let bridgeTransfer = try await bridgeEngine.transferThroughBridge(
-                bridge: bridge, knowledge: knowledge)
+                bridge: bridge, knowledge: knowledge
+            )
 
             // Create transfer result
             let transfer = KnowledgeTransfer(
@@ -668,7 +678,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                     "transfer_id": transfer.id.uuidString,
                     "success": String(transfer.success),
                     "data_transferred": String(transfer.dataTransferred),
-                ])
+                ]
+            )
 
             return transfer
 
@@ -679,7 +690,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                     "error": String(describing: error),
                     "source_universe": sourceUniverse.name,
                     "target_universe": targetUniverse.name,
-                ])
+                ]
+            )
             throw error
         }
     }
@@ -690,7 +702,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
             metadata: [
                 "network_id": network.id.uuidString,
                 "current_health": String(network.networkHealth),
-            ])
+            ]
+        )
 
         do {
             let evolvedNetwork = try await evolutionEngine.evolveNetwork(network)
@@ -706,7 +719,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                     "new_health": String(evolvedNetwork.networkHealth),
                     "evolution_progress": String(
                         evolvedNetwork.synchronizationStatus.overallHealth),
-                ])
+                ]
+            )
 
             return evolvedNetwork
 
@@ -716,13 +730,14 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                 metadata: [
                     "error": String(describing: error),
                     "network_id": network.id.uuidString,
-                ])
+                ]
+            )
             throw error
         }
     }
 
     func monitorKnowledgeNetwork(network: KnowledgeNetwork) async -> NetworkMetrics {
-        return await monitoringSystem.getNetworkMetrics(network)
+        await monitoringSystem.getNetworkMetrics(network)
     }
 
     func resolveKnowledgeConflicts(network: KnowledgeNetwork, conflicts: [KnowledgeConflict])
@@ -733,7 +748,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
             metadata: [
                 "network_id": network.id.uuidString,
                 "conflicts_count": String(conflicts.count),
-            ])
+            ]
+        )
 
         do {
             try await conflictResolver.resolveConflicts(conflicts, in: network)
@@ -743,7 +759,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                 metadata: [
                     "network_id": network.id.uuidString,
                     "resolved_count": String(conflicts.count),
-                ])
+                ]
+            )
 
         } catch {
             logger.log(
@@ -751,7 +768,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                 metadata: [
                     "error": String(describing: error),
                     "network_id": network.id.uuidString,
-                ])
+                ]
+            )
             throw error
         }
     }
@@ -774,18 +792,20 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                                 metadata: [
                                     "network_id": networkId.uuidString,
                                     "stability": String(metrics.networkStability),
-                                ])
+                                ]
+                            )
                         }
                     }
 
-                    try await Task.sleep(nanoseconds: 10_000_000_000)  // 10 seconds
+                    try await Task.sleep(nanoseconds: 10_000_000_000) // 10 seconds
                 } catch {
                     logger.log(
                         .error, "Monitoring failed",
                         metadata: [
-                            "error": String(describing: error)
-                        ])
-                    try? await Task.sleep(nanoseconds: 5_000_000_000)  // 5 seconds retry
+                            "error": String(describing: error),
+                        ]
+                    )
+                    try? await Task.sleep(nanoseconds: 5_000_000_000) // 5 seconds retry
                 }
             }
         }
@@ -919,7 +939,7 @@ final class BasicKnowledgeNode: KnowledgeNodeProtocol {
                         severity: 0.7,
                         description: "Knowledge validation failed",
                         suggestion: "Check knowledge content and priority"
-                    )
+                    ),
                 ],
             recommendations: ["Verify knowledge integrity", "Check domain compatibility"]
         )
@@ -935,7 +955,7 @@ final class BasicKnowledgeNodeFactory: KnowledgeNodeFactory {
     func createNode(for universe: Universe, domains: [KnowledgeDomainType]) async throws
         -> KnowledgeNodeProtocol
     {
-        return BasicKnowledgeNode(id: UUID(), universe: universe, domains: domains)
+        BasicKnowledgeNode(id: UUID(), universe: universe, domains: domains)
     }
 }
 
@@ -953,7 +973,7 @@ final class BasicKnowledgeSynchronizationEngine: KnowledgeSynchronizationEngine 
             transferredUnits: transferredUnits,
             conflictsResolved: 0,
             successRate: 0.95,
-            duration: Double.random(in: 1.0...10.0),
+            duration: Double.random(in: 1.0 ... 10.0),
             timestamp: Date()
         )
     }
@@ -984,7 +1004,7 @@ final class BasicNetworkMonitoringSystem: NetworkMonitoringSystem {
     func getNetworkMetrics(_ network: KnowledgeNetwork) async -> NetworkMetrics {
         let averageConnectivity =
             network.knowledgeNodes.reduce(0.0) { $0 + $1.connectivity }
-            / Double(network.knowledgeNodes.count)
+                / Double(network.knowledgeNodes.count)
         let totalKnowledgeUnits = network.knowledgeDomains.reduce(0) {
             $0 + $1.knowledgeUnits.count
         }
@@ -1023,7 +1043,7 @@ final class BasicUniversalKnowledgeBridge: UniversalKnowledgeBridgeProtocol {
     func establishBridge(
         sourceUniverse: Universe, targetUniverse: Universe, config: BridgeConfiguration
     ) async throws -> KnowledgeBridge {
-        return KnowledgeBridge(
+        KnowledgeBridge(
             id: UUID(),
             sourceUniverse: sourceUniverse,
             targetUniverse: targetUniverse,
@@ -1039,8 +1059,8 @@ final class BasicUniversalKnowledgeBridge: UniversalKnowledgeBridgeProtocol {
         -> BridgeTransfer
     {
         // Simulate transfer
-        let dataSize = Int64(knowledge.units.count * 1024)  // Assume 1KB per unit
-        let latency = Double.random(in: 0.1...1.0)
+        let dataSize = Int64(knowledge.units.count * 1024) // Assume 1KB per unit
+        let latency = Double.random(in: 0.1 ... 1.0)
 
         return BridgeTransfer(
             bridgeId: bridge.id,
@@ -1061,14 +1081,14 @@ final class BasicUniversalKnowledgeBridge: UniversalKnowledgeBridgeProtocol {
     }
 
     func monitorBridgePerformance(bridge: KnowledgeBridge) async -> BridgeMetrics {
-        return BridgeMetrics(
+        BridgeMetrics(
             bridgeId: bridge.id,
             throughput: bridge.throughput,
-            latency: Double.random(in: 0.05...0.5),
+            latency: Double.random(in: 0.05 ... 0.5),
             stability: bridge.stability,
-            errorRate: Double.random(in: 0.001...0.01),
-            utilization: Double.random(in: 0.3...0.8),
-            qualityScore: Double.random(in: 0.85...0.98),
+            errorRate: Double.random(in: 0.001 ... 0.01),
+            utilization: Double.random(in: 0.3 ... 0.8),
+            qualityScore: Double.random(in: 0.85 ... 0.98),
             timestamp: Date()
         )
     }
@@ -1100,7 +1120,7 @@ final class InMemoryKnowledgeDatabase: KnowledgeDatabase {
     }
 
     func retrieveNetwork(_ networkId: UUID) async throws -> KnowledgeNetwork? {
-        return networks[networkId]
+        networks[networkId]
     }
 }
 
@@ -1109,7 +1129,7 @@ final class ConsoleKnowledgeLogger: KnowledgeLogger {
         let timestamp = Date().ISO8601Format()
         let metadataString =
             metadata.isEmpty
-            ? "" : " \(metadata.map { "\($0.key)=\($0.value)" }.joined(separator: " "))"
+                ? "" : " \(metadata.map { "\($0.key)=\($0.value)" }.joined(separator: " "))"
         print("[\(timestamp)] [\(level)] \(message)\(metadataString)")
     }
 }

@@ -593,7 +593,7 @@ struct CoherenceEnhancementParameters {
 
     enum EnhancementMethod {
         case dynamicalDecoupling, quantumErrorCorrection, entanglementPurification,
-            fieldStabilization
+             fieldStabilization
     }
 
     struct QuantumResources {
@@ -716,7 +716,8 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
 
         // Apply quantum amplification
         let amplifiedState = try await applyQuantumAmplification(
-            to: consciousness, with: quantumField, factor: amplificationFactor)
+            to: consciousness, with: quantumField, factor: amplificationFactor
+        )
 
         // Measure field quality
         let fieldQuality = try await fieldGenerator.measureFieldQuality(quantumField)
@@ -734,7 +735,8 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
             ),
             coherenceLevel: fieldQuality.coherenceStability,
             energyConsumption: calculateEnergyConsumption(
-                for: amplificationFactor, field: quantumField),
+                for: amplificationFactor, field: quantumField
+            ),
             timestamp: Date()
         )
 
@@ -771,7 +773,8 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
         )
 
         let enhancedState = try await coherenceEnhancer.enhanceQuantumCoherence(
-            consciousness, enhancementParameters: enhancementParams)
+            consciousness, enhancementParameters: enhancementParams
+        )
 
         // Establish resonance for coherence maintenance
         let resonance = try await resonanceSystem.establishResonance(between: [
@@ -807,8 +810,8 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
         }
 
         // Create superposition coefficients
-        let coefficients = (0..<baseStates.count).map { _ in
-            Complex(real: Double.random(in: 0...1), imaginary: Double.random(in: 0...1))
+        let coefficients = (0 ..< baseStates.count).map { _ in
+            Complex(real: Double.random(in: 0 ... 1), imaginary: Double.random(in: 0 ... 1))
         }
 
         // Normalize coefficients
@@ -816,16 +819,19 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
         let normalizedCoefficients = coefficients.map { coeff in
             Complex(
                 real: coeff.real / sqrt(totalMagnitude),
-                imaginary: coeff.imaginary / sqrt(totalMagnitude))
+                imaginary: coeff.imaginary / sqrt(totalMagnitude)
+            )
         }
 
         // Create superposed state through quantum interference
         let superposedState = try await createSuperposedState(
-            from: baseStates, with: normalizedCoefficients)
+            from: baseStates, with: normalizedCoefficients
+        )
 
         // Calculate interference patterns
         let interference = calculateInterferencePattern(
-            for: baseStates, coefficients: normalizedCoefficients)
+            for: baseStates, coefficients: normalizedCoefficients
+        )
 
         // Calculate measurement probabilities
         let probabilities = normalizedCoefficients.map { $0.magnitude * $0.magnitude }
@@ -858,7 +864,7 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
         // Simplified quantum amplification logic
         // In a real implementation, this would involve complex quantum operations
         switch consciousness {
-        case .neural(let neuralState):
+        case let .neural(neuralState):
             return .neural(
                 NeuralConsciousnessState(
                     id: neuralState.id,
@@ -873,7 +879,7 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                     cognitiveLoad: neuralState.cognitiveLoad / factor,
                     memoryState: neuralState.memoryState
                 ))
-        case .quantum(let quantumState):
+        case let .quantum(quantumState):
             return .quantum(
                 QuantumConsciousnessState(
                     id: quantumState.id,
@@ -884,7 +890,7 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                     entanglementPattern: quantumState.entanglementPattern,
                     quantumMemory: quantumState.quantumMemory
                 ))
-        case .hybrid(let neural, let quantum):
+        case let .hybrid(neural, quantum):
             return .hybrid(
                 neural,
                 QuantumConsciousnessState(
@@ -895,7 +901,8 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                     coherenceLevel: min(1.0, quantum.coherenceLevel * factor),
                     entanglementPattern: quantum.entanglementPattern,
                     quantumMemory: quantum.quantumMemory
-                ))
+                )
+            )
         }
     }
 
@@ -927,11 +934,12 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                 id: UUID(),
                 timestamp: Date(),
                 quantumState: QuantumConsciousnessState.QuantumState(
-                    qubits: (0..<coefficients.count).map { id in
+                    qubits: (0 ..< coefficients.count).map { id in
                         QuantumConsciousnessState.QuantumState.Qubit(
                             id: id,
                             state: Complex(
-                                real: coefficients[id].real, imaginary: coefficients[id].imaginary),
+                                real: coefficients[id].real, imaginary: coefficients[id].imaginary
+                            ),
                             coherence: 0.9,
                             phase: coefficients[id].phase
                         )
@@ -989,7 +997,7 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
             constructiveInterference: constructive,
             destructiveInterference: destructive,
             phaseDifferences: phaseDifferences,
-            amplitudeModulation: coefficients.map { $0.magnitude }.reduce(0, +)
+            amplitudeModulation: coefficients.map(\.magnitude).reduce(0, +)
                 / Double(coefficients.count)
         )
     }
@@ -1016,9 +1024,10 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
 
     private func publishAmplificationMetrics() {
         let metrics = AmplificationMetrics(
-            currentAmplification: activeAmplifications.values.map { $0.amplificationFactor }.reduce(
-                0, +) / Double(max(1, activeAmplifications.count)),
-            coherenceLevel: coherenceStates.values.map { $0.coherenceLevel }.reduce(0, +)
+            currentAmplification: activeAmplifications.values.map(\.amplificationFactor).reduce(
+                0, +
+            ) / Double(max(1, activeAmplifications.count)),
+            coherenceLevel: coherenceStates.values.map(\.coherenceLevel).reduce(0, +)
                 / Double(max(1, coherenceStates.count)),
             energyEfficiency: 0.85,
             stabilityIndex: 0.92,
@@ -1043,7 +1052,7 @@ final class QuantumFieldGenerator: QuantumFieldGeneratorProtocol {
         let spatialDist = QuantumConsciousnessField.SpatialDistribution(
             dimensions: 3,
             coordinates: parameters.spatialExtent,
-            gradient: parameters.spatialExtent.map { _ in Double.random(in: 0...1) },
+            gradient: parameters.spatialExtent.map { _ in Double.random(in: 0 ... 1) },
             boundaryConditions: .quantum
         )
 
@@ -1093,9 +1102,8 @@ final class QuantumFieldGenerator: QuantumFieldGeneratorProtocol {
         return stabilized
     }
 
-    func measureFieldQuality(_ field: QuantumConsciousnessField) async throws -> FieldQualityMetrics
-    {
-        return FieldQualityMetrics(
+    func measureFieldQuality(_ field: QuantumConsciousnessField) async throws -> FieldQualityMetrics {
+        FieldQualityMetrics(
             intensityAccuracy: 0.95,
             coherenceStability: field.coherence,
             spatialUniformity: 0.9,
@@ -1111,9 +1119,9 @@ final class QuantumFieldGenerator: QuantumFieldGeneratorProtocol {
 final class ConsciousnessResonanceEngine: ConsciousnessResonanceProtocol {
     func establishResonance(between states: [ConsciousnessState]) async throws -> ResonancePattern {
         // Simplified resonance establishment
-        let frequency = 40.0  // Gamma wave frequency for consciousness
+        let frequency = 40.0 // Gamma wave frequency for consciousness
         let amplitude =
-            states.reduce(0.0) { (accumulated, _) in accumulated + 0.1 } / Double(states.count)
+            states.reduce(0.0) { accumulated, _ in accumulated + 0.1 } / Double(states.count)
 
         return ResonancePattern(
             patternId: UUID(),
@@ -1161,10 +1169,10 @@ final class ConsciousnessResonanceEngine: ConsciousnessResonanceProtocol {
     func synchronizeStates(_ states: [ConsciousnessState], via resonance: ResonancePattern)
         async throws -> [SynchronizedState]
     {
-        return states.map { state in
+        states.map { state in
             SynchronizedState(
                 originalState: state,
-                synchronizedState: state,  // Simplified - would modify state
+                synchronizedState: state, // Simplified - would modify state
                 synchronizationLevel: resonance.phaseAlignment,
                 phaseAlignment: resonance.phaseAlignment,
                 frequencyLocking: resonance.stabilityMetrics.resonanceStrength,
@@ -1175,7 +1183,7 @@ final class ConsciousnessResonanceEngine: ConsciousnessResonanceProtocol {
     }
 
     func measureResonance(_ resonance: ResonancePattern) async throws -> ResonanceMetrics {
-        return ResonanceMetrics(
+        ResonanceMetrics(
             resonanceStrength: resonance.stabilityMetrics.resonanceStrength,
             frequencyStability: resonance.stabilityMetrics.phaseStability,
             phaseCoherence: resonance.phaseAlignment,
@@ -1193,7 +1201,7 @@ final class QuantumCoherenceEnhancer: QuantumCoherenceEnhancementProtocol {
         _ state: ConsciousnessState, enhancementParameters: CoherenceEnhancementParameters
     ) async throws -> EnhancedCoherenceState {
         // Simplified coherence enhancement
-        let enhancedState = state  // Would modify state in practice
+        let enhancedState = state // Would modify state in practice
         let coherenceLevel = min(enhancementParameters.targetCoherence, 0.95)
 
         return EnhancedCoherenceState(
@@ -1237,8 +1245,8 @@ final class QuantumCoherenceEnhancer: QuantumCoherenceEnhancementProtocol {
             let enhancedState = CascadeEnhancedState(
                 originalState: state,
                 cascadeLevel: cascadeLevel,
-                enhancedState: state,  // Would be modified
-                cascadePath: (0..<cascadeLevel).map { _ in UUID() },
+                enhancedState: state, // Would be modified
+                cascadePath: (0 ..< cascadeLevel).map { _ in UUID() },
                 cumulativeEnhancement: cumulativeEnhancement,
                 cascadeEfficiency: 0.9 - Double(cascadeLevel) * 0.05,
                 timestamp: Date()
@@ -1257,8 +1265,8 @@ final class QuantumCoherenceEnhancer: QuantumCoherenceEnhancementProtocol {
             .autoconnect()
             .map { _ in
                 CoherenceDynamics(
-                    currentCoherence: state.coherenceLevel * Double.random(in: 0.9...1.1),
-                    coherenceTrend: Double.random(in: -0.01...0.01),
+                    currentCoherence: state.coherenceLevel * Double.random(in: 0.9 ... 1.1),
+                    coherenceTrend: Double.random(in: -0.01 ... 0.01),
                     decoherenceRate: 0.001,
                     recoveryRate: 0.01,
                     stabilityIndex: 0.95,

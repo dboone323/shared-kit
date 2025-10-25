@@ -16,7 +16,8 @@ extension String {
 /// Main quantum development environment coordinator
 public actor QuantumDevelopmentEnvironment {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumDevelopmentEnvironment")
+        subsystem: "com.quantum.workspace", category: "QuantumDevelopmentEnvironment"
+    )
 
     // Core quantum development components
     private let quantumCompiler: QuantumCompiler
@@ -43,7 +44,7 @@ public actor QuantumDevelopmentEnvironment {
 
         self.quantumResources = QuantumResources(
             availableQubits: 1000,
-            coherenceTime: 100.0,  // microseconds
+            coherenceTime: 100.0, // microseconds
             gateFidelity: 0.999,
             readoutFidelity: 0.98,
             lastUpdate: Date()
@@ -235,24 +236,24 @@ public actor QuantumDevelopmentEnvironment {
 
     /// Get development metrics
     public func getDevelopmentMetrics() -> DevelopmentMetrics {
-        return developmentMetrics
+        developmentMetrics
     }
 
     /// Get active projects
     public func getActiveProjects() -> [QuantumProject] {
-        return Array(activeProjects.values)
+        Array(activeProjects.values)
     }
 
     /// Get quantum resources
     public func getQuantumResources() -> QuantumResources {
-        return quantumResources
+        quantumResources
     }
 
     // MARK: - Private Methods
 
     private func calculateCompilationSuccessRate() -> Double {
         // Simplified calculation - in real implementation would track actual success rates
-        return 0.95  // 95% success rate
+        0.95 // 95% success rate
     }
 }
 
@@ -284,11 +285,11 @@ public actor QuantumCompiler {
         let compiled = CompiledCircuit(
             originalCircuit: circuit,
             target: target,
-            compiledGates: circuit.gates,  // Simplified - would be optimized
+            compiledGates: circuit.gates, // Simplified - would be optimized
             gateCount: gateCount,
             circuitDepth: depth,
             expectedFidelity: fidelity,
-            compilationTime: Double.random(in: 0.1...2.0),
+            compilationTime: Double.random(in: 0.1 ... 2.0),
             compiledDate: Date()
         )
 
@@ -306,7 +307,7 @@ public actor QuantumCompiler {
 
     private func calculateCircuitDepth(_ circuit: QuantumCircuit) -> Int {
         // Simplified depth calculation
-        return circuit.gates.count / 2
+        circuit.gates.count / 2
     }
 
     private func calculateExpectedFidelity(_ circuit: QuantumCircuit, target: CompilationTarget)
@@ -351,7 +352,7 @@ public actor QuantumDebugger {
                     step: index,
                     gate: gate,
                     qubitStates: simulateQubitStates(at: index, in: circuit),
-                    measurements: [:],  // Simplified
+                    measurements: [:], // Simplified
                     timestamp: Date()
                 )
                 debugStates.append(state)
@@ -361,8 +362,8 @@ public actor QuantumDebugger {
         return DebugResult(
             circuitId: circuit.id,
             debugStates: debugStates,
-            executionTime: Double.random(in: 0.5...5.0),
-            issues: [],  // No issues found in simulation
+            executionTime: Double.random(in: 0.5 ... 5.0),
+            issues: [], // No issues found in simulation
             completedDate: Date()
         )
     }
@@ -373,12 +374,13 @@ public actor QuantumDebugger {
         // Simplified qubit state simulation
         var states: [Int: QuantumState] = [:]
 
-        for qubit in 0..<circuit.qubits {
+        for qubit in 0 ..< circuit.qubits {
             states[qubit] = QuantumState(
                 qubit: qubit,
                 amplitude: Complex(
-                    real: Double.random(in: 0...1), imaginary: Double.random(in: 0...1)),
-                phase: Double.random(in: 0...(2 * .pi))
+                    real: Double.random(in: 0 ... 1), imaginary: Double.random(in: 0 ... 1)
+                ),
+                phase: Double.random(in: 0 ... (2 * .pi))
             )
         }
 
@@ -410,10 +412,11 @@ public actor QuantumSimulator {
         var outcomes: [String: Int] = [:]
         let possibleOutcomes = Int(pow(2.0, Double(circuit.qubits)))
 
-        for _ in 0..<shots {
-            let outcome = Int.random(in: 0..<possibleOutcomes)
+        for _ in 0 ..< shots {
+            let outcome = Int.random(in: 0 ..< possibleOutcomes)
             let outcomeString = String(outcome, radix: 2).leftPadding(
-                toLength: circuit.qubits, withPad: "0")
+                toLength: circuit.qubits, withPad: "0"
+            )
             outcomes[outcomeString, default: 0] += 1
         }
 
@@ -421,8 +424,8 @@ public actor QuantumSimulator {
             circuitId: circuit.id,
             outcomes: outcomes,
             shots: shots,
-            executionTime: Double.random(in: 1.0...10.0),
-            accuracy: Double.random(in: 0.95...0.999),
+            executionTime: Double.random(in: 1.0 ... 10.0),
+            accuracy: Double.random(in: 0.95 ... 0.999),
             completedDate: Date()
         )
 
@@ -434,7 +437,7 @@ public actor QuantumSimulator {
     /// Analyze resources
     public func analyzeResources() async throws -> ResourceAnalysis {
         // Simplified resource analysis
-        return ResourceAnalysis(
+        ResourceAnalysis(
             availableQubits: 1000,
             utilizedQubits: 50,
             coherenceTime: 100.0,
@@ -473,11 +476,11 @@ public actor QuantumOptimizer {
 
         return OptimizedCircuit(
             originalCircuit: circuit,
-            optimizedGates: Array(circuit.gates.prefix(optimizedGates)),  // Simplified
+            optimizedGates: Array(circuit.gates.prefix(optimizedGates)), // Simplified
             gateReduction: gateReduction,
             depthReduction: gateReduction * 0.8,
             fidelityImprovement: gateReduction * 0.1,
-            optimizationTime: Double.random(in: 0.2...3.0),
+            optimizationTime: Double.random(in: 0.2 ... 3.0),
             optimizationLevel: level,
             optimizedDate: Date()
         )
@@ -529,87 +532,87 @@ public actor QuantumIDE {
         switch language {
         case .qiskit:
             return """
-                from qiskit import QuantumCircuit, transpile
-                from qiskit_aer import AerSimulator
+            from qiskit import QuantumCircuit, transpile
+            from qiskit_aer import AerSimulator
 
-                def \(algorithm.name.lowercased())_circuit():
-                    qc = QuantumCircuit(\(algorithm.qubits))
+            def \(algorithm.name.lowercased())_circuit():
+                qc = QuantumCircuit(\(algorithm.qubits))
 
-                    # \(algorithm.description)
-                    \(generateQiskitGates(algorithm))
+                # \(algorithm.description)
+                \(generateQiskitGates(algorithm))
 
-                    return qc
+                return qc
 
-                # Execute the circuit
-                simulator = AerSimulator()
-                circuit = \(algorithm.name.lowercased())_circuit()
-                transpiled = transpile(circuit, simulator)
-                result = simulator.run(transpiled, shots=1000).result()
-                print(result.get_counts())
-                """
+            # Execute the circuit
+            simulator = AerSimulator()
+            circuit = \(algorithm.name.lowercased())_circuit()
+            transpiled = transpile(circuit, simulator)
+            result = simulator.run(transpiled, shots=1000).result()
+            print(result.get_counts())
+            """
 
         case .cirq:
             return """
-                import cirq
+            import cirq
 
-                def \(algorithm.name.lowercased())_circuit():
-                    qubits = cirq.LineQubit.range(\(algorithm.qubits))
-                    circuit = cirq.Circuit()
+            def \(algorithm.name.lowercased())_circuit():
+                qubits = cirq.LineQubit.range(\(algorithm.qubits))
+                circuit = cirq.Circuit()
 
-                    # \(algorithm.description)
-                    \(generateCirqGates(algorithm))
+                # \(algorithm.description)
+                \(generateCirqGates(algorithm))
 
-                    return circuit, qubits
+                return circuit, qubits
 
-                # Execute the circuit
-                circuit, qubits = \(algorithm.name.lowercased())_circuit()
-                simulator = cirq.Simulator()
-                result = simulator.run(circuit, repetitions=1000)
-                print(result)
-                """
+            # Execute the circuit
+            circuit, qubits = \(algorithm.name.lowercased())_circuit()
+            simulator = cirq.Simulator()
+            result = simulator.run(circuit, repetitions=1000)
+            print(result)
+            """
 
         case .pennylane:
             return """
-                import pennylane as qml
+            import pennylane as qml
 
-                @qml.qnode(qml.device('default.qubit', wires=\(algorithm.qubits)))
-                def \(algorithm.name.lowercased())_circuit():
-                    # \(algorithm.description)
-                    \(generatePennylaneGates(algorithm))
+            @qml.qnode(qml.device('default.qubit', wires=\(algorithm.qubits)))
+            def \(algorithm.name.lowercased())_circuit():
+                # \(algorithm.description)
+                \(generatePennylaneGates(algorithm))
 
-                    return qml.probs(wires=range(\(algorithm.qubits)))
+                return qml.probs(wires=range(\(algorithm.qubits)))
 
-                # Execute the circuit
-                result = \(algorithm.name.lowercased())_circuit()
-                print(result)
-                """
+            # Execute the circuit
+            result = \(algorithm.name.lowercased())_circuit()
+            print(result)
+            """
         }
     }
 
     private func generateQiskitGates(_ algorithm: QuantumAlgorithm) -> String {
         // Simplified gate generation
-        return """
-            qc.h(0)
-            qc.cx(0, 1)
-            qc.measure_all()
-            """
+        """
+        qc.h(0)
+        qc.cx(0, 1)
+        qc.measure_all()
+        """
     }
 
     private func generateCirqGates(_ algorithm: QuantumAlgorithm) -> String {
         // Simplified gate generation
-        return """
-            circuit.append(cirq.H(qubits[0]))
-            circuit.append(cirq.CNOT(qubits[0], qubits[1]))
-            circuit.append(cirq.measure(*qubits, key='result'))
-            """
+        """
+        circuit.append(cirq.H(qubits[0]))
+        circuit.append(cirq.CNOT(qubits[0], qubits[1]))
+        circuit.append(cirq.measure(*qubits, key='result'))
+        """
     }
 
     private func generatePennylaneGates(_ algorithm: QuantumAlgorithm) -> String {
         // Simplified gate generation
-        return """
-            qml.Hadamard(wires=0)
-            qml.CNOT(wires=[0, 1])
-            """
+        """
+        qml.Hadamard(wires=0)
+        qml.CNOT(wires=[0, 1])
+        """
     }
 
     private func getDependencies(for language: QuantumLanguage) -> [String] {
@@ -667,7 +670,7 @@ public actor QuantumTesting {
             failedTests: failedTests,
             coverage: coverage,
             testResults: testResults,
-            executionTime: Double.random(in: 5.0...30.0),
+            executionTime: Double.random(in: 5.0 ... 30.0),
             completedDate: Date()
         )
     }
@@ -676,15 +679,15 @@ public actor QuantumTesting {
         -> TestResult
     {
         // Simulate test execution
-        let passed = Bool.random()  // Simplified - would actually test the algorithm
+        let passed = Bool.random() // Simplified - would actually test the algorithm
 
         return TestResult(
             algorithmId: algorithm.id,
             testCaseId: testCase.id,
             passed: passed,
-            executionTime: Double.random(in: 0.1...2.0),
+            executionTime: Double.random(in: 0.1 ... 2.0),
             expectedOutput: testCase.expectedOutput,
-            actualOutput: passed ? testCase.expectedOutput : [:],  // Simplified
+            actualOutput: passed ? testCase.expectedOutput : [:], // Simplified
             error: passed ? nil : "Test failed",
             timestamp: Date()
         )
@@ -710,13 +713,13 @@ public actor QuantumDeployment {
         logger.info("🚀 Deploying to \(target.rawValue)")
 
         // Simulate deployment process
-        let success = Bool.random()  // Simplified - would actually deploy
+        let success = Bool.random() // Simplified - would actually deploy
 
         return DeploymentResult(
             applicationId: application.id,
             target: target,
             success: success,
-            deploymentTime: Double.random(in: 10.0...300.0),
+            deploymentTime: Double.random(in: 10.0 ... 300.0),
             endpoint: success ? "https://quantum-api.example.com/\(application.id)" : nil,
             error: success ? nil : "Deployment failed",
             deployedDate: Date()
@@ -1095,7 +1098,7 @@ public func generateQuantumCode(
 /// Get quantum development capabilities
 @MainActor
 public func getQuantumDevelopmentCapabilities() -> [String: [String]] {
-    return [
+    [
         "compilation": ["multi-target", "optimization", "error-checking"],
         "simulation": ["state-vector", "measurement-sampling", "noise-modeling"],
         "debugging": ["step-through", "state-inspection", "breakpoint-setting"],
@@ -1109,13 +1112,13 @@ public func getQuantumDevelopmentCapabilities() -> [String: [String]] {
 /// Get supported quantum languages
 @MainActor
 public func getSupportedQuantumLanguages() -> [QuantumLanguage] {
-    return [.qiskit, .cirq, .pennylane]
+    [.qiskit, .cirq, .pennylane]
 }
 
 /// Get quantum hardware specifications
 @MainActor
 public func getQuantumHardwareSpecs() -> [String: Any] {
-    return [
+    [
         "max_qubits": 1000,
         "coherence_time_us": 100.0,
         "gate_fidelity": 0.999,

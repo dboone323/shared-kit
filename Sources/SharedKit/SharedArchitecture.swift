@@ -375,7 +375,7 @@ extension Color {
 extension View {
     /// Platform-specific optimizations for iOS
     @ViewBuilder
-    func platformOptimizations() -> some View {
+    public func platformOptimizations() -> some View {
         #if os(iOS)
             self.tint(.blue)
         #elseif os(macOS)
@@ -394,7 +394,7 @@ extension View {
 
     /// Conditional modifier application
     @ViewBuilder
-    func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+    func `if`(_ condition: Bool, transform: (Self) -> some View) -> some View {
         if condition {
             transform(self)
         } else {

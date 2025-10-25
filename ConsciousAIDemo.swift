@@ -58,7 +58,7 @@ struct ConsciousAIDemo {
             stakeholders: [
                 Stakeholder(), // Patient
                 Stakeholder(), // Doctor
-                Stakeholder()  // Family
+                Stakeholder(), // Family
             ],
             proposedAction: .proceed,
             alternativeAction: .abstain
@@ -84,7 +84,7 @@ struct ConsciousAIDemo {
 
         // Demonstrate empathy
         let otherEmotionalState = EmotionalState(emotions: [
-            Emotion(type: .sadness, intensity: 0.7, valence: -0.6, duration: 1800)
+            Emotion(type: .sadness, intensity: 0.7, valence: -0.6, duration: 1800),
         ], timestamp: Date())
 
         let empathyResponse = await emotionalIntelligence.empathize(
@@ -123,7 +123,7 @@ struct ConsciousAIDemo {
         let agentID = "agent_001"
         let observations = [
             Observation(agentID: agentID, behavior: "helping others", context: .personal, timestamp: Date()),
-            Observation(agentID: agentID, behavior: "learning new skills", context: .professional, timestamp: Date())
+            Observation(agentID: agentID, behavior: "learning new skills", context: .professional, timestamp: Date()),
         ]
         let mentalModel = await theoryOfMind.modelMentalState(of: agentID, observations: observations)
         print("Mental model created for agent: \(agentID)")
@@ -219,7 +219,7 @@ class MockConsciousAI: ConsciousAI {
     typealias Consciousness = ConsciousnessState
 
     var state: String = "active"
-    var consciousness: ConsciousnessState = ConsciousnessState(level: .conscious, coherence: 0.8)
+    var consciousness: ConsciousnessState = .init(level: .conscious, coherence: 0.8)
     var isConscious: Bool = true
 
     func handle(_ action: String) async {}

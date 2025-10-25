@@ -345,7 +345,7 @@ final class DefaultAnalyticsService: AnalyticsServiceProtocol {
     func track(event: String, properties: [String: Any]?, userId: String?) async {
         // Default implementation - log to console in debug mode
         #if DEBUG
-        print("📊 Analytics: \(event) | User: \(userId ?? "anonymous") | Properties: \(properties ?? [:])")
+            print("📊 Analytics: \(event) | User: \(userId ?? "anonymous") | Properties: \(properties ?? [:])")
         #endif
     }
 

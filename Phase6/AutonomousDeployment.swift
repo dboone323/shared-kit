@@ -16,7 +16,8 @@ import OSLog
 /// Main autonomous deployment coordinator
 public actor AutonomousDeployment {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "AutonomousDeployment")
+        subsystem: "com.quantum.workspace", category: "AutonomousDeployment"
+    )
 
     // Core components
     private let deploymentEngine: DeploymentEngine
@@ -109,9 +110,10 @@ public actor AutonomousDeployment {
                     }
 
                     // Evaluate scaling needs
-                    for target in Set(self.activeDeployments.map { $0.target }) {
+                    for target in Set(self.activeDeployments.map(\.target)) {
                         try await self.scalingController.evaluateScalingNeeds(
-                            target: target, deployment: nil)
+                            target: target, deployment: nil
+                        )
                     }
 
                 } catch {
@@ -143,7 +145,7 @@ public actor AutonomousDeployment {
 
     /// Get deployment status
     public func getDeploymentStatus() -> DeploymentStatus {
-        return DeploymentStatus(
+        DeploymentStatus(
             activeDeployments: activeDeployments,
             deploymentHistory: deploymentHistory.suffix(20),
             scalingHistory: scalingHistory.suffix(20),
@@ -205,7 +207,8 @@ public actor AutonomousDeployment {
 
         // Select optimal deployment strategy
         let selectedStrategy = try await selectOptimalStrategy(
-            target: target, environment: environment)
+            target: target, environment: environment
+        )
 
         // Create deployment steps
         let steps = try await createDeploymentSteps(target: target, strategy: selectedStrategy)
@@ -224,7 +227,7 @@ public actor AutonomousDeployment {
         -> EnvironmentAnalysis
     {
         // Analyze the target environment
-        return EnvironmentAnalysis(
+        EnvironmentAnalysis(
             availableResources: 0.8,
             currentLoad: 0.6,
             compatibilityScore: 0.9,
@@ -260,29 +263,35 @@ public actor AutonomousDeployment {
         case .blueGreen:
             return [
                 DeploymentStep(
-                    type: .provision, description: "Provision green environment", duration: 180),
+                    type: .provision, description: "Provision green environment", duration: 180
+                ),
                 DeploymentStep(
-                    type: .deploy, description: "Deploy to green environment", duration: 240),
+                    type: .deploy, description: "Deploy to green environment", duration: 240
+                ),
                 DeploymentStep(type: .test, description: "Test green environment", duration: 120),
                 DeploymentStep(
-                    type: .trafficSwitch, description: "Switch traffic to green", duration: 30),
+                    type: .trafficSwitch, description: "Switch traffic to green", duration: 30
+                ),
                 DeploymentStep(
-                    type: .cleanup, description: "Cleanup blue environment", duration: 60),
+                    type: .cleanup, description: "Cleanup blue environment", duration: 60
+                ),
             ]
         case .canary:
             return [
                 DeploymentStep(type: .deploy, description: "Deploy to canary group", duration: 120),
                 DeploymentStep(
-                    type: .monitor, description: "Monitor canary performance", duration: 300),
+                    type: .monitor, description: "Monitor canary performance", duration: 300
+                ),
                 DeploymentStep(
-                    type: .scale, description: "Gradually scale to full deployment", duration: 600),
+                    type: .scale, description: "Gradually scale to full deployment", duration: 600
+                ),
                 DeploymentStep(type: .verify, description: "Final verification", duration: 60),
             ]
         }
     }
 
     private func calculateEstimatedDuration(_ steps: [DeploymentStep]) -> TimeInterval {
-        return steps.map { $0.duration }.reduce(0, +)
+        steps.map(\.duration).reduce(0, +)
     }
 
     private func assessDeploymentRisk(target: DeploymentTarget, steps: [DeploymentStep])
@@ -300,13 +309,13 @@ public actor AutonomousDeployment {
 
     private func calculateSuccessRate() -> Double {
         guard !deploymentHistory.isEmpty else { return 0.0 }
-        let successful = deploymentHistory.filter { $0.success }.count
+        let successful = deploymentHistory.filter(\.success).count
         return Double(successful) / Double(deploymentHistory.count)
     }
 
     private func calculateAverageDeploymentTime() -> TimeInterval {
         guard !deploymentHistory.isEmpty else { return 0.0 }
-        let totalTime = deploymentHistory.map { $0.duration }.reduce(0, +)
+        let totalTime = deploymentHistory.map(\.duration).reduce(0, +)
         return totalTime / Double(deploymentHistory.count)
     }
 
@@ -333,7 +342,7 @@ public actor AutonomousDeployment {
                 ))
         }
 
-        if avgTime > 600 {  // 10 minutes
+        if avgTime > 600 { // 10 minutes
             recommendations.append(
                 DeploymentRecommendation(
                     type: .optimizePipeline,
@@ -424,18 +433,18 @@ public actor DeploymentEngine {
 
     private func executeDeploymentStep(_ step: DeploymentStep) async throws {
         // Simulate step execution
-        try await Task.sleep(for: .seconds(step.duration / 10))  // Simulate faster execution
+        try await Task.sleep(for: .seconds(step.duration / 10)) // Simulate faster execution
 
         // Simulate random failure for testing
-        if Double.random(in: 0..<1) < 0.05 {  // 5% failure rate
+        if Double.random(in: 0 ..< 1) < 0.05 { // 5% failure rate
             throw DeploymentError.stepFailed("Simulated failure in \(step.description)")
         }
     }
 
     private func performStepHealthCheck(_ target: DeploymentTarget) async throws -> Bool {
         // Perform health check after deployment step
-        try await Task.sleep(for: .seconds(5))  // Simulate health check
-        return Double.random(in: 0..<1) > 0.1  // 90% success rate
+        try await Task.sleep(for: .seconds(5)) // Simulate health check
+        return Double.random(in: 0 ..< 1) > 0.1 // 90% success rate
     }
 
     private func performPartialRollback(
@@ -461,11 +470,11 @@ public actor DeploymentEngine {
 /// Manages intelligent rollback operations
 public actor IntelligentRollbackManager {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "IntelligentRollbackManager")
+        subsystem: "com.quantum.workspace", category: "IntelligentRollbackManager"
+    )
 
     /// Execute intelligent rollback
-    public func executeRollback(target: DeploymentTarget, deployment: DeploymentResult) async throws
-    {
+    public func executeRollback(target: DeploymentTarget, deployment: DeploymentResult) async throws {
         logger.info("🔄 Executing intelligent rollback for deployment \(deployment.deploymentId)")
 
         // Analyze failure reason
@@ -476,7 +485,8 @@ public actor IntelligentRollbackManager {
 
         // Execute rollback
         try await performRollback(
-            target: target, strategy: rollbackStrategy, deployment: deployment)
+            target: target, strategy: rollbackStrategy, deployment: deployment
+        )
 
         logger.info("✅ Rollback completed successfully")
     }
@@ -505,7 +515,7 @@ public actor IntelligentRollbackManager {
         -> FailureAnalysis
     {
         // Analyze the reason for deployment failure
-        return FailureAnalysis(
+        FailureAnalysis(
             primaryCause: .deploymentError,
             secondaryCauses: [.configurationError],
             severity: .high,
@@ -570,28 +580,28 @@ public actor IntelligentRollbackManager {
         _ target: DeploymentTarget, _ deployment: DeploymentResult
     ) -> TimeInterval {
         // Estimate downtime based on target and deployment
-        return 300  // 5 minutes
+        300 // 5 minutes
     }
 
     private func estimateDataLossRisk(_ target: DeploymentTarget, _ deployment: DeploymentResult)
         -> Double
     {
         // Estimate data loss risk
-        return 0.1  // 10% risk
+        0.1 // 10% risk
     }
 
     private func estimateUserImpact(_ target: DeploymentTarget, _ deployment: DeploymentResult)
         -> ImpactLevel
     {
         // Estimate user impact
-        return target.criticality == .high ? .high : .medium
+        target.criticality == .high ? .high : .medium
     }
 
     private func suggestAlternatives(_ target: DeploymentTarget, _ deployment: DeploymentResult)
         -> [RollbackAlternative]
     {
         // Suggest alternative rollback approaches
-        return [
+        [
             RollbackAlternative(
                 strategy: .gradual,
                 description: "Gradual rollback to minimize user impact",
@@ -613,7 +623,8 @@ public actor IntelligentRollbackManager {
 /// Controls automated scaling operations
 public actor AutomatedScalingController {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "AutomatedScalingController")
+        subsystem: "com.quantum.workspace", category: "AutomatedScalingController"
+    )
 
     /// Evaluate scaling needs
     public func evaluateScalingNeeds(target: DeploymentTarget, deployment: DeploymentResult?)
@@ -629,7 +640,8 @@ public actor AutomatedScalingController {
 
         // Determine scaling action
         let scalingAction = determineScalingAction(
-            currentLoad: currentLoad, predictedLoad: predictedLoad)
+            currentLoad: currentLoad, predictedLoad: predictedLoad
+        )
 
         // Execute scaling if needed
         if scalingAction != .none {
@@ -677,18 +689,19 @@ public actor AutomatedScalingController {
             successRate: scaleSuccessRate,
             costEfficiency: costEfficiency,
             recommendations: generateScalingRecommendations(
-                avgScaleTime, scaleSuccessRate, costEfficiency),
+                avgScaleTime, scaleSuccessRate, costEfficiency
+            ),
             analysisTimestamp: Date()
         )
     }
 
     private func analyzeCurrentLoad(_ target: DeploymentTarget) async throws -> LoadAnalysis {
         // Analyze current system load
-        return LoadAnalysis(
-            cpuUtilization: Double.random(in: 0.3..<0.9),
-            memoryUtilization: Double.random(in: 0.4..<0.95),
-            requestRate: Double.random(in: 100..<1000),
-            responseTime: Double.random(in: 50..<500)
+        LoadAnalysis(
+            cpuUtilization: Double.random(in: 0.3 ..< 0.9),
+            memoryUtilization: Double.random(in: 0.4 ..< 0.95),
+            requestRate: Double.random(in: 100 ..< 1000),
+            responseTime: Double.random(in: 50 ..< 500)
         )
     }
 
@@ -702,7 +715,7 @@ public actor AutomatedScalingController {
         return LoadPrediction(
             predictedLoad: baseLoad * deploymentMultiplier,
             confidence: 0.8,
-            timeHorizon: 3600  // 1 hour
+            timeHorizon: 3600 // 1 hour
         )
     }
 
@@ -726,22 +739,22 @@ public actor AutomatedScalingController {
         // Simulate scaling operation
         let duration =
             direction == .scaleOut ? TimeInterval(amount * 60) : TimeInterval(amount * 30)
-        try await Task.sleep(for: .seconds(duration / 10))  // Simulate faster execution
+        try await Task.sleep(for: .seconds(duration / 10)) // Simulate faster execution
     }
 
     private func calculateAverageScaleTime() -> TimeInterval {
         // Calculate average scaling time
-        return 120  // 2 minutes
+        120 // 2 minutes
     }
 
     private func calculateScaleSuccessRate() -> Double {
         // Calculate scaling success rate
-        return 0.95  // 95%
+        0.95 // 95%
     }
 
     private func calculateCostEfficiency() -> Double {
         // Calculate cost efficiency
-        return 0.85  // 85%
+        0.85 // 85%
     }
 
     private func generateScalingRecommendations(
@@ -790,7 +803,8 @@ public actor AutomatedScalingController {
 /// Monitors deployment health
 public actor DeploymentHealthMonitor {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "DeploymentHealthMonitor")
+        subsystem: "com.quantum.workspace", category: "DeploymentHealthMonitor"
+    )
 
     /// Perform health check on target
     public func performHealthCheck(target: DeploymentTarget) async throws -> HealthCheckResult {
@@ -839,25 +853,25 @@ public actor DeploymentHealthMonitor {
     /// Check deployment health
     public func checkDeploymentHealth(_ deployment: Deployment) async throws -> HealthCheckResult {
         // Check health of a specific deployment
-        return try await performHealthCheck(target: deployment.target)
+        try await performHealthCheck(target: deployment.target)
     }
 
     private func checkConnectivity(_ target: DeploymentTarget) async throws -> Bool {
         // Check network connectivity
         try await Task.sleep(for: .seconds(1))
-        return Double.random(in: 0..<1) > 0.05  // 95% success rate
+        return Double.random(in: 0 ..< 1) > 0.05 // 95% success rate
     }
 
     private func checkResources(_ target: DeploymentTarget) async throws -> Bool {
         // Check resource availability
         try await Task.sleep(for: .seconds(2))
-        return Double.random(in: 0..<1) > 0.1  // 90% success rate
+        return Double.random(in: 0 ..< 1) > 0.1 // 90% success rate
     }
 
     private func checkDependencies(_ target: DeploymentTarget) async throws -> Bool {
         // Check dependency health
         try await Task.sleep(for: .seconds(1))
-        return Double.random(in: 0..<1) > 0.08  // 92% success rate
+        return Double.random(in: 0 ..< 1) > 0.08 // 92% success rate
     }
 }
 
@@ -890,7 +904,7 @@ public struct DeploymentTarget: Sendable, Hashable {
     }
 
     public static func == (lhs: DeploymentTarget, rhs: DeploymentTarget) -> Bool {
-        return lhs.name == rhs.name && lhs.type == rhs.type && lhs.environment == rhs.environment
+        lhs.name == rhs.name && lhs.type == rhs.type && lhs.environment == rhs.environment
             && lhs.criticality == rhs.criticality
     }
 }
@@ -898,17 +912,17 @@ public struct DeploymentTarget: Sendable, Hashable {
 /// Target types
 public enum TargetType: String, Sendable {
     case webApplication = "web_application"
-    case microservice = "microservice"
-    case api = "api"
-    case database = "database"
-    case infrastructure = "infrastructure"
+    case microservice
+    case api
+    case database
+    case infrastructure
 }
 
 /// Environments
 public enum Environment: String, Sendable {
-    case development = "development"
-    case staging = "staging"
-    case production = "production"
+    case development
+    case staging
+    case production
 }
 
 /// Criticality levels
@@ -1181,7 +1195,7 @@ public func initializeAutonomousDeployment() async {
 /// Get autonomous deployment capabilities
 @MainActor
 public func getAutonomousDeploymentCapabilities() -> [String: [String]] {
-    return [
+    [
         "deployment_engine": ["automated_deployment", "strategy_selection", "health_monitoring"],
         "rollback_manager": ["intelligent_rollback", "impact_analysis", "strategy_optimization"],
         "scaling_controller": ["automated_scaling", "load_prediction", "efficiency_analysis"],
@@ -1197,14 +1211,15 @@ public func executeAutonomousDeployment(
     target: DeploymentTarget,
     strategy: DeploymentStrategy = .rolling
 ) async throws -> DeploymentResult {
-    return try await globalAutonomousDeployment.executeDeployment(
-        target: target, strategy: strategy)
+    try await globalAutonomousDeployment.executeDeployment(
+        target: target, strategy: strategy
+    )
 }
 
 /// Get deployment status
 @MainActor
 public func getDeploymentStatus() async -> DeploymentStatus {
-    return await globalAutonomousDeployment.getDeploymentStatus()
+    await globalAutonomousDeployment.getDeploymentStatus()
 }
 
 /// Execute intelligent rollback
@@ -1216,7 +1231,7 @@ public func executeIntelligentRollback(target: DeploymentTarget, reason: String)
 /// Analyze deployment performance
 @MainActor
 public func analyzeDeploymentPerformance() async throws -> DeploymentPerformanceAnalysis {
-    return try await globalAutonomousDeployment.analyzeDeploymentPerformance()
+    try await globalAutonomousDeployment.analyzeDeploymentPerformance()
 }
 
 /// Scale deployment automatically
@@ -1225,5 +1240,6 @@ public func scaleDeployment(target: DeploymentTarget, direction: ScalingDirectio
     async throws
 {
     try await globalAutonomousDeployment.scaleDeployment(
-        target: target, direction: direction, amount: amount)
+        target: target, direction: direction, amount: amount
+    )
 }

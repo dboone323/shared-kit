@@ -15,19 +15,19 @@ import os.log
 
 /// Represents different types of maintenance actions
 public enum MaintenanceAction: String, Codable {
-    case preventive = "preventive"
-    case corrective = "corrective"
-    case predictive = "predictive"
-    case optimization = "optimization"
-    case upgrade = "upgrade"
+    case preventive
+    case corrective
+    case predictive
+    case optimization
+    case upgrade
 }
 
 /// Represents the confidence level of a prediction
 public enum PredictionConfidence: String, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Represents a maintenance prediction
@@ -88,11 +88,11 @@ public struct MaintenanceSchedule: Codable {
 
 /// Status of a maintenance task
 public enum MaintenanceStatus: String, Codable {
-    case scheduled = "scheduled"
+    case scheduled
     case inProgress = "in_progress"
-    case completed = "completed"
-    case failed = "failed"
-    case cancelled = "cancelled"
+    case completed
+    case failed
+    case cancelled
 }
 
 /// System metrics for predictive analysis
@@ -117,10 +117,10 @@ public struct SystemMetrics: Codable {
 
 /// Trend direction for metrics
 public enum TrendDirection: String, Codable {
-    case increasing = "increasing"
-    case decreasing = "decreasing"
-    case stable = "stable"
-    case volatile = "volatile"
+    case increasing
+    case decreasing
+    case stable
+    case volatile
 }
 
 /// AI-driven predictive maintenance system
@@ -137,21 +137,22 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
     @Published public private(set) var systemHealthScore: Double = 100.0
 
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "PredictiveMaintenance")
+        subsystem: "com.quantum.workspace", category: "PredictiveMaintenance"
+    )
     private var monitoringTask: Task<Void, Never>?
     private var predictionTask: Task<Void, Never>?
     private var maintenanceTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
 
     // Configuration
-    private let monitoringInterval: TimeInterval = 60.0  // seconds
-    private let predictionInterval: TimeInterval = 300.0  // 5 minutes
-    private let maintenanceCheckInterval: TimeInterval = 3600.0  // 1 hour
+    private let monitoringInterval: TimeInterval = 60.0 // seconds
+    private let predictionInterval: TimeInterval = 300.0 // 5 minutes
+    private let maintenanceCheckInterval: TimeInterval = 3600.0 // 1 hour
 
     // AI Model parameters
-    private let failureThreshold: Double = 0.7  // 70% failure probability triggers action
-    private let criticalThreshold: Double = 0.9  // 90% failure probability is critical
-    private let predictionHorizon: TimeInterval = 604800.0  // 7 days
+    private let failureThreshold: Double = 0.7 // 70% failure probability triggers action
+    private let criticalThreshold: Double = 0.9 // 90% failure probability is critical
+    private let predictionHorizon: TimeInterval = 604_800.0 // 7 days
 
     // State
     private var metricsHistory = [String: [SystemMetrics]]()
@@ -213,12 +214,12 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
 
     /// Get current predictions
     public func getPredictions() -> [MaintenancePrediction] {
-        return activePredictions
+        activePredictions
     }
 
     /// Get maintenance schedule
     public func getMaintenanceSchedule() -> [MaintenanceSchedule] {
-        return maintenanceSchedule
+        maintenanceSchedule
     }
 
     /// Manually trigger prediction analysis for a component
@@ -368,22 +369,24 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         let trends = analyzeTrends(for: "memory")
 
         return SystemMetrics(
-            component: "memory", metrics: metrics, anomalies: anomalies, trends: trends)
+            component: "memory", metrics: metrics, anomalies: anomalies, trends: trends
+        )
     }
 
     private func collectCPUMetrics() async -> SystemMetrics {
         var metrics = [String: Double]()
 
         // CPU usage (simplified - would use more sophisticated monitoring in production)
-        metrics["usage_percent"] = Double.random(in: 10...80)
+        metrics["usage_percent"] = Double.random(in: 10 ... 80)
         metrics["core_count"] = Double(ProcessInfo.processInfo.activeProcessorCount)
-        metrics["temperature"] = Double.random(in: 40...80)  // Simulated temperature
+        metrics["temperature"] = Double.random(in: 40 ... 80) // Simulated temperature
 
         let anomalies = detectAnomalies(in: metrics, for: "cpu")
         let trends = analyzeTrends(for: "cpu")
 
         return SystemMetrics(
-            component: "cpu", metrics: metrics, anomalies: anomalies, trends: trends)
+            component: "cpu", metrics: metrics, anomalies: anomalies, trends: trends
+        )
     }
 
     private func collectDiskMetrics() async -> SystemMetrics {
@@ -395,7 +398,7 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
             let attributes = try fileManager.attributesOfFileSystem(forPath: homeURL.path)
 
             if let freeSpace = attributes[.systemFreeSize] as? NSNumber,
-                let totalSpace = attributes[.systemSize] as? NSNumber
+               let totalSpace = attributes[.systemSize] as? NSNumber
             {
                 let freeGB = freeSpace.doubleValue / 1024.0 / 1024.0 / 1024.0
                 let totalGB = totalSpace.doubleValue / 1024.0 / 1024.0 / 1024.0
@@ -412,52 +415,56 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         let trends = analyzeTrends(for: "disk")
 
         return SystemMetrics(
-            component: "disk", metrics: metrics, anomalies: anomalies, trends: trends)
+            component: "disk", metrics: metrics, anomalies: anomalies, trends: trends
+        )
     }
 
     private func collectNetworkMetrics() async -> SystemMetrics {
         var metrics = [String: Double]()
 
         // Network metrics (simplified)
-        metrics["latency_ms"] = Double.random(in: 10...200)
-        metrics["bandwidth_mbps"] = Double.random(in: 50...1000)
-        metrics["packet_loss_percent"] = Double.random(in: 0...5)
+        metrics["latency_ms"] = Double.random(in: 10 ... 200)
+        metrics["bandwidth_mbps"] = Double.random(in: 50 ... 1000)
+        metrics["packet_loss_percent"] = Double.random(in: 0 ... 5)
 
         let anomalies = detectAnomalies(in: metrics, for: "network")
         let trends = analyzeTrends(for: "network")
 
         return SystemMetrics(
-            component: "network", metrics: metrics, anomalies: anomalies, trends: trends)
+            component: "network", metrics: metrics, anomalies: anomalies, trends: trends
+        )
     }
 
     private func collectDatabaseMetrics() async -> SystemMetrics {
         var metrics = [String: Double]()
 
         // Database metrics (placeholder - would connect to actual database)
-        metrics["connection_count"] = Double.random(in: 1...100)
-        metrics["query_time_ms"] = Double.random(in: 1...500)
-        metrics["cache_hit_ratio"] = Double.random(in: 0.8...1.0)
+        metrics["connection_count"] = Double.random(in: 1 ... 100)
+        metrics["query_time_ms"] = Double.random(in: 1 ... 500)
+        metrics["cache_hit_ratio"] = Double.random(in: 0.8 ... 1.0)
 
         let anomalies = detectAnomalies(in: metrics, for: "database")
         let trends = analyzeTrends(for: "database")
 
         return SystemMetrics(
-            component: "database", metrics: metrics, anomalies: anomalies, trends: trends)
+            component: "database", metrics: metrics, anomalies: anomalies, trends: trends
+        )
     }
 
     private func collectAPIMetrics() async -> SystemMetrics {
         var metrics = [String: Double]()
 
         // API metrics (placeholder - would monitor actual API endpoints)
-        metrics["response_time_ms"] = Double.random(in: 50...1000)
-        metrics["error_rate_percent"] = Double.random(in: 0...10)
-        metrics["throughput_rps"] = Double.random(in: 10...1000)
+        metrics["response_time_ms"] = Double.random(in: 50 ... 1000)
+        metrics["error_rate_percent"] = Double.random(in: 0 ... 10)
+        metrics["throughput_rps"] = Double.random(in: 10 ... 1000)
 
         let anomalies = detectAnomalies(in: metrics, for: "api")
         let trends = analyzeTrends(for: "api")
 
         return SystemMetrics(
-            component: "api", metrics: metrics, anomalies: anomalies, trends: trends)
+            component: "api", metrics: metrics, anomalies: anomalies, trends: trends
+        )
     }
 
     private func collectFilesystemMetrics() async -> SystemMetrics {
@@ -468,7 +475,8 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
             let fileManager = FileManager.default
             let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
             let contents = try fileManager.contentsOfDirectory(
-                at: documentsURL, includingPropertiesForKeys: [.fileSizeKey])
+                at: documentsURL, includingPropertiesForKeys: [.fileSizeKey]
+            )
 
             var totalSize: Int64 = 0
             for url in contents {
@@ -486,7 +494,8 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         let trends = analyzeTrends(for: "filesystem")
 
         return SystemMetrics(
-            component: "filesystem", metrics: metrics, anomalies: anomalies, trends: trends)
+            component: "filesystem", metrics: metrics, anomalies: anomalies, trends: trends
+        )
     }
 
     private func storeMetrics(_ metrics: SystemMetrics) {
@@ -534,7 +543,7 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         var trends = [String: TrendDirection]()
 
         // Analyze trends for key metrics
-        let recentMetrics = history.suffix(10)  // Last 10 measurements
+        let recentMetrics = history.suffix(10) // Last 10 measurements
 
         for metricKey in ["usage_percent", "response_time_ms", "error_rate_percent"] {
             let values = recentMetrics.compactMap { $0.metrics[metricKey] }
@@ -598,8 +607,9 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         // Analyze each metric for potential failures
         for (metricKey, value) in metrics.metrics {
             let prediction = await predictFailure(
-                for: component, metric: metricKey, value: value, trends: metrics.trends)
-            if let prediction = prediction {
+                for: component, metric: metricKey, value: value, trends: metrics.trends
+            )
+            if let prediction {
                 predictions.append(prediction)
             }
         }
@@ -771,13 +781,13 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         }
 
         if existingSchedule == nil {
-            let scheduledDate = Date().addingTimeInterval(prediction.timeToFailure * 0.5)  // Schedule halfway to predicted failure
+            let scheduledDate = Date().addingTimeInterval(prediction.timeToFailure * 0.5) // Schedule halfway to predicted failure
             let schedule = MaintenanceSchedule(
                 component: prediction.component,
                 scheduledDate: scheduledDate,
                 action: prediction.recommendedAction,
                 priority: prediction.confidence,
-                estimatedDuration: 1800.0,  // 30 minutes
+                estimatedDuration: 1800.0, // 30 minutes
                 prerequisites: []
             )
 
@@ -796,7 +806,7 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
 
         for schedule in dueSchedules {
             if schedule.priority == .critical || schedule.priority == .high {
-                let _ = await executeMaintenance(scheduleId: schedule.id)
+                _ = await executeMaintenance(scheduleId: schedule.id)
             }
         }
     }
@@ -807,11 +817,11 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         logger.info("🔧 Performing \(action.rawValue) maintenance on \(component)")
 
         // Simulate maintenance duration
-        let duration = Double.random(in: 300...1800)  // 5-30 minutes
+        let duration = Double.random(in: 300 ... 1800) // 5-30 minutes
         try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
 
         // Simulate success/failure (80% success rate)
-        let success = Double.random(in: 0...1) < 0.8
+        let success = Double.random(in: 0 ... 1) < 0.8
 
         if success {
             // Clear related predictions
@@ -875,9 +885,9 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
 
 // MARK: - Extensions
 
-extension PredictiveMaintenanceSystem {
+public extension PredictiveMaintenanceSystem {
     /// Get health score for a specific component
-    public func getComponentHealthScore(_ component: String) -> Double {
+    func getComponentHealthScore(_ component: String) -> Double {
         guard let metrics = metricsHistory[component]?.last else { return 100.0 }
 
         var score = 100.0
@@ -903,15 +913,15 @@ extension PredictiveMaintenanceSystem {
     }
 
     /// Export maintenance history for analysis
-    public func exportMaintenanceHistory() -> Data? {
+    func exportMaintenanceHistory() -> Data? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         return try? encoder.encode(maintenanceHistory)
     }
 
     /// Get maintenance recommendations
-    public func getMaintenanceRecommendations() -> [MaintenancePrediction] {
-        return activePredictions.filter { $0.probability >= failureThreshold }
+    func getMaintenanceRecommendations() -> [MaintenancePrediction] {
+        activePredictions.filter { $0.probability >= failureThreshold }
     }
 }
 
@@ -919,12 +929,12 @@ extension PredictiveMaintenanceSystem {
 
 /// Global function to get current system health score
 public func getSystemHealthScore() async -> Double {
-    return await PredictiveMaintenanceSystem.shared.systemHealthScore
+    await PredictiveMaintenanceSystem.shared.systemHealthScore
 }
 
 /// Global function to get maintenance recommendations
 public func getMaintenanceRecommendations() async -> [MaintenancePrediction] {
-    return await PredictiveMaintenanceSystem.shared.getMaintenanceRecommendations()
+    await PredictiveMaintenanceSystem.shared.getMaintenanceRecommendations()
 }
 
 /// Global function to trigger component analysis

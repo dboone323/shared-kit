@@ -61,7 +61,7 @@ public struct RealityMetrics: Sendable {
         let metrics = [
             completeMastery, infiniteControl, transcendentDominion, eternalAuthority,
             cosmicCommand, divineSovereignty, universalRule, infinitePower,
-            eternalDominance, ultimateMastery
+            eternalDominance, ultimateMastery,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -237,7 +237,7 @@ public final class RealityMasteryEngine: Sendable {
             RealityMasteryStep(type: .universalRule, mastery: 12.0),
             RealityMasteryStep(type: .infinitePower, mastery: 14.0),
             RealityMasteryStep(type: .eternalDominance, mastery: 10.0),
-            RealityMasteryStep(type: .ultimateMastery, mastery: 15.0)
+            RealityMasteryStep(type: .ultimateMastery, mastery: 15.0),
         ]
 
         var capabilities: [RealityCapability] = []

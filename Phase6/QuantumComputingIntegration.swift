@@ -16,7 +16,8 @@ import OSLog
 /// Main quantum computing integration coordinator
 public actor QuantumComputingIntegration {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumComputingIntegration")
+        subsystem: "com.quantum.workspace", category: "QuantumComputingIntegration"
+    )
 
     // Core components
     private let quantumHardwareManager: QuantumHardwareManager
@@ -176,8 +177,8 @@ public actor QuantumComputingIntegration {
 
                     // Update metrics
                     let errorRate =
-                        hardwareHealth.map { $0.errorRate }.reduce(0, +)
-                        / Double(hardwareHealth.count)
+                        hardwareHealth.map(\.errorRate).reduce(0, +)
+                            / Double(hardwareHealth.count)
                     self.quantumMetrics = QuantumMetrics(
                         totalCircuitsExecuted: self.quantumMetrics.totalCircuitsExecuted,
                         averageExecutionTime: self.quantumMetrics.averageExecutionTime,
@@ -200,7 +201,7 @@ public actor QuantumComputingIntegration {
 
     /// Get quantum integration status
     public func getQuantumIntegrationStatus() -> QuantumIntegrationStatus {
-        return QuantumIntegrationStatus(
+        QuantumIntegrationStatus(
             activeCircuits: activeCircuits,
             hardwareConnections: hardwareConnections,
             recentOptimizations: optimizationResults.suffix(10),
@@ -235,7 +236,7 @@ public actor QuantumComputingIntegration {
         // In a real implementation, this would interface with actual quantum hardware
         // For now, simulate execution with realistic timing and results
 
-        let executionTime = Double(circuit.gates.count) * 0.001 + Double.random(in: 0.1..<1.0)
+        let executionTime = Double(circuit.gates.count) * 0.001 + Double.random(in: 0.1 ..< 1.0)
 
         // Simulate execution
         try await Task.sleep(for: .seconds(executionTime))
@@ -244,8 +245,8 @@ public actor QuantumComputingIntegration {
             circuitId: circuit.id,
             solution: generateSimulatedSolution(for: circuit),
             executionTime: executionTime,
-            fidelity: Double.random(in: 0.85..<0.98),
-            confidence: Double.random(in: 0.7..<0.95)
+            fidelity: Double.random(in: 0.85 ..< 0.98),
+            confidence: Double.random(in: 0.7 ..< 0.95)
         )
     }
 
@@ -275,29 +276,29 @@ public actor QuantumComputingIntegration {
         let classicalTime = estimateClassicalTime(for: problem)
         let quantumAdvantage = classicalTime / result.executionTime
 
-        return max(1.0, quantumAdvantage)  // Ensure at least 1x advantage
+        return max(1.0, quantumAdvantage) // Ensure at least 1x advantage
     }
 
     private func collectQuantumMetrics() async throws -> QuantumMetrics {
         let circuitsExecuted = activeCircuits.count + optimizationResults.count
         let avgExecutionTime =
             optimizationResults.isEmpty
-            ? 0.0
-            : optimizationResults.map { $0.executionTime }.reduce(0, +)
+                ? 0.0
+                : optimizationResults.map(\.executionTime).reduce(0, +)
                 / Double(optimizationResults.count)
 
         let avgAdvantage =
             optimizationResults.isEmpty
-            ? 1.0
-            : optimizationResults.map { $0.quantumAdvantage }.reduce(0, +)
+                ? 1.0
+                : optimizationResults.map(\.quantumAdvantage).reduce(0, +)
                 / Double(optimizationResults.count)
 
         return QuantumMetrics(
             totalCircuitsExecuted: circuitsExecuted,
             averageExecutionTime: avgExecutionTime,
             quantumAdvantage: avgAdvantage,
-            errorRate: Double.random(in: 0.001..<0.01),
-            coherenceTime: Double.random(in: 50..<200),
+            errorRate: Double.random(in: 0.001 ..< 0.01),
+            coherenceTime: Double.random(in: 50 ..< 200),
             timestamp: Date()
         )
     }
@@ -325,15 +326,15 @@ public actor QuantumComputingIntegration {
     private func estimateClassicalTime(for problem: OptimizationProblem) -> Double {
         // Estimate classical computation time for comparison
         switch problem.complexity {
-        case .low: return Double.random(in: 0.1..<1.0)
-        case .medium: return Double.random(in: 1..<10)
-        case .high: return Double.random(in: 10..<100)
+        case .low: return Double.random(in: 0.1 ..< 1.0)
+        case .medium: return Double.random(in: 1 ..< 10)
+        case .high: return Double.random(in: 10 ..< 100)
         }
     }
 
     private func generateSimulatedSolution(for circuit: QuantumCircuit) -> [Double] {
         // Generate a simulated quantum computation result
-        return (0..<circuit.qubits.count).map { _ in Double.random(in: 0..<1) }
+        (0 ..< circuit.qubits.count).map { _ in Double.random(in: 0 ..< 1) }
     }
 }
 
@@ -342,7 +343,8 @@ public actor QuantumComputingIntegration {
 /// Manages quantum hardware connections and capabilities
 public actor QuantumHardwareManager {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumHardwareManager")
+        subsystem: "com.quantum.workspace", category: "QuantumHardwareManager"
+    )
 
     /// Get available quantum hardware
     public func getAvailableHardware() async throws -> [QuantumHardwareConnection] {
@@ -420,8 +422,8 @@ public actor QuantumHardwareManager {
                 qubitCount: connection.capabilities.qubitCount,
                 errorRate: connection.capabilities.errorRate,
                 coherenceTime: connection.capabilities.coherenceTime,
-                queueDepth: Int.random(in: 0..<10),
-                lastCalibration: Date().addingTimeInterval(-Double.random(in: 3600..<86400))
+                queueDepth: Int.random(in: 0 ..< 10),
+                lastCalibration: Date().addingTimeInterval(-Double.random(in: 3600 ..< 86400))
             )
         }
     }
@@ -433,10 +435,10 @@ public actor QuantumHardwareManager {
         return hardware.map { connection in
             QuantumHardwareHealth(
                 hardwareId: connection.id,
-                status: Double.random(in: 0..<1) > 0.9 ? .degraded : .healthy,
-                errorRate: connection.capabilities.errorRate * Double.random(in: 0.8..<1.2),
-                calibrationDrift: Double.random(in: 0..<0.1),
-                temperature: Double.random(in: 0..<10),
+                status: Double.random(in: 0 ..< 1) > 0.9 ? .degraded : .healthy,
+                errorRate: connection.capabilities.errorRate * Double.random(in: 0.8 ..< 1.2),
+                calibrationDrift: Double.random(in: 0 ..< 0.1),
+                temperature: Double.random(in: 0 ..< 10),
                 lastHealthCheck: Date()
             )
         }
@@ -448,7 +450,8 @@ public actor QuantumHardwareManager {
 /// Builds quantum circuits for various optimization problems
 public actor QuantumCircuitBuilder {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumCircuitBuilder")
+        subsystem: "com.quantum.workspace", category: "QuantumCircuitBuilder"
+    )
 
     /// Build quantum circuit for optimization problem
     public func buildCircuit(for problem: OptimizationProblem) async throws -> QuantumCircuit {
@@ -475,7 +478,7 @@ public actor QuantumCircuitBuilder {
 
     /// Build circuit for quantum computation
     public func buildCircuit(for computation: QuantumComputation) async throws -> QuantumCircuit {
-        return try await buildCircuit(for: computation.problem)
+        try await buildCircuit(for: computation.problem)
     }
 
     private func allocateQubits(for problem: OptimizationProblem) async throws -> [QuantumQubit] {
@@ -487,7 +490,7 @@ public actor QuantumCircuitBuilder {
         case .high: qubitCount = 20
         }
 
-        return (0..<qubitCount).map { index in
+        return (0 ..< qubitCount).map { index in
             QuantumQubit(
                 id: index,
                 state: .zero,
@@ -517,13 +520,13 @@ public actor QuantumCircuitBuilder {
         // Add problem-specific gates
         switch problem.type {
         case "optimization":
-            gates.append(contentsOf: try await buildOptimizationGates(qubits: qubits))
+            try await gates.append(contentsOf: buildOptimizationGates(qubits: qubits))
         case "simulation":
-            gates.append(contentsOf: try await buildSimulationGates(qubits: qubits))
+            try await gates.append(contentsOf: buildSimulationGates(qubits: qubits))
         case "search":
-            gates.append(contentsOf: try await buildSearchGates(qubits: qubits))
+            try await gates.append(contentsOf: buildSearchGates(qubits: qubits))
         default:
-            gates.append(contentsOf: try await buildGenericGates(qubits: qubits))
+            try await gates.append(contentsOf: buildGenericGates(qubits: qubits))
         }
 
         // Add measurement gates
@@ -544,7 +547,7 @@ public actor QuantumCircuitBuilder {
         var gates: [QuantumGate] = []
 
         // QAOA-style optimization circuit
-        for i in 0..<qubits.count - 1 {
+        for i in 0 ..< qubits.count - 1 {
             gates.append(
                 QuantumGate(
                     type: .cx,
@@ -560,7 +563,7 @@ public actor QuantumCircuitBuilder {
                 QuantumGate(
                     type: .rz,
                     qubits: [qubit.id],
-                    parameters: [Double.random(in: 0..<2 * .pi)],
+                    parameters: [Double.random(in: 0 ..< 2 * .pi)],
                     duration: 100
                 ))
         }
@@ -572,8 +575,8 @@ public actor QuantumCircuitBuilder {
         var gates: [QuantumGate] = []
 
         // Quantum simulation circuit
-        for i in 0..<qubits.count {
-            for j in (i + 1)..<qubits.count {
+        for i in 0 ..< qubits.count {
+            for j in (i + 1) ..< qubits.count {
                 gates.append(
                     QuantumGate(
                         type: .cz,
@@ -593,7 +596,7 @@ public actor QuantumCircuitBuilder {
         // Grover search algorithm structure
         let oracle = QuantumGate(
             type: .oracle,
-            qubits: Array(0..<qubits.count),
+            qubits: Array(0 ..< qubits.count),
             parameters: [],
             duration: 500
         )
@@ -615,7 +618,7 @@ public actor QuantumCircuitBuilder {
 
     private func buildGenericGates(qubits: [QuantumQubit]) async throws -> [QuantumGate] {
         // Generic quantum circuit
-        return qubits.map { qubit in
+        qubits.map { qubit in
             QuantumGate(
                 type: .x,
                 qubits: [qubit.id],
@@ -661,7 +664,7 @@ public actor QuantumOptimizer {
             // Cancel adjacent inverse gates
             if areInverseGates(gate1, gate2) && gate1.qubits == gate2.qubits {
                 gates.remove(at: i)
-                gates.remove(at: i)  // Remove the pair
+                gates.remove(at: i) // Remove the pair
                 continue
             }
 
@@ -681,7 +684,7 @@ public actor QuantumOptimizer {
     private func applyGateCommutation(_ circuit: QuantumCircuit) async throws -> QuantumCircuit {
         // Implement gate commutation optimizations
         // This is a simplified version
-        return circuit
+        circuit
     }
 
     private func applyCircuitReduction(_ circuit: QuantumCircuit) async throws -> QuantumCircuit {
@@ -730,7 +733,7 @@ public actor HybridProcessor {
 
         return ClassicalResult(
             computationId: classicalComputation.id,
-            result: quantumResult.result.map { $0 * 2 },  // Simple transformation
+            result: quantumResult.result.map { $0 * 2 }, // Simple transformation
             executionTime: 0.1,
             timestamp: Date()
         )
@@ -745,7 +748,7 @@ public actor HybridProcessor {
 
         // Combine results using some hybrid algorithm
         return zip(quantum.result, classical.result).map { q, c in
-            (q + c) / 2  // Simple averaging
+            (q + c) / 2 // Simple averaging
         }
     }
 }
@@ -774,26 +777,26 @@ public actor QuantumSimulator {
             finalState: finalState,
             measurements: measurements,
             executionTime: executionTime,
-            fidelity: Double.random(in: 0.9..<0.99),
+            fidelity: Double.random(in: 0.9 ..< 0.99),
             timestamp: Date()
         )
     }
 
     private func simulateQuantumState(_ circuit: QuantumCircuit) -> [Complex] {
         // Simplified quantum state simulation
-        let stateSize = 1 << circuit.qubits.count  // 2^n for n qubits
-        return (0..<stateSize).map { _ in
-            Complex(real: Double.random(in: -1..<1), imaginary: Double.random(in: -1..<1))
+        let stateSize = 1 << circuit.qubits.count // 2^n for n qubits
+        return (0 ..< stateSize).map { _ in
+            Complex(real: Double.random(in: -1 ..< 1), imaginary: Double.random(in: -1 ..< 1))
         }
     }
 
     private func performMeasurements(_ circuit: QuantumCircuit, state: [Complex]) -> [Measurement] {
         // Simulate measurements
-        return circuit.qubits.map { qubit in
+        circuit.qubits.map { qubit in
             Measurement(
                 qubitId: qubit.id,
-                outcome: Int.random(in: 0..<2),
-                probability: Double.random(in: 0.4..<0.6)
+                outcome: Int.random(in: 0 ..< 2),
+                probability: Double.random(in: 0.4 ..< 0.6)
             )
         }
     }
@@ -1047,7 +1050,7 @@ public func initializeQuantumComputingIntegration() async {
 /// Get quantum computing capabilities
 @MainActor
 public func getQuantumComputingCapabilities() -> [String: [String]] {
-    return [
+    [
         "quantum_hardware": ["ibm_quantum", "rigetti_aspen", "ionq_systems", "hardware_discovery"],
         "circuit_builder": [
             "qaoa_circuits", "grover_search", "vqe_algorithms", "circuit_optimization",
@@ -1068,7 +1071,7 @@ public func executeQuantumOptimization(
     problem: OptimizationProblem,
     hardware: QuantumHardwareType = .auto
 ) async throws -> QuantumOptimizationResult {
-    return try await globalQuantumComputingIntegration.executeQuantumOptimization(
+    try await globalQuantumComputingIntegration.executeQuantumOptimization(
         problem: problem,
         hardwarePreference: hardware
     )
@@ -1077,7 +1080,7 @@ public func executeQuantumOptimization(
 /// Get quantum hardware status
 @MainActor
 public func getQuantumHardwareStatus() async throws -> [QuantumHardwareStatus] {
-    return try await globalQuantumComputingIntegration.getQuantumHardwareStatus()
+    try await globalQuantumComputingIntegration.getQuantumHardwareStatus()
 }
 
 /// Simulate quantum circuit
@@ -1085,11 +1088,11 @@ public func getQuantumHardwareStatus() async throws -> [QuantumHardwareStatus] {
 public func simulateQuantumCircuit(_ circuit: QuantumCircuit) async throws
     -> QuantumSimulationResult
 {
-    return try await globalQuantumComputingIntegration.simulateQuantumCircuit(circuit)
+    try await globalQuantumComputingIntegration.simulateQuantumCircuit(circuit)
 }
 
 /// Get quantum integration status
 @MainActor
 public func getQuantumIntegrationStatus() async -> QuantumIntegrationStatus {
-    return await globalQuantumComputingIntegration.getQuantumIntegrationStatus()
+    await globalQuantumComputingIntegration.getQuantumIntegrationStatus()
 }

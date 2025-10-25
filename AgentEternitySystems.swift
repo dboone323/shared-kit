@@ -344,8 +344,7 @@ public final class AgentEternitySystems: Sendable {
     private func processEternitySystems(
         _ request: EternitySystemsRequest,
         assessment: EternitySystemsAssessment
-    ) async throws -> EternitySystemsProcessing
-    {
+    ) async throws -> EternitySystemsProcessing {
         // Process eternity systems
         let processingContext = EternitySystemsProcessingContext(
             agents: request.agents,
@@ -369,8 +368,7 @@ public final class AgentEternitySystems: Sendable {
     private func coordinateEternalOperations(
         _ request: EternitySystemsRequest,
         systems: EternitySystemsProcessing
-    ) async throws -> EternalOperationsCoordination
-    {
+    ) async throws -> EternalOperationsCoordination {
         // Coordinate eternal operations
         let coordinationContext = EternalOperationsCoordinationContext(
             agents: request.agents,
@@ -394,8 +392,7 @@ public final class AgentEternitySystems: Sendable {
     private func synthesizeEternityPersistenceNetwork(
         _ request: EternitySystemsRequest,
         operations: EternalOperationsCoordination
-    ) async throws -> EternityPersistenceNetworkSynthesis
-    {
+    ) async throws -> EternityPersistenceNetworkSynthesis {
         // Synthesize eternity persistence network
         let synthesisContext = EternityPersistenceNetworkSynthesisContext(
             agents: request.agents,
@@ -419,8 +416,7 @@ public final class AgentEternitySystems: Sendable {
     private func orchestrateQuantumEternity(
         _ request: EternitySystemsRequest,
         persistence: EternityPersistenceNetworkSynthesis
-    ) async throws -> QuantumEternityOrchestration
-    {
+    ) async throws -> QuantumEternityOrchestration {
         // Orchestrate quantum eternity
         let orchestrationContext = QuantumEternityOrchestrationContext(
             agents: request.agents,
@@ -444,8 +440,7 @@ public final class AgentEternitySystems: Sendable {
     private func synthesizeEternalContinuity(
         _ request: EternitySystemsRequest,
         eternity: QuantumEternityOrchestration
-    ) async throws -> EternalContinuitySynthesis
-    {
+    ) async throws -> EternalContinuitySynthesis {
         // Synthesize eternal continuity
         let synthesisContext = EternalContinuitySynthesisContext(
             agents: request.agents,
@@ -469,8 +464,7 @@ public final class AgentEternitySystems: Sendable {
     private func validateEternitySystemsResults(
         _ eternalContinuitySynthesis: EternalContinuitySynthesis,
         session: EternitySystemsSession
-    ) async throws -> EternitySystemsValidationResult
-    {
+    ) async throws -> EternitySystemsValidationResult {
         // Validate eternity systems results
         let performanceComparison = await compareEternitySystemsPerformance(
             originalAgents: session.request.agents,
@@ -483,7 +477,7 @@ public final class AgentEternitySystems: Sendable {
         )
 
         let success = performanceComparison.eternityPersistence >= session.request.eternityPersistenceTarget &&
-                     eternityAdvantage.eternityAdvantage >= 0.4
+            eternityAdvantage.eternityAdvantage >= 0.4
 
         let events = generateEternitySystemsEvents(session, eternity: eternalContinuitySynthesis)
 
@@ -602,24 +596,24 @@ public final class AgentEternitySystems: Sendable {
 
     private func measureEternalOperations(_ eternalAgents: [EternitySystemsAgent]) async -> Double {
         // Measure eternal operations
-        return 0.94
+        0.94
     }
 
     private func measureEternalContinuity(_ eternalAgents: [EternitySystemsAgent]) async -> Double {
         // Measure eternal continuity
-        return 0.92
+        0.92
     }
 
     private func measureEternitySynthesis(_ eternalAgents: [EternitySystemsAgent]) async -> Double {
         // Measure eternity synthesis
-        return 0.95
+        0.95
     }
 
     private func generateEternitySystemsEvents(
         _ session: EternitySystemsSession,
         eternity: EternalContinuitySynthesis
     ) -> [EternitySystemsEvent] {
-        return [
+        [
             EternitySystemsEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -635,9 +629,9 @@ public final class AgentEternitySystems: Sendable {
                 data: [
                     "success": true,
                     "eternity_persistence": eternity.eternityHarmony,
-                    "eternity_harmony": eternity.synthesisEfficiency
+                    "eternity_harmony": eternity.synthesisEfficiency,
                 ]
-            )
+            ),
         ]
     }
 
@@ -970,7 +964,7 @@ public struct EternitySystemsFrameworkMetrics: Sendable, Codable {
     public var averageEternityAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Eternity systems metrics
@@ -1475,9 +1469,9 @@ public struct EternalContinuitySynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension AgentEternitySystems {
+public extension AgentEternitySystems {
     /// Create specialized eternity systems for specific agent architectures
-    public static func createSpecializedEternitySystems(
+    static func createSpecializedEternitySystems(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentEternitySystems {
         let system = try await AgentEternitySystems()
@@ -1486,7 +1480,7 @@ extension AgentEternitySystems {
     }
 
     /// Execute batch eternity systems processing
-    public func executeBatchEternitySystems(
+    func executeBatchEternitySystems(
         _ eternityRequests: [EternitySystemsRequest]
     ) async throws -> BatchEternitySystemsResult {
 
@@ -1509,8 +1503,8 @@ extension AgentEternitySystems {
         }
 
         let successRate = Double(results.count) / Double(eternityRequests.count)
-        let averagePersistence = results.map { $0.eternityPersistence }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.eternityAdvantage }.reduce(0, +) / Double(results.count)
+        let averagePersistence = results.map(\.eternityPersistence).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.eternityAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchEternitySystemsResult(
             batchId: batchId,
@@ -1527,7 +1521,7 @@ extension AgentEternitySystems {
     }
 
     /// Get eternity systems recommendations
-    public func getEternitySystemsRecommendations() async -> [EternitySystemsRecommendation] {
+    func getEternitySystemsRecommendations() async -> [EternitySystemsRecommendation] {
         var recommendations: [EternitySystemsRecommendation] = []
 
         let status = await getEternitySystemsStatus()

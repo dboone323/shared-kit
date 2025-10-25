@@ -345,7 +345,8 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
             metadata: [
                 "parameters_id": parameters.id.uuidString,
                 "time_horizon": String(timeHorizon),
-            ])
+            ]
+        )
 
         let sessionId = UUID()
         let startTime = Date()
@@ -356,7 +357,8 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
 
             // Execute parameter optimization
             let optimizedParameters = try await parameterOptimizer.optimizeParameters(
-                parameters, objectives: objectives)
+                parameters, objectives: objectives
+            )
 
             // Validate optimization
             let validation = await parameterOptimizer.validateOptimization(optimizedParameters)
@@ -365,15 +367,15 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
             }
 
             // Store results
-            let results = OptimizationResults(
+            let results = await OptimizationResults(
                 sessionId: sessionId,
                 startTime: startTime,
                 endTime: Date(),
                 initialParameters: parameters,
                 finalParameters: optimizedParameters,
                 objectives: objectives,
-                metrics: await monitoringSystem.getCurrentMetrics(),
-                iterations: 0,  // Will be updated by adaptive algorithm
+                metrics: monitoringSystem.getCurrentMetrics(),
+                iterations: 0, // Will be updated by adaptive algorithm
                 convergence: validation.score > 0.95,
                 feedback: []
             )
@@ -385,7 +387,8 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
                 metadata: [
                     "session_id": sessionId.uuidString,
                     "improvement_score": String(validation.score),
-                ])
+                ]
+            )
 
             return optimizedParameters
 
@@ -395,7 +398,8 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
                 metadata: [
                     "error": String(describing: error),
                     "session_id": sessionId.uuidString,
-                ])
+                ]
+            )
             throw error
         }
     }
@@ -406,7 +410,8 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
             metadata: [
                 "performance": String(feedback.performance),
                 "stability": String(feedback.stability),
-            ])
+            ]
+        )
 
         do {
             // Store feedback
@@ -441,7 +446,7 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
             )
 
             await adaptiveAlgorithm.learnFromResults(results)
-            await adaptiveAlgorithm.adaptParameters(await monitoringSystem.getCurrentMetrics())
+            await adaptiveAlgorithm.adaptParameters(monitoringSystem.getCurrentMetrics())
 
             logger.log(.info, "Algorithm adaptation completed")
 
@@ -449,13 +454,14 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
             logger.log(
                 .error, "Algorithm adaptation failed",
                 metadata: [
-                    "error": String(describing: error)
-                ])
+                    "error": String(describing: error),
+                ]
+            )
         }
     }
 
     func monitorOptimization() async -> OptimizationMetrics {
-        return await monitoringSystem.getCurrentMetrics()
+        await monitoringSystem.getCurrentMetrics()
     }
 
     func predictOutcomes(parameters: RealityParameters, scenarios: [RealityScenario]) async
@@ -464,8 +470,9 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
         logger.log(
             .info, "Predicting optimization outcomes",
             metadata: [
-                "scenarios_count": String(scenarios.count)
-            ])
+                "scenarios_count": String(scenarios.count),
+            ]
+        )
 
         do {
             var predictions: [OptimizationPrediction] = []
@@ -481,8 +488,9 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
             logger.log(
                 .info, "Outcome prediction completed",
                 metadata: [
-                    "predictions_count": String(predictions.count)
-                ])
+                    "predictions_count": String(predictions.count),
+                ]
+            )
 
             return predictions
 
@@ -490,8 +498,9 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
             logger.log(
                 .error, "Outcome prediction failed",
                 metadata: [
-                    "error": String(describing: error)
-                ])
+                    "error": String(describing: error),
+                ]
+            )
             return []
         }
     }
@@ -515,14 +524,15 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
                 do {
                     let metrics = await monitoringSystem.getCurrentMetrics()
                     try await database.storeOptimizationMetrics(metrics)
-                    try await Task.sleep(nanoseconds: 10_000_000_000)  // 10 seconds
+                    try await Task.sleep(nanoseconds: 10_000_000_000) // 10 seconds
                 } catch {
                     logger.log(
                         .error, "Monitoring failed",
                         metadata: [
-                            "error": String(describing: error)
-                        ])
-                    try? await Task.sleep(nanoseconds: 5_000_000_000)  // 5 seconds retry
+                            "error": String(describing: error),
+                        ]
+                    )
+                    try? await Task.sleep(nanoseconds: 5_000_000_000) // 5 seconds retry
                 }
             }
         }
@@ -614,8 +624,9 @@ final class RealityParameterOptimizer: RealityParameterOptimizationProtocol {
         logger.log(
             .info, "Optimizing reality parameters",
             metadata: [
-                "objectives_count": String(objectives.count)
-            ])
+                "objectives_count": String(objectives.count),
+            ]
+        )
 
         // Create feedback publisher for adaptive optimization
         let feedbackPublisher = PassthroughSubject<OptimizationFeedback, Never>()
@@ -623,11 +634,11 @@ final class RealityParameterOptimizer: RealityParameterOptimizationProtocol {
         // Execute adaptive optimization
         let optimizedParameters =
             try await optimizationAlgorithm
-            .executeAdaptiveOptimization(
-                initialParameters: parameters, feedback: feedbackPublisher.eraseToAnyPublisher()
-            )
-            .first()
-            .get()
+                .executeAdaptiveOptimization(
+                    initialParameters: parameters, feedback: feedbackPublisher.eraseToAnyPublisher()
+                )
+                .first()
+                .get()
 
         logger.log(.info, "Parameter optimization completed")
 
@@ -635,7 +646,7 @@ final class RealityParameterOptimizer: RealityParameterOptimizationProtocol {
     }
 
     func validateOptimization(_ parameters: RealityParameters) async -> ValidationResult {
-        return await validationEngine.validateParameters(parameters)
+        await validationEngine.validateParameters(parameters)
     }
 }
 
@@ -662,7 +673,7 @@ final class AdaptiveOptimizationAlgorithm: AdaptiveOptimizationAlgorithmProtocol
     func executeAdaptiveOptimization(
         initialParameters: RealityParameters, feedback: AnyPublisher<OptimizationFeedback, Never>
     ) -> AnyPublisher<RealityParameters, Error> {
-        return Future { promise in
+        Future { promise in
             Task {
                 do {
                     var currentParameters = initialParameters
@@ -705,8 +716,8 @@ final class AdaptiveOptimizationAlgorithm: AdaptiveOptimizationAlgorithmProtocol
                         }
 
                         // Check convergence
-                        let improvement = abs(
-                            bestScore - await self.evaluateParameters(currentParameters))
+                        let improvement = await abs(
+                            bestScore - self.evaluateParameters(currentParameters))
                         convergence = improvement < self.algorithmParameters.convergenceThreshold
 
                         currentParameters = bestParameters
@@ -719,7 +730,8 @@ final class AdaptiveOptimizationAlgorithm: AdaptiveOptimizationAlgorithmProtocol
                                 metadata: [
                                     "best_score": String(bestScore),
                                     "improvement": String(improvement),
-                                ])
+                                ]
+                            )
                         }
                     }
 
@@ -730,7 +742,8 @@ final class AdaptiveOptimizationAlgorithm: AdaptiveOptimizationAlgorithmProtocol
                         metadata: [
                             "iterations": String(iteration),
                             "converged": String(convergence),
-                        ])
+                        ]
+                    )
 
                     promise(.success(currentParameters))
 
@@ -766,7 +779,8 @@ final class AdaptiveOptimizationAlgorithm: AdaptiveOptimizationAlgorithmProtocol
         // Keep parameters within reasonable bounds
         algorithmParameters.learningRate = min(max(algorithmParameters.learningRate, 0.001), 0.1)
         algorithmParameters.explorationFactor = min(
-            max(algorithmParameters.explorationFactor, 0.05), 0.5)
+            max(algorithmParameters.explorationFactor, 0.05), 0.5
+        )
     }
 
     private func generateParameterVariations(from parameters: RealityParameters)
@@ -774,24 +788,24 @@ final class AdaptiveOptimizationAlgorithm: AdaptiveOptimizationAlgorithmProtocol
     {
         var variations: [RealityParameters] = []
 
-        for _ in 0..<10 {  // Generate 10 variations
+        for _ in 0 ..< 10 { // Generate 10 variations
             var newParameters = parameters
 
             // Randomly adjust parameters within exploration bounds
             let exploration = algorithmParameters.explorationFactor
 
             newParameters.dimensionalParameters.dimensionalStability *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.quantumParameters.coherence *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.consciousnessParameters.awarenessLevel *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.temporalParameters.temporalStability *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.causalParameters.outcomeOptimization *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.stabilityParameters.structuralIntegrity *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
 
             variations.append(newParameters)
         }
@@ -825,17 +839,17 @@ final class OptimizationMonitoringSystem {
 
     func getCurrentMetrics() async -> OptimizationMetrics {
         // In practice, this would collect real metrics from various sources
-        return OptimizationMetrics(
+        OptimizationMetrics(
             timestamp: Date(),
-            performanceScore: Double.random(in: 0.7...0.95),
-            stabilityIndex: Double.random(in: 0.8...0.98),
-            consciousnessLevel: Double.random(in: 0.6...0.9),
-            energyEfficiency: Double.random(in: 0.75...0.95),
-            temporalCoherence: Double.random(in: 0.7...0.95),
-            causalIntegrity: Double.random(in: 0.8...0.98),
-            adaptationRate: Double.random(in: 0.1...0.5),
-            convergenceSpeed: Double.random(in: 10...100),
-            issueResolution: Double.random(in: 0.8...0.98)
+            performanceScore: Double.random(in: 0.7 ... 0.95),
+            stabilityIndex: Double.random(in: 0.8 ... 0.98),
+            consciousnessLevel: Double.random(in: 0.6 ... 0.9),
+            energyEfficiency: Double.random(in: 0.75 ... 0.95),
+            temporalCoherence: Double.random(in: 0.7 ... 0.95),
+            causalIntegrity: Double.random(in: 0.8 ... 0.98),
+            adaptationRate: Double.random(in: 0.1 ... 0.5),
+            convergenceSpeed: Double.random(in: 10 ... 100),
+            issueResolution: Double.random(in: 0.8 ... 0.98)
         )
     }
 }
@@ -863,7 +877,8 @@ final class OptimizationPredictionEngine {
 
         // Generate prediction using model
         let predictedParameters = try await predictionModel.predict(
-            parameters: parameters, scenario: scenario)
+            parameters: parameters, scenario: scenario
+        )
 
         return OptimizationPrediction(
             scenario: scenario,
@@ -1011,7 +1026,7 @@ final class ConsoleOptimizationLogger: OptimizationLogger {
         let timestamp = Date().ISO8601Format()
         let metadataString =
             metadata.isEmpty
-            ? "" : " \(metadata.map { "\($0.key)=\($0.value)" }.joined(separator: " "))"
+                ? "" : " \(metadata.map { "\($0.key)=\($0.value)" }.joined(separator: " "))"
         print("[\(timestamp)] [\(level)] \(message)\(metadataString)")
     }
 }
@@ -1034,7 +1049,7 @@ final class InMemoryOptimizationDatabase: OptimizationDatabase {
     }
 
     func retrieveOptimizationHistory(limit: Int) async throws -> [OptimizationResults] {
-        return Array(results.suffix(limit))
+        Array(results.suffix(limit))
     }
 }
 
@@ -1046,7 +1061,7 @@ final class InMemoryMetricsStorage: MetricsStorage {
     }
 
     func retrieveMetrics(timeRange: ClosedRange<Date>) async throws -> [OptimizationMetrics] {
-        return metrics.filter { timeRange.contains($0.timestamp) }
+        metrics.filter { timeRange.contains($0.timestamp) }
     }
 }
 
@@ -1076,7 +1091,7 @@ final class BasicPredictionModel: PredictionModel {
 
 final class BasicScenarioAnalyzer: ScenarioAnalyzer {
     func analyzeScenario(_ scenario: RealityScenario) async -> ScenarioAnalysis {
-        return ScenarioAnalysis(
+        ScenarioAnalysis(
             probability: scenario.probability,
             confidence: 0.8,
             riskAssessment: OptimizationPrediction.RiskAssessment(
@@ -1098,7 +1113,7 @@ final class BasicMachineLearningEngine: MachineLearningEngine {
 
     func predict(parameters: RealityParameters) async throws -> RealityParameters {
         // Simple prediction
-        return parameters
+        parameters
     }
 }
 
@@ -1143,7 +1158,7 @@ final class BasicParameterValidationEngine: ParameterValidationEngine {
             score -= 0.15
         }
 
-        let recommendations = issues.map { $0.suggestion }
+        let recommendations = issues.map(\.suggestion)
 
         return ValidationResult(
             isValid: issues.isEmpty || score > 0.7,

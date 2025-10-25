@@ -15,8 +15,7 @@ import Foundation
 // MARK: - Core Eternal Consciousness Integration
 
 /// Master coordinator for eternal consciousness integration systems
-public final class EternalConsciousnessIntegrationCoordinator: ObservableObject, @unchecked Sendable
-{
+public final class EternalConsciousnessIntegrationCoordinator: ObservableObject, @unchecked Sendable {
     // MARK: - Properties
 
     /// Shared instance for eternal consciousness coordination
@@ -486,7 +485,7 @@ public final class EternalConsciousnessIntegrationCoordinator: ObservableObject,
         for coordinator in systemCoordinators {
             coordinator.statusPublisher
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] (domain, status) in
+                .sink { [weak self] domain, status in
                     if let index = self?.integrationSystems.firstIndex(where: {
                         $0.domain == domain
                     }) {

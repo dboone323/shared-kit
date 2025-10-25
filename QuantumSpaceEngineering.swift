@@ -52,8 +52,9 @@ final class QuantumSpaceEngineeringEngine: QSEProtocol {
     }
 
     func initializeSpatialField() async throws -> QSEField {
-        return QSEField(
-            id: UUID(), dimensions: 3, coherence: 0.93, curvature: 0.01, createdAt: Date())
+        QSEField(
+            id: UUID(), dimensions: 3, coherence: 0.93, curvature: 0.01, createdAt: Date()
+        )
     }
 
     func reinforceCoherence(for field: QSEField) async throws -> QSEReinforcement {
@@ -76,7 +77,8 @@ final class QuantumSpaceEngineeringEngine: QSEProtocol {
         let delta = min(1.0 - field.coherence, coherenceBoostCap)
         return QSEReinforcement(
             fieldId: field.id, success: delta > 0, newCoherence: field.coherence + delta,
-            energyCost: delta * energyScale)
+            energyCost: delta * energyScale
+        )
     }
 }
 

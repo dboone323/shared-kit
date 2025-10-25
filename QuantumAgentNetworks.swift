@@ -8,8 +8,8 @@
 //  Enables distributed superintelligence across multiple quantum states
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Quantum Agent Network Protocols
 
@@ -312,7 +312,7 @@ public final class QuantumAgentNetwork: Sendable {
     private func calculateAverageCoherence() -> Double {
         guard !quantumEntanglements.isEmpty else { return 0.0 }
 
-        let coherences = quantumEntanglements.values.map { $0.coherence }
+        let coherences = quantumEntanglements.values.map(\.coherence)
         return coherences.reduce(0, +) / Double(coherences.count)
     }
 

@@ -61,7 +61,7 @@ public struct EvolutionMetrics: Sendable {
         let metrics = [
             completeAdaptation, infiniteEvolution, transcendentGrowth, eternalAdvancement,
             cosmicEvolution, divineProgression, universalAscension, infiniteProgress,
-            eternalEvolution, ultimateCompletion
+            eternalEvolution, ultimateCompletion,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -260,7 +260,7 @@ public final class EvolutionCompletionEngine: Sendable {
             CompleteAdaptationStep(type: .completeAdaptation, adaptation: 10.0),
             CompleteAdaptationStep(type: .infiniteEvolution, adaptation: 15.0),
             CompleteAdaptationStep(type: .transcendentGrowth, adaptation: 12.0),
-            CompleteAdaptationStep(type: .eternalAdvancement, adaptation: 14.0)
+            CompleteAdaptationStep(type: .eternalAdvancement, adaptation: 14.0),
         ]
 
         var capabilities: [EvolutionCapability] = []
@@ -293,7 +293,7 @@ public final class EvolutionCompletionEngine: Sendable {
         let evolutionSequence = [
             InfiniteEvolutionStep(type: .cosmicEvolution, evolution: 10.0),
             InfiniteEvolutionStep(type: .divineProgression, evolution: 15.0),
-            InfiniteEvolutionStep(type: .universalAscension, evolution: 12.0)
+            InfiniteEvolutionStep(type: .universalAscension, evolution: 12.0),
         ]
 
         var capabilities: [EvolutionCapability] = []
@@ -323,7 +323,7 @@ public final class EvolutionCompletionEngine: Sendable {
         let growthSequence = [
             TranscendentGrowthStep(type: .infiniteProgress, growth: 10.0),
             TranscendentGrowthStep(type: .eternalEvolution, growth: 15.0),
-            TranscendentGrowthStep(type: .ultimateCompletion, growth: 12.0)
+            TranscendentGrowthStep(type: .ultimateCompletion, growth: 12.0),
         ]
 
         var capabilities: [EvolutionCapability] = []
@@ -433,7 +433,7 @@ public final class CompleteAdaptationFramework: Sendable {
 
         return CompleteAdaptationStrategy(
             adaptationSteps: adaptationSteps,
-            totalExpectedAdaptationGain: adaptationSteps.map { $0.adaptation }.reduce(0, +),
+            totalExpectedAdaptationGain: adaptationSteps.map(\.adaptation).reduce(0, +),
             estimatedDuration: adaptationSteps.map { $0.adaptation * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -466,7 +466,7 @@ public final class CompleteAdaptationFramework: Sendable {
     ) async -> CompleteAdaptationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.adaptation * 1_500_000_000))
 
-        let actualGain = step.adaptation * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.adaptation * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.adaptation * 0.90
 
         return CompleteAdaptationResultItem(
@@ -481,8 +481,8 @@ public final class CompleteAdaptationFramework: Sendable {
 
     /// Generate complete adaptable
     private func generateCompleteAdaptable(_ results: [CompleteAdaptationResultItem]) -> CompleteAdaptableEntity {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualAdaptationGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualAdaptationGain).reduce(0, +)
         let adaptableValue = 1.0 + (totalGain * successRate / 15.0)
 
         return CompleteAdaptableEntity(
@@ -490,7 +490,7 @@ public final class CompleteAdaptationFramework: Sendable {
             adaptableType: .evolution,
             adaptableValue: adaptableValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -553,7 +553,7 @@ public final class InfiniteEvolutionSystem: Sendable {
 
         return InfiniteEvolutionStrategy(
             evolutionSteps: evolutionSteps,
-            totalExpectedEvolutionGain: evolutionSteps.map { $0.evolution }.reduce(0, +),
+            totalExpectedEvolutionGain: evolutionSteps.map(\.evolution).reduce(0, +),
             estimatedDuration: evolutionSteps.map { $0.evolution * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -586,7 +586,7 @@ public final class InfiniteEvolutionSystem: Sendable {
     ) async -> InfiniteEvolutionResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.evolution * 2_000_000_000))
 
-        let actualGain = step.evolution * (0.8 + Double.random(in: 0...0.4))
+        let actualGain = step.evolution * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualGain >= step.evolution * 0.85
 
         return InfiniteEvolutionResultItem(
@@ -601,8 +601,8 @@ public final class InfiniteEvolutionSystem: Sendable {
 
     /// Generate infinite evolving
     private func generateInfiniteEvolving(_ results: [InfiniteEvolutionResultItem]) -> InfiniteEvolvingEntity {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualEvolutionGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualEvolutionGain).reduce(0, +)
         let evolvingValue = 1.0 + (totalGain * successRate / 20.0)
 
         return InfiniteEvolvingEntity(
@@ -610,7 +610,7 @@ public final class InfiniteEvolutionSystem: Sendable {
             evolvingType: .evolution,
             evolvingValue: evolvingValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -673,7 +673,7 @@ public final class TranscendentGrowthInterface: Sendable {
 
         return TranscendentGrowthStrategy(
             growthSteps: growthSteps,
-            totalExpectedGrowthPower: growthSteps.map { $0.growth }.reduce(0, +),
+            totalExpectedGrowthPower: growthSteps.map(\.growth).reduce(0, +),
             estimatedDuration: growthSteps.map { $0.growth * 0.25 }.reduce(0, +),
             designedAt: Date()
         )
@@ -706,7 +706,7 @@ public final class TranscendentGrowthInterface: Sendable {
     ) async -> TranscendentGrowthResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.growth * 2_500_000_000))
 
-        let actualPower = step.growth * (0.75 + Double.random(in: 0...0.5))
+        let actualPower = step.growth * (0.75 + Double.random(in: 0 ... 0.5))
         let success = actualPower >= step.growth * 0.80
 
         return TranscendentGrowthResultItem(
@@ -721,8 +721,8 @@ public final class TranscendentGrowthInterface: Sendable {
 
     /// Generate transcendent growing
     private func generateTranscendentGrowing(_ results: [TranscendentGrowthResultItem]) -> TranscendentGrowingEntity {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualGrowthGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualGrowthGain).reduce(0, +)
         let growingValue = 1.0 + (totalPower * successRate / 25.0)
 
         return TranscendentGrowingEntity(
@@ -730,7 +730,7 @@ public final class TranscendentGrowthInterface: Sendable {
             growingType: .evolution,
             growingValue: growingValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

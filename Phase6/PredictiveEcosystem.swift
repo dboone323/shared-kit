@@ -113,8 +113,8 @@ public actor PredictiveEcosystem {
         let optimizationImpact = try await calculateOptimizationImpact()
 
         let overallHealth =
-            (systemStatuses.values.map { $0.healthScore }.reduce(0, +)
-                / Double(systemStatuses.count) + predictionAccuracy + optimizationImpact) / 3.0
+            (systemStatuses.values.map(\.healthScore).reduce(0, +)
+                    / Double(systemStatuses.count) + predictionAccuracy + optimizationImpact) / 3.0
 
         return EcosystemHealth(
             overallScore: overallHealth,
@@ -139,8 +139,8 @@ public actor PredictiveEcosystem {
 
         for (systemId, usage) in resourceAnalysis {
             if let bottleneck = try await predictSystemBottleneck(
-                systemId, usage: usage, timeHorizon: timeHorizon)
-            {
+                systemId, usage: usage, timeHorizon: timeHorizon
+            ) {
                 predictions.append(bottleneck)
             }
         }
@@ -192,12 +192,12 @@ public actor PredictiveEcosystem {
 
     /// Get ecosystem metrics
     public func getEcosystemMetrics() -> EcosystemMetrics {
-        return ecosystemMetrics
+        ecosystemMetrics
     }
 
     /// Get active predictions
     public func getActivePredictions() -> [SystemPrediction] {
-        return systemPredictions
+        systemPredictions
     }
 
     // MARK: - Private Methods
@@ -206,7 +206,7 @@ public actor PredictiveEcosystem {
         // Update prediction accuracy tracking
         let recentPredictions = systemPredictions.suffix(10)
         let averageAccuracy =
-            recentPredictions.map { $0.confidence }.reduce(0, +) / Double(recentPredictions.count)
+            recentPredictions.map(\.confidence).reduce(0, +) / Double(recentPredictions.count)
 
         ecosystemMetrics.predictionAccuracy = averageAccuracy
         ecosystemMetrics.lastUpdate = Date()
@@ -217,19 +217,19 @@ public actor PredictiveEcosystem {
         let improvement = result.performanceGain
         let resourceCost = result.resourceCost
 
-        return improvement / max(resourceCost, 0.1)  // Avoid division by zero
+        return improvement / max(resourceCost, 0.1) // Avoid division by zero
     }
 
     private func calculatePredictionAccuracy() async throws -> Double {
         // Calculate accuracy of recent predictions
         let recentPredictions = systemPredictions.filter {
-            Date().timeIntervalSince($0.timestamp) < 86400  // Last 24 hours
+            Date().timeIntervalSince($0.timestamp) < 86400 // Last 24 hours
         }
 
         if recentPredictions.isEmpty { return 0.0 }
 
         // Simplified accuracy calculation
-        return recentPredictions.map { $0.confidence }.reduce(0, +)
+        return recentPredictions.map(\.confidence).reduce(0, +)
             / Double(recentPredictions.count)
     }
 
@@ -239,7 +239,7 @@ public actor PredictiveEcosystem {
 
         if optimizations.isEmpty { return 0.0 }
 
-        let totalImpact = optimizations.map { $0.performanceGain }.reduce(0, +)
+        let totalImpact = optimizations.map(\.performanceGain).reduce(0, +)
         return totalImpact / Double(optimizations.count)
     }
 
@@ -250,10 +250,10 @@ public actor PredictiveEcosystem {
     ) async throws -> BottleneckPrediction? {
         // Predict if system will hit bottleneck
         let usageTrend = usage.currentUsage / usage.capacity
-        let projectedUsage = usageTrend * (1 + (timeHorizon / 86400))  // Simple projection
+        let projectedUsage = usageTrend * (1 + (timeHorizon / 86400)) // Simple projection
 
-        if projectedUsage > 0.9 {  // 90% threshold
-            let confidence = min(1.0, (projectedUsage - 0.8) / 0.2)  // Confidence based on proximity to threshold
+        if projectedUsage > 0.9 { // 90% threshold
+            let confidence = min(1.0, (projectedUsage - 0.8) / 0.2) // Confidence based on proximity to threshold
 
             return BottleneckPrediction(
                 systemId: systemId,
@@ -298,7 +298,7 @@ public actor PredictiveEcosystem {
             type: .performance,
             title: "System Performance Analysis",
             description:
-                "Overall system performance is \(String(format: "%.1f", metrics.systemStability * 100))% stable",
+            "Overall system performance is \(String(format: "%.1f", metrics.systemStability * 100))% stable",
             confidence: 0.85,
             data: ["stability": .double(metrics.systemStability), "trend": .double(trend)],
             recommendation: generatePerformanceRecommendation(trend)
@@ -313,7 +313,7 @@ public actor PredictiveEcosystem {
             type: .optimization,
             title: "Optimization Effectiveness",
             description:
-                "Current optimization efficiency: \(String(format: "%.1f", efficiency * 100))%",
+            "Current optimization efficiency: \(String(format: "%.1f", efficiency * 100))%",
             confidence: 0.8,
             data: ["efficiency": .double(efficiency), "strategies_count": .int(strategies.count)],
             recommendation: efficiency > 0.7
@@ -330,7 +330,7 @@ public actor PredictiveEcosystem {
             type: .prediction,
             title: "Prediction System Health",
             description:
-                "\(activePredictions) active predictions with \(String(format: "%.1f", accuracy * 100))% accuracy",
+            "\(activePredictions) active predictions with \(String(format: "%.1f", accuracy * 100))% accuracy",
             confidence: 0.9,
             data: ["accuracy": .double(accuracy), "predictions": .int(activePredictions)],
             recommendation: accuracy > 0.8
@@ -458,7 +458,7 @@ public actor PredictionEngine {
         let newModel = PredictionModel(
             id: UUID().uuidString,
             type: type,
-            algorithm: .timeSeries,  // Default
+            algorithm: .timeSeries, // Default
             accuracy: 0.7,
             lastTrained: Date()
         )
@@ -473,7 +473,8 @@ public actor PredictionEngine {
 /// Coordinates system optimization strategies
 public actor OptimizationCoordinator {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "OptimizationCoordinator")
+        subsystem: "com.quantum.workspace", category: "OptimizationCoordinator"
+    )
 
     private var optimizationHistory: [OptimizationResult] = []
     private var activeStrategies: [String: OptimizationStrategy] = [:]
@@ -530,7 +531,7 @@ public actor OptimizationCoordinator {
 
     /// Get optimization history
     public func getOptimizationHistory() -> [OptimizationResult] {
-        return optimizationHistory
+        optimizationHistory
     }
 
     private func determineStrategyType(_ bottlenecks: [Bottleneck]) -> StrategyType {
@@ -563,7 +564,7 @@ public actor OptimizationCoordinator {
 
     private func calculateExpectedGain(_ bottlenecks: [Bottleneck]) -> Double {
         // Simplified gain calculation
-        let totalSeverity = bottlenecks.map { $0.severity.numericValue }.reduce(0, +)
+        let totalSeverity = bottlenecks.map(\.severity.numericValue).reduce(0, +)
         return min(0.5, Double(totalSeverity) / Double(bottlenecks.count) / 10.0)
     }
 
@@ -587,12 +588,12 @@ public actor OptimizationCoordinator {
         var recommendations: [ResourceRecommendation] = []
 
         for (resource, usage) in patterns.resourceUsage {
-            if usage > 0.8 {  // Over 80% usage
+            if usage > 0.8 { // Over 80% usage
                 recommendations.append(
                     ResourceRecommendation(
                         resourceType: resource,
                         action: .increase,
-                        amount: usage > 0.9 ? 50 : 25,  // Percentage increase
+                        amount: usage > 0.9 ? 50 : 25, // Percentage increase
                         priority: usage > 0.9 ? .high : .medium
                     ))
             }
@@ -607,7 +608,7 @@ public actor OptimizationCoordinator {
     ) -> Double {
         // Calculate potential efficiency improvement
         let overUtilized = patterns.resourceUsage.filter { $0.value > 0.8 }.count
-        return Double(overUtilized) * 0.1  // 10% gain per over-utilized resource
+        return Double(overUtilized) * 0.1 // 10% gain per over-utilized resource
     }
 
     private func estimateImplementationCost(
@@ -616,7 +617,7 @@ public actor OptimizationCoordinator {
     ) -> Double {
         // Estimate cost of implementing recommendations
         let recommendations = generateResourceRecommendations(current, patterns)
-        return Double(recommendations.count) * 0.05  // 5% cost per recommendation
+        return Double(recommendations.count) * 0.05 // 5% cost per recommendation
     }
 }
 
@@ -658,13 +659,13 @@ public actor AnalyticsProcessor {
         for (systemId, metrics) in systemMetrics {
             let latest =
                 metrics.last
-                ?? SystemMetrics(
-                    predictionAccuracy: 0, optimizationEfficiency: 0,
-                    systemStability: 0, resourceUtilization: 0, lastUpdate: Date()
-                )
+                    ?? SystemMetrics(
+                        predictionAccuracy: 0, optimizationEfficiency: 0,
+                        systemStability: 0, resourceUtilization: 0, lastUpdate: Date()
+                    )
 
             resourceUsage[systemId] = ResourceUsage(
-                resourceType: .cpu,  // Simplified
+                resourceType: .cpu, // Simplified
                 currentUsage: latest.resourceUtilization,
                 capacity: 1.0,
                 trend: .stable
@@ -686,8 +687,8 @@ public actor AnalyticsProcessor {
 
         return UsagePatterns(
             resourceUsage: usageByType,
-            peakUsageTimes: [:],  // Simplified
-            usagePatterns: [:],  // Simplified
+            peakUsageTimes: [:], // Simplified
+            usagePatterns: [:], // Simplified
             analysisTimestamp: Date()
         )
     }
@@ -702,10 +703,10 @@ public actor AnalyticsProcessor {
         let recent = allMetrics.suffix(10)
         let older = allMetrics.prefix(10)
 
-        let recentAvg = recent.map { $0.systemStability }.reduce(0, +) / Double(recent.count)
-        let olderAvg = older.map { $0.systemStability }.reduce(0, +) / Double(older.count)
+        let recentAvg = recent.map(\.systemStability).reduce(0, +) / Double(recent.count)
+        let olderAvg = older.map(\.systemStability).reduce(0, +) / Double(older.count)
 
-        return recentAvg - olderAvg  // Trend direction
+        return recentAvg - olderAvg // Trend direction
     }
 
     private func identifyBottlenecks(_ metrics: [SystemMetrics]) async throws -> [Bottleneck] {
@@ -729,15 +730,15 @@ public actor AnalyticsProcessor {
 
     private func calculatePerformance(_ metrics: [SystemMetrics]) -> SystemPerformance {
         let stability =
-            metrics.map { $0.systemStability }.reduce(0, +) / Double(max(metrics.count, 1))
+            metrics.map(\.systemStability).reduce(0, +) / Double(max(metrics.count, 1))
         let efficiency =
-            metrics.map { $0.optimizationEfficiency }.reduce(0, +) / Double(max(metrics.count, 1))
+            metrics.map(\.optimizationEfficiency).reduce(0, +) / Double(max(metrics.count, 1))
 
         return SystemPerformance(
             stability: stability,
             efficiency: efficiency,
-            throughput: 0.8,  // Simplified
-            latency: 0.1  // Simplified
+            throughput: 0.8, // Simplified
+            latency: 0.1 // Simplified
         )
     }
 }
@@ -765,7 +766,7 @@ public actor EcosystemMonitor {
         for (systemId, _) in systemStatuses {
             systemStatuses[systemId] = SystemStatus(
                 systemId: systemId,
-                healthScore: Double.random(in: 0.7...1.0),  // Simulated
+                healthScore: Double.random(in: 0.7 ... 1.0), // Simulated
                 status: .healthy,
                 lastChecked: Date()
             )
@@ -776,10 +777,10 @@ public actor EcosystemMonitor {
 
     /// Get resource allocation
     public func getResourceAllocation() async throws -> ResourceAllocation {
-        return ResourceAllocation(
-            cpu: 4,  // Simplified
+        ResourceAllocation(
+            cpu: 4, // Simplified
             memory: 8192,
-            storage: 100000,
+            storage: 100_000,
             network: 1000,
             timestamp: Date()
         )
@@ -872,19 +873,19 @@ public struct PredictionModel: Sendable {
         switch type {
         case .performance:
             let avgStability =
-                history.map { $0.systemStability }.reduce(0, +) / Double(max(history.count, 1))
+                history.map(\.systemStability).reduce(0, +) / Double(max(history.count, 1))
             predictionValue = .performance(double: avgStability)
             confidence = accuracy
         case .resource:
             let avgUtilization =
-                history.map { $0.resourceUtilization }.reduce(0, +) / Double(max(history.count, 1))
+                history.map(\.resourceUtilization).reduce(0, +) / Double(max(history.count, 1))
             predictionValue = .resource(usage: avgUtilization)
             confidence = accuracy * 0.9
         case .failure:
-            predictionValue = .failure(probability: 0.05)  // 5% failure probability
+            predictionValue = .failure(probability: 0.05) // 5% failure probability
             confidence = accuracy * 0.8
         case .trend:
-            predictionValue = .trend(direction: 0.0)  // Neutral trend
+            predictionValue = .trend(direction: 0.0) // Neutral trend
             confidence = accuracy * 0.7
         }
 
@@ -1101,9 +1102,9 @@ public enum ResourceType: String, Sendable {
 /// Resource allocation
 public struct ResourceAllocation: Sendable {
     public let cpu: Int
-    public let memory: Int  // MB
-    public let storage: Int  // GB
-    public let network: Int  // Mbps
+    public let memory: Int // MB
+    public let storage: Int // GB
+    public let network: Int // Mbps
     public let timestamp: Date
 }
 
@@ -1145,7 +1146,7 @@ public func initializePredictiveEcosystem() async throws {
 /// Get predictive ecosystem capabilities
 @MainActor
 public func getPredictiveCapabilities() -> [String: [String]] {
-    return [
+    [
         "prediction": ["performance_forecasting", "resource_prediction", "failure_prediction"],
         "optimization": [
             "resource_allocation", "performance_optimization", "bottleneck_resolution",

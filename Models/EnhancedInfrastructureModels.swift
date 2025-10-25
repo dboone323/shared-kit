@@ -116,7 +116,7 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         self.totalDecisionsMade = 0
         self.averageDecisionTime = 0.0
         self.systemUptime = 100.0
-        self.maintenanceInterval = 30 * 24 * 60 * 60  // 30 days
+        self.maintenanceInterval = 30 * 24 * 60 * 60 // 30 days
 
         self.decisionThreshold = 0.8
         self.ethicalOverrideEnabled = true
@@ -235,9 +235,9 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
             policyArea: policyArea,
             options: options,
             selectedOption: options.randomElement() ?? options.first!,
-            confidence: Double.random(in: 0.85...0.99),
+            confidence: Double.random(in: 0.85 ... 0.99),
             reasoning:
-                "Quantum optimization analysis completed with \(String(format: "%.1f", decisionAccuracy * 100))% accuracy",
+            "Quantum optimization analysis completed with \(String(format: "%.1f", decisionAccuracy * 100))% accuracy",
             priority: priority
         )
 
@@ -258,14 +258,15 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
                 "optionsCount": options.count,
                 "confidence": decision.confidence,
                 "priority": priority.rawValue,
-            ])
+            ]
+        )
 
         return decision
     }
 
     @MainActor
     public func optimizePolicy(_ policy: EnhancedGovernancePolicy) {
-        let improvement = Double.random(in: 0.05...0.15)
+        let improvement = Double.random(in: 0.05 ... 0.15)
         policy.optimizationScore += improvement
         policy.lastOptimized = Date()
         policy.optimizationCount += 1
@@ -273,8 +274,8 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         self.totalPoliciesOptimized += 1
         self.averageOptimizationImprovement =
             (self.averageOptimizationImprovement * Double(self.totalPoliciesOptimized - 1)
-                + improvement)
-            / Double(self.totalPoliciesOptimized)
+                    + improvement)
+                / Double(self.totalPoliciesOptimized)
 
         self.trackEvent(
             "policy_optimized",
@@ -282,7 +283,8 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
                 "policyId": policy.id.uuidString,
                 "improvement": improvement,
                 "newScore": policy.optimizationScore,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -308,7 +310,8 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
                 "networkName": name,
                 "participants": participantCount,
                 "regions": regions.count,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -323,7 +326,8 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
             parameters: [
                 "quantumCoherence": self.quantumCoherence,
                 "nextMaintenance": self.nextMaintenanceDate ?? Date(),
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -337,7 +341,7 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
                 recentDecisions.reduce(0.0) { $0 + $1.decisionTime } / Double(recentDecisions.count)
         }
 
-        self.globalCoverage = min(1.0, Double(self.globalParticipationCount) / 8000000000.0)  // Target: 8 billion people
+        self.globalCoverage = min(1.0, Double(self.globalParticipationCount) / 8_000_000_000.0) // Target: 8 billion people
         self.policyOptimizationRate = self.averageOptimizationImprovement
 
         // Update performance metrics
@@ -348,7 +352,7 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         let decisionTime = Date().timeIntervalSince(decision.timestamp)
         self.averageDecisionTime =
             (self.averageDecisionTime * Double(self.totalDecisionsMade - 1) + decisionTime)
-            / Double(self.totalDecisionsMade)
+                / Double(self.totalDecisionsMade)
     }
 
     private func updatePerformanceMetrics() {
@@ -400,8 +404,7 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
 // MARK: - Enhanced Universal Computation System
 
 @Model
-public final class EnhancedUniversalComputationSystem: Validatable, Trackable, CrossProjectRelatable
-{
+public final class EnhancedUniversalComputationSystem: Validatable, Trackable, CrossProjectRelatable {
     // Core Properties
     public var id: UUID
     public var name: String
@@ -504,10 +507,10 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
         self.averageSessionDuration = 0.0
         self.peakConcurrentUsers = 0
         self.totalOperationsPerformed = 0.0
-        self.syncInterval = 60 * 60  // 1 hour
+        self.syncInterval = 60 * 60 // 1 hour
 
-        self.maxSessionDuration = 8 * 60 * 60  // 8 hours
-        self.computationLimitPerUser = 1e18  // 10^18 operations
+        self.maxSessionDuration = 8 * 60 * 60 // 8 hours
+        self.computationLimitPerUser = 1e18 // 10^18 operations
         self.priorityQueueEnabled = true
         self.educationalAccessPriority = true
         self.emergencyAccessOverride = true
@@ -643,7 +646,8 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
                 "location": location,
                 "type": type.rawValue,
                 "capacity": capacity,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -686,7 +690,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
             if totalSessionsWithRating > 0 {
                 self.averageUserSatisfaction =
                     (self.averageUserSatisfaction * (totalSessionsWithRating - 1) + satisfaction)
-                    / totalSessionsWithRating
+                        / totalSessionsWithRating
             } else {
                 self.averageUserSatisfaction = satisfaction
             }
@@ -699,7 +703,8 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
                 "duration": duration,
                 "operations": operationsPerformed,
                 "accessPointType": accessPointType.rawValue,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -707,13 +712,13 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
         let pointsToAdd = targetAccessPoints - self.totalAccessPoints
         guard pointsToAdd > 0 else { return }
 
-        for i in 0..<pointsToAdd {
+        for i in 0 ..< pointsToAdd {
             let location = "Global Access Point \(self.totalAccessPoints + i + 1)"
-            let type: AccessPointType = AccessPointType.allCases.randomElement() ?? .publicTerminal
+            let type = AccessPointType.allCases.randomElement() ?? .publicTerminal
             self.addAccessPoint(location: location, type: type)
         }
 
-        self.globalCoverage = min(1.0, Double(self.totalAccessPoints) / 50000.0)  // Target: 50,000 access points
+        self.globalCoverage = min(1.0, Double(self.totalAccessPoints) / 50000.0) // Target: 50,000 access points
 
         self.trackEvent(
             "infrastructure_scaled",
@@ -721,7 +726,8 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
                 "pointsAdded": pointsToAdd,
                 "totalPoints": self.totalAccessPoints,
                 "globalCoverage": self.globalCoverage,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -736,13 +742,14 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
                 "quantumCoherence": self.quantumCoherence,
                 "energyEfficiency": self.energyEfficiency,
                 "computationPower": self.averageComputationPower,
-            ])
+            ]
+        )
     }
 
     @MainActor
     public func updateGlobalMetrics() {
         // Update utilization and coverage
-        self.globalCoverage = min(1.0, Double(self.activeUsers) / 8000000000.0)  // Target: 8 billion users
+        self.globalCoverage = min(1.0, Double(self.activeUsers) / 8_000_000_000.0) // Target: 8 billion users
 
         // Update performance metrics
         updatePerformanceMetrics()
@@ -963,8 +970,7 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID)
-    {
+    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
         let reference = CrossProjectReference(
             sourceProjectId: self.id,
             targetProjectId: projectId,
@@ -976,7 +982,7 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
     }
 
     public func getRelatedProjects() -> [UUID] {
-        return self.crossProjectReferences.map { $0.targetProjectId }
+        self.crossProjectReferences.map(\.targetProjectId)
     }
 
     // MARK: - Education System Methods
@@ -1000,7 +1006,7 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
         self.totalStudents += 1
 
         // Update global coverage based on world population
-        self.globalCoverage = min(1.0, Double(self.totalStudents) / 8000000000.0)
+        self.globalCoverage = min(1.0, Double(self.totalStudents) / 8_000_000_000.0)
 
         self.trackEvent(
             "student_enrolled",
@@ -1008,7 +1014,8 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
                 "studentId": studentId,
                 "courses": courseIds.count,
                 "learningStyle": learningStyle.rawValue,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1035,7 +1042,8 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
                 "educatorId": educatorId,
                 "specializations": specializations.count,
                 "experience": experience,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1064,7 +1072,8 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
                 "title": title,
                 "subject": subject,
                 "difficulty": difficulty.rawValue,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1091,7 +1100,8 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
                 "title": title,
                 "courseId": courseId.uuidString,
                 "contentType": contentType.rawValue,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1109,7 +1119,8 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
 
         studentProfile.updateProgress(
             courseId: courseId, progress: progress, comprehension: comprehension,
-            engagement: engagement)
+            engagement: engagement
+        )
 
         // Update system-wide averages
         let allProfiles = self.studentProfiles
@@ -1125,7 +1136,8 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
                 "courseId": courseId.uuidString,
                 "progress": progress,
                 "comprehension": comprehension,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1149,7 +1161,8 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
                 "retentionRate": self.knowledgeRetentionRate,
                 "skillAcquisition": self.skillAcquisitionRate,
                 "innovationIndex": self.innovationIndex,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1159,13 +1172,13 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
 
         // Add virtual classrooms and AI tutors proportionally
         if studentsToAdd > 0 {
-            self.virtualClassrooms += max(1, studentsToAdd / 100)  // 1 classroom per 100 students
-            self.aiTutors += max(1, studentsToAdd / 50)  // 1 AI tutor per 50 students
-            self.learningPlatforms += max(1, studentsToAdd / 1000)  // 1 platform per 1000 students
+            self.virtualClassrooms += max(1, studentsToAdd / 100) // 1 classroom per 100 students
+            self.aiTutors += max(1, studentsToAdd / 50) // 1 AI tutor per 50 students
+            self.learningPlatforms += max(1, studentsToAdd / 1000) // 1 platform per 1000 students
         }
 
         if educatorsToAdd > 0 {
-            self.researchFacilities += max(1, educatorsToAdd / 10)  // 1 facility per 10 educators
+            self.researchFacilities += max(1, educatorsToAdd / 10) // 1 facility per 10 educators
         }
 
         self.educationalResources = self.virtualClassrooms * 100 + self.learningPlatforms * 500
@@ -1176,7 +1189,8 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
                 "virtualClassrooms": self.virtualClassrooms,
                 "aiTutors": self.aiTutors,
                 "researchFacilities": self.researchFacilities,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1191,14 +1205,14 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
 
         // Gender equality based on enrollment distribution
         // This would be calculated from actual demographic data
-        self.genderEqualityIndex = 0.95  // Placeholder - would be calculated from real data
+        self.genderEqualityIndex = 0.95 // Placeholder - would be calculated from real data
 
         // Accessibility based on adaptive learning features
         self.accessibilityScore =
             self.aiPersonalizationLevel * 0.8 + self.neuralInterfaceCompatibility * 0.2
 
         // Cultural preservation through diverse curriculum
-        self.culturalPreservationIndex = min(1.0, Double(self.courses.count) / 1000.0)  // Target: 1000+ courses
+        self.culturalPreservationIndex = min(1.0, Double(self.courses.count) / 1000.0) // Target: 1000+ courses
 
         self.trackEvent(
             "social_impact_updated",
@@ -1206,7 +1220,8 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
                 "literacyRate": self.literacyRate,
                 "digitalLiteracyRate": self.digitalLiteracyRate,
                 "accessibilityScore": self.accessibilityScore,
-            ])
+            ]
+        )
     }
 
     private func updatePerformanceMetrics() {
@@ -1355,7 +1370,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
         self.emergencyResponseUnits = 0
 
         // Initialize outcomes
-        self.lifeExpectancy = 72.0  // Current global average
+        self.lifeExpectancy = 72.0 // Current global average
         self.diseasePreventionRate = 0.0
         self.treatmentSuccessRate = 0.0
         self.recoveryTime = 0.0
@@ -1417,8 +1432,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID)
-    {
+    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
         let reference = CrossProjectReference(
             sourceProjectId: self.id,
             targetProjectId: projectId,
@@ -1430,7 +1444,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
     }
 
     public func getRelatedProjects() -> [UUID] {
-        return self.crossProjectReferences.map { $0.targetProjectId }
+        self.crossProjectReferences.map(\.targetProjectId)
     }
 
     // MARK: - Healthcare System Methods
@@ -1456,7 +1470,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
         self.totalPatients += 1
 
         // Update global coverage
-        self.globalCoverage = min(1.0, Double(self.totalPatients) / 8000000000.0)
+        self.globalCoverage = min(1.0, Double(self.totalPatients) / 8_000_000_000.0)
 
         self.trackEvent(
             "patient_registered",
@@ -1464,7 +1478,8 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 "patientId": patientId,
                 "age": age,
                 "location": location,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1493,7 +1508,8 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 "providerId": providerId,
                 "specializations": specializations.count,
                 "facilityId": facilityId.uuidString,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1536,7 +1552,8 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 "name": name,
                 "type": type.rawValue,
                 "capacity": capacity,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1564,9 +1581,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
         self.totalTreatments += 1
 
         // Update success rate
-        let successfulTreatments = self.patientRecords.flatMap { $0.treatments }.filter {
-            $0.success
-        }.count
+        let successfulTreatments = self.patientRecords.flatMap(\.treatments).filter(\.success).count
         self.treatmentSuccessRate =
             Double(successfulTreatments) / Double(max(1, self.totalTreatments))
 
@@ -1577,13 +1592,14 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 "treatmentType": treatmentType,
                 "success": success,
                 "cost": cost,
-            ])
+            ]
+        )
     }
 
     @MainActor
     public func updateHealthOutcomes() {
         // Calculate average health index from patient records
-        let healthIndices = self.patientRecords.map { $0.healthIndex }
+        let healthIndices = self.patientRecords.map(\.healthIndex)
         self.averageHealthIndex = healthIndices.reduce(0.0, +) / Double(max(1, healthIndices.count))
 
         // Update life expectancy based on treatment success and preventive care
@@ -1592,7 +1608,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
         self.lifeExpectancy = baseLifeExpectancy + improvement
 
         // Update recovery time (faster with quantum medicine)
-        self.recoveryTime = max(1.0, 30.0 - (self.quantumSimulationCapability * 20.0))  // Days
+        self.recoveryTime = max(1.0, 30.0 - (self.quantumSimulationCapability * 20.0)) // Days
 
         // Update chronic disease management
         self.chronicDiseaseManagement =
@@ -1604,7 +1620,8 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 "averageHealthIndex": self.averageHealthIndex,
                 "lifeExpectancy": self.lifeExpectancy,
                 "recoveryTime": self.recoveryTime,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1630,7 +1647,8 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 "aiDiagnosticAccuracy": self.aiDiagnosticAccuracy,
                 "quantumSimulation": self.quantumSimulationCapability,
                 "geneticMedicine": self.geneticMedicineAdoption,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1640,14 +1658,14 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
 
         if facilitiesToAdd > 0 {
             // Add facilities proportionally
-            let hospitalsToAdd = facilitiesToAdd / 5  // 20% hospitals
-            let clinicsToAdd = facilitiesToAdd * 2 / 5  // 40% clinics
-            let telemedicineToAdd = facilitiesToAdd / 5  // 20% telemedicine
-            let researchToAdd = facilitiesToAdd / 5  // 20% research
+            let hospitalsToAdd = facilitiesToAdd / 5 // 20% hospitals
+            let clinicsToAdd = facilitiesToAdd * 2 / 5 // 40% clinics
+            let telemedicineToAdd = facilitiesToAdd / 5 // 20% telemedicine
+            let researchToAdd = facilitiesToAdd / 5 // 20% research
             let emergencyToAdd =
                 facilitiesToAdd - hospitalsToAdd - clinicsToAdd - telemedicineToAdd - researchToAdd
 
-            for i in 0..<hospitalsToAdd {
+            for i in 0 ..< hospitalsToAdd {
                 self.addMedicalFacility(
                     name: "Quantum Hospital \(self.hospitals + i + 1)",
                     type: .hospital,
@@ -1657,7 +1675,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 )
             }
 
-            for i in 0..<clinicsToAdd {
+            for i in 0 ..< clinicsToAdd {
                 self.addMedicalFacility(
                     name: "Quantum Clinic \(self.clinics + i + 1)",
                     type: .clinic,
@@ -1667,7 +1685,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 )
             }
 
-            for i in 0..<telemedicineToAdd {
+            for i in 0 ..< telemedicineToAdd {
                 self.addMedicalFacility(
                     name: "Telemedicine Center \(self.telemedicineCenters + i + 1)",
                     type: .telemedicine,
@@ -1677,7 +1695,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 )
             }
 
-            for i in 0..<researchToAdd {
+            for i in 0 ..< researchToAdd {
                 self.addMedicalFacility(
                     name: "Research Lab \(self.researchLabs + i + 1)",
                     type: .research,
@@ -1687,7 +1705,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 )
             }
 
-            for i in 0..<emergencyToAdd {
+            for i in 0 ..< emergencyToAdd {
                 self.addMedicalFacility(
                     name: "Emergency Unit \(self.emergencyResponseUnits + i + 1)",
                     type: .emergency,
@@ -1704,7 +1722,8 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 "facilitiesAdded": facilitiesToAdd,
                 "totalFacilities": self.totalFacilities,
                 "globalCoverage": self.globalCoverage,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -1743,7 +1762,8 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 "healthEquityIndex": self.healthEquityIndex,
                 "mentalHealthSupport": self.mentalHealthSupport,
                 "globalHealthSecurity": self.globalHealthSecurity,
-            ])
+            ]
+        )
     }
 
     private func updatePerformanceMetrics() {
@@ -1951,8 +1971,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID)
-    {
+    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
         let reference = CrossProjectReference(
             sourceProjectId: self.id,
             targetProjectId: projectId,
@@ -1964,7 +1983,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
     }
 
     public func getRelatedProjects() -> [UUID] {
-        return self.crossProjectReferences.map { $0.targetProjectId }
+        self.crossProjectReferences.map(\.targetProjectId)
     }
 
     // MARK: - Economic System Methods
@@ -1994,7 +2013,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
         case .enterprise:
             self.activeEnterprises += 1
         case .government:
-            break  // Governments are not counted in participants
+            break // Governments are not counted in participants
         case .nonprofit:
             self.activeEnterprises += 1
         }
@@ -2008,7 +2027,8 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
                 "entityId": entityId,
                 "type": type.rawValue,
                 "initialCapital": initialCapital,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2047,7 +2067,8 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
                 "toEntityId": toEntityId,
                 "amount": amount,
                 "type": transactionType.rawValue,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2072,7 +2093,8 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
                 "funds": funds,
                 "zones": zones,
                 "hubs": hubs,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2088,13 +2110,13 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
 
         // Calculate inflation rate (simplified - based on transaction volume growth)
         // This would need historical data in a real implementation
-        self.inflationRate = 0.02  // Placeholder: 2% inflation
+        self.inflationRate = 0.02 // Placeholder: 2% inflation
 
         // Calculate investment returns (simplified)
         let investmentTransactions = self.transactions.filter { $0.transactionType == .investment }
         if !investmentTransactions.isEmpty {
             let totalInvested = investmentTransactions.reduce(0.0) { $0 + $1.amount }
-            let returns = totalInvested * 1.15  // Assume 15% return
+            let returns = totalInvested * 1.15 // Assume 15% return
             self.investmentReturns = (returns - totalInvested) / totalInvested
         }
 
@@ -2109,7 +2131,8 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
                 "unemploymentRate": self.unemploymentRate,
                 "inflationRate": self.inflationRate,
                 "investmentReturns": self.investmentReturns,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2135,15 +2158,16 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
                 "quantumTrading": self.quantumTradingAlgorithms,
                 "aiModeling": self.aiEconomicModeling,
                 "blockchainTransparency": self.blockchainTransparency,
-            ])
+            ]
+        )
     }
 
     @MainActor
     public func optimizeEconomicStability() {
         // Calculate economic stability based on various factors
         let stabilityFactors = [
-            1.0 - self.unemploymentRate,  // Lower unemployment = higher stability
-            1.0 - abs(self.inflationRate - 0.02),  // Closer to 2% target inflation = higher stability
+            1.0 - self.unemploymentRate, // Lower unemployment = higher stability
+            1.0 - abs(self.inflationRate - 0.02), // Closer to 2% target inflation = higher stability
             self.innovationIndex,
             self.sustainabilityIndex,
             self.tradeEfficiency,
@@ -2152,7 +2176,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
         self.economicStability = stabilityFactors.reduce(0.0, +) / Double(stabilityFactors.count)
 
         // Calculate income equality (Gini coefficient approximation)
-        let balances = self.economicEntities.map { $0.balance }.sorted()
+        let balances = self.economicEntities.map(\.balance).sorted()
         if !balances.isEmpty {
             let n = Double(balances.count)
             let mean = balances.reduce(0.0, +) / n
@@ -2168,13 +2192,14 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
             parameters: [
                 "stability": self.economicStability,
                 "incomeEquality": self.incomeEquality,
-            ])
+            ]
+        )
     }
 
     @MainActor
     public func updateSocialEconomicMetrics() {
         // Poverty reduction based on entities above poverty line
-        let povertyLine = 1000.0  // Arbitrary poverty line
+        let povertyLine = 1000.0 // Arbitrary poverty line
         let abovePovertyLine = self.economicEntities.filter { $0.balance >= povertyLine }.count
         self.povertyReduction =
             Double(abovePovertyLine) / Double(max(1, self.economicEntities.count))
@@ -2202,7 +2227,8 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
                 "povertyReduction": self.povertyReduction,
                 "wealthDistribution": self.wealthDistribution,
                 "opportunityAccess": self.opportunityAccess,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2225,7 +2251,8 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
                 "tradePartners": self.tradePartners,
                 "tradeVolume": self.tradeVolume,
                 "tradeEfficiency": self.tradeEfficiency,
-            ])
+            ]
+        )
     }
 
     private func updatePerformanceMetrics() {
@@ -2273,8 +2300,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
 // MARK: - Enhanced Quantum Environmental System
 
 @Model
-public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, CrossProjectRelatable
-{
+public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, CrossProjectRelatable {
     public var id: UUID
     public var name: String
     public var description: String
@@ -2431,8 +2457,7 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID)
-    {
+    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
         let reference = CrossProjectReference(
             sourceProjectId: self.id,
             targetProjectId: projectId,
@@ -2444,7 +2469,7 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
     }
 
     public func getRelatedProjects() -> [UUID] {
-        return self.crossProjectReferences.map { $0.targetProjectId }
+        self.crossProjectReferences.map(\.targetProjectId)
     }
 
     // MARK: - Environmental System Methods
@@ -2471,7 +2496,7 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
 
         // Update global coverage
         let totalArea = self.environmentalZones.reduce(0.0) { $0 + $1.area }
-        self.globalCoverage = min(1.0, totalArea / 510000000.0)  // Earth's land area in km²
+        self.globalCoverage = min(1.0, totalArea / 510_000_000.0) // Earth's land area in km²
 
         // Update infrastructure counts based on zone type
         switch type {
@@ -2493,7 +2518,8 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
                 "type": type.rawValue,
                 "area": area,
                 "priority": priority.rawValue,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2527,7 +2553,8 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
                 "airQuality": airQuality,
                 "waterQuality": waterQuality,
                 "biodiversity": biodiversity,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2542,7 +2569,8 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
 
         // Expand renewable energy
         self.renewableEnergyAdoption = min(
-            renewableEnergyTarget, self.renewableEnergyAdoption + 0.08)
+            renewableEnergyTarget, self.renewableEnergyAdoption + 0.08
+        )
         self.renewableEnergySources +=
             Int(renewableEnergyTarget * 1000) - self.renewableEnergySources
 
@@ -2558,7 +2586,8 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
                 "carbonSequestration": self.carbonSequestration,
                 "renewableEnergy": self.renewableEnergyAdoption,
                 "wasteRecycling": self.wasteRecyclingRate,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2584,16 +2613,17 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
                 "quantumModeling": self.quantumClimateModeling,
                 "aiPrediction": self.aiEnvironmentalPrediction,
                 "satelliteMonitoring": self.satelliteMonitoring,
-            ])
+            ]
+        )
     }
 
     @MainActor
     public func restoreEcosystems(targetSpecies: Int, targetHabitats: Int) {
         // Protect species
-        self.speciesProtection = min(1.0, Double(targetSpecies) / 1000000.0)  // Target: 1M species
+        self.speciesProtection = min(1.0, Double(targetSpecies) / 1_000_000.0) // Target: 1M species
 
         // Restore habitats
-        self.habitatRestoration = min(1.0, Double(targetHabitats) / 100000.0)  // Target: 100K habitats
+        self.habitatRestoration = min(1.0, Double(targetHabitats) / 100_000.0) // Target: 100K habitats
 
         // Improve ocean health
         self.oceanHealth = min(1.0, self.oceanHealth + 0.05)
@@ -2610,7 +2640,8 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
                 "speciesProtection": self.speciesProtection,
                 "habitatRestoration": self.habitatRestoration,
                 "oceanHealth": self.oceanHealth,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2639,7 +2670,8 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
                 "circularEconomy": self.circularEconomyIndex,
                 "resourceEfficiency": self.resourceEfficiency,
                 "pollutionReduction": self.pollutionReduction,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2658,7 +2690,8 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
 
         // Update temperature stabilization based on carbon and climate actions
         self.temperatureStabilization = min(
-            1.0, (self.carbonSequestration + self.renewableEnergyAdoption) / 2.0)
+            1.0, (self.carbonSequestration + self.renewableEnergyAdoption) / 2.0
+        )
 
         self.trackEvent(
             "global_impact_monitored",
@@ -2666,7 +2699,8 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
                 "averageHealth": averageHealth,
                 "temperatureStabilization": self.temperatureStabilization,
                 "globalCoverage": self.globalCoverage,
-            ])
+            ]
+        )
     }
 
     private func updatePerformanceMetrics() {
@@ -2874,8 +2908,7 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID)
-    {
+    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
         let reference = CrossProjectReference(
             sourceProjectId: self.id,
             targetProjectId: projectId,
@@ -2887,7 +2920,7 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
     }
 
     public func getRelatedProjects() -> [UUID] {
-        return self.crossProjectReferences.map { $0.targetProjectId }
+        self.crossProjectReferences.map(\.targetProjectId)
     }
 
     // MARK: - Social System Methods
@@ -2908,7 +2941,8 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
                 "individualId": individualId,
                 "location": location,
                 "preferences": socialPreferences.count,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2951,7 +2985,8 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
                 "name": name,
                 "type": type.rawValue,
                 "capacity": memberCapacity,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -2981,7 +3016,8 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
                 "personB": personB,
                 "type": connectionType.rawValue,
                 "strength": strength,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -3007,7 +3043,8 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
                 "aiMatching": self.aiSocialMatching,
                 "virtualCommunities": self.virtualCommunities,
                 "emotionalIntelligence": self.emotionalIntelligence,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -3043,7 +3080,8 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
                 "conflictResolution": self.conflictResolution,
                 "cooperationIndex": self.cooperationIndex,
                 "socialHarmony": self.socialHarmony,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -3233,7 +3271,7 @@ public final class EnhancedEconomicEntity {
         self.sector = sector
         self.registrationDate = Date()
         self.transactionCount = 0
-        self.creditScore = 700.0  // Default good credit
+        self.creditScore = 700.0 // Default good credit
         self.riskProfile = "Low"
     }
 }
@@ -3269,7 +3307,7 @@ public final class EnhancedEconomicTransaction {
         self.transactionType = transactionType
         self.description = description
         self.timestamp = Date()
-        self.fee = amount * 0.001  // 0.1% transaction fee
+        self.fee = amount * 0.001 // 0.1% transaction fee
         self.status = "completed"
     }
 }
@@ -3357,12 +3395,12 @@ public final class EnhancedEnvironmentalZone {
         self.area = area
         self.priority = priority
         self.establishmentDate = Date()
-        self.airQuality = 0.5  // Default moderate quality
+        self.airQuality = 0.5 // Default moderate quality
         self.waterQuality = 0.5
         self.soilHealth = 0.5
         self.biodiversity = 0.5
         self.restorationProgress = 0.0
-        self.monitoringFrequency = 3600.0  // 1 hour
+        self.monitoringFrequency = 3600.0 // 1 hour
     }
 }
 

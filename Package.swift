@@ -4,13 +4,13 @@
     import PackageDescription
 
     let package = Package(
-        name: "SharedKit",
+        name: "Shared",
         platforms: [
             .iOS(.v17), .macOS(.v14),
         ],
         products: [
             .library(name: "SharedKit", targets: ["SharedKit"]),
-            .library(name: "SharedTestSupport", targets: ["SharedTestSupport"]),  // Reusable test utilities for Xcode projects
+            .library(name: "SharedTestSupport", targets: ["SharedTestSupport"]), // Reusable test utilities for Xcode projects
         ],
         targets: [
             // Minimal package for now; sources live under Sources/SharedKit
@@ -32,7 +32,8 @@
                     "UniversalAgentEraCompletion.swift",
                     "MCPOrchestrationFramework.swift",
                     "AnyCodable.swift",
-                ]),
+                ]
+            ),
             // Phase 8G minimal demo executable (builds only the decoupled QSE↔QEN composition)
             .executableTarget(
                 name: "Phase8GDemo",
@@ -48,7 +49,7 @@
                     "Phase8G_Complex.swift",
                 ],
                 swiftSettings: [
-                    .define("PHASE8G_DEMO")
+                    .define("PHASE8G_DEMO"),
                 ]
             ),
             // Conscious AI executable target
@@ -68,7 +69,8 @@
             // Utilities intended for use from XCTest targets in app projects
             .target(
                 name: "SharedTestSupport", dependencies: ["SharedKit"],
-                path: "Sources/SharedTestSupport"),
+                path: "Sources/SharedTestSupport"
+            ),
             .testTarget(name: "SharedKitTests", dependencies: ["SharedKit", "SharedTestSupport"]),
         ]
     )

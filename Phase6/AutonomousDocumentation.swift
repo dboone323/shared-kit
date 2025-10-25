@@ -36,14 +36,14 @@ public enum GenerationStrategy: String, Codable, Sendable {
 
 /// Documentation quality metrics
 public struct DocumentationQuality: Codable, Sendable {
-    public let completeness: Double  // 0.0 to 1.0
-    public let accuracy: Double  // 0.0 to 1.0
-    public let readability: Double  // 0.0 to 1.0
-    public let relevance: Double  // 0.0 to 1.0
-    public let freshness: Double  // 0.0 to 1.0 (how recent the content is)
+    public let completeness: Double // 0.0 to 1.0
+    public let accuracy: Double // 0.0 to 1.0
+    public let readability: Double // 0.0 to 1.0
+    public let relevance: Double // 0.0 to 1.0
+    public let freshness: Double // 0.0 to 1.0 (how recent the content is)
 
     public var overallScore: Double {
-        return (completeness + accuracy + readability + relevance + freshness) / 5.0
+        (completeness + accuracy + readability + relevance + freshness) / 5.0
     }
 
     public init(
@@ -73,7 +73,7 @@ public struct DocumentationContent: Codable, Sendable {
     public let updatedAt: Date
     public let version: String
     public let quality: DocumentationQuality
-    public let relatedContent: [String]  // IDs of related documentation
+    public let relatedContent: [String] // IDs of related documentation
 
     public init(
         id: String,
@@ -144,8 +144,8 @@ public struct KnowledgeNode: Codable, Sendable {
     public let title: String
     public let type: DocumentationType
     public let tags: [String]
-    public let connections: [String]  // IDs of connected nodes
-    public let importance: Double  // 0.0 to 1.0
+    public let connections: [String] // IDs of connected nodes
+    public let importance: Double // 0.0 to 1.0
     public let lastAccessed: Date
 
     public init(
@@ -201,16 +201,17 @@ public final class AutonomousDocumentation: ObservableObject {
     @Published public private(set) var systemHealth: Double = 1.0
 
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "AutonomousDocumentation")
+        subsystem: "com.quantum.workspace", category: "AutonomousDocumentation"
+    )
     private var monitoringTask: Task<Void, Never>?
     private var generationTask: Task<Void, Never>?
     private var maintenanceTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
 
     // Configuration
-    private let monitoringInterval: TimeInterval = 300.0  // 5 minutes
-    private let generationInterval: TimeInterval = 60.0  // 1 minute
-    private let maintenanceInterval: TimeInterval = 3600.0  // 1 hour
+    private let monitoringInterval: TimeInterval = 300.0 // 5 minutes
+    private let generationInterval: TimeInterval = 60.0 // 1 minute
+    private let maintenanceInterval: TimeInterval = 3600.0 // 1 hour
 
     // AI-driven parameters
     private let qualityThreshold: Double = 0.8
@@ -366,13 +367,13 @@ public final class AutonomousDocumentation: ObservableObject {
         }
 
         // Sort by relevance (quality score and recency)
-        results.sort { (a, b) -> Bool in
+        results.sort { a, b -> Bool in
             let aScore = a.quality.overallScore * freshnessScore(for: a)
             let bScore = b.quality.overallScore * freshnessScore(for: b)
             return aScore > bScore
         }
 
-        return Array(results.prefix(20))  // Limit results
+        return Array(results.prefix(20)) // Limit results
     }
 
     /// Get documentation recommendations
@@ -395,7 +396,7 @@ public final class AutonomousDocumentation: ObservableObject {
         }
 
         // Sort by personalized relevance
-        recommendations.sort { (a, b) -> Bool in
+        recommendations.sort { a, b -> Bool in
             let aRelevance = calculatePersonalizedRelevance(for: a, userContext: userContext)
             let bRelevance = calculatePersonalizedRelevance(for: b, userContext: userContext)
             return aRelevance > bRelevance
@@ -409,17 +410,17 @@ public final class AutonomousDocumentation: ObservableObject {
         logger.info("🎯 Processing documentation trigger: \(String(describing: trigger))")
 
         switch trigger {
-        case .codeChange(let file, let changeType):
+        case let .codeChange(file, changeType):
             await handleCodeChange(file: file, changeType: changeType)
-        case .apiChange(let symbol, let changeType):
+        case let .apiChange(symbol, changeType):
             await handleAPIChange(symbol: symbol, changeType: changeType)
-        case .userRequest(let contentId):
+        case let .userRequest(contentId):
             await handleUserRequest(contentId: contentId)
-        case .scheduledReview(let contentId):
+        case let .scheduledReview(contentId):
             await handleScheduledReview(contentId: contentId)
-        case .qualityThreshold(let contentId, let metric, let value):
+        case let .qualityThreshold(contentId, metric, value):
             await handleQualityThreshold(contentId: contentId, metric: metric, value: value)
-        case .dependencyUpdate(let package, let version):
+        case let .dependencyUpdate(package, version):
             await handleDependencyUpdate(package: package, version: version)
         }
     }
@@ -428,13 +429,13 @@ public final class AutonomousDocumentation: ObservableObject {
     public func getAnalytics() -> [String: Sendable] {
         let totalContent = documentationContent.count
         let averageQuality =
-            documentationContent.values.map { $0.quality.overallScore }.reduce(0, +)
-            / Double(max(1, totalContent))
+            documentationContent.values.map(\.quality.overallScore).reduce(0, +)
+                / Double(max(1, totalContent))
         let contentByType = Dictionary(grouping: documentationContent.values) { $0.type.rawValue }
             .mapValues { $0.count }
         let generationRate = generationHistory.values.flatMap { $0 }.filter {
             Date().timeIntervalSince($0) < 86400
-        }.count  // Last 24 hours
+        }.count // Last 24 hours
 
         return [
             "totalContent": totalContent,
@@ -593,11 +594,11 @@ public final class AutonomousDocumentation: ObservableObject {
         }
 
         let averageQuality =
-            documentationContent.values.map { $0.quality.overallScore }.reduce(0, +)
-            / Double(totalContent)
+            documentationContent.values.map(\.quality.overallScore).reduce(0, +)
+                / Double(totalContent)
         let averageFreshness =
             documentationContent.values.map { freshnessScore(for: $0) }.reduce(0, +)
-            / Double(totalContent)
+                / Double(totalContent)
 
         let health = (averageQuality + averageFreshness) / 2.0
 
@@ -685,9 +686,11 @@ public final class AutonomousDocumentation: ObservableObject {
 
         // Add generated sections
         content = content.replacingOccurrences(
-            of: "{USAGE_EXAMPLE}", with: generateUsageExample(for: request))
+            of: "{USAGE_EXAMPLE}", with: generateUsageExample(for: request)
+        )
         content = content.replacingOccurrences(
-            of: "{FULL_EXAMPLE}", with: generateFullExample(for: request))
+            of: "{FULL_EXAMPLE}", with: generateFullExample(for: request)
+        )
 
         return content
     }
@@ -695,29 +698,29 @@ public final class AutonomousDocumentation: ObservableObject {
     private func generateWithAI(_ request: ContentGenerationRequest) async throws -> String {
         // Simulate AI content generation
         let baseContent = """
-            # \(request.title)
+        # \(request.title)
 
-            ## Overview
-            This \(request.type.rawValue) provides comprehensive information about \(request.title.lowercased()).
+        ## Overview
+        This \(request.type.rawValue) provides comprehensive information about \(request.title.lowercased()).
 
-            ## Key Features
-            - Feature 1: Description of feature 1
-            - Feature 2: Description of feature 2
-            - Feature 3: Description of feature 3
+        ## Key Features
+        - Feature 1: Description of feature 1
+        - Feature 2: Description of feature 2
+        - Feature 3: Description of feature 3
 
-            ## Implementation
-            ```swift
-            // AI-generated example code
-            func exampleFunction() {
-                print("This is an AI-generated example")
-            }
-            ```
+        ## Implementation
+        ```swift
+        // AI-generated example code
+        func exampleFunction() {
+            print("This is an AI-generated example")
+        }
+        ```
 
-            ## Best Practices
-            1. Follow established patterns
-            2. Test thoroughly
-            3. Document your changes
-            """
+        ## Best Practices
+        1. Follow established patterns
+        2. Test thoroughly
+        3. Document your changes
+        """
 
         return baseContent
     }
@@ -728,24 +731,23 @@ public final class AutonomousDocumentation: ObservableObject {
         let aiContent = try await generateWithAI(request)
 
         return """
-            \(templateContent)
+        \(templateContent)
 
-            ## AI-Enhanced Content
-            \(aiContent)
-            """
+        ## AI-Enhanced Content
+        \(aiContent)
+        """
     }
 
-    private func generateQuantumInspired(_ request: ContentGenerationRequest) async throws -> String
-    {
+    private func generateQuantumInspired(_ request: ContentGenerationRequest) async throws -> String {
         // Quantum-inspired content generation using superposition concepts
         let baseContent = try await generateWithAI(request)
 
         return """
-            \(baseContent)
+        \(baseContent)
 
-            ## Quantum-Inspired Optimization
-            This content has been optimized using quantum-inspired algorithms for maximum relevance and comprehensiveness.
-            """
+        ## Quantum-Inspired Optimization
+        This content has been optimized using quantum-inspired algorithms for maximum relevance and comprehensiveness.
+        """
     }
 
     private func generateCollaborative(_ request: ContentGenerationRequest) async throws -> String {
@@ -753,45 +755,45 @@ public final class AutonomousDocumentation: ObservableObject {
         let baseContent = try await generateHybrid(request)
 
         return """
-            \(baseContent)
+        \(baseContent)
 
-            ## Collaborative Insights
-            This documentation has been enhanced through collaborative analysis of multiple knowledge sources.
-            """
+        ## Collaborative Insights
+        This documentation has been enhanced through collaborative analysis of multiple knowledge sources.
+        """
     }
 
     private func generateUsageExample(for request: ContentGenerationRequest) -> String {
         switch request.type {
         case .apiReference:
             return """
-                // Basic usage example
-                let result = exampleFunction(parameter: "value")
-                print(result)
-                """
+            // Basic usage example
+            let result = exampleFunction(parameter: "value")
+            print(result)
+            """
         case .tutorial:
             return """
-                // Tutorial example
-                let tutorial = TutorialExample()
-                tutorial.run()
-                """
+            // Tutorial example
+            let tutorial = TutorialExample()
+            tutorial.run()
+            """
         default:
             return "// Example usage code"
         }
     }
 
     private func generateFullExample(for request: ContentGenerationRequest) -> String {
-        return """
-            // Complete example implementation
-            class ExampleImplementation {
-                func performExample() {
-                    // Implementation details
-                    print("Example implementation")
-                }
+        """
+        // Complete example implementation
+        class ExampleImplementation {
+            func performExample() {
+                // Implementation details
+                print("Example implementation")
             }
+        }
 
-            let example = ExampleImplementation()
-            example.performExample()
-            """
+        let example = ExampleImplementation()
+        example.performExample()
+        """
     }
 
     private func generateTags(for request: ContentGenerationRequest) -> [String] {
@@ -814,16 +816,16 @@ public final class AutonomousDocumentation: ObservableObject {
         -> DocumentationQuality
     {
         // Simple quality assessment
-        let completeness = min(Double(content.count) / 1000.0, 1.0)  // Based on length
-        let readability = content.contains("```") ? 0.9 : 0.7  // Code examples improve readability
-        let relevance = request.context.isEmpty ? 0.8 : 0.95  // Context improves relevance
+        let completeness = min(Double(content.count) / 1000.0, 1.0) // Based on length
+        let readability = content.contains("```") ? 0.9 : 0.7 // Code examples improve readability
+        let relevance = request.context.isEmpty ? 0.8 : 0.95 // Context improves relevance
 
         return DocumentationQuality(
             completeness: completeness,
-            accuracy: 0.9,  // Assume high accuracy for generated content
+            accuracy: 0.9, // Assume high accuracy for generated content
             readability: readability,
             relevance: relevance,
-            freshness: 1.0  // Newly generated
+            freshness: 1.0 // Newly generated
         )
     }
 
@@ -875,7 +877,7 @@ public final class AutonomousDocumentation: ObservableObject {
 
     private func freshnessScore(for content: DocumentationContent) -> Double {
         let age = Date().timeIntervalSince(content.updatedAt)
-        let maxAge: TimeInterval = 30 * 24 * 3600  // 30 days
+        let maxAge: TimeInterval = 30 * 24 * 3600 // 30 days
 
         return max(0, 1.0 - (age / maxAge))
     }
@@ -1006,7 +1008,7 @@ public final class AutonomousDocumentation: ObservableObject {
     }
 
     private func cleanupGenerationHistory() async {
-        let cutoffDate = Date().addingTimeInterval(-7 * 24 * 3600)  // 7 days ago
+        let cutoffDate = Date().addingTimeInterval(-7 * 24 * 3600) // 7 days ago
 
         await MainActor.run {
             for (key, dates) in generationHistory {
@@ -1018,16 +1020,16 @@ public final class AutonomousDocumentation: ObservableObject {
 
 // MARK: - Extensions
 
-extension AutonomousDocumentation {
+public extension AutonomousDocumentation {
     /// Export documentation content
-    public func exportContent() -> Data? {
+    func exportContent() -> Data? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         return try? encoder.encode(documentationContent)
     }
 
     /// Import documentation content
-    public func importContent(_ data: Data) {
+    func importContent(_ data: Data) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         if let content = try? decoder.decode([String: DocumentationContent].self, from: data) {
@@ -1036,7 +1038,7 @@ extension AutonomousDocumentation {
     }
 
     /// Get knowledge graph visualization data
-    public func getKnowledgeGraphData() -> [String: [String: Any]] {
+    func getKnowledgeGraphData() -> [String: [String: Any]] {
         var graphData = [String: [String: Any]]()
 
         for (id, node) in knowledgeGraph {
@@ -1053,14 +1055,14 @@ extension AutonomousDocumentation {
     }
 
     /// Get documentation statistics
-    public func getStatistics() -> [String: Any] {
+    func getStatistics() -> [String: Any] {
         let totalContent = documentationContent.count
         let contentByType = Dictionary(grouping: documentationContent.values) { $0.type.rawValue }
             .mapValues { $0.count }
         let averageQuality =
-            documentationContent.values.map { $0.quality.overallScore }.reduce(0, +)
-            / Double(max(1, totalContent))
-        let totalTags = Set(documentationContent.values.flatMap { $0.tags }).count
+            documentationContent.values.map(\.quality.overallScore).reduce(0, +)
+                / Double(max(1, totalContent))
+        let totalTags = Set(documentationContent.values.flatMap(\.tags)).count
 
         return [
             "totalContent": totalContent,
@@ -1102,22 +1104,22 @@ public func generateDocumentation(
 
 /// Global function to search documentation
 public func searchDocumentation(query: String) async -> [DocumentationContent] {
-    return await AutonomousDocumentation.shared.searchContent(query: query)
+    await AutonomousDocumentation.shared.searchContent(query: query)
 }
 
 /// Global function to get documentation recommendations
 public func getDocumentationRecommendations(userContext: [String: String]) async
     -> [DocumentationContent]
 {
-    return await AutonomousDocumentation.shared.getRecommendations(for: userContext)
+    await AutonomousDocumentation.shared.getRecommendations(for: userContext)
 }
 
 /// Global function to check documentation system status
 public func isDocumentationSystemActive() async -> Bool {
-    return await AutonomousDocumentation.shared.isActive
+    await AutonomousDocumentation.shared.isActive
 }
 
 /// Global function to get documentation analytics
 public func getDocumentationAnalytics() async -> [String: Sendable] {
-    return await AutonomousDocumentation.shared.getAnalytics()
+    await AutonomousDocumentation.shared.getAnalytics()
 }

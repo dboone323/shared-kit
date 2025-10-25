@@ -60,14 +60,14 @@ struct QuantumParticle: Sendable {
     let id: UUID
     let particleType: ParticleType
     var quantumState: QENQuantumState
-    var position: [Double]  // Multi-dimensional coordinates
+    var position: [Double] // Multi-dimensional coordinates
     var momentum: [Double]
     var spin: SpinState
     var charge: Double
     var mass: Double
     let creationTime: Date
     var lastMeasurement: Date
-    var entangledPairs: [UUID]  // IDs of entangled particles
+    var entangledPairs: [UUID] // IDs of entangled particles
 }
 
 /// Particle types
@@ -129,9 +129,9 @@ struct EntanglementPair: Sendable {
 
 /// Entanglement types
 enum EntanglementType: String, Sendable {
-    case epr = "EPR"  // Einstein-Podolsky-Rosen
+    case epr = "EPR" // Einstein-Podolsky-Rosen
     case bell = "Bell"
-    case ghz = "GHZ"  // Greenberger-Horne-Zeilinger
+    case ghz = "GHZ" // Greenberger-Horne-Zeilinger
     case w = "W"
     case cluster = "Cluster"
     case custom = "Custom"
@@ -241,7 +241,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     private static func entanglementStrength(for pair: EntanglementPair) -> Double {
         let timeSinceCreation = Date().timeIntervalSince(pair.creationTime)
         let decoherenceFactor = exp(-timeSinceCreation / pair.decoherenceTime)
-        let environmentalNoise = Double.random(in: 0...0.1)
+        let environmentalNoise = Double.random(in: 0 ... 0.1)
         return max(0.0, pair.strength * decoherenceFactor - environmentalNoise)
     }
 
@@ -347,18 +347,18 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         }
 
         let successRate =
-            Double(propagationResults.filter { $0.success }.count)
-            / Double(propagationResults.count)
+            Double(propagationResults.filter(\.success).count)
+                / Double(propagationResults.count)
         let averageStrength =
-            propagationResults.map { $0.finalStrength }.reduce(0, +)
-            / Double(propagationResults.count)
+            propagationResults.map(\.finalStrength).reduce(0, +)
+                / Double(propagationResults.count)
 
         return EntanglementPropagationResult(
             networkId: network.networkId,
             propagations: propagationResults,
             successRate: successRate,
             averageStrength: averageStrength,
-            totalEnergyConsumed: propagationResults.map { $0.energyConsumed }.reduce(0, +),
+            totalEnergyConsumed: propagationResults.map(\.energyConsumed).reduce(0, +),
             processingTime: Date().timeIntervalSince(network.lastSynchronization),
             validationResults: ValidationResult(
                 isValid: successRate > 0.8,
@@ -366,7 +366,8 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
                     ? [
                         ValidationWarning(
                             message: "Propagation success rate below optimal", severity: .warning,
-                            suggestion: "Check network coherence")
+                            suggestion: "Check network coherence"
+                        ),
                     ] : [],
                 errors: [],
                 recommendations: ["Monitor entanglement strength regularly"]
@@ -390,11 +391,11 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
             particleType: particleType,
             quantumState: createInitialQuantumState(for: particleType),
             position: [
-                Double.random(in: -10...10), Double.random(in: -10...10),
-                Double.random(in: -10...10),
+                Double.random(in: -10 ... 10), Double.random(in: -10 ... 10),
+                Double.random(in: -10 ... 10),
             ],
             momentum: [
-                Double.random(in: -5...5), Double.random(in: -5...5), Double.random(in: -5...5),
+                Double.random(in: -5 ... 5), Double.random(in: -5 ... 5), Double.random(in: -5 ... 5),
             ],
             spin: .superposition,
             charge: particleType == .electron ? -1.0 : particleType == .proton ? 1.0 : 0.0,
@@ -420,7 +421,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     }
 
     func entangleWith(_ other: QuantumParticle) async throws -> EntanglementPair {
-        return try await createEntanglementPair(self.particles[other.id]!, other)
+        try await createEntanglementPair(self.particles[other.id]!, other)
     }
 
     // MARK: - EntanglementMonitoringProtocol
@@ -431,7 +432,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         // Calculate current entanglement strength based on various factors
         let timeSinceCreation = Date().timeIntervalSince(pair.creationTime)
         let decoherenceFactor = exp(-timeSinceCreation / pair.decoherenceTime)
-        let environmentalNoise = Double.random(in: 0...0.1)
+        let environmentalNoise = Double.random(in: 0 ... 0.1)
 
         return max(0.0, pair.strength * decoherenceFactor - environmentalNoise)
     }
@@ -492,15 +493,15 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
             }
             return count
         }
-        let decoherenceEvents = await detectEntanglementDecoherence(UUID())  // Simplified
+        let decoherenceEvents = await detectEntanglementDecoherence(UUID()) // Simplified
 
-        return EntanglementReport(
+        return await EntanglementReport(
             reportId: UUID(),
             generationTime: Date(),
             totalEntanglementPairs: totalPairs,
             activePairs: activePairs,
             decoherenceEvents: decoherenceEvents,
-            averageStrength: await calculateAverageEntanglementStrength(),
+            averageStrength: calculateAverageEntanglementStrength(),
             networkCoherence: calculateNetworkCoherence(),
             recommendations: generateEntanglementRecommendations()
         )
@@ -511,7 +512,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     private func createInitialParticleSet() async throws -> [QuantumParticle] {
         var particles: [QuantumParticle] = []
 
-        for _ in 0..<10 {  // Create 10 initial particles
+        for _ in 0 ..< 10 { // Create 10 initial particles
             let particle = try await initializeParticle()
             particles.append(particle)
         }
@@ -523,8 +524,8 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         let count = particles.count
         var matrix = Array(repeating: Array(repeating: 0.0, count: count), count: count)
 
-        for i in 0..<count {
-            for j in 0..<count {
+        for i in 0 ..< count {
+            for j in 0 ..< count {
                 if i != j {
                     let distance = calculateParticleDistance(particles[i], particles[j])
                     matrix[i][j] = 1.0 / (1.0 + distance)
@@ -542,7 +543,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         let matrix = createConnectivityMatrix(for: particles)
 
         return matrix.map { row in
-            row.map { $0 > 0.5 }  // Threshold for entanglement
+            row.map { $0 > 0.5 } // Threshold for entanglement
         }
     }
 
@@ -561,12 +562,12 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 
     private func calculateDecoherenceTime(for type: EntanglementType) -> TimeInterval {
         switch type {
-        case .epr: return 3600.0  // 1 hour
-        case .bell: return 7200.0  // 2 hours
-        case .ghz: return 1800.0  // 30 minutes
-        case .w: return 2400.0  // 40 minutes
-        case .cluster: return 3000.0  // 50 minutes
-        case .custom: return 1800.0  // 30 minutes
+        case .epr: return 3600.0 // 1 hour
+        case .bell: return 7200.0 // 2 hours
+        case .ghz: return 1800.0 // 30 minutes
+        case .w: return 2400.0 // 40 minutes
+        case .cluster: return 3000.0 // 50 minutes
+        case .custom: return 1800.0 // 30 minutes
         }
     }
 
@@ -575,12 +576,12 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     {
         // Simulate quantum measurement
         let measuredValue = quantumRandomGenerator.generateRandomBit() ? 1.0 : 0.0
-        let uncertainty = 0.0  // Ideal measurement
-        let collapse = Bool.random()  // Random collapse
+        let uncertainty = 0.0 // Ideal measurement
+        let collapse = Bool.random() // Random collapse
 
         return MeasurementResult(
             measurementId: UUID(),
-            particleId: pair.particle1Id,  // Measure first particle
+            particleId: pair.particle1Id, // Measure first particle
             measuredValue: measuredValue,
             uncertainty: uncertainty,
             measurementBasis: .computational,
@@ -593,7 +594,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     private func handleWaveFunctionCollapse(for pair: EntanglementPair) async throws {
         // Update entanglement pair after collapse
         var updatedPair = pair
-        updatedPair.strength *= 0.5  // Reduce strength due to collapse
+        updatedPair.strength *= 0.5 // Reduce strength due to collapse
         entanglementPairs[pair.pairId] = updatedPair
     }
 
@@ -603,7 +604,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         // Simulate entanglement propagation
         let success = Bool.random()
         let finalStrength = success ? pair.strength : pair.strength * 0.8
-        let energyConsumed = Double.random(in: 10...100)
+        let energyConsumed = Double.random(in: 10 ... 100)
 
         return EntanglementPropagation(
             pairId: pair.pairId,
@@ -611,7 +612,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
             initialStrength: pair.strength,
             finalStrength: finalStrength,
             energyConsumed: energyConsumed,
-            propagationTime: Double.random(in: 0.1...1.0)
+            propagationTime: Double.random(in: 0.1 ... 1.0)
         )
     }
 
@@ -639,7 +640,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         case .electron: return 9.1093837e-31
         case .proton: return 1.6726219e-27
         case .neutron: return 1.6749275e-27
-        default: return 1.0e-30  // Default mass
+        default: return 1.0e-30 // Default mass
         }
     }
 
@@ -652,12 +653,12 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 
     private func calculateCorrelationCoefficient(for pair: EntanglementPair) async -> Double {
         // Simplified correlation calculation
-        return cos(Date().timeIntervalSince(pair.creationTime) * 0.001)
+        cos(Date().timeIntervalSince(pair.creationTime) * 0.001)
     }
 
     private func calculateMutualInformation(for pair: EntanglementPair) -> Double {
         // Simplified mutual information
-        return 1.0 - exp(-pair.strength)
+        1.0 - exp(-pair.strength)
     }
 
     private func calculateEntanglementEntropy(for pair: EntanglementPair) -> Double {
@@ -669,12 +670,12 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 
     private func calculateConcurrence(for pair: EntanglementPair) -> Double {
         // Simplified concurrence calculation
-        return sqrt(2.0 * (1.0 - pair.correlationCoefficient * pair.correlationCoefficient))
+        sqrt(2.0 * (1.0 - pair.correlationCoefficient * pair.correlationCoefficient))
     }
 
     private func calculateFidelity(for pair: EntanglementPair) -> Double {
         // Calculate quantum fidelity
-        return pair.strength * pair.correlationCoefficient
+        pair.strength * pair.correlationCoefficient
     }
 
     private func calculateAverageEntanglementStrength() async -> Double {
@@ -693,8 +694,8 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     private func calculateNetworkCoherence() -> Double {
         // Simplified network coherence calculation
         let averageStrength =
-            entanglementPairs.values.map { $0.strength }.reduce(0, +)
-            / Double(max(1, entanglementPairs.count))
+            entanglementPairs.values.map(\.strength).reduce(0, +)
+                / Double(max(1, entanglementPairs.count))
         return averageStrength
             * (1.0 - Double(decoherenceEvents.values.flatMap { $0 }.count) * 0.01)
     }
@@ -703,8 +704,8 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         var recommendations: [String] = []
 
         let averageStrength =
-            entanglementPairs.values.map { $0.strength }.reduce(0, +)
-            / Double(max(1, entanglementPairs.count))
+            entanglementPairs.values.map(\.strength).reduce(0, +)
+                / Double(max(1, entanglementPairs.count))
 
         if averageStrength < 0.7 {
             recommendations.append(
@@ -724,7 +725,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     private func startEntanglementMonitoring() {
         #if !PHASE8G_DEMO
             // Set up periodic monitoring
-            Timer.publish(every: 300.0, on: .main, in: .common)  // Every 5 minutes
+            Timer.publish(every: 300.0, on: .main, in: .common) // Every 5 minutes
                 .autoconnect()
                 .sink { [weak self] _ in
                     Task {
@@ -753,11 +754,11 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 final class QuantumRandomGenerator: Sendable {
     func generateRandomBit() -> Bool {
         // Simulate quantum random bit generation
-        return Bool.random()
+        Bool.random()
     }
 
     func generateRandomDouble(in range: ClosedRange<Double>) -> Double {
-        return Double.random(in: range)
+        Double.random(in: range)
     }
 }
 
@@ -824,11 +825,11 @@ enum EntanglementError: Error {
 /// Factory for creating quantum entanglement networks
 enum QuantumEntanglementNetworkFactory {
     static func createEntanglementNetwork() -> QuantumEntanglementNetworkEngine {
-        return QuantumEntanglementNetworkEngine()
+        QuantumEntanglementNetworkEngine()
     }
 
     static func createTestParticles() -> [QuantumParticle] {
-        return [
+        [
             QuantumParticle(
                 id: UUID(),
                 particleType: .photon,
@@ -898,10 +899,11 @@ func demonstrateQuantumEntanglementNetworks() async {
 
         // Create entanglement pairs
         var pairs: [EntanglementPair] = []
-        for i in 0..<min(2, testParticles.count) {
-            for j in (i + 1)..<min(4, testParticles.count) {
+        for i in 0 ..< min(2, testParticles.count) {
+            for j in (i + 1) ..< min(4, testParticles.count) {
                 let pair = try await engine.createEntanglementPair(
-                    testParticles[i], testParticles[j])
+                    testParticles[i], testParticles[j]
+                )
                 pairs.append(pair)
                 print("✓ Created \(pair.entanglementType.rawValue) entanglement pair")
             }
@@ -972,7 +974,7 @@ final class QuantumEntanglementNetworkDatabase {
     }
 
     func loadNetwork(networkId: UUID) -> EntanglementNetwork? {
-        return networks[networkId]
+        networks[networkId]
     }
 
     func saveParticle(_ particle: QuantumParticle) {
@@ -980,7 +982,7 @@ final class QuantumEntanglementNetworkDatabase {
     }
 
     func loadParticle(particleId: UUID) -> QuantumParticle? {
-        return particles[particleId]
+        particles[particleId]
     }
 
     func saveEntanglementPair(_ pair: EntanglementPair) {
@@ -988,7 +990,7 @@ final class QuantumEntanglementNetworkDatabase {
     }
 
     func loadEntanglementPair(pairId: UUID) -> EntanglementPair? {
-        return entanglementPairs[pairId]
+        entanglementPairs[pairId]
     }
 
     func saveMeasurementResult(_ result: MeasurementResult, for entanglementId: UUID) {
@@ -996,7 +998,7 @@ final class QuantumEntanglementNetworkDatabase {
     }
 
     func getMeasurementHistory(for entanglementId: UUID) -> [MeasurementResult] {
-        return measurementResults[entanglementId, default: []]
+        measurementResults[entanglementId, default: []]
     }
 }
 
@@ -1043,7 +1045,7 @@ enum QuantumEntanglementNetworkTesting {
 // MARK: - Framework Metadata
 
 /// Framework information
-struct QuantumEntanglementNetworkMetadata {
+enum QuantumEntanglementNetworkMetadata {
     static let version = "1.0.0"
     static let framework = "Quantum Entanglement Networks"
     static let description =

@@ -145,7 +145,7 @@ struct QuantumSwarm: Codable, Sendable {
         let quantumState: QuantumState
         let capabilities: [AgentCapability]
         let position: QuantumPosition
-        let connections: [UUID]  // Connected agent IDs
+        let connections: [UUID] // Connected agent IDs
         let performance: Double
         let adaptationLevel: Double
     }
@@ -368,12 +368,13 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
             metadata: [
                 "swarm_id": config.swarmId.uuidString,
                 "agent_count": String(config.agentCount),
-            ])
+            ]
+        )
 
         do {
             // Create swarm agents
             var agents: [QuantumSwarm.SwarmAgent] = []
-            for i in 0..<config.agentCount {
+            for i in 0 ..< config.agentCount {
                 let agent = try await agentFactory.createAgent(
                     capabilities: config.entanglementTopology == .adaptive
                         ? [.computation, .sensing, .communication, .adaptation, .learning]
@@ -386,7 +387,7 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                     quantumState: agent.quantumState,
                     capabilities: agent.capabilities,
                     position: QuantumPosition(
-                        coordinates: [Double(i), Double.random(in: 0...1)],
+                        coordinates: [Double(i), Double.random(in: 0 ... 1)],
                         dimension: config.quantumDimensions,
                         stability: 1.0,
                         entanglementPotential: 1.0
@@ -440,7 +441,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                 metadata: [
                     "swarm_id": config.swarmId.uuidString,
                     "agents_created": String(agents.count),
-                ])
+                ]
+            )
 
             return swarm
 
@@ -450,7 +452,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                 metadata: [
                     "error": String(describing: error),
                     "swarm_id": config.swarmId.uuidString,
-                ])
+                ]
+            )
             throw error
         }
     }
@@ -464,7 +467,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                 "swarm_id": swarm.id.uuidString,
                 "problem_id": problem.id.uuidString,
                 "time_limit": String(timeLimit),
-            ])
+            ]
+        )
 
         let taskId = UUID()
         let decisionTask = Task {
@@ -473,7 +477,7 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
             do {
                 // Coordinate quantum entanglement
                 try await coordinationEngine.coordinateEntanglement(
-                    agents: [],  // Would be populated with actual agent implementations
+                    agents: [], // Would be populated with actual agent implementations
                     strategy: .quantumInspired
                 )
 
@@ -505,7 +509,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                         "swarm_id": swarm.id.uuidString,
                         "computation_time": String(computationTime),
                         "confidence": String(decision.confidence),
-                    ])
+                    ]
+                )
 
                 return decision
 
@@ -515,7 +520,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                     metadata: [
                         "error": String(describing: error),
                         "swarm_id": swarm.id.uuidString,
-                    ])
+                    ]
+                )
                 throw error
             }
         }
@@ -538,7 +544,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
             metadata: [
                 "swarm_id": swarm.id.uuidString,
                 "current_stage": String(swarm.evolutionStage),
-            ])
+            ]
+        )
 
         do {
             let evolvedSwarm = try await evolutionEngine.evolveSwarm(swarm)
@@ -554,7 +561,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                     "new_stage": String(evolvedSwarm.evolutionStage),
                     "intelligence_gain": String(
                         evolvedSwarm.collectiveIntelligence - swarm.collectiveIntelligence),
-                ])
+                ]
+            )
 
             return evolvedSwarm
 
@@ -564,13 +572,14 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                 metadata: [
                     "error": String(describing: error),
                     "swarm_id": swarm.id.uuidString,
-                ])
+                ]
+            )
             throw error
         }
     }
 
     func monitorSwarmPerformance(swarm: QuantumSwarm) async -> SwarmMetrics {
-        return await monitoringSystem.getSwarmMetrics(swarm)
+        await monitoringSystem.getSwarmMetrics(swarm)
     }
 
     func synchronizeSwarmAgents(swarm: QuantumSwarm) async throws {
@@ -579,7 +588,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
             metadata: [
                 "swarm_id": swarm.id.uuidString,
                 "agent_count": String(swarm.agents.count),
-            ])
+            ]
+        )
 
         do {
             try await coordinationEngine.maintainQuantumCoherence(swarm)
@@ -593,8 +603,9 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
             logger.log(
                 .info, "Swarm synchronization completed",
                 metadata: [
-                    "swarm_id": swarm.id.uuidString
-                ])
+                    "swarm_id": swarm.id.uuidString,
+                ]
+            )
 
         } catch {
             logger.log(
@@ -602,7 +613,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                 metadata: [
                     "error": String(describing: error),
                     "swarm_id": swarm.id.uuidString,
-                ])
+                ]
+            )
             throw error
         }
     }
@@ -625,18 +637,20 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                                 metadata: [
                                     "swarm_id": swarmId.uuidString,
                                     "coherence": String(metrics.quantumCoherence),
-                                ])
+                                ]
+                            )
                         }
                     }
 
-                    try await Task.sleep(nanoseconds: 10_000_000_000)  // 10 seconds
+                    try await Task.sleep(nanoseconds: 10_000_000_000) // 10 seconds
                 } catch {
                     logger.log(
                         .error, "Monitoring failed",
                         metadata: [
-                            "error": String(describing: error)
-                        ])
-                    try? await Task.sleep(nanoseconds: 5_000_000_000)  // 5 seconds retry
+                            "error": String(describing: error),
+                        ]
+                    )
+                    try? await Task.sleep(nanoseconds: 5_000_000_000) // 5 seconds retry
                 }
             }
         }
@@ -714,8 +728,7 @@ final class BasicSwarmAgent: SwarmAgentProtocol {
         await learningEngine.learn(from: localData)
     }
 
-    func interactWithNeighbors(neighbors: [SwarmAgentProtocol], entanglementStrength: Double) async
-    {
+    func interactWithNeighbors(neighbors: [SwarmAgentProtocol], entanglementStrength: Double) async {
         // Communicate with neighboring agents
         for neighbor in neighbors {
             await communicationEngine.sendSignal(to: neighbor, strength: entanglementStrength)
@@ -729,7 +742,7 @@ final class BasicSwarmAgent: SwarmAgentProtocol {
         // Calculate agent's contribution based on capabilities and quantum state
         let contribution =
             quantumState.coherence * Double(capabilities.count)
-            / Double(AgentCapability.allCases.count)
+                / Double(AgentCapability.allCases.count)
         let confidence = quantumState.entanglement * 0.8 + quantumState.coherence * 0.2
 
         return AgentContribution(
@@ -829,9 +842,9 @@ final class BasicSwarmDecisionEngine: SwarmDecisionEngine {
         // Make decision based on problem type
         let decision: SwarmDecision.Decision
         switch problem.complexity {
-        case 0..<0.3:
+        case 0 ..< 0.3:
             decision = .binary(totalContribution > Double(agentContributions.count) / 2)
-        case 0.3..<0.7:
+        case 0.3 ..< 0.7:
             decision = .multiChoice(Int(totalContribution) % 3)
         default:
             decision = .continuous(totalContribution / Double(agentContributions.count))
@@ -842,7 +855,7 @@ final class BasicSwarmDecisionEngine: SwarmDecisionEngine {
             decision: decision,
             confidence: averageConfidence,
             consensusLevel: consensusLevel,
-            computationTime: Double.random(in: 0.1...timeLimit),
+            computationTime: Double.random(in: 0.1 ... timeLimit),
             quantumAdvantage: swarm.quantumCoherence * swarm.collectiveIntelligence,
             agentContributions: agentContributions
         )
@@ -852,10 +865,10 @@ final class BasicSwarmDecisionEngine: SwarmDecisionEngine {
         -> [AgentContribution]
     {
         // Simulate contributions from all agents
-        return swarm.agents.map { agent in
+        swarm.agents.map { agent in
             AgentContribution(
                 agentId: agent.id,
-                contribution: Double.random(in: 0...1) * agent.performance,
+                contribution: Double.random(in: 0 ... 1) * agent.performance,
                 confidence: agent.quantumState.coherence * agent.adaptationLevel,
                 quantumState: agent.quantumState,
                 reasoning: "Quantum coherence-based contribution",
@@ -868,8 +881,8 @@ final class BasicSwarmDecisionEngine: SwarmDecisionEngine {
         let average = contributions.reduce(0) { $0 + $1.contribution } / Double(contributions.count)
         let variance =
             contributions.reduce(0) { $0 + pow($1.contribution - average, 2) }
-            / Double(contributions.count)
-        return 1.0 / (1.0 + variance)  // Higher consensus = lower variance
+                / Double(contributions.count)
+        return 1.0 / (1.0 + variance) // Higher consensus = lower variance
     }
 }
 
@@ -913,11 +926,11 @@ final class BasicSwarmMonitoringSystem: SwarmMonitoringSystem {
             collectiveIntelligence: swarm.collectiveIntelligence,
             decisionAccuracy: averagePerformance * 0.8 + averageCoherence * 0.2,
             adaptationRate: averageAdaptation,
-            energyEfficiency: 0.85,  // Simulated
+            energyEfficiency: 0.85, // Simulated
             communicationEfficiency: swarm.topology.quantumEfficiency,
             synchronizationQuality: swarm.quantumCoherence * 0.9,
             evolutionProgress: Double(swarm.evolutionStage) / 10.0,
-            interferenceLevel: Double.random(in: 0.05...0.15)
+            interferenceLevel: Double.random(in: 0.05 ... 0.15)
         )
     }
 }
@@ -937,8 +950,8 @@ final class BasicSwarmCoordinationEngine: QuantumSwarmCoordinationProtocol {
         switch swarm.configuration.entanglementTopology {
         case .fullyConnected:
             // Connect all agents
-            for i in 0..<swarm.agents.count {
-                for j in (i + 1)..<swarm.agents.count {
+            for i in 0 ..< swarm.agents.count {
+                for j in (i + 1) ..< swarm.agents.count {
                     connections.append(
                         SwarmTopology.SwarmConnection(
                             fromAgent: swarm.agents[i].id,
@@ -951,7 +964,7 @@ final class BasicSwarmCoordinationEngine: QuantumSwarmCoordinationProtocol {
             }
         case .nearestNeighbor:
             // Connect to nearest neighbors
-            for i in 0..<swarm.agents.count {
+            for i in 0 ..< swarm.agents.count {
                 let nextIndex = (i + 1) % swarm.agents.count
                 connections.append(
                     SwarmTopology.SwarmConnection(
@@ -971,7 +984,7 @@ final class BasicSwarmCoordinationEngine: QuantumSwarmCoordinationProtocol {
             connections: connections,
             clusteringCoefficient: Double(connections.count)
                 / Double(swarm.agents.count * (swarm.agents.count - 1) / 2),
-            averagePathLength: 2.0,  // Simplified
+            averagePathLength: 2.0, // Simplified
             centralityMeasures: [:],
             quantumEfficiency: 0.8
         )
@@ -1013,7 +1026,7 @@ final class InMemorySwarmDatabase: SwarmDatabase {
     }
 
     func retrieveSwarm(_ swarmId: UUID) async throws -> QuantumSwarm? {
-        return swarms[swarmId]
+        swarms[swarmId]
     }
 }
 
@@ -1022,7 +1035,7 @@ final class ConsoleSwarmLogger: SwarmLogger {
         let timestamp = Date().ISO8601Format()
         let metadataString =
             metadata.isEmpty
-            ? "" : " \(metadata.map { "\($0.key)=\($0.value)" }.joined(separator: " "))"
+                ? "" : " \(metadata.map { "\($0.key)=\($0.value)" }.joined(separator: " "))"
         print("[\(timestamp)] [\(level)] \(message)\(metadataString)")
     }
 }

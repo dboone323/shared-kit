@@ -157,7 +157,7 @@ public class QuantumInternetProtocols: ObservableObject {
     public func getProtocolStatistics() async -> ProtocolStatistics {
         let totalSessions = activeProtocols.count
         let activeSessions = activeProtocols.values.filter { $0.status == .active }.count
-        let totalDataTransmitted = activeProtocols.values.map { $0.dataTransmitted }.reduce(0, +)
+        let totalDataTransmitted = activeProtocols.values.map(\.dataTransmitted).reduce(0, +)
 
         let protocolDistribution = Dictionary(grouping: activeProtocols.values, by: { $0.protocolType })
             .mapValues { $0.count }
@@ -167,14 +167,14 @@ public class QuantumInternetProtocols: ObservableObject {
             return closedAt.timeIntervalSince(session.establishedAt)
         }.reduce(0, +) / Double(max(1, activeSessions))
 
-        return ProtocolStatistics(
+        return await ProtocolStatistics(
             totalSessions: totalSessions,
             activeSessions: activeSessions,
             totalDataTransmitted: totalDataTransmitted,
             protocolDistribution: protocolDistribution,
             averageSessionDuration: averageSessionDuration,
-            errorCorrectionEfficiency: await errorCorrection.getEfficiency(),
-            synchronizationAccuracy: await synchronizationEngine.getAccuracy()
+            errorCorrectionEfficiency: errorCorrection.getEfficiency(),
+            synchronizationAccuracy: synchronizationEngine.getAccuracy()
         )
     }
 
@@ -183,8 +183,8 @@ public class QuantumInternetProtocols: ObservableObject {
     private func performProtocolHandshake(nodeA: String, nodeB: String, protocolType: ProtocolType) async -> HandshakeResult {
         // Simulate protocol handshake
         let success = Bool.random()
-        let errorRate = success ? Double.random(in: 0.01...0.05) : Double.random(in: 0.1...0.3)
-        let throughput = success ? Double.random(in: 100...1000) : 0.0
+        let errorRate = success ? Double.random(in: 0.01 ... 0.05) : Double.random(in: 0.1 ... 0.3)
+        let throughput = success ? Double.random(in: 100 ... 1000) : 0.0
 
         return HandshakeResult(
             success: success,
@@ -196,8 +196,8 @@ public class QuantumInternetProtocols: ObservableObject {
 
     private func performProtocolTransmission(session: ProtocolSession, data: [QuantumState]) async -> RawTransmissionResult {
         // Simulate protocol-specific transmission
-        let baseErrorRate = Double.random(in: 0.02...0.08)
-        let latency = Double.random(in: 0.1...2.0)
+        let baseErrorRate = Double.random(in: 0.02 ... 0.08)
+        let latency = Double.random(in: 0.1 ... 2.0)
 
         // Apply protocol-specific optimizations
         let adjustedErrorRate: Double
@@ -284,7 +284,7 @@ public class ErrorCorrectionEngine: ObservableObject {
     }
 
     public func getEfficiency() async -> Double {
-        let totalCorrections = correctionSessions.values.map { $0.correctionCount }.reduce(0, +)
+        let totalCorrections = correctionSessions.values.map(\.correctionCount).reduce(0, +)
         let totalSessions = correctionSessions.count
 
         // Efficiency based on corrections per session
@@ -293,13 +293,13 @@ public class ErrorCorrectionEngine: ObservableObject {
 
     private func shouldApplyCorrection() -> Bool {
         // Simulate error detection
-        return Double.random(in: 0...1) < 0.1 // 10% error rate
+        Double.random(in: 0 ... 1) < 0.1 // 10% error rate
     }
 
     private func applyErrorCorrection(to state: QuantumState) async -> QuantumState {
         // Apply simplified error correction
-        let correctedAmplitude = min(1.0, state.amplitude + Double.random(in: -0.02...0.02))
-        let correctedPhase = state.phase + Double.random(in: -.pi/20...(.pi/20))
+        let correctedAmplitude = min(1.0, state.amplitude + Double.random(in: -0.02 ... 0.02))
+        let correctedPhase = state.phase + Double.random(in: -.pi / 20 ... (.pi / 20))
 
         return QuantumState(
             amplitude: correctedAmplitude,
@@ -326,13 +326,13 @@ public class SynchronizationEngine: ObservableObject {
         let pairId = "\(nodeA)_\(nodeB)"
 
         // Simulate synchronization process
-        let latency = Double.random(in: 0.01...0.1)
-        let accuracy = Double.random(in: 0.95...0.99)
+        let latency = Double.random(in: 0.01 ... 0.1)
+        let accuracy = Double.random(in: 0.95 ... 0.99)
 
         let syncPair = SynchronizationPair(
             nodeA: nodeA,
             nodeB: nodeB,
-            offset: Double.random(in: -0.001...0.001),
+            offset: Double.random(in: -0.001 ... 0.001),
             accuracy: accuracy,
             establishedAt: Date()
         )
@@ -348,7 +348,7 @@ public class SynchronizationEngine: ObservableObject {
 
     public func getAccuracy() async -> Double {
         guard !syncPairs.isEmpty else { return 0.0 }
-        let averageAccuracy = syncPairs.values.map { $0.accuracy }.reduce(0, +) / Double(syncPairs.count)
+        let averageAccuracy = syncPairs.values.map(\.accuracy).reduce(0, +) / Double(syncPairs.count)
         return averageAccuracy
     }
 }
@@ -396,7 +396,7 @@ public class ProtocolManager: ObservableObject {
     }
 
     public func getProtocolInfo(_ type: ProtocolType) -> ProtocolInfo? {
-        return supportedProtocols[type]
+        supportedProtocols[type]
     }
 }
 
@@ -505,6 +505,6 @@ public struct ProtocolInfo {
 
 extension Bool {
     static func random(withProbability probability: Double) -> Bool {
-        return Double.random(in: 0...1) < probability
+        Double.random(in: 0 ... 1) < probability
     }
 }

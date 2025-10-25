@@ -12,8 +12,8 @@
 //  within autonomous agent workflows.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - MCP Tool Integration Protocols
 
@@ -350,8 +350,8 @@ private actor MCPToolLearningSystem {
             return 0.5 // Neutral score for unknown tools
         }
 
-        let successRate = Double(performances.filter { $0.success }.count) / Double(performances.count)
-        let avgTime = performances.map { $0.executionTime }.reduce(0, +) / Double(performances.count)
+        let successRate = Double(performances.filter(\.success).count) / Double(performances.count)
+        let avgTime = performances.map(\.executionTime).reduce(0, +) / Double(performances.count)
 
         // Score based on success rate and reasonable execution time
         let timeScore = avgTime < 30.0 ? 1.0 : max(0.1, 30.0 / avgTime)
@@ -363,7 +363,7 @@ private actor MCPToolLearningSystem {
             return tool.estimatedExecutionTime
         }
 
-        let avgTime = performances.map { $0.executionTime }.reduce(0, +) / Double(performances.count)
+        let avgTime = performances.map(\.executionTime).reduce(0, +) / Double(performances.count)
         return avgTime
     }
 
@@ -371,7 +371,8 @@ private actor MCPToolLearningSystem {
         // Load from execution history
         for execution in executions {
             if let result = execution.result,
-               let endTime = execution.endTime {
+               let endTime = execution.endTime
+            {
                 let performance = ToolPerformance(
                     success: result.success,
                     executionTime: endTime.timeIntervalSince(execution.startTime),
@@ -407,13 +408,13 @@ public struct AgentPerformanceMetrics {
 
     func getSuccessRate() -> Double {
         guard !executions.isEmpty else { return 0.0 }
-        let successful = executions.filter { $0.success }.count
+        let successful = executions.filter(\.success).count
         return Double(successful) / Double(executions.count)
     }
 
     func getAverageExecutionTime() -> TimeInterval {
         guard !executions.isEmpty else { return 0.0 }
-        let totalTime = executions.map { $0.duration }.reduce(0, +)
+        let totalTime = executions.map(\.duration).reduce(0, +)
         return totalTime / Double(executions.count)
     }
 
@@ -421,9 +422,9 @@ public struct AgentPerformanceMetrics {
         let recent = executions.filter { Date().timeIntervalSince($0.timestamp) <= window }
         guard !recent.isEmpty else { return (0.0, 0.0) }
 
-        let successCount = recent.filter { $0.success }.count
+        let successCount = recent.filter(\.success).count
         let successRate = Double(successCount) / Double(recent.count)
-        let avgTime = recent.map { $0.duration }.reduce(0, +) / Double(recent.count)
+        let avgTime = recent.map(\.duration).reduce(0, +) / Double(recent.count)
 
         return (successRate, avgTime)
     }

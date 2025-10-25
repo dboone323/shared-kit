@@ -1,4 +1,5 @@
 import Foundation
+
 // import SharedKit // Will be available when integrated into package
 
 /// Unified Ollama Integration Framework
@@ -7,7 +8,9 @@ import Foundation
 
 // MARK: - Core Integration Manager
 
-public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisService, AICodeGenerationService, AICachingService, AIPerformanceMonitoring {
+public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisService,
+    AICodeGenerationService, AICachingService, AIPerformanceMonitoring
+{
     private let client: OllamaClient
     private let config: OllamaConfig
     private let logger = IntegrationLogger()
@@ -23,9 +26,13 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
     // MARK: - AITextGenerationService Protocol
 
-    public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
+    public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws
+        -> String
+    {
         let startTime = Date()
-        let cacheKey = cache.generateKey(for: prompt, model: "llama2", maxTokens: maxTokens, temperature: temperature)
+        let cacheKey = cache.generateKey(
+            for: prompt, model: "llama2", maxTokens: maxTokens, temperature: temperature
+        )
 
         // Check cache first
         if let cachedResponse = await cache.getCachedResponse(key: cacheKey) {
@@ -49,12 +56,15 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         }
 
         // Cache the result
-        await cache.cacheResponse(key: cacheKey, response: result, metadata: [
-            "operation": "generateText",
-            "model": "llama2",
-            "maxTokens": maxTokens,
-            "temperature": temperature
-        ])
+        await cache.cacheResponse(
+            key: cacheKey, response: result,
+            metadata: [
+                "operation": "generateText",
+                "model": "llama2",
+                "maxTokens": maxTokens,
+                "temperature": temperature,
+            ]
+        )
 
         await performanceMonitor.recordOperation(
             operation: "generateText",
@@ -78,12 +88,12 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         let codellamaAvailable = await client.checkModelAvailability("codellama")
         let availableModels = llama2Available && codellamaAvailable
 
-        let health = ServiceHealth(
+        let health = await ServiceHealth(
             serviceName: "Ollama",
             isRunning: serverStatus.running,
             modelsAvailable: availableModels,
             responseTime: Date().timeIntervalSince(startTime),
-            errorRate: await performanceMonitor.getErrorRate(for: "ollama"),
+            errorRate: performanceMonitor.getErrorRate(for: "ollama"),
             lastChecked: Date(),
             recommendations: generateHealthRecommendations(serverStatus, availableModels)
         )
@@ -91,7 +101,9 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         return health
     }
 
-    private func generateHealthRecommendations(_ status: OllamaServerStatus, _ modelsAvailable: Bool) -> [String] {
+    private func generateHealthRecommendations(
+        _ status: OllamaServerStatus, _ modelsAvailable: Bool
+    ) -> [String] {
         var recommendations: [String] = []
 
         if !status.running {
@@ -99,7 +111,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         }
 
         if !modelsAvailable {
-            recommendations.append("Pull required models: 'ollama pull llama2' and 'ollama pull codellama'")
+            recommendations.append(
+                "Pull required models: 'ollama pull llama2' and 'ollama pull codellama'")
         }
 
         if status.modelCount == 0 {
@@ -111,9 +124,13 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
     // MARK: - AICodeAnalysisService Protocol
 
-    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws -> CodeAnalysisResult {
+    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws
+        -> CodeAnalysisResult
+    {
         let startTime = Date()
-        let cacheKey = cache.generateKey(for: code, model: "llama2", analysisType: analysisType.rawValue)
+        let cacheKey = cache.generateKey(
+            for: code, model: "llama2", analysisType: analysisType.rawValue
+        )
 
         // Check cache first
         if let cachedResponse = await cache.getCachedResponse(key: cacheKey) {
@@ -121,31 +138,42 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "analyzeCode",
                 duration: Date().timeIntervalSince(startTime),
                 success: true,
-                metadata: ["cached": true, "language": language, "analysisType": analysisType.rawValue]
+                metadata: [
+                    "cached": true, "language": language, "analysisType": analysisType.rawValue,
+                ]
             )
             // Parse cached response back to CodeAnalysisResult
-            return try parseAnalysisResult(from: cachedResponse, language: language, analysisType: analysisType)
+            return try parseAnalysisResult(
+                from: cachedResponse, language: language, analysisType: analysisType
+            )
         }
 
         // Use retry manager for robust error handling
         let result = try await retryManager.retry {
-            try await self.analyzeCodebase(code: code, language: language, analysisType: analysisType)
+            try await self.analyzeCodebase(
+                code: code, language: language, analysisType: analysisType
+            )
         }
 
         // Cache the result as JSON string
         let jsonData = try JSONEncoder().encode(result)
         let jsonString = String(data: jsonData, encoding: .utf8) ?? ""
-        await cache.cacheResponse(key: cacheKey, response: jsonString, metadata: [
-            "operation": "analyzeCode",
-            "language": language,
-            "analysisType": analysisType.rawValue
-        ])
+        await cache.cacheResponse(
+            key: cacheKey, response: jsonString,
+            metadata: [
+                "operation": "analyzeCode",
+                "language": language,
+                "analysisType": analysisType.rawValue,
+            ]
+        )
 
         await performanceMonitor.recordOperation(
             operation: "analyzeCode",
             duration: Date().timeIntervalSince(startTime),
             success: true,
-            metadata: ["cached": false, "language": language, "analysisType": analysisType.rawValue]
+            metadata: [
+                "cached": false, "language": language, "analysisType": analysisType.rawValue,
+            ]
         )
 
         return result
@@ -166,12 +194,16 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         }
 
         do {
-            let result = try await generateDocumentation(code: code, language: language).documentation
+            let result = try await generateDocumentation(code: code, language: language)
+                .documentation
 
-            await cache.cacheResponse(key: cacheKey, response: result, metadata: [
-                "operation": "generateDocumentation",
-                "language": language
-            ])
+            await cache.cacheResponse(
+                key: cacheKey, response: result,
+                metadata: [
+                    "operation": "generateDocumentation",
+                    "language": language,
+                ]
+            )
 
             await performanceMonitor.recordOperation(
                 operation: "generateDocumentation",
@@ -209,10 +241,13 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         do {
             let result = try await generateTests(code: code, language: language).testCode
 
-            await cache.cacheResponse(key: cacheKey, response: result, metadata: [
-                "operation": "generateTests",
-                "language": language
-            ])
+            await cache.cacheResponse(
+                key: cacheKey, response: result,
+                metadata: [
+                    "operation": "generateTests",
+                    "language": language,
+                ]
+            )
 
             await performanceMonitor.recordOperation(
                 operation: "generateTests",
@@ -235,7 +270,9 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
     // MARK: - AICodeGenerationService Protocol
 
-    public func generateCode(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+    public func generateCode(description: String, language: String, context: String?) async throws
+        -> CodeGenerationResult
+    {
         let startTime = Date()
         let cacheKey = cache.generateKey(for: description, model: "codellama", context: context)
 
@@ -260,11 +297,14 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             // Cache the result
             let jsonData = try JSONEncoder().encode(result)
             let jsonString = String(data: jsonData, encoding: .utf8) ?? ""
-            await cache.cacheResponse(key: cacheKey, response: jsonString, metadata: [
-                "operation": "generateCode",
-                "language": language,
-                "context": context ?? ""
-            ])
+            await cache.cacheResponse(
+                key: cacheKey, response: jsonString,
+                metadata: [
+                    "operation": "generateCode",
+                    "language": language,
+                    "context": context ?? "",
+                ]
+            )
 
             await performanceMonitor.recordOperation(
                 operation: "generateCode",
@@ -285,11 +325,17 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         }
     }
 
-    public func generateCodeWithFallback(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+    public func generateCodeWithFallback(description: String, language: String, context: String?)
+        async throws -> CodeGenerationResult
+    {
         do {
-            return try await generateCode(description: description, language: language, context: context)
+            return try await generateCode(
+                description: description, language: language, context: context
+            )
         } catch {
-            logger.log("Ollama code generation failed, trying Hugging Face fallback: \(error.localizedDescription)")
+            logger.log(
+                "Ollama code generation failed, trying Hugging Face fallback: \(error.localizedDescription)"
+            )
 
             // Fallback to Hugging Face
             let prompt = buildCodeGenerationPrompt(description, language, context, .standard)
@@ -385,7 +431,9 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         )
     }
 
-    private func buildAnalysisPrompt(_ code: String, _ language: String, _ type: AnalysisType) -> String {
+    private func buildAnalysisPrompt(_ code: String, _ language: String, _ type: AnalysisType)
+        -> String
+    {
         let basePrompt = "Analyze this \(language) code:"
 
         switch type {
@@ -438,9 +486,13 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         var issues: [CodeIssue] = []
 
         for line in lines {
-            if line.lowercased().contains("error") || line.lowercased().contains("bug") ||
-                line.lowercased().contains("issue") || line.lowercased().contains("problem") {
-                issues.append(CodeIssue(description: line.trimmingCharacters(in: .whitespaces), severity: .medium))
+            if line.lowercased().contains("error") || line.lowercased().contains("bug")
+                || line.lowercased().contains("issue") || line.lowercased().contains("problem")
+            {
+                issues.append(
+                    CodeIssue(
+                        description: line.trimmingCharacters(in: .whitespaces), severity: .medium
+                    ))
             }
         }
 
@@ -450,8 +502,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
     private func extractSuggestions(from analysis: String) -> [String] {
         let lines = analysis.components(separatedBy: "\n")
         return lines.filter { line in
-            line.lowercased().contains("suggest") || line.lowercased().contains("recommend") ||
-                line.lowercased().contains("improve") || line.lowercased().contains("consider")
+            line.lowercased().contains("suggest") || line.lowercased().contains("recommend")
+                || line.lowercased().contains("improve") || line.lowercased().contains("consider")
         }.map { $0.trimmingCharacters(in: .whitespaces) }
     }
 
@@ -578,7 +630,9 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             guard let code = task.code else {
                 throw IntegrationError.missingRequiredData("code")
             }
-            let result = try await generateDocumentation(code: code, language: task.language ?? "Swift")
+            let result = try await generateDocumentation(
+                code: code, language: task.language ?? "Swift"
+            )
             return TaskResult(task: task, success: true, documentationResult: result)
 
         case .testing:
@@ -600,6 +654,9 @@ private class IntegrationLogger {
     }
 }
 
+// MARK: - Additional Protocol Conformances & Utilities
+
+extension OllamaIntegrationManager: AICachingService, AIPerformanceMonitoring {
     // MARK: - AICachingService Protocol
 
     public func cacheResponse(key: String, response: String, metadata: [String: Any]?) async {
@@ -620,8 +677,12 @@ private class IntegrationLogger {
 
     // MARK: - AIPerformanceMonitoring Protocol
 
-    public func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?) async {
-        await performanceMonitor.recordOperation(operation: operation, duration: duration, success: success, metadata: metadata)
+    public func recordOperation(
+        operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?
+    ) async {
+        await performanceMonitor.recordOperation(
+            operation: operation, duration: duration, success: success, metadata: metadata
+        )
     }
 
     public func getPerformanceMetrics() async -> PerformanceMetrics {
@@ -631,6 +692,7 @@ private class IntegrationLogger {
     public func resetMetrics() async {
         await performanceMonitor.resetMetrics()
     }
+
     /// Generate text with Ollama primary, Hugging Face fallback
     func generateWithFallback(
         prompt: String,
@@ -647,7 +709,9 @@ private class IntegrationLogger {
                 temperature: temperature
             )
         } catch {
-            self.logger.log("Ollama generation failed, trying Hugging Face fallback: \(error.localizedDescription)")
+            self.logger.log(
+                "Ollama generation failed, trying Hugging Face fallback: \(error.localizedDescription)"
+            )
 
             // Fallback to Hugging Face (online, rate-limited but still free)
             return try await HuggingFaceClient.shared.generateWithFallback(
@@ -667,10 +731,14 @@ private class IntegrationLogger {
     ) async throws -> String {
         do {
             // Try Ollama first
-            let result = try await analyzeCodebase(code: code, language: language, analysisType: analysisType)
+            let result = try await analyzeCodebase(
+                code: code, language: language, analysisType: analysisType
+            )
             return result.analysis
         } catch {
-            self.logger.log("Ollama analysis failed, trying Hugging Face fallback: \(error.localizedDescription)")
+            self.logger.log(
+                "Ollama analysis failed, trying Hugging Face fallback: \(error.localizedDescription)"
+            )
 
             // Fallback to Hugging Face
             return try await HuggingFaceClient.shared.generateWithFallback(
@@ -691,7 +759,9 @@ private class IntegrationLogger {
             // Try Ollama first
             return try await self.generateDocumentation(code: code, language: language)
         } catch {
-            self.logger.log("Ollama documentation failed, trying Hugging Face fallback: \(error.localizedDescription)")
+            self.logger.log(
+                "Ollama documentation failed, trying Hugging Face fallback: \(error.localizedDescription)"
+            )
 
             // Fallback to Hugging Face
             return try await HuggingFaceClient.shared.generateWithFallback(
@@ -856,7 +926,8 @@ private actor RetryManager {
             }
         }
 
-        throw lastError ?? AIError.operationFailed("All retry attempts failed for operation: \(operation)")
+        throw lastError
+            ?? AIError.operationFailed("All retry attempts failed for operation: \(operation)")
     }
 
     private func shouldNotRetry(_ error: Error) -> Bool {
@@ -874,13 +945,14 @@ private actor RetryManager {
 
     private func calculateDelay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
-        let jitter = Double.random(in: 0...0.1) * exponentialDelay
+        let jitter = Double.random(in: 0 ... 0.1) * exponentialDelay
         return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
     }
 
     private func isCircuitBreakerOpen(for key: String) -> Bool {
         guard let failureCount = failureCounts[key],
-              let lastFailure = lastFailureTimes[key] else {
+              let lastFailure = lastFailureTimes[key]
+        else {
             return false
         }
 
@@ -924,7 +996,10 @@ private actor AIResponseCache {
         let size: Int // Response size in bytes
     }
 
-    func generateKey(for prompt: String, model: String, maxTokens: Int? = nil, temperature: Double? = nil, analysisType: String? = nil, context: String? = nil, operation: String? = nil) -> String {
+    func generateKey(
+        for prompt: String, model: String, maxTokens: Int? = nil, temperature: Double? = nil,
+        analysisType: String? = nil, context: String? = nil, operation: String? = nil
+    ) -> String {
         var components = [prompt, model]
         if let maxTokens { components.append(String(maxTokens)) }
         if let temperature { components.append(String(temperature)) }
@@ -934,7 +1009,10 @@ private actor AIResponseCache {
         return components.joined(separator: "|").hashValue.description
     }
 
-    func cacheResponse(key: String, response: String, metadata: [String: Any]? = nil, expiration: TimeInterval? = nil) {
+    func cacheResponse(
+        key: String, response: String, metadata: [String: Any]? = nil,
+        expiration: TimeInterval? = nil
+    ) {
         let expirationDate = Date().addingTimeInterval(expiration ?? defaultExpiration)
         let size = response.utf8.count
         let accessCount = accessCounts[key, default: 0]
@@ -1007,7 +1085,8 @@ private actor AIResponseCache {
         let hitRate = totalRequests > 0 ? Double(hitCount) / Double(totalRequests) : 0.0
 
         let responseTimes = cache.values.map { Date().timeIntervalSince($0.timestamp) }
-        let averageResponseTime = responseTimes.isEmpty ? 0.0 : responseTimes.reduce(0, +) / Double(responseTimes.count)
+        let averageResponseTime =
+            responseTimes.isEmpty ? 0.0 : responseTimes.reduce(0, +) / Double(responseTimes.count)
 
         let cacheSize = cache.values.reduce(0) { $0 + $1.size }
 
@@ -1046,7 +1125,7 @@ private actor AIResponseCache {
 private actor AIOperationMonitor {
     private var operations: [String: [OperationRecord]] = [:]
     private let maxHistorySize = 1000
-    private var startTime: Date = Date()
+    private var startTime: Date = .init()
 
     struct OperationRecord {
         let duration: TimeInterval
@@ -1055,7 +1134,9 @@ private actor AIOperationMonitor {
         let metadata: [String: Any]?
     }
 
-    func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]? = nil) {
+    func recordOperation(
+        operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]? = nil
+    ) {
         let record = OperationRecord(
             duration: duration,
             success: success,
@@ -1074,11 +1155,13 @@ private actor AIOperationMonitor {
     func getPerformanceMetrics() -> PerformanceMetrics {
         let allRecords = operations.values.flatMap { $0 }
         let totalOperations = allRecords.count
-        let successfulOperations = allRecords.filter { $0.success }.count
-        let successRate = totalOperations > 0 ? Double(successfulOperations) / Double(totalOperations) : 0.0
+        let successfulOperations = allRecords.filter(\.success).count
+        let successRate =
+            totalOperations > 0 ? Double(successfulOperations) / Double(totalOperations) : 0.0
 
-        let durations = allRecords.map { $0.duration }
-        let averageResponseTime = durations.isEmpty ? 0.0 : durations.reduce(0, +) / Double(durations.count)
+        let durations = allRecords.map(\.duration)
+        let averageResponseTime =
+            durations.isEmpty ? 0.0 : durations.reduce(0, +) / Double(durations.count)
 
         let errorBreakdown = operations.mapValues { records in
             records.filter { !$0.success }.count
@@ -1111,12 +1194,16 @@ private actor AIOperationMonitor {
 // MARK: - Helper Methods
 
 extension OllamaIntegrationManager {
-    private func parseAnalysisResult(from jsonString: String, language: String, analysisType: AnalysisType) throws -> CodeAnalysisResult {
+    private func parseAnalysisResult(
+        from jsonString: String, language: String, analysisType: AnalysisType
+    ) throws -> CodeAnalysisResult {
         let jsonData = jsonString.data(using: .utf8) ?? Data()
         return try JSONDecoder().decode(CodeAnalysisResult.self, from: jsonData)
     }
 
-    private func parseCodeGenerationResult(from jsonString: String, language: String) throws -> CodeGenerationResult {
+    private func parseCodeGenerationResult(from jsonString: String, language: String) throws
+        -> CodeGenerationResult
+    {
         let jsonData = jsonString.data(using: .utf8) ?? Data()
         return try JSONDecoder().decode(CodeGenerationResult.self, from: jsonData)
     }

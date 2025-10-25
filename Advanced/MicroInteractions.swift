@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 /// Micro-interactions for Enhanced User Feedback
@@ -13,22 +13,22 @@ public struct MicroInteractions {
 
     public static func lightHaptic() {
         #if canImport(UIKit)
-        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-        impactFeedback.impactOccurred()
+            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            impactFeedback.impactOccurred()
         #endif
     }
 
     public static func mediumHaptic() {
         #if canImport(UIKit)
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
         #endif
     }
 
     public static func heavyHaptic() {
         #if canImport(UIKit)
-        let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
-        impactFeedback.impactOccurred()
+            let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+            impactFeedback.impactOccurred()
         #endif
     }
 

@@ -40,8 +40,8 @@
 // Thread Safety: All classes are Sendable for concurrent operations
 // Performance: Optimized for real-time empathy processing and network coordination
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Core Empathy Network Types
 
@@ -117,7 +117,7 @@ public final class EmpathyNetwork: Sendable {
     /// Update the emotional state based on connections
     private func updateEmotionalState() {
         // Calculate aggregate emotional state from all connections
-        let emotionalStates = connections.map { $0.emotionalState }
+        let emotionalStates = connections.map(\.emotionalState)
         emotionalState = EmotionalState.aggregate(states: emotionalStates)
     }
 
@@ -136,7 +136,7 @@ public final class EmpathyNetwork: Sendable {
     public func empathyStrength(between sourceEntityId: String, and targetEntityId: String) -> Double {
         guard let connection = connections.first(where: {
             ($0.sourceEntityId == sourceEntityId && $0.targetEntityId == targetEntityId) ||
-            ($0.sourceEntityId == targetEntityId && $0.targetEntityId == sourceEntityId)
+                ($0.sourceEntityId == targetEntityId && $0.targetEntityId == sourceEntityId)
         }) else {
             return 0.0
         }
@@ -229,15 +229,15 @@ public final class EmpathyConnection: Sendable {
             return EmotionalTrend(stable: true, trend: .stable, averageStrength: empathyStrength)
         }
 
-        let averageStrength = recentHistory.map { $0.empathyStrength }.reduce(0, +) / Double(recentHistory.count)
+        let averageStrength = recentHistory.map(\.empathyStrength).reduce(0, +) / Double(recentHistory.count)
         let trend: EmotionalTrendDirection
 
         if recentHistory.count >= 2 {
             let firstHalf = recentHistory.prefix(recentHistory.count / 2)
             let secondHalf = recentHistory.suffix(recentHistory.count / 2)
 
-            let firstAvg = firstHalf.map { $0.empathyStrength }.reduce(0, +) / Double(firstHalf.count)
-            let secondAvg = secondHalf.map { $0.empathyStrength }.reduce(0, +) / Double(secondHalf.count)
+            let firstAvg = firstHalf.map(\.empathyStrength).reduce(0, +) / Double(firstHalf.count)
+            let secondAvg = secondHalf.map(\.empathyStrength).reduce(0, +) / Double(secondHalf.count)
 
             if secondAvg > firstAvg + 0.1 {
                 trend = .increasing
@@ -293,14 +293,14 @@ public enum EmotionalState: Sendable, Codable {
             let intensity: Int
 
             switch state {
-            case .joy(let i): key = "joy"; intensity = i.rawValue
-            case .sadness(let i): key = "sadness"; intensity = i.rawValue
-            case .anger(let i): key = "anger"; intensity = i.rawValue
-            case .fear(let i): key = "fear"; intensity = i.rawValue
-            case .surprise(let i): key = "surprise"; intensity = i.rawValue
-            case .disgust(let i): key = "disgust"; intensity = i.rawValue
-            case .trust(let i): key = "trust"; intensity = i.rawValue
-            case .anticipation(let i): key = "anticipation"; intensity = i.rawValue
+            case let .joy(i): key = "joy"; intensity = i.rawValue
+            case let .sadness(i): key = "sadness"; intensity = i.rawValue
+            case let .anger(i): key = "anger"; intensity = i.rawValue
+            case let .fear(i): key = "fear"; intensity = i.rawValue
+            case let .surprise(i): key = "surprise"; intensity = i.rawValue
+            case let .disgust(i): key = "disgust"; intensity = i.rawValue
+            case let .trust(i): key = "trust"; intensity = i.rawValue
+            case let .anticipation(i): key = "anticipation"; intensity = i.rawValue
             case .neutral: key = "neutral"; intensity = 0
             }
 
@@ -491,7 +491,7 @@ public final class EmotionalIntelligenceProcessor: Sendable {
 
         // Create patterns from groups
         return stateGroups.map { state, points in
-            let averageStrength = points.map { $0.empathyStrength }.reduce(0, +) / Double(points.count)
+            let averageStrength = points.map(\.empathyStrength).reduce(0, +) / Double(points.count)
             let frequency = Double(points.count) / Double(data.count)
 
             return EmotionalPattern(
@@ -517,8 +517,8 @@ public final class EmotionalIntelligenceProcessor: Sendable {
         // Simple trigger identification based on state changes
         var triggers: [EmotionalTrigger] = []
 
-        for i in 1..<data.count {
-            let previous = data[i-1]
+        for i in 1 ..< data.count {
+            let previous = data[i - 1]
             let current = data[i]
 
             if previous.emotionalState != current.emotionalState {
@@ -612,8 +612,8 @@ public final class SocialCoordinator: Sendable {
         let sourceConnections = network.connectionsForEntity(interaction.sourceEntityId)
         let targetConnections = network.connectionsForEntity(interaction.targetEntityId)
 
-        let sourceEmpathyStrength = sourceConnections.map { $0.empathyStrength }.reduce(0, +) / Double(max(1, sourceConnections.count))
-        let targetEmpathyStrength = targetConnections.map { $0.empathyStrength }.reduce(0, +) / Double(max(1, targetConnections.count))
+        let sourceEmpathyStrength = sourceConnections.map(\.empathyStrength).reduce(0, +) / Double(max(1, sourceConnections.count))
+        let targetEmpathyStrength = targetConnections.map(\.empathyStrength).reduce(0, +) / Double(max(1, targetConnections.count))
 
         let directEmpathyStrength = network.empathyStrength(between: interaction.sourceEntityId, and: interaction.targetEntityId)
 
@@ -631,7 +631,7 @@ public final class SocialCoordinator: Sendable {
         let empathyFactor = (context.sourceEmpathyStrength + context.targetEmpathyStrength + context.directEmpathyStrength) / 3.0
 
         var responseType: SocialResponseType = .neutral
-        var responseIntensity: Double = 0.5
+        var responseIntensity = 0.5
 
         switch context.networkEmotionalState {
         case .joy:
@@ -918,7 +918,7 @@ public final class CompassionateDecisionMaker: Sendable {
                 "Empathy toward others",
                 "Emotional well-being impact",
                 "Relationship strengthening",
-                "Long-term compassionate outcomes"
+                "Long-term compassionate outcomes",
             ]
         )
     }
@@ -1228,7 +1228,7 @@ public final class MCPEmpathyNetworksCoordinator: Sendable {
         guard let network = empathyNetworks[networkId] else { return nil }
 
         // Collect emotional data from all connections
-        let allEmotionalData = network.connections.flatMap { $0.emotionalHistory }
+        let allEmotionalData = network.connections.flatMap(\.emotionalHistory)
 
         return await emotionalIntelligenceProcessor.processEmotionalData(allEmotionalData)
     }
@@ -1319,14 +1319,14 @@ public final class EmpathyAmplifier: Sendable {
     /// - Returns: Amplification result
     public func amplifyEmpathy(in network: EmpathyNetwork) async -> EmpathyAmplificationResult {
         // Calculate amplification potential
-        let baseEmpathyStrength = network.connections.map { $0.empathyStrength }.reduce(0, +) / Double(max(1, network.connections.count))
+        let baseEmpathyStrength = network.connections.map(\.empathyStrength).reduce(0, +) / Double(max(1, network.connections.count))
         let amplificationFactor = min(2.0, 1.0 + Double(network.connections.count) * 0.1)
 
         let amplifiedStrength = baseEmpathyStrength * amplificationFactor
 
         // Update network connections with amplified empathy
         var updatedConnections = network.connections
-        for i in 0..<updatedConnections.count {
+        for i in 0 ..< updatedConnections.count {
             let currentStrength = updatedConnections[i].empathyStrength
             let newStrength = min(1.0, currentStrength * amplificationFactor)
             updatedConnections[i].updateEmotionalState(updatedConnections[i].emotionalState, empathyStrength: newStrength)
@@ -1350,7 +1350,7 @@ public final class EmotionalResonanceEngine: Sendable {
     /// - Returns: Resonance result
     public func createResonance(in network: EmpathyNetwork) async -> EmotionalResonanceResult {
         // Analyze emotional patterns for resonance
-        let emotionalStates = network.connections.map { $0.emotionalState }
+        let emotionalStates = network.connections.map(\.emotionalState)
         let resonanceFrequency = EmotionalState.aggregate(states: emotionalStates)
 
         // Create resonance connections
@@ -1365,7 +1365,7 @@ public final class EmotionalResonanceEngine: Sendable {
             ))
         }
 
-        let overallResonance = resonanceConnections.map { $0.resonanceStrength }.reduce(0, +) / Double(resonanceConnections.count)
+        let overallResonance = resonanceConnections.map(\.resonanceStrength).reduce(0, +) / Double(resonanceConnections.count)
 
         return EmotionalResonanceResult(
             resonanceFrequency: resonanceFrequency,
@@ -1427,21 +1427,21 @@ public final class CompassionFramework: Sendable {
                 CompassionPrinciple(name: "Loving-kindness", description: "Cultivate love and kindness toward all beings"),
                 CompassionPrinciple(name: "Compassion", description: "Relieve suffering of others"),
                 CompassionPrinciple(name: "Sympathetic joy", description: "Rejoice in others' happiness"),
-                CompassionPrinciple(name: "Equanimity", description: "Maintain balance and peace")
+                CompassionPrinciple(name: "Equanimity", description: "Maintain balance and peace"),
             ]
         case .christian:
             return [
                 CompassionPrinciple(name: "Love thy neighbor", description: "Love and care for others as yourself"),
                 CompassionPrinciple(name: "Forgiveness", description: "Forgive others their trespasses"),
                 CompassionPrinciple(name: "Mercy", description: "Show mercy and compassion"),
-                CompassionPrinciple(name: "Service", description: "Serve others selflessly")
+                CompassionPrinciple(name: "Service", description: "Serve others selflessly"),
             ]
         case .secular:
             return [
                 CompassionPrinciple(name: "Empathy", description: "Understand others' feelings"),
                 CompassionPrinciple(name: "Altruism", description: "Act for others' benefit"),
                 CompassionPrinciple(name: "Justice", description: "Promote fairness and equality"),
-                CompassionPrinciple(name: "Care", description: "Show care and concern")
+                CompassionPrinciple(name: "Care", description: "Show care and concern"),
             ]
         }
     }
@@ -1581,7 +1581,7 @@ public final class EmpathyLearner: Sendable {
     private func generateLearningInsights(from strategies: [EmpathyStrategy], patterns: [InteractionPattern]) -> [EmpathyInsight] {
         var insights: [EmpathyInsight] = []
 
-        let averageSuccessRate = strategies.map { $0.successRate }.reduce(0, +) / Double(max(1, strategies.count))
+        let averageSuccessRate = strategies.map(\.successRate).reduce(0, +) / Double(max(1, strategies.count))
 
         insights.append(EmpathyInsight(
             type: .overallEffectiveness,

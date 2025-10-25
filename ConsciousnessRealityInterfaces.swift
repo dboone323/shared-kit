@@ -9,8 +9,8 @@
 //  for interfacing consciousness with different reality layers.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Shared Types (Local Definitions)
 
@@ -666,7 +666,7 @@ final class ConsciousnessRealityInterfaceEngine: ConsciousnessRealityInterfacePr
             establishmentTimestamp: Date(),
             connectionStrength: compatibility.compatibilityScore,
             stabilityRating: realityLayer.stabilityIndex,
-            interfaceCapabilities: consciousnessEntity.interfaceCapabilities.map { $0.capabilityType },
+            interfaceCapabilities: consciousnessEntity.interfaceCapabilities.map(\.capabilityType),
             monitoringStatus: .active
         )
 
@@ -718,7 +718,7 @@ final class ConsciousnessRealityInterfaceEngine: ConsciousnessRealityInterfacePr
                 amplitude: 0.85,
                 phase: 0.0,
                 significance: 0.9
-            )
+            ),
         ]
 
         return ConsciousnessData(
@@ -828,10 +828,10 @@ final class ConsciousnessRealityInterfaceEngine: ConsciousnessRealityInterfacePr
                 stabilityId: UUID(),
                 interfaceId: interfaceId,
                 timestamp: Date(),
-                stabilityLevel: interface.stabilityRating + Double.random(in: -0.1...0.1),
-                coherenceLevel: 0.85 + Double.random(in: -0.05...0.05),
-                connectionStrength: interface.connectionStrength + Double.random(in: -0.05...0.05),
-                anomalyCount: Int.random(in: 0...2),
+                stabilityLevel: interface.stabilityRating + Double.random(in: -0.1 ... 0.1),
+                coherenceLevel: 0.85 + Double.random(in: -0.05 ... 0.05),
+                connectionStrength: interface.connectionStrength + Double.random(in: -0.05 ... 0.05),
+                anomalyCount: Int.random(in: 0 ... 2),
                 alerts: []
             )
 
@@ -914,7 +914,7 @@ final class RealityLayerManager: RealityLayerManagementProtocol {
                         lastAccessed: Date(),
                         accessCount: 0
                     )
-                )
+                ),
             ]
         }
 
@@ -956,7 +956,7 @@ final class RealityLayerManager: RealityLayerManagementProtocol {
                     score: realityLayer.consciousnessCompatibility,
                     weight: 0.5,
                     description: "Resonance between consciousness and reality layer"
-                )
+                ),
             ],
             recommendations: ["Ensure entity readiness"],
             isCompatible: compatibilityScore > 0.6
@@ -1074,7 +1074,7 @@ final class ConsciousnessEntityManager: ConsciousnessEntityManagementProtocol {
 
         return InterfaceCapabilities(
             entityId: entityId,
-            supportedLayers: entity.interfaceCapabilities.flatMap { $0.supportedLayers },
+            supportedLayers: entity.interfaceCapabilities.flatMap(\.supportedLayers),
             maxConcurrentInterfaces: 5,
             dataTransferRate: 100.0,
             stabilityThreshold: entity.stabilityMetrics.baselineStability,
@@ -1107,7 +1107,7 @@ final class ConsciousnessEntityManager: ConsciousnessEntityManagementProtocol {
                     stepName: "Capability Validation",
                     completionStatus: true,
                     duration: 2.0
-                )
+                ),
             ],
             estimatedInterfaceTime: 30.0
         )
@@ -1185,7 +1185,7 @@ final class InterfaceSecurityManager: InterfaceSecurityProtocol {
                     result: true,
                     details: "Connection integrity verified",
                     severity: 0.1
-                )
+                ),
             ],
             isValid: true
         )
@@ -1217,7 +1217,7 @@ final class InterfaceSecurityManager: InterfaceSecurityProtocol {
                     protocolType: "emergency_disconnect",
                     activationCondition: "critical_anomaly",
                     responseAction: "immediate_disconnect"
-                )
+                ),
             ],
             coverageLevel: 0.9,
             monitoringStatus: true
@@ -1275,7 +1275,7 @@ final class ConsciousnessRealityDatabase {
     func getInterfaceMetrics() async throws -> InterfaceMetrics {
         let totalInterfaces = realityInterfaces.count
         let activeInterfaces = realityInterfaces.values.filter { $0.monitoringStatus == .active }.count
-        let averageStability = realityInterfaces.values.map { $0.stabilityRating }.reduce(0, +) / Double(max(totalInterfaces, 1))
+        let averageStability = realityInterfaces.values.map(\.stabilityRating).reduce(0, +) / Double(max(totalInterfaces, 1))
         let transmissionCount = dataTransmissions.count
 
         return InterfaceMetrics(

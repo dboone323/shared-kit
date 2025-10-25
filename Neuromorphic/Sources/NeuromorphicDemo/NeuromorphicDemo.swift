@@ -20,16 +20,17 @@ func demonstrateSpikingNetwork() {
 
     // Create input spikes
     var inputSpikes: [NeuromorphicSpike] = []
-    for i in 0..<10 {
-        if Double.random(in: 0...1) < 0.7 {  // 70% chance of spike
+    for i in 0 ..< 10 {
+        if Double.random(in: 0 ... 1) < 0.7 { // 70% chance of spike
             let neuron = network.inputLayer[i]
             let dummySynapse = NeuromorphicSynapse(
-                from: NeuromorphicNeuron(), to: neuron, weight: Double.random(in: 0.5...1.0))
+                from: NeuromorphicNeuron(), to: neuron, weight: Double.random(in: 0.5 ... 1.0)
+            )
             let spike = NeuromorphicSpike(
                 sourceNeuron: dummySynapse.presynapticNeuron,
                 targetSynapse: dummySynapse,
-                timestamp: Double.random(in: 0...0.01),
-                weight: Double.random(in: 0.5...1.0)
+                timestamp: Double.random(in: 0 ... 0.01),
+                weight: Double.random(in: 0.5 ... 1.0)
             )
             inputSpikes.append(spike)
         }
@@ -39,7 +40,7 @@ func demonstrateSpikingNetwork() {
 
     // Process through network (synchronous version)
     for spike in inputSpikes {
-        let _ = spike.targetSynapse.postsynapticNeuron.processSpike(spike, at: spike.timestamp)
+        _ = spike.targetSynapse.postsynapticNeuron.processSpike(spike, at: spike.timestamp)
     }
 
     // Get output
@@ -66,18 +67,20 @@ func demonstrateSynapticPlasticity() {
     // Simulate spike pairs
     print("Training with spike pairs...")
 
-    for _ in 0..<20 {
+    for _ in 0 ..< 20 {
         // Pre before post (LTP)
-        let _ = stdp.updateWeight(
-            synapse: synapse, preSpikeTime: 0.0, postSpikeTime: 0.005, currentTime: 0.01)
+        _ = stdp.updateWeight(
+            synapse: synapse, preSpikeTime: 0.0, postSpikeTime: 0.005, currentTime: 0.01
+        )
     }
 
     print("After LTP training: \(String(format: "%.3f", synapse.weight))")
 
-    for _ in 0..<20 {
+    for _ in 0 ..< 20 {
         // Post before pre (LTD)
-        let _ = stdp.updateWeight(
-            synapse: synapse, preSpikeTime: 0.005, postSpikeTime: 0.0, currentTime: 0.01)
+        _ = stdp.updateWeight(
+            synapse: synapse, preSpikeTime: 0.005, postSpikeTime: 0.0, currentTime: 0.01
+        )
     }
 
     print("After LTD training: \(String(format: "%.3f", synapse.weight))")
@@ -94,9 +97,9 @@ func demonstrateNeuromorphicVision() {
 
     // Create a simple test image (vertical line)
     var testImage: [[Double]] = []
-    for _ in 0..<32 {
+    for _ in 0 ..< 32 {
         var row: [Double] = []
-        for x in 0..<32 {
+        for x in 0 ..< 32 {
             // Vertical line in the middle
             let intensity = (x == 16) ? 1.0 : 0.0
             row.append(intensity)
@@ -134,8 +137,8 @@ func demonstrateMemorySystem() {
     // Store some patterns
     print("Storing memory patterns...")
 
-    for i in 0..<5 {
-        let pattern = (0..<10).map { _ in Double.random(in: 0...1) }
+    for i in 0 ..< 5 {
+        let pattern = (0 ..< 10).map { _ in Double.random(in: 0 ... 1) }
         memory.processMemory(pattern: pattern, reward: Double(i) * 0.1)
     }
 
@@ -156,17 +159,17 @@ func demonstrateEnergyEfficiency() {
     print("⚡ Demonstrating Energy-Efficient Processing")
     print("==================================================")
 
-    let processor = EnergyEfficientProcessor(powerBudget: 2.0)  // 2W budget
+    let processor = EnergyEfficientProcessor(powerBudget: 2.0) // 2W budget
 
     // Create some neurons
     var neurons: [NeuromorphicNeuron] = []
-    for _ in 0..<50 {
+    for _ in 0 ..< 50 {
         neurons.append(LIFNeuron())
     }
 
     // Simulate activity
-    for i in 0..<neurons.count {
-        let _ = Double.random(in: 0...1)
+    for i in 0 ..< neurons.count {
+        _ = Double.random(in: 0 ... 1)
         processor.updateActivity(for: neurons[i].id, at: TimeInterval(i) * 0.1)
     }
 
@@ -218,7 +221,7 @@ func demonstrateQuantumNeuromorphicHybrid() {
     print("Quantum enhancement: Available")
 
     // Test different modes
-    let input = (0..<8).map { _ in Double.random(in: 0...1) }
+    let input = (0 ..< 8).map { _ in Double.random(in: 0 ... 1) }
 
     hybridNetwork.hybridMode = .neuromorphic
     let neuromorphicOutput = hybridNetwork.processHybrid(input)
@@ -240,16 +243,16 @@ func demonstrateNeuromorphicAudio() {
 
     // Generate synthetic speech-like audio (simplified)
     let sampleRate = 44100.0
-    let duration = 1.0  // 1 second
+    let duration = 1.0 // 1 second
     let numSamples = Int(sampleRate * duration)
 
     // Create a simple tone sweep (simulating speech formants)
     var audioSamples: [Double] = []
-    for i in 0..<numSamples {
+    for i in 0 ..< numSamples {
         let t = Double(i) / sampleRate
         // Simple formant-like frequencies
-        let f1 = 700.0 + 200.0 * sin(2 * .pi * 2.0 * t)  // First formant
-        let f2 = 1200.0 + 300.0 * sin(2 * .pi * 3.0 * t)  // Second formant
+        let f1 = 700.0 + 200.0 * sin(2 * .pi * 2.0 * t) // First formant
+        let f2 = 1200.0 + 300.0 * sin(2 * .pi * 3.0 * t) // Second formant
 
         let sample = 0.3 * sin(2 * .pi * f1 * t) + 0.2 * sin(2 * .pi * f2 * t)
         audioSamples.append(sample)
@@ -278,25 +281,25 @@ func demonstrateSoundLocalization() {
 
     // Create binaural audio with ITD (simulating sound from the right)
     let sampleRate = 44100.0
-    let duration = 0.5  // 0.5 seconds
+    let duration = 0.5 // 0.5 seconds
     let numSamples = Int(sampleRate * duration)
-    let itdSamples = Int(0.0003 * sampleRate)  // 0.3ms ITD for 30-degree angle
+    let itdSamples = Int(0.0003 * sampleRate) // 0.3ms ITD for 30-degree angle
 
     // Generate click sound
-    let clickDuration = Int(0.001 * sampleRate)  // 1ms click
+    let clickDuration = Int(0.001 * sampleRate) // 1ms click
     var clickSound: [Double] = []
-    for i in 0..<numSamples {
+    for i in 0 ..< numSamples {
         if i < clickDuration {
-            clickSound.append(sin(.pi * Double(i) / Double(clickDuration)))  // Rising click
+            clickSound.append(sin(.pi * Double(i) / Double(clickDuration))) // Rising click
         } else {
             clickSound.append(0.0)
         }
     }
 
     // Create binaural signals
-    var leftAudio = clickSound  // Direct sound
-    var rightAudio = Array(repeating: 0.0, count: itdSamples) + clickSound  // Delayed sound
-    rightAudio = Array(rightAudio.prefix(numSamples))  // Trim to same length
+    var leftAudio = clickSound // Direct sound
+    var rightAudio = Array(repeating: 0.0, count: itdSamples) + clickSound // Delayed sound
+    rightAudio = Array(rightAudio.prefix(numSamples)) // Trim to same length
 
     print("Processing binaural audio (simulated 30° right sound)...")
 
@@ -324,16 +327,16 @@ func demonstrateCochlearProcessing() {
 
     // Create test signal with multiple frequencies
     let sampleRate = 44100.0
-    let duration = 0.1  // 100ms
+    let duration = 0.1 // 100ms
     let numSamples = Int(sampleRate * duration)
 
     var testSignal: [Double] = []
-    for i in 0..<numSamples {
+    for i in 0 ..< numSamples {
         let t = Double(i) / sampleRate
         // Mix of 500Hz, 1000Hz, and 2000Hz tones
         let sample =
             0.3 * sin(2 * .pi * 500.0 * t) + 0.2 * sin(2 * .pi * 1000.0 * t) + 0.1
-            * sin(2 * .pi * 2000.0 * t)
+                * sin(2 * .pi * 2000.0 * t)
         testSignal.append(sample)
     }
 
@@ -345,7 +348,7 @@ func demonstrateCochlearProcessing() {
     var peakFrequencies: [(frequency: Double, peakResponse: Double)] = []
     for (index, response) in responses.enumerated() {
         let peak = response.max() ?? 0.0
-        if peak > 0.01 {  // Significant response
+        if peak > 0.01 { // Significant response
             peakFrequencies.append((cochlea.segments[index].resonantFrequency, peak))
         }
     }
@@ -379,7 +382,7 @@ func demonstrateNeuromorphicRobotics() {
         position: SIMD3(1.0, 0.5, 0.0),
         objects: [
             VisualObject(position: SIMD3(1.5, 0.0, 0.0), size: SIMD3(0.5, 0.5, 1.0), type: "obstacle", confidence: 0.8),
-            VisualObject(position: SIMD3(-1.0, 1.0, 0.0), size: SIMD3(0.3, 0.3, 0.8), type: "target", confidence: 0.9)
+            VisualObject(position: SIMD3(-1.0, 1.0, 0.0), size: SIMD3(0.3, 0.3, 0.8), type: "target", confidence: 0.9),
         ]
     )
 
@@ -405,12 +408,12 @@ func demonstrateNeuromorphicRobotics() {
     var time: TimeInterval = 0.0
     let timeStep: TimeInterval = 0.1 // 100ms
 
-    for step in 0..<10 {
+    for step in 0 ..< 10 {
         print("\nTime step \(step + 1):")
 
         let action = robotController.controlLoop(sensoryInput: sensoryInput, time: time)
 
-        print("  Active behaviors: \(action.behaviorState.activeBehaviors.map { $0.name }.joined(separator: ", "))")
+        print("  Active behaviors: \(action.behaviorState.activeBehaviors.map(\.name).joined(separator: ", "))")
         print("  Motor commands: \(action.commands.count)")
 
         if let firstCommand = action.commands.first {

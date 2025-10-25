@@ -344,8 +344,7 @@ public final class AgentMultiverseOperations: Sendable {
     private func processUniverseNavigation(
         _ request: MultiverseOperationRequest,
         assessment: MultiverseOperationAssessment
-    ) async throws -> UniverseNavigationProcessing
-    {
+    ) async throws -> UniverseNavigationProcessing {
         // Process universe navigation
         let processingContext = UniverseNavigationProcessingContext(
             agents: request.agents,
@@ -369,8 +368,7 @@ public final class AgentMultiverseOperations: Sendable {
     private func coordinateUniverseBridging(
         _ request: MultiverseOperationRequest,
         navigation: UniverseNavigationProcessing
-    ) async throws -> UniverseBridgingCoordination
-    {
+    ) async throws -> UniverseBridgingCoordination {
         // Coordinate universe bridging
         let coordinationContext = UniverseBridgingCoordinationContext(
             agents: request.agents,
@@ -394,8 +392,7 @@ public final class AgentMultiverseOperations: Sendable {
     private func synthesizeCrossUniverseCommunication(
         _ request: MultiverseOperationRequest,
         bridging: UniverseBridgingCoordination
-    ) async throws -> CrossUniverseCommunicationSynthesis
-    {
+    ) async throws -> CrossUniverseCommunicationSynthesis {
         // Synthesize cross-universe communication
         let synthesisContext = CrossUniverseCommunicationSynthesisContext(
             agents: request.agents,
@@ -419,8 +416,7 @@ public final class AgentMultiverseOperations: Sendable {
     private func orchestrateQuantumEntanglement(
         _ request: MultiverseOperationRequest,
         communication: CrossUniverseCommunicationSynthesis
-    ) async throws -> QuantumEntanglementOrchestration
-    {
+    ) async throws -> QuantumEntanglementOrchestration {
         // Orchestrate quantum entanglement
         let orchestrationContext = QuantumEntanglementOrchestrationContext(
             agents: request.agents,
@@ -444,8 +440,7 @@ public final class AgentMultiverseOperations: Sendable {
     private func synthesizeMultiverseIntelligence(
         _ request: MultiverseOperationRequest,
         entanglement: QuantumEntanglementOrchestration
-    ) async throws -> MultiverseIntelligenceSynthesis
-    {
+    ) async throws -> MultiverseIntelligenceSynthesis {
         // Synthesize multiverse intelligence
         let synthesisContext = MultiverseIntelligenceSynthesisContext(
             agents: request.agents,
@@ -469,8 +464,7 @@ public final class AgentMultiverseOperations: Sendable {
     private func validateMultiverseOperationResults(
         _ multiverseIntelligence: MultiverseIntelligenceSynthesis,
         session: MultiverseOperationSession
-    ) async throws -> MultiverseOperationValidationResult
-    {
+    ) async throws -> MultiverseOperationValidationResult {
         // Validate multiverse operation results
         let performanceComparison = await compareMultiverseOperationPerformance(
             originalAgents: session.request.agents,
@@ -483,7 +477,7 @@ public final class AgentMultiverseOperations: Sendable {
         )
 
         let success = performanceComparison.multiverseDepth >= session.request.multiverseDepthTarget &&
-                     multiverseAdvantage.multiverseAdvantage >= 0.4
+            multiverseAdvantage.multiverseAdvantage >= 0.4
 
         let events = generateMultiverseOperationEvents(session, intelligence: multiverseIntelligence)
 
@@ -602,24 +596,24 @@ public final class AgentMultiverseOperations: Sendable {
 
     private func measureUniverseBridging(_ expandedAgents: [MultiverseAgent]) async -> Double {
         // Measure universe bridging
-        return 0.94
+        0.94
     }
 
     private func measureCrossUniverseCommunication(_ expandedAgents: [MultiverseAgent]) async -> Double {
         // Measure cross-universe communication
-        return 0.92
+        0.92
     }
 
     private func measureQuantumEntanglement(_ expandedAgents: [MultiverseAgent]) async -> Double {
         // Measure quantum entanglement
-        return 0.95
+        0.95
     }
 
     private func generateMultiverseOperationEvents(
         _ session: MultiverseOperationSession,
         intelligence: MultiverseIntelligenceSynthesis
     ) -> [MultiverseOperationEvent] {
-        return [
+        [
             MultiverseOperationEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -635,9 +629,9 @@ public final class AgentMultiverseOperations: Sendable {
                 data: [
                     "success": true,
                     "multiverse_depth": intelligence.intelligenceHarmony,
-                    "communication_harmony": intelligence.synthesisEfficiency
+                    "communication_harmony": intelligence.synthesisEfficiency,
                 ]
-            )
+            ),
         ]
     }
 
@@ -978,7 +972,7 @@ public struct MultiverseOperationFrameworkMetrics: Sendable, Codable {
     public var averageMultiverseAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Multiverse navigation metrics
@@ -1484,9 +1478,9 @@ public struct MultiverseIntelligenceSynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension AgentMultiverseOperations {
+public extension AgentMultiverseOperations {
     /// Create specialized multiverse operation system for specific agent architectures
-    public static func createSpecializedMultiverseOperationSystem(
+    static func createSpecializedMultiverseOperationSystem(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentMultiverseOperations {
         let system = try await AgentMultiverseOperations()
@@ -1495,7 +1489,7 @@ extension AgentMultiverseOperations {
     }
 
     /// Execute batch multiverse operation processing
-    public func executeBatchMultiverseOperation(
+    func executeBatchMultiverseOperation(
         _ operationRequests: [MultiverseOperationRequest]
     ) async throws -> BatchMultiverseOperationResult {
 
@@ -1518,8 +1512,8 @@ extension AgentMultiverseOperations {
         }
 
         let successRate = Double(results.count) / Double(operationRequests.count)
-        let averageDepth = results.map { $0.multiverseDepth }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.multiverseAdvantage }.reduce(0, +) / Double(results.count)
+        let averageDepth = results.map(\.multiverseDepth).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.multiverseAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchMultiverseOperationResult(
             batchId: batchId,
@@ -1536,7 +1530,7 @@ extension AgentMultiverseOperations {
     }
 
     /// Get multiverse operation recommendations
-    public func getMultiverseOperationRecommendations() async -> [MultiverseOperationRecommendation] {
+    func getMultiverseOperationRecommendations() async -> [MultiverseOperationRecommendation] {
         var recommendations: [MultiverseOperationRecommendation] = []
 
         let status = await getMultiverseOperationStatus()

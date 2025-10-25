@@ -102,7 +102,7 @@ public class OllamaClient: ObservableObject {
 
         // If cloud models are enabled and preferred, try cloud models first
         if self.config.enableCloudModels,
-            self.config.preferCloudModels || self.isCloudModel(targetModel)
+           self.config.preferCloudModels || self.isCloudModel(targetModel)
         {
             if self.isCloudModel(targetModel) {
                 return targetModel
@@ -157,7 +157,8 @@ public class OllamaClient: ObservableObject {
 
         do {
             let response = try await performRequestWithRetry(
-                endpoint: "api/generate", body: requestBody)
+                endpoint: "api/generate", body: requestBody
+            )
             guard let result = response["response"] as? String else {
                 throw OllamaError.invalidResponseFormat
             }
@@ -171,7 +172,8 @@ public class OllamaClient: ObservableObject {
             // Record metrics
             let duration = Date().timeIntervalSince(startTime)
             self.metrics.recordRequest(
-                model: requestModel, duration: duration, tokenCount: result.count / 4)
+                model: requestModel, duration: duration, tokenCount: result.count / 4
+            )
 
             return result
 
@@ -193,7 +195,8 @@ public class OllamaClient: ObservableObject {
         // For now, we'll simulate progress
         progressHandler("Starting generation...")
         let result = try await generate(
-            model: requestModel, prompt: prompt, temperature: temperature)
+            model: requestModel, prompt: prompt, temperature: temperature
+        )
         progressHandler("Generation complete")
         return result
     }
@@ -224,7 +227,7 @@ public class OllamaClient: ObservableObject {
         let response = try await performRequestWithRetry(endpoint: "api/chat", body: requestBody)
 
         guard let message = response["message"] as? [String: Any],
-            let content = message["content"] as? String
+              let content = message["content"] as? String
         else {
             throw OllamaError.invalidResponseFormat
         }
@@ -248,13 +251,13 @@ public class OllamaClient: ObservableObject {
     {
         var lastError: Error?
 
-        for attempt in 0..<self.config.maxRetries {
+        for attempt in 0 ..< self.config.maxRetries {
             do {
                 return try await self.performRequest(endpoint: endpoint, body: body)
             } catch {
                 lastError = error
                 if attempt < self.config.maxRetries - 1 {
-                    let delay = pow(2.0, Double(attempt))  // Exponential backoff
+                    let delay = pow(2.0, Double(attempt)) // Exponential backoff
                     try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                 }
             }
@@ -320,7 +323,7 @@ public class OllamaClient: ObservableObject {
         let response = try await performRequest(endpoint: "api/chat", body: requestBody)
 
         guard let message = response["message"] as? [String: Any],
-            let content = message["content"] as? String
+              let content = message["content"] as? String
         else {
             throw OllamaError.invalidResponseFormat
         }
@@ -371,7 +374,8 @@ public class OllamaClient: ObservableObject {
             let models = response["models"] as? [[String: Any]] ?? []
             return OllamaServerStatus(
                 running: true, modelCount: models.count,
-                models: models.compactMap { $0["name"] as? String })
+                models: models.compactMap { $0["name"] as? String }
+            )
         } catch {
             return OllamaServerStatus(running: false, modelCount: 0, models: [])
         }
@@ -379,8 +383,7 @@ public class OllamaClient: ObservableObject {
 
     // MARK: - Private Methods
 
-    private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any]
-    {
+    private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any] {
         // Validate URL construction for security
         let urlString = "\(config.baseURL)/\(endpoint)"
         guard let url = URL(string: urlString), url.scheme?.hasPrefix("http") == true else {
@@ -506,17 +509,17 @@ private class OllamaMetrics {
 
 // MARK: - Convenience Extensions
 
-extension OllamaClient {
-    public func generateCode(
+public extension OllamaClient {
+    func generateCode(
         language: String,
         task: String,
         context: String? = nil
     ) async throws -> String {
         let userPrompt = """
-            Language: \(language)
-            Task: \(task)
-            \(context != nil ? "Context: \(context!)" : "")
-            """
+        Language: \(language)
+        Task: \(task)
+        \(context != nil ? "Context: \(context!)" : "")
+        """
 
         return try await self.generate(
             model: "codellama",
@@ -526,20 +529,20 @@ extension OllamaClient {
         )
     }
 
-    public func analyzeCode(
+    func analyzeCode(
         code: String,
         language: String
     ) async throws -> String {
         let prompt = """
-            Analyze this \(language) code for:
-            1. Potential bugs or issues
-            2. Performance improvements
-            3. Best practices compliance
-            4. Security concerns
+        Analyze this \(language) code for:
+        1. Potential bugs or issues
+        2. Performance improvements
+        3. Best practices compliance
+        4. Security concerns
 
-            Code:
-            \(code)
-            """
+        Code:
+        \(code)
+        """
 
         return try await self.generate(
             model: "llama2",
@@ -549,20 +552,20 @@ extension OllamaClient {
         )
     }
 
-    public func generateDocumentation(
+    func generateDocumentation(
         code: String,
         language: String
     ) async throws -> String {
         let prompt = """
-            Generate comprehensive documentation for this \(language) code including:
-            - Function/class purpose
-            - Parameters and return values
-            - Usage examples
-            - Important notes
+        Generate comprehensive documentation for this \(language) code including:
+        - Function/class purpose
+        - Parameters and return values
+        - Usage examples
+        - Important notes
 
-            Code:
-            \(code)
-            """
+        Code:
+        \(code)
+        """
 
         return try await self.generate(
             model: "llama2",

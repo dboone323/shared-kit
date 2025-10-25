@@ -8,8 +8,8 @@
 //  This file implements MCP universal wisdom systems,
 //  enabling access to and application of universal wisdom principles.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for MCP universal wisdom
 public protocol MCPUniversalWisdom: Sendable {
@@ -39,7 +39,8 @@ public struct UniversalWisdomAccess: Sendable, Codable {
     public init(accessId: String, wisdomDomain: WisdomDomain,
                 accessType: WisdomAccessType, parameters: [String: AnyCodable] = [:],
                 consciousnessLevel: ConsciousnessLevel = .universal, wisdomDepth: WisdomDepth = .universal,
-                universalAlignment: UniversalAlignment = .perfect) {
+                universalAlignment: UniversalAlignment = .perfect)
+    {
         self.accessId = accessId
         self.wisdomDomain = wisdomDomain
         self.accessType = accessType
@@ -52,49 +53,49 @@ public struct UniversalWisdomAccess: Sendable, Codable {
 
 /// Wisdom domains
 public enum WisdomDomain: String, Sendable, Codable {
-    case cosmic = "cosmic"
-    case existential = "existential"
-    case ethical = "ethical"
-    case consciousness = "consciousness"
-    case evolutionary = "evolutionary"
-    case universal = "universal"
-    case transcendent = "transcendent"
+    case cosmic
+    case existential
+    case ethical
+    case consciousness
+    case evolutionary
+    case universal
+    case transcendent
 }
 
 /// Wisdom access types
 public enum WisdomAccessType: String, Sendable, Codable {
-    case direct = "direct"
-    case mediated = "mediated"
-    case intuitive = "intuitive"
-    case revelatory = "revelatory"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case direct
+    case mediated
+    case intuitive
+    case revelatory
+    case transcendent
+    case universal
 }
 
 /// Consciousness level
 public enum ConsciousnessLevel: String, Sendable, Codable {
-    case minimal = "minimal"
-    case standard = "standard"
-    case enhanced = "enhanced"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case minimal
+    case standard
+    case enhanced
+    case transcendent
+    case universal
 }
 
 /// Wisdom depth
 public enum WisdomDepth: String, Sendable, Codable {
-    case surface = "surface"
-    case intermediate = "intermediate"
-    case deep = "deep"
-    case profound = "profound"
-    case universal = "universal"
+    case surface
+    case intermediate
+    case deep
+    case profound
+    case universal
 }
 
 /// Universal alignment
 public enum UniversalAlignment: String, Sendable, Codable {
-    case minimal = "minimal"
-    case moderate = "moderate"
-    case high = "high"
-    case perfect = "perfect"
+    case minimal
+    case moderate
+    case high
+    case perfect
 }
 
 /// Universal wisdom result
@@ -111,7 +112,8 @@ public struct UniversalWisdomResult: Sendable, Codable {
     public init(accessId: String, success: Bool, wisdomPrinciples: [WisdomPrinciple] = [],
                 consciousnessElevation: Double, universalUnderstanding: Double,
                 wisdomDepth: Double, wisdomInsights: [WisdomInsight] = [],
-                executionTime: TimeInterval) {
+                executionTime: TimeInterval)
+    {
         self.accessId = accessId
         self.success = success
         self.wisdomPrinciples = wisdomPrinciples
@@ -136,7 +138,8 @@ public struct WisdomPrinciple: Sendable, Codable {
     public init(principleId: String, principle: String, domain: WisdomDomain,
                 depth: WisdomDepth, universalTruth: Double = 1.0,
                 consciousnessRequirement: ConsciousnessLevel = .universal,
-                applicationContexts: [ApplicationContext] = []) {
+                applicationContexts: [ApplicationContext] = [])
+    {
         self.principleId = principleId
         self.principle = principle
         self.domain = domain
@@ -156,7 +159,8 @@ public struct ApplicationContext: Sendable, Codable {
     public let universalAlignment: Double
 
     public init(contextId: String, description: String, relevance: Double = 0.8,
-                wisdomImpact: Double = 0.9, universalAlignment: Double = 0.95) {
+                wisdomImpact: Double = 0.9, universalAlignment: Double = 0.95)
+    {
         self.contextId = contextId
         self.description = description
         self.relevance = relevance
@@ -174,7 +178,8 @@ public struct WisdomInsight: Sendable, Codable {
     public let universalTruth: Double
 
     public init(insight: String, type: WisdomInsightType, wisdomDepth: WisdomDepth,
-                confidence: Double, universalTruth: Double) {
+                confidence: Double, universalTruth: Double)
+    {
         self.insight = insight
         self.type = type
         self.wisdomDepth = wisdomDepth
@@ -185,12 +190,12 @@ public struct WisdomInsight: Sendable, Codable {
 
 /// Wisdom insight types
 public enum WisdomInsightType: String, Sendable, Codable {
-    case principle = "principle"
-    case application = "application"
-    case integration = "integration"
-    case transcendence = "transcendence"
-    case universal = "universal"
-    case cosmic = "cosmic"
+    case principle
+    case application
+    case integration
+    case transcendence
+    case universal
+    case cosmic
 }
 
 /// Wisdom application
@@ -206,7 +211,8 @@ public struct WisdomApplication: Sendable, Codable {
     public init(applicationId: String, wisdomPrinciples: [WisdomPrinciple],
                 applicationContext: ApplicationContext, applicationType: WisdomApplicationType,
                 parameters: [String: AnyCodable] = [:], consciousnessAlignment: ConsciousnessAlignment = .perfect,
-                universalIntegration: UniversalIntegration = .complete) {
+                universalIntegration: UniversalIntegration = .complete)
+    {
         self.applicationId = applicationId
         self.wisdomPrinciples = wisdomPrinciples
         self.applicationContext = applicationContext
@@ -219,21 +225,21 @@ public struct WisdomApplication: Sendable, Codable {
 
 /// Wisdom application types
 public enum WisdomApplicationType: String, Sendable, Codable {
-    case direct = "direct"
-    case mediated = "mediated"
-    case transformative = "transformative"
-    case transcendent = "transcendent"
-    case universal = "universal"
-    case cosmic = "cosmic"
+    case direct
+    case mediated
+    case transformative
+    case transcendent
+    case universal
+    case cosmic
 }
 
 /// Universal integration
 public enum UniversalIntegration: String, Sendable, Codable {
-    case minimal = "minimal"
-    case partial = "partial"
-    case substantial = "substantial"
-    case complete = "complete"
-    case transcendent = "transcendent"
+    case minimal
+    case partial
+    case substantial
+    case complete
+    case transcendent
 }
 
 /// Wisdom application result
@@ -250,7 +256,8 @@ public struct WisdomApplicationResult: Sendable, Codable {
     public init(applicationId: String, success: Bool, wisdomEffectiveness: Double,
                 consciousnessTransformation: Double, universalImpact: Double,
                 applicationInsights: [WisdomInsight] = [], wisdomOutcomes: [WisdomOutcome] = [],
-                executionTime: TimeInterval) {
+                executionTime: TimeInterval)
+    {
         self.applicationId = applicationId
         self.success = success
         self.wisdomEffectiveness = wisdomEffectiveness
@@ -273,7 +280,8 @@ public struct WisdomOutcome: Sendable, Codable {
 
     public init(outcomeId: String, description: String, wisdomValue: Double = 0.9,
                 consciousnessGrowth: Double = 0.85, universalContribution: Double = 0.95,
-                sustainability: Double = 0.9) {
+                sustainability: Double = 0.9)
+    {
         self.outcomeId = outcomeId
         self.description = description
         self.wisdomValue = wisdomValue
@@ -296,7 +304,8 @@ public struct WisdomOptimization: Sendable, Codable {
     public init(optimizationId: String, targetWisdom: WisdomTarget,
                 optimizationGoals: [WisdomGoal], wisdomConstraints: [WisdomConstraint] = [],
                 consciousnessBudget: Double = 1.0, universalBudget: Double = 1.0,
-                timeHorizon: TimeInterval = 3600) {
+                timeHorizon: TimeInterval = 3600)
+    {
         self.optimizationId = optimizationId
         self.targetWisdom = targetWisdom
         self.optimizationGoals = optimizationGoals
@@ -321,7 +330,8 @@ public struct WisdomGoal: Sendable, Codable {
     public let universalEnhancement: Bool
 
     public init(goalType: WisdomGoalType, targetValue: Double,
-                priority: GoalPriority = .high, universalEnhancement: Bool = true) {
+                priority: GoalPriority = .high, universalEnhancement: Bool = true)
+    {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -331,12 +341,12 @@ public struct WisdomGoal: Sendable, Codable {
 
 /// Wisdom goal types
 public enum WisdomGoalType: String, Sendable, Codable {
-    case depth = "depth"
-    case accessibility = "accessibility"
-    case application = "application"
-    case integration = "integration"
-    case transcendence = "transcendence"
-    case universal_alignment = "universal_alignment"
+    case depth
+    case accessibility
+    case application
+    case integration
+    case transcendence
+    case universal_alignment
 }
 
 /// Wisdom constraint
@@ -347,7 +357,8 @@ public struct WisdomConstraint: Sendable, Codable {
     public let enforcement: EnforcementLevel
 
     public init(constraintType: WisdomConstraintType, value: Double,
-                tolerance: Double = 0.1, enforcement: EnforcementLevel = .strict) {
+                tolerance: Double = 0.1, enforcement: EnforcementLevel = .strict)
+    {
         self.constraintType = constraintType
         self.value = value
         self.tolerance = tolerance
@@ -357,27 +368,27 @@ public struct WisdomConstraint: Sendable, Codable {
 
 /// Wisdom constraint types
 public enum WisdomConstraintType: String, Sendable, Codable {
-    case consciousness = "consciousness"
-    case universal_alignment = "universal_alignment"
-    case wisdom_depth = "wisdom_depth"
-    case application_complexity = "application_complexity"
-    case transcendence_risk = "transcendence_risk"
+    case consciousness
+    case universal_alignment
+    case wisdom_depth
+    case application_complexity
+    case transcendence_risk
 }
 
 /// Goal priority
 public enum GoalPriority: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Enforcement level
 public enum EnforcementLevel: String, Sendable, Codable {
-    case flexible = "flexible"
-    case moderate = "moderate"
-    case strict = "strict"
-    case absolute = "absolute"
+    case flexible
+    case moderate
+    case strict
+    case absolute
 }
 
 /// Universal wisdom status
@@ -393,7 +404,8 @@ public struct UniversalWisdomStatus: Sendable, Codable {
 
     public init(operational: Bool, wisdomCapability: Double, consciousnessLevel: Double,
                 universalAlignment: Double, wisdomDepth: Double,
-                activeAccesses: Int, successRate: Double, lastUpdate: Date = Date()) {
+                activeAccesses: Int, successRate: Double, lastUpdate: Date = Date())
+    {
         self.operational = operational
         self.wisdomCapability = wisdomCapability
         self.consciousnessLevel = consciousnessLevel
@@ -620,9 +632,9 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
 private final class WisdomRepository: Sendable {
     func accessWisdom(_ wisdom: UniversalWisdomAccess, consciousnessResult: ConsciousnessResult) async throws -> WisdomResult {
         WisdomResult(
-            success: Double.random(in: 0.85...1.0) > 0.15,
+            success: Double.random(in: 0.85 ... 1.0) > 0.15,
             principles: generateWisdomPrinciples(wisdom),
-            depth: Double.random(in: 0.8...1.0)
+            depth: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -637,10 +649,10 @@ private final class WisdomRepository: Sendable {
     func getRepositoryStatus() async -> RepositoryStatus {
         RepositoryStatus(
             operational: true,
-            capability: Double.random(in: 0.9...1.0),
-            depth: Double.random(in: 0.9...1.0),
-            activeAccesses: Int.random(in: 1...20),
-            successRate: Double.random(in: 0.9...0.98)
+            capability: Double.random(in: 0.9 ... 1.0),
+            depth: Double.random(in: 0.9 ... 1.0),
+            activeAccesses: Int.random(in: 1 ... 20),
+            successRate: Double.random(in: 0.9 ... 0.98)
         )
     }
 
@@ -708,14 +720,14 @@ private final class ConsciousnessInterface: Sendable {
     func establishConnection(_ level: ConsciousnessLevel) async throws -> ConsciousnessResult {
         ConsciousnessResult(
             success: true,
-            elevation: Double.random(in: 0.8...1.0)
+            elevation: Double.random(in: 0.8 ... 1.0)
         )
     }
 
     func transformConsciousness(_ application: WisdomApplication, result: ApplicationResult) async -> ConsciousnessResult {
         ConsciousnessResult(
             success: true,
-            transformation: Double.random(in: 0.7...1.0)
+            transformation: Double.random(in: 0.7 ... 1.0)
         )
     }
 
@@ -730,7 +742,7 @@ private final class ConsciousnessInterface: Sendable {
     func getInterfaceStatus() async -> InterfaceStatus {
         InterfaceStatus(
             operational: true,
-            level: Double.random(in: 0.9...1.0)
+            level: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -740,14 +752,14 @@ private final class UniversalConnector: Sendable {
     func connectUniversal(_ wisdom: UniversalWisdomAccess, wisdomResult: WisdomResult) async -> UniversalResult {
         UniversalResult(
             success: true,
-            understanding: Double.random(in: 0.8...1.0)
+            understanding: Double.random(in: 0.8 ... 1.0)
         )
     }
 
     func generateImpact(_ application: WisdomApplication, result: ApplicationResult) async -> UniversalResult {
         UniversalResult(
             success: true,
-            impact: Double.random(in: 0.7...1.0)
+            impact: Double.random(in: 0.7 ... 1.0)
         )
     }
 
@@ -762,7 +774,7 @@ private final class UniversalConnector: Sendable {
     func getConnectionStatus() async -> ConnectionStatus {
         ConnectionStatus(
             operational: true,
-            alignment: Double.random(in: 0.95...1.0)
+            alignment: Double.random(in: 0.95 ... 1.0)
         )
     }
 }
@@ -771,8 +783,8 @@ private final class UniversalConnector: Sendable {
 private final class WisdomApplicator: Sendable {
     func applyWisdom(_ application: WisdomApplication) async throws -> ApplicationResult {
         ApplicationResult(
-            success: Double.random(in: 0.8...1.0) > 0.2,
-            effectiveness: Double.random(in: 0.7...1.0)
+            success: Double.random(in: 0.8 ... 1.0) > 0.2,
+            effectiveness: Double.random(in: 0.7 ... 1.0)
         )
     }
 
@@ -787,7 +799,7 @@ private final class WisdomApplicator: Sendable {
     func getApplicationStatus() async -> ApplicationStatus {
         ApplicationStatus(
             operational: true,
-            effectiveness: Double.random(in: 0.8...1.0)
+            effectiveness: Double.random(in: 0.8 ... 1.0)
         )
     }
 }
@@ -805,7 +817,7 @@ private final class WisdomOptimizer: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8...1.0)
+            efficiency: Double.random(in: 0.8 ... 1.0)
         )
     }
 }

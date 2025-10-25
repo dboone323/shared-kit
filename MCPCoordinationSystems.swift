@@ -60,12 +60,12 @@ public struct MCPOperationCoordination: Codable {
 
 /// Coordination strategy
 public enum CoordinationStrategy: String, Sendable, Codable {
-    case parallel_execution = "parallel_execution"
-    case sequential_execution = "sequential_execution"
-    case hierarchical_execution = "hierarchical_execution"
-    case adaptive_execution = "adaptive_execution"
-    case quantum_entangled_execution = "quantum_entangled_execution"
-    case consciousness_driven_execution = "consciousness_driven_execution"
+    case parallel_execution
+    case sequential_execution
+    case hierarchical_execution
+    case adaptive_execution
+    case quantum_entangled_execution
+    case consciousness_driven_execution
 }
 
 /// Coordination constraint
@@ -88,13 +88,13 @@ public struct CoordinationConstraint: Sendable, Codable {
 
 /// Coordination constraint types
 public enum CoordinationConstraintType: String, Sendable, Codable {
-    case temporal_dependency = "temporal_dependency"
-    case resource_dependency = "resource_dependency"
-    case data_dependency = "data_dependency"
-    case ethical_alignment = "ethical_alignment"
-    case quantum_coherence = "quantum_coherence"
-    case consciousness_integrity = "consciousness_integrity"
-    case performance_threshold = "performance_threshold"
+    case temporal_dependency
+    case resource_dependency
+    case data_dependency
+    case ethical_alignment
+    case quantum_coherence
+    case consciousness_integrity
+    case performance_threshold
 }
 
 /// Coordination result
@@ -185,7 +185,7 @@ public struct WorkflowStage: Codable {
     public let stageId: String
     public let stageType: WorkflowStageType
     public let operations: [UniversalMCPOperation]
-    public let dependencies: [String]  // Stage IDs this stage depends on
+    public let dependencies: [String] // Stage IDs this stage depends on
     public let parameters: [String: AnyCodable]
     public let priority: IntelligencePriority
 
@@ -205,23 +205,23 @@ public struct WorkflowStage: Codable {
 
 /// Workflow stage types
 public enum WorkflowStageType: String, Sendable, Codable {
-    case intelligence_gathering = "intelligence_gathering"
-    case analysis_processing = "analysis_processing"
-    case synthesis_integration = "synthesis_integration"
-    case decision_making = "decision_making"
-    case execution_coordination = "execution_coordination"
-    case evaluation_assessment = "evaluation_assessment"
-    case optimization_refinement = "optimization_refinement"
+    case intelligence_gathering
+    case analysis_processing
+    case synthesis_integration
+    case decision_making
+    case execution_coordination
+    case evaluation_assessment
+    case optimization_refinement
 }
 
 /// Workflow types
 public enum WorkflowType: String, Sendable, Codable {
-    case analytical_workflow = "analytical_workflow"
-    case creative_workflow = "creative_workflow"
-    case strategic_workflow = "strategic_workflow"
-    case operational_workflow = "operational_workflow"
-    case adaptive_workflow = "adaptive_workflow"
-    case quantum_workflow = "quantum_workflow"
+    case analytical_workflow
+    case creative_workflow
+    case strategic_workflow
+    case operational_workflow
+    case adaptive_workflow
+    case quantum_workflow
 }
 
 /// Workflow result
@@ -347,11 +347,11 @@ public struct FrameworkSynchronization: Codable {
 
 /// Synchronization types
 public enum SynchronizationType: String, Sendable, Codable {
-    case state_synchronization = "state_synchronization"
-    case capability_alignment = "capability_alignment"
-    case performance_optimization = "performance_optimization"
-    case quantum_entanglement = "quantum_entanglement"
-    case consciousness_harmonization = "consciousness_harmonization"
+    case state_synchronization
+    case capability_alignment
+    case performance_optimization
+    case quantum_entanglement
+    case consciousness_harmonization
 }
 
 /// Synchronization result
@@ -521,11 +521,12 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
 
         // Calculate coordination metrics
         let coordinationMetrics = calculateCoordinationMetrics(
-            coordination, results: operationResults)
-        let success = operationResults.values.allSatisfy { $0.success }
+            coordination, results: operationResults
+        )
+        let success = operationResults.values.allSatisfy(\.success)
         let quantumCoherence =
-            operationResults.values.map { $0.quantumEnhancement }.reduce(0, +)
-            / Double(max(operationResults.count, 1))
+            operationResults.values.map(\.quantumEnhancement).reduce(0, +)
+                / Double(max(operationResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
             coordination.consciousnessLevel)
 
@@ -566,17 +567,17 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
 
         // Calculate workflow metrics
         let workflowMetrics = calculateWorkflowMetrics(workflow, stageResults: stageResults)
-        let success = stageResults.values.allSatisfy { $0.success }
+        let success = stageResults.values.allSatisfy(\.success)
         let quantumCoherence =
-            stageResults.values.map { $0.stageMetrics.quantumContribution }.reduce(0, +)
-            / Double(max(stageResults.count, 1))
+            stageResults.values.map(\.stageMetrics.quantumContribution).reduce(0, +)
+                / Double(max(stageResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
             workflow.consciousnessLevel)
 
         return WorkflowResult(
             workflowId: workflow.workflowId,
             success: success,
-            stageResults: Array(stageResults.values),  // Convert dictionary to array
+            stageResults: Array(stageResults.values), // Convert dictionary to array
             workflowMetrics: workflowMetrics,
             quantumCoherence: quantumCoherence,
             consciousnessAmplification: consciousnessAmplification,
@@ -609,11 +610,12 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
 
         // Calculate synchronization metrics
         let synchronizationMetrics = calculateSynchronizationMetrics(
-            synchronization, states: frameworkStates)
-        let success = frameworkStates.values.allSatisfy { $0.operational }
+            synchronization, states: frameworkStates
+        )
+        let success = frameworkStates.values.allSatisfy(\.operational)
         let quantumCoherence =
-            frameworkStates.values.map { $0.quantumCoherence }.reduce(0, +)
-            / Double(max(frameworkStates.count, 1))
+            frameworkStates.values.map(\.quantumCoherence).reduce(0, +)
+                / Double(max(frameworkStates.count, 1))
 
         return SynchronizationResult(
             synchronizationId: synchronization.synchronizationId,
@@ -645,7 +647,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
             quantumCoherence: coordinatorStatus.quantumCoherence,
             consciousnessLevel: .universal,
             universalCapability: calculateUniversalCoordinationCapability(
-                coordinatorStatus, orchestratorStatus, synchronizerStatus)
+                coordinatorStatus, orchestratorStatus, synchronizerStatus
+            )
         )
     }
 
@@ -773,7 +776,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 quantumEnhancement: 1.0,
                 consciousnessAmplification: calculateConsciousnessAmplification(
                     operation.consciousnessLevel),
-                executionTime: Double.random(in: 0.1...1.0),
+                executionTime: Double.random(in: 0.1 ... 1.0),
                 insights: []
             )
             results[operation.operationId] = result
@@ -796,7 +799,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 quantumEnhancement: 0.9,
                 consciousnessAmplification: calculateConsciousnessAmplification(
                     operation.consciousnessLevel) * 1.2,
-                executionTime: Double.random(in: 0.2...1.5),
+                executionTime: Double.random(in: 0.2 ... 1.5),
                 insights: []
             )
             results[operation.operationId] = result
@@ -810,11 +813,11 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
     ) -> CoordinationMetrics {
         let totalOperations = coordination.operations.count
         let coordinationEfficiency = Double(results.count) / Double(max(totalOperations, 1))
-        let synchronizationScore = results.values.allSatisfy { $0.success } ? 1.0 : 0.5
-        let dependencySatisfaction = 1.0  // Simplified
+        let synchronizationScore = results.values.allSatisfy(\.success) ? 1.0 : 0.5
+        let dependencySatisfaction = 1.0 // Simplified
         let quantumCoherence =
-            results.values.map { $0.quantumEnhancement }.reduce(0, +)
-            / Double(max(results.count, 1))
+            results.values.map(\.quantumEnhancement).reduce(0, +)
+                / Double(max(results.count, 1))
         let consciousnessIntegration = calculateConsciousnessAmplification(
             coordination.consciousnessLevel)
         let ethicalCompliance =
@@ -836,7 +839,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
 
     private func validateWorkflowDependencies(_ workflow: IntelligenceWorkflow) async throws {
         // Validate that all dependencies exist
-        let stageIds = Set(workflow.stages.map { $0.stageId })
+        let stageIds = Set(workflow.stages.map(\.stageId))
 
         for stage in workflow.stages {
             for dependency in stage.dependencies {
@@ -874,7 +877,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
 
         // Calculate stage metrics
         let stageMetrics = calculateStageMetrics(stage, results: operationResults)
-        let success = operationResults.values.allSatisfy { $0.success }
+        let success = operationResults.values.allSatisfy(\.success)
 
         return StageResult(
             stageId: stage.stageId,
@@ -890,12 +893,12 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
     ) -> StageMetrics {
         let operationCount = stage.operations.count
         let successRate =
-            Double(results.values.filter { $0.success }.count) / Double(max(operationCount, 1))
+            Double(results.values.filter(\.success).count) / Double(max(operationCount, 1))
         let efficiency = successRate
-        let dependencySatisfaction = 1.0  // Simplified
+        let dependencySatisfaction = 1.0 // Simplified
         let quantumContribution =
-            results.values.map { $0.quantumEnhancement }.reduce(0, +)
-            / Double(max(results.count, 1))
+            results.values.map(\.quantumEnhancement).reduce(0, +)
+                / Double(max(results.count, 1))
 
         return StageMetrics(
             operationCount: operationCount,
@@ -911,12 +914,12 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
     ) -> WorkflowMetrics {
         let totalStages = workflow.stages.count
         let workflowEfficiency =
-            Double(stageResults.values.filter { $0.success }.count) / Double(max(totalStages, 1))
-        let stageSynchronization = 1.0  // Simplified
-        let dependencyResolution = 1.0  // Simplified
+            Double(stageResults.values.filter(\.success).count) / Double(max(totalStages, 1))
+        let stageSynchronization = 1.0 // Simplified
+        let dependencyResolution = 1.0 // Simplified
         let quantumCoherence =
-            stageResults.values.map { $0.stageMetrics.quantumContribution }.reduce(0, +)
-            / Double(max(stageResults.count, 1))
+            stageResults.values.map(\.stageMetrics.quantumContribution).reduce(0, +)
+                / Double(max(stageResults.count, 1))
         let consciousnessIntegration = calculateConsciousnessAmplification(
             workflow.consciousnessLevel)
         let ethicalCompliance = workflow.consciousnessLevel.rawValue >= "transcendent" ? 0.9 : 0.7
@@ -944,7 +947,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.quantumCapability,
-                performanceScore: Double.random(in: 0.8...1.0),
+                performanceScore: Double.random(in: 0.8 ... 1.0),
                 quantumCoherence: framework.quantumCapability,
                 consciousnessLevel: framework.consciousnessLevel
             )
@@ -964,7 +967,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.capabilities.count > 3 ? 0.9 : 0.7,
-                performanceScore: Double.random(in: 0.85...1.0),
+                performanceScore: Double.random(in: 0.85 ... 1.0),
                 quantumCoherence: framework.quantumCapability * 1.1,
                 consciousnessLevel: framework.consciousnessLevel
             )
@@ -984,7 +987,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.quantumCapability,
-                performanceScore: Double.random(in: 0.9...1.0),
+                performanceScore: Double.random(in: 0.9 ... 1.0),
                 quantumCoherence: framework.quantumCapability * 1.2,
                 consciousnessLevel: framework.consciousnessLevel
             )
@@ -1004,7 +1007,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.quantumCapability,
-                performanceScore: Double.random(in: 0.95...1.0),
+                performanceScore: Double.random(in: 0.95 ... 1.0),
                 quantumCoherence: 1.0,
                 consciousnessLevel: framework.consciousnessLevel
             )
@@ -1024,7 +1027,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.quantumCapability,
-                performanceScore: Double.random(in: 0.88...1.0),
+                performanceScore: Double.random(in: 0.88 ... 1.0),
                 quantumCoherence: framework.quantumCapability * 1.3,
                 consciousnessLevel: .universal
             )
@@ -1039,13 +1042,13 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
     ) -> SynchronizationMetrics {
         let frameworkCount = synchronization.frameworks.count
         let synchronizationEfficiency = Double(states.count) / Double(max(frameworkCount, 1))
-        let stateConsistency = states.values.allSatisfy { $0.operational } ? 1.0 : 0.5
+        let stateConsistency = states.values.allSatisfy(\.operational) ? 1.0 : 0.5
         let capabilityAlignment =
-            states.values.map { $0.capabilityLevel }.reduce(0, +) / Double(max(states.count, 1))
+            states.values.map(\.capabilityLevel).reduce(0, +) / Double(max(states.count, 1))
         let performanceHarmonization =
-            states.values.map { $0.performanceScore }.reduce(0, +) / Double(max(states.count, 1))
+            states.values.map(\.performanceScore).reduce(0, +) / Double(max(states.count, 1))
         let quantumEntanglement =
-            states.values.map { $0.quantumCoherence }.reduce(0, +) / Double(max(states.count, 1))
+            states.values.map(\.quantumCoherence).reduce(0, +) / Double(max(states.count, 1))
 
         return SynchronizationMetrics(
             frameworkCount: frameworkCount,
@@ -1081,34 +1084,34 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
     private func generateCoordinationInsights(
         _ coordination: MCPOperationCoordination, results: [String: UniversalMCPResult]
     ) -> [UniversalInsight] {
-        return [
+        [
             UniversalInsight(
                 insightId: "\(coordination.coordinationId)_coordination_insight",
                 insightType: "coordination_optimization",
                 content: AnyCodable(
-                    "Coordination strategy \(coordination.coordinationStrategy.rawValue) achieved \(results.values.filter { $0.success }.count)/\(results.count) successful operations"
+                    "Coordination strategy \(coordination.coordinationStrategy.rawValue) achieved \(results.values.filter(\.success).count)/\(results.count) successful operations"
                 ),
-                confidence: results.values.allSatisfy { $0.success } ? 0.9 : 0.7,
-                impact: results.values.map { $0.quantumEnhancement }.reduce(0, +)
+                confidence: results.values.allSatisfy(\.success) ? 0.9 : 0.7,
+                impact: results.values.map(\.quantumEnhancement).reduce(0, +)
                     / Double(max(results.count, 1))
-            )
+            ),
         ]
     }
 
     private func generateWorkflowInsights(
         _ workflow: IntelligenceWorkflow, results: [String: StageResult]
     ) -> [UniversalInsight] {
-        return [
+        [
             UniversalInsight(
                 insightId: "\(workflow.workflowId)_workflow_insight",
                 insightType: "workflow_optimization",
                 content: AnyCodable(
-                    "Workflow \(workflow.workflowType.rawValue) completed with \(results.values.filter { $0.success }.count)/\(results.count) successful stages"
+                    "Workflow \(workflow.workflowType.rawValue) completed with \(results.values.filter(\.success).count)/\(results.count) successful stages"
                 ),
-                confidence: results.values.allSatisfy { $0.success } ? 0.95 : 0.8,
-                impact: results.values.map { $0.stageMetrics.quantumContribution }.reduce(0, +)
+                confidence: results.values.allSatisfy(\.success) ? 0.95 : 0.8,
+                impact: results.values.map(\.stageMetrics.quantumContribution).reduce(0, +)
                     / Double(max(results.count, 1))
-            )
+            ),
         ]
     }
 }
@@ -1122,9 +1125,9 @@ private final class OperationCoordinator: Sendable {
     func getCoordinatorStatus() async -> CoordinatorStatus {
         CoordinatorStatus(
             operational: true,
-            activeCoordinations: Int.random(in: 0...5),
-            queuedCoordinations: Int.random(in: 0...3),
-            quantumCoherence: Double.random(in: 0.9...1.0)
+            activeCoordinations: Int.random(in: 0 ... 5),
+            queuedCoordinations: Int.random(in: 0 ... 3),
+            quantumCoherence: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -1146,8 +1149,8 @@ private final class WorkflowOrchestrator: Sendable {
     func getOrchestratorStatus() async -> OrchestratorStatus {
         OrchestratorStatus(
             operational: true,
-            activeWorkflows: Int.random(in: 0...3),
-            workflowEfficiency: Double.random(in: 0.85...0.95)
+            activeWorkflows: Int.random(in: 0 ... 3),
+            workflowEfficiency: Double.random(in: 0.85 ... 0.95)
         )
     }
 }
@@ -1168,8 +1171,8 @@ private final class FrameworkSynchronizer: Sendable {
     func getSynchronizerStatus() async -> SynchronizerStatus {
         SynchronizerStatus(
             operational: true,
-            synchronizedFrameworks: Int.random(in: 5...15),
-            synchronizationEfficiency: Double.random(in: 0.9...1.0)
+            synchronizedFrameworks: Int.random(in: 5 ... 15),
+            synchronizationEfficiency: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -1185,9 +1188,9 @@ private struct SynchronizerStatus: Sendable {
 private final class CoordinationPerformanceOptimizer: Sendable {
     func getPerformanceStatus() async -> CoordinationPerformanceStatus {
         CoordinationPerformanceStatus(
-            coordinationEfficiency: Double.random(in: 0.88...0.96),
-            workflowEfficiency: Double.random(in: 0.85...0.95),
-            synchronizationScore: Double.random(in: 0.9...1.0)
+            coordinationEfficiency: Double.random(in: 0.88 ... 0.96),
+            workflowEfficiency: Double.random(in: 0.85 ... 0.95),
+            synchronizationScore: Double.random(in: 0.9 ... 1.0)
         )
     }
 }

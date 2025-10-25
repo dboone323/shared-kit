@@ -816,12 +816,13 @@ final class QuantumEcosystemExpansionEngine: @preconcurrency QuantumEcosystemExp
                 let scalingFactor =
                     targetReality.properties.complexity * 100 / Double(ecosystem.scale.size)
                 let scalingResult = try await scaleEcosystem(ecosystem, by: scalingFactor)
-                scaledEcosystem = scalingResult.success ? ecosystem : ecosystem  // Simplified
+                scaledEcosystem = scalingResult.success ? ecosystem : ecosystem // Simplified
             }
 
             // Integrate ecosystem
             let integration = try await realityManager.integrateEcosystem(
-                scaledEcosystem, into: targetReality)
+                scaledEcosystem, into: targetReality
+            )
 
             guard integration.success else {
                 throw ExpansionError.integrationFailed(targetReality.id)
@@ -844,7 +845,7 @@ final class QuantumEcosystemExpansionEngine: @preconcurrency QuantumEcosystemExp
                 duration: Date().timeIntervalSince(startTime),
                 resourceUsage: ResourceUsage(
                     computational: 1000.0,
-                    memory: 1024 * 1024 * 500,  // 500MB
+                    memory: 1024 * 1024 * 500, // 500MB
                     network: 100.0,
                     quantum: 50,
                     duration: Date().timeIntervalSince(startTime)
@@ -888,7 +889,7 @@ final class QuantumEcosystemExpansionEngine: @preconcurrency QuantumEcosystemExp
                         severity: .high,
                         description: error.localizedDescription,
                         resolution: "Review compatibility requirements and retry"
-                    )
+                    ),
                 ]
             )
 
@@ -906,7 +907,8 @@ final class QuantumEcosystemExpansionEngine: @preconcurrency QuantumEcosystemExp
             // Execute scaling algorithm
             let algorithm = selectScalingAlgorithm(for: scalingFactor)
             let executionResult = try await scalingManager.executeScalingAlgorithm(
-                on: ecosystem, using: algorithm)
+                on: ecosystem, using: algorithm
+            )
 
             guard executionResult.success else {
                 throw ExpansionError.scalingFailed(ecosystem.id)
@@ -1032,10 +1034,10 @@ final class QuantumEcosystemExpansionEngine: @preconcurrency QuantumEcosystemExp
     private func publishExpansionStatus() {
         let status = ExpansionStatus(
             activeExpansions: activeExpansions.count,
-            completedExpansions: 0,  // Would track from database
-            failedExpansions: 0,  // Would track from database
-            totalScaleIncrease: 0.0,  // Would calculate from database
-            averageExpansionTime: 3600.0,  // Would calculate from database
+            completedExpansions: 0, // Would track from database
+            failedExpansions: 0, // Would track from database
+            totalScaleIncrease: 0.0, // Would calculate from database
+            averageExpansionTime: 3600.0, // Would calculate from database
             systemHealth: 0.95,
             resourceUtilization: 0.75
         )
@@ -1051,7 +1053,7 @@ final class AdaptiveScalingManager: EcosystemScalingProtocol {
     func executeScalingAlgorithm(on ecosystem: QuantumEcosystem, using algorithm: ScalingAlgorithm)
         async throws -> ScalingExecutionResult
     {
-        let executionTime = TimeInterval(algorithm.complexity * 60)  // Minutes in seconds
+        let executionTime = TimeInterval(algorithm.complexity * 60) // Minutes in seconds
 
         return ScalingExecutionResult(
             success: true,
@@ -1059,7 +1061,7 @@ final class AdaptiveScalingManager: EcosystemScalingProtocol {
             executionTime: executionTime,
             resourceUsage: ResourceUsage(
                 computational: Double(algorithm.complexity) * 100,
-                memory: Int64(algorithm.complexity) * 1024 * 1024 * 100,  // 100MB per complexity
+                memory: Int64(algorithm.complexity) * 1024 * 1024 * 100, // 100MB per complexity
                 network: Double(algorithm.complexity) * 10,
                 quantum: algorithm.complexity * 5,
                 duration: executionTime
@@ -1086,7 +1088,7 @@ final class AdaptiveScalingManager: EcosystemScalingProtocol {
         _ algorithm: ScalingAlgorithm, with performance: ScalingPerformanceMetrics
     ) async throws -> ScalingAlgorithm {
         // Return optimized version based on performance
-        algorithm  // In real implementation, would modify parameters
+        algorithm // In real implementation, would modify parameters
     }
 }
 
@@ -1127,10 +1129,10 @@ final class MultiversalRealityManager: RealityExpansionProtocol {
                         quantum: 5,
                         duration: 300
                     )
-                )
+                ),
             ],
             readinessScore: 0.9,
-            estimatedIntegrationTime: 1800,  // 30 minutes
+            estimatedIntegrationTime: 1800, // 30 minutes
             resourceRequirements: RealityPreparationResult.ResourceRequirements(
                 computational: 200.0,
                 memory: 1024 * 1024 * 200,
@@ -1176,7 +1178,7 @@ final class MultiversalRealityManager: RealityExpansionProtocol {
                     effectiveness: 0.9,
                     duration: 300,
                     resourceCost: 0.1
-                )
+                ),
             ],
             stabilityImprovement: 0.15,
             convergenceTime: 600,
@@ -1191,7 +1193,7 @@ final class IntelligentGrowthManager: EcosystemGrowthProtocol {
     func planEcosystemGrowth(_ ecosystem: QuantumEcosystem, to growthTargets: GrowthTargets)
         async throws -> GrowthPlan
     {
-        let phases = (0..<5).map { phase in
+        let phases = (0 ..< 5).map { phase in
             GrowthPlan.GrowthPhase(
                 phase: phase,
                 name: "Phase \(phase + 1)",
@@ -1209,7 +1211,7 @@ final class IntelligentGrowthManager: EcosystemGrowthProtocol {
                         metric: "scale",
                         target: Double(phase + 1) * growthTargets.targetScale / 5,
                         tolerance: 0.1
-                    )
+                    ),
                 ]
             )
         }
@@ -1237,7 +1239,7 @@ final class IntelligentGrowthManager: EcosystemGrowthProtocol {
             ),
             monitoringPlan: GrowthPlan.MonitoringPlan(
                 metrics: ["scale", "complexity", "performance", "stability"],
-                frequency: 300,  // 5 minutes
+                frequency: 300, // 5 minutes
                 thresholds: [],
                 alerts: []
             ),
@@ -1295,7 +1297,7 @@ final class IntelligentGrowthManager: EcosystemGrowthProtocol {
         async throws -> GrowthPlan
     {
         // Return adjusted plan
-        plan  // In real implementation, would apply adjustments
+        plan // In real implementation, would apply adjustments
     }
 }
 

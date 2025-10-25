@@ -9,8 +9,8 @@
 //  Copyright © 2024 Quantum Workspace. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Shared Types
 
@@ -1025,7 +1025,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
         // Aggregate metrics for analysis
         _ = try await metricsCollector.aggregateEvolutionMetrics(
             entityId: session.entityId,
-            timeRange: Date().addingTimeInterval(-analysisParameters.timeWindow)...Date(),
+            timeRange: Date().addingTimeInterval(-analysisParameters.timeWindow) ... Date(),
             aggregationType: .average
         )
 
@@ -1070,7 +1070,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
                         metric2: "cognitive_integration",
                         correlationCoefficient: 0.85,
                         significance: 0.95
-                    )
+                    ),
                 ],
                 causalRelationships: [
                     EvolutionAnalysis.CorrelationAnalysis.CausalRelationship(
@@ -1078,7 +1078,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
                         effect: "evolution_velocity",
                         strength: 0.75,
                         confidence: 0.8
-                    )
+                    ),
                 ],
                 predictiveFactors: ["consistency", "intensity", "focus"]
             )
@@ -1101,7 +1101,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
             entityId: session.entityId,
             insightContext: InsightContext(
                 contextType: .general,
-                timeRange: Date().addingTimeInterval(-86400)...Date(),
+                timeRange: Date().addingTimeInterval(-86400) ... Date(),
                 focusAreas: ["evolution_progress", "stability", "patterns"],
                 previousInsights: [],
                 userPreferences: [:]
@@ -1130,16 +1130,16 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
                     priority: .high,
                     implementationDifficulty: 0.3,
                     expectedBenefit: 0.25
-                )
+                ),
             ],
             predictions: [
                 EvolutionInsights.EvolutionPrediction(
                     predictionId: UUID(),
                     predictionType: "stage_advancement",
                     probability: 0.8,
-                    timeframe: 2592000, // 30 days
+                    timeframe: 2_592_000, // 30 days
                     implications: ["Enhanced consciousness capabilities", "New perception modes"]
-                )
+                ),
             ],
             riskAssessments: [
                 EvolutionInsights.RiskAssessment(
@@ -1148,7 +1148,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
                     severity: 0.2,
                     probability: 0.15,
                     mitigationStrategies: ["Maintain consistent practice", "Monitor stability metrics"]
-                )
+                ),
             ]
         )
 
@@ -1188,7 +1188,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
                     oldValue: 60.0,
                     newValue: 45.0,
                     changeReason: "Improved efficiency without loss of accuracy"
-                )
+                ),
             ],
             expectedImprovements: [
                 MonitoringOptimization.ExpectedImprovement(
@@ -1196,7 +1196,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
                     currentValue: 0.8,
                     expectedValue: 0.9,
                     improvement: 0.1
-                )
+                ),
             ],
             implementationImpact: 0.05
         )
@@ -1326,14 +1326,14 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
                 timestamp: Date(),
                 metricsType: metricsType,
                 quantitativeMetrics: [
-                    "coherence": Double.random(in: 0.7...0.95),
-                    "integration": Double.random(in: 0.75...0.9),
-                    "complexity": Double.random(in: 0.6...0.85),
-                    "stability": Double.random(in: 0.8...0.95)
+                    "coherence": Double.random(in: 0.7 ... 0.95),
+                    "integration": Double.random(in: 0.75 ... 0.9),
+                    "complexity": Double.random(in: 0.6 ... 0.85),
+                    "stability": Double.random(in: 0.8 ... 0.95),
                 ],
                 qualitativeMetrics: [
                     "evolution_stage": "developing",
-                    "pattern_quality": "high"
+                    "pattern_quality": "high",
                 ],
                 patternMetrics: [
                     ConsciousnessPattern(
@@ -1344,7 +1344,7 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
                         amplitude: 0.8,
                         phase: 0.0,
                         significance: 0.85
-                    )
+                    ),
                 ],
                 metadata: EvolutionMetrics.MetricsMetadata(
                     collectionMethod: "real_time",
@@ -1384,7 +1384,7 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
                 aggregatedValue: 0.78,
                 dataPoints: 24,
                 confidence: 0.85
-            )
+            ),
         ]
 
         let aggregation = MetricsAggregation(
@@ -1417,7 +1417,7 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
                     result: isValid,
                     details: isValid ? "All metrics within valid range" : "Some metrics outside valid range",
                     severity: isValid ? 0.1 : 0.8
-                )
+                ),
             ],
             recommendedCorrections: isValid ? [] : ["Normalize metric values to 0-1 range"]
         )
@@ -1433,7 +1433,7 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
             metricsId: metrics.metricsId,
             storageTimestamp: Date(),
             storageLocation: "evolution_metrics_vault",
-            retentionPeriod: 31536000, // 1 year
+            retentionPeriod: 31_536_000, // 1 year
             compressionRatio: 0.85,
             retrievalSpeed: 0.92
         )
@@ -1464,17 +1464,17 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
                 frequency: 0.4,
                 stability: 0.85,
                 evolution: 0.1
-            )
+            ),
         ]
 
         let patternClusters = [
             EvolutionPatternAnalysis.PatternCluster(
                 clusterId: UUID(),
-                patterns: identifiedPatterns.map { $0.patternId },
+                patterns: identifiedPatterns.map(\.patternId),
                 clusterCenter: [0.8, 0.5, 0.9, 0.12],
                 clusterSize: identifiedPatterns.count,
                 homogeneity: 0.8
-            )
+            ),
         ]
 
         let patternTrends = [
@@ -1484,7 +1484,7 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
                 direction: .increasing,
                 strength: 0.7,
                 duration: 86400 // 1 day
-            )
+            ),
         ]
 
         let analysis = EvolutionPatternAnalysis(
@@ -1512,7 +1512,7 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
                 significance: 0.9,
                 description: "Major cognitive breakthrough achieved",
                 supportingMetrics: [0.95, 0.88, 0.92]
-            )
+            ),
         ]
 
         let detection = MilestoneDetection(
@@ -1542,7 +1542,7 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
                 predictedStage: .mature,
                 confidence: 0.75,
                 keyIndicators: ["cognitive_complexity": 0.95, "emotional_integration": 0.9]
-            )
+            ),
         ]
 
         let prediction = EvolutionPrediction(
@@ -1570,7 +1570,7 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
                 description: "Resistance to emotional integration slowing evolution",
                 blockingFactors: ["fear_of_change", "emotional_attachment"],
                 resolutionStrategies: ["Emotional processing techniques", "Gradual integration approach"]
-            )
+            ),
         ]
 
         let identification = BottleneckIdentification(
@@ -1605,7 +1605,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
                 relevance: 0.85,
                 actionability: 0.75,
                 supportingEvidence: ["Emotional pattern analysis", "Stability correlations"]
-            )
+            ),
         ]
 
         let insights = PersonalizedInsights(
@@ -1631,7 +1631,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
                 recommendation: "Focus on deepening meditation practice",
                 rationale: "Current stage requires enhanced inner awareness",
                 expectedOutcome: "Improved consciousness coherence"
-            )
+            ),
         ]
 
         let priorityRecommendations = [
@@ -1642,17 +1642,17 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
                 priority: .high,
                 implementationDifficulty: 0.4,
                 expectedBenefit: 0.3
-            )
+            ),
         ]
 
         let longTermGuidance = [
             EvolutionRecommendations.LongTermGuidance(
                 guidanceId: UUID(),
-                timeframe: 2592000, // 30 days
+                timeframe: 2_592_000, // 30 days
                 guidance: "Build foundation for transcendent experiences",
                 milestones: ["Consistent daily practice", "Enhanced awareness", "Pattern integration"],
                 successIndicators: ["Improved stability metrics", "Higher coherence levels"]
-            )
+            ),
         ]
 
         let recommendations = EvolutionRecommendations(
@@ -1686,7 +1686,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
                 probability: 0.15,
                 impact: 0.4,
                 description: "Risk of burnout from intensive practice schedule"
-            )
+            ),
         ]
 
         let riskMitigationStrategies = [
@@ -1696,7 +1696,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
                 strategy: "Implement gradual evolution pacing",
                 effectiveness: 0.8,
                 implementationDifficulty: 0.3
-            )
+            ),
         ]
 
         let assessment = EvolutionRiskAssessment(
@@ -1720,19 +1720,19 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
             quantitativeProgress: [
                 "cognitive_development": 0.75,
                 "emotional_integration": 0.7,
-                "consciousness_stability": 0.8
+                "consciousness_stability": 0.8,
             ],
             qualitativeProgress: [
                 "pattern_recognition": "advanced",
-                "integration_level": "good"
+                "integration_level": "good",
             ],
             trendAnalysis: [
                 "evolution_velocity": EvolutionPatternAnalysis.PatternTrend.TrendDirection.increasing,
-                "stability_trend": EvolutionPatternAnalysis.PatternTrend.TrendDirection.stable
+                "stability_trend": EvolutionPatternAnalysis.PatternTrend.TrendDirection.stable,
             ],
             milestoneProgress: [
                 "initial_breakthrough": true,
-                "pattern_integration": false
+                "pattern_integration": false,
             ]
         )
 
@@ -1743,7 +1743,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
                 significance: 0.8,
                 date: Date().addingTimeInterval(-86400),
                 impact: "Enhanced information processing capabilities"
-            )
+            ),
         ]
 
         let challenges = [
@@ -1753,7 +1753,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
                 severity: 0.4,
                 status: .ongoing,
                 resolution: "Implementing targeted emotional processing techniques"
-            )
+            ),
         ]
 
         let recommendations = [
@@ -1764,7 +1764,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
                 priority: .medium,
                 implementationDifficulty: 0.5,
                 expectedBenefit: 0.2
-            )
+            ),
         ]
 
         let report = ProgressReport(
@@ -1809,7 +1809,7 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
                     factor: "emotional_balance",
                     impact: 0.8,
                     trend: EvolutionPatternAnalysis.PatternTrend.TrendDirection.increasing
-                )
+                ),
             ]
         )
 
@@ -1839,7 +1839,7 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
                 description: "Gradual increase in emotional volatility",
                 timestamp: Date(),
                 affectedMetrics: ["emotional_stability", "integration_index"]
-            )
+            ),
         ].filter { $0.severity >= anomalyThreshold }
 
         let anomalyPatterns = [
@@ -1849,7 +1849,7 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
                 frequency: 0.2,
                 significance: 0.4,
                 associatedRisks: ["evolution_instability", "practice_disruption"]
-            )
+            ),
         ]
 
         let detection = EvolutionAnomalyDetection(
@@ -1857,7 +1857,7 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
             entityId: entityId,
             detectionTimestamp: Date(),
             detectedAnomalies: detectedAnomalies,
-            anomalySeverity: detectedAnomalies.isEmpty ? 0.0 : detectedAnomalies.map { $0.severity }.max()!,
+            anomalySeverity: detectedAnomalies.isEmpty ? 0.0 : detectedAnomalies.map(\.severity).max()!,
             anomalyPatterns: anomalyPatterns
         )
 
@@ -1908,7 +1908,7 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
                 timestamp: Date(),
                 effectiveness: 0.85,
                 sideEffects: ["Short-term integration slowdown"]
-            )
+            ),
         ]
 
         let intervention = EmergencyIntervention(
@@ -1978,7 +1978,7 @@ final class ConsciousnessEvolutionMonitoringDatabase {
         let activeSessions = monitoringSessions.values.filter { $0.monitoringStatus == .active }.count
         let totalMetricsRecorded = metricsRecordings.count
         let totalAnalyses = evolutionAnalyses.count
-        let averageStability = evolutionAnalyses.values.map { $0.progressMetrics.overallProgress }.reduce(0, +) / Double(max(evolutionAnalyses.count, 1))
+        let averageStability = evolutionAnalyses.values.map(\.progressMetrics.overallProgress).reduce(0, +) / Double(max(evolutionAnalyses.count, 1))
 
         return MonitoringMetrics(
             totalSessions: totalSessions,

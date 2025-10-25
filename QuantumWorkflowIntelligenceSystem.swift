@@ -341,8 +341,7 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
     private func processQuantumIntelligence(
         _ request: QuantumIntelligenceRequest,
         quantumState: QuantumState
-    ) async throws -> QuantumIntelligenceProcessing
-    {
+    ) async throws -> QuantumIntelligenceProcessing {
         // Process quantum intelligence
         let processingContext = QuantumIntelligenceProcessingContext(
             workflow: request.workflow,
@@ -366,8 +365,7 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
     private func manageQuantumCoherence(
         _ request: QuantumIntelligenceRequest,
         intelligenceProcessing: QuantumIntelligenceProcessing
-    ) async throws -> QuantumCoherenceManagement
-    {
+    ) async throws -> QuantumCoherenceManagement {
         // Manage quantum coherence
         let coherenceContext = QuantumCoherenceManagementContext(
             quantumState: intelligenceProcessing.quantumState,
@@ -390,8 +388,7 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
     private func optimizeQuantumState(
         _ request: QuantumIntelligenceRequest,
         coherenceManagement: QuantumCoherenceManagement
-    ) async throws -> QuantumStateOptimization
-    {
+    ) async throws -> QuantumStateOptimization {
         // Optimize quantum state
         let optimizationContext = QuantumStateOptimizationContext(
             originalState: coherenceManagement.quantumState,
@@ -415,8 +412,7 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
     private func synthesizeQuantumIntelligence(
         _ request: QuantumIntelligenceRequest,
         stateOptimization: QuantumStateOptimization
-    ) async throws -> QuantumIntelligenceSynthesis
-    {
+    ) async throws -> QuantumIntelligenceSynthesis {
         // Synthesize quantum intelligence
         let synthesisContext = QuantumIntelligenceSynthesisContext(
             workflow: request.workflow,
@@ -440,8 +436,7 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
     private func validateQuantumIntelligenceResults(
         _ intelligenceSynthesis: QuantumIntelligenceSynthesis,
         session: QuantumIntelligenceSession
-    ) async throws -> QuantumIntelligenceValidationResult
-    {
+    ) async throws -> QuantumIntelligenceValidationResult {
         // Validate quantum intelligence results
         let performanceComparison = await compareQuantumWorkflowPerformance(
             original: session.request.workflow,
@@ -454,7 +449,7 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
         )
 
         let success = performanceComparison.quantumEnhancement >= session.request.quantumEnhancementTarget &&
-                     quantumAdvantage.quantumAdvantage >= 0.1
+            quantumAdvantage.quantumAdvantage >= 0.1
 
         let events = generateQuantumIntelligenceEvents(session, synthesis: intelligenceSynthesis)
 
@@ -573,14 +568,14 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
 
     private func measureQuantumCoherence(_ workflow: MCPWorkflow) async -> Double {
         // Measure quantum coherence level
-        return 0.87
+        0.87
     }
 
     private func generateQuantumIntelligenceEvents(
         _ session: QuantumIntelligenceSession,
         synthesis: QuantumIntelligenceSynthesis
     ) -> [QuantumIntelligenceEvent] {
-        return [
+        [
             QuantumIntelligenceEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -596,9 +591,9 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
                 data: [
                     "success": true,
                     "quantum_enhancement": synthesis.intelligenceGain,
-                    "processing_efficiency": synthesis.synthesisEfficiency
+                    "processing_efficiency": synthesis.synthesisEfficiency,
                 ]
-            )
+            ),
         ]
     }
 
@@ -885,7 +880,7 @@ public struct QuantumIntelligenceMetrics: Sendable, Codable {
     public var averageQuantumAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Quantum workflow metrics
@@ -1329,9 +1324,9 @@ public struct QuantumIntelligenceSynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension QuantumWorkflowIntelligenceSystem {
+public extension QuantumWorkflowIntelligenceSystem {
     /// Create specialized quantum intelligence system for specific workflow types
-    public static func createSpecializedQuantumIntelligenceSystem(
+    static func createSpecializedQuantumIntelligenceSystem(
         for workflowType: WorkflowType
     ) async throws -> QuantumWorkflowIntelligenceSystem {
         let system = try await QuantumWorkflowIntelligenceSystem()
@@ -1340,7 +1335,7 @@ extension QuantumWorkflowIntelligenceSystem {
     }
 
     /// Execute batch quantum intelligence processing
-    public func executeBatchQuantumIntelligence(
+    func executeBatchQuantumIntelligence(
         _ intelligenceRequests: [QuantumIntelligenceRequest]
     ) async throws -> BatchQuantumIntelligenceResult {
 
@@ -1363,8 +1358,8 @@ extension QuantumWorkflowIntelligenceSystem {
         }
 
         let successRate = Double(results.count) / Double(intelligenceRequests.count)
-        let averageEnhancement = results.map { $0.quantumEnhancement }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.quantumAdvantage }.reduce(0, +) / Double(results.count)
+        let averageEnhancement = results.map(\.quantumEnhancement).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.quantumAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchQuantumIntelligenceResult(
             batchId: batchId,
@@ -1381,7 +1376,7 @@ extension QuantumWorkflowIntelligenceSystem {
     }
 
     /// Get quantum intelligence recommendations
-    public func getQuantumIntelligenceRecommendations() async -> [QuantumIntelligenceRecommendation] {
+    func getQuantumIntelligenceRecommendations() async -> [QuantumIntelligenceRecommendation] {
         var recommendations: [QuantumIntelligenceRecommendation] = []
 
         let status = await getQuantumIntelligenceStatus()

@@ -8,8 +8,8 @@
 
 import Combine
 import Foundation
-import SwiftUI
 import os.log
+import SwiftUI
 
 // MARK: - Required Imports and Type Definitions
 
@@ -166,7 +166,7 @@ public struct AppError: AppErrorProtocol, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case errorId, severity, category, timestamp, userMessage, technicalDetails,
-            recoverySuggestions, shouldReport, isRecoverable
+             recoverySuggestions, shouldReport, isRecoverable
         case contextData
     }
 
@@ -282,7 +282,7 @@ public struct ValidationError: AppErrorProtocol, Sendable {
             "Validation failed for field '\(field)' with rule '\(validationRule)'"
         self.recoverySuggestions =
             recoverySuggestions.isEmpty
-            ? ["Please check the \(field) field and try again"] : recoverySuggestions
+                ? ["Please check the \(field) field and try again"] : recoverySuggestions
 
         var contextDict: [String: Any] = [
             "field": field,
@@ -384,11 +384,11 @@ public struct NetworkError: AppErrorProtocol, Sendable {
         // Generate technical details
         self.technicalDetails =
             technicalDetails
-            ?? NetworkError.generateTechnicalDetails(
-                statusCode: statusCode,
-                endpoint: endpoint,
-                httpMethod: httpMethod
-            )
+                ?? NetworkError.generateTechnicalDetails(
+                    statusCode: statusCode,
+                    endpoint: endpoint,
+                    httpMethod: httpMethod
+                )
 
         // Generate recovery suggestions
         self.recoverySuggestions = NetworkError.generateRecoverySuggestions(statusCode: statusCode)
@@ -414,8 +414,8 @@ public struct NetworkError: AppErrorProtocol, Sendable {
         guard let code = statusCode else { return .medium }
 
         switch code {
-        case 400...499: return .medium
-        case 500...599: return .high
+        case 400 ... 499: return .medium
+        case 500 ... 599: return .high
         default: return .low
         }
     }
@@ -431,7 +431,7 @@ public struct NetworkError: AppErrorProtocol, Sendable {
         case 403: return "Access denied. You don't have permission to perform this action."
         case 404: return "Resource not found. The requested item may have been moved or deleted."
         case 429: return "Too many requests. Please wait a moment and try again."
-        case 500...599: return "Server error. Please try again later."
+        case 500 ... 599: return "Server error. Please try again later."
         default: return "Network error occurred. Please check your connection and try again."
         }
     }
@@ -474,7 +474,7 @@ public struct NetworkError: AppErrorProtocol, Sendable {
         case 403: return ["Contact administrator for access", "Check your account permissions"]
         case 404: return ["Verify the resource exists", "Check the URL", "Try refreshing the page"]
         case 429: return ["Wait a few moments before trying again", "Reduce request frequency"]
-        case 500...599:
+        case 500 ... 599:
             return [
                 "Try again later", "Check service status", "Contact support if problem persists",
             ]
@@ -787,8 +787,7 @@ public final class ErrorHandlerManager: ObservableObject {
     // MARK: - Recovery Management
 
     /// Register a custom recovery strategy
-    public func registerRecoveryStrategy(_ strategy: RecoveryStrategy, for category: ErrorCategory)
-    {
+    public func registerRecoveryStrategy(_ strategy: RecoveryStrategy, for category: ErrorCategory) {
         if self.recoveryStrategies[category] == nil {
             self.recoveryStrategies[category] = []
         }
@@ -943,12 +942,12 @@ public final class ErrorHandlerManager: ObservableObject {
 
     private func collectSystemInfo() -> SystemInfo {
         SystemInfo(
-            platform: "iOS",  // Would be determined at runtime
+            platform: "iOS", // Would be determined at runtime
             version: "1.0.0",
-            device: "iPhone",  // Would be determined at runtime
+            device: "iPhone", // Would be determined at runtime
             memory: ProcessInfo.processInfo.physicalMemory,
-            diskSpace: 0,  // Would be calculated
-            networkStatus: "Connected",  // Would be determined
+            diskSpace: 0, // Would be calculated
+            networkStatus: "Connected", // Would be determined
             timestamp: Date()
         )
     }
@@ -1074,7 +1073,7 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
             return statusCode >= 500 || statusCode == 429 || statusCode == 408
         }
 
-        return true  // Can retry connection failures
+        return true // Can retry connection failures
     }
 
     public func attemptRecovery(_ error: any AppErrorProtocol) async throws -> RecoveryResult {
@@ -1083,11 +1082,11 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
         }
 
         // Simulate retry logic
-        for attempt in 1...self.maxRetries {
-            try await Task.sleep(nanoseconds: UInt64(attempt * 1_000_000_000))  // Wait 1, 2, 3 seconds
+        for attempt in 1 ... self.maxRetries {
+            try await Task.sleep(nanoseconds: UInt64(attempt * 1_000_000_000)) // Wait 1, 2, 3 seconds
 
             // In real implementation, would retry the network request
-            let simulatedSuccess = attempt == 2  // Succeed on second attempt
+            let simulatedSuccess = attempt == 2 // Succeed on second attempt
 
             if simulatedSuccess {
                 return RecoveryResult(
@@ -1098,7 +1097,8 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
         }
 
         return RecoveryResult(
-            success: false, message: "Network retry failed after \(self.maxRetries) attempts")
+            success: false, message: "Network retry failed after \(self.maxRetries) attempts"
+        )
     }
 }
 
@@ -1192,8 +1192,8 @@ public struct SystemRestartStrategy: RecoveryStrategy {
 /// Error report structure for export
 public struct ErrorReport: Codable {
     public let generatedAt: Date
-    public let recentErrors: [AppError]  // Simplified for Codable
-    public let criticalErrors: [AppError]  // Simplified for Codable
+    public let recentErrors: [AppError] // Simplified for Codable
+    public let criticalErrors: [AppError] // Simplified for Codable
     public let globalState: GlobalErrorState
     public let systemInfo: SystemInfo
 }

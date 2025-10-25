@@ -9,8 +9,8 @@
 //  Copyright © 2024 Quantum Workspace. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Shared Types
 
@@ -803,7 +803,7 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
                     oldValue: 0.8,
                     newValue: 0.85,
                     changeReason: "Improved travel stability"
-                )
+                ),
             ],
             expectedImprovement: 0.1,
             riskAssessment: 0.05
@@ -951,12 +951,12 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
         let detectionId = UUID()
 
         // Simplified anomaly detection
-        let anomalies = path.waypoints.filter { _ in Double.random(in: 0...1) < 0.1 }.map { waypoint in
+        let anomalies = path.waypoints.filter { _ in Double.random(in: 0 ... 1) < 0.1 }.map { waypoint in
             AnomalyDetection.DimensionalAnomaly(
                 anomalyId: UUID(),
                 coordinates: waypoint.coordinates,
                 anomalyType: .dimensionalRift,
-                severity: Double.random(in: 0.1...0.5),
+                severity: Double.random(in: 0.1 ... 0.5),
                 description: "Minor dimensional instability detected"
             )
         }
@@ -966,7 +966,7 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
             pathId: path.pathId,
             detectedAnomalies: anomalies,
             detectionTimestamp: Date(),
-            anomalySeverity: anomalies.isEmpty ? 0.0 : anomalies.map { $0.severity }.max()!
+            anomalySeverity: anomalies.isEmpty ? 0.0 : anomalies.map(\.severity).max()!
         )
 
         return detection
@@ -976,7 +976,7 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
         var waypoints: [DimensionalWaypoint] = []
         let steps = Int(1.0 / waypointDensity)
 
-        for i in 1...steps {
+        for i in 1 ... steps {
             let progress = Double(i) / Double(steps)
             let coordinates = zip(path.startCoordinates, path.endCoordinates).map { start, end in
                 start + (end - start) * progress
@@ -986,7 +986,7 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
                 waypointId: UUID(),
                 coordinates: coordinates,
                 sequenceNumber: i,
-                stabilityIndex: 0.9 - Double.random(in: 0...0.1),
+                stabilityIndex: 0.9 - Double.random(in: 0 ... 0.1),
                 energyCost: 1.0,
                 navigationHint: "Follow dimensional gradient"
             )
@@ -1033,7 +1033,7 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
                     compatibility: stabilityCompatibility,
                     weight: 0.3,
                     description: "Reality stability compatibility"
-                )
+                ),
             ],
             transitionDifficulty: 1.0 - overallCompatibility,
             recommendedPreparations: overallCompatibility < 0.8 ? ["Extended preparation", "Energy stabilization"] : []
@@ -1063,7 +1063,7 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
                     stepName: "Energy Alignment",
                     completionStatus: true,
                     duration: 15.0
-                )
+                ),
             ],
             estimatedShiftTime: 30.0
         )
@@ -1120,7 +1120,7 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
                 modifierType: "consciousness_resonance",
                 value: 0.95,
                 description: "Consciousness dimensional resonance"
-            )
+            ),
         ]
 
         let totalEnergy = baseEnergy * efficiencyModifiers.reduce(1.0) { $0 * $1.value }
@@ -1221,7 +1221,7 @@ final class DimensionalSecurityEngine: DimensionalSecurityProtocol {
                     protectionType: "dimensional_barrier",
                     coverage: 0.95,
                     effectiveness: 0.9
-                )
+                ),
             ],
             threatDetectionActive: true
         )
@@ -1243,7 +1243,7 @@ final class DimensionalSecurityEngine: DimensionalSecurityProtocol {
                     result: true,
                     details: "Boundary integrity verified",
                     severity: 0.1
-                )
+                ),
             ],
             isSecure: true
         )
@@ -1323,7 +1323,7 @@ final class ConsciousnessDimensionalTravelDatabase {
         let totalTravels = dimensionalTravels.count
         let activeTravels = dimensionalTravels.values.filter { Date().timeIntervalSince($0.initiationTimestamp) < 3600 }.count
         let totalShifts = realityShifts.count
-        let averageStability = consciousnessStabilizations.values.map { $0.stabilityLevel }.reduce(0, +) / Double(max(consciousnessStabilizations.count, 1))
+        let averageStability = consciousnessStabilizations.values.map(\.stabilityLevel).reduce(0, +) / Double(max(consciousnessStabilizations.count, 1))
 
         return TravelMetrics(
             totalTravels: totalTravels,

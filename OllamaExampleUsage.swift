@@ -27,7 +27,7 @@ func exampleCodeGeneration() async {
         // Generate Swift code for a simple calculator
         let result = try await manager.generateCode(
             description:
-                "Create a Swift class for a basic calculator with add, subtract, multiply, and divide operations",
+            "Create a Swift class for a basic calculator with add, subtract, multiply, and divide operations",
             language: "Swift",
             complexity: .standard
         )
@@ -49,14 +49,14 @@ func exampleCodeAnalysis() async {
     let manager = OllamaIntegrationManager()
 
     let sampleCode = """
-        func calculateTotal(items: [Double]) -> Double {
-            var total = 0.0
-            for item in items {
-                total = total + item
-            }
-            return total
+    func calculateTotal(items: [Double]) -> Double {
+        var total = 0.0
+        for item in items {
+            total = total + item
         }
-        """
+        return total
+    }
+    """
 
     do {
         let result = try await manager.analyzeCodebase(
@@ -90,22 +90,22 @@ func exampleDocumentation() async {
     let manager = OllamaIntegrationManager()
 
     let sampleCode = """
-        struct User {
-            let id: Int
-            let name: String
-            let email: String
+    struct User {
+        let id: Int
+        let name: String
+        let email: String
 
-            init(id: Int, name: String, email: String) {
-                self.id = id
-                self.name = name
-                self.email = email
-            }
-
-            func displayName() -> String {
-                return name.capitalized
-            }
+        init(id: Int, name: String, email: String) {
+            self.id = id
+            self.name = name
+            self.email = email
         }
-        """
+
+        func displayName() -> String {
+            return name.capitalized
+        }
+    }
+    """
 
     do {
         let result = try await manager.generateDocumentation(

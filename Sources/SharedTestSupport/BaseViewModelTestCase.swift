@@ -8,13 +8,13 @@ import XCTest
 open class SharedViewModelTestCase: XCTestCase {
     public var cancellables = Set<AnyCancellable>()
 
-    open override func setUp() async throws {
+    override open func setUp() async throws {
         try await super.setUp()
         self.cancellables = Set<AnyCancellable>()
         self.setupTestEnvironment()
     }
 
-    open override func tearDown() async throws {
+    override open func tearDown() async throws {
         self.cancellables.forEach { $0.cancel() }
         self.cancellables.removeAll()
         self.cleanupTestEnvironment()
@@ -54,7 +54,7 @@ open class SharedViewModelTestCase: XCTestCase {
                 // Task is still running, continue waiting
             }
 
-            try await Task.sleep(nanoseconds: 100_000_000)  // 0.1s
+            try await Task.sleep(nanoseconds: 100_000_000) // 0.1s
         }
 
         operationTask.cancel()
@@ -62,8 +62,8 @@ open class SharedViewModelTestCase: XCTestCase {
     }
 
     /// Assert async operation completes successfully
-    public func assertAsyncCompletes<T: Sendable>(
-        _ operation: @escaping () async throws -> T,
+    public func assertAsyncCompletes(
+        _ operation: @escaping () async throws -> some Sendable,
         timeout: TimeInterval = 5.0,
         message: String = "Async operation failed",
         file: StaticString = #file,
@@ -77,8 +77,8 @@ open class SharedViewModelTestCase: XCTestCase {
     }
 
     /// Assert async operation throws specific error
-    public func assertAsyncThrows<E, T: Sendable>(
-        _ operation: @escaping () async throws -> T,
+    public func assertAsyncThrows<E>(
+        _ operation: @escaping () async throws -> some Sendable,
         expectedError: E,
         timeout: TimeInterval = 5.0,
         file: StaticString = #file,
@@ -123,10 +123,10 @@ open class SharedViewModelTestCase: XCTestCase {
     // MARK: - Performance Testing
 
     /// Measure and assert performance
-    public func assertPerformance<T: Sendable>(
+    public func assertPerformance(
         operation: String,
         expectedDuration: TimeInterval,
-        _ block: @escaping () async throws -> T,
+        _ block: @escaping () async throws -> some Sendable,
         file: StaticString = #file,
         line: UInt = #line
     ) async {
@@ -164,8 +164,8 @@ open class SharedViewModelTestCase: XCTestCase {
     // MARK: - Memory Testing
 
     /// Assert no memory leaks in async operations
-    public func assertNoMemoryLeaks<T: Sendable>(
-        in operation: @escaping () async throws -> T,
+    public func assertNoMemoryLeaks(
+        in operation: @escaping () async throws -> some Sendable,
         timeout: TimeInterval = 5.0,
         file: StaticString = #file,
         line: UInt = #line
@@ -221,7 +221,8 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
     ) async {
         XCTAssertFalse(
             viewModel.isLoading, "View model should not be loading initially", file: file,
-            line: line)
+            line: line
+        )
 
         var loadingStates: [Bool] = []
 
@@ -229,7 +230,7 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
         let monitoringTask = Task {
             while !Task.isCancelled {
                 loadingStates.append(viewModel.isLoading)
-                try? await Task.sleep(nanoseconds: 50_000_000)  // 0.05s
+                try? await Task.sleep(nanoseconds: 50_000_000) // 0.05s
             }
         }
 
@@ -243,12 +244,14 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
         for expectedState in expectedLoadingStates {
             XCTAssertTrue(
                 loadingStates.contains(expectedState),
-                "Expected loading state \(expectedState) was not observed", file: file, line: line)
+                "Expected loading state \(expectedState) was not observed", file: file, line: line
+            )
         }
 
         XCTAssertFalse(
             viewModel.isLoading, "View model should not be loading after action completes",
-            file: file, line: line)
+            file: file, line: line
+        )
     }
 
     /// Test view model state validation
@@ -270,7 +273,8 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
     ) async {
         XCTAssertNil(
             viewModel.errorMessage, "View model should not have error initially", file: file,
-            line: line)
+            line: line
+        )
 
         await viewModel.handle(action)
 
@@ -278,12 +282,12 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
         let expectation = XCTestExpectation(description: "Error message")
         var errorSet = false
 
-        for _ in 0..<Int(timeout * 10) {
+        for _ in 0 ..< Int(timeout * 10) {
             if viewModel.errorMessage != nil {
                 errorSet = true
                 break
             }
-            try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1s
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
         }
 
         XCTAssertTrue(errorSet, "Error message was not set", file: file, line: line)

@@ -60,17 +60,17 @@ public struct AnyCodable: Codable, Sendable {
         var container = encoder.singleValueContainer()
 
         switch value {
-        case .string(let stringValue):
+        case let .string(stringValue):
             try container.encode(stringValue)
-        case .int(let intValue):
+        case let .int(intValue):
             try container.encode(intValue)
-        case .double(let doubleValue):
+        case let .double(doubleValue):
             try container.encode(doubleValue)
-        case .bool(let boolValue):
+        case let .bool(boolValue):
             try container.encode(boolValue)
-        case .array(let arrayValue):
+        case let .array(arrayValue):
             try container.encode(arrayValue)
-        case .dictionary(let dictValue):
+        case let .dictionary(dictValue):
             try container.encode(dictValue)
         }
     }
@@ -87,60 +87,60 @@ public struct AnyCodable: Codable, Sendable {
 
     /// Extract the value as a specific type
     public func asString() -> String? {
-        if case .string(let value) = value { return value }
+        if case let .string(value) = value { return value }
         return nil
     }
 
     public func asInt() -> Int? {
-        if case .int(let value) = value { return value }
+        if case let .int(value) = value { return value }
         return nil
     }
 
     public func asDouble() -> Double? {
-        if case .double(let value) = value { return value }
+        if case let .double(value) = value { return value }
         return nil
     }
 
     public func asBool() -> Bool? {
-        if case .bool(let value) = value { return value }
+        if case let .bool(value) = value { return value }
         return nil
     }
 
     public func asArray() -> [AnyCodable]? {
-        if case .array(let value) = value { return value }
+        if case let .array(value) = value { return value }
         return nil
     }
 
     public func asDictionary() -> [String: AnyCodable]? {
-        if case .dictionary(let value) = value { return value }
+        if case let .dictionary(value) = value { return value }
         return nil
     }
 }
 
 // MARK: - Convenience Initializers
 
-extension AnyCodable {
-    public static func string(_ value: String) -> AnyCodable {
+public extension AnyCodable {
+    static func string(_ value: String) -> AnyCodable {
         AnyCodable(value)
     }
 
-    public static func int(_ value: Int) -> AnyCodable {
+    static func int(_ value: Int) -> AnyCodable {
         AnyCodable(value)
     }
 
-    public static func double(_ value: Double) -> AnyCodable {
+    static func double(_ value: Double) -> AnyCodable {
         AnyCodable(value)
     }
 
-    public static func bool(_ value: Bool) -> AnyCodable {
+    static func bool(_ value: Bool) -> AnyCodable {
         AnyCodable(value)
     }
 
-    public static func array(_ value: [any Sendable]) -> AnyCodable {
+    static func array(_ value: [any Sendable]) -> AnyCodable {
         AnyCodable(value)
     }
 
-    public static func dictionary(_ value: [String: any Sendable]) -> AnyCodable {
+    static func dictionary(_ value: [String: any Sendable]) -> AnyCodable {
         AnyCodable(value)
     }
 }
@@ -150,12 +150,12 @@ extension AnyCodable {
 extension AnyCodable: CustomStringConvertible {
     public var description: String {
         switch value {
-        case .string(let value): return "\"\(value)\""
-        case .int(let value): return "\(value)"
-        case .double(let value): return "\(value)"
-        case .bool(let value): return "\(value)"
-        case .array(let value): return "\(value)"
-        case .dictionary(let value): return "\(value)"
+        case let .string(value): return "\"\(value)\""
+        case let .int(value): return "\(value)"
+        case let .double(value): return "\(value)"
+        case let .bool(value): return "\(value)"
+        case let .array(value): return "\(value)"
+        case let .dictionary(value): return "\(value)"
         }
     }
 }
@@ -165,12 +165,12 @@ extension AnyCodable: CustomStringConvertible {
 extension AnyCodable: Equatable {
     public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {
         switch (lhs.value, rhs.value) {
-        case (.string(let lhs), .string(let rhs)): return lhs == rhs
-        case (.int(let lhs), .int(let rhs)): return lhs == rhs
-        case (.double(let lhs), .double(let rhs)): return lhs == rhs
-        case (.bool(let lhs), .bool(let rhs)): return lhs == rhs
-        case (.array(let lhs), .array(let rhs)): return lhs == rhs
-        case (.dictionary(let lhs), .dictionary(let rhs)): return lhs == rhs
+        case let (.string(lhs), .string(rhs)): return lhs == rhs
+        case let (.int(lhs), .int(rhs)): return lhs == rhs
+        case let (.double(lhs), .double(rhs)): return lhs == rhs
+        case let (.bool(lhs), .bool(rhs)): return lhs == rhs
+        case let (.array(lhs), .array(rhs)): return lhs == rhs
+        case let (.dictionary(lhs), .dictionary(rhs)): return lhs == rhs
         default: return false
         }
     }

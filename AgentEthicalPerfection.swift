@@ -61,7 +61,7 @@ public struct EthicalMetrics: Sendable {
         let metrics = [
             moralReasoning, ethicalDecisionMaking, virtueAlignment, justiceImplementation,
             compassionExpression, integrityMaintenance, responsibilityFulfillment, fairnessApplication,
-            benevolenceDemonstration, wisdomIntegration
+            benevolenceDemonstration, wisdomIntegration,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -261,7 +261,7 @@ public final class EthicalPerfectionEngine: Sendable {
             MoralReasoningStep(type: .moralReasoning, reasoning: 10.0),
             MoralReasoningStep(type: .ethicalDecisionMaking, reasoning: 15.0),
             MoralReasoningStep(type: .virtueAlignment, reasoning: 12.0),
-            MoralReasoningStep(type: .justiceImplementation, reasoning: 14.0)
+            MoralReasoningStep(type: .justiceImplementation, reasoning: 14.0),
         ]
 
         var capabilities: [EthicalCapability] = []
@@ -294,7 +294,7 @@ public final class EthicalPerfectionEngine: Sendable {
         let decisionSequence = [
             EthicalDecisionStep(type: .compassionExpression, decision: 10.0),
             EthicalDecisionStep(type: .integrityMaintenance, decision: 15.0),
-            EthicalDecisionStep(type: .responsibilityFulfillment, decision: 12.0)
+            EthicalDecisionStep(type: .responsibilityFulfillment, decision: 12.0),
         ]
 
         var capabilities: [EthicalCapability] = []
@@ -324,7 +324,7 @@ public final class EthicalPerfectionEngine: Sendable {
         let alignmentSequence = [
             VirtueAlignmentStep(type: .fairnessApplication, alignment: 10.0),
             VirtueAlignmentStep(type: .benevolenceDemonstration, alignment: 15.0),
-            VirtueAlignmentStep(type: .wisdomIntegration, alignment: 12.0)
+            VirtueAlignmentStep(type: .wisdomIntegration, alignment: 12.0),
         ]
 
         var capabilities: [EthicalCapability] = []
@@ -434,7 +434,7 @@ public final class MoralReasoningFramework: Sendable {
 
         return MoralReasoningStrategy(
             reasoningSteps: reasoningSteps,
-            totalExpectedReasoningGain: reasoningSteps.map { $0.reasoning }.reduce(0, +),
+            totalExpectedReasoningGain: reasoningSteps.map(\.reasoning).reduce(0, +),
             estimatedDuration: reasoningSteps.map { $0.reasoning * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -467,7 +467,7 @@ public final class MoralReasoningFramework: Sendable {
     ) async -> MoralReasoningResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.reasoning * 1_500_000_000))
 
-        let actualGain = step.reasoning * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.reasoning * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.reasoning * 0.90
 
         return MoralReasoningResultItem(
@@ -482,8 +482,8 @@ public final class MoralReasoningFramework: Sendable {
 
     /// Generate moral reasoner
     private func generateMoralReasoner(_ results: [MoralReasoningResultItem]) -> MoralReasoner {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualReasoningGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualReasoningGain).reduce(0, +)
         let reasonerValue = 1.0 + (totalGain * successRate / 15.0)
 
         return MoralReasoner(
@@ -491,7 +491,7 @@ public final class MoralReasoningFramework: Sendable {
             reasonerType: .ethical,
             reasonerValue: reasonerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -554,7 +554,7 @@ public final class VirtueAlignmentSystem: Sendable {
 
         return VirtueAlignmentStrategy(
             alignmentSteps: alignmentSteps,
-            totalExpectedAlignmentGain: alignmentSteps.map { $0.alignment }.reduce(0, +),
+            totalExpectedAlignmentGain: alignmentSteps.map(\.alignment).reduce(0, +),
             estimatedDuration: alignmentSteps.map { $0.alignment * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -587,7 +587,7 @@ public final class VirtueAlignmentSystem: Sendable {
     ) async -> VirtueAlignmentResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.alignment * 2_000_000_000))
 
-        let actualGain = step.alignment * (0.8 + Double.random(in: 0...0.4))
+        let actualGain = step.alignment * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualGain >= step.alignment * 0.85
 
         return VirtueAlignmentResultItem(
@@ -602,8 +602,8 @@ public final class VirtueAlignmentSystem: Sendable {
 
     /// Generate virtue aligner
     private func generateVirtueAligner(_ results: [VirtueAlignmentResultItem]) -> VirtueAligner {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualAlignmentGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualAlignmentGain).reduce(0, +)
         let alignerValue = 1.0 + (totalGain * successRate / 20.0)
 
         return VirtueAligner(
@@ -611,7 +611,7 @@ public final class VirtueAlignmentSystem: Sendable {
             alignerType: .ethical,
             alignerValue: alignerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -674,7 +674,7 @@ public final class JusticeImplementationInterface: Sendable {
 
         return JusticeImplementationStrategy(
             implementationSteps: implementationSteps,
-            totalExpectedImplementationPower: implementationSteps.map { $0.implementation }.reduce(0, +),
+            totalExpectedImplementationPower: implementationSteps.map(\.implementation).reduce(0, +),
             estimatedDuration: implementationSteps.map { $0.implementation * 0.25 }.reduce(0, +),
             designedAt: Date()
         )
@@ -707,7 +707,7 @@ public final class JusticeImplementationInterface: Sendable {
     ) async -> JusticeImplementationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.implementation * 2_500_000_000))
 
-        let actualPower = step.implementation * (0.75 + Double.random(in: 0...0.5))
+        let actualPower = step.implementation * (0.75 + Double.random(in: 0 ... 0.5))
         let success = actualPower >= step.implementation * 0.80
 
         return JusticeImplementationResultItem(
@@ -722,8 +722,8 @@ public final class JusticeImplementationInterface: Sendable {
 
     /// Generate justice implementer
     private func generateJusticeImplementer(_ results: [JusticeImplementationResultItem]) -> JusticeImplementer {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualImplementationGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualImplementationGain).reduce(0, +)
         let implementerValue = 1.0 + (totalPower * successRate / 25.0)
 
         return JusticeImplementer(
@@ -731,7 +731,7 @@ public final class JusticeImplementationInterface: Sendable {
             implementerType: .ethical,
             implementerValue: implementerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

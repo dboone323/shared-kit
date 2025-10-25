@@ -40,8 +40,8 @@ public class CoreMLManager: ObservableObject {
     // MARK: - Model Management
 
     private func setupModelCache() {
-        self.modelCache.countLimit = 5  // Cache up to 5 models
-        self.modelCache.totalCostLimit = 100 * 1024 * 1024  // 100MB limit
+        self.modelCache.countLimit = 5 // Cache up to 5 models
+        self.modelCache.totalCostLimit = 100 * 1024 * 1024 // 100MB limit
     }
 
     private func discoverAvailableModels() {
@@ -56,7 +56,7 @@ public class CoreMLManager: ObservableObject {
                 type: .textClassification,
                 description: "Classifies text sentiment and categories",
                 isDownloadable: false,
-                modelSize: 5 * 1024 * 1024  // 5MB
+                modelSize: 5 * 1024 * 1024 // 5MB
             ),
             AIModel(
                 id: "image_classifier",
@@ -64,7 +64,7 @@ public class CoreMLManager: ObservableObject {
                 type: .imageClassification,
                 description: "Recognizes objects and scenes in images",
                 isDownloadable: false,
-                modelSize: 15 * 1024 * 1024  // 15MB
+                modelSize: 15 * 1024 * 1024 // 15MB
             ),
             AIModel(
                 id: "habit_predictor",
@@ -72,7 +72,7 @@ public class CoreMLManager: ObservableObject {
                 type: .prediction,
                 description: "Predicts habit completion likelihood",
                 isDownloadable: true,
-                modelSize: 3 * 1024 * 1024  // 3MB
+                modelSize: 3 * 1024 * 1024 // 3MB
             ),
             AIModel(
                 id: "expense_categorizer",
@@ -80,7 +80,7 @@ public class CoreMLManager: ObservableObject {
                 type: .classification,
                 description: "Automatically categorizes financial transactions",
                 isDownloadable: true,
-                modelSize: 8 * 1024 * 1024  // 8MB
+                modelSize: 8 * 1024 * 1024 // 8MB
             ),
             AIModel(
                 id: "task_prioritizer",
@@ -88,7 +88,7 @@ public class CoreMLManager: ObservableObject {
                 type: .prediction,
                 description: "Optimizes task priority based on deadlines and importance",
                 isDownloadable: true,
-                modelSize: 4 * 1024 * 1024  // 4MB
+                modelSize: 4 * 1024 * 1024 // 4MB
             ),
         ])
 
@@ -177,8 +177,8 @@ public class NaturalLanguageProcessor: ObservableObject {
 
     private let sentimentPredictor: NLModel? = {
         do {
-            return NLModel(
-                mlModel: try MLModel(
+            return try NLModel(
+                mlModel: MLModel(
                     contentsOf: Bundle.main.url(
                         forResource: "SentimentPolarity",
                         withExtension: "mlmodelc"
@@ -188,6 +188,7 @@ public class NaturalLanguageProcessor: ObservableObject {
             return nil
         }
     }()
+
     private let languageRecognizer = NLLanguageRecognizer()
     private let tokenizer = NLTokenizer(unit: .word)
 
@@ -233,7 +234,8 @@ public class NaturalLanguageProcessor: ObservableObject {
         tagger.string = text
 
         let (sentiment, _) = tagger.tag(
-            at: text.startIndex, unit: .paragraph, scheme: .sentimentScore)
+            at: text.startIndex, unit: .paragraph, scheme: .sentimentScore
+        )
 
         if let sentimentScore = sentiment?.rawValue, let score = Double(sentimentScore) {
             if score > 0.1 {
@@ -254,13 +256,14 @@ public class NaturalLanguageProcessor: ObservableObject {
         tagger.string = text
 
         let (sentiment, _) = tagger.tag(
-            at: text.startIndex, unit: .paragraph, scheme: .sentimentScore)
+            at: text.startIndex, unit: .paragraph, scheme: .sentimentScore
+        )
 
         if let sentimentScore = sentiment?.rawValue, let score = Double(sentimentScore) {
-            return min(abs(score), 1.0)  // Normalize to 0-1 range
+            return min(abs(score), 1.0) // Normalize to 0-1 range
         }
 
-        return 0.5  // Default confidence
+        return 0.5 // Default confidence
     }
 
     private func extractEmotions(_ text: String) -> [Emotion] {
@@ -293,7 +296,7 @@ public class NaturalLanguageProcessor: ObservableObject {
         self.tokenizer.string = text
         var wordCount = 0
 
-        self.tokenizer.enumerateTokens(in: text.startIndex..<text.endIndex) { _, _ in
+        self.tokenizer.enumerateTokens(in: text.startIndex ..< text.endIndex) { _, _ in
             wordCount += 1
             return true
         }
@@ -338,7 +341,7 @@ public class NaturalLanguageProcessor: ObservableObject {
         // This would use a trained ML model in production
 
         let scores = categories.map { category in
-            CategoryScore(category: category, score: Double.random(in: 0.1...0.9))
+            CategoryScore(category: category, score: Double.random(in: 0.1 ... 0.9))
         }.sorted { $0.score > $1.score }
 
         return TextCategorizationResult(
@@ -358,13 +361,13 @@ public class NaturalLanguageProcessor: ObservableObject {
         var keywords: [String: Int] = [:]
 
         tagger.enumerateTokens(
-            in: text.startIndex..<text.endIndex, unit: .word, scheme: .lexicalClass
+            in: text.startIndex ..< text.endIndex, unit: .word, scheme: .lexicalClass
         ) { tokenRange, tag in
             if let tag,
-                tag == .noun || tag == .adjective || tag == .verb
+               tag == .noun || tag == .adjective || tag == .verb
             {
                 let word = String(text[tokenRange]).lowercased()
-                if word.count > 3 {  // Filter out short words
+                if word.count > 3 { // Filter out short words
                     keywords[word, default: 0] += 1
                 }
             }
@@ -373,13 +376,14 @@ public class NaturalLanguageProcessor: ObservableObject {
 
         return
             keywords
-            .sorted { $0.value > $1.value }
-            .prefix(maxCount)
-            .map {
-                Keyword(
-                    word: $0.key, frequency: $0.value,
-                    relevance: Double($0.value) / Double(text.count))
-            }
+                .sorted { $0.value > $1.value }
+                .prefix(maxCount)
+                .map {
+                    Keyword(
+                        word: $0.key, frequency: $0.value,
+                        relevance: Double($0.value) / Double(text.count)
+                    )
+                }
     }
 }
 
@@ -486,7 +490,7 @@ public class ComputerVisionProcessor: ObservableObject {
                     DetectedObject(
                         boundingBox: observation.boundingBox,
                         confidence: Double(observation.confidence),
-                        type: "Rectangle"  // In production, this would be more specific
+                        type: "Rectangle" // In production, this would be more specific
                     )
                 }
 
@@ -620,7 +624,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
     {
         let completionRate =
             history.isEmpty
-            ? 0.5 : Double(history.count(where: { $0.completed })) / Double(history.count)
+                ? 0.5 : Double(history.count(where: { $0.completed })) / Double(history.count)
         let streakLength = self.calculateCurrentStreak(history)
         let timeOfDayConsistency = self.calculateTimeConsistency(history)
         let dayOfWeekPattern = self.analyzeDayOfWeekPattern(history)
@@ -630,7 +634,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
             currentStreak: streakLength,
             timeConsistency: timeOfDayConsistency,
             dayPattern: dayOfWeekPattern,
-            habitAge: habit.createdDate.timeIntervalSinceNow / -86400,  // Days since creation
+            habitAge: habit.createdDate.timeIntervalSinceNow / -86400, // Days since creation
             difficulty: habit.difficulty
         )
     }
@@ -639,7 +643,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
         // Simplified prediction algorithm
         // In production, this would use a trained ML model
 
-        var successProbability = features.completionRate * 0.4  // Historical performance
+        var successProbability = features.completionRate * 0.4 // Historical performance
 
         // Streak bonus
         if features.currentStreak > 7 {
@@ -666,7 +670,8 @@ public class PredictiveAnalyticsEngine: ObservableObject {
 
         let confidence = self.calculatePredictionConfidence(features: features)
         let recommendations = self.generateHabitRecommendations(
-            features: features, prediction: successProbability)
+            features: features, prediction: successProbability
+        )
 
         return HabitPrediction(
             successProbability: successProbability,
@@ -707,7 +712,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
             hours.map { pow(Double($0) - meanHour, 2) }.reduce(0, +) / Double(hours.count)
 
         // Lower variance means higher consistency
-        return max(0.0, 1.0 - (variance / 144.0))  // 144 is max variance for 24-hour range
+        return max(0.0, 1.0 - (variance / 144.0)) // 144 is max variance for 24-hour range
     }
 
     private func analyzeDayOfWeekPattern(_ history: [HabitCompletionRecord]) -> Double {
@@ -735,7 +740,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
     }
 
     private func calculatePredictionConfidence(features: HabitFeatures) -> Double {
-        var confidence = 0.5  // Base confidence
+        var confidence = 0.5 // Base confidence
 
         // More data points increase confidence
         if features.habitAge > 30 {
@@ -798,7 +803,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
                     ? .positive : features.completionRate < 0.3 ? .negative : .neutral,
                 weight: 0.4,
                 description:
-                    "Based on your past completion rate of \(Int(features.completionRate * 100))%"
+                "Based on your past completion rate of \(Int(features.completionRate * 100))%"
             ))
 
         factors.append(
@@ -897,7 +902,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
         } else {
             // Default scoring based on amount and time patterns
             for category in categories {
-                categoryScores[category] = Double.random(in: 0.1...0.6)
+                categoryScores[category] = Double.random(in: 0.1 ... 0.6)
             }
         }
 
@@ -916,7 +921,8 @@ public class PredictiveAnalyticsEngine: ObservableObject {
             confidence: topCategory?.value ?? 0.5,
             alternativeCategories: Array(categoryScores.sorted { $0.value > $1.value }.prefix(3)),
             reasoning: self.generateExpenseReasoning(
-                features: features, prediction: topCategory?.key ?? "Other"),
+                features: features, prediction: topCategory?.key ?? "Other"
+            ),
             timestamp: Date()
         )
     }
@@ -942,7 +948,7 @@ public struct AIModel: Identifiable, Codable {
     public let type: ModelType
     public let description: String
     public let isDownloadable: Bool
-    public let modelSize: Int  // in bytes
+    public let modelSize: Int // in bytes
     public var isLoaded: Bool = false
     public var downloadProgress: Double = 0.0
 
@@ -1067,7 +1073,7 @@ public struct Prediction: Identifiable, Codable {
 public struct HabitData: Codable {
     public let id: String
     public let name: String
-    public let difficulty: Double  // 0.0 to 1.0
+    public let difficulty: Double // 0.0 to 1.0
     public let frequency: String
     public let createdDate: Date
 }
@@ -1145,7 +1151,7 @@ public struct TrainingDataPoint: Codable {
 private class DataProcessor {
     func normalizeFeatures(_ features: [Double]) -> [Double] {
         // Implement feature normalization
-        features.map { max(-3.0, min(3.0, $0)) }  // Clip to reasonable range
+        features.map { max(-3.0, min(3.0, $0)) } // Clip to reasonable range
     }
 
     func extractFeatures(from data: [String: Any]) -> [Double] {
@@ -1156,7 +1162,7 @@ private class DataProcessor {
             if let number = value as? Double {
                 features.append(number)
             } else if let string = value as? String {
-                features.append(Double(string.count))  // Use string length as feature
+                features.append(Double(string.count)) // Use string length as feature
             } else if let bool = value as? Bool {
                 features.append(bool ? 1.0 : 0.0)
             }
@@ -1178,9 +1184,9 @@ public enum AIError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .modelNotFound(let modelId):
+        case let .modelNotFound(modelId):
             "AI model '\(modelId)' not found"
-        case .modelLoadingFailed(let modelId):
+        case let .modelLoadingFailed(modelId):
             "Failed to load AI model '\(modelId)'"
         case .imageProcessingFailed:
             "Image processing failed"

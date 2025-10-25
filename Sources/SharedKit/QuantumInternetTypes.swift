@@ -4,8 +4,8 @@ import Foundation
 
 /// Quantum state representation
 public struct QuantumState {
-    public let alpha: Double  // |0⟩ amplitude
-    public let beta: Double  // |1⟩ amplitude
+    public let alpha: Double // |0⟩ amplitude
+    public let beta: Double // |1⟩ amplitude
     public let amplitude: Double
     public let phase: Double
     public let polarization: Polarization
@@ -15,7 +15,7 @@ public struct QuantumState {
         self.beta = beta
         self.amplitude = sqrt(alpha * alpha + beta * beta)
         self.phase = atan2(beta, alpha)
-        self.polarization = .horizontal  // Default
+        self.polarization = .horizontal // Default
     }
 
     public init(amplitude: Double, phase: Double, polarization: Polarization) {
@@ -27,7 +27,7 @@ public struct QuantumState {
     }
 
     public var fidelity: Double {
-        return alpha * alpha + beta * beta
+        alpha * alpha + beta * beta
     }
 }
 
@@ -58,11 +58,11 @@ public struct EntanglementPair {
         self.decoherenceRate = decoherenceRate
         self.distance = distance
         self.createdAt = Date()
-        self.expiresAt = Date().addingTimeInterval(3600)  // 1 hour lifetime
+        self.expiresAt = Date().addingTimeInterval(3600) // 1 hour lifetime
     }
 
     public var isExpired: Bool {
-        return Date() > expiresAt
+        Date() > expiresAt
     }
 
     public var currentFidelity: Double {
@@ -88,7 +88,7 @@ public struct Qubit {
 public struct QuantumChannel {
     public let lossRate: Double
     public let noiseLevel: Double
-    public let capacity: Double  // qubits per second
+    public let capacity: Double // qubits per second
     public let maxDistance: Double
 
     public init(lossRate: Double, noiseLevel: Double, capacity: Double, maxDistance: Double) {
@@ -116,13 +116,13 @@ public struct RoutingConstraints {
         self.maxLatency = maxLatency
         self.maxHops = maxHops
         self.requiredSecurity = requiredSecurity
-        self.maxDistance = 1000.0  // Default max distance
-        self.priority = .fidelity  // Default priority
+        self.maxDistance = 1000.0 // Default max distance
+        self.priority = .fidelity // Default priority
     }
 
     public init(minFidelity: Double, maxDistance: Double, maxHops: Int, priority: RoutingPriority) {
         self.minFidelity = minFidelity
-        self.maxLatency = 100.0  // Default latency
+        self.maxLatency = 100.0 // Default latency
         self.maxHops = maxHops
         self.requiredSecurity = .high
         self.maxDistance = maxDistance

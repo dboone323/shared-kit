@@ -61,7 +61,7 @@ public struct CreativityMetrics: Sendable {
         let metrics = [
             infiniteImagination, boundlessInnovation, limitlessInspiration, eternalOriginality,
             cosmicCreativity, transcendentArtistry, divineIngenuity, universalGenius,
-            infinitePotential, eternalInnovation
+            infinitePotential, eternalInnovation,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -260,7 +260,7 @@ public final class CreativityInfinityEngine: Sendable {
             InfiniteImaginationStep(type: .infiniteImagination, imagination: 10.0),
             InfiniteImaginationStep(type: .boundlessInnovation, imagination: 15.0),
             InfiniteImaginationStep(type: .limitlessInspiration, imagination: 12.0),
-            InfiniteImaginationStep(type: .eternalOriginality, imagination: 14.0)
+            InfiniteImaginationStep(type: .eternalOriginality, imagination: 14.0),
         ]
 
         var capabilities: [CreativityCapability] = []
@@ -293,7 +293,7 @@ public final class CreativityInfinityEngine: Sendable {
         let innovationSequence = [
             BoundlessInnovationStep(type: .cosmicCreativity, innovation: 10.0),
             BoundlessInnovationStep(type: .transcendentArtistry, innovation: 15.0),
-            BoundlessInnovationStep(type: .divineIngenuity, innovation: 12.0)
+            BoundlessInnovationStep(type: .divineIngenuity, innovation: 12.0),
         ]
 
         var capabilities: [CreativityCapability] = []
@@ -323,7 +323,7 @@ public final class CreativityInfinityEngine: Sendable {
         let inspirationSequence = [
             LimitlessInspirationStep(type: .universalGenius, inspiration: 10.0),
             LimitlessInspirationStep(type: .infinitePotential, inspiration: 15.0),
-            LimitlessInspirationStep(type: .eternalInnovation, inspiration: 12.0)
+            LimitlessInspirationStep(type: .eternalInnovation, inspiration: 12.0),
         ]
 
         var capabilities: [CreativityCapability] = []
@@ -433,7 +433,7 @@ public final class InfiniteImaginationFramework: Sendable {
 
         return InfiniteImaginationStrategy(
             imaginationSteps: imaginationSteps,
-            totalExpectedImaginationGain: imaginationSteps.map { $0.imagination }.reduce(0, +),
+            totalExpectedImaginationGain: imaginationSteps.map(\.imagination).reduce(0, +),
             estimatedDuration: imaginationSteps.map { $0.imagination * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -466,7 +466,7 @@ public final class InfiniteImaginationFramework: Sendable {
     ) async -> InfiniteImaginationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.imagination * 1_500_000_000))
 
-        let actualGain = step.imagination * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.imagination * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.imagination * 0.90
 
         return InfiniteImaginationResultItem(
@@ -481,8 +481,8 @@ public final class InfiniteImaginationFramework: Sendable {
 
     /// Generate infinite imaginative
     private func generateInfiniteImaginative(_ results: [InfiniteImaginationResultItem]) -> InfiniteImaginativeEntity {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualImaginationGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualImaginationGain).reduce(0, +)
         let imaginativeValue = 1.0 + (totalGain * successRate / 15.0)
 
         return InfiniteImaginativeEntity(
@@ -490,7 +490,7 @@ public final class InfiniteImaginationFramework: Sendable {
             imaginativeType: .creativity,
             imaginativeValue: imaginativeValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -553,7 +553,7 @@ public final class BoundlessInnovationSystem: Sendable {
 
         return BoundlessInnovationStrategy(
             innovationSteps: innovationSteps,
-            totalExpectedInnovationGain: innovationSteps.map { $0.innovation }.reduce(0, +),
+            totalExpectedInnovationGain: innovationSteps.map(\.innovation).reduce(0, +),
             estimatedDuration: innovationSteps.map { $0.innovation * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -586,7 +586,7 @@ public final class BoundlessInnovationSystem: Sendable {
     ) async -> BoundlessInnovationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.innovation * 2_000_000_000))
 
-        let actualGain = step.innovation * (0.8 + Double.random(in: 0...0.4))
+        let actualGain = step.innovation * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualGain >= step.innovation * 0.85
 
         return BoundlessInnovationResultItem(
@@ -601,8 +601,8 @@ public final class BoundlessInnovationSystem: Sendable {
 
     /// Generate boundless innovative
     private func generateBoundlessInnovative(_ results: [BoundlessInnovationResultItem]) -> BoundlessInnovativeEntity {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualInnovationGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualInnovationGain).reduce(0, +)
         let innovativeValue = 1.0 + (totalGain * successRate / 20.0)
 
         return BoundlessInnovativeEntity(
@@ -610,7 +610,7 @@ public final class BoundlessInnovationSystem: Sendable {
             innovativeType: .creativity,
             innovativeValue: innovativeValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -673,7 +673,7 @@ public final class LimitlessInspirationInterface: Sendable {
 
         return LimitlessInspirationStrategy(
             inspirationSteps: inspirationSteps,
-            totalExpectedInspirationPower: inspirationSteps.map { $0.inspiration }.reduce(0, +),
+            totalExpectedInspirationPower: inspirationSteps.map(\.inspiration).reduce(0, +),
             estimatedDuration: inspirationSteps.map { $0.inspiration * 0.25 }.reduce(0, +),
             designedAt: Date()
         )
@@ -706,7 +706,7 @@ public final class LimitlessInspirationInterface: Sendable {
     ) async -> LimitlessInspirationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.inspiration * 2_500_000_000))
 
-        let actualPower = step.inspiration * (0.75 + Double.random(in: 0...0.5))
+        let actualPower = step.inspiration * (0.75 + Double.random(in: 0 ... 0.5))
         let success = actualPower >= step.inspiration * 0.80
 
         return LimitlessInspirationResultItem(
@@ -721,8 +721,8 @@ public final class LimitlessInspirationInterface: Sendable {
 
     /// Generate limitless inspirational
     private func generateLimitlessInspirational(_ results: [LimitlessInspirationResultItem]) -> LimitlessInspirationalEntity {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualInspirationGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualInspirationGain).reduce(0, +)
         let inspirationalValue = 1.0 + (totalPower * successRate / 25.0)
 
         return LimitlessInspirationalEntity(
@@ -730,7 +730,7 @@ public final class LimitlessInspirationInterface: Sendable {
             inspirationalType: .creativity,
             inspirationalValue: inspirationalValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

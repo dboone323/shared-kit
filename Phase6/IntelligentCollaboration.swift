@@ -16,7 +16,8 @@ import OSLog
 /// Main intelligent collaboration coordinator
 public actor IntelligentCollaboration {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "IntelligentCollaboration")
+        subsystem: "com.quantum.workspace", category: "IntelligentCollaboration"
+    )
 
     // Core components
     private let teamCoordinator: TeamCoordinator
@@ -156,7 +157,7 @@ public actor IntelligentCollaboration {
                 ))
         }
 
-        if analysis.knowledgeGaps.count > 0 {
+        if !analysis.knowledgeGaps.isEmpty {
             recommendations.append(
                 CollaborationRecommendation(
                     id: "address_knowledge_gaps",
@@ -186,7 +187,7 @@ public actor IntelligentCollaboration {
 
     /// Get current collaboration status
     public func getCollaborationStatus() -> CollaborationStatus {
-        return CollaborationStatus(
+        CollaborationStatus(
             activeSessions: activeSessions,
             teamMembers: teamMembers,
             metrics: collaborationMetrics,
@@ -329,8 +330,7 @@ public actor KnowledgeManager {
     }
 
     /// Get knowledge recommendations for a team member
-    public func getKnowledgeRecommendations(for member: TeamMember) async throws -> [KnowledgeItem]
-    {
+    public func getKnowledgeRecommendations(for member: TeamMember) async throws -> [KnowledgeItem] {
         logger.info("💡 Getting knowledge recommendations for \(member.name)")
 
         // Analyze member's knowledge gaps
@@ -382,13 +382,12 @@ public actor KnowledgeManager {
         -> [KnowledgeItem]
     {
         // Perform actual search
-        return []
+        []
     }
 
-    private func rankSearchResults(_ results: [KnowledgeItem], for query: String) -> [KnowledgeItem]
-    {
+    private func rankSearchResults(_ results: [KnowledgeItem], for query: String) -> [KnowledgeItem] {
         // Rank by relevance to query
-        return results.sorted { item1, item2 in
+        results.sorted { item1, item2 in
             // Simplified ranking logic
             item1.title.lowercased().contains(query.lowercased())
                 && !item2.title.lowercased().contains(query.lowercased())
@@ -397,23 +396,22 @@ public actor KnowledgeManager {
 
     private func analyzeKnowledgeGaps(for member: TeamMember) async throws -> [KnowledgeArea] {
         // Analyze what the member doesn't know
-        return []
+        []
     }
 
     private func findRelevantKnowledge(for gap: KnowledgeArea) async throws -> [KnowledgeItem] {
         // Find knowledge items that address the gap
-        return []
+        []
     }
 
     private func rankRecommendations(_ items: [KnowledgeItem], for member: TeamMember)
         -> [KnowledgeItem]
     {
         // Rank by relevance to member's needs
-        return items
+        items
     }
 
-    private func sendKnowledgeToRecipient(_ item: KnowledgeItem, recipient: TeamMember) async throws
-    {
+    private func sendKnowledgeToRecipient(_ item: KnowledgeItem, recipient: TeamMember) async throws {
         // Send knowledge item to individual recipient
         logger.info("📨 Sent knowledge to \(recipient.name)")
     }
@@ -424,7 +422,8 @@ public actor KnowledgeManager {
 /// Analyzes collaboration patterns and team dynamics
 public actor CollaborationAnalyzer {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "CollaborationAnalyzer")
+        subsystem: "com.quantum.workspace", category: "CollaborationAnalyzer"
+    )
 
     /// Analyze collaboration patterns
     public func analyzePatterns(
@@ -436,7 +435,8 @@ public actor CollaborationAnalyzer {
 
         let communicationGaps = try await analyzeCommunicationGaps(sessions: sessions)
         let knowledgeGaps = try await identifyKnowledgeGaps(
-            members: members, knowledgeBase: knowledgeBase)
+            members: members, knowledgeBase: knowledgeBase
+        )
         let productivityGain = try await calculateProductivityGain(sessions: sessions)
         let teamDynamics = try await assessTeamDynamics(sessions: sessions, members: members)
 
@@ -460,7 +460,7 @@ public actor CollaborationAnalyzer {
         // Analyze session durations
         let longSessions = sessions.filter { session in
             if let endTime = session.endTime {
-                return endTime.timeIntervalSince(session.startTime) > 3600  // 1 hour
+                return endTime.timeIntervalSince(session.startTime) > 3600 // 1 hour
             }
             return false
         }
@@ -478,7 +478,7 @@ public actor CollaborationAnalyzer {
 
         // Analyze participation levels
         for session in sessions {
-            let activeParticipants = session.participants.filter { $0.isActive }.count
+            let activeParticipants = session.participants.filter(\.isActive).count
             let totalParticipants = session.participants.count
 
             if Double(activeParticipants) / Double(totalParticipants) < 0.5 {
@@ -526,8 +526,7 @@ public actor CollaborationAnalyzer {
         return gaps
     }
 
-    private func calculateProductivityGain(sessions: [CollaborationSession]) async throws -> Double
-    {
+    private func calculateProductivityGain(sessions: [CollaborationSession]) async throws -> Double {
         // Calculate productivity improvements from collaboration
         // Simplified calculation
         let completedSessions = sessions.filter { $0.status == .completed }.count
@@ -541,7 +540,7 @@ public actor CollaborationAnalyzer {
         members: [TeamMember]
     ) async throws -> TeamDynamics {
         // Assess team dynamics
-        return TeamDynamics(
+        TeamDynamics(
             cohesion: 0.8,
             communication: 0.7,
             conflictResolution: 0.9,
@@ -594,8 +593,7 @@ public actor IntelligentMediator {
     }
 
     /// Optimize collaboration workflow
-    public func optimizeWorkflow(session: CollaborationSession) async throws -> WorkflowOptimization
-    {
+    public func optimizeWorkflow(session: CollaborationSession) async throws -> WorkflowOptimization {
         logger.info("⚡ Optimizing workflow for session \(session.id)")
 
         // Analyze current workflow
@@ -624,7 +622,7 @@ public actor IntelligentMediator {
         in session: CollaborationSession
     ) async throws -> ConflictAnalysis {
         // Analyze the conflict in detail
-        return ConflictAnalysis(
+        ConflictAnalysis(
             severity: conflict.severity,
             parties: conflict.partiesInvolved,
             rootCause: conflict.description,
@@ -638,7 +636,7 @@ public actor IntelligentMediator {
     ) async throws -> ResolutionStrategy {
         // Determine the best resolution strategy
         // This could use ML models trained on past conflict resolutions
-        return .compromise
+        .compromise
     }
 
     private func generateResolutionActions(
@@ -664,31 +662,29 @@ public actor IntelligentMediator {
         conflict: CollaborationConflict
     ) -> String {
         // Predict the outcome of the resolution
-        return "Conflict resolved with improved team understanding"
+        "Conflict resolved with improved team understanding"
     }
 
     private func analyzeWorkflowEfficiency(_ session: CollaborationSession) async throws -> Double {
         // Analyze how efficiently the workflow is running
-        return 0.75  // Simplified
+        0.75 // Simplified
     }
 
     private func identifyOptimizationOpportunities(_ session: CollaborationSession) async throws
         -> [OptimizationOpportunity]
     {
         // Identify ways to optimize the workflow
-        return []
+        []
     }
 
-    private func calculateExpectedImprovement(_ opportunities: [OptimizationOpportunity]) -> Double
-    {
+    private func calculateExpectedImprovement(_ opportunities: [OptimizationOpportunity]) -> Double {
         // Calculate expected productivity improvement
-        return opportunities.count > 0 ? 0.15 : 0.0
+        !opportunities.isEmpty ? 0.15 : 0.0
     }
 
-    private func generateImplementationPlan(_ opportunities: [OptimizationOpportunity]) -> [String]
-    {
+    private func generateImplementationPlan(_ opportunities: [OptimizationOpportunity]) -> [String] {
         // Generate a plan for implementing optimizations
-        return ["Implement identified optimizations", "Monitor results", "Adjust as needed"]
+        ["Implement identified optimizations", "Monitor results", "Adjust as needed"]
     }
 }
 
@@ -803,7 +799,7 @@ public struct KnowledgeBase: Sendable {
     }
 
     public func search(query: String) -> [KnowledgeItem] {
-        return items.filter { item in
+        items.filter { item in
             item.title.lowercased().contains(query.lowercased())
                 || item.content.lowercased().contains(query.lowercased())
                 || item.tags.contains { $0.lowercased().contains(query.lowercased()) }
@@ -995,7 +991,7 @@ public func initializeIntelligentCollaboration() async {
 /// Get intelligent collaboration capabilities
 @MainActor
 public func getIntelligentCollaborationCapabilities() -> [String: [String]] {
-    return [
+    [
         "team_coordination": [
             "session_management", "participant_coordination", "progress_tracking",
         ],
@@ -1017,7 +1013,7 @@ public func startCollaborationSession(
     objective: String,
     context: CollaborationContext
 ) async throws -> CollaborationSession {
-    return try await globalIntelligentCollaboration.startCollaborationSession(
+    try await globalIntelligentCollaboration.startCollaborationSession(
         title: title,
         participants: participants,
         objective: objective,
@@ -1042,7 +1038,7 @@ public func shareKnowledge(
 /// Get current collaboration status
 @MainActor
 public func getCurrentCollaborationStatus() async -> CollaborationStatus {
-    return await globalIntelligentCollaboration.getCollaborationStatus()
+    await globalIntelligentCollaboration.getCollaborationStatus()
 }
 
 /// Resolve a collaboration conflict
@@ -1051,7 +1047,7 @@ public func resolveCollaborationConflict(
     in session: CollaborationSession,
     conflict: CollaborationConflict
 ) async throws -> ConflictResolution {
-    return try await globalIntelligentCollaboration.resolveConflict(
+    try await globalIntelligentCollaboration.resolveConflict(
         in: session,
         conflict: conflict
     )

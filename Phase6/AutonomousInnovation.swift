@@ -16,7 +16,8 @@ import OSLog
 /// Main autonomous innovation coordinator
 public actor AutonomousInnovation {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "AutonomousInnovation")
+        subsystem: "com.quantum.workspace", category: "AutonomousInnovation"
+    )
 
     // Core components
     private let innovationGenerator: InnovationGenerator
@@ -94,7 +95,7 @@ public actor AutonomousInnovation {
 
     /// Predict future innovation opportunities
     public func predictInnovationOpportunities(
-        timeHorizon: TimeInterval = 365 * 24 * 3600  // 1 year
+        timeHorizon: TimeInterval = 365 * 24 * 3600 // 1 year
     ) async throws -> [PredictedOpportunity] {
         logger.info(
             "🔮 Predicting innovation opportunities for next \(Int(timeHorizon / (365 * 24 * 3600))) years"
@@ -185,7 +186,7 @@ public actor AutonomousInnovation {
         }
         updatedMetrics.innovationSuccessRate =
             Double(updatedMetrics.successfulImplementations)
-            / Double(max(updatedMetrics.totalInnovations, 1))
+                / Double(max(updatedMetrics.totalInnovations, 1))
         innovationMetrics = updatedMetrics
 
         logger.info(
@@ -224,12 +225,12 @@ public actor AutonomousInnovation {
 
     /// Get innovation metrics
     public func getInnovationMetrics() -> InnovationMetrics {
-        return innovationMetrics
+        innovationMetrics
     }
 
     /// Get implementation queue
     public func getImplementationQueue() -> [ImplementationTask] {
-        return implementationQueue
+        implementationQueue
     }
 
     private func updateInnovationMetrics(_ innovations: [Innovation]) {
@@ -237,7 +238,7 @@ public actor AutonomousInnovation {
         updatedMetrics.totalInnovations += innovations.count
         updatedMetrics.innovationSuccessRate =
             Double(updatedMetrics.successfulImplementations)
-            / Double(max(updatedMetrics.totalInnovations, 1))
+                / Double(max(updatedMetrics.totalInnovations, 1))
         updatedMetrics.timestamp = Date()
         innovationMetrics = updatedMetrics
     }
@@ -252,7 +253,7 @@ public actor AutonomousInnovation {
         let domainCounts = Dictionary(grouping: successful, by: { $0.domain.name })
             .mapValues { $0.count }
 
-        let domainData = domainCounts.map { (key, value) in
+        let domainData = domainCounts.map { key, value in
             (key, SendablePatternValue.int(value))
         }
         let domainDict = Dictionary(uniqueKeysWithValues: domainData)
@@ -272,7 +273,7 @@ public actor AutonomousInnovation {
                     / Double(innovations.count)
             }
 
-        let complexityData = complexitySuccess.map { (key, value) in
+        let complexityData = complexitySuccess.map { key, value in
             (key.rawValue, SendablePatternValue.double(value))
         }
         let complexityDict = Dictionary(uniqueKeysWithValues: complexityData)
@@ -289,7 +290,7 @@ public actor AutonomousInnovation {
             totalInnovations: innovationHistory.count,
             successfulInnovations: successful.count,
             patterns: patterns,
-            averagePotential: successful.map { $0.potential }.reduce(0, +)
+            averagePotential: successful.map(\.potential).reduce(0, +)
                 / Double(max(successful.count, 1))
         )
     }
@@ -304,7 +305,7 @@ public actor AutonomousInnovation {
         let typeCounts = Dictionary(grouping: opportunities, by: { $0.type })
             .mapValues { $0.count }
 
-        let typeData = typeCounts.map { (key, value) in
+        let typeData = typeCounts.map { key, value in
             (key.rawValue, SendablePatternValue.int(value))
         }
         let typeDict = Dictionary(uniqueKeysWithValues: typeData)
@@ -318,11 +319,11 @@ public actor AutonomousInnovation {
             ))
 
         // Timeline analysis
-        let timelineOpportunities = opportunities.filter { $0.timeframe < 365 * 24 * 3600 }  // Next year
+        let timelineOpportunities = opportunities.filter { $0.timeframe < 365 * 24 * 3600 } // Next year
         let timelineCounts = Dictionary(grouping: timelineOpportunities, by: { $0.timeframe })
             .mapValues { $0.count }
 
-        let timelineData = timelineCounts.map { (key, value) in
+        let timelineData = timelineCounts.map { key, value in
             (String(format: "%.0f", key), SendablePatternValue.int(value))
         }
         let timelineDict = Dictionary(uniqueKeysWithValues: timelineData)
@@ -339,7 +340,7 @@ public actor AutonomousInnovation {
             totalOpportunities: opportunities.count,
             nearTermOpportunities: timelineOpportunities.count,
             patterns: opportunityPatterns,
-            averageImpact: opportunities.map { $0.impact }.reduce(0, +)
+            averageImpact: opportunities.map(\.impact).reduce(0, +)
                 / Double(max(opportunities.count, 1))
         )
     }
@@ -354,14 +355,14 @@ public actor AutonomousInnovation {
         if innovationAnalysis.successfulInnovations > 0 {
             let successRate =
                 Double(innovationAnalysis.successfulInnovations)
-                / Double(innovationAnalysis.totalInnovations)
+                    / Double(innovationAnalysis.totalInnovations)
 
             insights.append(
                 InnovationInsight(
                     type: .successRate,
                     title: "Innovation Success Rate",
                     description:
-                        "Current success rate: \(String(format: "%.1f", successRate * 100))%",
+                    "Current success rate: \(String(format: "%.1f", successRate * 100))%",
                     confidence: 0.9,
                     recommendation: successRate > 0.7
                         ? "Continue current innovation strategy"
@@ -375,10 +376,10 @@ public actor AutonomousInnovation {
                     type: .opportunityDensity,
                     title: "High Opportunity Density",
                     description:
-                        "\(opportunityAnalysis.nearTermOpportunities) opportunities identified for next year",
+                    "\(opportunityAnalysis.nearTermOpportunities) opportunities identified for next year",
                     confidence: 0.8,
                     recommendation:
-                        "Prioritize implementation of high-impact near-term opportunities"
+                    "Prioritize implementation of high-impact near-term opportunities"
                 ))
         }
 
@@ -402,7 +403,7 @@ public actor InnovationGenerator {
         var innovations: [Innovation] = []
 
         // Generate multiple innovation concepts
-        for i in 0..<constraints.maxIdeasPerOpportunity {
+        for i in 0 ..< constraints.maxIdeasPerOpportunity {
             let innovation = try await generateSingleInnovation(
                 for: opportunity,
                 index: i,
@@ -454,8 +455,7 @@ public actor InnovationGenerator {
     }
 
     private func generateInnovationDescription(_ opportunity: InnovationOpportunity) -> String {
-        return
-            "An innovative solution that leverages \(opportunity.description.lowercased()) to create new capabilities in \(opportunity.domain.name)."
+        "An innovative solution that leverages \(opportunity.description.lowercased()) to create new capabilities in \(opportunity.domain.name)."
     }
 
     private func generateInnovationFeatures(_ opportunity: InnovationOpportunity)
@@ -464,14 +464,14 @@ public actor InnovationGenerator {
         var features: [InnovationFeature] = []
 
         // Generate 3-5 key features
-        let featureCount = Int.random(in: 3...5)
+        let featureCount = Int.random(in: 3 ... 5)
 
-        for i in 0..<featureCount {
+        for i in 0 ..< featureCount {
             let feature = InnovationFeature(
                 name: "Feature \(i + 1)",
                 description: "Advanced capability leveraging \(opportunity.type.rawValue)",
-                technicalComplexity: Double.random(in: 0.3...0.9),
-                userValue: Double.random(in: 0.5...1.0)
+                technicalComplexity: Double.random(in: 0.3 ... 0.9),
+                userValue: Double.random(in: 0.5 ... 1.0)
             )
             features.append(feature)
         }
@@ -481,7 +481,7 @@ public actor InnovationGenerator {
 
     private func estimateComplexity(_ features: [InnovationFeature]) -> InnovationComplexity {
         let avgComplexity =
-            features.map { $0.technicalComplexity }.reduce(0, +) / Double(features.count)
+            features.map(\.technicalComplexity).reduce(0, +) / Double(features.count)
 
         if avgComplexity > 0.7 {
             return .high
@@ -496,8 +496,8 @@ public actor InnovationGenerator {
         _ opportunity: InnovationOpportunity, _ features: [InnovationFeature]
     ) -> Double {
         let opportunityImpact = opportunity.impact
-        let featureValue = features.map { $0.userValue }.reduce(0, +) / Double(features.count)
-        let marketTiming = Double.random(in: 0.7...1.0)  // Market readiness
+        let featureValue = features.map(\.userValue).reduce(0, +) / Double(features.count)
+        let marketTiming = Double.random(in: 0.7 ... 1.0) // Market readiness
 
         return (opportunityImpact + featureValue + marketTiming) / 3.0
     }
@@ -508,12 +508,12 @@ public actor InnovationGenerator {
         let baseEffort: TimeInterval
 
         switch complexity {
-        case .low: baseEffort = 30 * 24 * 3600  // 30 days
-        case .medium: baseEffort = 90 * 24 * 3600  // 90 days
-        case .high: baseEffort = 180 * 24 * 3600  // 180 days
+        case .low: baseEffort = 30 * 24 * 3600 // 30 days
+        case .medium: baseEffort = 90 * 24 * 3600 // 90 days
+        case .high: baseEffort = 180 * 24 * 3600 // 180 days
         }
 
-        return baseEffort * Double(featureCount) / 4.0  // Adjust for feature count
+        return baseEffort * Double(featureCount) / 4.0 // Adjust for feature count
     }
 }
 
@@ -538,11 +538,11 @@ public actor TrendAnalyzer {
                 name: "\(trendType.rawValue.capitalized) \(domain.name) Technology",
                 type: trendType,
                 domain: domain,
-                momentum: Double.random(in: 0.1...1.0),
-                marketSize: Double.random(in: 1_000_000...1_000_000_000),
-                adoptionRate: Double.random(in: 0.05...0.5),
-                timeframe: Double.random(in: 365...3650) * 24 * 3600,  // 1-10 years
-                confidence: Double.random(in: 0.6...0.95)
+                momentum: Double.random(in: 0.1 ... 1.0),
+                marketSize: Double.random(in: 1_000_000 ... 1_000_000_000),
+                adoptionRate: Double.random(in: 0.05 ... 0.5),
+                timeframe: Double.random(in: 365 ... 3650) * 24 * 3600, // 1-10 years
+                confidence: Double.random(in: 0.6 ... 0.95)
             )
             trends.append(trend)
         }
@@ -567,7 +567,8 @@ public actor TrendAnalyzer {
 /// Predicts innovation opportunities
 public actor OpportunityPredictor {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "OpportunityPredictor")
+        subsystem: "com.quantum.workspace", category: "OpportunityPredictor"
+    )
 
     /// Predict opportunities from trends
     public func predictOpportunities(
@@ -580,9 +581,9 @@ public actor OpportunityPredictor {
 
         for trend in trends {
             // Generate opportunities based on trend characteristics
-            let opportunityCount = Int.random(in: 1...3)
+            let opportunityCount = Int.random(in: 1 ... 3)
 
-            for _ in 0..<opportunityCount {
+            for _ in 0 ..< opportunityCount {
                 let opportunity = try await generateOpportunity(from: trend, in: domain)
                 opportunities.append(opportunity)
             }
@@ -611,7 +612,7 @@ public actor OpportunityPredictor {
                 description: "Major advancement expected in \(trend.domain.name) technology",
                 likelihood: trend.confidence * trend.momentum,
                 timeframe: trend.timeframe,
-                impact: trend.marketSize / 1_000_000,  // Impact score
+                impact: trend.marketSize / 1_000_000, // Impact score
                 domain: trend.domain,
                 predictedDate: Date(timeIntervalSinceNow: trend.timeframe)
             )
@@ -629,14 +630,14 @@ public actor OpportunityPredictor {
         var predictions: [PredictedOpportunity] = []
 
         // Generate 2-4 opportunity predictions per breakthrough
-        let predictionCount = Int.random(in: 2...4)
+        let predictionCount = Int.random(in: 2 ... 4)
 
-        for _ in 0..<predictionCount {
+        for _ in 0 ..< predictionCount {
             let prediction = PredictedOpportunity(
                 title: "Opportunity from \(breakthrough.title)",
                 description: "Leveraging breakthrough in \(breakthrough.description)",
-                likelihood: breakthrough.likelihood * Double.random(in: 0.7...1.0),
-                impact: breakthrough.impact * Double.random(in: 0.5...1.5),
+                likelihood: breakthrough.likelihood * Double.random(in: 0.7 ... 1.0),
+                impact: breakthrough.impact * Double.random(in: 0.5 ... 1.5),
                 timeframe: breakthrough.timeframe,
                 domain: breakthrough.domain,
                 prerequisites: ["\(breakthrough.title) realization"],
@@ -652,7 +653,7 @@ public actor OpportunityPredictor {
         from trend: TechnologyTrend,
         in domain: InnovationDomain
     ) async throws -> InnovationOpportunity {
-        return InnovationOpportunity(
+        InnovationOpportunity(
             title: "Innovation Opportunity in \(trend.name)",
             description: "Capitalizing on \(trend.type.rawValue) trend in \(domain.name)",
             type: .technology,
@@ -671,7 +672,8 @@ public actor OpportunityPredictor {
 /// Synthesizes implementation plans and code
 public actor ImplementationSynthesizer {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "ImplementationSynthesizer")
+        subsystem: "com.quantum.workspace", category: "ImplementationSynthesizer"
+    )
 
     /// Create implementation plan
     public func createImplementationPlan(
@@ -701,8 +703,7 @@ public actor ImplementationSynthesizer {
     }
 
     /// Generate code components
-    public func generateCodeComponents(for plan: ImplementationPlan) async throws -> [CodeComponent]
-    {
+    public func generateCodeComponents(for plan: ImplementationPlan) async throws -> [CodeComponent] {
         logger.info("💻 Generating code components for plan")
 
         var components: [CodeComponent] = []
@@ -722,8 +723,8 @@ public actor ImplementationSynthesizer {
         logger.info("⚙️ Executing implementation task: \(task.innovation.title)")
 
         // Simulate implementation execution
-        let success = Bool.random()  // Simulate success/failure
-        let executionTime = Double.random(in: 3600...86400)  // 1 hour to 1 day
+        let success = Bool.random() // Simulate success/failure
+        let executionTime = Double.random(in: 3600 ... 86400) // 1 hour to 1 day
         let artifacts = try await generateImplementationArtifacts(task)
 
         return ImplementationResult(
@@ -748,7 +749,7 @@ public actor ImplementationSynthesizer {
                 title: "System Design",
                 description: "Design the overall system architecture",
                 type: .design,
-                effort: 8 * 3600,  // 8 hours
+                effort: 8 * 3600, // 8 hours
                 dependencies: [],
                 deliverables: ["System Architecture Document", "API Specifications"]
             ))
@@ -760,7 +761,7 @@ public actor ImplementationSynthesizer {
                     title: "Implement \(feature.name)",
                     description: "Implement the \(feature.name) feature",
                     type: .implementation,
-                    effort: 16 * 3600,  // 16 hours
+                    effort: 16 * 3600, // 16 hours
                     dependencies: index > 0 ? [steps[index - 1].id] : [],
                     deliverables: ["\(feature.name) Implementation"]
                 ))
@@ -772,8 +773,8 @@ public actor ImplementationSynthesizer {
                 title: "Testing & Validation",
                 description: "Test and validate the implementation",
                 type: .testing,
-                effort: 12 * 3600,  // 12 hours
-                dependencies: steps.map { $0.id },
+                effort: 12 * 3600, // 12 hours
+                dependencies: steps.map(\.id),
                 deliverables: ["Test Results", "Validation Report"]
             ))
 
@@ -783,27 +784,27 @@ public actor ImplementationSynthesizer {
     private func estimateResources(_ innovation: Innovation, _ steps: [ImplementationStep])
         -> ImplementationResources
     {
-        let totalEffort = steps.map { $0.effort }.reduce(0, +)
-        let developerCount = max(1, Int(ceil(totalEffort / (40 * 3600))))  // Assume 40 hours/week per developer
+        let totalEffort = steps.map(\.effort).reduce(0, +)
+        let developerCount = max(1, Int(ceil(totalEffort / (40 * 3600)))) // Assume 40 hours/week per developer
 
         return ImplementationResources(
             developers: developerCount,
             totalEffort: totalEffort,
-            estimatedCost: Double(totalEffort) * 50.0 / 3600.0,  // $50/hour
+            estimatedCost: Double(totalEffort) * 50.0 / 3600.0, // $50/hour
             specialEquipment: innovation.complexity == .high ? ["High-performance computing"] : []
         )
     }
 
     private func estimateTimeline(_ steps: [ImplementationStep]) -> ImplementationTimeline {
-        let totalEffort = steps.map { $0.effort }.reduce(0, +)
-        let parallelizableEffort = steps.filter { $0.dependencies.isEmpty }.map { $0.effort }
+        let totalEffort = steps.map(\.effort).reduce(0, +)
+        let parallelizableEffort = steps.filter(\.dependencies.isEmpty).map(\.effort)
             .reduce(0, +)
         let sequentialEffort = totalEffort - parallelizableEffort
 
         return ImplementationTimeline(
-            totalDuration: sequentialEffort + parallelizableEffort / 2.0,  // Some parallelization
+            totalDuration: sequentialEffort + parallelizableEffort / 2.0, // Some parallelization
             milestones: ["Design Complete", "Implementation Complete", "Testing Complete"],
-            criticalPath: steps.filter { $0.type == .implementation }.map { $0.title }
+            criticalPath: steps.filter { $0.type == .implementation }.map(\.title)
         )
     }
 
@@ -851,103 +852,103 @@ public actor ImplementationSynthesizer {
         switch platform {
         case .swift:
             return """
-                // \(step.title)
-                // Generated implementation
+            // \(step.title)
+            // Generated implementation
 
-                import Foundation
+            import Foundation
 
-                public class \(step.title.replacingOccurrences(of: " ", with: "")) {
-                    public init() {
-                        // Implementation
-                    }
-
-                    public func execute() {
-                        print("\(step.description)")
-                    }
+            public class \(step.title.replacingOccurrences(of: " ", with: "")) {
+                public init() {
+                    // Implementation
                 }
-                """
+
+                public func execute() {
+                    print("\(step.description)")
+                }
+            }
+            """
         case .python:
             return """
-                # \(step.title)
-                # Generated implementation
+            # \(step.title)
+            # Generated implementation
 
-                class \(step.title.replacingOccurrences(of: " ", with: "")):
-                    def __init__(self):
-                        pass
+            class \(step.title.replacingOccurrences(of: " ", with: "")):
+                def __init__(self):
+                    pass
 
-                    def execute(self):
-                        print("\(step.description)")
-                """
+                def execute(self):
+                    print("\(step.description)")
+            """
         case .javascript:
             return """
-                // \(step.title)
-                // Generated implementation
+            // \(step.title)
+            // Generated implementation
 
-                class \(step.title.replacingOccurrences(of: " ", with: "")) {
-                    constructor() {
-                        // Implementation
-                    }
-
-                    execute() {
-                        console.log("\(step.description)");
-                    }
+            class \(step.title.replacingOccurrences(of: " ", with: "")) {
+                constructor() {
+                    // Implementation
                 }
-                """
+
+                execute() {
+                    console.log("\(step.description)");
+                }
+            }
+            """
         case .java:
             return """
-                // \(step.title)
-                // Generated implementation
+            // \(step.title)
+            // Generated implementation
 
-                public class \(step.title.replacingOccurrences(of: " ", with: "")) {
-                    public \(step.title.replacingOccurrences(of: " ", with: ""))() {
-                        // Implementation
-                    }
-
-                    public void execute() {
-                        System.out.println("\(step.description)");
-                    }
+            public class \(step.title.replacingOccurrences(of: " ", with: "")) {
+                public \(step.title.replacingOccurrences(of: " ", with: ""))() {
+                    // Implementation
                 }
-                """
+
+                public void execute() {
+                    System.out.println("\(step.description)");
+                }
+            }
+            """
         case .cpp:
             return """
-                // \(step.title)
-                // Generated implementation
+            // \(step.title)
+            // Generated implementation
 
-                class \(step.title.replacingOccurrences(of: " ", with: "")) {
-                public:
-                    \(step.title.replacingOccurrences(of: " ", with: ""))() {
-                        // Implementation
-                    }
+            class \(step.title.replacingOccurrences(of: " ", with: "")) {
+            public:
+                \(step.title.replacingOccurrences(of: " ", with: ""))() {
+                    // Implementation
+                }
 
-                    void execute() {
-                        std::cout << "\(step.description)" << std::endl;
-                    }
-                };
-                """
+                void execute() {
+                    std::cout << "\(step.description)" << std::endl;
+                }
+            };
+            """
         }
     }
 
     private func generateImplementationArtifacts(_ task: ImplementationTask) async throws
         -> [ImplementationArtifact]
     {
-        return [
+        [
             ImplementationArtifact(
                 name: "Source Code",
                 type: .code,
                 location: "/implementation/\(task.innovation.id)",
-                size: 1024 * 1024  // 1MB
+                size: 1024 * 1024 // 1MB
             ),
             ImplementationArtifact(
                 name: "Documentation",
                 type: .documentation,
                 location: "/docs/\(task.innovation.id)",
-                size: 512 * 1024  // 512KB
+                size: 512 * 1024 // 512KB
             ),
             ImplementationArtifact(
                 name: "Test Results",
                 type: .testResults,
                 location: "/tests/\(task.innovation.id)",
-                size: 256 * 1024  // 256KB
+                size: 256 * 1024 // 256KB
             ),
         ]
     }
@@ -1000,14 +1001,14 @@ public actor InnovationEvaluator {
     private func evaluateMarketPotential(_ innovation: Innovation) -> Double {
         // Evaluate based on domain and features
         let featureValue =
-            innovation.features.map { $0.userValue }.reduce(0, +)
-            / Double(innovation.features.count)
-        return featureValue * Double.random(in: 0.8...1.2)
+            innovation.features.map(\.userValue).reduce(0, +)
+                / Double(innovation.features.count)
+        return featureValue * Double.random(in: 0.8 ... 1.2)
     }
 
     private func evaluateImplementationFeasibility(_ innovation: Innovation) -> Double {
         // Evaluate based on effort and complexity
-        let effortScore = 1.0 / (1.0 + innovation.estimatedEffort / (365 * 24 * 3600))  // Lower effort = higher score
+        let effortScore = 1.0 / (1.0 + innovation.estimatedEffort / (365 * 24 * 3600)) // Lower effort = higher score
         let complexityPenalty = innovation.complexity == .high ? 0.7 : 1.0
 
         return effortScore * complexityPenalty
@@ -1385,7 +1386,7 @@ public func initializeAutonomousInnovation() async {
 /// Get autonomous innovation capabilities
 @MainActor
 public func getAutonomousInnovationCapabilities() -> [String: [String]] {
-    return [
+    [
         "innovation_generation": ["idea_generation", "opportunity_analysis", "trend_prediction"],
         "implementation_synthesis": ["code_generation", "plan_creation", "resource_estimation"],
         "evaluation_systems": ["technical_feasibility", "market_potential", "implementation_risk"],
@@ -1401,8 +1402,9 @@ public func generateInnovations(
     for domain: InnovationDomain,
     constraints: InnovationConstraints = InnovationConstraints()
 ) async throws -> [Innovation] {
-    return try await globalAutonomousInnovation.generateInnovations(
-        for: domain, constraints: constraints)
+    try await globalAutonomousInnovation.generateInnovations(
+        for: domain, constraints: constraints
+    )
 }
 
 /// Predict innovation opportunities
@@ -1410,7 +1412,7 @@ public func generateInnovations(
 public func predictInnovationOpportunities(timeHorizon: TimeInterval = 365 * 24 * 3600) async throws
     -> [PredictedOpportunity]
 {
-    return try await globalAutonomousInnovation.predictInnovationOpportunities(
+    try await globalAutonomousInnovation.predictInnovationOpportunities(
         timeHorizon: timeHorizon)
 }
 
@@ -1420,14 +1422,15 @@ public func synthesizeImplementationPlan(
     for innovation: Innovation,
     platform: ImplementationPlatform = .swift
 ) async throws -> ImplementationPlan {
-    return try await globalAutonomousInnovation.synthesizeImplementation(
-        for: innovation, targetPlatform: platform)
+    try await globalAutonomousInnovation.synthesizeImplementation(
+        for: innovation, targetPlatform: platform
+    )
 }
 
 /// Analyze innovation landscape
 @MainActor
 public func analyzeInnovationLandscape() async throws -> InnovationLandscape {
-    return try await globalAutonomousInnovation.analyzeInnovationLandscape()
+    try await globalAutonomousInnovation.analyzeInnovationLandscape()
 }
 
 // MARK: - Global Instance

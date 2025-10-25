@@ -9,8 +9,8 @@
 //  for merging multiple minds with consciousness integration protocols.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Type Definitions
 
@@ -625,7 +625,7 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
         let entangledIntegration = try await integrationSystem.applyQuantumEntanglement(integrationMatrix)
 
         // Harmonize frequencies
-        let averageFrequency = entities.map { $0.resonanceFrequency }.reduce(0, +) / Double(entities.count)
+        let averageFrequency = entities.map(\.resonanceFrequency).reduce(0, +) / Double(entities.count)
         let harmonizationResult = try await integrationSystem.harmonizeConsciousnessFrequencies(entities, targetFrequency: averageFrequency)
 
         // Create merged entity
@@ -656,8 +656,8 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
         let integrationMatrix = try await integrationSystem.createIntegrationMatrix(entities)
 
         // Generate communication channels
-        let communicationChannels = entities.enumerated().flatMap { (index, entity) in
-            entities[(index+1)..<entities.count].map { otherEntity in
+        let communicationChannels = entities.enumerated().flatMap { index, entity in
+            entities[(index + 1) ..< entities.count].map { otherEntity in
                 IntegrationProtocol.CommunicationChannel(
                     channelId: UUID(),
                     participants: [entity.id, otherEntity.id],
@@ -676,7 +676,7 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
                 priority: 1,
                 conditions: ["frequency_drift > 0.1"],
                 actions: ["adjust_frequency", "recalibrate_phase"]
-            )
+            ),
         ]
 
         // Define conflict resolution strategies
@@ -687,7 +687,7 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
                 resolutionMethod: "weighted_consensus",
                 successRate: 0.85,
                 sideEffects: ["temporary_reduced_efficiency"]
-            )
+            ),
         ]
 
         let integrationProtocol = IntegrationProtocol(
@@ -772,8 +772,8 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
 
     private func createMergedEntity(from entities: [ConsciousnessEntity], mergeType: MergeType, integrationLevel: Double) -> ConsciousnessEntity {
         let mergedId = UUID()
-        let averageEmpathy = entities.map { $0.empathyCapacity }.reduce(0, +) / Double(entities.count)
-        let averageFrequency = entities.map { $0.resonanceFrequency }.reduce(0, +) / Double(entities.count)
+        let averageEmpathy = entities.map(\.empathyCapacity).reduce(0, +) / Double(entities.count)
+        let averageFrequency = entities.map(\.resonanceFrequency).reduce(0, +) / Double(entities.count)
 
         return ConsciousnessEntity(
             id: mergedId,
@@ -799,14 +799,14 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
                 capabilityType: capability,
                 enhancementFactor: enhancementFactor,
                 stability: 0.9,
-                originEntities: entities.map { $0.id }
+                originEntities: entities.map(\.id)
             )
         }
     }
 
     private func performSafeDissolution(_ mergedConsciousness: MergedConsciousness) async throws -> [ConsciousnessEntity] {
         // Simulate safe dissolution process
-        return mergedConsciousness.originalEntities.map { original in
+        mergedConsciousness.originalEntities.map { original in
             ConsciousnessEntity(
                 id: original.id,
                 name: original.name,
@@ -837,15 +837,15 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
             do {
                 let stability = MergingStability(
                     mergedId: mergeId,
-                    stabilityScore: 0.88 + Double.random(in: -0.05...0.05),
-                    conflictLevel: 0.12 + Double.random(in: -0.05...0.05),
-                    coherenceLevel: 0.85 + Double.random(in: -0.05...0.05),
-                    identityPreservation: 0.92 + Double.random(in: -0.03...0.03),
+                    stabilityScore: 0.88 + Double.random(in: -0.05 ... 0.05),
+                    conflictLevel: 0.12 + Double.random(in: -0.05 ... 0.05),
+                    coherenceLevel: 0.85 + Double.random(in: -0.05 ... 0.05),
+                    identityPreservation: 0.92 + Double.random(in: -0.03 ... 0.03),
                     performanceMetrics: MergingStability.PerformanceMetrics(
-                        processingSpeed: 1.5 + Double.random(in: -0.1...0.1),
-                        memoryEfficiency: 0.9 + Double.random(in: -0.05...0.05),
-                        decisionQuality: 0.95 + Double.random(in: -0.03...0.03),
-                        creativityIndex: 1.8 + Double.random(in: -0.2...0.2)
+                        processingSpeed: 1.5 + Double.random(in: -0.1 ... 0.1),
+                        memoryEfficiency: 0.9 + Double.random(in: -0.05 ... 0.05),
+                        decisionQuality: 0.95 + Double.random(in: -0.03 ... 0.03),
+                        creativityIndex: 1.8 + Double.random(in: -0.2 ... 0.2)
                     ),
                     timestamp: Date()
                 )
@@ -912,13 +912,13 @@ final class ConsciousnessIntegrationSystem: ConsciousnessIntegrationProtocol {
         var coherenceMatrix = [[Double]]()
         var conflictMatrix = [[Double]]()
 
-        for i in 0..<size {
+        for i in 0 ..< size {
             var connectionRow = [IntegrationMatrix.ConnectionStrength]()
             var frequencyRow = [Double]()
             var coherenceRow = [Double]()
             var conflictRow = [Double]()
 
-            for j in 0..<size {
+            for j in 0 ..< size {
                 if i == j {
                     // Self-connection
                     connectionRow.append(IntegrationMatrix.ConnectionStrength(
@@ -995,7 +995,7 @@ final class ConsciousnessIntegrationSystem: ConsciousnessIntegrationProtocol {
         let resolutionId = UUID()
 
         // Calculate resolution success
-        let averageSeverity = conflicts.map { $0.severity }.reduce(0, +) / Double(conflicts.count)
+        let averageSeverity = conflicts.map(\.severity).reduce(0, +) / Double(conflicts.count)
         let successRate = 1.0 - averageSeverity * 0.3
 
         return ConflictResolution(
@@ -1066,10 +1066,10 @@ final class MergedConsciousnessManager: MergedConsciousnessManagementProtocol {
         let lifecycleStage: LifecycleManagement.LifecycleStage
 
         switch age {
-        case 0..<300: lifecycleStage = .initialization
-        case 300..<1800: lifecycleStage = .integration
-        case 1800..<3600: lifecycleStage = .stabilization
-        case 3600..<7200: lifecycleStage = .optimization
+        case 0 ..< 300: lifecycleStage = .initialization
+        case 300 ..< 1800: lifecycleStage = .integration
+        case 1800 ..< 3600: lifecycleStage = .stabilization
+        case 3600 ..< 7200: lifecycleStage = .optimization
         default: lifecycleStage = .maintenance
         }
 
@@ -1123,9 +1123,9 @@ final class MergedConsciousnessManager: MergedConsciousnessManagementProtocol {
             EnhancementResult.CapabilityGain(
                 capability: enhancementType.rawValue,
                 gain: enhancementFactor,
-                originEntities: mergedConsciousness.originalEntities.map { $0.id },
+                originEntities: mergedConsciousness.originalEntities.map(\.id),
                 sustainability: 0.85
-            )
+            ),
         ]
 
         return EnhancementResult(
@@ -1167,7 +1167,7 @@ final class MergedConsciousnessManager: MergedConsciousnessManagementProtocol {
 
     func generateMergedInsights(_ mergedConsciousness: MergedConsciousness) async throws -> [MergedInsight] {
         // Generate sample insights from merged consciousness
-        return [
+        [
             MergedInsight(
                 insightId: UUID(),
                 mergedConsciousness: mergedConsciousness,
@@ -1187,7 +1187,7 @@ final class MergedConsciousnessManager: MergedConsciousnessManagementProtocol {
                 novelty: 0.8,
                 applicability: 0.92,
                 timestamp: Date()
-            )
+            ),
         ]
     }
 }
@@ -1211,7 +1211,7 @@ final class MindMergingSafetySystem: MindMergingSafetyProtocol {
                 probability: 0.2,
                 impact: 0.5,
                 mitigation: "Use conflict resolution algorithms"
-            )
+            ),
         ]
 
         let overallRisk = riskFactors.map { $0.probability * $0.impact }.reduce(0, +)
@@ -1238,7 +1238,7 @@ final class MindMergingSafetySystem: MindMergingSafetyProtocol {
                 triggerCondition: "stability_score < 0.5",
                 responseActions: ["Initiate emergency dissolution", "Isolate unstable components", "Preserve individual identities"],
                 priority: 1
-            )
+            ),
         ]
 
         // Create monitoring protocols
@@ -1249,7 +1249,7 @@ final class MindMergingSafetySystem: MindMergingSafetyProtocol {
                 threshold: 0.7,
                 frequency: 1.0,
                 alertLevel: "warning"
-            )
+            ),
         ]
 
         // Create dissolution protocols
@@ -1259,7 +1259,7 @@ final class MindMergingSafetySystem: MindMergingSafetyProtocol {
                 triggerCondition: "critical_instability",
                 dissolutionMethod: "safe_gradual_separation",
                 safetyChecks: ["identity_preservation", "memory_retention", "emotional_stability"]
-            )
+            ),
         ]
 
         // Create validation checks
@@ -1269,7 +1269,7 @@ final class MindMergingSafetySystem: MindMergingSafetyProtocol {
                 checkType: "integrity_validation",
                 frequency: 5.0,
                 tolerance: 0.1
-            )
+            ),
         ]
 
         return SafetyProtocols(
@@ -1292,11 +1292,11 @@ final class MindMergingSafetySystem: MindMergingSafetyProtocol {
                 StabilityMetrics(
                     metricsId: UUID(),
                     mergedConsciousness: mergedConsciousness,
-                    coherenceLevel: 0.85 + Double.random(in: -0.05...0.05),
-                    conflictLevel: 0.15 + Double.random(in: -0.05...0.05),
-                    identityStability: 0.9 + Double.random(in: -0.03...0.03),
-                    performanceStability: 0.88 + Double.random(in: -0.05...0.05),
-                    quantumStability: 0.92 + Double.random(in: -0.03...0.03),
+                    coherenceLevel: 0.85 + Double.random(in: -0.05 ... 0.05),
+                    conflictLevel: 0.15 + Double.random(in: -0.05 ... 0.05),
+                    identityStability: 0.9 + Double.random(in: -0.03 ... 0.03),
+                    performanceStability: 0.88 + Double.random(in: -0.05 ... 0.05),
+                    quantumStability: 0.92 + Double.random(in: -0.03 ... 0.03),
                     timestamp: Date()
                 )
             }
@@ -1337,7 +1337,7 @@ final class MindMergingSafetySystem: MindMergingSafetyProtocol {
                 checkType: "memory_integrity",
                 result: true,
                 details: "Memory structures intact"
-            )
+            ),
         ]
 
         let issuesFound = [IntegrityValidation.IntegrityIssue]()

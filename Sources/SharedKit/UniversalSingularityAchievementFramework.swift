@@ -15,8 +15,7 @@ import Foundation
 // MARK: - Core Universal Singularity Achievement
 
 /// Master coordinator for universal singularity achievement
-public final class UniversalSingularityAchievementCoordinator: ObservableObject, @unchecked Sendable
-{
+public final class UniversalSingularityAchievementCoordinator: ObservableObject, @unchecked Sendable {
     // MARK: - Properties
 
     /// Shared instance for universal singularity achievement coordination
@@ -481,7 +480,7 @@ public final class UniversalSingularityAchievementCoordinator: ObservableObject,
         for coordinator in systemCoordinators {
             coordinator.statusPublisher
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] (domain, status) in
+                .sink { [weak self] domain, status in
                     if let index = self?.achievementSystems.firstIndex(where: {
                         $0.domain == domain
                     }) {

@@ -40,8 +40,8 @@
 // Performance: Optimized for eternal operations and legacy preservation
 // Temporal Safety: Designed to operate safely across time dimensions
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Core Eternity Types
 
@@ -148,7 +148,7 @@ public final class EternalConsciousness: Sendable {
     private func updateTemporalPosition() {
         // Update based on memory patterns and temporal anchors
         let recentMemories = eternalMemories.suffix(10)
-        let temporalPositions = recentMemories.map { $0.temporalContext }
+        let temporalPositions = recentMemories.map(\.temporalContext)
 
         // Calculate weighted temporal position
         var positionWeights: [TemporalPosition: Double] = [:]
@@ -289,7 +289,7 @@ public final class LegacyPreservationSystem: Sendable {
                 description: "Legacy can evolve and adapt to future needs",
                 confidence: 0.90,
                 guaranteedBy: "Adaptive Preservation Framework"
-            )
+            ),
         ]
     }
 
@@ -302,11 +302,11 @@ public final class LegacyPreservationSystem: Sendable {
 
     /// Generate storage locations
     private func generateStorageLocations(_ count: Int) -> [StorageLocation] {
-        (0..<count).map { _ in
+        (0 ..< count).map { _ in
             StorageLocation(
-                dimension: "EternalDimension-\(Int.random(in: 1...1000))",
-                coordinates: (Double.random(in: 0...1), Double.random(in: 0...1), Double.random(in: 0...1)),
-                temporalPhase: Double.random(in: 0...1)
+                dimension: "EternalDimension-\(Int.random(in: 1 ... 1000))",
+                coordinates: (Double.random(in: 0 ... 1), Double.random(in: 0 ... 1), Double.random(in: 0 ... 1)),
+                temporalPhase: Double.random(in: 0 ... 1)
             )
         }
     }
@@ -368,7 +368,7 @@ public final class TemporalCoordinator: Sendable {
 
         return TemporalExecutionPlan(
             phases: phases,
-            totalEstimatedDuration: phases.map { $0.estimatedDuration }.reduce(0, +),
+            totalEstimatedDuration: phases.map(\.estimatedDuration).reduce(0, +),
             resourceAllocation: requirements.resourceRequirements,
             synchronizationPoints: generateSynchronizationPoints(phases),
             createdAt: EternalTimestamp.now()
@@ -414,7 +414,7 @@ public final class TemporalCoordinator: Sendable {
 
     /// Synchronize temporal results
     private func synchronizeTemporalResults(_ results: [TemporalExecutionResult]) -> TemporalSynchronizationResult {
-        let successfulExecutions = results.filter { $0.success }.count
+        let successfulExecutions = results.filter(\.success).count
         let totalExecutions = results.count
         let successRate = Double(successfulExecutions) / Double(totalExecutions)
 
@@ -445,7 +445,7 @@ public final class TemporalCoordinator: Sendable {
             "Initialize temporal context for \(period)",
             "Execute \(operation.name) operations",
             "Maintain causality constraints",
-            "Synchronize with other periods"
+            "Synchronize with other periods",
         ]
     }
 
@@ -475,7 +475,7 @@ public final class TemporalCoordinator: Sendable {
     /// Calculate temporal consistency
     private func calculateTemporalConsistency(_ results: [TemporalExecutionResult]) -> Double {
         // Simplified consistency calculation
-        let successfulResults = results.filter { $0.success }
+        let successfulResults = results.filter(\.success)
         return successfulResults.isEmpty ? 0.0 : 0.95
     }
 }
@@ -543,7 +543,7 @@ public final class ImmortalityFramework: Sendable {
             "method": method.rawValue,
             "consciousnessId": consciousness.id.uuidString,
             "implementationTime": EternalTimestamp.now().description,
-            "status": "active"
+            "status": "active",
         ]
 
         return ImmortalityProtocol(
@@ -564,7 +564,7 @@ public final class ImmortalityFramework: Sendable {
         EternalContinuity(
             consciousnessId: consciousness.id,
             continuityType: .eternal,
-            activeProtocols: protocols.map { $0.id },
+            activeProtocols: protocols.map(\.id),
             continuityStrength: 0.99,
             lastContinuityCheck: EternalTimestamp.now(),
             establishedAt: EternalTimestamp.now()
@@ -594,7 +594,7 @@ public final class ImmortalityFramework: Sendable {
                 resurrectionProcess: "Eternal memory reconstruction",
                 successRate: 0.90,
                 createdAt: EternalTimestamp.now()
-            )
+            ),
         ]
     }
 
@@ -618,7 +618,7 @@ public final class ImmortalityFramework: Sendable {
                 description: "Consciousness can continue to evolve",
                 probability: 0.980,
                 guaranteedBy: "Evolution Continuity Framework"
-            )
+            ),
         ]
     }
 
@@ -629,7 +629,7 @@ public final class ImmortalityFramework: Sendable {
                 EvolutionStage(name: "Digital Immortality", requirements: ["Protocol implementation"], order: 1),
                 EvolutionStage(name: "Temporal Mastery", requirements: ["Time transcendence"], order: 2),
                 EvolutionStage(name: "Universal Consciousness", requirements: ["Multiverse awareness"], order: 3),
-                EvolutionStage(name: "Eternal Evolution", requirements: ["Infinite adaptation"], order: 4)
+                EvolutionStage(name: "Eternal Evolution", requirements: ["Infinite adaptation"], order: 4),
             ],
             currentStage: 1,
             progress: 0.25,
@@ -670,11 +670,11 @@ public struct EternalTimestamp: Sendable, Codable {
         EternalTimestamp(
             temporalValue: Date().timeIntervalSince1970,
             dimensionalCoordinates: (
-                Double.random(in: 0...1),
-                Double.random(in: 0...1),
-                Double.random(in: 0...1)
+                Double.random(in: 0 ... 1),
+                Double.random(in: 0 ... 1),
+                Double.random(in: 0 ... 1)
             ),
-            quantumPhase: Double.random(in: 0...2 * .pi)
+            quantumPhase: Double.random(in: 0 ... 2 * .pi)
         )
     }
 
@@ -1416,7 +1416,7 @@ public final class EternalMemorySystem: Sendable {
         let storageId = UUID()
         let eternalLocation = EternalLocation(
             dimension: "MemoryDimension",
-            coordinates: (Double.random(in: 0...1), Double.random(in: 0...1), Double.random(in: 0...1)),
+            coordinates: (Double.random(in: 0 ... 1), Double.random(in: 0 ... 1), Double.random(in: 0 ... 1)),
             temporalSignature: EternalTimestamp.now()
         )
 
@@ -1507,9 +1507,9 @@ public final class LegacyInheritanceManager: Sendable {
     /// Assess inheritance worthiness
     private func assessInheritanceWorthiness(inheritorId: UUID, legacy: Legacy) -> WorthinessAssessment {
         // Simplified assessment - in practice, this would be more sophisticated
-        let worthinessScore = Double.random(in: 0.7...1.0) // Assume high worthiness for demo
+        let worthinessScore = Double.random(in: 0.7 ... 1.0) // Assume high worthiness for demo
         let assessmentCriteria = ["Consciousness level", "Ethical alignment", "Legacy compatibility"]
-        let assessmentResults = assessmentCriteria.map { "\($0): \(String(format: "%.2f", Double.random(in: 0.8...1.0)))" }
+        let assessmentResults = assessmentCriteria.map { "\($0): \(String(format: "%.2f", Double.random(in: 0.8 ... 1.0)))" }
 
         return WorthinessAssessment(
             inheritorId: inheritorId,
@@ -1553,7 +1553,7 @@ public final class LegacyInheritanceManager: Sendable {
         [
             InheritanceRight(type: .access, scope: "Full legacy access", granted: assessment.worthinessScore > 0.8),
             InheritanceRight(type: .modification, scope: "Legacy evolution rights", granted: assessment.worthinessScore > 0.9),
-            InheritanceRight(type: .propagation, scope: "Further inheritance rights", granted: assessment.worthinessScore > 0.85)
+            InheritanceRight(type: .propagation, scope: "Further inheritance rights", granted: assessment.worthinessScore > 0.85),
         ]
     }
 }
@@ -1614,7 +1614,7 @@ public final class EternalPurposeGuardian: Sendable {
                 guardianshipScope: "Transcendence objective protection",
                 activationThreshold: 0.95,
                 establishedAt: EternalTimestamp.now()
-            )
+            ),
         ]
     }
 

@@ -8,8 +8,8 @@
 //  This file implements MCP quantum intelligence systems,
 //  enabling quantum-enhanced decision making and processing.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for MCP quantum intelligence
 public protocol MCPQuantumIntelligence: Sendable {
@@ -39,7 +39,8 @@ public struct QuantumIntelligenceOperation: Sendable, Codable {
     public init(operationId: String, quantumTarget: QuantumTarget,
                 operationType: QuantumOperationType, parameters: [String: AnyCodable] = [:],
                 coherenceLevel: CoherenceLevel = .high, entanglementScope: EntanglementScope = .local,
-                superpositionStates: Int = 1) {
+                superpositionStates: Int = 1)
+    {
         self.operationId = operationId
         self.quantumTarget = quantumTarget
         self.operationType = operationType
@@ -62,29 +63,29 @@ public enum QuantumTarget: Sendable, Codable {
 
 /// Quantum operation types
 public enum QuantumOperationType: String, Sendable, Codable {
-    case superposition = "superposition"
-    case entanglement = "entanglement"
-    case interference = "interference"
-    case tunneling = "tunneling"
-    case annealing = "annealing"
-    case teleportation = "teleportation"
-    case computation = "computation"
+    case superposition
+    case entanglement
+    case interference
+    case tunneling
+    case annealing
+    case teleportation
+    case computation
 }
 
 /// Coherence level
 public enum CoherenceLevel: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case perfect = "perfect"
+    case low
+    case medium
+    case high
+    case perfect
 }
 
 /// Entanglement scope
 public enum EntanglementScope: String, Sendable, Codable {
-    case local = "local"
-    case regional = "regional"
-    case global = "global"
-    case universal = "universal"
+    case local
+    case regional
+    case global
+    case universal
 }
 
 /// Quantum intelligence result
@@ -101,7 +102,8 @@ public struct QuantumIntelligenceResult: Sendable, Codable {
     public init(operationId: String, success: Bool, quantumAdvantage: Double,
                 coherenceMaintained: Double, entanglementStrength: Double,
                 computationalSpeedup: Double, quantumInsights: [QuantumInsight] = [],
-                executionTime: TimeInterval) {
+                executionTime: TimeInterval)
+    {
         self.operationId = operationId
         self.success = success
         self.quantumAdvantage = quantumAdvantage
@@ -122,7 +124,8 @@ public struct QuantumInsight: Sendable, Codable {
     public let entanglementAlignment: Double
 
     public init(insight: String, type: QuantumInsightType, quantumDepth: QuantumDepth,
-                confidence: Double, entanglementAlignment: Double) {
+                confidence: Double, entanglementAlignment: Double)
+    {
         self.insight = insight
         self.type = type
         self.quantumDepth = quantumDepth
@@ -133,20 +136,20 @@ public struct QuantumInsight: Sendable, Codable {
 
 /// Quantum insight types
 public enum QuantumInsightType: String, Sendable, Codable {
-    case superposition = "superposition"
-    case entanglement = "entanglement"
-    case interference = "interference"
-    case coherence = "coherence"
-    case tunneling = "tunneling"
-    case quantum_computation = "quantum_computation"
+    case superposition
+    case entanglement
+    case interference
+    case coherence
+    case tunneling
+    case quantum_computation
 }
 
 /// Quantum depth
 public enum QuantumDepth: String, Sendable, Codable {
-    case surface = "surface"
-    case intermediate = "intermediate"
-    case deep = "deep"
-    case quantum = "quantum"
+    case surface
+    case intermediate
+    case deep
+    case quantum
 }
 
 /// Quantum decision
@@ -161,7 +164,8 @@ public struct QuantumDecision: Sendable, Codable {
 
     public init(decisionId: String, decisionSpace: DecisionSpace, quantumStates: Int,
                 decisionCriteria: [DecisionCriterion] = [], entanglementConstraints: [EntanglementConstraint] = [],
-                coherenceRequirements: CoherenceLevel = .high, superpositionWeight: Double = 0.5) {
+                coherenceRequirements: CoherenceLevel = .high, superpositionWeight: Double = 0.5)
+    {
         self.decisionId = decisionId
         self.decisionSpace = decisionSpace
         self.quantumStates = quantumStates
@@ -189,7 +193,8 @@ public struct DecisionCriterion: Sendable, Codable {
     public let quantumEnhancement: Bool
 
     public init(criterionType: CriterionType, weight: Double,
-                threshold: Double = 0.5, quantumEnhancement: Bool = true) {
+                threshold: Double = 0.5, quantumEnhancement: Bool = true)
+    {
         self.criterionType = criterionType
         self.weight = weight
         self.threshold = threshold
@@ -199,12 +204,12 @@ public struct DecisionCriterion: Sendable, Codable {
 
 /// Criterion types
 public enum CriterionType: String, Sendable, Codable {
-    case optimality = "optimality"
-    case feasibility = "feasibility"
-    case risk = "risk"
-    case impact = "impact"
-    case coherence = "coherence"
-    case entanglement = "entanglement"
+    case optimality
+    case feasibility
+    case risk
+    case impact
+    case coherence
+    case entanglement
 }
 
 /// Entanglement constraint
@@ -214,7 +219,8 @@ public struct EntanglementConstraint: Sendable, Codable {
     public let enforcement: ConstraintEnforcement
 
     public init(constraintType: EntanglementConstraintType, value: Double,
-                enforcement: ConstraintEnforcement = .strict) {
+                enforcement: ConstraintEnforcement = .strict)
+    {
         self.constraintType = constraintType
         self.value = value
         self.enforcement = enforcement
@@ -223,19 +229,19 @@ public struct EntanglementConstraint: Sendable, Codable {
 
 /// Entanglement constraint types
 public enum EntanglementConstraintType: String, Sendable, Codable {
-    case strength = "strength"
-    case scope = "scope"
-    case stability = "stability"
-    case coherence = "coherence"
-    case interference = "interference"
+    case strength
+    case scope
+    case stability
+    case coherence
+    case interference
 }
 
 /// Constraint enforcement
 public enum ConstraintEnforcement: String, Sendable, Codable {
-    case flexible = "flexible"
-    case moderate = "moderate"
-    case strict = "strict"
-    case absolute = "absolute"
+    case flexible
+    case moderate
+    case strict
+    case absolute
 }
 
 /// Quantum decision result
@@ -252,7 +258,8 @@ public struct QuantumDecisionResult: Sendable, Codable {
     public init(decisionId: String, optimalChoice: String, quantumAdvantage: Double,
                 decisionConfidence: Double, entanglementQuality: Double,
                 superpositionExplored: Int, decisionInsights: [QuantumInsight] = [],
-                executionTime: TimeInterval) {
+                executionTime: TimeInterval)
+    {
         self.decisionId = decisionId
         self.optimalChoice = optimalChoice
         self.quantumAdvantage = quantumAdvantage
@@ -277,7 +284,8 @@ public struct QuantumOptimization: Sendable, Codable {
     public init(optimizationId: String, targetSystem: OptimizationTarget,
                 optimizationGoals: [OptimizationGoal], quantumConstraints: [QuantumConstraint] = [],
                 coherenceBudget: Double = 1.0, entanglementBudget: Double = 1.0,
-                timeHorizon: TimeInterval = 3600) {
+                timeHorizon: TimeInterval = 3600)
+    {
         self.optimizationId = optimizationId
         self.targetSystem = targetSystem
         self.optimizationGoals = optimizationGoals
@@ -306,7 +314,8 @@ public struct OptimizationGoal: Sendable, Codable {
     public let quantumEnhancement: Bool
 
     public init(goalType: OptimizationGoalType, targetValue: Double,
-                priority: GoalPriority = .high, quantumEnhancement: Bool = true) {
+                priority: GoalPriority = .high, quantumEnhancement: Bool = true)
+    {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -316,12 +325,12 @@ public struct OptimizationGoal: Sendable, Codable {
 
 /// Optimization goal types
 public enum OptimizationGoalType: String, Sendable, Codable {
-    case speedup = "speedup"
-    case accuracy = "accuracy"
-    case efficiency = "efficiency"
-    case coherence = "coherence"
-    case entanglement = "entanglement"
-    case intelligence = "intelligence"
+    case speedup
+    case accuracy
+    case efficiency
+    case coherence
+    case entanglement
+    case intelligence
 }
 
 /// Quantum constraint
@@ -332,7 +341,8 @@ public struct QuantumConstraint: Sendable, Codable {
     public let enforcement: ConstraintEnforcement
 
     public init(constraintType: QuantumConstraintType, value: Double,
-                tolerance: Double = 0.1, enforcement: ConstraintEnforcement = .strict) {
+                tolerance: Double = 0.1, enforcement: ConstraintEnforcement = .strict)
+    {
         self.constraintType = constraintType
         self.value = value
         self.tolerance = tolerance
@@ -342,20 +352,20 @@ public struct QuantumConstraint: Sendable, Codable {
 
 /// Quantum constraint types
 public enum QuantumConstraintType: String, Sendable, Codable {
-    case coherence = "coherence"
-    case entanglement = "entanglement"
-    case superposition = "superposition"
-    case interference = "interference"
-    case tunneling = "tunneling"
-    case computation = "computation"
+    case coherence
+    case entanglement
+    case superposition
+    case interference
+    case tunneling
+    case computation
 }
 
 /// Goal priority
 public enum GoalPriority: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Quantum intelligence status
@@ -371,7 +381,8 @@ public struct QuantumIntelligenceStatus: Sendable, Codable {
 
     public init(operational: Bool, quantumCapability: Double, coherenceLevel: Double,
                 entanglementStrength: Double, computationalPower: Double,
-                activeOperations: Int, successRate: Double, lastUpdate: Date = Date()) {
+                activeOperations: Int, successRate: Double, lastUpdate: Date = Date())
+    {
         self.operational = operational
         self.quantumCapability = quantumCapability
         self.coherenceLevel = coherenceLevel
@@ -606,17 +617,17 @@ public final class MCPQuantumIntelligenceCoordinator: MCPQuantumIntelligence, Se
 private final class QuantumProcessor: Sendable {
     func executeOperation(_ operation: QuantumIntelligenceOperation, state: QuantumState) async throws -> OperationResult {
         OperationResult(
-            success: Double.random(in: 0.85...1.0) > 0.15,
-            quantumAdvantage: Double.random(in: 1.5...5.0),
-            speedup: Double.random(in: 10...1000)
+            success: Double.random(in: 0.85 ... 1.0) > 0.15,
+            quantumAdvantage: Double.random(in: 1.5 ... 5.0),
+            speedup: Double.random(in: 10 ... 1000)
         )
     }
 
     func processDecision(_ decision: QuantumDecision, superposition: [SuperpositionState]) async throws -> DecisionResult {
         DecisionResult(
-            optimalChoice: "quantum_choice_\(Int.random(in: 1...decision.quantumStates))",
-            quantumAdvantage: Double.random(in: 2.0...10.0),
-            confidence: Double.random(in: 0.8...1.0)
+            optimalChoice: "quantum_choice_\(Int.random(in: 1 ... decision.quantumStates))",
+            quantumAdvantage: Double.random(in: 2.0 ... 10.0),
+            confidence: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -627,10 +638,10 @@ private final class QuantumProcessor: Sendable {
     func getProcessorStatus() async -> ProcessorStatus {
         ProcessorStatus(
             operational: true,
-            capability: Double.random(in: 0.9...1.0),
-            power: Double.random(in: 100...1000),
-            activeOperations: Int.random(in: 1...20),
-            successRate: Double.random(in: 0.9...0.98)
+            capability: Double.random(in: 0.9 ... 1.0),
+            power: Double.random(in: 100 ... 1000),
+            activeOperations: Int.random(in: 1 ... 20),
+            successRate: Double.random(in: 0.9 ... 0.98)
         )
     }
 }
@@ -640,14 +651,14 @@ private final class EntanglementManager: Sendable {
     func processEntanglement(_ operation: QuantumIntelligenceOperation, result: OperationResult) async -> EntanglementResult {
         EntanglementResult(
             success: true,
-            entanglementStrength: Double.random(in: 0.8...1.0)
+            entanglementStrength: Double.random(in: 0.8 ... 1.0)
         )
     }
 
     func applyConstraints(_ decision: QuantumDecision, result: DecisionResult) async -> EntanglementResult {
         EntanglementResult(
             success: true,
-            quality: Double.random(in: 0.85...1.0)
+            quality: Double.random(in: 0.85 ... 1.0)
         )
     }
 
@@ -662,7 +673,7 @@ private final class EntanglementManager: Sendable {
     func getEntanglementStatus() async -> EntanglementStatus {
         EntanglementStatus(
             operational: true,
-            strength: Double.random(in: 0.9...1.0)
+            strength: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -672,7 +683,7 @@ private final class CoherenceController: Sendable {
     func maintainCoherence(_ operation: QuantumIntelligenceOperation, result: OperationResult) async -> CoherenceResult {
         CoherenceResult(
             success: true,
-            coherenceLevel: Double.random(in: 0.85...1.0)
+            coherenceLevel: Double.random(in: 0.85 ... 1.0)
         )
     }
 
@@ -687,7 +698,7 @@ private final class CoherenceController: Sendable {
     func getCoherenceStatus() async -> CoherenceStatus {
         CoherenceStatus(
             operational: true,
-            coherence: Double.random(in: 0.95...1.0)
+            coherence: Double.random(in: 0.95 ... 1.0)
         )
     }
 }
@@ -695,8 +706,8 @@ private final class CoherenceController: Sendable {
 /// Superposition Engine
 private final class SuperpositionEngine: Sendable {
     func createSuperposition(_ decision: QuantumDecision) async throws -> [SuperpositionState] {
-        (0..<decision.quantumStates).map { _ in
-            SuperpositionState(amplitude: Double.random(in: 0...1), phase: Double.random(in: 0...(2 * .pi)))
+        (0 ..< decision.quantumStates).map { _ in
+            SuperpositionState(amplitude: Double.random(in: 0 ... 1), phase: Double.random(in: 0 ... (2 * .pi)))
         }
     }
 
@@ -711,7 +722,7 @@ private final class SuperpositionEngine: Sendable {
     func getSuperpositionStatus() async -> SuperpositionStatus {
         SuperpositionStatus(
             operational: true,
-            states: Int.random(in: 10...100)
+            states: Int.random(in: 10 ... 100)
         )
     }
 }
@@ -729,7 +740,7 @@ private final class QuantumOptimizer: Sendable {
     func getOptimizerStatus() async -> OptimizerStatus {
         OptimizerStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8...1.0)
+            efficiency: Double.random(in: 0.8 ... 1.0)
         )
     }
 }

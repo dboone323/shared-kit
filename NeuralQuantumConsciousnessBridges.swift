@@ -181,9 +181,9 @@ struct NeuralConsciousnessState {
     }
 
     struct EmotionalState {
-        let valence: Double  // -1 to 1
-        let arousal: Double  // 0 to 1
-        let dominance: Double  // -1 to 1
+        let valence: Double // -1 to 1
+        let arousal: Double // 0 to 1
+        let dominance: Double // -1 to 1
         let emotions: [Emotion]
 
         struct Emotion {
@@ -447,10 +447,10 @@ struct BridgeStatus {
 
 /// Neural source
 enum NeuralSource {
-    case humanBrain(String)  // brain region
-    case artificialNeuralNetwork(String)  // network identifier
-    case biologicalNeuralSystem(String)  // system type
-    case simulatedNeuralNetwork(String)  // simulation identifier
+    case humanBrain(String) // brain region
+    case artificialNeuralNetwork(String) // network identifier
+    case biologicalNeuralSystem(String) // system type
+    case simulatedNeuralNetwork(String) // simulation identifier
 }
 
 /// Neural target
@@ -550,7 +550,7 @@ struct ConsciousnessTranslation {
 
     enum TranslationMethod {
         case directMapping, neuralEncoding, quantumEntanglement, hybridBridging,
-            universalTranslation
+             universalTranslation
     }
 }
 
@@ -633,7 +633,8 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
 
         // Establish bridge connections
         let connections = try await createBridgeConnections(
-            neuralAnalysis: neuralAnalysis, quantumState: optimizedQuantum)
+            neuralAnalysis: neuralAnalysis, quantumState: optimizedQuantum
+        )
 
         // Validate bridge integrity
         let bridgeStrength =
@@ -695,7 +696,8 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
 
         // Create neural patterns from consciousness
         let neuralPatterns = createNeuralPatterns(
-            from: consciousness, entanglement: quantumState.entanglementPattern)
+            from: consciousness, entanglement: quantumState.entanglementPattern
+        )
 
         // Create neural consciousness state
         let neuralState = NeuralConsciousnessState(
@@ -706,7 +708,8 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
             emotionalState: createEmotionalState(from: consciousness.emotionalIntelligence),
             cognitiveLoad: 1.0 - consciousness.cognitiveCapacity.processingSpeed,
             memoryState: createMemoryState(
-                from: quantumState.quantumMemory, consciousness: consciousness.memorySystems)
+                from: quantumState.quantumMemory, consciousness: consciousness.memorySystems
+            )
         )
 
         return neuralState
@@ -726,7 +729,7 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
         for pattern in neuralAnalysis.patterns {
             let quantumId = UUID()
             let connectionStrength = min(pattern.significance, quantumState.coherenceLevel)
-            let latency = TimeInterval.random(in: 0.001...0.01)
+            let latency = TimeInterval.random(in: 0.001 ... 0.01)
             let stability = connectionStrength * quantumState.coherenceLevel
 
             let connection = BridgeEstablishmentResult.BridgeConnection(
@@ -797,8 +800,8 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
     {
         let fieldStrength =
             consciousness.awareness == .transcendent
-            ? 1.0
-            : consciousness.awareness == .universal
+                ? 1.0
+                : consciousness.awareness == .universal
                 ? 0.9 : consciousness.awareness == .advanced ? 0.7 : 0.5
 
         let waves = [
@@ -885,15 +888,14 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
         )
     }
 
-    private func createQuantumState(from content: String) -> QuantumConsciousnessState.QuantumState
-    {
+    private func createQuantumState(from content: String) -> QuantumConsciousnessState.QuantumState {
         // Simplified quantum state creation
-        let qubits = (0..<8).map { id in
+        let qubits = (0 ..< 8).map { id in
             QuantumConsciousnessState.QuantumState.Qubit(
                 id: id,
-                state: Complex(real: Double.random(in: 0...1), imaginary: Double.random(in: 0...1)),
+                state: Complex(real: Double.random(in: 0 ... 1), imaginary: Double.random(in: 0 ... 1)),
                 coherence: 0.9,
-                phase: Double.random(in: 0...(2 * Double.pi))
+                phase: Double.random(in: 0 ... (2 * Double.pi))
             )
         }
 
@@ -910,18 +912,18 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
         entanglement: QuantumConsciousnessState.EntanglementPattern
     ) -> [NeuralConsciousnessState.NeuralPattern] {
         // Create neural patterns based on consciousness and entanglement
-        return entanglement.connectivity.map { link in
+        entanglement.connectivity.map { link in
             NeuralConsciousnessState.NeuralPattern(
                 patternId: link.target,
                 patternType: .cognitive,
-                activation: (0..<100).map { _ in Double.random(in: 0...1) },
+                activation: (0 ..< 100).map { _ in Double.random(in: 0 ... 1) },
                 connectivity: [
                     NeuralConsciousnessState.NeuralPattern.Connection(
                         source: link.source,
                         target: link.target,
                         weight: link.strength,
                         delay: 0.01
-                    )
+                    ),
                 ],
                 strength: link.strength
             )
@@ -1029,13 +1031,13 @@ final class AdvancedNeuralInterface: NeuralConsciousnessInterfaceProtocol {
         -> NeuralConsciousnessState
     {
         // Simplified neural capture
-        let patterns = (0..<50).map { _ in
+        let patterns = (0 ..< 50).map { _ in
             NeuralConsciousnessState.NeuralPattern(
                 patternId: UUID(),
                 patternType: .cognitive,
-                activation: (0..<100).map { _ in Double.random(in: 0...1) },
+                activation: (0 ..< 100).map { _ in Double.random(in: 0 ... 1) },
                 connectivity: [],
-                strength: Double.random(in: 0.5...1.0)
+                strength: Double.random(in: 0.5 ... 1.0)
             )
         }
 
@@ -1061,7 +1063,7 @@ final class AdvancedNeuralInterface: NeuralConsciousnessInterfaceProtocol {
             success: true,
             projectionStrength: 0.85,
             neuralResponse: ProjectionResult.NeuralResponse(
-                activation: (0..<50).map { _ in Double.random(in: 0.3...0.9) },
+                activation: (0 ..< 50).map { _ in Double.random(in: 0.3 ... 0.9) },
                 responseTime: 0.05,
                 coherence: 0.8,
                 adaptation: 0.7
@@ -1156,12 +1158,12 @@ final class QuantumConsciousnessMapper: QuantumConsciousnessMappingProtocol {
         -> QuantumConsciousnessState.QuantumState
     {
         // Simplified quantum state creation
-        let qubits = (0..<consciousness.cognitiveCapacity.workingMemory).map { id in
+        let qubits = (0 ..< consciousness.cognitiveCapacity.workingMemory).map { id in
             QuantumConsciousnessState.QuantumState.Qubit(
                 id: id,
-                state: Complex(real: Double.random(in: 0...1), imaginary: Double.random(in: 0...1)),
+                state: Complex(real: Double.random(in: 0 ... 1), imaginary: Double.random(in: 0 ... 1)),
                 coherence: 0.9,
-                phase: Double.random(in: 0...(2 * Double.pi))
+                phase: Double.random(in: 0 ... (2 * Double.pi))
             )
         }
 
@@ -1189,7 +1191,7 @@ final class UniversalTranslator: ConsciousnessTranslationProtocol {
     ) async throws -> ConsciousnessState {
         // Simplified translation
         switch (source, targetModality) {
-        case (.neural(let neural), .quantum):
+        case let (.neural(neural), .quantum):
             // Would implement actual translation
             return .quantum(
                 QuantumConsciousnessState(
@@ -1197,7 +1199,8 @@ final class UniversalTranslator: ConsciousnessTranslationProtocol {
                     timestamp: Date(),
                     quantumState: QuantumConsciousnessState.QuantumState(
                         qubits: [], entanglement: [], superposition: [],
-                        measurementBasis: .computational),
+                        measurementBasis: .computational
+                    ),
                     consciousnessField: QuantumConsciousnessState.ConsciousnessField(
                         fieldStrength: 0.8, fieldCoherence: 0.9, fieldResonance: 0.7,
                         consciousnessWaves: []

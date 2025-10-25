@@ -13,12 +13,14 @@ struct REAParameters: Sendable {
     let intensity: Double
     let duration: TimeInterval
 }
+
 struct REAOutcome: Sendable {
     let targetId: UUID
     let success: Bool
     let gain: Double
     let notes: String
 }
+
 enum REAError: Error { case invalidIntensity }
 
 final class RealityEvolutionAccelerationEngine: REAProtocol {
@@ -29,7 +31,8 @@ final class RealityEvolutionAccelerationEngine: REAProtocol {
         let gain = parameters.intensity * min(1.0, parameters.duration / 60.0)
         return REAOutcome(
             targetId: parameters.targetId, success: gain > 0.1, gain: gain,
-            notes: gain > 0.5 ? "Significant acceleration" : "Minor acceleration")
+            notes: gain > 0.5 ? "Significant acceleration" : "Minor acceleration"
+        )
     }
 }
 

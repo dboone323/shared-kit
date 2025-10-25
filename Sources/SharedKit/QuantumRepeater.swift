@@ -31,7 +31,7 @@ public class QuantumRepeater: ObservableObject {
         try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
 
         operationalStatus = .operational
-        successRate = Double.random(in: 0.85...0.95)
+        successRate = Double.random(in: 0.85 ... 0.95)
 
         print("✅ Quantum repeater \(id) initialized with \(String(format: "%.1f", successRate * 100))% success rate")
     }
@@ -52,7 +52,7 @@ public class QuantumRepeater: ObservableObject {
         }
 
         // Simulate entanglement swapping process
-        let swappingSuccess = Double.random(in: 0...1) < successRate
+        let swappingSuccess = Double.random(in: 0 ... 1) < successRate
 
         if swappingSuccess {
             // Create new extended entanglement pair
@@ -94,11 +94,11 @@ public class QuantumRepeater: ObservableObject {
         guard operationalStatus == .operational else { return nil }
 
         // Simulate purification process
-        let purificationEfficiency = Double.random(in: 0.7...0.9)
+        let purificationEfficiency = Double.random(in: 0.7 ... 0.9)
         let purifiedFidelity = min(0.99, pair.currentFidelity * purificationEfficiency)
 
         // Purification may fail if fidelity is too low
-        let purificationSuccess = pair.currentFidelity > 0.3 && Double.random(in: 0...1) < 0.8
+        let purificationSuccess = pair.currentFidelity > 0.3 && Double.random(in: 0 ... 1) < 0.8
 
         if purificationSuccess {
             let purifiedPair = EntanglementPair(
@@ -157,8 +157,8 @@ public class QuantumRepeater: ObservableObject {
 
     private func createLocalEntanglementPair() async -> EntanglementPair? {
         // Simulate creating a local high-fidelity entanglement pair
-        let localFidelity = Double.random(in: 0.95...0.99)
-        let localDistance = Double.random(in: 1...10)
+        let localFidelity = Double.random(in: 0.95 ... 0.99)
+        let localDistance = Double.random(in: 1 ... 10)
 
         return EntanglementPair(
             id: "\(id)_local_\(UUID().uuidString.prefix(8))",
@@ -172,8 +172,8 @@ public class QuantumRepeater: ObservableObject {
 
     /// Monitor repeater performance and health
     public func monitorPerformance() async -> RepeaterPerformanceMetrics {
-        let uptime = Double.random(in: 0.95...0.99)
-        let averageFidelity = entanglementPairs.map { $0.currentFidelity }.reduce(0, +) / Double(max(1, entanglementPairs.count))
+        let uptime = Double.random(in: 0.95 ... 0.99)
+        let averageFidelity = entanglementPairs.map(\.currentFidelity).reduce(0, +) / Double(max(1, entanglementPairs.count))
         let throughput = Double(entanglementPairs.count) / 3600.0 // pairs per hour
         let errorRate = 1.0 - successRate
 

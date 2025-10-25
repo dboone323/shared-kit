@@ -371,11 +371,11 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
     }
 
     public func getComponent(_ componentId: String) async -> MCPSystemComponent? {
-        return _components[componentId]
+        _components[componentId]
     }
 
     public func listComponents() async -> [MCPSystemComponent] {
-        return Array(_components.values)
+        Array(_components.values)
     }
 
     // MARK: - Private Methods
@@ -495,7 +495,7 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
     private func calculateOverallHealth(_ componentHealth: [String: MCPComponentHealth])
         -> MCPComponentHealthStatus
     {
-        let statuses = componentHealth.values.map { $0.status }
+        let statuses = componentHealth.values.map(\.status)
 
         if statuses.contains(.unhealthy) {
             return .unhealthy
@@ -513,7 +513,7 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
         await integrationManager.eventSystem.publish(
             MCPEvent(
                 id: event.id,
-                type: .serviceRegistered,  // Map to existing event type
+                type: .serviceRegistered, // Map to existing event type
                 source: event.componentId,
                 data: event.data ?? [:],
                 severity: event.severity
@@ -563,7 +563,7 @@ public final class MCPOrchestratorComponent: MCPSystemComponent {
 
     public func healthCheck() async -> MCPComponentHealth {
         // Simple health check - in real implementation, would check actual orchestrator state
-        return MCPComponentHealth(status: .healthy, message: "Orchestrator operational")
+        MCPComponentHealth(status: .healthy, message: "Orchestrator operational")
     }
 }
 
@@ -606,7 +606,7 @@ public final class MCPSchedulerComponent: MCPSystemComponent {
     }
 
     public func healthCheck() async -> MCPComponentHealth {
-        return MCPComponentHealth(status: .healthy, message: "Scheduler operational")
+        MCPComponentHealth(status: .healthy, message: "Scheduler operational")
     }
 }
 
@@ -649,7 +649,7 @@ public final class MCPMonitorComponent: MCPSystemComponent {
     }
 
     public func healthCheck() async -> MCPComponentHealth {
-        return MCPComponentHealth(status: .healthy, message: "Monitor operational")
+        MCPComponentHealth(status: .healthy, message: "Monitor operational")
     }
 }
 
@@ -692,7 +692,7 @@ public final class MCPOptimizerComponent: MCPSystemComponent {
     }
 
     public func healthCheck() async -> MCPComponentHealth {
-        return MCPComponentHealth(status: .healthy, message: "Optimizer operational")
+        MCPComponentHealth(status: .healthy, message: "Optimizer operational")
     }
 }
 
@@ -735,7 +735,7 @@ public final class MCPIntegrationComponent: MCPSystemComponent {
     }
 
     public func healthCheck() async -> MCPComponentHealth {
-        return MCPComponentHealth(status: .healthy, message: "Integration operational")
+        MCPComponentHealth(status: .healthy, message: "Integration operational")
     }
 }
 
@@ -752,9 +752,9 @@ public enum MCPSystemError: Error {
 
 // MARK: - Convenience Extensions
 
-extension MCPCompleteSystemIntegration {
+public extension MCPCompleteSystemIntegration {
     /// Execute a workflow with full system integration
-    public func executeWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult {
+    func executeWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult {
         let result = try await workflowOrchestrator.orchestrateWorkflow(workflow)
 
         // Record execution in monitor
@@ -772,7 +772,7 @@ extension MCPCompleteSystemIntegration {
     }
 
     /// Get comprehensive system metrics
-    public func getSystemMetrics() async -> MCPSystemMetrics {
+    func getSystemMetrics() async -> MCPSystemMetrics {
         let status = await getSystemStatus()
         let workflowMetrics = await workflowMonitor.getWorkflowMetrics(
             timeRange: DateInterval(start: Date().addingTimeInterval(-3600), end: Date())
@@ -787,7 +787,7 @@ extension MCPCompleteSystemIntegration {
     }
 
     /// Optimize and execute workflow
-    public nonisolated func optimizeAndExecuteWorkflow(_ workflow: MCPWorkflow) async throws
+    nonisolated func optimizeAndExecuteWorkflow(_ workflow: MCPWorkflow) async throws
         -> MCPWorkflowResult
     {
         let optimization = try await workflowOptimizer.optimizeWorkflow(workflow)
@@ -795,14 +795,15 @@ extension MCPCompleteSystemIntegration {
     }
 
     /// Schedule optimized workflow
-    public nonisolated func scheduleOptimizedWorkflow(
+    nonisolated func scheduleOptimizedWorkflow(
         _ workflow: MCPWorkflow, schedule: MCPWorkflowSchedule
     )
         async throws -> String
     {
         let optimization = try await workflowOptimizer.optimizeWorkflow(workflow)
         return try await workflowScheduler.scheduleRecurringWorkflow(
-            optimization.optimizedWorkflow, schedule: schedule)
+            optimization.optimizedWorkflow, schedule: schedule
+        )
     }
 }
 

@@ -66,7 +66,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         XCTAssertFalse(history.isEmpty)
 
         // Wait for healing to complete
-        try await Task.sleep(nanoseconds: 2_000_000_000)  // 2 seconds
+        try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
 
         let updatedHistory = healingEngine.getHealingHistory()
         XCTAssertGreaterThan(updatedHistory.count, history.count)
@@ -77,7 +77,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         await healingEngine.start()
 
         // When - wait for monitoring cycle
-        try await Task.sleep(nanoseconds: 35_000_000_000)  // 35 seconds (longer than monitoring interval)
+        try await Task.sleep(nanoseconds: 35_000_000_000) // 35 seconds (longer than monitoring interval)
 
         // Then
         let healthStatus = healingEngine.getHealthStatus()
@@ -100,7 +100,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         await healingEngine.reportError(memoryError)
 
         // Then
-        try await Task.sleep(nanoseconds: 3_000_000_000)  // Wait for healing
+        try await Task.sleep(nanoseconds: 3_000_000_000) // Wait for healing
 
         let history = healingEngine.getHealingHistory()
         let memoryHealings = history.filter { action in
@@ -116,13 +116,14 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         // Given
         await healingEngine.start()
         let networkError = SystemError.connectivityFailure(
-            endpoint: "api.example.com", error: "Connection timeout")
+            endpoint: "api.example.com", error: "Connection timeout"
+        )
 
         // When
         await healingEngine.reportError(networkError)
 
         // Then
-        try await Task.sleep(nanoseconds: 6_000_000_000)  // Wait for healing
+        try await Task.sleep(nanoseconds: 6_000_000_000) // Wait for healing
 
         let history = healingEngine.getHealingHistory()
         let networkHealings = history.filter { action in
@@ -138,13 +139,14 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         // Given
         await healingEngine.start()
         let configError = SystemError.configurationError(
-            key: "database.url", expected: "localhost", actual: "invalid")
+            key: "database.url", expected: "localhost", actual: "invalid"
+        )
 
         // When
         await healingEngine.reportError(configError)
 
         // Then
-        try await Task.sleep(nanoseconds: 2_000_000_000)  // Wait for healing
+        try await Task.sleep(nanoseconds: 2_000_000_000) // Wait for healing
 
         let history = healingEngine.getHealingHistory()
         let configHealings = history.filter { action in
@@ -163,7 +165,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         await healingEngine.start()
 
         // When - trigger health check
-        try await Task.sleep(nanoseconds: 35_000_000_000)  // Wait for monitoring
+        try await Task.sleep(nanoseconds: 35_000_000_000) // Wait for monitoring
 
         // Then
         let healthStatus = healingEngine.getHealthStatus()
@@ -180,7 +182,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         await healingEngine.start()
 
         // When - trigger health check
-        try await Task.sleep(nanoseconds: 35_000_000_000)  // Wait for monitoring
+        try await Task.sleep(nanoseconds: 35_000_000_000) // Wait for monitoring
 
         // Then
         let healthStatus = healingEngine.getHealthStatus()
@@ -211,13 +213,13 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         }
 
         // Then - wait for processing
-        try await Task.sleep(nanoseconds: 10_000_000_000)  // 10 seconds
+        try await Task.sleep(nanoseconds: 10_000_000_000) // 10 seconds
 
         let history = healingEngine.getHealingHistory()
         XCTAssertGreaterThanOrEqual(history.count, errors.count)
 
         // Check that recoveries were attempted
-        let successfulRecoveries = history.filter { $0.success }
+        let successfulRecoveries = history.filter(\.success)
         XCTAssertGreaterThan(successfulRecoveries.count, 0)
     }
 
@@ -231,11 +233,11 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         await healingEngine.healComponent("memory")
 
         // Then
-        try await Task.sleep(nanoseconds: 3_000_000_000)  // Wait for healing
+        try await Task.sleep(nanoseconds: 3_000_000_000) // Wait for healing
 
         let history = healingEngine.getHealingHistory()
         let manualHealings = history.filter { action in
-            if case .custom(let description, _) = action.error {
+            if case let .custom(description, _) = action.error {
                 return description.contains("Manual healing requested")
             }
             return false
@@ -251,7 +253,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         await healingEngine.reportError(
             SystemError.custom(description: "Test export", metadata: [:]))
 
-        try await Task.sleep(nanoseconds: 2_000_000_000)  // Wait for processing
+        try await Task.sleep(nanoseconds: 2_000_000_000) // Wait for processing
 
         // When
         let exportedData = healingEngine.exportHealingHistory()
@@ -270,7 +272,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
                 success: true,
                 duration: 1.5,
                 metadata: ["imported": "true"]
-            )
+            ),
         ]
 
         let encoder = JSONEncoder()
@@ -325,18 +327,18 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         let startTime = Date()
 
         // When - perform multiple healing operations
-        for i in 0..<5 {
+        for i in 0 ..< 5 {
             let error = SystemError.custom(description: "Performance test \(i)", metadata: [:])
             await healingEngine.reportError(error)
         }
 
-        try await Task.sleep(nanoseconds: 15_000_000_000)  // Wait for all healing to complete
+        try await Task.sleep(nanoseconds: 15_000_000_000) // Wait for all healing to complete
 
         let endTime = Date()
         let totalTime = endTime.timeIntervalSince(startTime)
 
         // Then - should complete within reasonable time (allowing for async processing)
-        XCTAssertLessThan(totalTime, 30.0)  // Less than 30 seconds for 5 healings
+        XCTAssertLessThan(totalTime, 30.0) // Less than 30 seconds for 5 healings
 
         let history = healingEngine.getHealingHistory()
         XCTAssertGreaterThanOrEqual(history.count, 5)
@@ -361,11 +363,11 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         // Report high severity - should trigger immediate healing
         await healingEngine.reportError(highSeverityLeak)
 
-        try await Task.sleep(nanoseconds: 5_000_000_000)  // Wait for processing
+        try await Task.sleep(nanoseconds: 5_000_000_000) // Wait for processing
 
         let history = healingEngine.getHealingHistory()
         let highSeverityHealings = history.filter { action in
-            if case .memoryLeak(_, let severity) = action.error {
+            if case let .memoryLeak(_, severity) = action.error {
                 return severity > 0.8
             }
             return false

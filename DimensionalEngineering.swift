@@ -7,8 +7,8 @@
 //  Task 193: Dimensional Engineering
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Core Protocols
 
@@ -283,35 +283,35 @@ final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, Dimens
     }
 
     func stabilizeDimensionalConstruct(_ construct: DimensionalConstruct) async throws -> StabilizationResult {
-        return try await stabilityController.stabilizeConstruct(construct, in: initialState)
+        try await stabilityController.stabilizeConstruct(construct, in: initialState)
     }
 
     // MARK: - DimensionalManipulationProtocol
 
     func modifyDimensionalProperties(_ properties: DimensionalProperties) async throws -> ModificationResult {
-        return try await dimensionManager.modifyProperties(properties, in: initialState)
+        try await dimensionManager.modifyProperties(properties, in: initialState)
     }
 
     func bridgeDimensions(_ bridge: DimensionalBridge) async throws -> BridgeResult {
-        return try await dimensionManager.createBridge(bridge, in: initialState)
+        try await dimensionManager.createBridge(bridge, in: initialState)
     }
 
     func collapseDimensionalStructure(_ structure: DimensionalStructure) async throws -> CollapseResult {
-        return try await dimensionManager.collapseStructure(structure, in: initialState)
+        try await dimensionManager.collapseStructure(structure, in: initialState)
     }
 
     // MARK: - DimensionalStabilityProtocol
 
     func assessDimensionalStability(_ dimension: Dimension) async -> StabilityAssessment {
-        return await stabilityController.assessDimensionStability(dimension)
+        await stabilityController.assessDimensionStability(dimension)
     }
 
     func reinforceDimensionalIntegrity(_ dimension: Dimension) async throws -> ReinforcementResult {
-        return try await stabilityController.reinforceDimension(dimension, in: initialState)
+        try await stabilityController.reinforceDimension(dimension, in: initialState)
     }
 
     func monitorDimensionalFluctuations() async -> FluctuationReport {
-        return await stabilityController.generateFluctuationReport(for: initialState)
+        await stabilityController.generateFluctuationReport(for: initialState)
     }
 
     // MARK: - Private Methods
@@ -378,7 +378,7 @@ final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, Dimens
 
     private func analyzeBridges(_ bridges: [DimensionalBridge]) -> BridgeAnalysis {
         let bridgeCount = bridges.count
-        let averageStability = bridges.map { $0.stability }.reduce(0, +) / Double(bridgeCount)
+        let averageStability = bridges.map(\.stability).reduce(0, +) / Double(bridgeCount)
         let bridgeTypes = Dictionary(grouping: bridges) { $0.bridgeType }
             .mapValues { $0.count }
 
@@ -394,11 +394,11 @@ final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, Dimens
     }
 
     private func generateRecommendations() -> [String] {
-        return [
+        [
             "Monitor dimensional stability levels",
             "Maintain adequate energy reserves for dimensional operations",
             "Regular dimensional coherence checks",
-            "Implement dimensional fluctuation monitoring"
+            "Implement dimensional fluctuation monitoring",
         ]
     }
 
@@ -432,8 +432,8 @@ final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, Dimens
 final class DimensionManager {
     func analyzeDimensions(_ dimensions: [Dimension]) async -> DimensionAnalysis {
         let dimensionCount = dimensions.count
-        let averageStability = dimensions.map { $0.stability }.reduce(0, +) / Double(dimensionCount)
-        let averageCoherence = dimensions.map { $0.coherence }.reduce(0, +) / Double(dimensionCount)
+        let averageStability = dimensions.map(\.stability).reduce(0, +) / Double(dimensionCount)
+        let averageCoherence = dimensions.map(\.coherence).reduce(0, +) / Double(dimensionCount)
 
         let dimensionTypes = Dictionary(grouping: dimensions) { $0.type }
             .mapValues { $0.count }
@@ -595,7 +595,7 @@ final class DimensionManager {
 
     private func calculateEnergyDelta(_ original: Dimension, _ modified: Dimension) -> Double {
         // Simplified energy calculation
-        return modified.energyLevel - original.energyLevel
+        modified.energyLevel - original.energyLevel
     }
 }
 
@@ -603,9 +603,9 @@ final class DimensionManager {
 final class ConstructBuilder {
     func analyzeConstructs(_ constructs: [DimensionalConstruct]) async -> ConstructAnalysis {
         let constructCount = constructs.count
-        let averageStability = constructs.map { $0.stability }.reduce(0, +) / Double(constructCount)
-        let averageCoherence = constructs.map { $0.coherence }.reduce(0, +) / Double(constructCount)
-        let totalEnergyRequirement = constructs.map { $0.energyRequirement }.reduce(0, +)
+        let averageStability = constructs.map(\.stability).reduce(0, +) / Double(constructCount)
+        let averageCoherence = constructs.map(\.coherence).reduce(0, +) / Double(constructCount)
+        let totalEnergyRequirement = constructs.map(\.energyRequirement).reduce(0, +)
 
         let constructTypes = Dictionary(grouping: constructs) { $0.dimensionality }
             .mapValues { $0.count }
@@ -645,7 +645,7 @@ final class StabilityController {
     func analyzeStability(_ state: DimensionalState) async -> StabilityAnalysis {
         let overallStability = state.stabilityIndex
         let stabilityTrend: StabilityTrend = overallStability > 0.9 ? .stable :
-                                           overallStability > 0.7 ? .improving : .critical
+            overallStability > 0.7 ? .improving : .critical
 
         let criticalDimensions = state.dimensions.filter { $0.stability < 0.8 }
         let criticalConstructs = state.constructs.filter { $0.stability < 0.8 }
@@ -656,7 +656,7 @@ final class StabilityController {
                 projectedStability: overallStability * 0.98,
                 confidenceLevel: 0.85,
                 riskFactors: ["Dimensional fluctuations", "Energy depletion"]
-            )
+            ),
         ]
 
         return StabilityAnalysis(
@@ -714,15 +714,15 @@ final class StabilityController {
         let fluctuations = state.dimensions.map { dimension in
             DimensionalFluctuation(
                 dimensionId: dimension.id,
-                fluctuationMagnitude: Double.random(in: 0.01...0.1),
-                fluctuationFrequency: Double.random(in: 0.1...1.0),
+                fluctuationMagnitude: Double.random(in: 0.01 ... 0.1),
+                fluctuationFrequency: Double.random(in: 0.1 ... 1.0),
                 stability: dimension.stability,
                 timestamp: Date()
             )
         }
 
-        let averageFluctuation = fluctuations.map { $0.fluctuationMagnitude }.reduce(0, +) / Double(fluctuations.count)
-        let maxFluctuation = fluctuations.map { $0.fluctuationMagnitude }.max() ?? 0.0
+        let averageFluctuation = fluctuations.map(\.fluctuationMagnitude).reduce(0, +) / Double(fluctuations.count)
+        let maxFluctuation = fluctuations.map(\.fluctuationMagnitude).max() ?? 0.0
 
         return FluctuationReport(
             timestamp: Date(),
@@ -1025,15 +1025,15 @@ enum DimensionalError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .validationFailed(let errors):
+        case let .validationFailed(errors):
             return "Validation failed with \(errors.count) errors"
-        case .operationFailed(let errors):
+        case let .operationFailed(errors):
             return "Operation failed with \(errors.count) errors"
-        case .constructionFailed(let reason):
+        case let .constructionFailed(reason):
             return "Construction failed: \(reason)"
-        case .stabilityCritical(let reason):
+        case let .stabilityCritical(reason):
             return "Stability critical: \(reason)"
-        case .bridgeFailed(let reason):
+        case let .bridgeFailed(reason):
             return "Bridge failed: \(reason)"
         }
     }
@@ -1084,7 +1084,7 @@ struct AnyCodable: Codable, Sendable {
 enum DimensionalEngineeringFactory {
     @MainActor
     static func createEngine(withInitialState state: DimensionalState) -> DimensionalEngineeringEngine {
-        return DimensionalEngineeringEngine(initialState: state)
+        DimensionalEngineeringEngine(initialState: state)
     }
 
     static func createDefaultDimensionalState() -> DimensionalState {
@@ -1175,7 +1175,7 @@ enum DimensionalEngineeringFactory {
                 stability: 0.88,
                 coherence: 0.94,
                 energyLevel: 2.0
-            )
+            ),
         ]
 
         let constructs = [
@@ -1200,8 +1200,8 @@ enum DimensionalEngineeringFactory {
                 energyRequirement: 1000.0,
                 creationDate: Date(),
                 parentDimensions: [],
-                childDimensions: dimensions.map { $0.id }
-            )
+                childDimensions: dimensions.map(\.id)
+            ),
         ]
 
         return DimensionalState(
@@ -1302,7 +1302,7 @@ final class DimensionalEngineeringDatabase {
     }
 
     func loadState(id: UUID) -> DimensionalState? {
-        return states[id]
+        states[id]
     }
 
     func saveConstruct(_ construct: DimensionalConstruct) {
@@ -1310,7 +1310,7 @@ final class DimensionalEngineeringDatabase {
     }
 
     func loadConstruct(id: UUID) -> DimensionalConstruct? {
-        return constructs[id]
+        constructs[id]
     }
 
     func saveOperation(_ operation: DimensionalOperation, forState stateId: UUID) {
@@ -1321,7 +1321,7 @@ final class DimensionalEngineeringDatabase {
     }
 
     func getOperations(forState stateId: UUID) -> [DimensionalOperation] {
-        return operations[stateId] ?? []
+        operations[stateId] ?? []
     }
 }
 
@@ -1330,7 +1330,7 @@ final class DimensionalEngineeringDatabase {
 /// Testing utilities for dimensional engineering
 enum DimensionalEngineeringTesting {
     static func createTestState() -> DimensionalState {
-        return DimensionalEngineeringFactory.createDefaultDimensionalState()
+        DimensionalEngineeringFactory.createDefaultDimensionalState()
     }
 
     static func createUnstableState() -> DimensionalState {
@@ -1351,7 +1351,7 @@ enum DimensionalEngineeringTesting {
 // MARK: - Framework Metadata
 
 /// Framework information
-struct DimensionalEngineeringMetadata {
+enum DimensionalEngineeringMetadata {
     static let version = "1.0.0"
     static let framework = "Dimensional Engineering"
     static let description = "Comprehensive framework for creating and manipulating dimensional structures"
@@ -1363,7 +1363,7 @@ struct DimensionalEngineeringMetadata {
         "Bridge Engineering",
         "Structure Collapse",
         "Property Modification",
-        "Fluctuation Monitoring"
+        "Fluctuation Monitoring",
     ]
     static let dependencies = ["Foundation", "Combine"]
     static let author = "Quantum Singularity Era - Task 193"

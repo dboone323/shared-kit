@@ -17,22 +17,22 @@ public class MotorCortex {
 
     public init() {
         // Initialize motor cortex areas
-        for _ in 0..<500 {
+        for _ in 0 ..< 500 {
             primaryMotorCortex.append(MotorNeuron())
         }
 
-        for _ in 0..<300 {
+        for _ in 0 ..< 300 {
             premotorCortex.append(MotorNeuron())
         }
 
-        for _ in 0..<200 {
+        for _ in 0 ..< 200 {
             supplementaryMotorArea.append(MotorNeuron())
         }
 
         // Create motor homunculus (sensory/motor body map)
         let bodyParts = ["hand", "arm", "face", "leg", "torso", "head"]
         for part in bodyParts {
-            motorHomunculus[part] = (0..<50).map { _ in MotorNeuron() }
+            motorHomunculus[part] = (0 ..< 50).map { _ in MotorNeuron() }
         }
     }
 
@@ -109,7 +109,7 @@ public class MotorNeuron: NeuromorphicNeuron {
     public var motorThreshold: Double = 0.6
     public var forceOutput: SIMD3<Double> = SIMD3(0, 0, 0)
     public var torqueOutput: SIMD3<Double> = SIMD3(0, 0, 0)
-    public var leakRate: Double = 0.95  // Add leak rate property
+    public var leakRate: Double = 0.95 // Add leak rate property
 
     /// Process motor planning input
     public func processMotorPlanning(_ input: SensoryInput) -> Double {
@@ -176,9 +176,9 @@ public class MotorNeuron: NeuromorphicNeuron {
     public func executeMotorCommand(_ command: MotorCommand) -> (SIMD3<Double>, SIMD3<Double>) {
         // Apply command with some noise and variability
         let noise = SIMD3<Double>(
-            Double.random(in: -0.1...0.1),
-            Double.random(in: -0.1...0.1),
-            Double.random(in: -0.1...0.1)
+            Double.random(in: -0.1 ... 0.1),
+            Double.random(in: -0.1 ... 0.1),
+            Double.random(in: -0.1 ... 0.1)
         )
 
         let actualForce = command.force + noise
@@ -272,7 +272,8 @@ public struct MotorGoal {
                 currentPosition: SIMD3<Double> = SIMD3(0, 0, 0),
                 currentOrientation: SIMD3<Double> = SIMD3(0, 0, 0),
                 targetBodyPart: String = "hand",
-                priority: Double = 1.0) {
+                priority: Double = 1.0)
+    {
         self.targetPosition = targetPosition
         self.targetOrientation = targetOrientation
         self.currentPosition = currentPosition
@@ -297,8 +298,8 @@ public struct MotorCommand {
     public var targetPosition: SIMD3<Double>
 
     public var description: String {
-        return String(format: "Force: (%.2f, %.2f, %.2f), Torque: (%.2f, %.2f, %.2f), Duration: %.3fs",
-                     force.x, force.y, force.z, torque.x, torque.y, torque.z, duration)
+        String(format: "Force: (%.2f, %.2f, %.2f), Torque: (%.2f, %.2f, %.2f), Duration: %.3fs",
+               force.x, force.y, force.z, torque.x, torque.y, torque.z, duration)
     }
 }
 
@@ -420,12 +421,12 @@ public class VisualProcessor {
 /// Auditory processor for sensory integration
 public class AuditoryProcessor {
     public func processAuditoryData(_ data: AuditoryData) -> [Double] {
-        return [
+        [
             data.direction / 180.0, // Normalized to [-1, 1]
             data.distance,
             Double(data.soundType == "speech" ? 1.0 : 0.0),
             Double(data.soundType == "alarm" ? 1.0 : 0.0),
-            Double(data.soundType == "music" ? 1.0 : 0.0)
+            Double(data.soundType == "music" ? 1.0 : 0.0),
         ]
     }
 }
@@ -434,7 +435,7 @@ public class AuditoryProcessor {
 public class TactileProcessor {
     public func processTactileData(_ data: [Double]) -> [Double] {
         // Simple processing - return normalized sensor values
-        return data.map { min(max($0, 0.0), 1.0) }
+        data.map { min(max($0, 0.0), 1.0) }
     }
 }
 
@@ -485,7 +486,8 @@ public class BehaviorSystem {
 
         // Only use the highest priority behavior to avoid conflicting commands
         if let primaryBehavior = sortedBehaviors.first,
-           let goal = primaryBehavior.generateGoal(sensoryData) {
+           let goal = primaryBehavior.generateGoal(sensoryData)
+        {
             goals.append(goal)
         }
 
@@ -505,12 +507,12 @@ public class Behavior {
 
     /// Evaluate activation level for this behavior
     public func evaluateActivation(_ sensoryData: IntegratedSensoryData, _ robotState: RobotState) -> Double {
-        return 0.0 // Override in subclasses
+        0.0 // Override in subclasses
     }
 
     /// Generate motor goal if behavior is active
     public func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
-        return nil // Override in subclasses
+        nil // Override in subclasses
     }
 }
 
@@ -520,13 +522,13 @@ public class ObstacleAvoidanceBehavior: Behavior {
         super.init(priority: priority, name: "Obstacle Avoidance")
     }
 
-    public override func evaluateActivation(_ sensoryData: IntegratedSensoryData, _ robotState: RobotState) -> Double {
+    override public func evaluateActivation(_ sensoryData: IntegratedSensoryData, _ robotState: RobotState) -> Double {
         // Activate if obstacles detected in visual field
         let obstacleCount = sensoryData.visualFeatures.count > 6 ? sensoryData.visualFeatures[6] : 0.0
         return min(obstacleCount / 5.0, 1.0) // Scale with obstacle count
     }
 
-    public override func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
+    override public func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
         // Move away from obstacles - use small avoidance movement
         let obstacleX = sensoryData.visualFeatures.count > 7 ? sensoryData.visualFeatures[7] : 0.0
 
@@ -548,13 +550,13 @@ public class ObjectTrackingBehavior: Behavior {
         super.init(priority: priority, name: "Object Tracking")
     }
 
-    public override func evaluateActivation(_ sensoryData: IntegratedSensoryData, _ robotState: RobotState) -> Double {
+    override public func evaluateActivation(_ sensoryData: IntegratedSensoryData, _ robotState: RobotState) -> Double {
         // Activate if interesting objects detected
         let objectCount = sensoryData.visualFeatures.count > 6 ? sensoryData.visualFeatures[6] : 0.0
         return min(objectCount / 3.0, 1.0)
     }
 
-    public override func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
+    override public func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
         // Track object position - use relative movement instead of absolute position
         let objectX = sensoryData.visualFeatures.count > 7 ? sensoryData.visualFeatures[7] : 0.0
         let objectY = sensoryData.visualFeatures.count > 8 ? sensoryData.visualFeatures[8] : 0.0
@@ -578,15 +580,15 @@ public class ExplorationBehavior: Behavior {
         super.init(priority: priority, name: "Exploration")
     }
 
-    public override func evaluateActivation(_ sensoryData: IntegratedSensoryData, _ robotState: RobotState) -> Double {
+    override public func evaluateActivation(_ sensoryData: IntegratedSensoryData, _ robotState: RobotState) -> Double {
         // Always somewhat active, reduced when other behaviors are active
-        return 0.3
+        0.3
     }
 
-    public override func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
+    override public func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
         // Random exploration movement
-        let randomX = Double.random(in: -2.0...2.0)
-        let randomY = Double.random(in: -2.0...2.0)
+        let randomX = Double.random(in: -2.0 ... 2.0)
+        let randomY = Double.random(in: -2.0 ... 2.0)
 
         return MotorGoal(
             targetPosition: SIMD3(randomX, randomY, 0.0),
@@ -602,14 +604,14 @@ public class HomeostasisBehavior: Behavior {
         super.init(priority: priority, name: "Homeostasis")
     }
 
-    public override func evaluateActivation(_ sensoryData: IntegratedSensoryData, _ robotState: RobotState) -> Double {
+    override public func evaluateActivation(_ sensoryData: IntegratedSensoryData, _ robotState: RobotState) -> Double {
         // Activate if system needs balancing (low energy, etc.)
-        return 0.2
+        0.2
     }
 
-    public override func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
+    override public func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
         // Return to center position
-        return MotorGoal(
+        MotorGoal(
             targetPosition: SIMD3(0, 0, 0),
             targetBodyPart: "torso",
             priority: priority
@@ -640,7 +642,7 @@ public struct RobotState {
     public var lastUpdateTime: TimeInterval = 0.0
 
     public init() {
-        jointStates = (0..<10).map { _ in JointState() }
+        jointStates = (0 ..< 10).map { _ in JointState() }
     }
 
     public mutating func update(with actions: [MotorCommand], at time: TimeInterval) {
@@ -684,7 +686,7 @@ public struct RobotAction {
     public var behaviorState: BehaviorState
 
     public var description: String {
-        let behaviorNames = behaviorState.activeBehaviors.map { $0.name }.joined(separator: ", ")
+        let behaviorNames = behaviorState.activeBehaviors.map(\.name).joined(separator: ", ")
         return "Active behaviors: \(behaviorNames), Commands: \(commands.count)"
     }
 }

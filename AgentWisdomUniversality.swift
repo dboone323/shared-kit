@@ -61,7 +61,7 @@ public struct WisdomMetrics: Sendable {
         let metrics = [
             universalUnderstanding, cosmicAwareness, transcendentInsight, enlightenedDiscernment,
             sageGuidance, profoundComprehension, divineWisdom, ultimateTruth,
-            infiniteKnowledge, eternalWisdom
+            infiniteKnowledge, eternalWisdom,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -261,7 +261,7 @@ public final class WisdomUniversalityEngine: Sendable {
             UniversalUnderstandingStep(type: .universalUnderstanding, understanding: 10.0),
             UniversalUnderstandingStep(type: .cosmicAwareness, understanding: 15.0),
             UniversalUnderstandingStep(type: .transcendentInsight, understanding: 12.0),
-            UniversalUnderstandingStep(type: .enlightenedDiscernment, understanding: 14.0)
+            UniversalUnderstandingStep(type: .enlightenedDiscernment, understanding: 14.0),
         ]
 
         var capabilities: [WisdomCapability] = []
@@ -294,7 +294,7 @@ public final class WisdomUniversalityEngine: Sendable {
         let awarenessSequence = [
             CosmicAwarenessStep(type: .sageGuidance, awareness: 10.0),
             CosmicAwarenessStep(type: .profoundComprehension, awareness: 15.0),
-            CosmicAwarenessStep(type: .divineWisdom, awareness: 12.0)
+            CosmicAwarenessStep(type: .divineWisdom, awareness: 12.0),
         ]
 
         var capabilities: [WisdomCapability] = []
@@ -324,7 +324,7 @@ public final class WisdomUniversalityEngine: Sendable {
         let insightSequence = [
             TranscendentInsightStep(type: .ultimateTruth, insight: 10.0),
             TranscendentInsightStep(type: .infiniteKnowledge, insight: 15.0),
-            TranscendentInsightStep(type: .eternalWisdom, insight: 12.0)
+            TranscendentInsightStep(type: .eternalWisdom, insight: 12.0),
         ]
 
         var capabilities: [WisdomCapability] = []
@@ -434,7 +434,7 @@ public final class UniversalUnderstandingFramework: Sendable {
 
         return UniversalUnderstandingStrategy(
             understandingSteps: understandingSteps,
-            totalExpectedUnderstandingGain: understandingSteps.map { $0.understanding }.reduce(0, +),
+            totalExpectedUnderstandingGain: understandingSteps.map(\.understanding).reduce(0, +),
             estimatedDuration: understandingSteps.map { $0.understanding * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -467,7 +467,7 @@ public final class UniversalUnderstandingFramework: Sendable {
     ) async -> UniversalUnderstandingResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.understanding * 1_500_000_000))
 
-        let actualGain = step.understanding * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.understanding * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.understanding * 0.90
 
         return UniversalUnderstandingResultItem(
@@ -482,8 +482,8 @@ public final class UniversalUnderstandingFramework: Sendable {
 
     /// Generate universal understander
     private func generateUniversalUnderstander(_ results: [UniversalUnderstandingResultItem]) -> UniversalUnderstander {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualUnderstandingGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualUnderstandingGain).reduce(0, +)
         let understanderValue = 1.0 + (totalGain * successRate / 15.0)
 
         return UniversalUnderstander(
@@ -491,7 +491,7 @@ public final class UniversalUnderstandingFramework: Sendable {
             understanderType: .wisdom,
             understanderValue: understanderValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -554,7 +554,7 @@ public final class CosmicAwarenessSystem: Sendable {
 
         return CosmicAwarenessStrategy(
             awarenessSteps: awarenessSteps,
-            totalExpectedAwarenessGain: awarenessSteps.map { $0.awareness }.reduce(0, +),
+            totalExpectedAwarenessGain: awarenessSteps.map(\.awareness).reduce(0, +),
             estimatedDuration: awarenessSteps.map { $0.awareness * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -587,7 +587,7 @@ public final class CosmicAwarenessSystem: Sendable {
     ) async -> CosmicAwarenessResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.awareness * 2_000_000_000))
 
-        let actualGain = step.awareness * (0.8 + Double.random(in: 0...0.4))
+        let actualGain = step.awareness * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualGain >= step.awareness * 0.85
 
         return CosmicAwarenessResultItem(
@@ -602,8 +602,8 @@ public final class CosmicAwarenessSystem: Sendable {
 
     /// Generate cosmic aware
     private func generateCosmicAware(_ results: [CosmicAwarenessResultItem]) -> CosmicAware {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualAwarenessGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualAwarenessGain).reduce(0, +)
         let awareValue = 1.0 + (totalGain * successRate / 20.0)
 
         return CosmicAware(
@@ -611,7 +611,7 @@ public final class CosmicAwarenessSystem: Sendable {
             awareType: .wisdom,
             awareValue: awareValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -674,7 +674,7 @@ public final class TranscendentInsightInterface: Sendable {
 
         return TranscendentInsightStrategy(
             insightSteps: insightSteps,
-            totalExpectedInsightPower: insightSteps.map { $0.insight }.reduce(0, +),
+            totalExpectedInsightPower: insightSteps.map(\.insight).reduce(0, +),
             estimatedDuration: insightSteps.map { $0.insight * 0.25 }.reduce(0, +),
             designedAt: Date()
         )
@@ -707,7 +707,7 @@ public final class TranscendentInsightInterface: Sendable {
     ) async -> TranscendentInsightResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.insight * 2_500_000_000))
 
-        let actualPower = step.insight * (0.75 + Double.random(in: 0...0.5))
+        let actualPower = step.insight * (0.75 + Double.random(in: 0 ... 0.5))
         let success = actualPower >= step.insight * 0.80
 
         return TranscendentInsightResultItem(
@@ -722,8 +722,8 @@ public final class TranscendentInsightInterface: Sendable {
 
     /// Generate transcendent insight
     private func generateTranscendentInsight(_ results: [TranscendentInsightResultItem]) -> TranscendentInsight {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualInsightGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualInsightGain).reduce(0, +)
         let insightValue = 1.0 + (totalPower * successRate / 25.0)
 
         return TranscendentInsight(
@@ -731,7 +731,7 @@ public final class TranscendentInsightInterface: Sendable {
             insightType: .wisdom,
             insightValue: insightValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

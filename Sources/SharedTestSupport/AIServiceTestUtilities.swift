@@ -17,7 +17,7 @@ class AIServiceTestUtilities {
             callHistory.append(call)
         }
 
-        func setResponse<T>(_ response: T, for method: String) {
+        func setResponse(_ response: some Any, for method: String) {
             responses[method] = response
         }
 
@@ -52,7 +52,8 @@ class AIServiceTestUtilities {
         {
             recordCall(
                 "generateCode",
-                parameters: ["prompt": prompt, "language": language, "context": context])
+                parameters: ["prompt": prompt, "language": language, "context": context]
+            )
 
             if let error = errors["generateCode"] {
                 throw error
@@ -75,7 +76,8 @@ class AIServiceTestUtilities {
         {
             recordCall(
                 "reviewCode",
-                parameters: ["codeLength": code.count, "language": language, "criteria": criteria])
+                parameters: ["codeLength": code.count, "language": language, "criteria": criteria]
+            )
 
             if let error = errors["reviewCode"] {
                 throw error
@@ -99,7 +101,8 @@ class AIServiceTestUtilities {
         {
             recordCall(
                 "optimizeCode",
-                parameters: ["codeLength": code.count, "language": language, "target": target])
+                parameters: ["codeLength": code.count, "language": language, "target": target]
+            )
 
             if let error = errors["optimizeCode"] {
                 throw error
@@ -111,7 +114,7 @@ class AIServiceTestUtilities {
 
             // Default mock response
             return CodeOptimization(
-                optimizedCode: code,  // Return original for simplicity
+                optimizedCode: code, // Return original for simplicity
                 improvements: ["Code is already optimized"],
                 performanceGain: 0.1,
                 explanation: "No significant optimizations needed"
@@ -120,7 +123,8 @@ class AIServiceTestUtilities {
 
         func generateTests(for code: String, language: String) async throws -> TestGeneration {
             recordCall(
-                "generateTests", parameters: ["codeLength": code.count, "language": language])
+                "generateTests", parameters: ["codeLength": code.count, "language": language]
+            )
 
             if let error = errors["generateTests"] {
                 throw error
@@ -174,12 +178,13 @@ class AIServiceTestUtilities {
             XCTAssertEqual(result, expectedResult, file: file, line: line)
             XCTAssertTrue(
                 mockAIService.callHistory.contains(where: { $0.contains(method) }),
-                "Method \(method) was not called", file: file, line: line)
+                "Method \(method) was not called", file: file, line: line
+            )
         }
 
-        func testAIServiceError<T: Sendable>(
+        func testAIServiceError(
             method: String,
-            operation: @escaping () async throws -> T,
+            operation: @escaping () async throws -> some Sendable,
             expectedError: Error,
             timeout: TimeInterval = 5.0,
             file: StaticString = #file,
@@ -190,18 +195,20 @@ class AIServiceTestUtilities {
             do {
                 _ = try await waitForAsync(timeout: timeout, operation: operation)
                 XCTFail(
-                    "Expected error but operation completed successfully", file: file, line: line)
+                    "Expected error but operation completed successfully", file: file, line: line
+                )
             } catch {
                 // Error was thrown as expected
                 XCTAssertTrue(
                     mockAIService.callHistory.contains(where: { $0.contains(method) }),
-                    "Method \(method) was not called", file: file, line: line)
+                    "Method \(method) was not called", file: file, line: line
+                )
             }
         }
 
-        func testAIServicePerformance<T: Sendable>(
+        func testAIServicePerformance(
             method: String,
-            operation: @escaping () async throws -> T,
+            operation: @escaping () async throws -> some Sendable,
             maxDuration: TimeInterval = 2.0,
             file: StaticString = #file,
             line: UInt = #line
@@ -216,7 +223,8 @@ class AIServiceTestUtilities {
 
             XCTAssertTrue(
                 mockAIService.callHistory.contains(where: { $0.contains(method) }),
-                "Method \(method) was not called", file: file, line: line)
+                "Method \(method) was not called", file: file, line: line
+            )
         }
     }
 }
@@ -294,16 +302,18 @@ extension SharedViewModelTestCase {
         await viewModel.handle(aiAction)
 
         // Wait for AI operations to complete
-        try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
+        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
 
         let finalCallCount = mockService.callHistory.count
         XCTAssertGreaterThan(
-            finalCallCount, initialCallCount, "AI service was not called", file: file, line: line)
+            finalCallCount, initialCallCount, "AI service was not called", file: file, line: line
+        )
 
         for expectedCall in expectedCalls {
             XCTAssertTrue(
                 mockService.callHistory.contains(where: { $0.contains(expectedCall) }),
-                "Expected AI call '\(expectedCall)' was not made", file: file, line: line)
+                "Expected AI call '\(expectedCall)' was not made", file: file, line: line
+            )
         }
     }
 
@@ -322,18 +332,21 @@ extension SharedViewModelTestCase {
 
         XCTAssertNil(
             viewModel.errorMessage, "View model should not have error initially", file: file,
-            line: line)
+            line: line
+        )
 
         await viewModel.handle(aiAction)
 
         // Wait for error handling
-        try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
+        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
 
         XCTAssertNotNil(
             viewModel.errorMessage, "Error message should be set after AI error", file: file,
-            line: line)
+            line: line
+        )
         XCTAssertTrue(
             mockService.callHistory.contains(where: { $0.contains(errorMethod) }),
-            "AI method '\(errorMethod)' was not called", file: file, line: line)
+            "AI method '\(errorMethod)' was not called", file: file, line: line
+        )
     }
 }

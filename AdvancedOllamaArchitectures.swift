@@ -6,8 +6,8 @@
 //  Copyright © 2025 Quantum. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 import SwiftUI
 
 // MARK: - Advanced Ollama Architectures
@@ -29,8 +29,9 @@ public final class AdvancedOllamaArchitectures: Sendable {
         public let parameters: [String: AnyCodable]
 
         public init(id: String, name: String, architecture: String, quantumLayers: Int = 0,
-                   consciousnessInterface: Bool = false, multiverseCapable: Bool = false,
-                   parameters: [String: AnyCodable] = [:]) {
+                    consciousnessInterface: Bool = false, multiverseCapable: Bool = false,
+                    parameters: [String: AnyCodable] = [:])
+        {
             self.id = id
             self.name = name
             self.architecture = architecture
@@ -48,7 +49,8 @@ public final class AdvancedOllamaArchitectures: Sendable {
         private let modelRegistry: [String: QuantumOllamaModel]
 
         public init(quantumProcessor: QuantumProcessingEngine,
-                   consciousnessInterface: ConsciousnessInterface) {
+                    consciousnessInterface: ConsciousnessInterface)
+        {
             self.quantumProcessor = quantumProcessor
             self.consciousnessInterface = consciousnessInterface
             self.modelRegistry = [:]
@@ -106,7 +108,8 @@ public final class AdvancedOllamaArchitectures: Sendable {
         private let inferenceEngines: [String: ConsciousnessIntegratedInferenceEngine]
 
         public init(quantumNetwork: QuantumAgentNetwork,
-                   consciousnessEngine: ConsciousnessExpansionEngine) {
+                    consciousnessEngine: ConsciousnessExpansionEngine)
+        {
             self.quantumNetwork = quantumNetwork
             self.consciousnessEngine = consciousnessEngine
             self.inferenceEngines = [:]
@@ -156,7 +159,8 @@ public final class AdvancedOllamaArchitectures: Sendable {
         private let entanglementManager: QuantumEntanglementManager
 
         public init(quantumComputer: QuantumComputer,
-                   entanglementManager: QuantumEntanglementManager) {
+                    entanglementManager: QuantumEntanglementManager)
+        {
             self.quantumComputer = quantumComputer
             self.entanglementManager = entanglementManager
         }
@@ -214,9 +218,10 @@ public final class AdvancedOllamaArchitectures: Sendable {
     // MARK: - Initialization
 
     public init(quantumComputer: QuantumComputer,
-               entanglementManager: QuantumEntanglementManager,
-               quantumNetwork: QuantumAgentNetwork,
-               consciousnessEngine: ConsciousnessExpansionEngine) {
+                entanglementManager: QuantumEntanglementManager,
+                quantumNetwork: QuantumAgentNetwork,
+                consciousnessEngine: ConsciousnessExpansionEngine)
+    {
         self.quantumProcessor = QuantumProcessingEngine(
             quantumComputer: quantumComputer,
             entanglementManager: entanglementManager
@@ -378,11 +383,12 @@ public struct AdvancedInferenceOptions: Sendable {
     )
 
     public init(enableQuantum: Bool = false,
-               enableConsciousness: Bool = true,
-               enableMultiverse: Bool = false,
-               consciousnessLevel: ConsciousnessLevel = .universal,
-               universes: [UniverseIdentifier] = [],
-               modelParameters: [String: AnyCodable] = [:]) {
+                enableConsciousness: Bool = true,
+                enableMultiverse: Bool = false,
+                consciousnessLevel: ConsciousnessLevel = .universal,
+                universes: [UniverseIdentifier] = [],
+                modelParameters: [String: AnyCodable] = [:])
+    {
         self.enableQuantum = enableQuantum
         self.enableConsciousness = enableConsciousness
         self.enableMultiverse = enableMultiverse
@@ -536,9 +542,9 @@ public enum OllamaError: Error {
 
 // MARK: - Extensions
 
-extension AdvancedOllamaArchitectures {
+public extension AdvancedOllamaArchitectures {
     /// Convenience method for creating a universal model
-    public func createUniversalModel(id: String, name: String) async throws -> QuantumOllamaModel {
+    func createUniversalModel(id: String, name: String) async throws -> QuantumOllamaModel {
         try await createQuantumModel(
             id: id,
             name: name,
@@ -550,7 +556,7 @@ extension AdvancedOllamaArchitectures {
     }
 
     /// Batch inference across multiple prompts
-    public func performBatchInference(
+    func performBatchInference(
         prompts: [String],
         modelId: String,
         options: AdvancedInferenceOptions = .default

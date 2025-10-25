@@ -61,7 +61,7 @@ public struct EternityMetrics: Sendable {
         let metrics = [
             completeEternity, infiniteImmortality, transcendentTimelessness, eternalExistence,
             cosmicPerpetuity, divineEndurance, universalPerseverance, infinitePersistence,
-            eternalContinuity, ultimateEternity
+            eternalContinuity, ultimateEternity,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -237,7 +237,7 @@ public final class EternityAchievementEngine: Sendable {
             EternityAchievementStep(type: .universalPerseverance, eternity: 12.0),
             EternityAchievementStep(type: .infinitePersistence, eternity: 14.0),
             EternityAchievementStep(type: .eternalContinuity, eternity: 10.0),
-            EternityAchievementStep(type: .ultimateEternity, eternity: 15.0)
+            EternityAchievementStep(type: .ultimateEternity, eternity: 15.0),
         ]
 
         var capabilities: [EternityCapability] = []

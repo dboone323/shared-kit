@@ -22,10 +22,10 @@ enum ConsciousnessState: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case .neural(let state):
+        case let .neural(state):
             try container.encode("neural", forKey: .type)
             try container.encode(state, forKey: .data)
-        case .quantum(let state):
+        case let .quantum(state):
             try container.encode("quantum", forKey: .type)
             try container.encode(state, forKey: .data)
         }
@@ -503,7 +503,8 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
             timestamp: Date()
         )
         let storageResult = try await quantumMemory.storeInQuantumMemory(
-            consciousnessData, memoryType: memoryType)
+            consciousnessData, memoryType: memoryType
+        )
 
         // Generate access credentials
         let credentials = generateAccessCredentials(for: preservationId)
@@ -574,7 +575,7 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
             retrievalQuality: memoryResult.fidelity,
             integrityVerified: integrityCheck.isIntact,
             lastModified: preservation.timestamp,
-            accessCount: 1,  // Would track actual access count
+            accessCount: 1, // Would track actual access count
             timestamp: Date()
         )
 
@@ -592,7 +593,8 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
 
         // Preserve the updated state
         let newPreservation = try await preserveConsciousnessState(
-            updatedState, preservationLevel: PreservationLevel.indefinite)
+            updatedState, preservationLevel: PreservationLevel.indefinite
+        )
 
         let result = UpdateResult(
             preservationId: preservationId,
@@ -666,12 +668,12 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
 
     private func calculateEstimatedLifespan(for level: PreservationLevel) -> TimeInterval {
         switch level {
-        case .temporary(let duration):
+        case let .temporary(duration):
             return duration
-        case .longTerm(let retention):
+        case let .longTerm(retention):
             return retention
         case .indefinite:
-            return 3_153_600_000  // 100 years
+            return 3_153_600_000 // 100 years
         }
     }
 
@@ -836,7 +838,7 @@ final class QuantumMemorySystem: QuantumMemorySystemProtocol {
             coherence: storage.coherenceLevel,
             signalToNoiseRatio: 100.0,
             errorRate: 1.0 - storage.errorCorrection,
-            retentionTime: 3_153_600_000,  // 100 years
+            retentionTime: 3_153_600_000, // 100 years
             timestamp: Date()
         )
     }
@@ -866,7 +868,7 @@ final class ConsciousnessSerializer: ConsciousnessSerializationProtocol {
         -> ConsciousnessState
     {
         // Simplified deserialization - return a default state
-        return .neural(
+        .neural(
             NeuralConsciousnessState(
                 id: UUID(),
                 timestamp: Date(),
@@ -886,7 +888,7 @@ final class ConsciousnessSerializer: ConsciousnessSerializationProtocol {
         -> CompressedConsciousness
     {
         // Simplified compression
-        let compressedData = data.content.rawData  // Would implement actual compression
+        let compressedData = data.content.rawData // Would implement actual compression
         let compressionRatio = Double(compressedData.count) / Double(data.content.rawData.count)
 
         return CompressedConsciousness(
@@ -904,7 +906,7 @@ final class ConsciousnessSerializer: ConsciousnessSerializationProtocol {
         -> ConsciousnessData
     {
         // Simplified decompression
-        return compressed.originalData
+        compressed.originalData
     }
 }
 
@@ -912,7 +914,7 @@ final class ConsciousnessSerializer: ConsciousnessSerializationProtocol {
 final class PreservationIntegrityVerifier: PreservationIntegrityProtocol {
     func verifyPreservationIntegrity(preservationId: UUID) async throws -> IntegrityVerification {
         // Simplified integrity verification
-        return IntegrityVerification(
+        IntegrityVerification(
             preservationId: preservationId,
             isIntact: true,
             integrityScore: 0.98,
@@ -924,7 +926,7 @@ final class PreservationIntegrityVerifier: PreservationIntegrityProtocol {
 
     func detectAndCorrectCorruption(preservationId: UUID) async throws -> CorruptionCorrection {
         // Simplified corruption correction
-        return CorruptionCorrection(
+        CorruptionCorrection(
             preservationId: preservationId,
             correctionPerformed: true,
             corruptionDetected: 0.01,
@@ -935,7 +937,7 @@ final class PreservationIntegrityVerifier: PreservationIntegrityProtocol {
     }
 
     func generatePreservationBackup(preservationId: UUID) async throws -> BackupResult {
-        return BackupResult(
+        BackupResult(
             preservationId: preservationId,
             backupId: UUID(),
             backupLocation: "/quantum/backup/\(preservationId)",
@@ -946,7 +948,7 @@ final class PreservationIntegrityVerifier: PreservationIntegrityProtocol {
     }
 
     func restoreFromBackup(backupId: UUID) async throws -> RestorationResult {
-        return RestorationResult(
+        RestorationResult(
             backupId: backupId,
             preservationId: UUID(),
             restorationSuccess: true,

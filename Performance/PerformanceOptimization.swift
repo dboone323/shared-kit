@@ -81,7 +81,7 @@ public class PerformanceMonitor: ObservableObject {
         }
 
         if kerr == KERN_SUCCESS {
-            let usedMemory = Double(info.resident_size) / 1024 / 1024  // Convert to MB
+            let usedMemory = Double(info.resident_size) / 1024 / 1024 // Convert to MB
             let availableMemory = Double(ProcessInfo.processInfo.physicalMemory) / 1024 / 1024
 
             return MemoryUsage(
@@ -121,9 +121,9 @@ public class PerformanceMonitor: ObservableObject {
             var totalIdle: UInt32 = 0
 
             for cpu in cpuLoadInfo {
-                totalUser += cpu.cpu_ticks.0  // CPU_STATE_USER
-                totalSystem += cpu.cpu_ticks.1  // CPU_STATE_SYSTEM
-                totalIdle += cpu.cpu_ticks.2  // CPU_STATE_IDLE
+                totalUser += cpu.cpu_ticks.0 // CPU_STATE_USER
+                totalSystem += cpu.cpu_ticks.1 // CPU_STATE_SYSTEM
+                totalIdle += cpu.cpu_ticks.2 // CPU_STATE_IDLE
             }
 
             let totalTicks = totalUser + totalSystem + totalIdle
@@ -240,9 +240,11 @@ public struct PerformanceMetrics {
         memoryUsage: MemoryUsage = MemoryUsage(used: 0, available: 0, percentage: 0),
         cpuUsage: CPUUsage = CPUUsage(user: 0, system: 0, idle: 100, total: 0),
         batteryLevel: BatteryStatus = BatteryStatus(
-            level: 100, state: .unknown, isLowPowerModeEnabled: false),
+            level: 100, state: .unknown, isLowPowerModeEnabled: false
+        ),
         networkStatus: NetworkStatus = NetworkStatus(
-            isConnected: true, connectionType: .wifi, bandwidth: 0),
+            isConnected: true, connectionType: .wifi, bandwidth: 0
+        ),
         frameRate: Double = 60.0,
         thermalState: ThermalState = .nominal,
         timestamp: Date = Date()
@@ -322,8 +324,8 @@ public struct PerformanceMetrics {
 }
 
 public struct MemoryUsage: Codable {
-    public let used: Double  // MB
-    public let available: Double  // MB
+    public let used: Double // MB
+    public let available: Double // MB
     public let percentage: Double
 
     public init(used: Double, available: Double, percentage: Double) {
@@ -372,7 +374,7 @@ public struct CPUUsage: Codable {
 }
 
 public struct BatteryStatus: Codable {
-    public let level: Double  // Percentage
+    public let level: Double // Percentage
     public let state: BatteryState
     public let isLowPowerModeEnabled: Bool
 
@@ -414,7 +416,7 @@ public enum BatteryState: String, Codable {
 public struct NetworkStatus: Codable {
     public let isConnected: Bool
     public let connectionType: ConnectionType
-    public let bandwidth: Double  // Mbps
+    public let bandwidth: Double // Mbps
 
     public init(isConnected: Bool, connectionType: ConnectionType, bandwidth: Double) {
         self.isConnected = isConnected
@@ -531,13 +533,13 @@ public class MemoryManager: ObservableObject {
     private func setupCaches() {
         #if canImport(UIKit)
             // Configure image cache
-            self.imageCache.countLimit = 100  // Max 100 images
-            self.imageCache.totalCostLimit = 50 * 1024 * 1024  // 50MB
+            self.imageCache.countLimit = 100 // Max 100 images
+            self.imageCache.totalCostLimit = 50 * 1024 * 1024 // 50MB
         #endif
 
         // Configure data cache
-        self.dataCache.countLimit = 200  // Max 200 data objects
-        self.dataCache.totalCostLimit = 20 * 1024 * 1024  // 20MB
+        self.dataCache.countLimit = 200 // Max 200 data objects
+        self.dataCache.totalCostLimit = 20 * 1024 * 1024 // 20MB
 
         // Set up automatic cleanup on memory warning
         #if canImport(UIKit)
@@ -631,7 +633,7 @@ public class MemoryManager: ObservableObject {
 
     #if canImport(UIKit)
         public func cacheImage(_ image: UIImage, forKey key: String) {
-            let cost = Int(image.size.width * image.size.height * 4)  // Rough memory estimate
+            let cost = Int(image.size.width * image.size.height * 4) // Rough memory estimate
             self.imageCache.setObject(image, forKey: key as NSString, cost: cost)
         }
 
@@ -732,7 +734,7 @@ public class CPUOptimizer: ObservableObject {
     }
 
     private func throttleProcessing(factor: Double) {
-        let sleepTime = (1.0 - factor) * 0.1  // Up to 100ms delay
+        let sleepTime = (1.0 - factor) * 0.1 // Up to 100ms delay
         Thread.sleep(forTimeInterval: sleepTime)
     }
 
@@ -817,7 +819,8 @@ public class NetworkMonitor: ObservableObject {
     @MainActor public static let shared = NetworkMonitor()
 
     @Published public var currentStatus = NetworkStatus(
-        isConnected: true, connectionType: .wifi, bandwidth: 0)
+        isConnected: true, connectionType: .wifi, bandwidth: 0
+    )
     @Published public var isOptimizing = false
 
     private let pathMonitor = NWPathMonitor()
@@ -867,7 +870,7 @@ public class NetworkMonitor: ObservableObject {
         self.currentStatus = NetworkStatus(
             isConnected: isConnected,
             connectionType: connectionType,
-            bandwidth: self.currentStatus.bandwidth  // Keep existing bandwidth until updated
+            bandwidth: self.currentStatus.bandwidth // Keep existing bandwidth until updated
         )
 
         // Apply network-based optimizations
@@ -887,11 +890,11 @@ public class NetworkMonitor: ObservableObject {
         let estimatedBandwidth: Double =
             switch self.currentStatus.connectionType {
             case .wifi:
-                Double.random(in: 10...100)
+                Double.random(in: 10 ... 100)
             case .ethernet:
-                Double.random(in: 50...1000)
+                Double.random(in: 50 ... 1000)
             case .cellular:
-                Double.random(in: 1...50)
+                Double.random(in: 1 ... 50)
             default:
                 0
             }
@@ -1057,7 +1060,7 @@ public class BatteryOptimizer: ObservableObject {
         let levelDrop = recentReadings.first!.level - recentReadings.last!.level
 
         if timeSpan > 0, levelDrop > 0 {
-            let drainRate = levelDrop / timeSpan  // Percent per second
+            let drainRate = levelDrop / timeSpan // Percent per second
             let currentLevel = self.batteryHistory.last!.level
             let estimatedSeconds = currentLevel / drainRate
             self.estimatedBatteryLife = estimatedSeconds
@@ -1151,12 +1154,12 @@ private struct BatteryReading {
 
 // MARK: - Notification Names
 
-extension Notification.Name {
-    public static let performanceMemoryWarning = Notification.Name("PerformanceMemoryWarning")
-    public static let performanceMemoryCleanup = Notification.Name("PerformanceMemoryCleanup")
-    public static let performanceOptimizationChanged = Notification.Name(
+public extension Notification.Name {
+    static let performanceMemoryWarning = Notification.Name("PerformanceMemoryWarning")
+    static let performanceMemoryCleanup = Notification.Name("PerformanceMemoryCleanup")
+    static let performanceOptimizationChanged = Notification.Name(
         "PerformanceOptimizationChanged")
-    public static let performanceNetworkChanged = Notification.Name("PerformanceNetworkChanged")
-    public static let performanceBatteryModeChanged = Notification.Name(
+    static let performanceNetworkChanged = Notification.Name("PerformanceNetworkChanged")
+    static let performanceBatteryModeChanged = Notification.Name(
         "PerformanceBatteryModeChanged")
 }

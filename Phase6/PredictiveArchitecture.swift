@@ -16,7 +16,8 @@ import OSLog
 /// Main predictive architecture coordinator
 public actor PredictiveArchitecture {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "PredictiveArchitecture")
+        subsystem: "com.quantum.workspace", category: "PredictiveArchitecture"
+    )
 
     // Core components
     private let patternAnalyzer: PatternAnalyzer
@@ -97,7 +98,7 @@ public actor PredictiveArchitecture {
 
     /// Get current architecture metrics
     public func getMetrics() -> ArchitectureMetrics {
-        return architectureMetrics
+        architectureMetrics
     }
 
     /// Handle real-time system events for continuous learning
@@ -111,15 +112,15 @@ public actor PredictiveArchitecture {
         let recentPatterns = systemPatterns.suffix(10)
         let accuracy =
             recentPatterns.isEmpty
-            ? 0.0
-            : Double(recentPatterns.filter { $0.confidence > 0.7 }.count)
+                ? 0.0
+                : Double(recentPatterns.filter { $0.confidence > 0.7 }.count)
                 / Double(recentPatterns.count)
 
         // Calculate prediction confidence
         let avgConfidence =
             predictiveModels.isEmpty
-            ? 0.0
-            : predictiveModels.map { $0.confidence }.reduce(0, +) / Double(predictiveModels.count)
+                ? 0.0
+                : predictiveModels.map(\.confidence).reduce(0, +) / Double(predictiveModels.count)
 
         // Calculate optimization efficiency (simplified)
         let efficiency = min(1.0, Double(architectureMetrics.proactiveActions) / 100.0)
@@ -197,7 +198,7 @@ public actor PatternAnalyzer {
         }
 
         for (hour, events) in hourGroups {
-            if events.count > 10 {  // Significant usage
+            if events.count > 10 { // Significant usage
                 let pattern = SystemPattern(
                     id: "usage_peak_\(hour)",
                     type: .usage,
@@ -220,8 +221,8 @@ public actor PatternAnalyzer {
 
         // Analyze performance degradation patterns
         let degradationEvents = performanceEvents.filter { event in
-            if case .performance(let metric, let value) = event.data {
-                return metric == "response_time" && value > 1000  // ms
+            if case let .performance(metric, value) = event.data {
+                return metric == "response_time" && value > 1000 // ms
             }
             return false
         }
@@ -231,7 +232,7 @@ public actor PatternAnalyzer {
                 id: "performance_degradation",
                 type: .performance,
                 description:
-                    "Performance degradation detected in \(degradationEvents.count) instances",
+                "Performance degradation detected in \(degradationEvents.count) instances",
                 confidence: min(1.0, Double(degradationEvents.count) / 20.0),
                 frequency: Double(degradationEvents.count),
                 impact: .high,
@@ -251,7 +252,7 @@ public actor PatternAnalyzer {
 
         // Group errors by type
         let errorGroups = Dictionary(grouping: errorEvents) { event -> String in
-            if case .error(let errorType, _) = event.data {
+            if case let .error(errorType, _) = event.data {
                 return errorType
             }
             return "unknown"
@@ -338,8 +339,7 @@ public actor FuturePredictor {
         // This would refine predictions based on real-time data
     }
 
-    private func predictResourceNeeds(_ patterns: [SystemPattern]) async throws -> [PredictiveModel]
-    {
+    private func predictResourceNeeds(_ patterns: [SystemPattern]) async throws -> [PredictiveModel] {
         let usagePatterns = patterns.filter { $0.type == .usage }
         var predictions: [PredictiveModel] = []
 
@@ -373,7 +373,7 @@ public actor FuturePredictor {
                     id: "feature_\(pattern.id)",
                     type: .feature,
                     description:
-                        "New collaboration features needed based on \(pattern.description)",
+                    "New collaboration features needed based on \(pattern.description)",
                     confidence: pattern.confidence,
                     timeHorizon: .months,
                     impact: .medium,
@@ -516,7 +516,8 @@ public actor ProactiveAssistant {
 /// Optimizes system architecture based on predictions
 public actor ArchitectureOptimizer {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "ArchitectureOptimizer")
+        subsystem: "com.quantum.workspace", category: "ArchitectureOptimizer"
+    )
 
     /// Optimize architecture based on patterns and predictions
     public func optimizeBasedOnPredictions(
@@ -772,7 +773,7 @@ public func initializePredictiveArchitecture() async {
 /// Get predictive architecture capabilities
 @MainActor
 public func getPredictiveCapabilities() -> [String: [String]] {
-    return [
+    [
         "analysis": [
             "pattern_recognition", "usage_analysis", "performance_monitoring", "error_detection",
         ],
@@ -793,5 +794,5 @@ public func recordSystemEvent(_ event: SystemEvent) async {
 /// Get current architecture health metrics
 @MainActor
 public func getArchitectureHealth() async -> ArchitectureMetrics {
-    return await globalPredictiveArchitecture.getMetrics()
+    await globalPredictiveArchitecture.getMetrics()
 }

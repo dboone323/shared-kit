@@ -74,15 +74,15 @@ public final class AdvancedTextProcessingTool: EnhancedMCPTool {
         let textLength = text.count
 
         // Estimate based on text length and operation complexity
-        let baseTime = Double(textLength) / 1000.0  // ~1 second per 1000 characters
-        return max(baseTime, 0.5)  // Minimum 0.5 seconds
+        let baseTime = Double(textLength) / 1000.0 // ~1 second per 1000 characters
+        return max(baseTime, 0.5) // Minimum 0.5 seconds
     }
 
     public func getOptimizationHints() -> [String] {
         [
             "Process large texts in chunks for better performance",
             "Cache frequent analysis results",
-            "Use streaming for real-time text processing"
+            "Use streaming for real-time text processing",
         ]
     }
 
@@ -115,7 +115,7 @@ public final class AdvancedTextProcessingTool: EnhancedMCPTool {
             "analysis": analysis,
             "analysis_type": analysisType,
             "text_length": text.count,
-            "timestamp": Date()
+            "timestamp": Date(),
         ]
     }
 
@@ -141,7 +141,7 @@ public final class AdvancedTextProcessingTool: EnhancedMCPTool {
             "summary": summary,
             "original_length": text.count,
             "summary_length": summary.count,
-            "compression_ratio": Double(summary.count) / Double(text.count)
+            "compression_ratio": Double(summary.count) / Double(text.count),
         ]
     }
 
@@ -167,7 +167,7 @@ public final class AdvancedTextProcessingTool: EnhancedMCPTool {
             "translation": translation,
             "source_language": "auto-detected",
             "target_language": targetLanguage,
-            "original_text": text
+            "original_text": text,
         ]
     }
 
@@ -197,7 +197,7 @@ public final class AdvancedTextProcessingTool: EnhancedMCPTool {
             "sentiment": sentiment,
             "confidence": confidence,
             "explanation": explanation,
-            "text": text
+            "text": text,
         ]
     }
 
@@ -220,14 +220,15 @@ public final class AdvancedTextProcessingTool: EnhancedMCPTool {
 
         // Parse JSON result
         if let data = result.data(using: .utf8),
-           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+        {
             return json
         }
 
         return [
             "entities": [],
             "raw_result": result,
-            "text": text
+            "text": text,
         ]
     }
 }
@@ -291,9 +292,9 @@ public final class AdvancedDataAnalysisTool: EnhancedMCPTool {
 
         // Estimate based on data complexity
         if let array = data as? [Any] {
-            return max(Double(array.count) / 100.0, 1.0)  // ~1 second per 100 data points
+            return max(Double(array.count) / 100.0, 1.0) // ~1 second per 100 data points
         } else if let dict = data as? [String: Any] {
-            return max(Double(dict.count) / 50.0, 1.0)   // ~1 second per 50 features
+            return max(Double(dict.count) / 50.0, 1.0) // ~1 second per 50 features
         }
 
         return 2.0
@@ -303,7 +304,7 @@ public final class AdvancedDataAnalysisTool: EnhancedMCPTool {
         [
             "Preprocess data before analysis for better performance",
             "Use sampling for large datasets",
-            "Cache analysis results for repeated queries"
+            "Cache analysis results for repeated queries",
         ]
     }
 
@@ -338,7 +339,7 @@ public final class AdvancedDataAnalysisTool: EnhancedMCPTool {
             "analysis": analysis,
             "data_summary": dataDescription,
             "analysis_type": analysisType,
-            "timestamp": Date()
+            "timestamp": Date(),
         ]
     }
 
@@ -369,7 +370,7 @@ public final class AdvancedDataAnalysisTool: EnhancedMCPTool {
             "patterns": patterns,
             "data_summary": dataDescription,
             "pattern_types": ["correlation", "clustering", "trends", "anomalies"],
-            "confidence": 0.85
+            "confidence": 0.85,
         ]
     }
 
@@ -403,7 +404,7 @@ public final class AdvancedDataAnalysisTool: EnhancedMCPTool {
             "horizon": predictionHorizon,
             "data_summary": dataDescription,
             "prediction_method": "AI-powered trend analysis",
-            "timestamp": Date()
+            "timestamp": Date(),
         ]
     }
 
@@ -437,7 +438,7 @@ public final class AdvancedDataAnalysisTool: EnhancedMCPTool {
             "focus_area": focus,
             "data_summary": dataDescription,
             "insight_categories": ["findings", "recommendations", "impact", "implementation"],
-            "generated_at": Date()
+            "generated_at": Date(),
         ]
     }
 
@@ -468,7 +469,7 @@ public final class AdvancedDataAnalysisTool: EnhancedMCPTool {
             "statistical_summary": summary,
             "data_summary": dataDescription,
             "metrics_included": ["descriptive", "distribution", "outliers", "quality", "significance"],
-            "timestamp": Date()
+            "timestamp": Date(),
         ]
     }
 
@@ -542,12 +543,12 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
 
         switch operation {
         case "analyze_file", "extract_metadata":
-            return 2.0  // Quick operations
+            return 2.0 // Quick operations
         case "transform_file", "optimize_file":
-            return 5.0  // Medium operations
+            return 5.0 // Medium operations
         case "merge_files":
             if let filePaths = parameters["file_paths"] as? [String] {
-                return Double(filePaths.count) * 3.0  // ~3 seconds per file
+                return Double(filePaths.count) * 3.0 // ~3 seconds per file
             }
             return 10.0
         default:
@@ -559,7 +560,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
         [
             "Process files in parallel when possible",
             "Use streaming for large files",
-            "Cache file metadata for repeated operations"
+            "Cache file metadata for repeated operations",
         ]
     }
 
@@ -590,7 +591,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
                 "file_size": fileSize,
                 "creation_date": creationDate?.description ?? "unknown",
                 "modification_date": modificationDate?.description ?? "unknown",
-                "analysis_type": analysisType
+                "analysis_type": analysisType,
             ]
 
             // File type specific analysis
@@ -612,7 +613,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
             }
 
             // Read file content for deeper analysis if not too large
-            if fileSize < 1024 * 1024 {  // Less than 1MB
+            if fileSize < 1024 * 1024 { // Less than 1MB
                 let content = try String(contentsOfFile: filePath, encoding: .utf8)
                 analysis["line_count"] = content.components(separatedBy: .newlines).count
                 analysis["character_count"] = content.count
@@ -655,7 +656,8 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
                 if fileExtension == "json" {
                     if let jsonData = content.data(using: .utf8),
                        let jsonObject = try? JSONSerialization.jsonObject(with: jsonData),
-                       let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) {
+                       let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                    {
                         transformedContent = String(data: prettyData, encoding: .utf8) ?? content
                     }
                 }
@@ -664,7 +666,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
                     transformedContent = removeComments(from: content, language: fileExtension)
                 }
             default:
-                break  // No transformation
+                break // No transformation
             }
 
             // Write transformed content
@@ -676,7 +678,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
                 "transformation": transformation,
                 "original_size": content.count,
                 "transformed_size": transformedContent.count,
-                "timestamp": Date()
+                "timestamp": Date(),
             ]
 
         } catch {
@@ -707,7 +709,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
                 "file_path": filePath,
                 "file_name": (filePath as NSString).lastPathComponent,
                 "size": fileSize,
-                "line_count": content.components(separatedBy: .newlines).count
+                "line_count": content.components(separatedBy: .newlines).count,
             ])
         }
 
@@ -724,7 +726,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
             "total_files": filePaths.count,
             "total_size": mergedContent.count,
             "separator": separator,
-            "timestamp": Date()
+            "timestamp": Date(),
         ]
     }
 
@@ -748,7 +750,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
                 "is_readable": (attributes[.posixPermissions] as? Int ?? 0) & 0o444 != 0,
                 "is_writable": (attributes[.posixPermissions] as? Int ?? 0) & 0o222 != 0,
                 "is_executable": (attributes[.posixPermissions] as? Int ?? 0) & 0o111 != 0,
-                "file_type": attributes[.type] as? String ?? "unknown"
+                "file_type": attributes[.type] as? String ?? "unknown",
             ]
 
             return metadata
@@ -797,7 +799,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
                 "optimized_size": optimizedContent.count,
                 "compression_ratio": Double(optimizedContent.count) / Double(content.count),
                 "optimizations_applied": optimizations,
-                "timestamp": Date()
+                "timestamp": Date(),
             ]
 
         } catch {
@@ -818,7 +820,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
         var lines = content.components(separatedBy: .newlines)
         var inMultilineComment = false
 
-        for i in 0..<lines.count {
+        for i in 0 ..< lines.count {
             var line = lines[i]
 
             if language == "swift" {
@@ -895,7 +897,8 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
         // Minify JSON
         if let data = content.data(using: .utf8),
            let jsonObject = try? JSONSerialization.jsonObject(with: data),
-           let minifiedData = try? JSONSerialization.data(withJSONObject: jsonObject) {
+           let minifiedData = try? JSONSerialization.data(withJSONObject: jsonObject)
+        {
             let minified = String(data: minifiedData, encoding: .utf8) ?? content
             optimizations.append("Minified JSON structure")
             return (minified, optimizations)
@@ -988,7 +991,7 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
             return 2.0
         case "execute_workflow":
             if let steps = parameters["steps"] as? [[String: Any]] {
-                return Double(steps.count) * 5.0  // ~5 seconds per step
+                return Double(steps.count) * 5.0 // ~5 seconds per step
             }
             return 10.0
         case "optimize_workflow":
@@ -1006,7 +1009,7 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
         [
             "Parallelize independent workflow steps",
             "Cache intermediate results",
-            "Use intelligent scheduling for resource optimization"
+            "Use intelligent scheduling for resource optimization",
         ]
     }
 
@@ -1048,7 +1051,7 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
             "description": workflow.description ?? "",
             "step_count": workflow.steps.count,
             "created_at": workflow.createdAt,
-            "has_dependencies": workflow.hasDependencies
+            "has_dependencies": workflow.hasDependencies,
         ]
     }
 
@@ -1064,7 +1067,7 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
             name: "Mock Workflow",
             steps: [
                 MCPWorkflowStep(toolId: "mock_tool_1"),
-                MCPWorkflowStep(toolId: "mock_tool_2", dependencies: [UUID()])
+                MCPWorkflowStep(toolId: "mock_tool_2", dependencies: [UUID()]),
             ]
         )
 
@@ -1077,7 +1080,7 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
             "execution_time": result.executionTime,
             "step_results_count": result.stepResults.count,
             "error_count": result.errors.count,
-            "timestamp": Date()
+            "timestamp": Date(),
         ]
     }
 
@@ -1094,7 +1097,7 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
             steps: [
                 MCPWorkflowStep(toolId: "tool_1"),
                 MCPWorkflowStep(toolId: "tool_2"),
-                MCPWorkflowStep(toolId: "tool_3", dependencies: [UUID(), UUID()])
+                MCPWorkflowStep(toolId: "tool_3", dependencies: [UUID(), UUID()]),
             ]
         )
 
@@ -1107,7 +1110,7 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
             "optimization_applied": "parallel_execution",
             "step_count": optimizedWorkflow.steps.count,
             "has_parallel_execution": true,
-            "timestamp": Date()
+            "timestamp": Date(),
         ]
     }
 
@@ -1132,7 +1135,7 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
             "progress": status.progress,
             "estimated_time_remaining": status.estimatedTimeRemaining ?? 0,
             "current_step": status.currentStep?.uuidString ?? "none",
-            "timestamp": Date()
+            "timestamp": Date(),
         ]
     }
 
@@ -1152,20 +1155,20 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
             "optimization_opportunities": [
                 "Parallelize data processing steps",
                 "Cache intermediate results",
-                "Optimize file I/O operations"
+                "Optimize file I/O operations",
             ],
             "resource_utilization": [
                 "cpu": 0.75,
                 "memory": 0.60,
-                "disk": 0.40
+                "disk": 0.40,
             ],
             "performance_score": 8.2,
             "recommendations": [
                 "Implement parallel processing for independent steps",
                 "Add result caching for repeated operations",
-                "Monitor resource usage during execution"
+                "Monitor resource usage during execution",
             ],
-            "timestamp": Date()
+            "timestamp": Date(),
         ]
 
         return analysis

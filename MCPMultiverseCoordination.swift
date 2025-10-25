@@ -8,8 +8,8 @@
 //  This file implements MCP multiverse coordination systems,
 //  enabling coordination of intelligence across multiple universes.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for MCP multiverse coordination
 public protocol MCPMultiverseCoordination: Sendable {
@@ -39,7 +39,8 @@ public struct MultiverseCoordination: Sendable, Codable {
     public init(coordinationId: String, targetUniverses: [UniverseTarget],
                 coordinationType: CoordinationType, parameters: [String: AnyCodable] = [:],
                 synchronizationLevel: SynchronizationLevel = .high, entanglementScope: EntanglementScope = .universal,
-                causalityConstraints: [CausalityConstraint] = []) {
+                causalityConstraints: [CausalityConstraint] = [])
+    {
         self.coordinationId = coordinationId
         self.targetUniverses = targetUniverses
         self.coordinationType = coordinationType
@@ -61,29 +62,29 @@ public enum UniverseTarget: Sendable, Codable {
 
 /// Coordination types
 public enum CoordinationType: String, Sendable, Codable {
-    case synchronization = "synchronization"
-    case convergence = "convergence"
-    case divergence = "divergence"
-    case optimization = "optimization"
-    case evolution = "evolution"
-    case transcendence = "transcendence"
+    case synchronization
+    case convergence
+    case divergence
+    case optimization
+    case evolution
+    case transcendence
 }
 
 /// Synchronization level
 public enum SynchronizationLevel: String, Sendable, Codable {
-    case minimal = "minimal"
-    case moderate = "moderate"
-    case high = "high"
-    case perfect = "perfect"
+    case minimal
+    case moderate
+    case high
+    case perfect
 }
 
 /// Entanglement scope
 public enum EntanglementScope: String, Sendable, Codable {
-    case local = "local"
-    case regional = "regional"
-    case global = "global"
-    case universal = "universal"
-    case multiversal = "multiversal"
+    case local
+    case regional
+    case global
+    case universal
+    case multiversal
 }
 
 /// Causality constraint
@@ -94,7 +95,8 @@ public struct CausalityConstraint: Sendable, Codable {
     public let enforcement: EnforcementLevel
 
     public init(constraintType: CausalityConstraintType, value: String,
-                priority: ConstraintPriority = .high, enforcement: EnforcementLevel = .strict) {
+                priority: ConstraintPriority = .high, enforcement: EnforcementLevel = .strict)
+    {
         self.constraintType = constraintType
         self.value = value
         self.priority = priority
@@ -104,27 +106,27 @@ public struct CausalityConstraint: Sendable, Codable {
 
 /// Causality constraint types
 public enum CausalityConstraintType: String, Sendable, Codable {
-    case temporal_order = "temporal_order"
-    case cause_effect = "cause_effect"
-    case butterfly_effect = "butterfly_effect"
-    case quantum_coherence = "quantum_coherence"
-    case reality_stability = "reality_stability"
+    case temporal_order
+    case cause_effect
+    case butterfly_effect
+    case quantum_coherence
+    case reality_stability
 }
 
 /// Constraint priority
 public enum ConstraintPriority: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Enforcement level
 public enum EnforcementLevel: String, Sendable, Codable {
-    case flexible = "flexible"
-    case moderate = "moderate"
-    case strict = "strict"
-    case absolute = "absolute"
+    case flexible
+    case moderate
+    case strict
+    case absolute
 }
 
 /// Multiverse coordination result
@@ -141,7 +143,8 @@ public struct MultiverseCoordinationResult: Sendable, Codable {
     public init(coordinationId: String, success: Bool, universesCoordinated: Int,
                 synchronizationAchieved: Double, entanglementStrength: Double,
                 causalityPreserved: Double, multiverseInsights: [MultiverseInsight] = [],
-                executionTime: TimeInterval) {
+                executionTime: TimeInterval)
+    {
         self.coordinationId = coordinationId
         self.success = success
         self.universesCoordinated = universesCoordinated
@@ -162,7 +165,8 @@ public struct MultiverseInsight: Sendable, Codable {
     public let universalAlignment: Double
 
     public init(insight: String, type: MultiverseInsightType, multiverseDepth: MultiverseDepth,
-                confidence: Double, universalAlignment: Double) {
+                confidence: Double, universalAlignment: Double)
+    {
         self.insight = insight
         self.type = type
         self.multiverseDepth = multiverseDepth
@@ -173,21 +177,21 @@ public struct MultiverseInsight: Sendable, Codable {
 
 /// Multiverse insight types
 public enum MultiverseInsightType: String, Sendable, Codable {
-    case convergence = "convergence"
-    case divergence = "divergence"
-    case synchronization = "synchronization"
-    case entanglement = "entanglement"
-    case causality = "causality"
-    case transcendence = "transcendence"
+    case convergence
+    case divergence
+    case synchronization
+    case entanglement
+    case causality
+    case transcendence
 }
 
 /// Multiverse depth
 public enum MultiverseDepth: String, Sendable, Codable {
-    case surface = "surface"
-    case intermediate = "intermediate"
-    case deep = "deep"
-    case universal = "universal"
-    case multiversal = "multiversal"
+    case surface
+    case intermediate
+    case deep
+    case universal
+    case multiversal
 }
 
 /// Universe synchronization
@@ -205,7 +209,8 @@ public struct UniverseSynchronization: Sendable, Codable {
                 targetUniverses: [UniverseTarget], synchronizationType: SynchronizationType,
                 parameters: [String: AnyCodable] = [:], bidirectional: Bool = true,
                 causalityPreservation: CausalityPreservation = .strict,
-                entanglementTransfer: EntanglementTransfer = .full) {
+                entanglementTransfer: EntanglementTransfer = .full)
+    {
         self.synchronizationId = synchronizationId
         self.sourceUniverse = sourceUniverse
         self.targetUniverses = targetUniverses
@@ -219,29 +224,29 @@ public struct UniverseSynchronization: Sendable, Codable {
 
 /// Synchronization types
 public enum SynchronizationType: String, Sendable, Codable {
-    case state = "state"
-    case knowledge = "knowledge"
-    case consciousness = "consciousness"
-    case evolution = "evolution"
-    case reality = "reality"
-    case universal = "universal"
+    case state
+    case knowledge
+    case consciousness
+    case evolution
+    case reality
+    case universal
 }
 
 /// Causality preservation
 public enum CausalityPreservation: String, Sendable, Codable {
-    case none = "none"
-    case minimal = "minimal"
-    case moderate = "moderate"
-    case strict = "strict"
-    case absolute = "absolute"
+    case none
+    case minimal
+    case moderate
+    case strict
+    case absolute
 }
 
 /// Entanglement transfer
 public enum EntanglementTransfer: String, Sendable, Codable {
-    case none = "none"
-    case partial = "partial"
-    case full = "full"
-    case enhanced = "enhanced"
+    case none
+    case partial
+    case full
+    case enhanced
 }
 
 /// Universe synchronization result
@@ -258,7 +263,8 @@ public struct UniverseSynchronizationResult: Sendable, Codable {
     public init(synchronizationId: String, success: Bool, universesSynchronized: Int,
                 synchronizationQuality: Double, causalityIntegrity: Double,
                 entanglementTransferred: Double, synchronizationInsights: [MultiverseInsight] = [],
-                executionTime: TimeInterval) {
+                executionTime: TimeInterval)
+    {
         self.synchronizationId = synchronizationId
         self.success = success
         self.universesSynchronized = universesSynchronized
@@ -281,7 +287,8 @@ public struct MultiverseOptimization: Sendable, Codable {
 
     public init(optimizationId: String, targetMultiverse: MultiverseTarget,
                 optimizationGoals: [MultiverseGoal], constraints: [MultiverseConstraint] = [],
-                timeHorizon: TimeInterval = 3600, riskTolerance: RiskTolerance = .moderate) {
+                timeHorizon: TimeInterval = 3600, riskTolerance: RiskTolerance = .moderate)
+    {
         self.optimizationId = optimizationId
         self.targetMultiverse = targetMultiverse
         self.optimizationGoals = optimizationGoals
@@ -306,7 +313,8 @@ public struct MultiverseGoal: Sendable, Codable {
     public let measurement: String
 
     public init(goalType: MultiverseGoalType, targetValue: Double,
-                priority: GoalPriority = .high, measurement: String) {
+                priority: GoalPriority = .high, measurement: String)
+    {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -316,12 +324,12 @@ public struct MultiverseGoal: Sendable, Codable {
 
 /// Multiverse goal types
 public enum MultiverseGoalType: String, Sendable, Codable {
-    case convergence = "convergence"
-    case harmony = "harmony"
-    case evolution = "evolution"
-    case stability = "stability"
-    case transcendence = "transcendence"
-    case optimization = "optimization"
+    case convergence
+    case harmony
+    case evolution
+    case stability
+    case transcendence
+    case optimization
 }
 
 /// Multiverse constraint
@@ -332,7 +340,8 @@ public struct MultiverseConstraint: Sendable, Codable {
     public let enforcement: EnforcementLevel
 
     public init(constraintType: MultiverseConstraintType, value: Double,
-                tolerance: Double = 0.1, enforcement: EnforcementLevel = .strict) {
+                tolerance: Double = 0.1, enforcement: EnforcementLevel = .strict)
+    {
         self.constraintType = constraintType
         self.value = value
         self.tolerance = tolerance
@@ -342,27 +351,27 @@ public struct MultiverseConstraint: Sendable, Codable {
 
 /// Multiverse constraint types
 public enum MultiverseConstraintType: String, Sendable, Codable {
-    case causality = "causality"
-    case entanglement = "entanglement"
-    case synchronization = "synchronization"
-    case convergence = "convergence"
-    case divergence = "divergence"
+    case causality
+    case entanglement
+    case synchronization
+    case convergence
+    case divergence
 }
 
 /// Goal priority
 public enum GoalPriority: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Risk tolerance
 public enum RiskTolerance: String, Sendable, Codable {
-    case conservative = "conservative"
-    case moderate = "moderate"
-    case aggressive = "aggressive"
-    case extreme = "extreme"
+    case conservative
+    case moderate
+    case aggressive
+    case extreme
 }
 
 /// Multiverse coordination status
@@ -378,7 +387,8 @@ public struct MultiverseCoordinationStatus: Sendable, Codable {
 
     public init(operational: Bool, universesAccessible: Int, synchronizationLevel: Double,
                 entanglementStrength: Double, causalityIntegrity: Double,
-                activeCoordinations: Int, successRate: Double, lastUpdate: Date = Date()) {
+                activeCoordinations: Int, successRate: Double, lastUpdate: Date = Date())
+    {
         self.operational = operational
         self.universesAccessible = universesAccessible
         self.synchronizationLevel = synchronizationLevel
@@ -610,7 +620,7 @@ private final class UniverseManager: Sendable {
     func getUniverseStatus() async -> UniverseStatus {
         UniverseStatus(
             operational: true,
-            accessibleUniverses: Int.random(in: 100...10000)
+            accessibleUniverses: Int.random(in: 100 ... 10000)
         )
     }
 }
@@ -619,15 +629,15 @@ private final class UniverseManager: Sendable {
 private final class SynchronizationEngine: Sendable {
     func executeCoordination(_ coordination: MultiverseCoordination, universeAccess: UniverseAccess) async throws -> CoordinationResult {
         CoordinationResult(
-            success: Double.random(in: 0.8...1.0) > 0.2,
-            synchronizationLevel: Double.random(in: 0.7...1.0)
+            success: Double.random(in: 0.8 ... 1.0) > 0.2,
+            synchronizationLevel: Double.random(in: 0.7 ... 1.0)
         )
     }
 
     func executeSynchronization(_ synchronization: UniverseSynchronization, sourceAccess: UniverseAccess, targetAccess: UniverseAccess) async throws -> SynchronizationResult {
         SynchronizationResult(
-            success: Double.random(in: 0.85...1.0) > 0.15,
-            quality: Double.random(in: 0.8...1.0)
+            success: Double.random(in: 0.85 ... 1.0) > 0.15,
+            quality: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -642,9 +652,9 @@ private final class SynchronizationEngine: Sendable {
     func getSynchronizationStatus() async -> SynchronizationStatus {
         SynchronizationStatus(
             operational: true,
-            level: Double.random(in: 0.9...1.0),
-            activeCoordinations: Int.random(in: 1...50),
-            successRate: Double.random(in: 0.9...0.98)
+            level: Double.random(in: 0.9 ... 1.0),
+            activeCoordinations: Int.random(in: 1 ... 50),
+            successRate: Double.random(in: 0.9 ... 0.98)
         )
     }
 }
@@ -654,14 +664,14 @@ private final class EntanglementCoordinator: Sendable {
     func processEntanglement(_ coordination: MultiverseCoordination, result: CoordinationResult) async -> EntanglementResult {
         EntanglementResult(
             success: true,
-            entanglementStrength: Double.random(in: 0.8...1.0)
+            entanglementStrength: Double.random(in: 0.8 ... 1.0)
         )
     }
 
     func transferEntanglement(_ synchronization: UniverseSynchronization, result: SynchronizationResult) async -> EntanglementResult {
         EntanglementResult(
             success: true,
-            transferred: Double.random(in: 0.7...1.0)
+            transferred: Double.random(in: 0.7 ... 1.0)
         )
     }
 
@@ -676,7 +686,7 @@ private final class EntanglementCoordinator: Sendable {
     func getEntanglementStatus() async -> EntanglementStatus {
         EntanglementStatus(
             operational: true,
-            strength: Double.random(in: 0.9...1.0)
+            strength: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -686,14 +696,14 @@ private final class CausalityGuardian: Sendable {
     func preserveCausality(_ coordination: MultiverseCoordination, result: CoordinationResult) async -> CausalityResult {
         CausalityResult(
             success: true,
-            causalityIntegrity: Double.random(in: 0.85...1.0)
+            causalityIntegrity: Double.random(in: 0.85 ... 1.0)
         )
     }
 
     func preserveSynchronizationCausality(_ synchronization: UniverseSynchronization, result: SynchronizationResult) async -> CausalityResult {
         CausalityResult(
             success: true,
-            integrity: Double.random(in: 0.9...1.0)
+            integrity: Double.random(in: 0.9 ... 1.0)
         )
     }
 
@@ -708,7 +718,7 @@ private final class CausalityGuardian: Sendable {
     func getCausalityStatus() async -> CausalityStatus {
         CausalityStatus(
             operational: true,
-            integrity: Double.random(in: 0.95...1.0)
+            integrity: Double.random(in: 0.95 ... 1.0)
         )
     }
 }
@@ -726,7 +736,7 @@ private final class MultiverseOptimizer: Sendable {
     func getOptimizerStatus() async -> OptimizerStatus {
         OptimizerStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8...1.0)
+            efficiency: Double.random(in: 0.8 ... 1.0)
         )
     }
 }

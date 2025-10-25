@@ -7,8 +7,8 @@
 //  Task 191: Reality Matrix Engineering
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Core Protocols
 
@@ -283,7 +283,7 @@ struct RealityMatrixOperation: Sendable {
     let executionPlan: ExecutionPlan
 
     static func modification(_ modification: RealityMatrixModification) -> RealityMatrixOperation {
-        return RealityMatrixOperation(
+        RealityMatrixOperation(
             id: UUID(),
             type: .modification,
             parameters: ["modification": AnyCodable(modification)],
@@ -604,7 +604,7 @@ final class RealityMatrixEngineeringEngine: RealityMatrixEngineeringProtocol, Re
     // MARK: - RealityMatrixEngineeringProtocol
 
     func analyzeRealityMatrix() async throws -> RealityMatrixAnalysis {
-        return try await matrixAnalyzer.analyze(matrix: currentMatrix)
+        try await matrixAnalyzer.analyze(matrix: currentMatrix)
     }
 
     func engineerMatrixModification(_ modification: RealityMatrixModification) async throws -> EngineeringResult {
@@ -642,11 +642,11 @@ final class RealityMatrixEngineeringEngine: RealityMatrixEngineeringProtocol, Re
     }
 
     func validateMatrixEngineering(_ operation: RealityMatrixOperation) async throws -> ValidationResult {
-        return try await validationEngine.validate(operation, for: currentMatrix)
+        try await validationEngine.validate(operation, for: currentMatrix)
     }
 
     func monitorMatrixStability() async -> MatrixStabilityReport {
-        return await monitoringSystem.generateStabilityReport(for: currentMatrix)
+        await monitoringSystem.generateStabilityReport(for: currentMatrix)
     }
 
     // MARK: - RealityMatrixManipulationProtocol
@@ -672,7 +672,7 @@ final class RealityMatrixEngineeringEngine: RealityMatrixEngineeringProtocol, Re
     // MARK: - MatrixStabilityProtocol
 
     func assessStability(_ matrix: RealityMatrix) async -> StabilityAssessment {
-        return await stabilityController.assessStability(of: matrix)
+        await stabilityController.assessStability(of: matrix)
     }
 
     func stabilizeMatrixRegion(_ region: MatrixRegion) async throws -> StabilizationResult {
@@ -774,7 +774,7 @@ final class MatrixAnalyzer {
     private func assessStability(_ matrix: RealityMatrix) async -> StabilityAssessment {
         let overallStability = matrix.stabilityIndex
         let stabilityTrend: StabilityTrend = overallStability > 0.9 ? .stable :
-                                           overallStability > 0.7 ? .improving : .critical
+            overallStability > 0.7 ? .improving : .critical
 
         let criticalRegions = matrix.dimensions.filter { $0.stability < 0.8 }.map {
             MatrixRegion(
@@ -792,7 +792,7 @@ final class MatrixAnalyzer {
                 projectedStability: overallStability * 0.95,
                 confidenceLevel: 0.85,
                 riskFactors: ["Natural decoherence"]
-            )
+            ),
         ]
 
         return StabilityAssessment(
@@ -805,7 +805,7 @@ final class MatrixAnalyzer {
 
     private func analyzeCoherence(_ matrix: RealityMatrix) -> CoherenceAnalysis {
         let overallCoherence = matrix.coherenceLevel
-        let coherenceDistribution = matrix.dimensions.map { $0.coherence }
+        let coherenceDistribution = matrix.dimensions.map(\.coherence)
 
         let decoherencePoints = matrix.dimensions.filter { $0.coherence < 0.9 }.map {
             DecoherencePoint(
@@ -954,7 +954,7 @@ final class MatrixManipulator {
                     oldValue: AnyCodable("old"),
                     newValue: AnyCodable(parameters),
                     impact: 0.5
-                )
+                ),
             ],
             sideEffects: [],
             validationResults: ValidationResult(
@@ -970,7 +970,7 @@ final class MatrixManipulator {
         // Apply matrix transformation
         // This is a simplified implementation
 
-        return TransformationResult(
+        TransformationResult(
             transformedMatrix: matrix,
             transformationMetrics: TransformationMetrics(
                 processingTime: 0.5,
@@ -1114,7 +1114,7 @@ final class MonitoringSystem {
                 action: "Monitor stability trends",
                 expectedImpact: 0.1,
                 complexity: 0.2
-            )
+            ),
         ]
 
         return MatrixStabilityReport(
@@ -1157,13 +1157,13 @@ enum RealityMatrixError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .validationFailed(let errors):
+        case let .validationFailed(errors):
             return "Validation failed with \(errors.count) errors"
-        case .modificationFailed(let reason):
+        case let .modificationFailed(reason):
             return "Modification failed: \(reason)"
-        case .stabilityCritical(let reason):
+        case let .stabilityCritical(reason):
             return "Stability critical: \(reason)"
-        case .synchronizationFailed(let reason):
+        case let .synchronizationFailed(reason):
             return "Synchronization failed: \(reason)"
         }
     }
@@ -1214,7 +1214,7 @@ struct AnyCodable: Codable, Sendable {
 enum RealityMatrixEngineeringFactory {
     @MainActor
     static func createEngine(withInitialMatrix matrix: RealityMatrix) -> RealityMatrixEngineeringEngine {
-        return RealityMatrixEngineeringEngine(initialMatrix: matrix)
+        RealityMatrixEngineeringEngine(initialMatrix: matrix)
     }
 
     static func createDefaultMatrix() -> RealityMatrix {
@@ -1263,14 +1263,14 @@ enum RealityMatrixEngineeringFactory {
                 ),
                 stability: 0.88,
                 coherence: 0.94
-            )
+            ),
         ]
 
         let parameters = RealityParameters(
             fundamentalConstants: [
-                "speed_of_light": 299792458.0,
+                "speed_of_light": 299_792_458.0,
                 "planck_constant": 6.62607015e-34,
-                "gravitational_constant": 6.67430e-11
+                "gravitational_constant": 6.67430e-11,
             ],
             physicalLaws: [
                 PhysicalLaw(
@@ -1284,7 +1284,7 @@ enum RealityMatrixEngineeringFactory {
                     equation: "iℏ ∂ψ/∂t = Ĥ ψ",
                     parameters: [:],
                     domain: .quantum
-                )
+                ),
             ],
             quantumProperties: QuantumProperties(
                 superpositionStates: 1000,
@@ -1363,7 +1363,7 @@ final class RealityMatrixDatabase {
     }
 
     func loadMatrix(id: UUID) -> RealityMatrix? {
-        return matrices[id]
+        matrices[id]
     }
 
     func saveModification(_ modification: RealityMatrixModification, forMatrix matrixId: UUID) {
@@ -1374,7 +1374,7 @@ final class RealityMatrixDatabase {
     }
 
     func getModifications(forMatrix matrixId: UUID) -> [RealityMatrixModification] {
-        return modifications[matrixId] ?? []
+        modifications[matrixId] ?? []
     }
 
     func saveStabilityReport(_ report: MatrixStabilityReport, forMatrix matrixId: UUID) {
@@ -1390,7 +1390,7 @@ final class RealityMatrixDatabase {
     }
 
     func getStabilityHistory(forMatrix matrixId: UUID) -> [MatrixStabilityReport] {
-        return stabilityHistory[matrixId] ?? []
+        stabilityHistory[matrixId] ?? []
     }
 }
 
@@ -1399,7 +1399,7 @@ final class RealityMatrixDatabase {
 /// Testing utilities for reality matrix engineering
 enum RealityMatrixEngineeringTesting {
     static func createTestMatrix() -> RealityMatrix {
-        return RealityMatrixEngineeringFactory.createDefaultMatrix()
+        RealityMatrixEngineeringFactory.createDefaultMatrix()
     }
 
     static func createUnstableMatrix() -> RealityMatrix {
@@ -1420,7 +1420,7 @@ enum RealityMatrixEngineeringTesting {
 // MARK: - Framework Metadata
 
 /// Framework information
-struct RealityMatrixEngineeringMetadata {
+enum RealityMatrixEngineeringMetadata {
     static let version = "1.0.0"
     static let framework = "Reality Matrix Engineering"
     static let description = "Comprehensive framework for engineering fundamental reality matrices"
@@ -1431,7 +1431,7 @@ struct RealityMatrixEngineeringMetadata {
         "Stability Control",
         "Dimensional Engineering",
         "Consciousness Integration",
-        "Quantum Enhancement"
+        "Quantum Enhancement",
     ]
     static let dependencies = ["Foundation", "Combine"]
     static let author = "Quantum Singularity Era - Task 191"

@@ -139,12 +139,12 @@ public actor MultiAgentSystem {
 
     /// Get system metrics
     public func getSystemMetrics() -> SystemMetrics {
-        return systemMetrics
+        systemMetrics
     }
 
     /// Get intelligence patterns
     public func getIntelligencePatterns() -> [IntelligencePattern] {
-        return intelligencePatterns
+        intelligencePatterns
     }
 
     // MARK: - Private Methods
@@ -190,8 +190,8 @@ public actor MultiAgentSystem {
     private func calculateEmergentIntelligence(_ patterns: [IntelligencePattern]) -> Double {
         // Calculate emergent intelligence score based on pattern complexity and emergence
         let complexityScore =
-            patterns.map { $0.complexity }.reduce(0, +) / Double(max(patterns.count, 1))
-        let emergenceScore = patterns.filter { $0.emergent }.count > 0 ? 0.8 : 0.4
+            patterns.map(\.complexity).reduce(0, +) / Double(max(patterns.count, 1))
+        let emergenceScore = patterns.filter(\.emergent).count > 0 ? 0.8 : 0.4
 
         return (complexityScore + emergenceScore) / 2.0
     }
@@ -241,8 +241,7 @@ public actor AgentCoordinator {
     private var agentCapabilities: [String: [AgentCapability]] = [:]
 
     /// Deploy agent
-    public func deployAgent(_ agent: Agent, capabilities: [AgentCapability]) async throws -> String
-    {
+    public func deployAgent(_ agent: Agent, capabilities: [AgentCapability]) async throws -> String {
         let agentId = UUID().uuidString
 
         var mutableAgent = agent
@@ -291,7 +290,8 @@ public actor AgentCoordinator {
 /// Engine for emergent intelligence and pattern recognition
 public actor EmergentIntelligenceEngine {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "EmergentIntelligence")
+        subsystem: "com.quantum.workspace", category: "EmergentIntelligence"
+    )
 
     private var intelligencePatterns: [IntelligencePattern] = []
     private var agentInteractions: [AgentInteraction] = []
@@ -335,7 +335,7 @@ public actor EmergentIntelligenceEngine {
 
     /// Get intelligence status
     public func getIntelligenceStatus() async throws -> IntelligenceStatus {
-        return IntelligenceStatus(
+        IntelligenceStatus(
             patterns: intelligencePatterns,
             emergenceLevel: calculateEmergenceLevel(),
             learningRate: calculateLearningRate(),
@@ -347,7 +347,7 @@ public actor EmergentIntelligenceEngine {
         // Analyze how agents collaborate on tasks
         let collaborationInteractions = agentInteractions.filter { $0.type == .collaboration }
 
-        let complexity = Double(collaborationInteractions.count) / 10.0  // Normalize
+        let complexity = Double(collaborationInteractions.count) / 10.0 // Normalize
         let confidence = min(1.0, Double(collaborationInteractions.count) / 50.0)
 
         return IntelligencePattern(
@@ -395,21 +395,21 @@ public actor EmergentIntelligenceEngine {
     }
 
     private func calculateEmergenceLevel() -> Double {
-        let emergentPatterns = intelligencePatterns.filter { $0.emergent }
+        let emergentPatterns = intelligencePatterns.filter(\.emergent)
         return Double(emergentPatterns.count) / Double(max(intelligencePatterns.count, 1))
     }
 
     private func calculateLearningRate() -> Double {
         let recentInteractions = agentInteractions.filter {
-            Date().timeIntervalSince($0.timestamp) < 3600  // Last hour
+            Date().timeIntervalSince($0.timestamp) < 3600 // Last hour
         }
 
-        return Double(recentInteractions.count) / 3600.0  // Interactions per second
+        return Double(recentInteractions.count) / 3600.0 // Interactions per second
     }
 
     private func calculateSpecializationScore() -> Double {
         // Simplified specialization calculation
-        return Double.random(in: 0.3...0.9)
+        Double.random(in: 0.3 ... 0.9)
     }
 }
 
@@ -458,8 +458,8 @@ public actor AgentCommunicationNetwork {
 
     /// Get network status
     public func getNetworkStatus() async throws -> NetworkStatus {
-        return NetworkStatus(
-            activeConnections: 1,  // Simplified
+        NetworkStatus(
+            activeConnections: 1, // Simplified
             messageQueueSize: messageQueue.count,
             averageLatency: networkMetrics.messageLatency,
             bandwidthUtilization: networkMetrics.bandwidthUsage,
@@ -473,9 +473,9 @@ public actor AgentCommunicationNetwork {
         let errorRate = networkMetrics.errorRate
 
         return CoordinationMetrics(
-            messageOverhead: Double(messageCount) / 1000.0,  // Simplified
+            messageOverhead: Double(messageCount) / 1000.0, // Simplified
             coordinationEfficiency: 1.0 - errorRate,
-            agentUtilization: 0.8,  // Simplified
+            agentUtilization: 0.8, // Simplified
             timestamp: Date()
         )
     }
@@ -483,17 +483,17 @@ public actor AgentCommunicationNetwork {
     /// Optimize bandwidth
     public func optimizeBandwidth() async throws {
         // Implement bandwidth optimization
-        networkMetrics.bandwidthUsage *= 0.8  // Reduce usage
+        networkMetrics.bandwidthUsage *= 0.8 // Reduce usage
         logger.info("📊 Bandwidth optimized")
     }
 
     private func deliverMessage(_ message: AgentMessage) async throws {
         // Simulate network latency
-        let latency = Double.random(in: 0.001...0.01)  // 1-10ms
+        let latency = Double.random(in: 0.001 ... 0.01) // 1-10ms
         networkMetrics.messageLatency = latency
 
         // Simulate occasional errors
-        if Double.random(in: 0...1) < 0.02 {  // 2% error rate
+        if Double.random(in: 0 ... 1) < 0.02 { // 2% error rate
             networkMetrics.errorRate += 0.02
             throw MultiAgentError.messageDeliveryFailed(message.id)
         }
@@ -507,7 +507,7 @@ public actor TaskDispatcher {
     private let logger = Logger(subsystem: "com.quantum.workspace", category: "TaskDispatcher")
 
     private var taskQueue: [String: AgentTask] = [:]
-    private var taskAssignments: [String: [String]] = [:]  // taskId -> [agentIds]
+    private var taskAssignments: [String: [String]] = [:] // taskId -> [agentIds]
 
     /// Initialize dispatcher
     public func initialize() async throws {
@@ -613,8 +613,8 @@ public actor AgentPerformanceMonitor {
             return (0.0, 0.0)
         }
 
-        let completion = metrics.map { $0.taskCompletionRate }.reduce(0, +) / Double(metrics.count)
-        let efficiency = metrics.map { $0.efficiency }.reduce(0, +) / Double(metrics.count)
+        let completion = metrics.map(\.taskCompletionRate).reduce(0, +) / Double(metrics.count)
+        let efficiency = metrics.map(\.efficiency).reduce(0, +) / Double(metrics.count)
 
         return (completion, efficiency)
     }
@@ -685,7 +685,7 @@ public struct AgentCapability: Sendable {
         case (.communication, .communication): return true
         case (.learning, .learning): return true
         case (.coordination, .coordination): return true
-        case (.specialized(let spec), .specialized(let taskSpec)): return spec == taskSpec
+        case let (.specialized(spec), .specialized(taskSpec)): return spec == taskSpec
         default: return false
         }
     }
@@ -942,7 +942,7 @@ public func initializeMultiAgentSystem() async throws {
 /// Get multi-agent system capabilities
 @MainActor
 public func getMultiAgentCapabilities() -> [String: [String]] {
-    return [
+    [
         "agent_types": ["worker", "coordinator", "specialist", "learner", "communicator"],
         "intelligence": [
             "emergent_patterns", "adaptive_learning", "collaborative_problem_solving",

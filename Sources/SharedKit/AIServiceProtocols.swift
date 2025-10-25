@@ -520,7 +520,7 @@ public struct AnyCodable: Codable, @unchecked Sendable {
         } else if let boolValue = try? container.decode(Bool.self) {
             self.value = boolValue
         } else if let arrayValue = try? container.decode([AnyCodable].self) {
-            self.value = arrayValue.map { $0.value }
+            self.value = arrayValue.map(\.value)
         } else if let dictValue = try? container.decode([String: AnyCodable].self) {
             self.value = dictValue.mapValues { $0.value }
         } else {
@@ -551,29 +551,29 @@ public struct AnyCodable: Codable, @unchecked Sendable {
 
 // MARK: - Default Implementations
 
-extension AITextGenerationService {
-    public func isAvailable() async -> Bool {
+public extension AITextGenerationService {
+    func isAvailable() async -> Bool {
         let health = await getHealthStatus()
         return health.isRunning
     }
 }
 
-extension AICodeAnalysisService {
-    public func generateDocumentation(code: String, language: String) async throws -> String {
+public extension AICodeAnalysisService {
+    func generateDocumentation(code: String, language: String) async throws -> String {
         // Default implementation - should be overridden
         throw AIError.serviceNotImplemented("Documentation generation not implemented")
     }
 
-    public func generateTests(code: String, language: String) async throws -> String {
+    func generateTests(code: String, language: String) async throws -> String {
         // Default implementation - should be overridden
         throw AIError.serviceNotImplemented("Test generation not implemented")
     }
 }
 
-extension AICodeGenerationService {
-    public func generateCodeWithFallback(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+public extension AICodeGenerationService {
+    func generateCodeWithFallback(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
         // Default implementation - just call regular generateCode
-        return try await generateCode(description: description, language: language, context: context)
+        try await generateCode(description: description, language: language, context: context)
     }
 }
 
@@ -590,19 +590,19 @@ public enum AIError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .serviceNotImplemented(let service):
+        case let .serviceNotImplemented(service):
             "AI service not implemented: \(service)"
-        case .serviceUnavailable(let service):
+        case let .serviceUnavailable(service):
             "AI service unavailable: \(service)"
-        case .invalidConfiguration(let details):
+        case let .invalidConfiguration(details):
             "Invalid AI service configuration: \(details)"
-        case .operationFailed(let details):
+        case let .operationFailed(details):
             "AI operation failed: \(details)"
         case .rateLimitExceeded:
             "AI service rate limit exceeded"
         case .authenticationFailed:
             "AI service authentication failed"
-        case .networkError(let details):
+        case let .networkError(details):
             "AI service network error: \(details)"
         }
     }

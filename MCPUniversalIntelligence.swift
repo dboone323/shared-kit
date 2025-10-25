@@ -193,7 +193,7 @@ public final class UniversalIntelligence {
     public func intelligenceCoherence() -> Double {
         let domainVariance =
             intelligenceDomains.map { abs($0.capability - synthesisLevel.averageCapability) }
-            .reduce(0, +) / Double(intelligenceDomains.count)
+                .reduce(0, +) / Double(intelligenceDomains.count)
         return max(0.0, 1.0 - domainVariance)
     }
 
@@ -201,7 +201,7 @@ public final class UniversalIntelligence {
     /// - Returns: Universal intelligence potential metric
     public func universalIntelligencePotential() -> Double {
         let coherence = intelligenceCoherence()
-        let integrationStrength = Double(integrationPatterns.count) / 10.0  // Target 10 patterns
+        let integrationStrength = Double(integrationPatterns.count) / 10.0 // Target 10 patterns
         return (coherence + integrationStrength + synthesisLevel.overallSynthesis) / 3.0
     }
 
@@ -285,7 +285,8 @@ public final class IntelligenceSynthesisEngine: Sendable {
 
         // Execute intelligence synthesis
         let synthesisResults = await executeIntelligenceSynthesis(
-            sources, strategy: synthesisStrategy)
+            sources, strategy: synthesisStrategy
+        )
 
         // Generate intelligence synthesis field
         let synthesisField = generateIntelligenceSynthesisField(synthesisResults)
@@ -312,7 +313,7 @@ public final class IntelligenceSynthesisEngine: Sendable {
                     "Domain synthesis for \(source.domainType.rawValue)"),
                 contribution: source.capability,
                 coherence: source.capability,
-                processingTime: Double.random(in: 0.1...1.0)
+                processingTime: Double.random(in: 0.1 ... 1.0)
             )
             domainResults[source.domainType] = domainResult
         }
@@ -346,14 +347,14 @@ public final class IntelligenceSynthesisEngine: Sendable {
     private func analyzeIntelligenceSources(_ sources: [IntelligenceSourceInstance])
         -> IntelligenceSourceAnalysis
     {
-        let capabilities = sources.map { $0.capability }
+        let capabilities = sources.map(\.capability)
         let avgCapability = capabilities.reduce(0, +) / Double(capabilities.count)
         let capabilityVariance =
             capabilities.map { pow($0 - avgCapability, 2) }.reduce(0, +)
-            / Double(capabilities.count)
+                / Double(capabilities.count)
 
-        let types = Set(sources.map { $0.sourceType })
-        let diversityIndex = Double(types.count) / 10.0  // Assuming 10 intelligence types
+        let types = Set(sources.map(\.sourceType))
+        let diversityIndex = Double(types.count) / 10.0 // Assuming 10 intelligence types
 
         let compatibilityMatrix = calculateCompatibilityMatrix(sources)
         let synthesisPotential = calculateSynthesisPotential(compatibilityMatrix)
@@ -370,17 +371,17 @@ public final class IntelligenceSynthesisEngine: Sendable {
     }
 
     /// Calculate compatibility matrix
-    private func calculateCompatibilityMatrix(_ sources: [IntelligenceSourceInstance]) -> [[Double]]
-    {
+    private func calculateCompatibilityMatrix(_ sources: [IntelligenceSourceInstance]) -> [[Double]] {
         var matrix = Array(
-            repeating: Array(repeating: 0.0, count: sources.count), count: sources.count)
+            repeating: Array(repeating: 0.0, count: sources.count), count: sources.count
+        )
 
-        for i in 0..<sources.count {
-            for j in 0..<sources.count {
+        for i in 0 ..< sources.count {
+            for j in 0 ..< sources.count {
                 if i != j {
                     matrix[i][j] = calculateSourceCompatibility(sources[i], sources[j])
                 } else {
-                    matrix[i][j] = 1.0  // Self-compatibility
+                    matrix[i][j] = 1.0 // Self-compatibility
                 }
             }
         }
@@ -442,9 +443,10 @@ public final class IntelligenceSynthesisEngine: Sendable {
 
         return IntelligenceSynthesisStrategy(
             synthesisTechniques: synthesisTechniques,
-            totalExpectedSynthesisGain: synthesisTechniques.map { $0.expectedSynthesisGain }.reduce(
-                0, +),
-            estimatedDuration: synthesisTechniques.map { $0.duration }.reduce(0, +),
+            totalExpectedSynthesisGain: synthesisTechniques.map(\.expectedSynthesisGain).reduce(
+                0, +
+            ),
+            estimatedDuration: synthesisTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -456,7 +458,7 @@ public final class IntelligenceSynthesisEngine: Sendable {
     ) async -> [IntelligenceSynthesisStep] {
         await withTaskGroup(of: IntelligenceSynthesisStep.self) { group in
             for technique in strategy.synthesisTechniques {
-                let localSources = sources  // Create local copy to avoid data race
+                let localSources = sources // Create local copy to avoid data race
                 group.addTask { @Sendable in
                     await self.executeSynthesisTechnique(technique, sources: localSources)
                 }
@@ -477,7 +479,7 @@ public final class IntelligenceSynthesisEngine: Sendable {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
         let actualSynthesisGain =
-            technique.expectedSynthesisGain * (0.8 + Double.random(in: 0...0.4))
+            technique.expectedSynthesisGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualSynthesisGain >= technique.expectedSynthesisGain * 0.9
 
         return IntelligenceSynthesisStep(
@@ -494,8 +496,8 @@ public final class IntelligenceSynthesisEngine: Sendable {
         -> IntelligenceSynthesisField
     {
         let successRate =
-            Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalSynthesisGain = results.map { $0.actualSynthesisGain }.reduce(0, +)
+            Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalSynthesisGain = results.map(\.actualSynthesisGain).reduce(0, +)
         let fieldStrength = successRate * 0.9
 
         return IntelligenceSynthesisField(
@@ -504,7 +506,7 @@ public final class IntelligenceSynthesisEngine: Sendable {
             fieldStrength: fieldStrength,
             coverageScope: .multiversal,
             synthesisFrequency: 440.0 + totalSynthesisGain * 10.0,
-            activeSources: results.map { $0.techniqueId },
+            activeSources: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -516,8 +518,7 @@ public final class KnowledgeIntegrationNetwork: Sendable {
     /// Integrate knowledge from sources
     /// - Parameter sources: Knowledge sources to integrate
     /// - Returns: Integration result
-    public func integrateKnowledge(_ sources: [KnowledgeSource]) async -> KnowledgeIntegrationResult
-    {
+    public func integrateKnowledge(_ sources: [KnowledgeSource]) async -> KnowledgeIntegrationResult {
         // Analyze knowledge sources
         let sourceAnalysis = analyzeKnowledgeSources(sources)
 
@@ -526,7 +527,8 @@ public final class KnowledgeIntegrationNetwork: Sendable {
 
         // Execute knowledge integration
         let integrationResults = await executeKnowledgeIntegration(
-            sources, topology: integrationTopology)
+            sources, topology: integrationTopology
+        )
 
         // Generate knowledge integration field
         let integrationField = generateKnowledgeIntegrationField(integrationResults)
@@ -543,13 +545,13 @@ public final class KnowledgeIntegrationNetwork: Sendable {
 
     /// Analyze knowledge sources
     private func analyzeKnowledgeSources(_ sources: [KnowledgeSource]) -> KnowledgeSourceAnalysis {
-        let knowledgeVolumes = sources.map { $0.knowledgeVolume }
+        let knowledgeVolumes = sources.map(\.knowledgeVolume)
         let avgVolume = knowledgeVolumes.reduce(0, +) / Double(knowledgeVolumes.count)
 
-        let domains = Set(sources.map { $0.domain })
-        let domainCoverage = Double(domains.count) / 20.0  // Assuming 20 knowledge domains
+        let domains = Set(sources.map(\.domain))
+        let domainCoverage = Double(domains.count) / 20.0 // Assuming 20 knowledge domains
 
-        let qualityScores = sources.map { $0.qualityScore }
+        let qualityScores = sources.map(\.qualityScore)
         let avgQuality = qualityScores.reduce(0, +) / Double(qualityScores.count)
 
         let connectivityMatrix = calculateKnowledgeConnectivity(sources)
@@ -569,10 +571,11 @@ public final class KnowledgeIntegrationNetwork: Sendable {
     /// Calculate knowledge connectivity
     private func calculateKnowledgeConnectivity(_ sources: [KnowledgeSource]) -> [[Double]] {
         var matrix = Array(
-            repeating: Array(repeating: 0.0, count: sources.count), count: sources.count)
+            repeating: Array(repeating: 0.0, count: sources.count), count: sources.count
+        )
 
-        for i in 0..<sources.count {
-            for j in 0..<sources.count {
+        for i in 0 ..< sources.count {
+            for j in 0 ..< sources.count {
                 if i != j {
                     matrix[i][j] = calculateSourceConnectivity(sources[i], sources[j])
                 } else {
@@ -617,7 +620,8 @@ public final class KnowledgeIntegrationNetwork: Sendable {
         }
 
         let integrationConnections = createIntegrationConnections(
-            integrationNodes, sources: sources)
+            integrationNodes, sources: sources
+        )
 
         return KnowledgeIntegrationTopology(
             integrationNodes: integrationNodes,
@@ -633,8 +637,8 @@ public final class KnowledgeIntegrationNetwork: Sendable {
     ) -> [IntegrationConnection] {
         var connections: [IntegrationConnection] = []
 
-        for i in 0..<nodes.count {
-            for j in (i + 1)..<nodes.count {
+        for i in 0 ..< nodes.count {
+            for j in (i + 1) ..< nodes.count {
                 let node1 = nodes[i]
                 let node2 = nodes[j]
                 let source1 = sources[i]
@@ -676,9 +680,9 @@ public final class KnowledgeIntegrationNetwork: Sendable {
 
     /// Calculate topology efficiency
     private func calculateTopologyEfficiency(_ connections: [IntegrationConnection]) -> Double {
-        let totalBandwidth = connections.map { $0.bandwidth }.reduce(0, +)
+        let totalBandwidth = connections.map(\.bandwidth).reduce(0, +)
         let avgConnectionStrength =
-            connections.map { $0.connectionStrength }.reduce(0, +) / Double(connections.count)
+            connections.map(\.connectionStrength).reduce(0, +) / Double(connections.count)
         return min(1.0, (totalBandwidth / 1000.0 + avgConnectionStrength) / 2.0)
     }
 
@@ -706,10 +710,10 @@ public final class KnowledgeIntegrationNetwork: Sendable {
     private func executeIntegrationConnection(
         _ connection: IntegrationConnection, sources: [KnowledgeSource]
     ) async -> KnowledgeIntegrationStep {
-        try? await Task.sleep(nanoseconds: 300_000_000)  // 0.3 seconds
+        try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
 
         let integrationEfficiency =
-            connection.connectionStrength * (0.85 + Double.random(in: 0...0.3))
+            connection.connectionStrength * (0.85 + Double.random(in: 0 ... 0.3))
         let knowledgeTransferRate = connection.bandwidth * integrationEfficiency / 100.0
 
         return KnowledgeIntegrationStep(
@@ -726,8 +730,8 @@ public final class KnowledgeIntegrationNetwork: Sendable {
         -> KnowledgeIntegrationField
     {
         let successRate =
-            Double(results.filter { $0.integrationSuccess }.count) / Double(results.count)
-        let totalTransferRate = results.map { $0.knowledgeTransferRate }.reduce(0, +)
+            Double(results.filter(\.integrationSuccess).count) / Double(results.count)
+        let totalTransferRate = results.map(\.knowledgeTransferRate).reduce(0, +)
         let fieldStrength = successRate * 0.95
 
         return KnowledgeIntegrationField(
@@ -736,7 +740,7 @@ public final class KnowledgeIntegrationNetwork: Sendable {
             fieldStrength: fieldStrength,
             knowledgeDensity: totalTransferRate / 100.0,
             integrationRadius: Double(results.count) * 15.0,
-            activeConnections: results.map { $0.connectionId },
+            activeConnections: results.map(\.connectionId),
             generatedAt: Date()
         )
     }
@@ -763,18 +767,18 @@ public struct SynthesisLevel: Sendable {
     public let overallSynthesis: Double
 
     public init(domains: [IntelligenceDomainInstance]) {
-        let capabilities = domains.map { $0.capability }
+        let capabilities = domains.map(\.capability)
         let calculatedAverageCapability = capabilities.reduce(0, +) / Double(capabilities.count)
         self.averageCapability = calculatedAverageCapability
 
         // Generate synthesis curve using the calculated average capability
-        let calculatedSynthesisCurve = (0..<10).map { step in
+        let calculatedSynthesisCurve = (0 ..< 10).map { step in
             let baseSynthesis = Double(step + 1) / 10.0
             return baseSynthesis * (1.0 + calculatedAverageCapability)
         }
         self.synthesisCurve = calculatedSynthesisCurve
 
-        let integrationLevels = domains.map { $0.integrationLevel }
+        let integrationLevels = domains.map(\.integrationLevel)
         let avgIntegration = integrationLevels.reduce(0, +) / Double(integrationLevels.count)
         self.overallSynthesis = (calculatedAverageCapability + avgIntegration) / 2.0
     }
@@ -1141,8 +1145,8 @@ public final actor MCPUniversalIntelligenceCoordinator: Sendable {
         let intelligenceDomains = domains.map { domain in
             IntelligenceDomainInstance(
                 domainType: domain,
-                capability: 0.5,  // Default capability
-                integrationLevel: 0.0,  // Default integration level
+                capability: 0.5, // Default capability
+                integrationLevel: 0.0, // Default integration level
                 metadata: [
                     "domainId": AnyCodable(domain.rawValue),
                     "coordinationReadiness": AnyCodable(0.5),
@@ -1177,8 +1181,8 @@ public final actor MCPUniversalIntelligenceCoordinator: Sendable {
         let sourceInstances = sources.map { source in
             IntelligenceSourceInstance(
                 sourceType: source,
-                domainType: .universal,  // Default domain
-                capability: 0.5,  // Default capability
+                domainType: .universal, // Default domain
+                capability: 0.5, // Default capability
                 metadata: ["source": AnyCodable(source.rawValue)]
             )
         }
@@ -1307,7 +1311,8 @@ public final class WisdomAmplificationSystem: Sendable {
         let wisdomAssessment = assessWisdomLevel(wisdom)
         let amplificationStrategy = designWisdomAmplificationStrategy(wisdomAssessment)
         let amplificationResults = await executeWisdomAmplification(
-            wisdom, strategy: amplificationStrategy)
+            wisdom, strategy: amplificationStrategy
+        )
         let wisdomAmplifier = generateWisdomAmplifier(amplificationResults)
 
         return WisdomAmplificationResult(
@@ -1365,9 +1370,10 @@ public final class WisdomAmplificationSystem: Sendable {
 
         return WisdomAmplificationStrategy(
             amplificationTechniques: amplificationTechniques,
-            totalExpectedWisdomGain: amplificationTechniques.map { $0.expectedWisdomGain }.reduce(
-                0, +),
-            estimatedDuration: amplificationTechniques.map { $0.duration }.reduce(0, +),
+            totalExpectedWisdomGain: amplificationTechniques.map(\.expectedWisdomGain).reduce(
+                0, +
+            ),
+            estimatedDuration: amplificationTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1398,7 +1404,7 @@ public final class WisdomAmplificationSystem: Sendable {
     ) async -> WisdomAmplificationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualWisdomGain = technique.expectedWisdomGain * (0.8 + Double.random(in: 0...0.4))
+        let actualWisdomGain = technique.expectedWisdomGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualWisdomGain >= technique.expectedWisdomGain * 0.9
 
         return WisdomAmplificationStep(
@@ -1413,8 +1419,8 @@ public final class WisdomAmplificationSystem: Sendable {
     /// Generate wisdom amplifier
     private func generateWisdomAmplifier(_ results: [WisdomAmplificationStep]) -> WisdomAmplifier {
         let successRate =
-            Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalWisdomGain = results.map { $0.actualWisdomGain }.reduce(0, +)
+            Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalWisdomGain = results.map(\.actualWisdomGain).reduce(0, +)
         let amplifierValue = 1.0 + (totalWisdomGain * successRate / 5.0)
 
         return WisdomAmplifier(
@@ -1422,7 +1428,7 @@ public final class WisdomAmplificationSystem: Sendable {
             amplifierType: .exponential,
             amplifierValue: amplifierValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -1440,7 +1446,8 @@ public final class ConsciousnessExpansionInterface: Sendable {
         let consciousnessAssessment = assessConsciousnessLevel(consciousness)
         let expansionStrategy = designConsciousnessExpansionStrategy(consciousnessAssessment)
         let expansionResults = await executeConsciousnessExpansion(
-            consciousness, strategy: expansionStrategy)
+            consciousness, strategy: expansionStrategy
+        )
         let consciousnessExpander = generateConsciousnessExpander(expansionResults)
 
         return ConsciousnessExpansionResult(
@@ -1500,9 +1507,9 @@ public final class ConsciousnessExpansionInterface: Sendable {
 
         return ConsciousnessExpansionStrategy(
             expansionTechniques: expansionTechniques,
-            totalExpectedConsciousnessGain: expansionTechniques.map { $0.expectedConsciousnessGain }
+            totalExpectedConsciousnessGain: expansionTechniques.map(\.expectedConsciousnessGain)
                 .reduce(0, +),
-            estimatedDuration: expansionTechniques.map { $0.duration }.reduce(0, +),
+            estimatedDuration: expansionTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1534,7 +1541,7 @@ public final class ConsciousnessExpansionInterface: Sendable {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
         let actualConsciousnessGain =
-            technique.expectedConsciousnessGain * (0.8 + Double.random(in: 0...0.4))
+            technique.expectedConsciousnessGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualConsciousnessGain >= technique.expectedConsciousnessGain * 0.9
 
         return ConsciousnessExpansionStep(
@@ -1551,8 +1558,8 @@ public final class ConsciousnessExpansionInterface: Sendable {
         -> ConsciousnessExpander
     {
         let successRate =
-            Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalConsciousnessGain = results.map { $0.actualConsciousnessGain }.reduce(0, +)
+            Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalConsciousnessGain = results.map(\.actualConsciousnessGain).reduce(0, +)
         let expanderValue = 1.0 + (totalConsciousnessGain * successRate / 6.0)
 
         return ConsciousnessExpander(
@@ -1560,7 +1567,7 @@ public final class ConsciousnessExpansionInterface: Sendable {
             expanderType: .exponential,
             expanderValue: expanderValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -1578,7 +1585,8 @@ public final class QuantumIntelligenceProcessor: Sendable {
         let quantumAssessment = assessQuantumCapabilities(intelligence)
         let processingStrategy = designQuantumProcessingStrategy(quantumAssessment)
         let processingResults = await executeQuantumProcessing(
-            intelligence, strategy: processingStrategy)
+            intelligence, strategy: processingStrategy
+        )
         let quantumProcessor = generateQuantumProcessor(processingResults)
 
         return QuantumIntelligenceProcessingResult(
@@ -1638,9 +1646,10 @@ public final class QuantumIntelligenceProcessor: Sendable {
 
         return QuantumProcessingStrategy(
             processingTechniques: processingTechniques,
-            totalExpectedQuantumGain: processingTechniques.map { $0.expectedQuantumGain }.reduce(
-                0, +),
-            estimatedDuration: processingTechniques.map { $0.duration }.reduce(0, +),
+            totalExpectedQuantumGain: processingTechniques.map(\.expectedQuantumGain).reduce(
+                0, +
+            ),
+            estimatedDuration: processingTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1671,7 +1680,7 @@ public final class QuantumIntelligenceProcessor: Sendable {
     ) async -> QuantumProcessingStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualQuantumGain = technique.expectedQuantumGain * (0.8 + Double.random(in: 0...0.4))
+        let actualQuantumGain = technique.expectedQuantumGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualQuantumGain >= technique.expectedQuantumGain * 0.9
 
         return QuantumProcessingStep(
@@ -1686,8 +1695,8 @@ public final class QuantumIntelligenceProcessor: Sendable {
     /// Generate quantum processor
     private func generateQuantumProcessor(_ results: [QuantumProcessingStep]) -> QuantumProcessor {
         let successRate =
-            Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalQuantumGain = results.map { $0.actualQuantumGain }.reduce(0, +)
+            Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalQuantumGain = results.map(\.actualQuantumGain).reduce(0, +)
         let processorValue = 1.0 + (totalQuantumGain * successRate / 7.0)
 
         return QuantumProcessor(
@@ -1695,7 +1704,7 @@ public final class QuantumIntelligenceProcessor: Sendable {
             processorType: .quantum,
             processorValue: processorValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -1713,7 +1722,8 @@ public final class MultiversalIntelligenceNetwork: Sendable {
         let multiversalAssessment = assessMultiversalCapabilities(intelligences)
         let coordinationStrategy = designMultiversalCoordinationStrategy(multiversalAssessment)
         let coordinationResults = await executeMultiversalCoordination(
-            intelligences, strategy: coordinationStrategy)
+            intelligences, strategy: coordinationStrategy
+        )
         let multiversalCoordinator = generateMultiversalCoordinator(coordinationResults)
 
         return MultiversalIntelligenceCoordinationResult(
@@ -1732,12 +1742,12 @@ public final class MultiversalIntelligenceNetwork: Sendable {
     {
         let universeCount = Double(intelligences.count)
         let avgInterconnectivity =
-            intelligences.map { $0.multiversalMetrics.interconnectivity }.reduce(0, +)
-            / universeCount
+            intelligences.map(\.multiversalMetrics.interconnectivity).reduce(0, +)
+                / universeCount
         let avgSynchronization =
-            intelligences.map { $0.multiversalMetrics.synchronization }.reduce(0, +) / universeCount
+            intelligences.map(\.multiversalMetrics.synchronization).reduce(0, +) / universeCount
         let avgHarmony =
-            intelligences.map { $0.multiversalMetrics.harmony }.reduce(0, +) / universeCount
+            intelligences.map(\.multiversalMetrics.harmony).reduce(0, +) / universeCount
 
         return MultiversalAssessment(
             universeCount: universeCount,
@@ -1778,9 +1788,9 @@ public final class MultiversalIntelligenceNetwork: Sendable {
 
         return MultiversalCoordinationStrategy(
             coordinationTechniques: coordinationTechniques,
-            totalExpectedMultiversalGain: coordinationTechniques.map { $0.expectedMultiversalGain }
+            totalExpectedMultiversalGain: coordinationTechniques.map(\.expectedMultiversalGain)
                 .reduce(0, +),
-            estimatedDuration: coordinationTechniques.map { $0.duration }.reduce(0, +),
+            estimatedDuration: coordinationTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1812,7 +1822,7 @@ public final class MultiversalIntelligenceNetwork: Sendable {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
         let actualMultiversalGain =
-            technique.expectedMultiversalGain * (0.8 + Double.random(in: 0...0.4))
+            technique.expectedMultiversalGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualMultiversalGain >= technique.expectedMultiversalGain * 0.9
 
         return MultiversalCoordinationStep(
@@ -1829,8 +1839,8 @@ public final class MultiversalIntelligenceNetwork: Sendable {
         -> MultiversalCoordinator
     {
         let successRate =
-            Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalMultiversalGain = results.map { $0.actualMultiversalGain }.reduce(0, +)
+            Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalMultiversalGain = results.map(\.actualMultiversalGain).reduce(0, +)
         let coordinatorValue = 1.0 + (totalMultiversalGain * successRate / 8.0)
 
         return MultiversalCoordinator(
@@ -1838,7 +1848,7 @@ public final class MultiversalIntelligenceNetwork: Sendable {
             coordinatorType: .universal,
             coordinatorValue: coordinatorValue,
             coverageDomain: .multiversal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -1856,7 +1866,8 @@ public final class EthicalIntelligenceFramework: Sendable {
         let ethicalAssessment = assessEthicalCapabilities(intelligence)
         let frameworkStrategy = designEthicalFrameworkStrategy(ethicalAssessment)
         let frameworkResults = await executeEthicalFramework(
-            intelligence, strategy: frameworkStrategy)
+            intelligence, strategy: frameworkStrategy
+        )
         let ethicalFramework = generateEthicalFramework(frameworkResults)
 
         return EthicalIntelligenceFrameworkResult(
@@ -1870,8 +1881,7 @@ public final class EthicalIntelligenceFramework: Sendable {
     }
 
     /// Assess ethical capabilities
-    private func assessEthicalCapabilities(_ intelligence: EthicalIntelligence) -> EthicalAssessment
-    {
+    private func assessEthicalCapabilities(_ intelligence: EthicalIntelligence) -> EthicalAssessment {
         let moralReasoning = intelligence.ethicalMetrics.moralReasoning
         let valueAlignment = intelligence.ethicalMetrics.valueAlignment
         let consequenceAnalysis = intelligence.ethicalMetrics.consequenceAnalysis
@@ -1916,9 +1926,10 @@ public final class EthicalIntelligenceFramework: Sendable {
 
         return EthicalFrameworkStrategy(
             frameworkTechniques: frameworkTechniques,
-            totalExpectedEthicalGain: frameworkTechniques.map { $0.expectedEthicalGain }.reduce(
-                0, +),
-            estimatedDuration: frameworkTechniques.map { $0.duration }.reduce(0, +),
+            totalExpectedEthicalGain: frameworkTechniques.map(\.expectedEthicalGain).reduce(
+                0, +
+            ),
+            estimatedDuration: frameworkTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1949,7 +1960,7 @@ public final class EthicalIntelligenceFramework: Sendable {
     ) async -> EthicalFrameworkStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualEthicalGain = technique.expectedEthicalGain * (0.8 + Double.random(in: 0...0.4))
+        let actualEthicalGain = technique.expectedEthicalGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualEthicalGain >= technique.expectedEthicalGain * 0.9
 
         return EthicalFrameworkStep(
@@ -1964,8 +1975,8 @@ public final class EthicalIntelligenceFramework: Sendable {
     /// Generate ethical framework
     private func generateEthicalFramework(_ results: [EthicalFrameworkStep]) -> EthicalFramework {
         let successRate =
-            Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalEthicalGain = results.map { $0.actualEthicalGain }.reduce(0, +)
+            Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalEthicalGain = results.map(\.actualEthicalGain).reduce(0, +)
         let frameworkValue = 1.0 + (totalEthicalGain * successRate / 6.0)
 
         return EthicalFramework(
@@ -1973,7 +1984,7 @@ public final class EthicalIntelligenceFramework: Sendable {
             frameworkType: .universal,
             frameworkValue: frameworkValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -1991,7 +2002,8 @@ public final class CreativeIntelligenceAmplifier: Sendable {
         let creativeAssessment = assessCreativeCapabilities(intelligence)
         let amplificationStrategy = designCreativeAmplificationStrategy(creativeAssessment)
         let amplificationResults = await executeCreativeAmplification(
-            intelligence, strategy: amplificationStrategy)
+            intelligence, strategy: amplificationStrategy
+        )
         let creativeAmplifier = generateCreativeAmplifier(amplificationResults)
 
         return CreativeIntelligenceAmplificationResult(
@@ -2051,9 +2063,9 @@ public final class CreativeIntelligenceAmplifier: Sendable {
 
         return CreativeAmplificationStrategy(
             amplificationTechniques: amplificationTechniques,
-            totalExpectedCreativeGain: amplificationTechniques.map { $0.expectedCreativeGain }
+            totalExpectedCreativeGain: amplificationTechniques.map(\.expectedCreativeGain)
                 .reduce(0, +),
-            estimatedDuration: amplificationTechniques.map { $0.duration }.reduce(0, +),
+            estimatedDuration: amplificationTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -2084,7 +2096,7 @@ public final class CreativeIntelligenceAmplifier: Sendable {
     ) async -> CreativeAmplificationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualCreativeGain = technique.expectedCreativeGain * (0.8 + Double.random(in: 0...0.4))
+        let actualCreativeGain = technique.expectedCreativeGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualCreativeGain >= technique.expectedCreativeGain * 0.9
 
         return CreativeAmplificationStep(
@@ -2101,8 +2113,8 @@ public final class CreativeIntelligenceAmplifier: Sendable {
         -> CreativeAmplifier
     {
         let successRate =
-            Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalCreativeGain = results.map { $0.actualCreativeGain }.reduce(0, +)
+            Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalCreativeGain = results.map(\.actualCreativeGain).reduce(0, +)
         let amplifierValue = 1.0 + (totalCreativeGain * successRate / 5.0)
 
         return CreativeAmplifier(
@@ -2110,7 +2122,7 @@ public final class CreativeIntelligenceAmplifier: Sendable {
             amplifierType: .exponential,
             amplifierValue: amplifierValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -2188,8 +2200,8 @@ public final class EmpathyDrivenIntelligence: Sendable {
 
         return EmpathyDrivingStrategy(
             drivingTechniques: drivingTechniques,
-            totalExpectedEmpathyGain: drivingTechniques.map { $0.expectedEmpathyGain }.reduce(0, +),
-            estimatedDuration: drivingTechniques.map { $0.duration }.reduce(0, +),
+            totalExpectedEmpathyGain: drivingTechniques.map(\.expectedEmpathyGain).reduce(0, +),
+            estimatedDuration: drivingTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -2220,7 +2232,7 @@ public final class EmpathyDrivenIntelligence: Sendable {
     ) async -> EmpathyDrivingStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualEmpathyGain = technique.expectedEmpathyGain * (0.8 + Double.random(in: 0...0.4))
+        let actualEmpathyGain = technique.expectedEmpathyGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualEmpathyGain >= technique.expectedEmpathyGain * 0.9
 
         return EmpathyDrivingStep(
@@ -2235,8 +2247,8 @@ public final class EmpathyDrivenIntelligence: Sendable {
     /// Generate empathy driver
     private func generateEmpathyDriver(_ results: [EmpathyDrivingStep]) -> EmpathyDriver {
         let successRate =
-            Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalEmpathyGain = results.map { $0.actualEmpathyGain }.reduce(0, +)
+            Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalEmpathyGain = results.map(\.actualEmpathyGain).reduce(0, +)
         let driverValue = 1.0 + (totalEmpathyGain * successRate / 5.0)
 
         return EmpathyDriver(
@@ -2244,7 +2256,7 @@ public final class EmpathyDrivenIntelligence: Sendable {
             driverType: .universal,
             driverValue: driverValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }

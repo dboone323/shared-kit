@@ -687,13 +687,13 @@ public struct IntelligenceAmplifiedAgent: Sendable {
 
 // MARK: - Extensions
 
-extension AgentInput {
-    public var isExpired: Bool {
+public extension AgentInput {
+    var isExpired: Bool {
         let age = Date().timeIntervalSince(timestamp)
         return age > 300 // 5 minutes
     }
 
-    public var urgency: Double {
+    var urgency: Double {
         let age = Date().timeIntervalSince(timestamp)
         let priorityMultiplier = switch priority {
         case .low: 0.5
@@ -705,18 +705,18 @@ extension AgentInput {
     }
 }
 
-extension AgentOutput {
-    public var isConfident: Bool { confidence > 0.8 }
-    public var hasReasoning: Bool { !reasoning.isEmpty }
+public extension AgentOutput {
+    var isConfident: Bool { confidence > 0.8 }
+    var hasReasoning: Bool { !reasoning.isEmpty }
 }
 
-extension AgentExperience {
-    public var isPositive: Bool { reward > 0 }
-    public var magnitude: Double { abs(reward) }
+public extension AgentExperience {
+    var isPositive: Bool { reward > 0 }
+    var magnitude: Double { abs(reward) }
 }
 
-extension IntelligenceLevel {
-    public var numericValue: Double {
+public extension IntelligenceLevel {
+    var numericValue: Double {
         switch self {
         case .basic: 1.0
         case .intermediate: 2.0
@@ -729,29 +729,29 @@ extension IntelligenceLevel {
         }
     }
 
-    public static func fromNumericValue(_ value: Double) -> IntelligenceLevel {
+    static func fromNumericValue(_ value: Double) -> IntelligenceLevel {
         switch value {
         case ..<1.5: .basic
-        case 1.5..<2.5: .intermediate
-        case 2.5..<3.5: .advanced
-        case 3.5..<4.5: .expert
-        case 4.5..<5.5: .master
-        case 5.5..<6.5: .genius
-        case 6.5..<7.5: .superintelligent
+        case 1.5 ..< 2.5: .intermediate
+        case 2.5 ..< 3.5: .advanced
+        case 3.5 ..< 4.5: .expert
+        case 4.5 ..< 5.5: .master
+        case 5.5 ..< 6.5: .genius
+        case 6.5 ..< 7.5: .superintelligent
         default: .universal
         }
     }
 }
 
-extension AgentDomain {
-    public var requiresSpecialization: Bool {
+public extension AgentDomain {
+    var requiresSpecialization: Bool {
         switch self {
         case .general: false
         default: true
         }
     }
 
-    public var typicalComplexity: CapabilityComplexity {
+    var typicalComplexity: CapabilityComplexity {
         switch self {
         case .general: .simple
         case .scientific, .engineering: .complex
@@ -764,8 +764,8 @@ extension AgentDomain {
     }
 }
 
-extension TaskComplexity {
-    public var estimatedDuration: TimeInterval {
+public extension TaskComplexity {
+    var estimatedDuration: TimeInterval {
         switch self {
         case .trivial: 60 // 1 minute
         case .simple: 300 // 5 minutes
@@ -773,7 +773,7 @@ extension TaskComplexity {
         case .complex: 7200 // 2 hours
         case .challenging: 21600 // 6 hours
         case .expert: 86400 // 1 day
-        case .genius: 604800 // 1 week
+        case .genius: 604_800 // 1 week
         case .impossible: .infinity
         }
     }

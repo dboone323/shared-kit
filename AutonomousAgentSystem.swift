@@ -74,13 +74,16 @@ public final class AutonomousAgentSystem: AutonomousAgent {
             capabilities = [
                 BasicCapability(
                     name: "reasoning", description: "Basic reasoning capability", domain: .general,
-                    complexity: .simple),
+                    complexity: .simple
+                ),
                 BasicCapability(
                     name: "learning", description: "Basic learning capability", domain: .general,
-                    complexity: .moderate),
+                    complexity: .moderate
+                ),
                 BasicCapability(
                     name: "communication", description: "Basic communication capability",
-                    domain: .social, complexity: .simple),
+                    domain: .social, complexity: .simple
+                ),
             ]
         }
 
@@ -245,7 +248,7 @@ public final class AutonomousAgentSystem: AutonomousAgent {
         let evolvedCapabilities = await evolveCapabilities(basedOn: performanceAnalysis)
         let evolvedIntelligenceLevel = IntelligenceLevel.fromNumericValue(
             intelligenceLevel.numericValue + 0.1)
-        let evolvedLearningRate = learningRate * 0.95  // Slightly more conservative
+        let evolvedLearningRate = learningRate * 0.95 // Slightly more conservative
 
         let evolvedAgent = AutonomousAgentSystem(
             id: id,
@@ -339,7 +342,7 @@ public final class AutonomousAgentSystem: AutonomousAgent {
             return AgentOutput(
                 inputId: input.id,
                 type: .response,
-                data: ["capabilities": capabilities.map { $0.name }],
+                data: ["capabilities": capabilities.map(\.name)],
                 confidence: 1.0
             )
         case "knowledge":
@@ -386,7 +389,7 @@ public final class AutonomousAgentSystem: AutonomousAgent {
                             step: 1,
                             description: "Selected capability: \(capability.name)",
                             confidence: 0.8
-                        )
+                        ),
                     ]
                 )
             }
@@ -416,7 +419,7 @@ public final class AutonomousAgentSystem: AutonomousAgent {
 
     private func processTask(_ task: AgentTask, inputId: UUID) async -> AgentOutput {
         // Simulate task processing
-        let processingTime = task.complexity.estimatedDuration * 0.1  // Faster for demo
+        let processingTime = task.complexity.estimatedDuration * 0.1 // Faster for demo
 
         try? await Task.sleep(nanoseconds: UInt64(processingTime * 1_000_000_000))
 
@@ -504,10 +507,10 @@ public final class AutonomousAgentSystem: AutonomousAgent {
     private func analyzePerformance() async -> PerformanceAnalysis {
         let recentExperiences = experienceBuffer.suffix(100)
         let averageReward =
-            recentExperiences.map { $0.reward }.reduce(0, +) / Double(recentExperiences.count)
+            recentExperiences.map(\.reward).reduce(0, +) / Double(recentExperiences.count)
         let successRate =
             Double(recentExperiences.filter { $0.outcome == .success }.count)
-            / Double(recentExperiences.count)
+                / Double(recentExperiences.count)
 
         return PerformanceAnalysis(
             averageReward: averageReward,
@@ -527,7 +530,7 @@ public final class AutonomousAgentSystem: AutonomousAgent {
         }
 
         let averageConfidence =
-            experiences.map { $0.output.confidence }.reduce(0, +) / Double(experiences.count)
+            experiences.map(\.output.confidence).reduce(0, +) / Double(experiences.count)
         if averageConfidence < 0.7 {
             areas.append("confidence_calibration")
         }
@@ -614,7 +617,7 @@ public final class AutonomousAgentSystem: AutonomousAgent {
         case "status":
             response = ["status": state.rawValue, "capabilities": capabilities.count]
         case "expertise":
-            response = ["domains": capabilities.map { $0.domain.rawValue }]
+            response = ["domains": capabilities.map(\.domain.rawValue)]
         default:
             response = ["response": "Query not understood"]
         }
@@ -808,12 +811,12 @@ enum AgentError: Error {
 
 // MARK: - Extensions
 
-extension AutonomousAgentSystem {
+public extension AutonomousAgentSystem {
     /// Get agent statistics
-    public var statistics: AgentStatistics {
+    var statistics: AgentStatistics {
         AgentStatistics(
             totalExperiences: experienceBuffer.count,
-            averageReward: experienceBuffer.map { $0.reward }.reduce(0, +)
+            averageReward: experienceBuffer.map(\.reward).reduce(0, +)
                 / Double(experienceBuffer.count),
             capabilityCount: capabilities.count,
             activeTasks: activeTasks.count,
@@ -822,12 +825,12 @@ extension AutonomousAgentSystem {
     }
 
     /// Export agent knowledge
-    public func exportKnowledge() -> [String: AnyCodable] {
+    func exportKnowledge() -> [String: AnyCodable] {
         knowledgeBase
     }
 
     /// Import agent knowledge
-    public func importKnowledge(_ knowledge: [String: AnyCodable]) {
+    func importKnowledge(_ knowledge: [String: AnyCodable]) {
         knowledgeBase.merge(knowledge) { _, new in new }
     }
 }

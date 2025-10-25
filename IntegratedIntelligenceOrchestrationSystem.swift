@@ -289,7 +289,7 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
                 amplificationLevel: request.intelligenceLevel,
                 quantumEnhancement: 0.8,
                 consciousnessAmplification: 0.7
-            )}
+            ) }
         )
     }
 
@@ -297,8 +297,8 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
         -> EstablishedCommunicationNetwork
     {
         // Establish communication network for orchestration
-        let agentIds = request.originalRequest.agents.map { $0.id.uuidString }
-        let mcpSystemIds = request.originalRequest.mcpSystems.map { $0.id }
+        let agentIds = request.originalRequest.agents.map(\.id.uuidString)
+        let mcpSystemIds = request.originalRequest.mcpSystems.map(\.id)
 
         let network = try await communicationNetworks.establishCoordinatedNetwork(
             agents: agentIds,
@@ -340,15 +340,15 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
                 description: "Workflow orchestrated as part of integrated intelligence operation",
                 agent: agent,
                 workflow: workflow,
-                mcpTools: request.originalRequest.mcpSystems.flatMap { $0.availableTools }
+                mcpTools: request.originalRequest.mcpSystems.flatMap(\.availableTools)
             )
 
             let result = try await unifiedWorkflowOrchestrator.executeUnifiedWorkflow(unifiedWorkflow)
             results.append(result)
         }
 
-        let overallSuccess = results.allSatisfy { $0.success }
-        let averageExecutionTime = results.map { $0.executionTime }.reduce(0, +) / Double(results.count)
+        let overallSuccess = results.allSatisfy(\.success)
+        let averageExecutionTime = results.map(\.executionTime).reduce(0, +) / Double(results.count)
 
         return UnifiedWorkflowExecutionResult(
             results: results,
@@ -371,8 +371,8 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
                 "orchestration_session": AnyCodable(session.sessionId),
                 "workflow_results": AnyCodable(workflowResult.results.map { [
                     "success": $0.success,
-                    "execution_time": $0.executionTime
-                ]})
+                    "execution_time": $0.executionTime,
+                ] }),
             ],
             domains: [.analytical, .strategic, .quantum, .consciousness],
             priority: .high,
@@ -481,8 +481,8 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
         session: IntegratedOrchestrationSession
     ) -> Double {
         let frameworkGain = frameworkResult.quantumEnhancement * 0.4 +
-                           frameworkResult.consciousnessAmplification * 0.4 +
-                           (frameworkResult.success ? 0.2 : 0.0)
+            frameworkResult.consciousnessAmplification * 0.4 +
+            (frameworkResult.success ? 0.2 : 0.0)
         let levelMultiplier = session.request.intelligenceLevel.intelligenceMultiplier
         return min(frameworkGain * levelMultiplier, 1.0)
     }
@@ -520,7 +520,7 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
         _ session: IntegratedOrchestrationSession,
         frameworkResult: UniversalFrameworkIntegrationResult
     ) -> [OrchestrationEvent] {
-        return [
+        [
             OrchestrationEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -535,9 +535,9 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
                 timestamp: Date(),
                 data: [
                     "success": frameworkResult.success,
-                    "domains_coordinated": frameworkResult.frameworkContributions.count
+                    "domains_coordinated": frameworkResult.frameworkContributions.count,
                 ]
-            )
+            ),
         ]
     }
 
@@ -624,7 +624,7 @@ public struct IntegratedOrchestrationMetrics: Sendable, Codable {
     public var averagePerformanceScore: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Integrated orchestration status
@@ -910,9 +910,9 @@ private final class IntegratedIntelligenceMonitor: Sendable {
 
 // MARK: - Extensions
 
-extension IntegratedIntelligenceOrchestrationSystem {
+public extension IntegratedIntelligenceOrchestrationSystem {
     /// Create specialized orchestration for specific intelligence domains
-    public static func createSpecializedOrchestration(
+    static func createSpecializedOrchestration(
         for domain: IntelligenceDomain
     ) async throws -> IntegratedIntelligenceOrchestrationSystem {
         let system = try await IntegratedIntelligenceOrchestrationSystem()
@@ -921,7 +921,7 @@ extension IntegratedIntelligenceOrchestrationSystem {
     }
 
     /// Execute emergency orchestration with maximum priority
-    public func executeEmergencyOrchestration(
+    func executeEmergencyOrchestration(
         agents: [AutonomousAgentSystem],
         workflows: [MCPWorkflow],
         mcpSystems: [MCPCompleteSystemIntegration]
@@ -939,7 +939,7 @@ extension IntegratedIntelligenceOrchestrationSystem {
     }
 
     /// Get orchestration recommendations
-    public func getOrchestrationRecommendations() async -> [OrchestrationRecommendation] {
+    func getOrchestrationRecommendations() async -> [OrchestrationRecommendation] {
         var recommendations: [OrchestrationRecommendation] = []
 
         let status = await getOrchestrationStatus()

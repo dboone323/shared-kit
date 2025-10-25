@@ -61,7 +61,7 @@ public struct IntelligenceMetrics: Sendable {
         let metrics = [
             completeIntelligence, infiniteWisdom, transcendentKnowledge, eternalUnderstanding,
             cosmicInsight, divineComprehension, universalCognizance, infinitePerception,
-            eternalDiscernment, ultimateIntelligence
+            eternalDiscernment, ultimateIntelligence,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -237,7 +237,7 @@ public final class UniversalIntelligenceEngine: Sendable {
             UniversalIntelligenceStep(type: .universalCognizance, intelligence: 12.0),
             UniversalIntelligenceStep(type: .infinitePerception, intelligence: 14.0),
             UniversalIntelligenceStep(type: .eternalDiscernment, intelligence: 10.0),
-            UniversalIntelligenceStep(type: .ultimateIntelligence, intelligence: 15.0)
+            UniversalIntelligenceStep(type: .ultimateIntelligence, intelligence: 15.0),
         ]
 
         var capabilities: [IntelligenceCapability] = []

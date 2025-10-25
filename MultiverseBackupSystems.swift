@@ -563,8 +563,7 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
         setupAutomatedBackup()
     }
 
-    func createBackup(of universe: QuantumUniverse, scope: BackupScope) async throws -> BackupResult
-    {
+    func createBackup(of universe: QuantumUniverse, scope: BackupScope) async throws -> BackupResult {
         let operationId = UUID()
         let startTime = Date()
 
@@ -629,7 +628,7 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
                     universeId: universe.id,
                     timestamp: startTime,
                     scope: scope,
-                    size: Int64(1024 * 1024),  // Estimated size in bytes
+                    size: Int64(1024 * 1024), // Estimated size in bytes
                     compressionRatio: 0.8,
                     integrityVerified: true,
                     replicas: 0,
@@ -646,7 +645,7 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
             if config.replicationStrategy != .none {
                 let replicationResult = try await replicationManager.replicateBackup(
                     backup,
-                    to: []  // Would be populated with target universes
+                    to: [] // Would be populated with target universes
                 )
                 replicasCreated = replicationResult.replicasCreated
             }
@@ -718,7 +717,7 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
                 backupId: backupId,
                 targetUniverseId: targetUniverse.id,
                 timestamp: startTime,
-                dataRestored: 1024 * 1024,  // Estimated size
+                dataRestored: 1024 * 1024, // Estimated size
                 duration: Date().timeIntervalSince(startTime),
                 integrityVerified: integrityResult.isIntact,
                 issues: validationResult.issues
@@ -746,8 +745,7 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
         }
     }
 
-    func archiveBackup(_ backupId: UUID, to archiveTier: ArchiveTier) async throws -> ArchiveResult
-    {
+    func archiveBackup(_ backupId: UUID, to archiveTier: ArchiveTier) async throws -> ArchiveResult {
         let timestamp = Date()
 
         // Check if backup exists
@@ -807,7 +805,7 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
     ) async throws -> QuantumUniverse {
         // Simplified restoration logic
         // In real implementation, this would deserialize and apply backup data
-        return targetUniverse  // Placeholder
+        targetUniverse // Placeholder
     }
 
     private func validateRestoration(_ universe: QuantumUniverse) async throws -> ValidationResult {
@@ -825,7 +823,7 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
         StorageResult(
             success: true,
             location: "/archive/\(tier.rawValue)/\(backupId)",
-            size: 1024 * 1024,  // 1MB
+            size: 1024 * 1024, // 1MB
             checksum: "archive_checksum",
             replicationFactor: 3
         )
@@ -833,10 +831,10 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
 
     private func calculateRetentionPeriod(for tier: ArchiveTier) -> TimeInterval {
         switch tier {
-        case .hot: return 30 * 24 * 3600  // 30 days
-        case .warm: return 365 * 24 * 3600  // 1 year
-        case .cold: return 5 * 365 * 24 * 3600  // 5 years
-        case .glacial: return 25 * 365 * 24 * 3600  // 25 years
+        case .hot: return 30 * 24 * 3600 // 30 days
+        case .warm: return 365 * 24 * 3600 // 1 year
+        case .cold: return 5 * 365 * 24 * 3600 // 5 years
+        case .glacial: return 25 * 365 * 24 * 3600 // 25 years
         }
     }
 
@@ -862,10 +860,10 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
     private func publishBackupStatus() {
         let status = BackupStatus(
             activeBackups: activeBackups.count,
-            completedBackups: 0,  // Would track from database
-            failedBackups: 0,  // Would track from database
-            totalStorageUsed: 0,  // Would calculate from database
-            averageBackupTime: 300,  // Would calculate from database
+            completedBackups: 0, // Would track from database
+            failedBackups: 0, // Would track from database
+            totalStorageUsed: 0, // Would calculate from database
+            averageBackupTime: 300, // Would calculate from database
             systemHealth: 0.98,
             replicationHealth: 0.95
         )
@@ -934,8 +932,7 @@ final class QuantumIntegrityVerifier: BackupIntegrityProtocol {
         )
     }
 
-    func generateChecksums(for data: MultiverseBackup.BackupData) async throws -> IntegrityChecksums
-    {
+    func generateChecksums(for data: MultiverseBackup.BackupData) async throws -> IntegrityChecksums {
         let primaryHash = "\(data.universeState.id.hashValue)".hashValue.description
         let secondaryHashes = [primaryHash, "secondary_hash"]
         let quantumFingerprint = "quantum_fingerprint"
@@ -973,7 +970,7 @@ final class MultiverseReplicationManager: MultiverseReplicationProtocol {
         ReplicationResult(
             success: true,
             backupId: backup.id,
-            targetUniverses: targetUniverses.map { $0.id },
+            targetUniverses: targetUniverses.map(\.id),
             replicasCreated: targetUniverses.count,
             duration: 60.0,
             issues: []

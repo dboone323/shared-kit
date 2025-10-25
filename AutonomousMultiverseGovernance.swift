@@ -931,7 +931,7 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
                             probability: 1.0,
                             impact: 0.8,
                             mitigation: "Manual intervention required"
-                        )
+                        ),
                     ],
                     mitigationStrategies: ["Escalate to human oversight"]
                 )
@@ -962,10 +962,10 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
         for violation in compliance.violations {
             let handling = try await policyEnforcer.handlePolicyViolation(violation)
             enforcementActions.append(
-                contentsOf: handling.actions.map { action in
+                contentsOf: handling.actions.map { _ in
                     PolicyEnforcementResult.EnforcementAction(
                         actionId: UUID(),
-                        type: .warn,  // Simplified mapping
+                        type: .warn, // Simplified mapping
                         target: violation.violator,
                         result: .success,
                         timestamp: Date()
@@ -980,7 +980,7 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
             complianceRate: compliance.complianceRate,
             violationsDetected: compliance.violations.count,
             timestamp: Date(),
-            duration: 0  // Would calculate actual duration
+            duration: 0 // Would calculate actual duration
         )
 
         try await database.storePolicyEnforcementResult(result)
@@ -994,7 +994,7 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
         // Generate ethical guidelines
         let context = DecisionContext(
             situation: action.description,
-            stakeholders: [],  // Would populate from action
+            stakeholders: [], // Would populate from action
             constraints: [],
             precedents: [],
             ethicalConsiderations: action.ethicalConsiderations
@@ -1005,7 +1005,7 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
         // Determine approval status
         let approvalStatus: EthicalReviewResult.ApprovalStatus =
             assessment.overallScore >= 0.8
-            ? .approved : assessment.overallScore >= 0.6 ? .conditional : .requiresReview
+                ? .approved : assessment.overallScore >= 0.6 ? .conditional : .requiresReview
 
         let result = EthicalReviewResult(
             actionId: action.id,
@@ -1087,7 +1087,7 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
                 type: .ecosystem,
                 location: "multiverse",
                 capabilities: ["monitoring", "enforcement", "reporting"]
-            )
+            ),
         ]
     }
 
@@ -1103,8 +1103,8 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
     private func publishGovernanceStatus() {
         let status = GovernanceStatus(
             activeDecisions: activeOperations.values.filter { $0.type == .decision }.count,
-            policiesEnforced: 0,  // Would track from database
-            ethicalReviews: 0,  // Would track from database
+            policiesEnforced: 0, // Would track from database
+            ethicalReviews: 0, // Would track from database
             complianceRate: 0.95,
             systemHealth: 0.98,
             decisionAccuracy: 0.92
@@ -1197,7 +1197,7 @@ final class IntelligentDecisionMaker: GovernanceDecisionProtocol {
                         score: option.feasibility,
                         weight: 0.25,
                         justification: "Based on technical assessment"
-                    )
+                    ),
                 ],
                 overallScore: option.feasibility * 0.8
                     + (option.impact.severity == Severity.low ? 0.9 : 0.7),
@@ -1230,10 +1230,10 @@ final class IntelligentDecisionMaker: GovernanceDecisionProtocol {
 
         return GovernanceDecision(
             id: UUID(),
-            issueId: UUID(),  // Would be from original issue
+            issueId: UUID(), // Would be from original issue
             decision: .approve,
             rationale:
-                "Selected based on comprehensive evaluation of feasibility, impact, risk, and ethics",
+            "Selected based on comprehensive evaluation of feasibility, impact, risk, and ethics",
             confidence: bestOption.confidence,
             timestamp: Date(),
             implementer: "Intelligent Decision Maker",
@@ -1249,7 +1249,7 @@ final class IntelligentDecisionMaker: GovernanceDecisionProtocol {
                         reversibility: true,
                         cascadingEffects: ["Enhanced monitoring", "Better resource allocation"]
                     )
-                )
+                ),
             ],
             riskAssessment: GovernanceDecision.RiskAssessment(
                 overallRisk: 0.2,
@@ -1259,7 +1259,7 @@ final class IntelligentDecisionMaker: GovernanceDecisionProtocol {
                         probability: 0.3,
                         impact: 0.4,
                         mitigation: "Phased implementation approach"
-                    )
+                    ),
                 ],
                 mitigationStrategies: ["Regular monitoring", "Contingency planning"]
             )
@@ -1326,8 +1326,7 @@ final class AdaptivePolicyEnforcer: PolicyEnforcementProtocol {
         )
     }
 
-    func handlePolicyViolation(_ violation: PolicyViolation) async throws -> ViolationHandlingResult
-    {
+    func handlePolicyViolation(_ violation: PolicyViolation) async throws -> ViolationHandlingResult {
         ViolationHandlingResult(
             violationId: violation.id,
             actions: [
@@ -1335,15 +1334,14 @@ final class AdaptivePolicyEnforcer: PolicyEnforcementProtocol {
                     action: "Warning issued",
                     result: "Acknowledged",
                     timestamp: Date()
-                )
+                ),
             ],
             resolution: .resolved,
             timestamp: Date()
         )
     }
 
-    func updateGovernancePolicies(for changes: [EcosystemChange]) async throws -> PolicyUpdateResult
-    {
+    func updateGovernancePolicies(for changes: [EcosystemChange]) async throws -> PolicyUpdateResult {
         PolicyUpdateResult(
             updatedPolicies: [],
             changes: [],

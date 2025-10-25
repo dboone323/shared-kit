@@ -15,22 +15,22 @@ import os.log
 
 /// Represents different types of test cases
 public enum TestCaseType: String, Codable {
-    case unit = "unit"
-    case integration = "integration"
-    case ui = "ui"
-    case performance = "performance"
-    case security = "security"
-    case mutation = "mutation"
-    case property = "property"
+    case unit
+    case integration
+    case ui
+    case performance
+    case security
+    case mutation
+    case property
 }
 
 /// Test execution result
 public enum TestResult: String, Codable {
-    case passed = "passed"
-    case failed = "failed"
-    case skipped = "skipped"
-    case error = "error"
-    case timeout = "timeout"
+    case passed
+    case failed
+    case skipped
+    case error
+    case timeout
 }
 
 /// Represents a test case
@@ -38,7 +38,7 @@ public struct TestCase: Codable, Identifiable {
     public let id: UUID
     public let name: String
     public let type: TestCaseType
-    public let target: String  // Class, function, or component being tested
+    public let target: String // Class, function, or component being tested
     public var priority: TestPriority
     public let estimatedDuration: TimeInterval
     public let dependencies: [String]
@@ -98,10 +98,10 @@ public struct TestExecution: Codable {
 
 /// Test priority levels
 public enum TestPriority: String, Codable {
-    case critical = "critical"
-    case high = "high"
-    case medium = "medium"
-    case low = "low"
+    case critical
+    case high
+    case medium
+    case low
 }
 
 /// Test suite configuration
@@ -135,10 +135,10 @@ public struct TestSuite: Codable {
 
 /// Test execution strategy
 public enum ExecutionStrategy: String, Codable {
-    case sequential = "sequential"
-    case parallel = "parallel"
-    case prioritized = "prioritized"
-    case adaptive = "adaptive"
+    case sequential
+    case parallel
+    case prioritized
+    case adaptive
 }
 
 /// Coverage analysis result
@@ -184,10 +184,10 @@ public final class AutonomousTestingFramework: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     // Configuration
-    private let monitoringInterval: TimeInterval = 3600.0  // 1 hour
-    private let evolutionInterval: TimeInterval = 86400.0  // 24 hours
-    private let coverageTarget: Double = 0.85  // 85% target coverage
-    private let maxTestDuration: TimeInterval = 300.0  // 5 minutes per test
+    private let monitoringInterval: TimeInterval = 3600.0 // 1 hour
+    private let evolutionInterval: TimeInterval = 86400.0 // 24 hours
+    private let coverageTarget: Double = 0.85 // 85% target coverage
+    private let maxTestDuration: TimeInterval = 300.0 // 5 minutes per test
 
     // State
     private var testCases = [UUID: TestCase]()
@@ -330,12 +330,12 @@ public final class AutonomousTestingFramework: ObservableObject {
 
     /// Get current test coverage analysis
     public func getCoverageAnalysis() -> [CoverageAnalysis] {
-        return coverageAnalysis
+        coverageAnalysis
     }
 
     /// Get test execution history
     public func getTestHistory() -> [TestExecution] {
-        return executionHistory
+        executionHistory
     }
 
     // MARK: - Private Methods
@@ -431,7 +431,7 @@ public final class AutonomousTestingFramework: ObservableObject {
 
         // Simulate detecting changes in key components
         let components = ["Models", "Views", "Controllers", "Services"]
-        return components.filter { _ in Bool.random() }  // Randomly detect changes for demo
+        return components.filter { _ in Bool.random() } // Randomly detect changes for demo
     }
 
     private func generateTestsForComponent(_ component: String) async -> [TestCase] {
@@ -537,7 +537,7 @@ public final class AutonomousTestingFramework: ObservableObject {
                 }
 
                 for await result in group {
-                    if let result = result {
+                    if let result {
                         results.append(result)
                     }
                 }
@@ -575,7 +575,7 @@ public final class AutonomousTestingFramework: ObservableObject {
         let (result, output) = await simulateTestExecution(testCase)
 
         let duration = Date().timeIntervalSince(startTime)
-        let coverage = Double.random(in: 0.1...1.0)  // Simulated coverage
+        let coverage = Double.random(in: 0.1 ... 1.0) // Simulated coverage
 
         let execution = TestExecution(
             testCaseId: testId,
@@ -592,7 +592,7 @@ public final class AutonomousTestingFramework: ObservableObject {
         let successRate = result == .passed ? 1.0 : 0.0
         testCase.successRate =
             (testCase.successRate * Double(testCase.executionCount - 1) + successRate)
-            / Double(testCase.executionCount)
+                / Double(testCase.executionCount)
         testCase.coverage = coverage
 
         testCases[testId] = testCase
@@ -605,10 +605,10 @@ public final class AutonomousTestingFramework: ObservableObject {
         // Simulate test execution with realistic outcomes
         try? await Task.sleep(nanoseconds: UInt64(testCase.estimatedDuration * 1_000_000_000))
 
-        let random = Double.random(in: 0...1)
+        let random = Double.random(in: 0 ... 1)
 
         // Base success rate depends on test type and priority
-        var successRate = 0.85  // 85% base success rate
+        var successRate = 0.85 // 85% base success rate
 
         switch testCase.type {
         case .unit:
@@ -622,7 +622,7 @@ public final class AutonomousTestingFramework: ObservableObject {
         case .security:
             successRate = 0.85
         case .mutation:
-            successRate = 0.6  // Mutation tests are more likely to fail initially
+            successRate = 0.6 // Mutation tests are more likely to fail initially
         case .property:
             successRate = 0.7
         }
@@ -667,7 +667,7 @@ public final class AutonomousTestingFramework: ObservableObject {
         }
 
         // Execute remaining tests in parallel, but limit concurrency
-        let semaphore = AsyncSemaphore(value: 3)  // Max 3 concurrent tests
+        let semaphore = AsyncSemaphore(value: 3) // Max 3 concurrent tests
 
         await withTaskGroup(of: TestExecution?.self) { group in
             for testId in remainingTests {
@@ -680,7 +680,7 @@ public final class AutonomousTestingFramework: ObservableObject {
             }
 
             for await result in group {
-                if let result = result {
+                if let result {
                     results.append(result)
                 }
             }
@@ -699,7 +699,7 @@ public final class AutonomousTestingFramework: ObservableObject {
             let successRate = execution.result == .passed ? 1.0 : 0.0
             testCase.successRate =
                 (testCase.successRate * Double(testCase.executionCount - 1) + successRate)
-                / Double(testCase.executionCount)
+                    / Double(testCase.executionCount)
             testCase.coverage = execution.coverage
 
             testCases[execution.testCaseId] = testCase
@@ -720,19 +720,19 @@ public final class AutonomousTestingFramework: ObservableObject {
         await MainActor.run {
             coverageAnalysis = analyses
             overallCoverage =
-                analyses.map { $0.coveragePercentage }.reduce(0, +) / Double(analyses.count)
+                analyses.map(\.coveragePercentage).reduce(0, +) / Double(analyses.count)
         }
     }
 
     private func analyzeComponentCoverage(_ component: String) async -> CoverageAnalysis {
         // Simulate coverage analysis
-        let totalLines = Int.random(in: 100...1000)
-        let coveredLines = Int(Double(totalLines) * Double.random(in: 0.6...0.95))
+        let totalLines = Int.random(in: 100 ... 1000)
+        let coveredLines = Int(Double(totalLines) * Double.random(in: 0.6 ... 0.95))
         let coveragePercentage = Double(coveredLines) / Double(totalLines)
 
         // Identify uncovered lines (simplified)
-        let uncoveredLines = (1...totalLines).filter { _ in
-            Double.random(in: 0...1) > coveragePercentage
+        let uncoveredLines = (1 ... totalLines).filter { _ in
+            Double.random(in: 0 ... 1) > coveragePercentage
         }
 
         // Identify risk areas
@@ -748,7 +748,7 @@ public final class AutonomousTestingFramework: ObservableObject {
             component: component,
             linesCovered: coveredLines,
             totalLines: totalLines,
-            uncoveredLines: Array(uncoveredLines.prefix(10)),  // Limit to first 10
+            uncoveredLines: Array(uncoveredLines.prefix(10)), // Limit to first 10
             riskAreas: riskAreas
         )
     }
@@ -766,7 +766,7 @@ public final class AutonomousTestingFramework: ObservableObject {
 
         var metrics = [String: Double]()
         metrics["averageDuration"] =
-            executions.map { $0.duration }.reduce(0, +) / Double(executions.count)
+            executions.map(\.duration).reduce(0, +) / Double(executions.count)
         metrics["successRate"] =
             Double(executions.filter { $0.result == .passed }.count) / Double(executions.count)
         metrics["failureRate"] =
@@ -783,18 +783,18 @@ public final class AutonomousTestingFramework: ObservableObject {
         // Add tests for low coverage areas
         if coverage < coverageTarget {
             let newTests = await generateCoverageTests()
-            optimizedTests.append(contentsOf: newTests.map { $0.id })
+            optimizedTests.append(contentsOf: newTests.map(\.id))
         }
 
         // Optimize execution strategy based on performance
         var strategy = ExecutionStrategy.parallel
 
         if let avgDuration = performance["averageDuration"], avgDuration > 10.0 {
-            strategy = .prioritized  // Prioritize fast tests
+            strategy = .prioritized // Prioritize fast tests
         }
 
         if let failureRate = performance["failureRate"], failureRate > 0.2 {
-            strategy = .sequential  // Run failing tests sequentially for better debugging
+            strategy = .sequential // Run failing tests sequentially for better debugging
         }
 
         return (optimizedTests, strategy)
@@ -802,14 +802,14 @@ public final class AutonomousTestingFramework: ObservableObject {
 
     private func generateCoverageTests() async -> [TestCase] {
         // Generate tests for uncovered code paths
-        return [
+        [
             TestCase(
                 name: "testUncoveredFunctionality",
                 type: .unit,
                 target: "CoverageGap",
                 priority: .high,
                 tags: ["coverage", "generated"]
-            )
+            ),
         ]
     }
 
@@ -829,7 +829,7 @@ public final class AutonomousTestingFramework: ObservableObject {
     private func calculateTestEffectiveness(_ executions: [TestExecution]) -> Double {
         let successRate =
             Double(executions.filter { $0.result == .passed }.count) / Double(executions.count)
-        let avgCoverage = executions.map { $0.coverage }.reduce(0, +) / Double(executions.count)
+        let avgCoverage = executions.map(\.coverage).reduce(0, +) / Double(executions.count)
 
         // Effectiveness is a combination of reliability and coverage
         return (successRate * 0.7) + (avgCoverage * 0.3)
@@ -895,7 +895,7 @@ public final class AutonomousTestingFramework: ObservableObject {
                 case .high:
                     testCase.priority = .critical
                 case .critical:
-                    break  // Already critical
+                    break // Already critical
                 }
                 testCases[failure.testCaseId] = testCase
             }
@@ -947,26 +947,26 @@ extension TestPriority {
     }
 }
 
-extension AutonomousTestingFramework {
+public extension AutonomousTestingFramework {
     /// Get test cases for a specific component
-    public func getTestCases(for component: String) -> [TestCase] {
-        return testCases.values.filter { $0.target == component }
+    func getTestCases(for component: String) -> [TestCase] {
+        testCases.values.filter { $0.target == component }
     }
 
     /// Get test suites
-    public func getTestSuites() -> [TestSuite] {
-        return Array(testSuites.values)
+    func getTestSuites() -> [TestSuite] {
+        Array(testSuites.values)
     }
 
     /// Create a new test suite
-    public func createTestSuite(name: String, targetComponents: [String]) -> UUID {
+    func createTestSuite(name: String, targetComponents: [String]) -> UUID {
         let suite = TestSuite(name: name, targetComponents: targetComponents)
         testSuites[suite.id] = suite
         return suite.id
     }
 
     /// Export test results for analysis
-    public func exportTestResults() -> Data? {
+    func exportTestResults() -> Data? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         return try? encoder.encode(executionHistory)
@@ -982,7 +982,7 @@ public func runAutonomousTests() async {
 
 /// Global function to get current test coverage
 public func getCurrentTestCoverage() async -> Double {
-    return await AutonomousTestingFramework.shared.overallCoverage
+    await AutonomousTestingFramework.shared.overallCoverage
 }
 
 /// Global function to execute a test suite

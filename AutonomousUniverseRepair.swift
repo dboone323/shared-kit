@@ -339,7 +339,7 @@ enum RepairAlgorithm {
     }
 
     var estimatedDuration: TimeInterval {
-        Double(complexity) * 3600  // Hours in seconds
+        Double(complexity) * 3600 // Hours in seconds
     }
 }
 
@@ -560,7 +560,7 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
                 remainingIssues: validation.issues.map { issue in
                     DiagnosticReport.IdentifiedIssue(
                         id: UUID(),
-                        type: .instability,  // Simplified mapping
+                        type: .instability, // Simplified mapping
                         severity: .medium,
                         location: DiagnosticReport.IdentifiedIssue.IssueLocation(
                             dimension: 0,
@@ -593,7 +593,7 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
                 duration: Date().timeIntervalSince(operation.startTime),
                 improvements: [],
                 remainingIssues: [],
-                nextMaintenanceDate: Optional<Date>.none
+                nextMaintenanceDate: Date?.none
             )
 
             try await database.storeRepairResult(failedResult)
@@ -614,9 +614,9 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
             overallHealth: health.overallScore > 0.8
                 ? .excellent
                 : health.overallScore > 0.6
-                    ? .good
-                    : health.overallScore > 0.4
-                        ? .fair : health.overallScore > 0.2 ? .poor : .critical,
+                ? .good
+                : health.overallScore > 0.4
+                ? .fair : health.overallScore > 0.2 ? .poor : .critical,
             issues: issues.map { issue in
                 DiagnosticReport.IdentifiedIssue(
                     id: UUID(),
@@ -637,7 +637,7 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
                     )
                 )
             },
-            recommendations: health.recommendations.map { recommendation in
+            recommendations: health.recommendations.map { _ in
                 DiagnosticReport.RepairRecommendation(
                     priority: 1,
                     algorithm: .quantumStabilization,
@@ -654,7 +654,7 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
             riskAssessment: stability.stabilityIndex < 0.3
                 ? .critical
                 : stability.stabilityIndex < 0.5
-                    ? .high : stability.stabilityIndex < 0.7 ? .medium : .low
+                ? .high : stability.stabilityIndex < 0.7 ? .medium : .low
         )
     }
 
@@ -673,13 +673,13 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
 
             return RestorationResult(
                 success: result.success && validation.isValid,
-                restoredUniverse: universe,  // In real implementation, this would be the restored universe
+                restoredUniverse: universe, // In real implementation, this would be the restored universe
                 validationResults: [validation],
                 performanceMetrics: PerformanceMetrics(
-                    executionTime: 0,  // Would be calculated
+                    executionTime: 0, // Would be calculated
                     resourceEfficiency: 0.9,
                     successRate: result.success ? 1.0 : 0.0,
-                    stabilityImprovement: 0.0  // Would be calculated
+                    stabilityImprovement: 0.0 // Would be calculated
                 )
             )
 
@@ -725,12 +725,12 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
                 before: 0.5,
                 after: 0.8,
                 improvement: 0.3
-            )
+            ),
         ]
     }
 
     private func calculateNextMaintenance(for universe: QuantumUniverse) -> Date? {
-        Date().addingTimeInterval(7 * 24 * 3600)  // 7 days from now
+        Date().addingTimeInterval(7 * 24 * 3600) // 7 days from now
     }
 
     private func setupMonitoring() {
@@ -746,9 +746,9 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
     private func publishRepairStatus() {
         let status = RepairStatus(
             activeRepairs: activeRepairs.count,
-            completedRepairs: 0,  // Would track from database
-            failedRepairs: 0,  // Would track from database
-            averageRepairTime: 3600,  // Would calculate from database
+            completedRepairs: 0, // Would track from database
+            failedRepairs: 0, // Would track from database
+            averageRepairTime: 3600, // Would calculate from database
             systemHealth: 0.95
         )
 
@@ -836,7 +836,7 @@ final class BasicUniverseRestorationSystem: UniverseRestorationProtocol {
             metadata: UniverseBackup.BackupMetadata(
                 compressionRatio: 0.8,
                 encryptionMethod: "QuantumEncryption",
-                backupSize: 1024 * 1024,  // 1MB
+                backupSize: 1024 * 1024, // 1MB
                 validationChecksum: "checksum123"
             ),
             integrityHash: "hash123"
@@ -847,10 +847,10 @@ final class BasicUniverseRestorationSystem: UniverseRestorationProtocol {
         // Simplified restoration logic
         RestorationResult(
             success: true,
-            restoredUniverse: nil,  // Would create restored universe
+            restoredUniverse: nil, // Would create restored universe
             validationResults: [],
             performanceMetrics: PerformanceMetrics(
-                executionTime: 300,  // 5 minutes
+                executionTime: 300, // 5 minutes
                 resourceEfficiency: 0.9,
                 successRate: 0.95,
                 stabilityImprovement: 0.2
@@ -899,15 +899,15 @@ final class BasicRepairAlgorithmManager: RepairAlgorithmProtocol {
         async throws -> AlgorithmResult
     {
         // Simulate algorithm execution
-        let executionTime = algorithm.estimatedDuration * 0.8  // 80% of estimated time
+        let executionTime = algorithm.estimatedDuration * 0.8 // 80% of estimated time
 
         return AlgorithmResult(
             success: true,
             executionTime: executionTime,
             resourceUsage: ResourceUsage(
                 cpuTime: executionTime,
-                memoryPeak: 1024 * 1024 * 100,  // 100MB
-                networkTraffic: 1024 * 1024,  // 1MB
+                memoryPeak: 1024 * 1024 * 100, // 100MB
+                networkTraffic: 1024 * 1024, // 1MB
                 quantumOperations: 1_000_000
             ),
             effectiveness: 0.85,
@@ -919,7 +919,7 @@ final class BasicRepairAlgorithmManager: RepairAlgorithmProtocol {
         async throws -> RepairAlgorithm
     {
         // Return optimized version of algorithm
-        algorithm  // In real implementation, would modify parameters
+        algorithm // In real implementation, would modify parameters
     }
 
     func validateAlgorithm(_ algorithm: RepairAlgorithm, on testUniverse: QuantumUniverse)

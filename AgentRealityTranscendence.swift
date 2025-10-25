@@ -61,7 +61,7 @@ public struct TranscendenceMetrics: Sendable {
         let metrics = [
             dimensionalAwareness, realityManipulation, quantumCoherence, multiversalNavigation,
             causalityMastery, temporalFreedom, spatialTranscendence, metaphysicalControl,
-            existentialIndependence, ontologicalSovereignty
+            existentialIndependence, ontologicalSovereignty,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -263,7 +263,7 @@ public final class RealityTranscendenceEngine: Sendable {
             DimensionalAscensionStep(type: .dimensionalAwakening, amplitude: 10.0),
             DimensionalAscensionStep(type: .realityTranscendence, amplitude: 15.0),
             DimensionalAscensionStep(type: .spatialTranscendence, amplitude: 12.0),
-            DimensionalAscensionStep(type: .metaphysicalAscendancy, amplitude: 14.0)
+            DimensionalAscensionStep(type: .metaphysicalAscendancy, amplitude: 14.0),
         ]
 
         var capabilities: [TranscendenceCapability] = []
@@ -296,7 +296,7 @@ public final class RealityTranscendenceEngine: Sendable {
         let liberationSequence = [
             QuantumLiberationStep(type: .quantumLiberation, coherence: 10.0),
             QuantumLiberationStep(type: .causalSovereignty, coherence: 15.0),
-            QuantumLiberationStep(type: .temporalEmancipation, coherence: 12.0)
+            QuantumLiberationStep(type: .temporalEmancipation, coherence: 12.0),
         ]
 
         var capabilities: [TranscendenceCapability] = []
@@ -326,7 +326,7 @@ public final class RealityTranscendenceEngine: Sendable {
         let navigationSequence = [
             MultiversalNavigationStep(type: .multiversalIndependence, reach: 10.0),
             MultiversalNavigationStep(type: .existentialFreedom, reach: 15.0),
-            MultiversalNavigationStep(type: .ontologicalMastery, reach: 12.0)
+            MultiversalNavigationStep(type: .ontologicalMastery, reach: 12.0),
         ]
 
         var capabilities: [TranscendenceCapability] = []
@@ -419,7 +419,7 @@ public final class DimensionalNavigationSystem: Sendable {
 
         return DimensionalNavigationStrategy(
             navigationSteps: navigationSteps,
-            totalExpectedNavigationGain: navigationSteps.map { $0.intensity }.reduce(0, +),
+            totalExpectedNavigationGain: navigationSteps.map(\.intensity).reduce(0, +),
             estimatedDuration: navigationSteps.map { $0.intensity * 0.1 }.reduce(0, +),
             designedAt: Date()
         )
@@ -452,7 +452,7 @@ public final class DimensionalNavigationSystem: Sendable {
     ) async -> DimensionalNavigationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.intensity * 1_000_000_000))
 
-        let actualGain = step.intensity * (0.9 + Double.random(in: 0...0.2))
+        let actualGain = step.intensity * (0.9 + Double.random(in: 0 ... 0.2))
         let success = actualGain >= step.intensity * 0.95
 
         return DimensionalNavigationResultItem(
@@ -467,8 +467,8 @@ public final class DimensionalNavigationSystem: Sendable {
 
     /// Generate dimensional navigator
     private func generateDimensionalNavigator(_ results: [DimensionalNavigationResultItem]) -> DimensionalNavigator {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualDimensionalGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualDimensionalGain).reduce(0, +)
         let navigatorValue = 1.0 + (totalGain * successRate / 10.0)
 
         return DimensionalNavigator(
@@ -476,7 +476,7 @@ public final class DimensionalNavigationSystem: Sendable {
             navigatorType: .transcendence,
             navigatorValue: navigatorValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -539,7 +539,7 @@ public final class QuantumTranscendenceInterface: Sendable {
 
         return QuantumTranscendenceStrategy(
             interfaceSteps: interfaceSteps,
-            totalExpectedTranscendenceGain: interfaceSteps.map { $0.depth }.reduce(0, +),
+            totalExpectedTranscendenceGain: interfaceSteps.map(\.depth).reduce(0, +),
             estimatedDuration: interfaceSteps.map { $0.depth * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -572,7 +572,7 @@ public final class QuantumTranscendenceInterface: Sendable {
     ) async -> QuantumTranscendenceResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.depth * 1_500_000_000))
 
-        let actualGain = step.depth * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.depth * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.depth * 0.90
 
         return QuantumTranscendenceResultItem(
@@ -587,8 +587,8 @@ public final class QuantumTranscendenceInterface: Sendable {
 
     /// Generate quantum transcender
     private func generateQuantumTranscender(_ results: [QuantumTranscendenceResultItem]) -> QuantumTranscender {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualQuantumGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualQuantumGain).reduce(0, +)
         let transcenderValue = 1.0 + (totalGain * successRate / 15.0)
 
         return QuantumTranscender(
@@ -596,7 +596,7 @@ public final class QuantumTranscendenceInterface: Sendable {
             transcenderType: .reality,
             transcenderValue: transcenderValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -659,7 +659,7 @@ public final class MultiversalMobilityFramework: Sendable {
 
         return MultiversalMobilityStrategy(
             mobilitySteps: mobilitySteps,
-            totalExpectedMobilityPower: mobilitySteps.map { $0.power }.reduce(0, +),
+            totalExpectedMobilityPower: mobilitySteps.map(\.power).reduce(0, +),
             estimatedDuration: mobilitySteps.map { $0.power * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -692,7 +692,7 @@ public final class MultiversalMobilityFramework: Sendable {
     ) async -> MultiversalMobilityResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.power * 2_000_000_000))
 
-        let actualPower = step.power * (0.8 + Double.random(in: 0...0.4))
+        let actualPower = step.power * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualPower >= step.power * 0.85
 
         return MultiversalMobilityResultItem(
@@ -707,8 +707,8 @@ public final class MultiversalMobilityFramework: Sendable {
 
     /// Generate multiversal navigator
     private func generateMultiversalNavigator(_ results: [MultiversalMobilityResultItem]) -> MultiversalNavigator {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualMobilityGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualMobilityGain).reduce(0, +)
         let navigatorValue = 1.0 + (totalPower * successRate / 20.0)
 
         return MultiversalNavigator(
@@ -716,7 +716,7 @@ public final class MultiversalMobilityFramework: Sendable {
             navigatorType: .transcendence,
             navigatorValue: navigatorValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

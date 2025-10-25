@@ -6,8 +6,8 @@
 //  Purpose: Ollama-powered local AI workflows without Git Actions dependencies
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Ollama Integration Protocols
 
@@ -105,7 +105,8 @@ public struct InferenceOptions: Codable, Sendable {
                 numCtx: Int? = nil,
                 repeatPenalty: Double? = nil,
                 repeatLastN: Int? = nil,
-                seed: Int? = nil) {
+                seed: Int? = nil)
+    {
         self.temperature = temperature
         self.topP = topP
         self.topK = topK
@@ -141,7 +142,8 @@ public struct OllamaResponse: Codable, Sendable {
                 promptEvalCount: Int? = nil,
                 promptEvalDuration: Int64? = nil,
                 evalCount: Int? = nil,
-                evalDuration: Int64? = nil) {
+                evalDuration: Int64? = nil)
+    {
         self.model = model
         self.createdAt = createdAt
         self.response = response
@@ -172,7 +174,8 @@ public struct OllamaWorkflow: Codable, Sendable {
                 description: String? = nil,
                 steps: [WorkflowStep],
                 createdAt: Date = Date(),
-                modifiedAt: Date = Date()) {
+                modifiedAt: Date = Date())
+    {
         self.id = id
         self.name = name
         self.description = description
@@ -200,7 +203,8 @@ public struct WorkflowStep: Codable, Sendable {
                 prompt: String? = nil,
                 options: InferenceOptions? = nil,
                 dependencies: [UUID] = [],
-                outputKey: String? = nil) {
+                outputKey: String? = nil)
+    {
         self.id = id
         self.name = name
         self.type = type
@@ -235,7 +239,8 @@ public struct WorkflowResult: Sendable {
                 success: Bool,
                 outputs: [String: Any] = [:],
                 executionTime: TimeInterval,
-                errors: [WorkflowError] = []) {
+                errors: [WorkflowError] = [])
+    {
         self.workflowId = workflowId
         self.success = success
         self.outputs = outputs
@@ -282,7 +287,8 @@ public final class OllamaHTTPClient {
         let (data, response) = try await session.data(for: urlRequest)
 
         guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
+              (200 ... 299).contains(httpResponse.statusCode)
+        else {
             throw OllamaError.invalidResponse
         }
 
@@ -305,7 +311,8 @@ public final class OllamaHTTPClient {
                     let (bytes, response) = try await session.bytes(for: urlRequest)
 
                     guard let httpResponse = response as? HTTPURLResponse,
-                          (200...299).contains(httpResponse.statusCode) else {
+                          (200 ... 299).contains(httpResponse.statusCode)
+                    else {
                         throw OllamaError.invalidResponse
                     }
 
@@ -402,7 +409,7 @@ private struct OllamaListResponse: Codable {
 }
 
 /// Empty response for operations that don't return data
-private struct EmptyResponse: Codable { }
+private struct EmptyResponse: Codable {}
 
 // MARK: - Ollama Inference Engine Implementation
 
@@ -419,7 +426,7 @@ public final class OllamaInference: OllamaInferenceEngine {
             "model": model,
             "prompt": prompt,
             "stream": false,
-            "options": options?.dictionary ?? [:]
+            "options": options?.dictionary ?? [:],
         ]
 
         let request = OllamaAPIRequest(endpoint: "/api/generate", method: .post, body: requestBody)
@@ -431,7 +438,7 @@ public final class OllamaInference: OllamaInferenceEngine {
             "model": model,
             "prompt": prompt,
             "stream": true,
-            "options": options?.dictionary ?? [:]
+            "options": options?.dictionary ?? [:],
         ]
 
         let request = OllamaAPIRequest(endpoint: "/api/generate", method: .post, body: requestBody)
@@ -441,7 +448,7 @@ public final class OllamaInference: OllamaInferenceEngine {
     public func embedText(_ text: String, model: String) async throws -> [Double] {
         let requestBody: [String: Any] = [
             "model": model,
-            "input": text
+            "input": text,
         ]
 
         let request = OllamaAPIRequest(endpoint: "/api/embed", method: .post, body: requestBody)
@@ -452,7 +459,7 @@ public final class OllamaInference: OllamaInferenceEngine {
     public func createModel(name: String, modelfile: String) async throws {
         let requestBody: [String: Any] = [
             "name": name,
-            "modelfile": modelfile
+            "modelfile": modelfile,
         ]
 
         let request = OllamaAPIRequest(endpoint: "/api/create", method: .post, body: requestBody)
@@ -473,7 +480,8 @@ public final class OllamaWorkflowOrchestrator: WorkflowOrchestrator {
     private let modelManager: OllamaModelManager
 
     public init(inferenceEngine: OllamaInferenceEngine = OllamaInference(),
-                modelManager: OllamaModelManager = OllamaManager()) {
+                modelManager: OllamaModelManager = OllamaManager())
+    {
         self.inferenceEngine = inferenceEngine
         self.modelManager = modelManager
     }
@@ -513,7 +521,7 @@ public final class OllamaWorkflowOrchestrator: WorkflowOrchestrator {
     }
 
     public func createWorkflow(name: String, steps: [WorkflowStep]) -> OllamaWorkflow {
-        return OllamaWorkflow(name: name, steps: steps)
+        OllamaWorkflow(name: name, steps: steps)
     }
 
     public func optimizeWorkflow(_ workflow: OllamaWorkflow) async -> OllamaWorkflow {
@@ -632,17 +640,17 @@ public final class OllamaWorkflowOrchestrator: WorkflowOrchestrator {
 
     private func processData(_ inputs: [String: Any]) -> Any {
         // Implement custom data processing logic
-        return inputs
+        inputs
     }
 
     private func evaluateCondition(_ step: WorkflowStep, with inputs: [String: Any]) -> Bool {
         // Implement conditional evaluation logic
-        return true // Placeholder
+        true // Placeholder
     }
 
     private func executeParallelSteps(_ stepIds: [UUID], with inputs: [String: Any]) async throws -> [Any] {
         // Execute steps in parallel
-        let tasks = stepIds.compactMap { stepId in
+        let tasks = stepIds.compactMap { _ in
             // This would need access to the actual steps - simplified for now
             nil // Placeholder
         }
@@ -651,7 +659,7 @@ public final class OllamaWorkflowOrchestrator: WorkflowOrchestrator {
             for task in tasks {
                 group.addTask {
                     // Execute task
-                    return "parallel_result" // Placeholder
+                    "parallel_result" // Placeholder
                 }
             }
 
@@ -701,7 +709,7 @@ public final class OllamaWorkflowOrchestrator: WorkflowOrchestrator {
     private func optimizeModelUsage(_ steps: [WorkflowStep]) async -> [WorkflowStep] {
         // Optimize model selection and usage
         // This could involve caching models, batching requests, etc.
-        return steps // Placeholder - return as-is for now
+        steps // Placeholder - return as-is for now
     }
 }
 
@@ -710,14 +718,14 @@ public final class OllamaWorkflowOrchestrator: WorkflowOrchestrator {
 extension InferenceOptions {
     var dictionary: [String: Any] {
         var dict: [String: Any] = [:]
-        if let temperature = temperature { dict["temperature"] = temperature }
-        if let topP = topP { dict["top_p"] = topP }
-        if let topK = topK { dict["top_k"] = topK }
-        if let numPredict = numPredict { dict["num_predict"] = numPredict }
-        if let numCtx = numCtx { dict["num_ctx"] = numCtx }
-        if let repeatPenalty = repeatPenalty { dict["repeat_penalty"] = repeatPenalty }
-        if let repeatLastN = repeatLastN { dict["repeat_last_n"] = repeatLastN }
-        if let seed = seed { dict["seed"] = seed }
+        if let temperature { dict["temperature"] = temperature }
+        if let topP { dict["top_p"] = topP }
+        if let topK { dict["top_k"] = topK }
+        if let numPredict { dict["num_predict"] = numPredict }
+        if let numCtx { dict["num_ctx"] = numCtx }
+        if let repeatPenalty { dict["repeat_penalty"] = repeatPenalty }
+        if let repeatLastN { dict["repeat_last_n"] = repeatLastN }
+        if let seed { dict["seed"] = seed }
         return dict
     }
 }

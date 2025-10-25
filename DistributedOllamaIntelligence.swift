@@ -8,8 +8,8 @@
 //  This file implements distributed intelligence systems across multiple Ollama models,
 //  enabling coordinated processing and collective intelligence emergence.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for distributed intelligence coordination
 public protocol DistributedIntelligenceCoordinator: Sendable {
@@ -36,7 +36,8 @@ public struct DistributedIntelligenceInput: Sendable, Codable {
                 intelligenceDomains: [IntelligenceDomain] = IntelligenceDomain.allCases,
                 distributionStrategy: DistributionStrategy = .adaptive,
                 priority: IntelligencePriority = .normal,
-                quantumState: QuantumState? = nil) {
+                quantumState: QuantumState? = nil)
+    {
         self.query = query
         self.context = context
         self.intelligenceDomains = intelligenceDomains
@@ -48,10 +49,10 @@ public struct DistributedIntelligenceInput: Sendable, Codable {
 
 /// Distribution strategies for intelligence processing
 public enum DistributionStrategy: String, Sendable, Codable {
-    case parallel = "parallel"
-    case sequential = "sequential"
-    case hierarchical = "hierarchical"
-    case adaptive = "adaptive"
+    case parallel
+    case sequential
+    case hierarchical
+    case adaptive
     case quantumEntangled = "quantum_entangled"
 }
 
@@ -68,7 +69,8 @@ public struct DistributedIntelligenceOutput: Sendable, Codable {
                 contributingModels: [ModelContribution] = [],
                 collectiveInsights: [CollectiveInsight] = [],
                 distributionEfficiency: Double = 0.0,
-                emergenceLevel: EmergenceLevel = .individual) {
+                emergenceLevel: EmergenceLevel = .individual)
+    {
         self.synthesizedResult = synthesizedResult
         self.confidence = confidence
         self.contributingModels = contributingModels
@@ -88,7 +90,8 @@ public struct ModelContribution: Sendable, Codable {
     public let quantumContribution: Double
 
     public init(modelId: String, domain: IntelligenceDomain, contribution: String,
-                confidence: Double, processingTime: TimeInterval, quantumContribution: Double) {
+                confidence: Double, processingTime: TimeInterval, quantumContribution: Double)
+    {
         self.modelId = modelId
         self.domain = domain
         self.contribution = contribution
@@ -107,7 +110,8 @@ public struct CollectiveInsight: Sendable, Codable {
     public let quantumAmplification: Double
 
     public init(insight: String, emergenceType: EmergenceType, confidence: Double,
-                participatingModels: [String], quantumAmplification: Double) {
+                participatingModels: [String], quantumAmplification: Double)
+    {
         self.insight = insight
         self.emergenceType = emergenceType
         self.confidence = confidence
@@ -118,20 +122,20 @@ public struct CollectiveInsight: Sendable, Codable {
 
 /// Types of emergence in collective intelligence
 public enum EmergenceType: String, Sendable, Codable {
-    case synergistic = "synergistic"
-    case quantum = "quantum"
-    case consciousness = "consciousness"
-    case universal = "universal"
-    case transcendent = "transcendent"
+    case synergistic
+    case quantum
+    case consciousness
+    case universal
+    case transcendent
 }
 
 /// Levels of emergence in distributed systems
 public enum EmergenceLevel: String, Sendable, Codable {
-    case individual = "individual"
-    case collective = "collective"
-    case emergent = "emergent"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case individual
+    case collective
+    case emergent
+    case transcendent
+    case universal
 }
 
 /// Performance metrics for distribution strategies
@@ -145,7 +149,8 @@ public struct DistributionPerformanceMetrics: Sendable, Codable {
 
     public init(totalProcessingTime: TimeInterval, averageConfidence: Double,
                 distributionEfficiency: Double, emergenceQuality: Double,
-                resourceUtilization: Double, quantumCoherence: Double) {
+                resourceUtilization: Double, quantumCoherence: Double)
+    {
         self.totalProcessingTime = totalProcessingTime
         self.averageConfidence = averageConfidence
         self.distributionEfficiency = distributionEfficiency
@@ -166,7 +171,8 @@ public struct DistributionStatus: Sendable, Codable {
 
     public init(activeModels: Int, distributionStrategy: DistributionStrategy,
                 currentLoad: Double, emergenceLevel: EmergenceLevel,
-                quantumEntanglement: Double, lastOptimization: Date) {
+                quantumEntanglement: Double, lastOptimization: Date)
+    {
         self.activeModels = activeModels
         self.distributionStrategy = distributionStrategy
         self.currentLoad = currentLoad
@@ -283,7 +289,7 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
     }
 
     private func selectTopModels(from models: [OllamaSpecializedModel], count: Int) -> [OllamaSpecializedModel] {
-        return models.sorted { $0.performanceMetrics.accuracy > $1.performanceMetrics.accuracy }
+        models.sorted { $0.performanceMetrics.accuracy > $1.performanceMetrics.accuracy }
             .prefix(count)
             .map { $0 }
     }
@@ -313,7 +319,7 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         modelSelections: [IntelligenceDomain: [OllamaSpecializedModel]]
     ) async throws -> [ModelContribution] {
 
-        return await withTaskGroup(of: ModelContribution.self) { group in
+        await withTaskGroup(of: ModelContribution.self) { group in
             for (domain, models) in modelSelections {
                 for model in models {
                     group.addTask {
@@ -505,7 +511,7 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         input: DistributedIntelligenceInput
     ) async throws -> [ModelContribution] {
 
-        return await withTaskGroup(of: ModelContribution.self) { group in
+        await withTaskGroup(of: ModelContribution.self) { group in
             for model in models {
                 group.addTask {
                     let startTime = Date()
@@ -633,7 +639,7 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
     ) async throws -> DistributedIntelligenceOutput {
 
         // Combine all contributions
-        let allContributions = distributionResults.map { $0.contribution }.joined(separator: "\n\n")
+        let allContributions = distributionResults.map(\.contribution).joined(separator: "\n\n")
 
         // Calculate average confidence
         let totalConfidence = distributionResults.reduce(0.0) { $0 + $1.confidence }
@@ -694,7 +700,7 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
                 insight: "Collective intelligence emergence detected across distributed models",
                 emergenceType: .synergistic,
                 confidence: emergence.emergenceConfidence,
-                participatingModels: contributions.map { $0.modelId },
+                participatingModels: contributions.map(\.modelId),
                 quantumAmplification: 1.0
             ))
         }
@@ -709,7 +715,7 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
 
     private func calculateCurrentLoad() async -> Double {
         // Mock load calculation - in real implementation would check actual system load
-        return 0.65
+        0.65
     }
 }
 
@@ -718,7 +724,7 @@ private final class IntelligenceDistributionEngine: Sendable {
     private var currentStrategy: DistributionStrategy = .adaptive
 
     func getCurrentStrategy() async -> DistributionStrategy {
-        return currentStrategy
+        currentStrategy
     }
 
     func updateStrategy(performanceMetrics: DistributionPerformanceMetrics) async {
@@ -748,7 +754,7 @@ private final class EmergenceDetectionEngine: Sendable {
     }
 
     func getCurrentEmergenceLevel() async -> EmergenceLevel {
-        return .emergent
+        .emergent
     }
 }
 
@@ -775,7 +781,7 @@ private final class QuantumDistributionCoordinator: Sendable {
     }
 
     func getEntanglementLevel() async -> Double {
-        return 0.85
+        0.85
     }
 }
 
@@ -786,7 +792,7 @@ private final class DistributionPerformanceOptimizer: Sendable {
     }
 
     func getLastOptimizationTime() async -> Date {
-        return Date()
+        Date()
     }
 }
 

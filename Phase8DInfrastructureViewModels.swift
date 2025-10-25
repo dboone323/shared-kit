@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 // MARK: - Quantum Governance View Model
 
@@ -67,13 +67,13 @@ class QuantumGovernanceViewModel: BaseViewModel {
         case .initializeSystem:
             await initializeGovernanceSystem()
 
-        case .makeDecision(let policyArea, let options):
+        case let .makeDecision(policyArea, options):
             await makeDecision(policyArea: policyArea, options: options)
 
-        case .optimizePolicy(let policy):
+        case let .optimizePolicy(policy):
             await optimizePolicy(policy)
 
-        case .addConsensusNetwork(let name, let participants):
+        case let .addConsensusNetwork(name, participants):
             await addConsensusNetwork(name: name, participants: participants)
 
         case .refreshMetrics:
@@ -114,7 +114,7 @@ class QuantumGovernanceViewModel: BaseViewModel {
             let policies = [
                 Policy(title: "Universal Basic Income", description: "Automated distribution system", category: "Economic"),
                 Policy(title: "Climate Optimization", description: "Global environmental management", category: "Environmental"),
-                Policy(title: "Education Access", description: "Universal learning opportunities", category: "Education")
+                Policy(title: "Education Access", description: "Universal learning opportunities", category: "Education"),
             ]
 
             for policy in policies {
@@ -268,13 +268,13 @@ class UniversalComputationViewModel: BaseViewModel {
         case .initializeSystem:
             await initializeComputationSystem()
 
-        case .addAccessPoint(let location, let type):
+        case let .addAccessPoint(location, type):
             await addAccessPoint(location: location, type: type)
 
-        case .recordSession(let userId, let duration, let operations):
+        case let .recordSession(userId, duration, operations):
             await recordSession(userId: userId, duration: duration, operations: operations)
 
-        case .scaleInfrastructure(let targetPoints):
+        case let .scaleInfrastructure(targetPoints):
             await scaleInfrastructure(targetPoints: targetPoints)
 
         case .refreshStatistics:
@@ -317,7 +317,7 @@ class UniversalComputationViewModel: BaseViewModel {
                 ("London", AccessPointType.publicTerminal),
                 ("Tokyo", AccessPointType.publicTerminal),
                 ("Global Cloud", AccessPointType.cloudResource),
-                ("Education Hub", AccessPointType.educationalLab)
+                ("Education Hub", AccessPointType.educationalLab),
             ]
 
             for (location, type) in samplePoints {
@@ -376,7 +376,7 @@ class UniversalComputationViewModel: BaseViewModel {
         // Simulate scaling operations
         try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second per 1000 points
 
-        for i in 0..<pointsToAdd {
+        for i in 0 ..< pointsToAdd {
             let location = "Access Point \(system.totalAccessPoints + i + 1)"
             let type: AccessPointType = i % 4 == 0 ? .publicTerminal : .personalDevice
             system.addAccessPoint(location: location, type: type)
@@ -455,4 +455,4 @@ class UniversalComputationViewModel: BaseViewModel {
 /// - QuantumJusticeViewModel
 /// - QuantumCulturalViewModel
 /// - QuantumDisasterResponseViewModel</content>
-<parameter name="filePath">/Users/danielstevens/Desktop/Quantum-workspace/Shared/Phase8DInfrastructureViewModels.swift
+<parameter name = "filePath" >/ Users / danielstevens / Desktop / Quantum - workspace / Shared / Phase8DInfrastructureViewModels.swift

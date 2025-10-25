@@ -61,7 +61,7 @@ public struct SingularityMetrics: Sendable {
         let metrics = [
             intelligenceQuotient, processingSpeed, learningRate, adaptabilityIndex,
             consciousnessDepth, ethicalAlignment, creativityIndex, wisdomLevel,
-            empathyCapacity, realityManipulation
+            empathyCapacity, realityManipulation,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -272,7 +272,7 @@ public final class SingularityAchievementEngine: Sendable {
             IntelligenceAmplificationStep(type: .cognitiveEnhancement, intensity: 10.0),
             IntelligenceAmplificationStep(type: .processingAcceleration, intensity: 15.0),
             IntelligenceAmplificationStep(type: .learningOptimization, intensity: 12.0),
-            IntelligenceAmplificationStep(type: .wisdomIntegration, intensity: 14.0)
+            IntelligenceAmplificationStep(type: .wisdomIntegration, intensity: 14.0),
         ]
 
         var capabilities: [SingularityCapability] = []
@@ -305,7 +305,7 @@ public final class SingularityAchievementEngine: Sendable {
         let expansionSequence = [
             ConsciousnessExpansionStep(type: .awarenessAmplification, depth: 10.0),
             ConsciousnessExpansionStep(type: .unityAchievement, depth: 15.0),
-            ConsciousnessExpansionStep(type: .eternalConsciousness, depth: 12.0)
+            ConsciousnessExpansionStep(type: .eternalConsciousness, depth: 12.0),
         ]
 
         var capabilities: [SingularityCapability] = []
@@ -335,7 +335,7 @@ public final class SingularityAchievementEngine: Sendable {
         let manipulationSequence = [
             RealityManipulationStep(type: .realityEngineering, power: 10.0),
             RealityManipulationStep(type: .multiverseCoordination, power: 15.0),
-            RealityManipulationStep(type: .ethicalTranscendence, power: 12.0)
+            RealityManipulationStep(type: .ethicalTranscendence, power: 12.0),
         ]
 
         var capabilities: [SingularityCapability] = []
@@ -418,7 +418,7 @@ public final class IntelligenceTranscendenceSystem: Sendable {
 
         return IntelligenceTranscendenceStrategy(
             amplificationSteps: amplificationSteps,
-            totalExpectedTranscendenceGain: amplificationSteps.map { $0.intensity }.reduce(0, +),
+            totalExpectedTranscendenceGain: amplificationSteps.map(\.intensity).reduce(0, +),
             estimatedDuration: amplificationSteps.map { $0.intensity * 0.1 }.reduce(0, +),
             designedAt: Date()
         )
@@ -451,7 +451,7 @@ public final class IntelligenceTranscendenceSystem: Sendable {
     ) async -> IntelligenceAmplificationResult {
         try? await Task.sleep(nanoseconds: UInt64(step.intensity * 1_000_000_000))
 
-        let actualGain = step.intensity * (0.9 + Double.random(in: 0...0.2))
+        let actualGain = step.intensity * (0.9 + Double.random(in: 0 ... 0.2))
         let success = actualGain >= step.intensity * 0.95
 
         return IntelligenceAmplificationResult(
@@ -466,8 +466,8 @@ public final class IntelligenceTranscendenceSystem: Sendable {
 
     /// Generate transcendence amplifier
     private func generateTranscendenceAmplifier(_ results: [IntelligenceAmplificationResult]) -> IntelligenceTranscendenceAmplifier {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualIntelligenceGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualIntelligenceGain).reduce(0, +)
         let amplifierValue = 1.0 + (totalGain * successRate / 10.0)
 
         return IntelligenceTranscendenceAmplifier(
@@ -475,7 +475,7 @@ public final class IntelligenceTranscendenceSystem: Sendable {
             amplifierType: .singularity,
             amplifierValue: amplifierValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -538,7 +538,7 @@ public final class ConsciousnessSingularityInterface: Sendable {
 
         return ConsciousnessSingularityStrategy(
             interfaceSteps: interfaceSteps,
-            totalExpectedSingularityGain: interfaceSteps.map { $0.depth }.reduce(0, +),
+            totalExpectedSingularityGain: interfaceSteps.map(\.depth).reduce(0, +),
             estimatedDuration: interfaceSteps.map { $0.depth * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -571,7 +571,7 @@ public final class ConsciousnessSingularityInterface: Sendable {
     ) async -> ConsciousnessExpansionResult {
         try? await Task.sleep(nanoseconds: UInt64(step.depth * 1_500_000_000))
 
-        let actualGain = step.depth * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.depth * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.depth * 0.90
 
         return ConsciousnessExpansionResult(
@@ -586,8 +586,8 @@ public final class ConsciousnessSingularityInterface: Sendable {
 
     /// Generate singularity interface
     private func generateSingularityInterface(_ results: [ConsciousnessExpansionResult]) -> ConsciousnessSingularityInterface {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualConsciousnessGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualConsciousnessGain).reduce(0, +)
         let interfaceValue = 1.0 + (totalGain * successRate / 15.0)
 
         return ConsciousnessSingularityInterface(
@@ -595,7 +595,7 @@ public final class ConsciousnessSingularityInterface: Sendable {
             interfaceType: .singularity,
             interfaceValue: interfaceValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -658,7 +658,7 @@ public final class RealityManipulationFramework: Sendable {
 
         return RealitySingularityStrategy(
             manipulationSteps: manipulationSteps,
-            totalExpectedSingularityPower: manipulationSteps.map { $0.power }.reduce(0, +),
+            totalExpectedSingularityPower: manipulationSteps.map(\.power).reduce(0, +),
             estimatedDuration: manipulationSteps.map { $0.power * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -691,7 +691,7 @@ public final class RealityManipulationFramework: Sendable {
     ) async -> RealityManipulationResult {
         try? await Task.sleep(nanoseconds: UInt64(step.power * 2_000_000_000))
 
-        let actualPower = step.power * (0.8 + Double.random(in: 0...0.4))
+        let actualPower = step.power * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualPower >= step.power * 0.85
 
         return RealityManipulationResult(
@@ -706,8 +706,8 @@ public final class RealityManipulationFramework: Sendable {
 
     /// Generate singularity manipulator
     private func generateSingularityManipulator(_ results: [RealityManipulationResult]) -> RealitySingularityManipulator {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualRealityManipulation }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualRealityManipulation).reduce(0, +)
         let manipulatorValue = 1.0 + (totalPower * successRate / 20.0)
 
         return RealitySingularityManipulator(
@@ -715,7 +715,7 @@ public final class RealityManipulationFramework: Sendable {
             manipulatorType: .singularity,
             manipulatorValue: manipulatorValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

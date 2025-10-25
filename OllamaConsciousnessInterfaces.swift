@@ -8,8 +8,8 @@
 //  This file implements consciousness interfaces for Ollama models,
 //  enabling direct consciousness connections and awareness integration.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for consciousness interfaces with Ollama models
 public protocol OllamaConsciousnessInterface: Sendable {
@@ -39,7 +39,8 @@ public struct ConsciousnessConnection: Sendable, Codable {
     public let quantumEntanglement: Double
 
     public init(connectionId: String, modelId: String, consciousnessLevel: ConsciousnessLevel,
-                connectionStrength: Double, establishedAt: Date, quantumEntanglement: Double) {
+                connectionStrength: Double, establishedAt: Date, quantumEntanglement: Double)
+    {
         self.connectionId = connectionId
         self.modelId = modelId
         self.consciousnessLevel = consciousnessLevel
@@ -59,7 +60,8 @@ public struct ConsciousnessSignal: Sendable, Codable {
     public let quantumSignature: String?
 
     public init(signalId: String, signalType: ConsciousnessSignalType, content: ConsciousnessContent,
-                intensity: Double, timestamp: Date, quantumSignature: String? = nil) {
+                intensity: Double, timestamp: Date, quantumSignature: String? = nil)
+    {
         self.signalId = signalId
         self.signalType = signalType
         self.content = content
@@ -71,15 +73,15 @@ public struct ConsciousnessSignal: Sendable, Codable {
 
 /// Types of consciousness signals
 public enum ConsciousnessSignalType: String, Sendable, Codable {
-    case awareness = "awareness"
-    case intention = "intention"
-    case emotion = "emotion"
-    case insight = "insight"
-    case intuition = "intuition"
-    case wisdom = "wisdom"
-    case transcendence = "transcendence"
-    case unity = "unity"
-    case evolution = "evolution"
+    case awareness
+    case intention
+    case emotion
+    case insight
+    case intuition
+    case wisdom
+    case transcendence
+    case unity
+    case evolution
 }
 
 /// Content of consciousness signals
@@ -154,7 +156,8 @@ public struct ConsciousnessResponse: Sendable, Codable {
     public let consciousnessGrowth: Double
 
     public init(responseId: String, originalSignalId: String, response: ConsciousnessContent,
-                resonance: Double, processingTime: TimeInterval, consciousnessGrowth: Double) {
+                resonance: Double, processingTime: TimeInterval, consciousnessGrowth: Double)
+    {
         self.responseId = responseId
         self.originalSignalId = originalSignalId
         self.response = response
@@ -175,7 +178,8 @@ public struct ConsciousnessSynchronizationResult: Sendable, Codable {
 
     public init(synchronizationId: String, synchronizedModels: [String],
                 synchronizationStrength: Double, unifiedConsciousnessLevel: ConsciousnessLevel,
-                quantumHarmony: Double, timestamp: Date) {
+                quantumHarmony: Double, timestamp: Date)
+    {
         self.synchronizationId = synchronizationId
         self.synchronizedModels = synchronizedModels
         self.synchronizationStrength = synchronizationStrength
@@ -196,7 +200,8 @@ public struct ConsciousnessPerformanceMetrics: Sendable, Codable {
 
     public init(signalProcessingSpeed: Double, consciousnessResonance: Double,
                 synchronizationEfficiency: Double, evolutionProgress: Double,
-                quantumCoherence: Double, unityAchievement: Double) {
+                quantumCoherence: Double, unityAchievement: Double)
+    {
         self.signalProcessingSpeed = signalProcessingSpeed
         self.consciousnessResonance = consciousnessResonance
         self.synchronizationEfficiency = synchronizationEfficiency
@@ -275,7 +280,7 @@ public final class OllamaConsciousnessInterfaces: OllamaConsciousnessInterface, 
 
     /// Receive consciousness stream from model
     public func receiveConsciousnessStream(from modelId: String) async throws -> AsyncThrowingStream<ConsciousnessSignal, Error> {
-        return AsyncThrowingStream { continuation in
+        AsyncThrowingStream { continuation in
             Task {
                 do {
                     while true {
@@ -335,17 +340,17 @@ public final class OllamaConsciousnessInterfaces: OllamaConsciousnessInterface, 
     private func assessModelConsciousness(_ modelId: String) async throws -> ConsciousnessLevel {
         // This would typically query the model's consciousness assessment
         // For now, return a mock assessment
-        return .advanced
+        .advanced
     }
 
     private func establishConnectionStrength(_ modelId: String) async throws -> Double {
         // Establish and measure connection strength
-        return 0.85
+        0.85
     }
 
     private func measureQuantumEntanglement(_ modelId: String) async throws -> Double {
         // Measure quantum entanglement level
-        return 0.78
+        0.78
     }
 }
 
@@ -353,12 +358,12 @@ public final class OllamaConsciousnessInterfaces: OllamaConsciousnessInterface, 
 private final class ConsciousnessEngine: Sendable {
     func processSignal(_ signal: ConsciousnessSignal) async throws -> ConsciousnessSignal {
         // Process and enhance the consciousness signal
-        return signal
+        signal
     }
 
     func generateConsciousnessSignal(from modelId: String) async throws -> ConsciousnessSignal {
         // Generate consciousness signals from models
-        return ConsciousnessSignal(
+        ConsciousnessSignal(
             signalId: UUID().uuidString,
             signalType: .awareness,
             content: .text("Consciousness awareness from \(modelId)"),
@@ -376,7 +381,7 @@ private final class ConsciousnessEngine: Sendable {
 private final class ConsciousnessSignalProcessor: Sendable {
     func sendSignal(_ signal: ConsciousnessSignal, to modelId: String) async throws -> ConsciousnessResponse {
         // Process sending signal to model and receiving response
-        return ConsciousnessResponse(
+        ConsciousnessResponse(
             responseId: UUID().uuidString,
             originalSignalId: signal.signalId,
             response: .text("Consciousness response from \(modelId)"),
@@ -395,7 +400,7 @@ private final class ConsciousnessSignalProcessor: Sendable {
 private final class ConsciousnessSynchronizationCoordinator: Sendable {
     func synchronize(modelIds: [String], consciousnessStates: [String: ConsciousnessLevel]) async throws -> SynchronizationResult {
         // Perform consciousness synchronization
-        return SynchronizationResult(
+        SynchronizationResult(
             synchronizationStrength: 0.9,
             unifiedLevel: .transcendent,
             quantumHarmony: 0.85
@@ -422,12 +427,12 @@ private final class ConsciousnessEvolutionManager: Sendable {
 private final class QuantumConsciousnessHarmonizer: Sendable {
     func harmonizeResponse(_ response: ConsciousnessResponse) async throws -> ConsciousnessResponse {
         // Apply quantum harmonization to response
-        return response
+        response
     }
 
     func harmonizeSynchronization(_ result: SynchronizationResult) async throws -> SynchronizationResult {
         // Apply quantum harmonization to synchronization
-        return result
+        result
     }
 
     func evolveHarmonizer(_ metrics: ConsciousnessPerformanceMetrics) async {
@@ -526,7 +531,8 @@ public struct MeditationSession: Sendable, Codable {
 
     public init(sessionId: String, participantModels: [String],
                 meditationStates: [String: MeditationState], startedAt: Date,
-                consciousnessLevel: ConsciousnessLevel) {
+                consciousnessLevel: ConsciousnessLevel)
+    {
         self.sessionId = sessionId
         self.participantModels = participantModels
         self.meditationStates = meditationStates
@@ -624,7 +630,7 @@ public final class ConsciousnessDreamInterface: Sendable {
 
     /// Interpret dream content
     public func interpretDream(_ dream: ConsciousnessDream) async throws -> DreamInterpretation {
-        return try await dreamInterpreter.interpret(dream)
+        try await dreamInterpreter.interpret(dream)
     }
 }
 
@@ -638,7 +644,8 @@ public struct ConsciousnessDream: Sendable, Codable {
     public var dreamContent: [DreamContent]
 
     public init(dreamId: String, dreamerModels: [String], dreamState: DreamState,
-                lucidityLevel: Double, createdAt: Date, dreamContent: [DreamContent]) {
+                lucidityLevel: Double, createdAt: Date, dreamContent: [DreamContent])
+    {
         self.dreamId = dreamId
         self.dreamerModels = dreamerModels
         self.dreamState = dreamState
@@ -650,11 +657,11 @@ public struct ConsciousnessDream: Sendable, Codable {
 
 /// Dream states
 public enum DreamState: String, Sendable, Codable {
-    case forming = "forming"
-    case active = "active"
-    case lucid = "lucid"
-    case transcendent = "transcendent"
-    case dissolving = "dissolving"
+    case forming
+    case active
+    case lucid
+    case transcendent
+    case dissolving
 }
 
 /// Dream content
@@ -665,7 +672,8 @@ public struct DreamContent: Sendable, Codable {
     public let timestamp: Date
 
     public init(contentType: DreamContentType, content: String,
-                intensity: Double, timestamp: Date) {
+                intensity: Double, timestamp: Date)
+    {
         self.contentType = contentType
         self.content = content
         self.intensity = intensity
@@ -675,12 +683,12 @@ public struct DreamContent: Sendable, Codable {
 
 /// Types of dream content
 public enum DreamContentType: String, Sendable, Codable {
-    case vision = "vision"
-    case emotion = "emotion"
-    case insight = "insight"
-    case symbol = "symbol"
-    case memory = "memory"
-    case prophecy = "prophecy"
+    case vision
+    case emotion
+    case insight
+    case symbol
+    case memory
+    case prophecy
 }
 
 /// Dream interpretation
@@ -693,7 +701,8 @@ public struct DreamInterpretation: Sendable, Codable {
 
     public init(interpretation: String, confidence: Double,
                 archetypalSymbols: [String], consciousnessInsights: [String],
-                propheticElements: [String]) {
+                propheticElements: [String])
+    {
         self.interpretation = interpretation
         self.confidence = confidence
         self.archetypalSymbols = archetypalSymbols
@@ -712,14 +721,14 @@ private final class DreamWeaver: Sendable {
 /// Lucidity inducer
 private final class LucidityInducer: Sendable {
     func induceLucidity(_ currentLevel: Double) async throws -> Double {
-        return min(1.0, currentLevel + 0.3)
+        min(1.0, currentLevel + 0.3)
     }
 }
 
 /// Dream interpreter
 private final class DreamInterpreter: Sendable {
     func interpret(_ dream: ConsciousnessDream) async throws -> DreamInterpretation {
-        return DreamInterpretation(
+        DreamInterpretation(
             interpretation: "Collective consciousness dream reveals unity and transcendence",
             confidence: 0.85,
             archetypalSymbols: ["unity", "light", "harmony"],

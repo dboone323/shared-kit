@@ -194,7 +194,7 @@ public struct MCPWorkflowProgress: Sendable {
     public let failedSteps: Int
     public let currentStep: UUID?
     public let estimatedTimeRemaining: TimeInterval?
-    public let progress: Double  // 0.0 to 1.0
+    public let progress: Double // 0.0 to 1.0
 
     public init(
         workflowId: UUID,
@@ -463,7 +463,7 @@ public struct MCPWorkflowOptimizationResult {
 public struct MCPWorkflowImprovement {
     public let type: MCPWorkflowImprovementType
     public let description: String
-    public let impact: Double  // Performance impact (0.0 to 1.0)
+    public let impact: Double // Performance impact (0.0 to 1.0)
 
     public init(type: MCPWorkflowImprovementType, description: String, impact: Double) {
         self.type = type
@@ -650,10 +650,10 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                     totalSteps: workflow.steps.count,
                     completedSteps: result.success
                         ? workflow.steps.count
-                        : result.stepResults.filter { $0.value.success }.count,
+                        : result.stepResults.filter(\.value.success).count,
                     failedSteps: result.stepResults.filter { !$0.value.success }.count
                 ),
-                stepResults: result.stepResults.map { (stepId, toolResult) in
+                stepResults: result.stepResults.map { stepId, toolResult in
                     MCPWorkflowStepResult(
                         stepId: stepId,
                         state: toolResult.success ? .completed : .failed,
@@ -661,7 +661,8 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                         error: toolResult.error != nil
                             ? NSError(
                                 domain: "MCPWorkflow", code: -1,
-                                userInfo: [NSLocalizedDescriptionKey: toolResult.error!]) : nil,
+                                userInfo: [NSLocalizedDescriptionKey: toolResult.error!]
+                            ) : nil,
                         startTime: context.startTime,
                         endTime: Date(),
                         retryCount: 0
@@ -721,7 +722,7 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
         }
 
         // Check for duplicate step IDs
-        let stepIds = workflow.steps.map { $0.id }
+        let stepIds = workflow.steps.map(\.id)
         let uniqueStepIds = Set(stepIds)
         if stepIds.count != uniqueStepIds.count {
             errors.append(
@@ -943,7 +944,7 @@ public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler, @unchecked S
         let scheduledWorkflow = MCPScheduledWorkflow(
             id: scheduleId,
             workflow: workflow,
-            schedule: MCPWorkflowSchedule(frequency: .hourly),  // One-time
+            schedule: MCPWorkflowSchedule(frequency: .hourly), // One-time
             nextExecutionDate: date
         )
 
@@ -952,16 +953,16 @@ public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler, @unchecked S
         }
 
         // Schedule execution
-        let localOrchestrator = orchestrator  // Capture locally to avoid data race
-        let localQueue = queue  // Capture locally to avoid data race
-        let localScheduleId = scheduleId  // Capture locally to avoid data race
-        let localWorkflow = workflow  // Capture locally to avoid data race
+        let localOrchestrator = orchestrator // Capture locally to avoid data race
+        let localQueue = queue // Capture locally to avoid data race
+        let localScheduleId = scheduleId // Capture locally to avoid data race
+        let localWorkflow = workflow // Capture locally to avoid data race
 
         Task { @Sendable in
             try await Task.sleep(nanoseconds: UInt64(date.timeIntervalSinceNow * 1_000_000_000))
-            let scheduledWorkflow = localQueue.sync(execute: { [weak self] in
+            let scheduledWorkflow = localQueue.sync { [weak self] in
                 self?.scheduledWorkflows[localScheduleId]
-            })
+            }
             if scheduledWorkflow != nil {
                 do {
                     _ = try await localOrchestrator.orchestrateWorkflow(localWorkflow)
@@ -995,11 +996,11 @@ public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler, @unchecked S
         }
 
         // Start recurring execution loop
-        let localOrchestrator = orchestrator  // Capture locally to avoid data race
-        let localQueue = queue  // Capture locally to avoid data race
-        let localScheduleId = scheduleId  // Capture locally to avoid data race
-        let localWorkflow = workflow  // Capture locally to avoid data race
-        let localSchedule = schedule  // Capture locally to avoid data race
+        let localOrchestrator = orchestrator // Capture locally to avoid data race
+        let localQueue = queue // Capture locally to avoid data race
+        let localScheduleId = scheduleId // Capture locally to avoid data race
+        let localWorkflow = workflow // Capture locally to avoid data race
+        let localSchedule = schedule // Capture locally to avoid data race
 
         Task { @Sendable in
             while let currentSchedule = localQueue.sync(execute: { [weak self] in
@@ -1030,7 +1031,8 @@ public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler, @unchecked S
                         }
                         let nextExecution =
                             calendar.date(
-                                byAdding: components, to: currentSchedule.nextExecutionDate)
+                                byAdding: components, to: currentSchedule.nextExecutionDate
+                            )
                             ?? currentSchedule.nextExecutionDate.addingTimeInterval(3600)
 
                         let updatedSchedule = MCPScheduledWorkflow(
@@ -1052,7 +1054,7 @@ public final class BasicMCPWorkflowScheduler: MCPWorkflowScheduler, @unchecked S
                     }
                 }
 
-                try await Task.sleep(nanoseconds: 60_000_000_000)  // Check every minute
+                try await Task.sleep(nanoseconds: 60_000_000_000) // Check every minute
             }
         }
 
@@ -1103,7 +1105,8 @@ public final class BasicMCPWorkflowMonitor: MCPWorkflowMonitor, @unchecked Senda
     private var subscriptions: [UUID: MCPWorkflowSubscription] = [:]
     private var executionHistory: [UUID: [MCPWorkflowExecution]] = [:]
     private let monitorQueue = DispatchQueue(
-        label: "com.mcp.workflow.monitor", attributes: .concurrent)
+        label: "com.mcp.workflow.monitor", attributes: .concurrent
+    )
 
     public init() {}
 
@@ -1143,8 +1146,8 @@ public final class BasicMCPWorkflowMonitor: MCPWorkflowMonitor, @unchecked Senda
                 let completedExecutions = relevantExecutions.filter { $0.totalExecutionTime != nil }
                 let averageExecutionTime =
                     completedExecutions.isEmpty
-                    ? 0
-                    : completedExecutions.reduce(0) { $0 + ($1.totalExecutionTime ?? 0) }
+                        ? 0
+                        : completedExecutions.reduce(0) { $0 + ($1.totalExecutionTime ?? 0) }
                         / Double(completedExecutions.count)
 
                 // Calculate most executed workflows
@@ -1239,7 +1242,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                 MCPWorkflowImprovement(
                     type: .parallelization,
                     description:
-                        "Converted \(parallelizableSteps.count) steps to parallel execution",
+                    "Converted \(parallelizableSteps.count) steps to parallel execution",
                     impact: 0.3
                 ))
         }
@@ -1251,7 +1254,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                 MCPWorkflowImprovement(
                     type: .caching,
                     description:
-                        "Consider caching results for \(repeatedTools.count) repeated tool calls",
+                    "Consider caching results for \(repeatedTools.count) repeated tool calls",
                     impact: 0.2
                 ))
         }
@@ -1264,7 +1267,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                 MCPWorkflowImprovement(
                     type: .stepConsolidation,
                     description:
-                        "Consolidated \(workflow.steps.count - consolidatedSteps.count) similar steps",
+                    "Consolidated \(workflow.steps.count - consolidatedSteps.count) similar steps",
                     impact: 0.15
                 ))
         }
@@ -1309,7 +1312,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                 firstHalf.reduce(0) { $0 + ($1.totalExecutionTime ?? 0) } / Double(firstHalf.count)
             let secondHalfAvg =
                 secondHalf.reduce(0) { $0 + ($1.totalExecutionTime ?? 0) }
-                / Double(secondHalf.count)
+                    / Double(secondHalf.count)
 
             let changePercent = ((secondHalfAvg - firstHalfAvg) / firstHalfAvg) * 100
             let trend: MCPWorkflowTrend =
@@ -1322,7 +1325,8 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                     changePercent: changePercent,
                     timeRange: DateInterval(
                         start: sortedExecutions.first!.startTime,
-                        end: sortedExecutions.last!.startTime)
+                        end: sortedExecutions.last!.startTime
+                    )
                 ))
         }
 
@@ -1363,7 +1367,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                 MCPWorkflowSuggestion(
                     type: .addRetryLogic,
                     description:
-                        "Add retry logic to \(stepsWithoutRetry.count) steps without error handling",
+                    "Add retry logic to \(stepsWithoutRetry.count) steps without error handling",
                     priority: .high,
                     estimatedBenefit: 0.15
                 ))
@@ -1407,7 +1411,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
     private func findRepeatedTools(_ workflow: MCPWorkflow) -> [String] {
         let toolCounts = Dictionary(grouping: workflow.steps) { $0.toolId }
             .mapValues { $0.count }
-        return toolCounts.filter { $0.value > 1 }.map { $0.key }
+        return toolCounts.filter { $0.value > 1 }.map(\.key)
     }
 
     private func consolidateSimilarSteps(_ steps: [MCPWorkflowStep]) -> [MCPWorkflowStep] {
@@ -1436,7 +1440,7 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                     retryPolicy: step.retryPolicy,
                     timeout: step.timeout,
                     metadata: [
-                        "consolidated_steps": AnyCodable(similarSteps.map { $0.id.uuidString })
+                        "consolidated_steps": AnyCodable(similarSteps.map(\.id.uuidString)),
                     ]
                 )
                 consolidated.append(consolidatedStep)
@@ -1474,6 +1478,6 @@ extension MCPWorkflowOrchestrator {
         progressHandler: @escaping @Sendable (MCPWorkflowProgress) -> Void
     ) async throws -> MCPWorkflowResult {
         // This would be implemented by concrete orchestrators
-        return try await orchestrateWorkflow(workflow)
+        try await orchestrateWorkflow(workflow)
     }
 }

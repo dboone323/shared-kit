@@ -10,26 +10,26 @@ import Foundation
 // same compilation unit can use @Query without adding explicit `import SwiftData`.
 // If SwiftData is not available, provide a minimal fallback Query property wrapper.
 #if canImport(SwiftData)
-@_exported import SwiftData
+    @_exported import SwiftData
 #else
 
-/// A minimal, source-compatible fallback for the SwiftData @Query property wrapper.
-/// It stores a value in an ordinary stored property and exposes a projectedValue
-/// to remain compatible with simple usages.
-@propertyWrapper
-public struct Query<Value> {
-    private var value: Value
+    /// A minimal, source-compatible fallback for the SwiftData @Query property wrapper.
+    /// It stores a value in an ordinary stored property and exposes a projectedValue
+    /// to remain compatible with simple usages.
+    @propertyWrapper
+    public struct Query<Value> {
+        private var value: Value
 
-    public init(wrappedValue: Value) {
-        self.value = wrappedValue
+        public init(wrappedValue: Value) {
+            self.value = wrappedValue
+        }
+
+        public var wrappedValue: Value {
+            get { self.value }
+            set { self.value = newValue }
+        }
+
+        public var projectedValue: Query<Value> { self }
     }
-
-    public var wrappedValue: Value {
-        get { self.value }
-        set { self.value = newValue }
-    }
-
-    public var projectedValue: Query<Value> { self }
-}
 
 #endif

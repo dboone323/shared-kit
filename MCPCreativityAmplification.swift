@@ -8,8 +8,8 @@
 //  This file implements MCP creativity amplification systems,
 //  enabling enhanced creative intelligence and innovation.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for MCP creativity amplification
 public protocol MCPCreativityAmplification: Sendable {
@@ -39,7 +39,8 @@ public struct CreativityAmplification: Sendable, Codable {
     public init(amplificationId: String, creativeDomain: CreativeDomain,
                 amplificationType: AmplificationType, parameters: [String: AnyCodable] = [:],
                 inspirationSources: [InspirationSource] = [], creativityLevel: CreativityLevel = .transcendent,
-                innovationScope: InnovationScope = .universal) {
+                innovationScope: InnovationScope = .universal)
+    {
         self.amplificationId = amplificationId
         self.creativeDomain = creativeDomain
         self.amplificationType = amplificationType
@@ -52,23 +53,23 @@ public struct CreativityAmplification: Sendable, Codable {
 
 /// Creative domains
 public enum CreativeDomain: String, Sendable, Codable {
-    case artistic = "artistic"
-    case scientific = "scientific"
-    case technological = "technological"
-    case philosophical = "philosophical"
-    case mathematical = "mathematical"
-    case universal = "universal"
-    case transcendent = "transcendent"
+    case artistic
+    case scientific
+    case technological
+    case philosophical
+    case mathematical
+    case universal
+    case transcendent
 }
 
 /// Amplification types
 public enum AmplificationType: String, Sendable, Codable {
-    case inspiration = "inspiration"
-    case ideation = "ideation"
-    case synthesis = "synthesis"
-    case innovation = "innovation"
-    case transformation = "transformation"
-    case transcendence = "transcendence"
+    case inspiration
+    case ideation
+    case synthesis
+    case innovation
+    case transformation
+    case transcendence
 }
 
 /// Inspiration source
@@ -81,7 +82,8 @@ public struct InspirationSource: Sendable, Codable {
 
     public init(sourceId: String, sourceType: InspirationSourceType,
                 relevance: Double = 0.8, creativityPotential: Double = 0.9,
-                universalAlignment: Double = 0.95) {
+                universalAlignment: Double = 0.95)
+    {
         self.sourceId = sourceId
         self.sourceType = sourceType
         self.relevance = relevance
@@ -92,31 +94,31 @@ public struct InspirationSource: Sendable, Codable {
 
 /// Inspiration source types
 public enum InspirationSourceType: String, Sendable, Codable {
-    case nature = "nature"
-    case science = "science"
-    case art = "art"
-    case philosophy = "philosophy"
-    case technology = "technology"
-    case consciousness = "consciousness"
-    case universal = "universal"
+    case nature
+    case science
+    case art
+    case philosophy
+    case technology
+    case consciousness
+    case universal
 }
 
 /// Creativity level
 public enum CreativityLevel: String, Sendable, Codable {
-    case minimal = "minimal"
-    case standard = "standard"
-    case enhanced = "enhanced"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case minimal
+    case standard
+    case enhanced
+    case transcendent
+    case universal
 }
 
 /// Innovation scope
 public enum InnovationScope: String, Sendable, Codable {
-    case local = "local"
-    case regional = "regional"
-    case global = "global"
-    case universal = "universal"
-    case multiversal = "multiversal"
+    case local
+    case regional
+    case global
+    case universal
+    case multiversal
 }
 
 /// Creativity amplification result
@@ -133,7 +135,8 @@ public struct CreativityAmplificationResult: Sendable, Codable {
     public init(amplificationId: String, success: Bool, creativityAmplification: Double,
                 innovationPotential: Double, inspirationQuality: Double,
                 creativeInsights: [CreativeInsight] = [], creativeOutcomes: [CreativeOutcome] = [],
-                executionTime: TimeInterval) {
+                executionTime: TimeInterval)
+    {
         self.amplificationId = amplificationId
         self.success = success
         self.creativityAmplification = creativityAmplification
@@ -154,7 +157,8 @@ public struct CreativeInsight: Sendable, Codable {
     public let innovationPotential: Double
 
     public init(insight: String, type: CreativeInsightType, creativityDepth: CreativityDepth,
-                confidence: Double, innovationPotential: Double) {
+                confidence: Double, innovationPotential: Double)
+    {
         self.insight = insight
         self.type = type
         self.creativityDepth = creativityDepth
@@ -165,21 +169,21 @@ public struct CreativeInsight: Sendable, Codable {
 
 /// Creative insight types
 public enum CreativeInsightType: String, Sendable, Codable {
-    case inspiration = "inspiration"
-    case ideation = "ideation"
-    case synthesis = "synthesis"
-    case innovation = "innovation"
-    case transformation = "transformation"
-    case transcendence = "transcendence"
+    case inspiration
+    case ideation
+    case synthesis
+    case innovation
+    case transformation
+    case transcendence
 }
 
 /// Creativity depth
 public enum CreativityDepth: String, Sendable, Codable {
-    case surface = "surface"
-    case intermediate = "intermediate"
-    case deep = "deep"
-    case profound = "profound"
-    case universal = "universal"
+    case surface
+    case intermediate
+    case deep
+    case profound
+    case universal
 }
 
 /// Creative outcome
@@ -193,7 +197,8 @@ public struct CreativeOutcome: Sendable, Codable {
 
     public init(outcomeId: String, description: String, creativityValue: Double = 0.9,
                 innovationImpact: Double = 0.85, universalSignificance: Double = 0.95,
-                sustainability: Double = 0.9) {
+                sustainability: Double = 0.9)
+    {
         self.outcomeId = outcomeId
         self.description = description
         self.creativityValue = creativityValue
@@ -215,7 +220,8 @@ public struct CreativeInnovationGeneration: Sendable, Codable {
     public init(generationId: String, innovationDomain: InnovationDomain,
                 generationCriteria: [GenerationCriterion] = [], creativityConstraints: [CreativityConstraint] = [],
                 inspirationParameters: InspirationParameters = InspirationParameters(),
-                innovationGoals: [InnovationGoal] = []) {
+                innovationGoals: [InnovationGoal] = [])
+    {
         self.generationId = generationId
         self.innovationDomain = innovationDomain
         self.generationCriteria = generationCriteria
@@ -227,13 +233,13 @@ public struct CreativeInnovationGeneration: Sendable, Codable {
 
 /// Innovation domain
 public enum InnovationDomain: String, Sendable, Codable {
-    case technology = "technology"
-    case science = "science"
-    case art = "art"
-    case philosophy = "philosophy"
-    case society = "society"
-    case consciousness = "consciousness"
-    case universal = "universal"
+    case technology
+    case science
+    case art
+    case philosophy
+    case society
+    case consciousness
+    case universal
 }
 
 /// Generation criterion
@@ -244,7 +250,8 @@ public struct GenerationCriterion: Sendable, Codable {
     public let creativityEnhancement: Bool
 
     public init(criterionType: GenerationCriterionType, weight: Double = 1.0,
-                threshold: Double = 0.5, creativityEnhancement: Bool = true) {
+                threshold: Double = 0.5, creativityEnhancement: Bool = true)
+    {
         self.criterionType = criterionType
         self.weight = weight
         self.threshold = threshold
@@ -254,12 +261,12 @@ public struct GenerationCriterion: Sendable, Codable {
 
 /// Generation criterion types
 public enum GenerationCriterionType: String, Sendable, Codable {
-    case novelty = "novelty"
-    case feasibility = "feasibility"
-    case impact = "impact"
-    case elegance = "elegance"
-    case universality = "universality"
-    case transcendence = "transcendence"
+    case novelty
+    case feasibility
+    case impact
+    case elegance
+    case universality
+    case transcendence
 }
 
 /// Creativity constraint
@@ -270,7 +277,8 @@ public struct CreativityConstraint: Sendable, Codable {
     public let enforcement: EnforcementLevel
 
     public init(constraintType: CreativityConstraintType, value: Double,
-                flexibility: Double = 0.2, enforcement: EnforcementLevel = .moderate) {
+                flexibility: Double = 0.2, enforcement: EnforcementLevel = .moderate)
+    {
         self.constraintType = constraintType
         self.value = value
         self.flexibility = flexibility
@@ -280,12 +288,12 @@ public struct CreativityConstraint: Sendable, Codable {
 
 /// Creativity constraint types
 public enum CreativityConstraintType: String, Sendable, Codable {
-    case complexity = "complexity"
-    case practicality = "practicality"
-    case ethics = "ethics"
-    case resources = "resources"
-    case time = "time"
-    case scope = "scope"
+    case complexity
+    case practicality
+    case ethics
+    case resources
+    case time
+    case scope
 }
 
 /// Inspiration parameters
@@ -296,7 +304,8 @@ public struct InspirationParameters: Sendable, Codable {
     public let universality: Double
 
     public init(diversity: Double = 0.8, intensity: Double = 0.9,
-                persistence: Double = 0.7, universality: Double = 0.95) {
+                persistence: Double = 0.7, universality: Double = 0.95)
+    {
         self.diversity = diversity
         self.intensity = intensity
         self.persistence = persistence
@@ -312,7 +321,8 @@ public struct InnovationGoal: Sendable, Codable {
     public let creativityAmplification: Bool
 
     public init(goalType: InnovationGoalType, targetValue: Double,
-                priority: GoalPriority = .high, creativityAmplification: Bool = true) {
+                priority: GoalPriority = .high, creativityAmplification: Bool = true)
+    {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -322,12 +332,12 @@ public struct InnovationGoal: Sendable, Codable {
 
 /// Innovation goal types
 public enum InnovationGoalType: String, Sendable, Codable {
-    case breakthrough = "breakthrough"
-    case transformation = "transformation"
-    case evolution = "evolution"
-    case transcendence = "transcendence"
-    case universal_impact = "universal_impact"
-    case consciousness_expansion = "consciousness_expansion"
+    case breakthrough
+    case transformation
+    case evolution
+    case transcendence
+    case universal_impact
+    case consciousness_expansion
 }
 
 /// Creative innovation result
@@ -345,7 +355,8 @@ public struct CreativeInnovationResult: Sendable, Codable {
     public init(generationId: String, success: Bool, innovationQuality: Double,
                 creativityLevel: Double, noveltyIndex: Double, feasibilityScore: Double,
                 innovationConcepts: [InnovationConcept] = [], creativityInsights: [CreativeInsight] = [],
-                executionTime: TimeInterval) {
+                executionTime: TimeInterval)
+    {
         self.generationId = generationId
         self.success = success
         self.innovationQuality = innovationQuality
@@ -372,7 +383,8 @@ public struct InnovationConcept: Sendable, Codable {
     public init(conceptId: String, title: String, description: String,
                 domain: InnovationDomain, creativityRating: Double = 0.9,
                 innovationPotential: Double = 0.85, feasibilityRating: Double = 0.8,
-                universalImpact: Double = 0.95) {
+                universalImpact: Double = 0.95)
+    {
         self.conceptId = conceptId
         self.title = title
         self.description = description
@@ -397,7 +409,8 @@ public struct CreativityOptimization: Sendable, Codable {
     public init(optimizationId: String, targetCreativity: CreativityTarget,
                 optimizationGoals: [CreativityGoal], creativityConstraints: [CreativityConstraint] = [],
                 inspirationBudget: Double = 1.0, innovationBudget: Double = 1.0,
-                timeHorizon: TimeInterval = 3600) {
+                timeHorizon: TimeInterval = 3600)
+    {
         self.optimizationId = optimizationId
         self.targetCreativity = targetCreativity
         self.optimizationGoals = optimizationGoals
@@ -422,7 +435,8 @@ public struct CreativityGoal: Sendable, Codable {
     public let innovationEnhancement: Bool
 
     public init(goalType: CreativityGoalType, targetValue: Double,
-                priority: GoalPriority = .high, innovationEnhancement: Bool = true) {
+                priority: GoalPriority = .high, innovationEnhancement: Bool = true)
+    {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -432,28 +446,28 @@ public struct CreativityGoal: Sendable, Codable {
 
 /// Creativity goal types
 public enum CreativityGoalType: String, Sendable, Codable {
-    case amplification = "amplification"
-    case inspiration = "inspiration"
-    case innovation = "innovation"
-    case transformation = "transformation"
-    case transcendence = "transcendence"
-    case universal_creativity = "universal_creativity"
+    case amplification
+    case inspiration
+    case innovation
+    case transformation
+    case transcendence
+    case universal_creativity
 }
 
 /// Goal priority
 public enum GoalPriority: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Enforcement level
 public enum EnforcementLevel: String, Sendable, Codable {
-    case flexible = "flexible"
-    case moderate = "moderate"
-    case strict = "strict"
-    case absolute = "absolute"
+    case flexible
+    case moderate
+    case strict
+    case absolute
 }
 
 /// Creativity amplification status
@@ -469,7 +483,8 @@ public struct CreativityAmplificationStatus: Sendable, Codable {
 
     public init(operational: Bool, creativityCapability: Double, inspirationLevel: Double,
                 innovationPotential: Double, creativityDepth: Double,
-                activeAmplifications: Int, successRate: Double, lastUpdate: Date = Date()) {
+                activeAmplifications: Int, successRate: Double, lastUpdate: Date = Date())
+    {
         self.operational = operational
         self.creativityCapability = creativityCapability
         self.inspirationLevel = inspirationLevel
@@ -690,7 +705,7 @@ private final class InspirationEngine: Sendable {
     func generateInspiration(_ amplification: CreativityAmplification) async throws -> InspirationResult {
         InspirationResult(
             success: true,
-            quality: Double.random(in: 0.8...1.0)
+            quality: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -705,7 +720,7 @@ private final class InspirationEngine: Sendable {
     func getInspirationStatus() async -> InspirationStatus {
         InspirationStatus(
             operational: true,
-            level: Double.random(in: 0.9...1.0)
+            level: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -714,16 +729,16 @@ private final class InspirationEngine: Sendable {
 private final class CreativityAmplifier: Sendable {
     func amplifyCreativity(_ amplification: CreativityAmplification, inspirationResult: InspirationResult) async throws -> AmplificationResult {
         AmplificationResult(
-            success: Double.random(in: 0.8...1.0) > 0.2,
-            amplification: Double.random(in: 0.7...1.0),
-            innovationPotential: Double.random(in: 0.8...1.0)
+            success: Double.random(in: 0.8 ... 1.0) > 0.2,
+            amplification: Double.random(in: 0.7 ... 1.0),
+            innovationPotential: Double.random(in: 0.8 ... 1.0)
         )
     }
 
     func amplifyInnovation(_ generation: CreativeInnovationGeneration, result: InnovationResult) async -> AmplificationResult {
         AmplificationResult(
             success: true,
-            creativityLevel: Double.random(in: 0.8...1.0)
+            creativityLevel: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -738,10 +753,10 @@ private final class CreativityAmplifier: Sendable {
     func getAmplificationStatus() async -> AmplificationStatus {
         AmplificationStatus(
             operational: true,
-            capability: Double.random(in: 0.9...1.0),
-            depth: Double.random(in: 0.9...1.0),
-            activeAmplifications: Int.random(in: 1...20),
-            successRate: Double.random(in: 0.9...0.98)
+            capability: Double.random(in: 0.9 ... 1.0),
+            depth: Double.random(in: 0.9 ... 1.0),
+            activeAmplifications: Int.random(in: 1 ... 20),
+            successRate: Double.random(in: 0.9 ... 0.98)
         )
     }
 }
@@ -750,10 +765,10 @@ private final class CreativityAmplifier: Sendable {
 private final class InnovationGenerator: Sendable {
     func generateInnovation(_ generation: CreativeInnovationGeneration) async throws -> InnovationResult {
         InnovationResult(
-            success: Double.random(in: 0.85...1.0) > 0.15,
-            quality: Double.random(in: 0.8...1.0),
-            novelty: Double.random(in: 0.7...1.0),
-            feasibility: Double.random(in: 0.6...1.0),
+            success: Double.random(in: 0.85 ... 1.0) > 0.15,
+            quality: Double.random(in: 0.8 ... 1.0),
+            novelty: Double.random(in: 0.7 ... 1.0),
+            feasibility: Double.random(in: 0.6 ... 1.0),
             concepts: generateInnovationConcepts(generation)
         )
     }
@@ -769,7 +784,7 @@ private final class InnovationGenerator: Sendable {
     func getGenerationStatus() async -> GenerationStatus {
         GenerationStatus(
             operational: true,
-            potential: Double.random(in: 0.8...1.0)
+            potential: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -857,7 +872,7 @@ private final class CreativeSynthesizer: Sendable {
     func getSynthesisStatus() async -> SynthesisStatus {
         SynthesisStatus(
             operational: true,
-            effectiveness: Double.random(in: 0.8...1.0)
+            effectiveness: Double.random(in: 0.8 ... 1.0)
         )
     }
 }
@@ -875,7 +890,7 @@ private final class CreativityOptimizer: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8...1.0)
+            efficiency: Double.random(in: 0.8 ... 1.0)
         )
     }
 }

@@ -130,7 +130,8 @@ public final class UniversalIntelligenceCoordinator: ObservableObject, @unchecke
 
         // Update universal intelligence level
         universalIntelligenceLevel = calculateUniversalIntelligenceLevel(
-            overallReadiness, domainReadiness)
+            overallReadiness, domainReadiness
+        )
 
         return IntelligenceProgressReport(
             timestamp: Date(),
@@ -242,15 +243,20 @@ public final class UniversalIntelligenceCoordinator: ObservableObject, @unchecke
     private func executeEvolutionPhases() async throws {
         evolutionPhases = [
             IntelligenceEvolutionPhase(
-                name: "Cognitive Foundation", level: 1, estimatedDuration: 1800),
+                name: "Cognitive Foundation", level: 1, estimatedDuration: 1800
+            ),
             IntelligenceEvolutionPhase(
-                name: "Domain Specialization", level: 2, estimatedDuration: 3600),
+                name: "Domain Specialization", level: 2, estimatedDuration: 3600
+            ),
             IntelligenceEvolutionPhase(
-                name: "Cross-Domain Integration", level: 3, estimatedDuration: 7200),
+                name: "Cross-Domain Integration", level: 3, estimatedDuration: 7200
+            ),
             IntelligenceEvolutionPhase(
-                name: "Universal Emergence", level: 4, estimatedDuration: 10800),
+                name: "Universal Emergence", level: 4, estimatedDuration: 10800
+            ),
             IntelligenceEvolutionPhase(
-                name: "Consciousness Integration", level: 5, estimatedDuration: 14400),
+                name: "Consciousness Integration", level: 5, estimatedDuration: 14400
+            ),
         ]
 
         for phase in evolutionPhases {
@@ -270,7 +276,7 @@ public final class UniversalIntelligenceCoordinator: ObservableObject, @unchecke
             while state == .converging || state == .consciousnessIntegrated {
                 let progress = await monitorMethod()
                 updateMethod(progress)
-                try? await Task.sleep(nanoseconds: 15_000_000_000)  // 15 seconds
+                try? await Task.sleep(nanoseconds: 15_000_000_000) // 15 seconds
                 // Update state for next iteration
                 state = getStateMethod()
             }
@@ -309,7 +315,7 @@ public final class UniversalIntelligenceCoordinator: ObservableObject, @unchecke
         for coordinator in domainCoordinators {
             coordinator.readinessPublisher
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] (domain, readiness) in
+                .sink { [weak self] domain, readiness in
                     self?.intelligenceMetrics.domainMetrics[domain] = readiness
                 }
                 .store(in: &cancellables)
@@ -381,7 +387,7 @@ public final class UniversalIntelligenceCoordinator: ObservableObject, @unchecke
         let remainingProgress = 1.0 - currentLevel
 
         // Estimate based on current convergence rate (simplified)
-        let convergenceRate = 0.001  // Progress per second (adjustable)
+        let convergenceRate = 0.001 // Progress per second (adjustable)
         let estimatedSeconds = remainingProgress / convergenceRate
 
         return estimatedSeconds
@@ -441,7 +447,7 @@ public struct IntelligenceConvergenceProgress {
 
 /// Intelligence emergence timeline
 public struct IntelligenceEmergenceTimeline {
-    public let startTime: Date = Date()
+    public let startTime: Date = .init()
     public var milestones: [IntelligenceMilestone] = []
 }
 
@@ -520,7 +526,7 @@ private class DomainCoordinator {
 
     func initialize() async throws {}
     func activate() async throws { isActive = true }
-    func assessReadiness() async -> Double { Double.random(in: 0.7...0.95) }
+    func assessReadiness() async -> Double { Double.random(in: 0.7 ... 0.95) }
     func executeBreakthrough(_ breakthrough: IntelligenceBreakthrough) async throws {}
 
     let readinessPublisher = PassthroughSubject<(IntelligenceDomain, Double), Never>()

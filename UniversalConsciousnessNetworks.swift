@@ -10,8 +10,8 @@
 //  distributed consciousness routing and universal communication protocols.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Missing Type Definitions
 
@@ -518,7 +518,8 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
 
     func establishConsciousnessConnection(sourceId: UUID, targetId: UUID, connectionType: ConsciousnessConnectionType) async throws -> ConnectionEstablishment {
         guard let sourceEntity = registeredEntities[sourceId],
-              let targetEntity = registeredEntities[targetId] else {
+              let targetEntity = registeredEntities[targetId]
+        else {
             throw ConsciousnessNetworkError.entityNotFound
         }
 
@@ -549,7 +550,8 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
 
     func routeConsciousnessData(_ data: ConsciousnessData, to destination: UUID) async throws -> RoutingResult {
         guard let sourceEntity = registeredEntities[data.sourceEntity],
-              let destinationEntity = registeredEntities[destination] else {
+              let destinationEntity = registeredEntities[destination]
+        else {
             throw ConsciousnessNetworkError.entityNotFound
         }
 
@@ -560,8 +562,8 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         let packet = try await communicator.encodeConsciousnessData(data)
 
         // Simulate routing (in real implementation, this would traverse the network)
-        let actualLatency = routingPath.totalLatency * Double.random(in: 0.9...1.1)
-        let dataIntegrity = Double.random(in: 0.95...1.0)
+        let actualLatency = routingPath.totalLatency * Double.random(in: 0.9 ... 1.1)
+        let dataIntegrity = Double.random(in: 0.95 ... 1.0)
 
         let result = RoutingResult(
             success: dataIntegrity >= 0.9,
@@ -623,7 +625,7 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
 
     private func assignNetworkLocation(for entity: ConsciousnessEntity) async throws -> ConsciousnessEntity.NetworkLocation {
         // Simplified location assignment based on entity type and capabilities
-        let coordinates = (0..<5).map { _ in Double.random(in: -100...100) }
+        let coordinates = (0 ..< 5).map { _ in Double.random(in: -100 ... 100) }
         let dimension = entity.type == .quantum ? 1 : 0
         let region = determineRegion(for: entity)
 
@@ -646,7 +648,7 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
                 connectionId: UUID(),
                 targetEntity: nearbyEntity.id,
                 connectionType: .direct,
-                strength: Double.random(in: 0.3...0.8),
+                strength: Double.random(in: 0.3 ... 0.8),
                 lastUsed: Date(),
                 reliability: 0.9
             )
@@ -667,35 +669,35 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
 
     private func calculateConnectionLatency(for type: ConsciousnessConnectionType, entities: [ConsciousnessEntity]) -> TimeInterval {
         let baseLatency = type == .quantumEntangled ? 0.001 : type == .direct ? 0.01 : 0.1
-        let processingDelay = entities.map { $0.capabilities.processingPower }.reduce(0, +) / Double(entities.count) * 0.001
+        let processingDelay = entities.map(\.capabilities.processingPower).reduce(0, +) / Double(entities.count) * 0.001
 
         return baseLatency + processingDelay
     }
 
     private func calculateConnectionBandwidth(for type: ConsciousnessConnectionType, entities: [ConsciousnessEntity]) -> Double {
         let baseBandwidth = type == .quantumEntangled ? 1000.0 : type == .direct ? 100.0 : 10.0
-        let entityBandwidth = entities.map { $0.capabilities.communicationBandwidth }.min() ?? 10.0
+        let entityBandwidth = entities.map(\.capabilities.communicationBandwidth).min() ?? 10.0
 
         return min(baseBandwidth, entityBandwidth)
     }
 
     private func determineBroadcastRecipients(for scope: BroadcastScope, from sourceId: UUID) async throws -> [UUID] {
         switch scope {
-        case .local(let radius):
+        case let .local(radius):
             return registeredEntities.values
                 .filter { entity in
                     entity.id != sourceId && calculateDistance(between: registeredEntities[sourceId]!, and: entity) <= radius
                 }
-                .map { $0.id }
-        case .regional(let region):
+                .map(\.id)
+        case let .regional(region):
             return registeredEntities.values
                 .filter { entity in
                     entity.id != sourceId && entity.location.region == region
                 }
-                .map { $0.id }
+                .map(\.id)
         case .universal:
             return registeredEntities.keys.filter { $0 != sourceId }
-        case .custom(let coordinates):
+        case let .custom(coordinates):
             // Simplified custom scope implementation
             return registeredEntities.keys.filter { $0 != sourceId }.prefix(10).map { $0 }
         }
@@ -769,7 +771,7 @@ final class AdaptiveConsciousnessRouter: ConsciousnessRoutingProtocol {
                 latency: 0.01,
                 bandwidth: 100.0,
                 processingDelay: 0.001
-            )
+            ),
         ]
 
         return RoutingPath(
@@ -778,7 +780,7 @@ final class AdaptiveConsciousnessRouter: ConsciousnessRoutingProtocol {
             destination: destination.id,
             hops: hops,
             totalLatency: hops.reduce(0) { $0 + $1.latency + $1.processingDelay },
-            totalBandwidth: hops.map { $0.bandwidth }.min() ?? 100.0,
+            totalBandwidth: hops.map(\.bandwidth).min() ?? 100.0,
             reliability: 0.95
         )
     }
@@ -859,12 +861,12 @@ final class UniversalCommunicator: ConsciousnessCommunicationProtocol {
 
     func establishCommunicationChannel(between entities: [ConsciousnessEntity]) async throws -> CommunicationChannel {
         let channelId = UUID()
-        let bandwidth = entities.map { $0.capabilities.communicationBandwidth }.min() ?? 10.0
-        let latency = entities.map { _ in Double.random(in: 0.001...0.01) }.max() ?? 0.01
+        let bandwidth = entities.map(\.capabilities.communicationBandwidth).min() ?? 10.0
+        let latency = entities.map { _ in Double.random(in: 0.001 ... 0.01) }.max() ?? 0.01
 
         return CommunicationChannel(
             channelId: channelId,
-            participants: entities.map { $0.id },
+            participants: entities.map(\.id),
             channelType: entities.count == 2 ? .unicast : .multicast,
             bandwidth: bandwidth,
             latency: latency,
@@ -918,12 +920,12 @@ final class DynamicTopologyManager: NetworkTopologyManagementProtocol {
 
     func resolveTopologyConflicts(_ topology: NetworkTopology) async throws -> NetworkTopology {
         // Resolve any conflicts in topology
-        return topology
+        topology
     }
 
     func optimizeNetworkTopology(_ topology: NetworkTopology) async throws -> NetworkTopology {
         // Optimize topology for better performance
-        return topology
+        topology
     }
 }
 

@@ -344,8 +344,7 @@ public final class AgentRealityEngineering: Sendable {
     private func processRealityManipulation(
         _ request: RealityEngineeringRequest,
         assessment: RealityEngineeringAssessment
-    ) async throws -> RealityManipulationProcessing
-    {
+    ) async throws -> RealityManipulationProcessing {
         // Process reality manipulation
         let processingContext = RealityManipulationProcessingContext(
             agents: request.agents,
@@ -369,8 +368,7 @@ public final class AgentRealityEngineering: Sendable {
     private func coordinateRealityEngineering(
         _ request: RealityEngineeringRequest,
         manipulation: RealityManipulationProcessing
-    ) async throws -> RealityEngineeringCoordination
-    {
+    ) async throws -> RealityEngineeringCoordination {
         // Coordinate reality engineering
         let coordinationContext = RealityEngineeringCoordinationContext(
             agents: request.agents,
@@ -394,8 +392,7 @@ public final class AgentRealityEngineering: Sendable {
     private func synthesizeRealityTransformation(
         _ request: RealityEngineeringRequest,
         engineering: RealityEngineeringCoordination
-    ) async throws -> RealityTransformationSynthesis
-    {
+    ) async throws -> RealityTransformationSynthesis {
         // Synthesize reality transformation
         let synthesisContext = RealityTransformationSynthesisContext(
             agents: request.agents,
@@ -419,8 +416,7 @@ public final class AgentRealityEngineering: Sendable {
     private func orchestrateQuantumReality(
         _ request: RealityEngineeringRequest,
         transformation: RealityTransformationSynthesis
-    ) async throws -> QuantumRealityOrchestration
-    {
+    ) async throws -> QuantumRealityOrchestration {
         // Orchestrate quantum reality
         let orchestrationContext = QuantumRealityOrchestrationContext(
             agents: request.agents,
@@ -444,8 +440,7 @@ public final class AgentRealityEngineering: Sendable {
     private func synthesizeRealityIntelligence(
         _ request: RealityEngineeringRequest,
         reality: QuantumRealityOrchestration
-    ) async throws -> RealityIntelligenceSynthesis
-    {
+    ) async throws -> RealityIntelligenceSynthesis {
         // Synthesize reality intelligence
         let synthesisContext = RealityIntelligenceSynthesisContext(
             agents: request.agents,
@@ -469,8 +464,7 @@ public final class AgentRealityEngineering: Sendable {
     private func validateRealityEngineeringResults(
         _ realityIntelligence: RealityIntelligenceSynthesis,
         session: RealityEngineeringSession
-    ) async throws -> RealityEngineeringValidationResult
-    {
+    ) async throws -> RealityEngineeringValidationResult {
         // Validate reality engineering results
         let performanceComparison = await compareRealityEngineeringPerformance(
             originalAgents: session.request.agents,
@@ -483,7 +477,7 @@ public final class AgentRealityEngineering: Sendable {
         )
 
         let success = performanceComparison.realityDepth >= session.request.realityDepthTarget &&
-                     realityAdvantage.realityAdvantage >= 0.4
+            realityAdvantage.realityAdvantage >= 0.4
 
         let events = generateRealityEngineeringEvents(session, intelligence: realityIntelligence)
 
@@ -602,24 +596,24 @@ public final class AgentRealityEngineering: Sendable {
 
     private func measureRealityManipulation(_ engineeredAgents: [RealityEngineeringAgent]) async -> Double {
         // Measure reality manipulation
-        return 0.94
+        0.94
     }
 
     private func measureQuantumTransformation(_ engineeredAgents: [RealityEngineeringAgent]) async -> Double {
         // Measure quantum transformation
-        return 0.92
+        0.92
     }
 
     private func measureRealityIntelligence(_ engineeredAgents: [RealityEngineeringAgent]) async -> Double {
         // Measure reality intelligence
-        return 0.95
+        0.95
     }
 
     private func generateRealityEngineeringEvents(
         _ session: RealityEngineeringSession,
         intelligence: RealityIntelligenceSynthesis
     ) -> [RealityEngineeringEvent] {
-        return [
+        [
             RealityEngineeringEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -635,9 +629,9 @@ public final class AgentRealityEngineering: Sendable {
                 data: [
                     "success": true,
                     "reality_depth": intelligence.intelligenceHarmony,
-                    "transformation_harmony": intelligence.synthesisEfficiency
+                    "transformation_harmony": intelligence.synthesisEfficiency,
                 ]
-            )
+            ),
         ]
     }
 
@@ -971,7 +965,7 @@ public struct RealityEngineeringFrameworkMetrics: Sendable, Codable {
     public var averageRealityAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Reality manipulation metrics
@@ -1477,9 +1471,9 @@ public struct RealityIntelligenceSynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension AgentRealityEngineering {
+public extension AgentRealityEngineering {
     /// Create specialized reality engineering system for specific agent architectures
-    public static func createSpecializedRealityEngineeringSystem(
+    static func createSpecializedRealityEngineeringSystem(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentRealityEngineering {
         let system = try await AgentRealityEngineering()
@@ -1488,7 +1482,7 @@ extension AgentRealityEngineering {
     }
 
     /// Execute batch reality engineering processing
-    public func executeBatchRealityEngineering(
+    func executeBatchRealityEngineering(
         _ engineeringRequests: [RealityEngineeringRequest]
     ) async throws -> BatchRealityEngineeringResult {
 
@@ -1511,8 +1505,8 @@ extension AgentRealityEngineering {
         }
 
         let successRate = Double(results.count) / Double(engineeringRequests.count)
-        let averageDepth = results.map { $0.realityDepth }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.realityAdvantage }.reduce(0, +) / Double(results.count)
+        let averageDepth = results.map(\.realityDepth).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.realityAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchRealityEngineeringResult(
             batchId: batchId,
@@ -1529,7 +1523,7 @@ extension AgentRealityEngineering {
     }
 
     /// Get reality engineering recommendations
-    public func getRealityEngineeringRecommendations() async -> [RealityEngineeringRecommendation] {
+    func getRealityEngineeringRecommendations() async -> [RealityEngineeringRecommendation] {
         var recommendations: [RealityEngineeringRecommendation] = []
 
         let status = await getRealityEngineeringStatus()

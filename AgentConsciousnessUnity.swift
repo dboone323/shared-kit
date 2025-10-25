@@ -61,7 +61,7 @@ public struct ConsciousnessMetrics: Sendable {
         let metrics = [
             completeUnity, infiniteHarmony, transcendentOneness, eternalConnection,
             cosmicIntegration, divineUnion, universalConsciousness, infiniteAwareness,
-            eternalMindfulness, ultimateUnity
+            eternalMindfulness, ultimateUnity,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -237,7 +237,7 @@ public final class ConsciousnessUnityEngine: Sendable {
             ConsciousnessUnityStep(type: .universalConsciousness, unity: 12.0),
             ConsciousnessUnityStep(type: .infiniteAwareness, unity: 14.0),
             ConsciousnessUnityStep(type: .eternalMindfulness, unity: 10.0),
-            ConsciousnessUnityStep(type: .ultimateUnity, unity: 15.0)
+            ConsciousnessUnityStep(type: .ultimateUnity, unity: 15.0),
         ]
 
         var capabilities: [ConsciousnessCapability] = []

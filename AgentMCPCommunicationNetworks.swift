@@ -69,7 +69,7 @@ public final class AgentMCPCommunicationNetworks: Sendable {
             .secure: SecureMCPAdapter(),
             .quantum: QuantumMCPAdapter(),
             .consciousness: ConsciousnessMCPAdapter(),
-            .universal: UniversalMCPAdapter()
+            .universal: UniversalMCPAdapter(),
         ]
 
         // Initialize the communication network
@@ -245,9 +245,9 @@ public final class AgentMCPCommunicationNetworks: Sendable {
             // Collect results
             for await (recipientId, result) in group {
                 switch result {
-                case .success(let deliveryResult):
+                case let .success(deliveryResult):
                     deliveryResults[recipientId] = deliveryResult
-                case .failure(let error):
+                case let .failure(error):
                     if let communicationError = error as? MCPCommunicationError {
                         failures.append(communicationError)
                     } else {
@@ -307,9 +307,9 @@ public final class AgentMCPCommunicationNetworks: Sendable {
             // Collect results
             for await (agentId, mcpSystemId, result) in group {
                 switch result {
-                case .success(let channel):
+                case let .success(channel):
                     channels.append(channel)
-                case .failure(let error):
+                case let .failure(error):
                     if let communicationError = error as? MCPCommunicationError {
                         failures.append(communicationError)
                     } else {
@@ -343,13 +343,13 @@ public final class AgentMCPCommunicationNetworks: Sendable {
         let totalMCPSystems = await networkRegistry.getTotalMCPSystems()
         let performanceMetrics = await performanceMonitor.getNetworkMetrics()
 
-        return MCPNetworkStatus(
+        return await MCPNetworkStatus(
             activeChannels: activeChannels,
             totalAgents: totalAgents,
             totalMCPSystems: totalMCPSystems,
-            networkTopology: await topologyManager.getTopologyStatus(),
+            networkTopology: topologyManager.getTopologyStatus(),
             performanceMetrics: performanceMetrics,
-            securityStatus: await securityManager.getSecurityStatus(),
+            securityStatus: securityManager.getSecurityStatus(),
             lastUpdate: Date()
         )
     }
@@ -759,7 +759,7 @@ private final class MCPMessageRouter: Sendable {
         priority: MCPMessagePriority
     ) async throws -> MCPMessageDeliveryResult {
         // Implement message routing logic
-        let deliveryTime = Double.random(in: 0.001...0.1) // Simulated delivery time
+        let deliveryTime = Double.random(in: 0.001 ... 0.1) // Simulated delivery time
         return MCPMessageDeliveryResult(
             messageId: message.messageId,
             success: true,
@@ -1025,9 +1025,9 @@ public enum MCPCommunicationError: Error {
 
 // MARK: - Extensions
 
-extension AgentMCPCommunicationNetworks {
+public extension AgentMCPCommunicationNetworks {
     /// Create a communication channel with automatic protocol selection
-    public func createOptimalChannel(
+    func createOptimalChannel(
         agentId: String,
         mcpSystemId: String,
         requirements: MCPChannelRequirements = MCPChannelRequirements()
@@ -1045,7 +1045,7 @@ extension AgentMCPCommunicationNetworks {
     }
 
     /// Send urgent message with guaranteed delivery
-    public func sendUrgentMessage(
+    func sendUrgentMessage(
         from senderId: String,
         to recipientId: String,
         message: MCPCommunicationMessage
@@ -1059,7 +1059,7 @@ extension AgentMCPCommunicationNetworks {
     }
 
     /// Get communication analytics
-    public func getCommunicationAnalytics(timeRange: DateInterval) async -> MCPCommunicationAnalytics {
+    func getCommunicationAnalytics(timeRange: DateInterval) async -> MCPCommunicationAnalytics {
         let metrics = await performanceMonitor.getNetworkMetrics()
         let topologyStatus = await topologyManager.getTopologyStatus()
 

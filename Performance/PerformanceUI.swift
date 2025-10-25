@@ -142,9 +142,9 @@ private struct PerformanceRing: View {
             Circle()
                 .stroke(
                     #if canImport(UIKit)
-                    Color(UIColor.systemGray5)
+                        Color(UIColor.systemGray5)
                     #else
-                    Color.gray.opacity(0.2)
+                        Color.gray.opacity(0.2)
                     #endif,
                     lineWidth: 8
                 )
@@ -232,9 +232,9 @@ private struct MetricTabButton: View {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(isSelected ? Color.accentColor :
                         #if canImport(UIKit)
-                        Color(UIColor.systemGray6)
+                            Color(UIColor.systemGray6)
                         #else
-                        Color.gray.opacity(0.1)
+                            Color.gray.opacity(0.1)
                         #endif
                     )
             )
@@ -925,16 +925,16 @@ private struct BatteryOptimizationActions: View {
                 }
 
                 #if canImport(UIKit)
-                Button(action: {
-                    // Open system settings for Low Power Mode
-                    if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
-                        UIApplication.shared.open(settingsUrl)
+                    Button(action: {
+                        // Open system settings for Low Power Mode
+                        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(settingsUrl)
+                        }
+                    }) {
+                        Label("Open Battery Settings", systemImage: "gearshape")
+                            .frame(maxWidth: .infinity)
                     }
-                }) {
-                    Label("Open Battery Settings", systemImage: "gearshape")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
+                    .buttonStyle(.bordered)
                 #endif
             }
         }

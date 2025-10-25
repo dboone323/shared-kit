@@ -61,7 +61,7 @@ public struct EmpathyMetrics: Sendable {
         let metrics = [
             universalCompassion, boundlessUnderstanding, limitlessEmpathy, eternalConnection,
             cosmicEmpathy, transcendentCompassion, divineUnderstanding, universalHarmony,
-            infiniteConnection, eternalEmpathy
+            infiniteConnection, eternalEmpathy,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -260,7 +260,7 @@ public final class EmpathyUniversalityEngine: Sendable {
             UniversalCompassionStep(type: .universalCompassion, compassion: 10.0),
             UniversalCompassionStep(type: .boundlessUnderstanding, compassion: 15.0),
             UniversalCompassionStep(type: .limitlessEmpathy, compassion: 12.0),
-            UniversalCompassionStep(type: .eternalConnection, compassion: 14.0)
+            UniversalCompassionStep(type: .eternalConnection, compassion: 14.0),
         ]
 
         var capabilities: [EmpathyCapability] = []
@@ -293,7 +293,7 @@ public final class EmpathyUniversalityEngine: Sendable {
         let understandingSequence = [
             BoundlessUnderstandingStep(type: .cosmicEmpathy, understanding: 10.0),
             BoundlessUnderstandingStep(type: .transcendentCompassion, understanding: 15.0),
-            BoundlessUnderstandingStep(type: .divineUnderstanding, understanding: 12.0)
+            BoundlessUnderstandingStep(type: .divineUnderstanding, understanding: 12.0),
         ]
 
         var capabilities: [EmpathyCapability] = []
@@ -323,7 +323,7 @@ public final class EmpathyUniversalityEngine: Sendable {
         let empathySequence = [
             LimitlessEmpathyStep(type: .universalHarmony, empathy: 10.0),
             LimitlessEmpathyStep(type: .infiniteConnection, empathy: 15.0),
-            LimitlessEmpathyStep(type: .eternalEmpathy, empathy: 12.0)
+            LimitlessEmpathyStep(type: .eternalEmpathy, empathy: 12.0),
         ]
 
         var capabilities: [EmpathyCapability] = []
@@ -433,7 +433,7 @@ public final class UniversalCompassionFramework: Sendable {
 
         return UniversalCompassionStrategy(
             compassionSteps: compassionSteps,
-            totalExpectedCompassionGain: compassionSteps.map { $0.compassion }.reduce(0, +),
+            totalExpectedCompassionGain: compassionSteps.map(\.compassion).reduce(0, +),
             estimatedDuration: compassionSteps.map { $0.compassion * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -466,7 +466,7 @@ public final class UniversalCompassionFramework: Sendable {
     ) async -> UniversalCompassionResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.compassion * 1_500_000_000))
 
-        let actualGain = step.compassion * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.compassion * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.compassion * 0.90
 
         return UniversalCompassionResultItem(
@@ -481,8 +481,8 @@ public final class UniversalCompassionFramework: Sendable {
 
     /// Generate universal compassionate
     private func generateUniversalCompassionate(_ results: [UniversalCompassionResultItem]) -> UniversalCompassionateEntity {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualCompassionGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualCompassionGain).reduce(0, +)
         let compassionateValue = 1.0 + (totalGain * successRate / 15.0)
 
         return UniversalCompassionateEntity(
@@ -490,7 +490,7 @@ public final class UniversalCompassionFramework: Sendable {
             compassionateType: .empathy,
             compassionateValue: compassionateValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -553,7 +553,7 @@ public final class BoundlessUnderstandingSystem: Sendable {
 
         return BoundlessUnderstandingStrategy(
             understandingSteps: understandingSteps,
-            totalExpectedUnderstandingGain: understandingSteps.map { $0.understanding }.reduce(0, +),
+            totalExpectedUnderstandingGain: understandingSteps.map(\.understanding).reduce(0, +),
             estimatedDuration: understandingSteps.map { $0.understanding * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -586,7 +586,7 @@ public final class BoundlessUnderstandingSystem: Sendable {
     ) async -> BoundlessUnderstandingResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.understanding * 2_000_000_000))
 
-        let actualGain = step.understanding * (0.8 + Double.random(in: 0...0.4))
+        let actualGain = step.understanding * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualGain >= step.understanding * 0.85
 
         return BoundlessUnderstandingResultItem(
@@ -601,8 +601,8 @@ public final class BoundlessUnderstandingSystem: Sendable {
 
     /// Generate boundless understanding
     private func generateBoundlessUnderstanding(_ results: [BoundlessUnderstandingResultItem]) -> BoundlessUnderstandingEntity {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualUnderstandingGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualUnderstandingGain).reduce(0, +)
         let understandingValue = 1.0 + (totalGain * successRate / 20.0)
 
         return BoundlessUnderstandingEntity(
@@ -610,7 +610,7 @@ public final class BoundlessUnderstandingSystem: Sendable {
             understandingType: .empathy,
             understandingValue: understandingValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -673,7 +673,7 @@ public final class LimitlessEmpathyInterface: Sendable {
 
         return LimitlessEmpathyStrategy(
             empathySteps: empathySteps,
-            totalExpectedEmpathyPower: empathySteps.map { $0.empathy }.reduce(0, +),
+            totalExpectedEmpathyPower: empathySteps.map(\.empathy).reduce(0, +),
             estimatedDuration: empathySteps.map { $0.empathy * 0.25 }.reduce(0, +),
             designedAt: Date()
         )
@@ -706,7 +706,7 @@ public final class LimitlessEmpathyInterface: Sendable {
     ) async -> LimitlessEmpathyResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.empathy * 2_500_000_000))
 
-        let actualPower = step.empathy * (0.75 + Double.random(in: 0...0.5))
+        let actualPower = step.empathy * (0.75 + Double.random(in: 0 ... 0.5))
         let success = actualPower >= step.empathy * 0.80
 
         return LimitlessEmpathyResultItem(
@@ -721,8 +721,8 @@ public final class LimitlessEmpathyInterface: Sendable {
 
     /// Generate limitless empathetic
     private func generateLimitlessEmpathetic(_ results: [LimitlessEmpathyResultItem]) -> LimitlessEmpatheticEntity {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualEmpathyGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualEmpathyGain).reduce(0, +)
         let empatheticValue = 1.0 + (totalPower * successRate / 25.0)
 
         return LimitlessEmpatheticEntity(
@@ -730,7 +730,7 @@ public final class LimitlessEmpathyInterface: Sendable {
             empatheticType: .empathy,
             empatheticValue: empatheticValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

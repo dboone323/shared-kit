@@ -84,7 +84,7 @@ public class TripletSTDPRule: STDPRule {
         super.init(learningRate: learningRate, timeWindow: timeWindow)
     }
 
-    public override func updateWeight(
+    override public func updateWeight(
         synapse: NeuromorphicSynapse,
         preSpikeTime: TimeInterval,
         postSpikeTime: TimeInterval,
@@ -104,13 +104,14 @@ public class TripletSTDPRule: STDPRule {
             synapse: synapse,
             preSpikeTime: preSpikeTime,
             postSpikeTime: postSpikeTime,
-            currentTime: currentTime)
+            currentTime: currentTime
+        )
 
         return synapse.weight
     }
 
     private func updateTraces(deltaT: TimeInterval, currentTime: TimeInterval) {
-        let traceDecay = 0.95  // Decay factor
+        let traceDecay = 0.95 // Decay factor
         let tripletDecay = 0.97
 
         if deltaT > 0 {
@@ -135,7 +136,7 @@ public class HomeostaticPlasticityRule: SynapticPlasticityRule {
     private var lastUpdateTime: TimeInterval = 0.0
 
     public init(
-        targetFiringRate: Double = 10.0,  // Hz
+        targetFiringRate: Double = 10.0, // Hz
         homeostaticRate: Double = 0.001,
         timeWindow: TimeInterval = 1.0
     ) {
@@ -154,7 +155,7 @@ public class HomeostaticPlasticityRule: SynapticPlasticityRule {
         let currentFiringRate = calculateFiringRate(at: currentTime)
 
         // Homeostatic scaling
-        let scalingFactor = targetFiringRate / (currentFiringRate + 1.0)  // Avoid division by zero
+        let scalingFactor = targetFiringRate / (currentFiringRate + 1.0) // Avoid division by zero
         let homeostaticChange = homeostaticRate * (scalingFactor - 1.0)
 
         synapse.weight *= (1.0 + homeostaticChange)
@@ -244,9 +245,9 @@ public class StructuralPlasticityRule {
 
     private func createNewSynapses(network: NeuromorphicNetwork, currentTime: TimeInterval) {
         // Find neurons with high activity that could benefit from new connections
-        let activeNeurons = network.neurons.filter { neuron in
+        let activeNeurons = network.neurons.filter { _ in
             // Calculate recent activity (simplified)
-            let recentSpikes = Double.random(in: 0...1)  // Placeholder for actual calculation
+            let recentSpikes = Double.random(in: 0 ... 1) // Placeholder for actual calculation
             return recentSpikes > creationThreshold
         }
 
@@ -254,10 +255,11 @@ public class StructuralPlasticityRule {
         for sourceNeuron in activeNeurons {
             for targetNeuron in network.neurons where targetNeuron !== sourceNeuron {
                 if shouldCreateSynapse(from: sourceNeuron, to: targetNeuron) {
-                    let weight = Double.random(in: 0.1...0.3)
-                    let delay = Double.random(in: 0.001...0.005)
+                    let weight = Double.random(in: 0.1 ... 0.3)
+                    let delay = Double.random(in: 0.001 ... 0.005)
                     network.connect(
-                        from: sourceNeuron, to: targetNeuron, weight: weight, delay: delay)
+                        from: sourceNeuron, to: targetNeuron, weight: weight, delay: delay
+                    )
                 }
             }
         }
@@ -268,7 +270,7 @@ public class StructuralPlasticityRule {
     {
         // Check if connection already exists
         if let axon = source.axon,
-            axon.synapses.contains(where: { $0.postsynapticNeuron === target })
+           axon.synapses.contains(where: { $0.postsynapticNeuron === target })
         {
             return false
         }
@@ -283,7 +285,7 @@ public class StructuralPlasticityRule {
         }
 
         // Probabilistic creation based on activity correlation
-        return Double.random(in: 0...1) < plasticityRate
+        return Double.random(in: 0 ... 1) < plasticityRate
     }
 }
 
@@ -320,12 +322,13 @@ public class HebbianLearning {
             guard let axon = neuron.axon else { continue }
 
             // Calculate neuron activity (simplified - would need spike history)
-            let postActivity = Double.random(in: 0...1)  // Placeholder
+            let postActivity = Double.random(in: 0 ... 1) // Placeholder
 
             for synapse in axon.synapses {
-                let preActivity = Double.random(in: 0...1)  // Placeholder
+                let preActivity = Double.random(in: 0 ... 1) // Placeholder
                 applyHebbianRule(
-                    synapse: synapse, preActivity: preActivity, postActivity: postActivity)
+                    synapse: synapse, preActivity: preActivity, postActivity: postActivity
+                )
             }
         }
     }
@@ -374,7 +377,7 @@ public class RewardModulatedSTDP: STDPRule {
     public var dopamineDecay: Double = 0.95
     public var eligibilityTrace: Double = 0.0
 
-    public override func updateWeight(
+    override public func updateWeight(
         synapse: NeuromorphicSynapse,
         preSpikeTime: TimeInterval,
         postSpikeTime: TimeInterval,
@@ -385,7 +388,8 @@ public class RewardModulatedSTDP: STDPRule {
             synapse: synapse,
             preSpikeTime: preSpikeTime,
             postSpikeTime: postSpikeTime,
-            currentTime: currentTime)
+            currentTime: currentTime
+        )
 
         // Apply reward modulation
         let modulatedChange = stdpChange * (1.0 + rewardSignal)
@@ -445,7 +449,7 @@ public class ShortTermMemory {
     public func decayMemories() {
         let currentTime = Date.timeIntervalSinceReferenceDate
 
-        for i in 0..<memoryItems.count {
+        for i in 0 ..< memoryItems.count {
             let age = currentTime - memoryItems[i].timestamp
             let ageFactor = pow(decayRate, age)
             memoryItems[i].strength *= ageFactor
@@ -477,11 +481,11 @@ public class LongTermMemory {
     }
 
     public func retrieveMemory(key: String) -> [Double]? {
-        return memoryPatterns[key]
+        memoryPatterns[key]
     }
 
     public func getMemoryStrength(key: String) -> Double {
-        return memoryStrength[key, default: 0.0]
+        memoryStrength[key, default: 0.0]
     }
 
     public func forgetWeakMemories(threshold: Double = 0.3) {
@@ -502,7 +506,7 @@ public class HippocampalMemory {
     public init() {
         self.shortTermMemory = ShortTermMemory()
         self.longTermMemory = LongTermMemory()
-        self.replayFrequency = 0.1  // 10% chance of replay
+        self.replayFrequency = 0.1 // 10% chance of replay
     }
 
     public func processMemory(pattern: [Double], reward: Double = 0.0) {
@@ -516,7 +520,7 @@ public class HippocampalMemory {
         }
 
         // Occasional replay for memory consolidation
-        if Double.random(in: 0...1) < replayFrequency {
+        if Double.random(in: 0 ... 1) < replayFrequency {
             performReplay()
         }
     }
@@ -527,7 +531,8 @@ public class HippocampalMemory {
             let key = patternHash(pattern)
             let currentStrength = longTermMemory.getMemoryStrength(key: key)
             longTermMemory.consolidateMemory(
-                key: key, pattern: pattern, strength: currentStrength + 0.1)
+                key: key, pattern: pattern, strength: currentStrength + 0.1
+            )
         }
     }
 
@@ -588,26 +593,27 @@ public class NeuromorphicLearningSupervisor {
 
             for synapse in axon.synapses {
                 // Simplified: would need actual spike timing data
-                let preSpikeTime = currentTime - Double.random(in: 0.001...0.01)
+                let preSpikeTime = currentTime - Double.random(in: 0.001 ... 0.01)
                 let postSpikeTime = currentTime
 
-                let _ = rule.updateWeight(
+                _ = rule.updateWeight(
                     synapse: synapse,
                     preSpikeTime: preSpikeTime,
                     postSpikeTime: postSpikeTime,
-                    currentTime: currentTime)
+                    currentTime: currentTime
+                )
             }
         }
     }
 
     private func updateMemorySystem(network: NeuromorphicNetwork) {
         // Extract network state as pattern
-        let pattern = network.neurons.map { $0.membranePotential }
+        let pattern = network.neurons.map(\.membranePotential)
         memorySystem.processMemory(pattern: pattern)
     }
 
     public func getLearningMetrics() -> [String: Double] {
-        return [
+        [
             "memory_items": Double(memorySystem.shortTermMemory.memoryItems.count),
             "consolidated_memories": Double(memorySystem.longTermMemory.memoryPatterns.count),
             "plasticity_rules": Double(plasticityRules.count),

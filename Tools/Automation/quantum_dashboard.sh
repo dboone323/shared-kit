@@ -107,10 +107,10 @@ print_quantum_metrics() {
 		fi
 	done
 
-	echo "   📱 Total Project$$$$${: }$to}tal}_pr}oje}cts"
-	echo "   ⚛️  Quantum Enhanc$$$${d: $}quan}tum_}proj}e$$$${${s}}/$to}tal_}proj}ects"
-	echo "   🧠 AI Enhance$$$${${ }}$ai}_en}han}c$$$$${d/}$to}tal}_pr}oje}cts"
-	echo "   🔧 Auto-Fix Enable$$$$${: $a}uto}_fi}x_e}nab}l$$$$${d/}$to}tal}_pr}oje}cts"
+	echo "   📱 Total Projects: ${total_projects}"
+	echo "   ⚛️  Quantum Enhanced: ${quantum_projects}/${total_projects}"
+	echo "   🧠 AI Enhanced: ${ai_enhanced}/${total_projects}"
+	echo "   🔧 Auto-Fix Enabled: ${auto_fix_enabled}/${total_projects}"
 	echo ""
 
 	# Calculate quantum readiness percentage
@@ -118,7 +118,7 @@ print_quantum_metrics() {
 	if [[ ${readiness} -eq 100 ]]; then
 		echo -e "   ${GREEN}🎉 100% Quantum Readiness Achieved!${NC}"
 	else
-		echo -e "   ${YELLOW}⚠️  Quantum Readine$$${${${}}: $r}eadi}ness%${NC}"
+		echo -e "   ${YELLOW}⚠️  Quantum Readiness: ${readiness}%${NC}"
 	fi
 
 	echo ""

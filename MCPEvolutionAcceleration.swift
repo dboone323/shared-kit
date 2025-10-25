@@ -42,8 +42,8 @@
 // Performance: Optimized for real-time evolution acceleration and capability enhancement
 // Universal Scope: Designed to operate across all dimensions and realities
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Core Evolution Types
 
@@ -148,7 +148,7 @@ public final class EvolutionaryAcceleration: Sendable {
     /// Get evolutionary momentum
     /// - Returns: Evolutionary momentum metric
     public func evolutionaryMomentum() -> Double {
-        let growthAcceleration = growthPatterns.map { $0.accelerationRate }.reduce(0, +) / Double(max(1, growthPatterns.count))
+        let growthAcceleration = growthPatterns.map(\.accelerationRate).reduce(0, +) / Double(max(1, growthPatterns.count))
         let efficiency = accelerationEfficiency()
         return (growthAcceleration + efficiency) / 2.0
     }
@@ -203,9 +203,9 @@ public final class EvolutionAccelerator: Sendable {
 
     /// Analyze evolutionary state
     private func analyzeEvolutionaryState(_ process: EvolutionaryProcess) -> EvolutionaryState {
-        let adaptationRate = process.adaptationHistory.map { $0.rate }.reduce(0, +) / Double(process.adaptationHistory.count)
-        let complexityGrowth = process.complexityHistory.map { $0.growth }.reduce(0, +) / Double(process.complexityHistory.count)
-        let capabilityExpansion = process.capabilityHistory.map { $0.expansion }.reduce(0, +) / Double(process.capabilityHistory.count)
+        let adaptationRate = process.adaptationHistory.map(\.rate).reduce(0, +) / Double(process.adaptationHistory.count)
+        let complexityGrowth = process.complexityHistory.map(\.growth).reduce(0, +) / Double(process.complexityHistory.count)
+        let capabilityExpansion = process.capabilityHistory.map(\.expansion).reduce(0, +) / Double(process.capabilityHistory.count)
 
         let momentumIndex = (adaptationRate + complexityGrowth + capabilityExpansion) / 3.0
 
@@ -254,8 +254,8 @@ public final class EvolutionAccelerator: Sendable {
 
         return AccelerationParameters(
             parameters: parameters,
-            overallAccelerationFactor: parameters.map { $0.accelerationFactor }.reduce(1, *),
-            estimatedTotalImpact: parameters.map { $0.estimatedImpact }.reduce(0, +),
+            overallAccelerationFactor: parameters.map(\.accelerationFactor).reduce(1, *),
+            estimatedTotalImpact: parameters.map(\.estimatedImpact).reduce(0, +),
             calculatedAt: Date()
         )
     }
@@ -285,7 +285,7 @@ public final class EvolutionAccelerator: Sendable {
         // Simulate acceleration application
         try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
 
-        let actualImpact = parameter.estimatedImpact * (0.8 + Double.random(in: 0...0.4))
+        let actualImpact = parameter.estimatedImpact * (0.8 + Double.random(in: 0 ... 0.4))
         let successRate = min(1.0, actualImpact / parameter.estimatedImpact)
 
         return EvolutionAccelerationStep(
@@ -299,8 +299,8 @@ public final class EvolutionAccelerator: Sendable {
 
     /// Generate evolution catalyst
     private func generateEvolutionCatalyst(_ results: [EvolutionAccelerationStep]) -> EvolutionCatalyst {
-        let avgSuccessRate = results.map { $0.successRate }.reduce(0, +) / Double(results.count)
-        let totalImpact = results.map { $0.actualImpact }.reduce(0, +)
+        let avgSuccessRate = results.map(\.successRate).reduce(0, +) / Double(results.count)
+        let totalImpact = results.map(\.actualImpact).reduce(0, +)
         let catalystStrength = avgSuccessRate * 0.8
 
         return EvolutionCatalyst(
@@ -309,7 +309,7 @@ public final class EvolutionAccelerator: Sendable {
             catalystStrength: catalystStrength,
             coverageScope: .universal,
             evolutionDomain: .multiDomain,
-            activeProcesses: results.map { $0.parameterId },
+            activeProcesses: results.map(\.parameterId),
             generatedAt: Date()
         )
     }
@@ -356,8 +356,8 @@ public final class CapabilityAmplifier: Sendable {
             )
         }
 
-        let overallAmplificationPotential = performanceMetrics.map { $0.amplificationPotential }.reduce(0, +) / Double(performanceMetrics.count)
-        let capabilityDiversity = Double(Set(system.capabilities.map { $0.type }).count) / 10.0 // Assuming 10 capability types
+        let overallAmplificationPotential = performanceMetrics.map(\.amplificationPotential).reduce(0, +) / Double(performanceMetrics.count)
+        let capabilityDiversity = Double(Set(system.capabilities.map(\.type)).count) / 10.0 // Assuming 10 capability types
         let synergyIndex = calculateSynergyIndex(system.capabilities)
 
         return CapabilityAssessment(
@@ -392,7 +392,7 @@ public final class CapabilityAmplifier: Sendable {
         return AmplificationStrategy(
             amplificationTargets: amplificationTargets,
             totalResourceRequirements: calculateTotalResources(amplificationTargets),
-            estimatedTotalDuration: amplificationTargets.map { $0.estimatedDuration }.reduce(0, +),
+            estimatedTotalDuration: amplificationTargets.map(\.estimatedDuration).reduce(0, +),
             riskAssessment: calculateRiskAssessment(amplificationTargets),
             designedAt: Date()
         )
@@ -447,22 +447,22 @@ public final class CapabilityAmplifier: Sendable {
     private func executeAmplificationTarget(_ target: AmplificationTarget, for system: AmplifiableSystem) async -> CapabilityAmplificationStep {
         try? await Task.sleep(nanoseconds: UInt64(target.estimatedDuration * 1_000_000_000))
 
-        let achievedLevel = target.targetLevel * (0.85 + Double.random(in: 0...0.3))
+        let achievedLevel = target.targetLevel * (0.85 + Double.random(in: 0 ... 0.3))
         let amplificationSuccess = achievedLevel >= target.targetLevel * 0.9
 
         return CapabilityAmplificationStep(
             targetId: target.id,
             achievedLevel: achievedLevel,
             amplificationSuccess: amplificationSuccess,
-            resourceUtilization: target.resourceRequirements.mapValues { $0 * (0.9 + Double.random(in: 0...0.2)) },
+            resourceUtilization: target.resourceRequirements.mapValues { $0 * (0.9 + Double.random(in: 0 ... 0.2)) },
             completedAt: Date()
         )
     }
 
     /// Generate capability multiplier
     private func generateCapabilityMultiplier(_ results: [CapabilityAmplificationStep]) -> CapabilityMultiplier {
-        let avgSuccessRate = results.filter { $0.amplificationSuccess }.count / results.count
-        let totalAmplification = results.map { $0.achievedLevel }.reduce(0, +) / Double(results.count)
+        let avgSuccessRate = results.filter(\.amplificationSuccess).count / results.count
+        let totalAmplification = results.map(\.achievedLevel).reduce(0, +) / Double(results.count)
         let multiplierValue = 1.0 + (totalAmplification * Double(avgSuccessRate))
 
         return CapabilityMultiplier(
@@ -470,7 +470,7 @@ public final class CapabilityAmplifier: Sendable {
             multiplierType: .exponential,
             multiplierValue: multiplierValue,
             coverageDomain: .universal,
-            activeCapabilities: results.map { $0.targetId },
+            activeCapabilities: results.map(\.targetId),
             generatedAt: Date()
         )
     }
@@ -565,11 +565,11 @@ public struct EvolutionRate: Sendable {
     public let growthVelocity: Double
 
     public init(forces: [AccelerationFactor]) {
-        let totalStrength = forces.map { $0.strength }.reduce(0, +)
+        let totalStrength = forces.map(\.strength).reduce(0, +)
         self.optimalStrength = totalStrength / Double(forces.count)
 
         // Generate acceleration curve
-        self.accelerationCurve = (0..<10).map { step in
+        self.accelerationCurve = (0 ..< 10).map { step in
             let baseRate = Double(step + 1) / 10.0
             return baseRate * (1.0 + optimalStrength / 10.0)
         }
@@ -1080,9 +1080,9 @@ public final class LearningAccelerator: Sendable {
 
     /// Assess learning state
     private func assessLearningState(_ learner: AcceleratedLearner) -> LearningState {
-        let learningRate = learner.learningHistory.map { $0.rate }.reduce(0, +) / Double(learner.learningHistory.count)
-        let knowledgeRetention = learner.knowledgeHistory.map { $0.retention }.reduce(0, +) / Double(learner.knowledgeHistory.count)
-        let skillAcquisition = learner.skillHistory.map { $0.acquisition }.reduce(0, +) / Double(learner.skillHistory.count)
+        let learningRate = learner.learningHistory.map(\.rate).reduce(0, +) / Double(learner.learningHistory.count)
+        let knowledgeRetention = learner.knowledgeHistory.map(\.retention).reduce(0, +) / Double(learner.knowledgeHistory.count)
+        let skillAcquisition = learner.skillHistory.map(\.acquisition).reduce(0, +) / Double(learner.skillHistory.count)
 
         return LearningState(
             learningRate: learningRate,
@@ -1117,8 +1117,8 @@ public final class LearningAccelerator: Sendable {
 
         return LearningAccelerationStrategy(
             accelerationTechniques: accelerationTechniques,
-            totalExpectedImprovement: accelerationTechniques.map { $0.expectedImprovement }.reduce(0, +),
-            estimatedDuration: accelerationTechniques.map { $0.duration }.reduce(0, +),
+            totalExpectedImprovement: accelerationTechniques.map(\.expectedImprovement).reduce(0, +),
+            estimatedDuration: accelerationTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1147,7 +1147,7 @@ public final class LearningAccelerator: Sendable {
     private func executeAccelerationTechnique(_ technique: LearningAccelerationTechnique, for learner: AcceleratedLearner) async -> LearningAccelerationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualImprovement = technique.expectedImprovement * (0.8 + Double.random(in: 0...0.4))
+        let actualImprovement = technique.expectedImprovement * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualImprovement >= technique.expectedImprovement * 0.9
 
         return LearningAccelerationStep(
@@ -1161,8 +1161,8 @@ public final class LearningAccelerator: Sendable {
 
     /// Generate learning multiplier
     private func generateLearningMultiplier(_ results: [LearningAccelerationStep]) -> LearningMultiplier {
-        let successRate = Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalImprovement = results.map { $0.actualImprovement }.reduce(0, +)
+        let successRate = Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalImprovement = results.map(\.actualImprovement).reduce(0, +)
         let multiplierValue = 1.0 + (totalImprovement * successRate / 10.0)
 
         return LearningMultiplier(
@@ -1170,7 +1170,7 @@ public final class LearningAccelerator: Sendable {
             multiplierType: .exponential,
             multiplierValue: multiplierValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -1201,7 +1201,7 @@ public final class GrowthCatalyst: Sendable {
     /// Assess growth potential
     private func assessGrowthPotential(_ system: GrowableSystem) -> GrowthAssessment {
         let currentSize = system.sizeMetrics.currentSize
-        let growthRate = system.growthHistory.map { $0.rate }.reduce(0, +) / Double(system.growthHistory.count)
+        let growthRate = system.growthHistory.map(\.rate).reduce(0, +) / Double(system.growthHistory.count)
         let scalability = system.scalabilityMetrics.scalabilityIndex
         let resourceAvailability = system.resourceMetrics.availabilityIndex
 
@@ -1239,8 +1239,8 @@ public final class GrowthCatalyst: Sendable {
 
         return GrowthCatalysisStrategy(
             catalysisMethods: catalysisMethods,
-            totalExpectedGrowthBoost: catalysisMethods.map { $0.expectedGrowthBoost }.reduce(0, +),
-            estimatedDuration: catalysisMethods.map { $0.duration }.reduce(0, +),
+            totalExpectedGrowthBoost: catalysisMethods.map(\.expectedGrowthBoost).reduce(0, +),
+            estimatedDuration: catalysisMethods.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1269,7 +1269,7 @@ public final class GrowthCatalyst: Sendable {
     private func executeCatalysisMethod(_ method: GrowthCatalysisMethod, for system: GrowableSystem) async -> GrowthCatalysisStep {
         try? await Task.sleep(nanoseconds: UInt64(method.duration * 1_000_000_000))
 
-        let actualGrowthBoost = method.expectedGrowthBoost * (0.85 + Double.random(in: 0...0.3))
+        let actualGrowthBoost = method.expectedGrowthBoost * (0.85 + Double.random(in: 0 ... 0.3))
         let methodSuccess = actualGrowthBoost >= method.expectedGrowthBoost * 0.95
 
         return GrowthCatalysisStep(
@@ -1283,8 +1283,8 @@ public final class GrowthCatalyst: Sendable {
 
     /// Generate growth accelerator
     private func generateGrowthAccelerator(_ results: [GrowthCatalysisStep]) -> GrowthAccelerator {
-        let successRate = Double(results.filter { $0.methodSuccess }.count) / Double(results.count)
-        let totalGrowthBoost = results.map { $0.actualGrowthBoost }.reduce(0, +)
+        let successRate = Double(results.filter(\.methodSuccess).count) / Double(results.count)
+        let totalGrowthBoost = results.map(\.actualGrowthBoost).reduce(0, +)
         let acceleratorValue = 1.0 + (totalGrowthBoost * successRate / 8.0)
 
         return GrowthAccelerator(
@@ -1292,7 +1292,7 @@ public final class GrowthCatalyst: Sendable {
             acceleratorType: .exponential,
             acceleratorValue: acceleratorValue,
             coverageDomain: .universal,
-            activeMethods: results.map { $0.methodId },
+            activeMethods: results.map(\.methodId),
             generatedAt: Date()
         )
     }
@@ -1361,8 +1361,8 @@ public final class IntelligenceBooster: Sendable {
 
         return IntelligenceBoostStrategy(
             boostTechniques: boostTechniques,
-            totalExpectedIntelligenceGain: boostTechniques.map { $0.expectedIntelligenceGain }.reduce(0, +),
-            estimatedDuration: boostTechniques.map { $0.duration }.reduce(0, +),
+            totalExpectedIntelligenceGain: boostTechniques.map(\.expectedIntelligenceGain).reduce(0, +),
+            estimatedDuration: boostTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1391,7 +1391,7 @@ public final class IntelligenceBooster: Sendable {
     private func executeBoostTechnique(_ technique: IntelligenceBoostTechnique, for intelligence: BoostableIntelligence) async -> IntelligenceBoostStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualIntelligenceGain = technique.expectedIntelligenceGain * (0.8 + Double.random(in: 0...0.4))
+        let actualIntelligenceGain = technique.expectedIntelligenceGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualIntelligenceGain >= technique.expectedIntelligenceGain * 0.9
 
         return IntelligenceBoostStep(
@@ -1405,8 +1405,8 @@ public final class IntelligenceBooster: Sendable {
 
     /// Generate intelligence amplifier
     private func generateIntelligenceAmplifier(_ results: [IntelligenceBoostStep]) -> IntelligenceAmplifier {
-        let successRate = Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalIntelligenceGain = results.map { $0.actualIntelligenceGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalIntelligenceGain = results.map(\.actualIntelligenceGain).reduce(0, +)
         let amplifierValue = 1.0 + (totalIntelligenceGain * successRate / 6.0)
 
         return IntelligenceAmplifier(
@@ -1414,7 +1414,7 @@ public final class IntelligenceBooster: Sendable {
             amplifierType: .exponential,
             amplifierValue: amplifierValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -1479,7 +1479,7 @@ public final class AdaptationEngine: Sendable {
 
     /// Calculate adaptation complexity
     private func calculateAdaptationComplexity(_ gaps: [AdaptationGap]) -> Double {
-        let avgGapSize = gaps.map { $0.gapSize }.reduce(0, +) / Double(max(1, gaps.count))
+        let avgGapSize = gaps.map(\.gapSize).reduce(0, +) / Double(max(1, gaps.count))
         let highPriorityGaps = gaps.filter { $0.adaptationPriority == .high }.count
         return min(1.0, (avgGapSize + Double(highPriorityGaps) / Double(max(1, gaps.count))) / 2.0)
     }
@@ -1498,8 +1498,8 @@ public final class AdaptationEngine: Sendable {
 
         return AdaptationStrategy(
             adaptationActions: adaptationActions,
-            totalExpectedAdaptationGain: adaptationActions.map { $0.expectedAdaptationGain }.reduce(0, +),
-            estimatedDuration: adaptationActions.map { $0.duration }.reduce(0, +),
+            totalExpectedAdaptationGain: adaptationActions.map(\.expectedAdaptationGain).reduce(0, +),
+            estimatedDuration: adaptationActions.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1528,7 +1528,7 @@ public final class AdaptationEngine: Sendable {
     private func executeAdaptationAction(_ action: AdaptationAction, for system: AdaptableSystem) async -> AdaptationExecutionResult {
         try? await Task.sleep(nanoseconds: UInt64(action.duration * 1_000_000_000))
 
-        let actualAdaptationGain = action.expectedAdaptationGain * (0.85 + Double.random(in: 0...0.3))
+        let actualAdaptationGain = action.expectedAdaptationGain * (0.85 + Double.random(in: 0 ... 0.3))
         let actionSuccess = actualAdaptationGain >= action.expectedAdaptationGain * 0.95
 
         return AdaptationExecutionResult(
@@ -1542,8 +1542,8 @@ public final class AdaptationEngine: Sendable {
 
     /// Generate adaptation accelerator
     private func generateAdaptationAccelerator(_ results: [AdaptationExecutionResult]) -> AdaptationAccelerator {
-        let successRate = Double(results.filter { $0.actionSuccess }.count) / Double(results.count)
-        let totalAdaptationGain = results.map { $0.actualAdaptationGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.actionSuccess).count) / Double(results.count)
+        let totalAdaptationGain = results.map(\.actualAdaptationGain).reduce(0, +)
         let acceleratorValue = 1.0 + (totalAdaptationGain * successRate / 5.0)
 
         return AdaptationAccelerator(
@@ -1551,7 +1551,7 @@ public final class AdaptationEngine: Sendable {
             acceleratorType: .exponential,
             acceleratorValue: acceleratorValue,
             coverageDomain: .universal,
-            activeActions: results.map { $0.actionId },
+            activeActions: results.map(\.actionId),
             generatedAt: Date()
         )
     }
@@ -1620,8 +1620,8 @@ public final class InnovationAccelerator: Sendable {
 
         return InnovationAccelerationStrategy(
             accelerationTechniques: accelerationTechniques,
-            totalExpectedInnovationBoost: accelerationTechniques.map { $0.expectedInnovationBoost }.reduce(0, +),
-            estimatedDuration: accelerationTechniques.map { $0.duration }.reduce(0, +),
+            totalExpectedInnovationBoost: accelerationTechniques.map(\.expectedInnovationBoost).reduce(0, +),
+            estimatedDuration: accelerationTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1650,7 +1650,7 @@ public final class InnovationAccelerator: Sendable {
     private func executeAccelerationTechnique(_ technique: InnovationAccelerationTechnique, for innovator: InnovativeSystem) async -> InnovationAccelerationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualInnovationBoost = technique.expectedInnovationBoost * (0.8 + Double.random(in: 0...0.4))
+        let actualInnovationBoost = technique.expectedInnovationBoost * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualInnovationBoost >= technique.expectedInnovationBoost * 0.9
 
         return InnovationAccelerationStep(
@@ -1664,8 +1664,8 @@ public final class InnovationAccelerator: Sendable {
 
     /// Generate innovation multiplier
     private func generateInnovationMultiplier(_ results: [InnovationAccelerationStep]) -> InnovationMultiplier {
-        let successRate = Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalInnovationBoost = results.map { $0.actualInnovationBoost }.reduce(0, +)
+        let successRate = Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalInnovationBoost = results.map(\.actualInnovationBoost).reduce(0, +)
         let multiplierValue = 1.0 + (totalInnovationBoost * successRate / 7.0)
 
         return InnovationMultiplier(
@@ -1673,7 +1673,7 @@ public final class InnovationAccelerator: Sendable {
             multiplierType: .exponential,
             multiplierValue: multiplierValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }
@@ -1742,8 +1742,8 @@ public final class PerformanceMultiplier: Sendable {
 
         return PerformanceMultiplicationStrategy(
             multiplicationTechniques: multiplicationTechniques,
-            totalExpectedPerformanceGain: multiplicationTechniques.map { $0.expectedPerformanceGain }.reduce(0, +),
-            estimatedDuration: multiplicationTechniques.map { $0.duration }.reduce(0, +),
+            totalExpectedPerformanceGain: multiplicationTechniques.map(\.expectedPerformanceGain).reduce(0, +),
+            estimatedDuration: multiplicationTechniques.map(\.duration).reduce(0, +),
             designedAt: Date()
         )
     }
@@ -1772,7 +1772,7 @@ public final class PerformanceMultiplier: Sendable {
     private func executeMultiplicationTechnique(_ technique: PerformanceMultiplicationTechnique, for system: PerformantSystem) async -> PerformanceMultiplicationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualPerformanceGain = technique.expectedPerformanceGain * (0.85 + Double.random(in: 0...0.3))
+        let actualPerformanceGain = technique.expectedPerformanceGain * (0.85 + Double.random(in: 0 ... 0.3))
         let techniqueSuccess = actualPerformanceGain >= technique.expectedPerformanceGain * 0.95
 
         return PerformanceMultiplicationStep(
@@ -1786,8 +1786,8 @@ public final class PerformanceMultiplier: Sendable {
 
     /// Generate performance amplifier
     private func generatePerformanceAmplifier(_ results: [PerformanceMultiplicationStep]) -> PerformanceAmplifier {
-        let successRate = Double(results.filter { $0.techniqueSuccess }.count) / Double(results.count)
-        let totalPerformanceGain = results.map { $0.actualPerformanceGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.techniqueSuccess).count) / Double(results.count)
+        let totalPerformanceGain = results.map(\.actualPerformanceGain).reduce(0, +)
         let amplifierValue = 1.0 + (totalPerformanceGain * successRate / 6.0)
 
         return PerformanceAmplifier(
@@ -1795,7 +1795,7 @@ public final class PerformanceMultiplier: Sendable {
             amplifierType: .exponential,
             amplifierValue: amplifierValue,
             coverageDomain: .universal,
-            activeTechniques: results.map { $0.techniqueId },
+            activeTechniques: results.map(\.techniqueId),
             generatedAt: Date()
         )
     }

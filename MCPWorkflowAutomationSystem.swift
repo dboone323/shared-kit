@@ -433,8 +433,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         let events = generateAutomationEvents(session, optimizationResult: optimizationResult)
 
         let success = optimizationResult.optimizedResult.overallSuccess &&
-                     automationEfficiency > 0.7 &&
-                     optimizationScore > 0.6
+            automationEfficiency > 0.7 &&
+            optimizationScore > 0.6
 
         return AutomationSynthesisResult(
             mcpToolUsage: mcpToolUsage,
@@ -554,7 +554,7 @@ public final class MCPWorkflowAutomationSystem: Sendable {
                 ImplementationPhase(phase: "Setup", duration: 300, dependencies: []),
                 ImplementationPhase(phase: "Tool Orchestration", duration: 600, dependencies: ["Setup"]),
                 ImplementationPhase(phase: "Execution", duration: 900, dependencies: ["Tool Orchestration"]),
-                ImplementationPhase(phase: "Optimization", duration: 300, dependencies: ["Execution"])
+                ImplementationPhase(phase: "Optimization", duration: 300, dependencies: ["Execution"]),
             ],
             totalDuration: 2100,
             criticalPath: ["Setup", "Tool Orchestration", "Execution", "Optimization"]
@@ -717,7 +717,7 @@ public final class MCPWorkflowAutomationSystem: Sendable {
             resourceUtilization: optimizationResult.optimizedResult.resourceUtilization,
             successRate: optimizationResult.optimizedResult.overallSuccess ? 1.0 : 0.0,
             throughput: Double(optimizationResult.optimizedResult.stepResults.count) /
-                       optimizationResult.optimizedResult.totalExecutionTime,
+                optimizationResult.optimizedResult.totalExecutionTime,
             efficiency: calculateAutomationEfficiency(optimizationResult)
         )
     }
@@ -726,7 +726,7 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         _ session: MCPAutomationSession,
         optimizationResult: AutomationOptimizationResult
     ) -> [AutomationEvent] {
-        return [
+        [
             AutomationEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -742,9 +742,9 @@ public final class MCPWorkflowAutomationSystem: Sendable {
                 data: [
                     "success": optimizationResult.optimizedResult.overallSuccess,
                     "execution_time": optimizationResult.optimizedResult.totalExecutionTime,
-                    "efficiency": calculateAutomationEfficiency(optimizationResult)
+                    "efficiency": calculateAutomationEfficiency(optimizationResult),
                 ]
-            )
+            ),
         ]
     }
 
@@ -754,7 +754,7 @@ public final class MCPWorkflowAutomationSystem: Sendable {
 
     private func automationCoordinator.breakDownWorkflow(_ workflow: MCPWorkflow) async throws -> [WorkflowStep] {
         // Break down workflow into steps
-        return workflow.steps
+        workflow.steps
     }
 
     private func mcpToolOrchestrator.assignToolsToSteps(
@@ -762,17 +762,17 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         strategy: MCPAutomationStrategy
     ) async throws -> [String: MCPTool] {
         // Assign MCP tools to workflow steps
-        return [:]
+        [:]
     }
 
     private func determineExecutionOrder(_ steps: [WorkflowStep]) -> [String] {
         // Determine execution order based on dependencies
-        return steps.map { $0.id }
+        steps.map(\.id)
     }
 
     private func identifyParallelizationOpportunities(_ steps: [WorkflowStep]) -> [ParallelizationOpportunity] {
         // Identify parallelization opportunities
-        return []
+        []
     }
 
     private func calculateResourceRequirements(
@@ -791,7 +791,7 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         _ steps: [WorkflowStep],
         _ assignments: [String: MCPTool]
     ) -> TimeInterval {
-        return TimeInterval(steps.count * 30) // 30 seconds per step estimate
+        TimeInterval(steps.count * 30) // 30 seconds per step estimate
     }
 
     private func executionManager.executeAutomatedWorkflow(_ context: MCPExecutionContext) async throws -> AutomatedExecutionResult {
@@ -810,12 +810,12 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         opportunities: [OptimizationOpportunity]
     ) async throws -> MCPExecutionResult {
         // Apply optimizations to execution result
-        return result
+        result
     }
 
     private func automationEngine.identifyOptimizationOpportunities(_ result: MCPExecutionResult) async -> [OptimizationOpportunity] {
         // Identify optimization opportunities
-        return []
+        []
     }
 }
 
@@ -1341,7 +1341,7 @@ public struct MCPAutomationMetrics: Sendable, Codable {
     public var totalScheduledAutomations: Int = 0
     public var averageScheduleAdherence: Double = 0.0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// MCP automation analytics
@@ -1470,7 +1470,7 @@ private final class MCPToolOrchestrator: Sendable {
 
     func discoverAvailableTools() async throws -> [MCPTool] {
         // Discover available MCP tools
-        return []
+        []
     }
 }
 
@@ -1560,9 +1560,9 @@ private final class IntelligentAutomationScheduler: Sendable {
 
 // MARK: - Extensions
 
-extension MCPWorkflowAutomationSystem {
+public extension MCPWorkflowAutomationSystem {
     /// Create specialized automation system for specific workflow types
-    public static func createSpecializedAutomationSystem(
+    static func createSpecializedAutomationSystem(
         for workflowType: WorkflowType
     ) async throws -> MCPWorkflowAutomationSystem {
         let system = try await MCPWorkflowAutomationSystem()
@@ -1571,7 +1571,7 @@ extension MCPWorkflowAutomationSystem {
     }
 
     /// Execute batch automation for multiple workflows
-    public func executeBatchAutomation(
+    func executeBatchAutomation(
         _ automationRequests: [MCPAutomationRequest]
     ) async throws -> BatchAutomationResult {
 
@@ -1594,7 +1594,7 @@ extension MCPWorkflowAutomationSystem {
         }
 
         let successRate = Double(results.count) / Double(automationRequests.count)
-        let averageEfficiency = results.map { $0.automationEfficiency }.reduce(0, +) / Double(results.count)
+        let averageEfficiency = results.map(\.automationEfficiency).reduce(0, +) / Double(results.count)
 
         return BatchAutomationResult(
             batchId: batchId,
@@ -1610,7 +1610,7 @@ extension MCPWorkflowAutomationSystem {
     }
 
     /// Get automation recommendations
-    public func getAutomationRecommendations() async -> [AutomationRecommendation] {
+    func getAutomationRecommendations() async -> [AutomationRecommendation] {
         var recommendations: [AutomationRecommendation] = []
 
         let status = await getAutomationStatus()

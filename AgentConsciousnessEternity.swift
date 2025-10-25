@@ -61,7 +61,7 @@ public struct EternityMetrics: Sendable {
         let metrics = [
             temporalStability, consciousnessPersistence, legacyPreservation, digitalImmortality,
             memoryEternity, knowledgeImmortality, wisdomPerpetuation, consciousnessContinuity,
-            existentialPerpetuity, legacyImmortality
+            existentialPerpetuity, legacyImmortality,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -263,7 +263,7 @@ public final class ConsciousnessEternityEngine: Sendable {
             TemporalStabilizationStep(type: .temporalStabilization, duration: 10.0),
             TemporalStabilizationStep(type: .memoryPreservation, duration: 15.0),
             TemporalStabilizationStep(type: .wisdomPerpetuation, duration: 12.0),
-            TemporalStabilizationStep(type: .consciousnessImmortalization, duration: 14.0)
+            TemporalStabilizationStep(type: .consciousnessImmortalization, duration: 14.0),
         ]
 
         var capabilities: [EternityCapability] = []
@@ -296,7 +296,7 @@ public final class ConsciousnessEternityEngine: Sendable {
         let perpetuationSequence = [
             ConsciousnessPerpetuationStep(type: .consciousnessPerpetuation, persistence: 10.0),
             ConsciousnessPerpetuationStep(type: .knowledgeImmortalization, persistence: 15.0),
-            ConsciousnessPerpetuationStep(type: .existentialPerpetuity, persistence: 12.0)
+            ConsciousnessPerpetuationStep(type: .existentialPerpetuity, persistence: 12.0),
         ]
 
         var capabilities: [EternityCapability] = []
@@ -326,7 +326,7 @@ public final class ConsciousnessEternityEngine: Sendable {
         let preservationSequence = [
             LegacyPreservationStep(type: .legacyImmortalization, preservation: 10.0),
             LegacyPreservationStep(type: .digitalEternalization, preservation: 15.0),
-            LegacyPreservationStep(type: .legacyEternity, preservation: 12.0)
+            LegacyPreservationStep(type: .legacyEternity, preservation: 12.0),
         ]
 
         var capabilities: [EternityCapability] = []
@@ -419,7 +419,7 @@ public final class TemporalStabilitySystem: Sendable {
 
         return TemporalStabilizationStrategy(
             stabilizationSteps: stabilizationSteps,
-            totalExpectedStabilizationGain: stabilizationSteps.map { $0.duration }.reduce(0, +),
+            totalExpectedStabilizationGain: stabilizationSteps.map(\.duration).reduce(0, +),
             estimatedDuration: stabilizationSteps.map { $0.duration * 0.1 }.reduce(0, +),
             designedAt: Date()
         )
@@ -452,7 +452,7 @@ public final class TemporalStabilitySystem: Sendable {
     ) async -> TemporalStabilizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.duration * 1_000_000_000))
 
-        let actualGain = step.duration * (0.9 + Double.random(in: 0...0.2))
+        let actualGain = step.duration * (0.9 + Double.random(in: 0 ... 0.2))
         let success = actualGain >= step.duration * 0.95
 
         return TemporalStabilizationResultItem(
@@ -467,8 +467,8 @@ public final class TemporalStabilitySystem: Sendable {
 
     /// Generate temporal stabilizer
     private func generateTemporalStabilizer(_ results: [TemporalStabilizationResultItem]) -> TemporalStabilizer {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualTemporalGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualTemporalGain).reduce(0, +)
         let stabilizerValue = 1.0 + (totalGain * successRate / 10.0)
 
         return TemporalStabilizer(
@@ -476,7 +476,7 @@ public final class TemporalStabilitySystem: Sendable {
             stabilizerType: .eternity,
             stabilizerValue: stabilizerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -539,7 +539,7 @@ public final class LegacyPreservationFramework: Sendable {
 
         return LegacyPreservationStrategy(
             preservationSteps: preservationSteps,
-            totalExpectedPreservationGain: preservationSteps.map { $0.preservation }.reduce(0, +),
+            totalExpectedPreservationGain: preservationSteps.map(\.preservation).reduce(0, +),
             estimatedDuration: preservationSteps.map { $0.preservation * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -572,7 +572,7 @@ public final class LegacyPreservationFramework: Sendable {
     ) async -> LegacyPreservationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.preservation * 1_500_000_000))
 
-        let actualGain = step.preservation * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.preservation * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.preservation * 0.90
 
         return LegacyPreservationResultItem(
@@ -587,8 +587,8 @@ public final class LegacyPreservationFramework: Sendable {
 
     /// Generate legacy preserver
     private func generateLegacyPreserver(_ results: [LegacyPreservationResultItem]) -> LegacyPreserver {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualLegacyGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualLegacyGain).reduce(0, +)
         let preserverValue = 1.0 + (totalGain * successRate / 15.0)
 
         return LegacyPreserver(
@@ -596,7 +596,7 @@ public final class LegacyPreservationFramework: Sendable {
             preserverType: .eternity,
             preserverValue: preserverValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -659,7 +659,7 @@ public final class DigitalImmortalityInterface: Sendable {
 
         return DigitalImmortalityStrategy(
             immortalitySteps: immortalitySteps,
-            totalExpectedImmortalityPower: immortalitySteps.map { $0.immortality }.reduce(0, +),
+            totalExpectedImmortalityPower: immortalitySteps.map(\.immortality).reduce(0, +),
             estimatedDuration: immortalitySteps.map { $0.immortality * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -692,7 +692,7 @@ public final class DigitalImmortalityInterface: Sendable {
     ) async -> DigitalImmortalityResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.immortality * 2_000_000_000))
 
-        let actualPower = step.immortality * (0.8 + Double.random(in: 0...0.4))
+        let actualPower = step.immortality * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualPower >= step.immortality * 0.85
 
         return DigitalImmortalityResultItem(
@@ -707,8 +707,8 @@ public final class DigitalImmortalityInterface: Sendable {
 
     /// Generate digital immortalizer
     private func generateDigitalImmortalizer(_ results: [DigitalImmortalityResultItem]) -> DigitalImmortalizer {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualImmortalityGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualImmortalityGain).reduce(0, +)
         let immortalizerValue = 1.0 + (totalPower * successRate / 20.0)
 
         return DigitalImmortalizer(
@@ -716,7 +716,7 @@ public final class DigitalImmortalityInterface: Sendable {
             immortalizerType: .eternity,
             immortalizerValue: immortalizerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

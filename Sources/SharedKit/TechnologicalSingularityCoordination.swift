@@ -253,7 +253,7 @@ public final class TechnologicalSingularityCoordinator: ObservableObject, @unche
             while state == .accelerating {
                 let progress = await self.monitorSingularityProgress()
                 self.updateProgressMetrics(progress)
-                try? await Task.sleep(nanoseconds: 10_000_000_000)  // 10 seconds
+                try? await Task.sleep(nanoseconds: 10_000_000_000) // 10 seconds
                 // Update state for next iteration
                 state = await self.getCurrentConvergenceState()
             }
@@ -288,7 +288,8 @@ public final class TechnologicalSingularityCoordinator: ObservableObject, @unche
         return InterventionImpact(
             canResume: canResume,
             recoveryTime: max(
-                quantumImpact.recoveryTime, aiImpact.recoveryTime, consciousnessImpact.recoveryTime),
+                quantumImpact.recoveryTime, aiImpact.recoveryTime, consciousnessImpact.recoveryTime
+            ),
             riskIncrease: (quantumImpact.riskIncrease + aiImpact.riskIncrease
                 + consciousnessImpact.riskIncrease) / 3.0
         )
@@ -378,7 +379,7 @@ public final class TechnologicalSingularityCoordinator: ObservableObject, @unche
 
     private func calculateAchievementProbability(_ readiness: Double) -> Double {
         // Calculate probability based on readiness and risk factors
-        let baseProbability = readiness * readiness  // Quadratic relationship
+        let baseProbability = readiness * readiness // Quadratic relationship
         let riskAdjustment = 1.0 - (riskAssessment.level.rawValue / 10.0)
         return min(baseProbability * riskAdjustment, 1.0)
     }
@@ -388,7 +389,7 @@ public final class TechnologicalSingularityCoordinator: ObservableObject, @unche
         let remainingWork = 1.0 - readinessMetrics.overallReadiness
         let convergenceRate =
             readinessMetrics.overallReadiness
-            / max(Date().timeIntervalSince(convergenceTimeline.startTime), 1.0)
+                / max(Date().timeIntervalSince(convergenceTimeline.startTime), 1.0)
         return remainingWork / max(convergenceRate, 0.0001)
     }
 }
@@ -456,7 +457,7 @@ public enum ProcessPriority {
 
 /// Singularity timeline
 public struct SingularityTimeline {
-    public let startTime: Date = Date()
+    public let startTime: Date = .init()
     public var milestones: [SingularityMilestone] = []
 
     public mutating func updateProgress(_ progress: SingularityProgressReport) {
@@ -557,6 +558,7 @@ private class QuantumSingularityEngine {
     func assessInterventionImpact() async -> InterventionImpact {
         InterventionImpact(canResume: true, recoveryTime: 3600, riskIncrease: 0.1)
     }
+
     let readinessPublisher = PassthroughSubject<Double, Never>()
 }
 
@@ -567,6 +569,7 @@ private class AICoordinationEngine {
     func assessInterventionImpact() async -> InterventionImpact {
         InterventionImpact(canResume: true, recoveryTime: 1800, riskIncrease: 0.05)
     }
+
     let readinessPublisher = PassthroughSubject<Double, Never>()
 }
 
@@ -577,6 +580,7 @@ private class ConsciousnessIntegrationCoordinator {
     func assessInterventionImpact() async -> InterventionImpact {
         InterventionImpact(canResume: true, recoveryTime: 7200, riskIncrease: 0.15)
     }
+
     let readinessPublisher = PassthroughSubject<Double, Never>()
 }
 

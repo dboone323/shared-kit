@@ -339,7 +339,8 @@ public class MockHabitService: HabitServiceProtocol {
 
 public class MockFinancialService: FinancialServiceProtocol {
     public func createTransaction(_ transaction: any EnhancedFinancialTransactionProtocol) async throws
-        -> any EnhancedFinancialTransactionProtocol {
+        -> any EnhancedFinancialTransactionProtocol
+    {
         transaction
     }
 
@@ -874,7 +875,8 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
         case .delete:
             // Handle external deletions
             if let habitIdString = change.payload["habit_id"] as? String,
-               let habitId = UUID(uuidString: habitIdString) {
+               let habitId = UUID(uuidString: habitIdString)
+            {
                 self.habits.removeValue(forKey: habitId)
             }
 

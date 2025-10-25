@@ -1,5 +1,5 @@
 //
-//  SingularityMonitoringSystems.swift
+//  SingularityMonitoringSystemsFramework.swift
 //  Quantum Singularity Era - Phase 8H
 //
 //  Created on: October 13, 2025
@@ -333,7 +333,7 @@ public final class SingularityMonitoringCoordinator: ObservableObject, @unchecke
             while state == .tracking || state == .realityManaged || state == .eternal {
                 let evolution = await self.monitorSingularityEvolution()
                 self.updateEvolutionTracking(evolution)
-                try? await Task.sleep(nanoseconds: 15_000_000_000)  // 15 seconds
+                try? await Task.sleep(nanoseconds: 15_000_000_000) // 15 seconds
                 // Update state for next iteration
                 state = await self.getCurrentMonitoringState()
             }
@@ -402,7 +402,7 @@ public final class SingularityMonitoringCoordinator: ObservableObject, @unchecke
         for coordinator in systemCoordinators {
             coordinator.statusPublisher
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] (domain, status) in
+                .sink { [weak self] domain, status in
                     if let index = self?.activeMonitoringSystems.firstIndex(where: {
                         $0.domain == domain
                     }) {
@@ -451,7 +451,7 @@ public final class SingularityMonitoringCoordinator: ObservableObject, @unchecke
         evolutionTracking.evolutionProgress = evolution.evolutionProgress
         evolutionTracking.evolutionRate =
             evolution.evolutionProgress
-            / max(Date().timeIntervalSince(Date(timeIntervalSinceNow: -3600)), 1.0)
+                / max(Date().timeIntervalSince(Date(timeIntervalSinceNow: -3600)), 1.0)
     }
 
     private func calculateOverallHealth(_ systemStatus: [MonitoringDomain: MonitoringSystemStatus])

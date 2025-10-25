@@ -340,8 +340,7 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     private func processConsciousnessIntelligence(
         _ request: ConsciousnessWorkflowRequest,
         consciousnessState: ConsciousnessState
-    ) async throws -> ConsciousnessIntelligenceProcessing
-    {
+    ) async throws -> ConsciousnessIntelligenceProcessing {
         // Process consciousness intelligence
         let processingContext = ConsciousnessIntelligenceProcessingContext(
             workflow: request.workflow,
@@ -365,8 +364,7 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     private func manageConsciousnessState(
         _ request: ConsciousnessWorkflowRequest,
         intelligenceProcessing: ConsciousnessIntelligenceProcessing
-    ) async throws -> ConsciousnessStateManagement
-    {
+    ) async throws -> ConsciousnessStateManagement {
         // Manage consciousness state
         let managementContext = ConsciousnessStateManagementContext(
             consciousnessState: intelligenceProcessing.consciousnessState,
@@ -389,8 +387,7 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     private func synthesizeConsciousnessIntelligence(
         _ request: ConsciousnessWorkflowRequest,
         stateManagement: ConsciousnessStateManagement
-    ) async throws -> ConsciousnessIntelligenceSynthesis
-    {
+    ) async throws -> ConsciousnessIntelligenceSynthesis {
         // Synthesize consciousness intelligence
         let synthesisContext = ConsciousnessIntelligenceSynthesisContext(
             workflow: request.workflow,
@@ -414,8 +411,7 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     private func orchestrateConsciousnessWorkflow(
         _ request: ConsciousnessWorkflowRequest,
         intelligenceSynthesis: ConsciousnessIntelligenceSynthesis
-    ) async throws -> ConsciousnessWorkflowOrchestration
-    {
+    ) async throws -> ConsciousnessWorkflowOrchestration {
         // Orchestrate consciousness workflow
         let orchestrationContext = ConsciousnessWorkflowOrchestrationContext(
             workflow: request.workflow,
@@ -439,8 +435,7 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     private func validateConsciousnessIntelligenceResults(
         _ workflowOrchestration: ConsciousnessWorkflowOrchestration,
         session: ConsciousnessWorkflowSession
-    ) async throws -> ConsciousnessIntelligenceValidationResult
-    {
+    ) async throws -> ConsciousnessIntelligenceValidationResult {
         // Validate consciousness intelligence results
         let performanceComparison = await compareConsciousnessWorkflowPerformance(
             original: session.request.workflow,
@@ -453,7 +448,7 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
         )
 
         let success = performanceComparison.intelligenceExpansion >= session.request.intelligenceExpansionTarget &&
-                     consciousnessAdvantage.consciousnessAdvantage >= 0.2
+            consciousnessAdvantage.consciousnessAdvantage >= 0.2
 
         let events = generateConsciousnessIntelligenceEvents(session, orchestration: workflowOrchestration)
 
@@ -572,24 +567,24 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
 
     private func measureConsciousnessDepth(_ workflow: MCPWorkflow) async -> Double {
         // Measure consciousness depth level
-        return 0.89
+        0.89
     }
 
     private func measureAwarenessLevel(_ workflow: MCPWorkflow) async -> Double {
         // Measure awareness level
-        return 0.86
+        0.86
     }
 
     private func measureAdaptiveLearningRate(_ workflow: MCPWorkflow) async -> Double {
         // Measure adaptive learning rate
-        return 0.83
+        0.83
     }
 
     private func generateConsciousnessIntelligenceEvents(
         _ session: ConsciousnessWorkflowSession,
         orchestration: ConsciousnessWorkflowOrchestration
     ) -> [ConsciousnessIntelligenceEvent] {
-        return [
+        [
             ConsciousnessIntelligenceEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -605,9 +600,9 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
                 data: [
                     "success": true,
                     "intelligence_expansion": orchestration.orchestrationScore,
-                    "consciousness_integration": orchestration.consciousnessIntegration
+                    "consciousness_integration": orchestration.consciousnessIntegration,
                 ]
-            )
+            ),
         ]
     }
 
@@ -903,7 +898,7 @@ public struct ConsciousnessIntelligenceMetrics: Sendable, Codable {
     public var averageConsciousnessAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Consciousness workflow metrics
@@ -1381,9 +1376,9 @@ public struct ConsciousnessWorkflowOrchestrationResult: Sendable {
 
 // MARK: - Extensions
 
-extension ConsciousnessDrivenWorkflowSystem {
+public extension ConsciousnessDrivenWorkflowSystem {
     /// Create specialized consciousness system for specific workflow types
-    public static func createSpecializedConsciousnessSystem(
+    static func createSpecializedConsciousnessSystem(
         for workflowType: WorkflowType
     ) async throws -> ConsciousnessDrivenWorkflowSystem {
         let system = try await ConsciousnessDrivenWorkflowSystem()
@@ -1392,7 +1387,7 @@ extension ConsciousnessDrivenWorkflowSystem {
     }
 
     /// Execute batch consciousness workflow processing
-    public func executeBatchConsciousnessWorkflow(
+    func executeBatchConsciousnessWorkflow(
         _ consciousnessRequests: [ConsciousnessWorkflowRequest]
     ) async throws -> BatchConsciousnessWorkflowResult {
 
@@ -1415,8 +1410,8 @@ extension ConsciousnessDrivenWorkflowSystem {
         }
 
         let successRate = Double(results.count) / Double(consciousnessRequests.count)
-        let averageExpansion = results.map { $0.intelligenceExpansion }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.consciousnessAdvantage }.reduce(0, +) / Double(results.count)
+        let averageExpansion = results.map(\.intelligenceExpansion).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.consciousnessAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchConsciousnessWorkflowResult(
             batchId: batchId,
@@ -1433,7 +1428,7 @@ extension ConsciousnessDrivenWorkflowSystem {
     }
 
     /// Get consciousness intelligence recommendations
-    public func getConsciousnessIntelligenceRecommendations() async -> [ConsciousnessIntelligenceRecommendation] {
+    func getConsciousnessIntelligenceRecommendations() async -> [ConsciousnessIntelligenceRecommendation] {
         var recommendations: [ConsciousnessIntelligenceRecommendation] = []
 
         let status = await getConsciousnessWorkflowStatus()

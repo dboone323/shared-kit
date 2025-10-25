@@ -79,7 +79,8 @@ public actor AutonomousSecurity {
 
         // Generate response
         let response = try await adaptiveDefender.generateResponse(
-            for: incident, analysis: analysis)
+            for: incident, analysis: analysis
+        )
 
         // Execute response
         try await executeSecurityResponse(response)
@@ -90,7 +91,8 @@ public actor AutonomousSecurity {
         // Update metrics
         securityMetrics.responseTime = response.executionTime
         securityMetrics.securityScore = max(
-            0, securityMetrics.securityScore - incident.severity.rawValue)
+            0, securityMetrics.securityScore - incident.severity.rawValue
+        )
 
         logger.info(
             "✅ Security incident handled in \(String(format: "%.2f", response.executionTime))s")
@@ -124,7 +126,7 @@ public actor AutonomousSecurity {
 
                     // Adapt defenses based on learning
                     try await self.adaptiveDefender.adaptDefenses(
-                        learning: await self.securityLearner.getLearnings())
+                        learning: self.securityLearner.getLearnings())
 
                 } catch {
                     self.logger.error("Security monitoring error: \(error.localizedDescription)")
@@ -253,8 +255,7 @@ public actor ThreatPredictor {
         predictionModel.update(with: incident)
     }
 
-    private func predictFromPatterns(_ analysis: SecurityAnalysis) async throws -> [SecurityThreat]
-    {
+    private func predictFromPatterns(_ analysis: SecurityAnalysis) async throws -> [SecurityThreat] {
         var threats: [SecurityThreat] = []
 
         // Analyze access patterns for anomalies
@@ -267,7 +268,7 @@ public actor ThreatPredictor {
                     severity: .high,
                     confidence: 0.8,
                     indicators: ["High failed login ratio", "Multiple IP addresses"],
-                    predictedTime: Date().addingTimeInterval(3600)  // 1 hour
+                    predictedTime: Date().addingTimeInterval(3600) // 1 hour
                 )
                 threats.append(threat)
             }
@@ -283,7 +284,7 @@ public actor ThreatPredictor {
                     severity: .medium,
                     confidence: 0.7,
                     indicators: ["Unusual connection patterns", "Unknown destinations"],
-                    predictedTime: Date().addingTimeInterval(1800)  // 30 minutes
+                    predictedTime: Date().addingTimeInterval(1800) // 30 minutes
                 )
                 threats.append(threat)
             }
@@ -351,7 +352,7 @@ public actor SecurityAnalyzer {
     private func gatherSecurityMetrics() async throws -> SecurityMetrics {
         // In a real implementation, this would gather metrics from various sources
         // For now, return simulated metrics
-        return SecurityMetrics(
+        SecurityMetrics(
             threatDetectionRate: 0.85,
             falsePositiveRate: 0.05,
             responseTime: 2.3,
@@ -361,12 +362,12 @@ public actor SecurityAnalyzer {
 
     private func gatherRecentEvents() async throws -> [SecurityEvent] {
         // Gather recent security events from logs, monitoring systems, etc.
-        return []
+        []
     }
 
     private func analyzeAccessPatterns() async throws -> AccessPatternAnalysis? {
         // Analyze authentication and access patterns
-        return AccessPatternAnalysis(
+        AccessPatternAnalysis(
             successfulAttempts: 1250,
             failedAttempts: 23,
             uniqueIPs: 89,
@@ -376,11 +377,11 @@ public actor SecurityAnalyzer {
 
     private func analyzeNetworkTraffic() async throws -> NetworkTrafficAnalysis? {
         // Analyze network traffic patterns
-        return NetworkTrafficAnalysis(
+        NetworkTrafficAnalysis(
             totalConnections: 15420,
             suspiciousConnections: 7,
             blockedConnections: 12,
-            dataTransferred: 1024 * 1024 * 500  // 500MB
+            dataTransferred: 1024 * 1024 * 500 // 500MB
         )
     }
 
@@ -527,7 +528,7 @@ public actor AdaptiveDefender {
         return SecurityResponse(
             incidentId: incident.id,
             actions: actions,
-            executionTime: 0.0,  // Will be set when executed
+            executionTime: 0.0, // Will be set when executed
             success: true
         )
     }
@@ -565,7 +566,7 @@ public actor AdaptiveDefender {
                     type: .rateLimit,
                     condition: "login_attempts > 5",
                     action: .block,
-                    duration: 3600  // 1 hour
+                    duration: 3600 // 1 hour
                 ))
         case .injection:
             rules.append(
@@ -601,7 +602,7 @@ public actor AdaptiveDefender {
                     type: .trafficFilter,
                     condition: "high_traffic_volume",
                     action: .throttle,
-                    duration: 300  // 5 minutes
+                    duration: 300 // 5 minutes
                 ))
         case .malware:
             rules.append(
@@ -659,7 +660,7 @@ public actor SecurityLearner {
 
     /// Get current security learnings
     public func getLearnings() async -> SecurityLearnings {
-        return await learningModel.getLearnings()
+        await learningModel.getLearnings()
     }
 }
 
@@ -679,11 +680,11 @@ public struct SecurityThreat: Sendable {
 /// Types of security threats
 public enum ThreatType: String, Sendable {
     case bruteForce = "brute_force"
-    case injection = "injection"
-    case xss = "xss"
+    case injection
+    case xss
     case dataBreach = "data_breach"
-    case ddos = "ddos"
-    case malware = "malware"
+    case ddos
+    case malware
     case networkIntrusion = "network_intrusion"
 }
 
@@ -905,9 +906,9 @@ public actor SecurityLearningModel {
 
     func getLearnings() -> SecurityLearnings {
         // Generate learnings from stored incidents and responses
-        return SecurityLearnings(
+        SecurityLearnings(
             effectiveResponses: responses.count,
-            learnedPatterns: incidents.count / 10,  // Simplified
+            learnedPatterns: incidents.count / 10, // Simplified
             adaptationRate: 0.85
         )
     }
@@ -934,7 +935,7 @@ public func initializeAutonomousSecurity() async {
 /// Get autonomous security capabilities
 @MainActor
 public func getAutonomousSecurityCapabilities() -> [String: [String]] {
-    return [
+    [
         "threat_detection": ["pattern_analysis", "behavior_monitoring", "anomaly_detection"],
         "threat_prediction": ["ai_modeling", "trend_analysis", "risk_assessment"],
         "adaptive_defense": ["dynamic_policies", "automated_response", "self_evolution"],
@@ -951,7 +952,7 @@ public func reportSecurityIncident(_ incident: SecurityIncident) async throws {
 /// Get current security status
 @MainActor
 public func getCurrentSecurityStatus() async -> SecurityStatus {
-    return await globalAutonomousSecurity.getSecurityStatus()
+    await globalAutonomousSecurity.getSecurityStatus()
 }
 
 /// Manually trigger security analysis

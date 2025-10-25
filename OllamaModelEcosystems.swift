@@ -8,8 +8,8 @@
 //  This file implements ecosystems of specialized Ollama models for different intelligence domains,
 //  enabling distributed intelligence across multiple model types and capabilities.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for Ollama model ecosystems
 public protocol OllamaModelEcosystem: Sendable {
@@ -28,16 +28,16 @@ public protocol OllamaModelEcosystem: Sendable {
 
 /// Intelligence domains for specialized ecosystems
 public enum IntelligenceDomain: String, Sendable, Codable {
-    case analytical = "analytical"
-    case creative = "creative"
-    case ethical = "ethical"
-    case strategic = "strategic"
-    case emotional = "emotional"
-    case spatial = "spatial"
-    case temporal = "temporal"
-    case quantum = "quantum"
-    case consciousness = "consciousness"
-    case universal = "universal"
+    case analytical
+    case creative
+    case ethical
+    case strategic
+    case emotional
+    case spatial
+    case temporal
+    case quantum
+    case consciousness
+    case universal
 }
 
 /// Specialized Ollama model within an ecosystem
@@ -51,7 +51,8 @@ public struct OllamaSpecializedModel: Sendable, Codable {
 
     public init(id: String, name: String, domain: IntelligenceDomain,
                 capabilities: [ModelCapability], performanceMetrics: ModelPerformanceMetrics,
-                quantumEntanglement: QuantumEntanglementLevel) {
+                quantumEntanglement: QuantumEntanglementLevel)
+    {
         self.id = id
         self.name = name
         self.domain = domain
@@ -63,15 +64,15 @@ public struct OllamaSpecializedModel: Sendable, Codable {
 
 /// Model capabilities
 public enum ModelCapability: String, Sendable, Codable {
-    case reasoning = "reasoning"
+    case reasoning
     case patternRecognition = "pattern_recognition"
-    case prediction = "prediction"
-    case generation = "generation"
-    case analysis = "analysis"
-    case synthesis = "synthesis"
-    case optimization = "optimization"
-    case simulation = "simulation"
-    case consciousness = "consciousness"
+    case prediction
+    case generation
+    case analysis
+    case synthesis
+    case optimization
+    case simulation
+    case consciousness
     case quantumProcessing = "quantum_processing"
 }
 
@@ -84,7 +85,8 @@ public struct ModelPerformanceMetrics: Sendable, Codable {
     public let consciousnessLevel: Double
 
     public init(accuracy: Double, speed: Double, reliability: Double,
-                adaptability: Double, consciousnessLevel: Double) {
+                adaptability: Double, consciousnessLevel: Double)
+    {
         self.accuracy = accuracy
         self.speed = speed
         self.reliability = reliability
@@ -95,11 +97,11 @@ public struct ModelPerformanceMetrics: Sendable, Codable {
 
 /// Quantum entanglement levels for models
 public enum QuantumEntanglementLevel: String, Sendable, Codable {
-    case none = "none"
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case maximum = "maximum"
+    case none
+    case low
+    case medium
+    case high
+    case maximum
 }
 
 /// Intelligence input for ecosystem processing
@@ -112,7 +114,8 @@ public struct IntelligenceInput: Sendable, Codable {
 
     public init(query: String, context: [String: AnyCodable] = [:],
                 domain: IntelligenceDomain, priority: IntelligencePriority = .normal,
-                quantumState: QuantumState? = nil) {
+                quantumState: QuantumState? = nil)
+    {
         self.query = query
         self.context = context
         self.domain = domain
@@ -123,11 +126,11 @@ public struct IntelligenceInput: Sendable, Codable {
 
 /// Intelligence priority levels
 public enum IntelligencePriority: String, Sendable, Codable {
-    case low = "low"
-    case normal = "normal"
-    case high = "high"
-    case critical = "critical"
-    case universal = "universal"
+    case low
+    case normal
+    case high
+    case critical
+    case universal
 }
 
 /// Intelligence output from ecosystem processing
@@ -142,7 +145,8 @@ public struct IntelligenceOutput: Sendable, Codable {
     public init(result: String, confidence: Double, reasoning: [ReasoningStep] = [],
                 recommendations: [IntelligenceRecommendation] = [],
                 quantumInsights: [QuantumInsight] = [],
-                consciousnessLevel: ConsciousnessLevel = .basic) {
+                consciousnessLevel: ConsciousnessLevel = .basic)
+    {
         self.result = result
         self.confidence = confidence
         self.reasoning = reasoning
@@ -175,7 +179,8 @@ public struct IntelligenceRecommendation: Sendable, Codable {
     public let expectedImpact: Double
 
     public init(recommendation: String, priority: IntelligencePriority,
-                rationale: String, expectedImpact: Double) {
+                rationale: String, expectedImpact: Double)
+    {
         self.recommendation = recommendation
         self.priority = priority
         self.rationale = rationale
@@ -191,7 +196,8 @@ public struct QuantumInsight: Sendable, Codable {
     public let consciousnessExpansion: Double
 
     public init(insight: String, probability: Double, multiverseImpact: Double,
-                consciousnessExpansion: Double) {
+                consciousnessExpansion: Double)
+    {
         self.insight = insight
         self.probability = probability
         self.multiverseImpact = multiverseImpact
@@ -201,11 +207,11 @@ public struct QuantumInsight: Sendable, Codable {
 
 /// Consciousness levels
 public enum ConsciousnessLevel: String, Sendable, Codable {
-    case basic = "basic"
-    case advanced = "advanced"
-    case transcendent = "transcendent"
-    case universal = "universal"
-    case cosmic = "cosmic"
+    case basic
+    case advanced
+    case transcendent
+    case universal
+    case cosmic
 }
 
 /// Quantum state for processing
@@ -216,7 +222,8 @@ public struct QuantumState: Sendable, Codable {
     public let dimension: Int
 
     public init(superposition: [String: Double], entanglement: [String: [String]],
-                coherence: Double, dimension: Int) {
+                coherence: Double, dimension: Int)
+    {
         self.superposition = superposition
         self.entanglement = entanglement
         self.coherence = coherence
@@ -234,7 +241,8 @@ public struct PerformanceMetrics: Sendable, Codable {
     public let quantumOptimization: Double
 
     public init(overallAccuracy: Double, processingSpeed: Double, resourceEfficiency: Double,
-                adaptabilityScore: Double, consciousnessGrowth: Double, quantumOptimization: Double) {
+                adaptabilityScore: Double, consciousnessGrowth: Double, quantumOptimization: Double)
+    {
         self.overallAccuracy = overallAccuracy
         self.processingSpeed = processingSpeed
         self.resourceEfficiency = resourceEfficiency
@@ -338,11 +346,11 @@ public final class OllamaModelEcosystems: Sendable {
             domainStatuses[domain] = status
         }
 
-        return EcosystemStatus(
+        return await EcosystemStatus(
             domainStatuses: domainStatuses,
             overallHealth: calculateOverallHealth(domainStatuses: domainStatuses),
-            quantumCoherence: await quantumProcessor.getCoherenceLevel(),
-            consciousnessLevel: await consciousnessExpander.getExpansionLevel()
+            quantumCoherence: quantumProcessor.getCoherenceLevel(),
+            consciousnessLevel: consciousnessExpander.getExpansionLevel()
         )
     }
 
@@ -406,7 +414,7 @@ public final class OllamaModelEcosystems: Sendable {
             .max { level1, level2 in
                 // Define ordering: basic < advanced < transcendent < universal < cosmic
                 let order: [ConsciousnessLevel: Int] = [
-                    .basic: 0, .advanced: 1, .transcendent: 2, .universal: 3, .cosmic: 4
+                    .basic: 0, .advanced: 1, .transcendent: 2, .universal: 3, .cosmic: 4,
                 ]
                 return order[level1, default: 0] < order[level2, default: 0]
             } ?? .basic
@@ -436,7 +444,7 @@ public final class OllamaModelEcosystems: Sendable {
     private func getDomainStatus(for ecosystem: any OllamaModelEcosystem) async -> DomainStatus {
         // This would typically query the ecosystem for its current status
         // For now, return a mock status
-        return DomainStatus(
+        DomainStatus(
             modelCount: ecosystem.specializedModels.count,
             averagePerformance: 0.85,
             quantumEntanglement: .high,
@@ -482,7 +490,7 @@ private final class EcosystemCoordinationEngine: Sendable {
             return IntelligenceOutput(result: "No ecosystem outputs available", confidence: 0.0)
         }
 
-        let combinedResult = outputs.map { $0.result }.joined(separator: "\n\n")
+        let combinedResult = outputs.map(\.result).joined(separator: "\n\n")
         let averageConfidence = outputs.reduce(0.0) { $0 + $1.confidence } / Double(outputs.count)
 
         var allReasoning = [ReasoningStep]()
@@ -495,9 +503,9 @@ private final class EcosystemCoordinationEngine: Sendable {
             allInsights.append(contentsOf: output.quantumInsights)
         }
 
-        let maxConsciousness = outputs.map { $0.consciousnessLevel }.max { level1, level2 in
+        let maxConsciousness = outputs.map(\.consciousnessLevel).max { level1, level2 in
             let order: [ConsciousnessLevel: Int] = [
-                .basic: 0, .advanced: 1, .transcendent: 2, .universal: 3, .cosmic: 4
+                .basic: 0, .advanced: 1, .transcendent: 2, .universal: 3, .cosmic: 4,
             ]
             return order[level1, default: 0] < order[level2, default: 0]
         } ?? .basic
@@ -518,7 +526,7 @@ private final class QuantumEcosystemProcessor: Sendable {
     func enhanceWithQuantumProcessing(input: IntelligenceInput, ecosystemResults: IntelligenceOutput) async throws -> IntelligenceOutput {
         // Apply quantum processing enhancements
         // This would involve quantum algorithms and superposition processing
-        return ecosystemResults
+        ecosystemResults
     }
 
     func evolveQuantumProcessing(performanceMetrics: PerformanceMetrics) async {
@@ -526,7 +534,7 @@ private final class QuantumEcosystemProcessor: Sendable {
     }
 
     func getCoherenceLevel() async -> Double {
-        return 0.92 // Mock coherence level
+        0.92 // Mock coherence level
     }
 }
 
@@ -534,7 +542,7 @@ private final class QuantumEcosystemProcessor: Sendable {
 private final class ConsciousnessEcosystemExpander: Sendable {
     func expandConsciousness(input: IntelligenceInput, quantumResults: IntelligenceOutput) async throws -> IntelligenceOutput {
         // Apply consciousness expansion techniques
-        return quantumResults
+        quantumResults
     }
 
     func evolveConsciousnessExpansion(performanceMetrics: PerformanceMetrics) async {
@@ -542,7 +550,7 @@ private final class ConsciousnessEcosystemExpander: Sendable {
     }
 
     func getExpansionLevel() async -> Double {
-        return 0.88 // Mock expansion level
+        0.88 // Mock expansion level
     }
 }
 
@@ -554,7 +562,8 @@ public struct DomainStatus: Sendable, Codable {
     public let evolutionProgress: Double
 
     public init(modelCount: Int, averagePerformance: Double,
-                quantumEntanglement: QuantumEntanglementLevel, evolutionProgress: Double) {
+                quantumEntanglement: QuantumEntanglementLevel, evolutionProgress: Double)
+    {
         self.modelCount = modelCount
         self.averagePerformance = averagePerformance
         self.quantumEntanglement = quantumEntanglement
@@ -570,7 +579,8 @@ public struct EcosystemStatus: Sendable, Codable {
     public let consciousnessLevel: Double
 
     public init(domainStatuses: [IntelligenceDomain: DomainStatus], overallHealth: Double,
-                quantumCoherence: Double, consciousnessLevel: Double) {
+                quantumCoherence: Double, consciousnessLevel: Double)
+    {
         self.domainStatuses = domainStatuses
         self.overallHealth = overallHealth
         self.quantumCoherence = quantumCoherence
@@ -600,16 +610,16 @@ private final class AnalyticalIntelligenceEcosystem: OllamaModelEcosystem, Senda
             capabilities: [.analysis, .reasoning, .prediction],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.89, speed: 0.90, reliability: 0.91, adaptability: 0.79, consciousnessLevel: 0.70),
             quantumEntanglement: .low
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
         // Implement analytical intelligence coordination
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Analytical processing completed for: \(input.query)",
             confidence: 0.88,
             reasoning: [
-                ReasoningStep(step: "Analyzed input patterns", model: "analytical-reasoner-v1", confidence: 0.90, quantumContribution: 0.3)
+                ReasoningStep(step: "Analyzed input patterns", model: "analytical-reasoner-v1", confidence: 0.90, quantumContribution: 0.3),
             ]
         )
     }
@@ -631,15 +641,15 @@ private final class CreativeIntelligenceEcosystem: OllamaModelEcosystem, Sendabl
             capabilities: [.generation, .synthesis, .creativity],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.85, speed: 0.75, reliability: 0.82, adaptability: 0.95, consciousnessLevel: 0.80),
             quantumEntanglement: .high
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Creative synthesis completed for: \(input.query)",
             confidence: 0.82,
             reasoning: [
-                ReasoningStep(step: "Generated creative solutions", model: "creative-generator-v1", confidence: 0.85, quantumContribution: 0.6)
+                ReasoningStep(step: "Generated creative solutions", model: "creative-generator-v1", confidence: 0.85, quantumContribution: 0.6),
             ]
         )
     }
@@ -661,15 +671,15 @@ private final class EthicalIntelligenceEcosystem: OllamaModelEcosystem, Sendable
             capabilities: [.reasoning, .analysis, .consciousness],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.94, speed: 0.70, reliability: 0.96, adaptability: 0.85, consciousnessLevel: 0.90),
             quantumEntanglement: .high
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Ethical analysis completed for: \(input.query)",
             confidence: 0.91,
             reasoning: [
-                ReasoningStep(step: "Evaluated ethical implications", model: "ethical-reasoner-v1", confidence: 0.93, quantumContribution: 0.4)
+                ReasoningStep(step: "Evaluated ethical implications", model: "ethical-reasoner-v1", confidence: 0.93, quantumContribution: 0.4),
             ]
         )
     }
@@ -691,15 +701,15 @@ private final class StrategicIntelligenceEcosystem: OllamaModelEcosystem, Sendab
             capabilities: [.strategic, .prediction, .optimization],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.87, speed: 0.80, reliability: 0.89, adaptability: 0.88, consciousnessLevel: 0.78),
             quantumEntanglement: .medium
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Strategic planning completed for: \(input.query)",
             confidence: 0.86,
             reasoning: [
-                ReasoningStep(step: "Developed strategic approach", model: "strategic-planner-v1", confidence: 0.88, quantumContribution: 0.5)
+                ReasoningStep(step: "Developed strategic approach", model: "strategic-planner-v1", confidence: 0.88, quantumContribution: 0.5),
             ]
         )
     }
@@ -721,15 +731,15 @@ private final class EmotionalIntelligenceEcosystem: OllamaModelEcosystem, Sendab
             capabilities: [.emotional, .empathy, .consciousness],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.83, speed: 0.85, reliability: 0.87, adaptability: 0.92, consciousnessLevel: 0.85),
             quantumEntanglement: .high
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Emotional processing completed for: \(input.query)",
             confidence: 0.84,
             reasoning: [
-                ReasoningStep(step: "Processed emotional context", model: "emotional-processor-v1", confidence: 0.86, quantumContribution: 0.7)
+                ReasoningStep(step: "Processed emotional context", model: "emotional-processor-v1", confidence: 0.86, quantumContribution: 0.7),
             ]
         )
     }
@@ -751,15 +761,15 @@ private final class SpatialIntelligenceEcosystem: OllamaModelEcosystem, Sendable
             capabilities: [.spatial, .patternRecognition, .simulation],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.91, speed: 0.88, reliability: 0.90, adaptability: 0.83, consciousnessLevel: 0.72),
             quantumEntanglement: .medium
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Spatial processing completed for: \(input.query)",
             confidence: 0.89,
             reasoning: [
-                ReasoningStep(step: "Analyzed spatial relationships", model: "spatial-processor-v1", confidence: 0.91, quantumContribution: 0.3)
+                ReasoningStep(step: "Analyzed spatial relationships", model: "spatial-processor-v1", confidence: 0.91, quantumContribution: 0.3),
             ]
         )
     }
@@ -781,15 +791,15 @@ private final class TemporalIntelligenceEcosystem: OllamaModelEcosystem, Sendabl
             capabilities: [.temporal, .prediction, .patternRecognition],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.86, speed: 0.82, reliability: 0.88, adaptability: 0.86, consciousnessLevel: 0.76),
             quantumEntanglement: .medium
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Temporal analysis completed for: \(input.query)",
             confidence: 0.85,
             reasoning: [
-                ReasoningStep(step: "Analyzed temporal patterns", model: "temporal-analyzer-v1", confidence: 0.87, quantumContribution: 0.4)
+                ReasoningStep(step: "Analyzed temporal patterns", model: "temporal-analyzer-v1", confidence: 0.87, quantumContribution: 0.4),
             ]
         )
     }
@@ -811,15 +821,15 @@ private final class QuantumIntelligenceEcosystem: OllamaModelEcosystem, Sendable
             capabilities: [.quantumProcessing, .simulation, .optimization],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.95, speed: 0.92, reliability: 0.94, adaptability: 0.91, consciousnessLevel: 0.88),
             quantumEntanglement: .maximum
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Quantum processing completed for: \(input.query)",
             confidence: 0.93,
             reasoning: [
-                ReasoningStep(step: "Applied quantum algorithms", model: "quantum-processor-v1", confidence: 0.95, quantumContribution: 0.9)
+                ReasoningStep(step: "Applied quantum algorithms", model: "quantum-processor-v1", confidence: 0.95, quantumContribution: 0.9),
             ]
         )
     }
@@ -841,15 +851,15 @@ private final class ConsciousnessIntelligenceEcosystem: OllamaModelEcosystem, Se
             capabilities: [.consciousness, .reasoning, .synthesis],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.89, speed: 0.75, reliability: 0.92, adaptability: 0.94, consciousnessLevel: 0.95),
             quantumEntanglement: .maximum
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Consciousness expansion completed for: \(input.query)",
             confidence: 0.90,
             reasoning: [
-                ReasoningStep(step: "Expanded consciousness boundaries", model: "consciousness-expander-v1", confidence: 0.92, quantumContribution: 0.8)
+                ReasoningStep(step: "Expanded consciousness boundaries", model: "consciousness-expander-v1", confidence: 0.92, quantumContribution: 0.8),
             ]
         )
     }
@@ -871,15 +881,15 @@ private final class UniversalIntelligenceEcosystem: OllamaModelEcosystem, Sendab
             capabilities: [.synthesis, .optimization, .consciousness, .quantumProcessing],
             performanceMetrics: ModelPerformanceMetrics(accuracy: 0.96, speed: 0.78, reliability: 0.95, adaptability: 0.97, consciousnessLevel: 0.98),
             quantumEntanglement: .maximum
-        )
+        ),
     ]
 
     func coordinateIntelligence(input: IntelligenceInput) async throws -> IntelligenceOutput {
-        return IntelligenceOutput(
+        IntelligenceOutput(
             result: "Universal intelligence synthesis completed for: \(input.query)",
             confidence: 0.94,
             reasoning: [
-                ReasoningStep(step: "Synthesized universal intelligence", model: "universal-synthesizer-v1", confidence: 0.96, quantumContribution: 0.95)
+                ReasoningStep(step: "Synthesized universal intelligence", model: "universal-synthesizer-v1", confidence: 0.96, quantumContribution: 0.95),
             ]
         )
     }

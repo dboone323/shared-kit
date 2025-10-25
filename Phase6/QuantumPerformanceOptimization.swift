@@ -16,7 +16,8 @@ import OSLog
 /// Main quantum performance optimization coordinator
 public actor QuantumPerformanceOptimization {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumPerformanceOptimization")
+        subsystem: "com.quantum.workspace", category: "QuantumPerformanceOptimization"
+    )
 
     // Core components
     private let quantumAnalyzer: QuantumPerformanceAnalyzer
@@ -169,7 +170,7 @@ public actor QuantumPerformanceOptimization {
 
     /// Get current performance status
     public func getPerformanceStatus() -> PerformanceStatus {
-        return PerformanceStatus(
+        PerformanceStatus(
             currentMetrics: systemMetrics,
             activeOptimizations: optimizationHistory.suffix(10),
             resourceAllocations: resourceAllocations,
@@ -192,14 +193,14 @@ public actor QuantumPerformanceOptimization {
     private func gatherSystemMetrics() async throws -> SystemPerformanceMetrics {
         // In a real implementation, this would gather actual system metrics
         // For now, return simulated metrics
-        return SystemPerformanceMetrics(
-            cpuUsage: Double.random(in: 0.1..<0.9),
-            memoryUsage: Double.random(in: 0.2..<0.95),
-            diskIO: Double.random(in: 0.0..<100.0),
-            networkIO: Double.random(in: 0.0..<1000.0),
-            responseTime: Double.random(in: 10..<500),
-            throughput: Double.random(in: 50..<200),
-            errorRate: Double.random(in: 0.0..<0.05),
+        SystemPerformanceMetrics(
+            cpuUsage: Double.random(in: 0.1 ..< 0.9),
+            memoryUsage: Double.random(in: 0.2 ..< 0.95),
+            diskIO: Double.random(in: 0.0 ..< 100.0),
+            networkIO: Double.random(in: 0.0 ..< 1000.0),
+            responseTime: Double.random(in: 10 ..< 500),
+            throughput: Double.random(in: 50 ..< 200),
+            errorRate: Double.random(in: 0.0 ..< 0.05),
             timestamp: Date()
         )
     }
@@ -275,7 +276,8 @@ public actor QuantumPerformanceOptimization {
 /// Analyzes performance using quantum-inspired algorithms
 public actor QuantumPerformanceAnalyzer {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumPerformanceAnalyzer")
+        subsystem: "com.quantum.workspace", category: "QuantumPerformanceAnalyzer"
+    )
 
     /// Analyze performance patterns using quantum algorithms
     public func analyzePatterns(metrics: SystemPerformanceMetrics) async throws
@@ -344,7 +346,7 @@ public actor QuantumPerformanceAnalyzer {
         }
 
         // Response time anomaly detection
-        if metrics.responseTime > 1000 {  // 1 second
+        if metrics.responseTime > 1000 { // 1 second
             anomalies.append(
                 PerformanceAnomaly(
                     id: "slow_response",
@@ -378,13 +380,13 @@ public actor QuantumPerformanceAnalyzer {
         -> [CPUPattern]
     {
         // Simplified quantum-inspired CPU pattern analysis
-        return [
+        [
             CPUPattern(
                 utilization: metrics.cpuUsage,
                 pattern: metrics.cpuUsage > 0.7 ? .high : .normal,
-                quantumCoherence: 0.85,  // Simulated quantum coherence measure
+                quantumCoherence: 0.85, // Simulated quantum coherence measure
                 optimizationPotential: metrics.cpuUsage > 0.8 ? 0.3 : 0.1
-            )
+            ),
         ]
     }
 
@@ -392,7 +394,7 @@ public actor QuantumPerformanceAnalyzer {
         -> MemoryPatternAnalysis
     {
         // Simplified memory pattern analysis
-        return MemoryPatternAnalysis(
+        MemoryPatternAnalysis(
             usage: metrics.memoryUsage,
             leakProbability: metrics.memoryUsage > 0.9 ? 0.6 : 0.2,
             fragmentationLevel: 0.3,
@@ -404,7 +406,7 @@ public actor QuantumPerformanceAnalyzer {
         -> IOPatternAnalysis
     {
         // Simplified I/O pattern analysis
-        return IOPatternAnalysis(
+        IOPatternAnalysis(
             readWriteRatio: 0.7,
             bottleneckProbability: metrics.diskIO > 80 ? 0.8 : 0.3,
             cacheEfficiency: 0.75,
@@ -416,7 +418,7 @@ public actor QuantumPerformanceAnalyzer {
         -> NetworkPatternAnalysis
     {
         // Simplified network pattern analysis
-        return NetworkPatternAnalysis(
+        NetworkPatternAnalysis(
             latency: metrics.responseTime,
             throughput: metrics.throughput,
             congestionLevel: 0.4,
@@ -447,7 +449,8 @@ public actor QuantumPerformanceAnalyzer {
 /// Executes optimizations using quantum-inspired algorithms
 public actor QuantumOptimizationEngine {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumOptimizationEngine")
+        subsystem: "com.quantum.workspace", category: "QuantumOptimizationEngine"
+    )
 
     /// Execute a performance optimization
     public func executeOptimization(_ opportunity: OptimizationOpportunity) async throws
@@ -469,7 +472,7 @@ public actor QuantumOptimizationEngine {
             expectedGain: opportunity.potentialGain,
             actualGain: actualGain,
             executionTime: executionTime,
-            success: actualGain >= opportunity.potentialGain * 0.8,  // 80% of expected
+            success: actualGain >= opportunity.potentialGain * 0.8, // 80% of expected
             timestamp: Date()
         )
     }
@@ -493,16 +496,16 @@ public actor QuantumOptimizationEngine {
         switch opportunity.type {
         case .cpu:
             // Simulate CPU optimization
-            return opportunity.potentialGain * Double.random(in: 0.8..<1.2)
+            return opportunity.potentialGain * Double.random(in: 0.8 ..< 1.2)
         case .memory:
             // Simulate memory optimization
-            return opportunity.potentialGain * Double.random(in: 0.7..<1.1)
+            return opportunity.potentialGain * Double.random(in: 0.7 ..< 1.1)
         case .io:
             // Simulate I/O optimization
-            return opportunity.potentialGain * Double.random(in: 0.85..<1.15)
+            return opportunity.potentialGain * Double.random(in: 0.85 ..< 1.15)
         case .network:
             // Simulate network optimization
-            return opportunity.potentialGain * Double.random(in: 0.9..<1.1)
+            return opportunity.potentialGain * Double.random(in: 0.9 ..< 1.1)
         }
     }
 }
@@ -512,7 +515,8 @@ public actor QuantumOptimizationEngine {
 /// Manages system resources intelligently
 public actor IntelligentResourceManager {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "IntelligentResourceManager")
+        subsystem: "com.quantum.workspace", category: "IntelligentResourceManager"
+    )
 
     /// Analyze current resource usage
     public func analyzeCurrentUsage() async throws -> ResourceUsageAnalysis {
@@ -613,22 +617,22 @@ public actor IntelligentResourceManager {
 
     private func getCPUUsage() async throws -> Double {
         // Get actual CPU usage
-        return Double.random(in: 0.1..<0.9)
+        Double.random(in: 0.1 ..< 0.9)
     }
 
     private func getMemoryUsage() async throws -> Double {
         // Get actual memory usage
-        return Double.random(in: 0.2..<0.95)
+        Double.random(in: 0.2 ..< 0.95)
     }
 
     private func getDiskUsage() async throws -> Double {
         // Get actual disk usage
-        return Double.random(in: 0.3..<0.98)
+        Double.random(in: 0.3 ..< 0.98)
     }
 
     private func getNetworkUsage() async throws -> Double {
         // Get actual network usage
-        return Double.random(in: 0.1..<0.8)
+        Double.random(in: 0.1 ..< 0.8)
     }
 
     private func executeResourceRecommendation(_ recommendation: ResourceRecommendation)
@@ -654,7 +658,8 @@ public actor IntelligentResourceManager {
 /// Predicts future performance needs
 public actor PerformancePredictor {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "PerformancePredictor")
+        subsystem: "com.quantum.workspace", category: "PerformancePredictor"
+    )
 
     /// Predict future performance metrics
     public func predictPerformance(
@@ -674,7 +679,7 @@ public actor PerformancePredictor {
             memoryUsage: memoryPrediction,
             ioLoad: ioPrediction,
             networkCongestion: networkPrediction,
-            predictionHorizon: 3600,  // 1 hour
+            predictionHorizon: 3600, // 1 hour
             confidence: 0.8,
             timestamp: Date()
         )
@@ -693,7 +698,7 @@ public actor PerformancePredictor {
             memoryNeeds: currentUsage.memoryUsage * 1.05,
             diskNeeds: currentUsage.diskUsage * 1.02,
             networkNeeds: currentUsage.networkUsage * 1.15,
-            timeHorizon: 7200,  // 2 hours
+            timeHorizon: 7200, // 2 hours
             confidence: 0.75
         )
     }
@@ -706,8 +711,8 @@ public actor PerformancePredictor {
         let recentOptimizations = historical.suffix(5)
         let avgGain =
             recentOptimizations.isEmpty
-            ? 0.0
-            : recentOptimizations.map { $0.actualGain }.reduce(0, +)
+                ? 0.0
+                : recentOptimizations.map(\.actualGain).reduce(0, +)
                 / Double(recentOptimizations.count)
 
         return max(0.0, min(1.0, current.cpuUsage * (1.0 - avgGain)))
@@ -718,7 +723,7 @@ public actor PerformancePredictor {
         _ historical: [OptimizationResult]
     ) -> Double {
         // Predict memory usage
-        return max(0.0, min(1.0, current.memoryUsage * 0.95))
+        max(0.0, min(1.0, current.memoryUsage * 0.95))
     }
 
     private func predictIOMetrics(
@@ -726,7 +731,7 @@ public actor PerformancePredictor {
         _ historical: [OptimizationResult]
     ) -> Double {
         // Predict I/O load
-        return max(0.0, min(1.0, current.diskIO / 100.0 * 0.9))
+        max(0.0, min(1.0, current.diskIO / 100.0 * 0.9))
     }
 
     private func predictNetworkMetrics(
@@ -734,7 +739,7 @@ public actor PerformancePredictor {
         _ historical: [OptimizationResult]
     ) -> Double {
         // Predict network congestion
-        return max(0.0, min(1.0, current.networkIO / 1000.0 * 0.85))
+        max(0.0, min(1.0, current.networkIO / 1000.0 * 0.85))
     }
 }
 
@@ -986,7 +991,7 @@ public func initializeQuantumPerformanceOptimization() async {
 /// Get quantum performance optimization capabilities
 @MainActor
 public func getQuantumPerformanceCapabilities() -> [String: [String]] {
-    return [
+    [
         "performance_analysis": [
             "quantum_pattern_recognition", "anomaly_detection", "efficiency_measurement",
         ],
@@ -1005,7 +1010,7 @@ public func getQuantumPerformanceCapabilities() -> [String: [String]] {
 /// Perform comprehensive performance analysis
 @MainActor
 public func analyzeSystemPerformance() async throws -> PerformanceAnalysis {
-    return try await globalQuantumPerformanceOptimization.analyzePerformance()
+    try await globalQuantumPerformanceOptimization.analyzePerformance()
 }
 
 /// Execute performance optimizations
@@ -1013,17 +1018,17 @@ public func analyzeSystemPerformance() async throws -> PerformanceAnalysis {
 public func executePerformanceOptimizations(analysis: PerformanceAnalysis) async throws
     -> [OptimizationResult]
 {
-    return try await globalQuantumPerformanceOptimization.executeOptimizations(analysis: analysis)
+    try await globalQuantumPerformanceOptimization.executeOptimizations(analysis: analysis)
 }
 
 /// Get current performance status
 @MainActor
 public func getCurrentPerformanceStatus() async -> PerformanceStatus {
-    return await globalQuantumPerformanceOptimization.getPerformanceStatus()
+    await globalQuantumPerformanceOptimization.getPerformanceStatus()
 }
 
 /// Optimize resource allocation
 @MainActor
 public func optimizeResourceAllocation() async throws -> ResourceOptimizationPlan {
-    return try await globalQuantumPerformanceOptimization.optimizeResourceAllocation()
+    try await globalQuantumPerformanceOptimization.optimizeResourceAllocation()
 }

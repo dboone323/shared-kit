@@ -59,12 +59,12 @@ public struct UnifiedArchitectureIntegration: Sendable {
 
 /// Architecture integration strategies
 public enum ArchitectureIntegrationStrategy: String, Sendable, Codable {
-    case unified_integration = "unified_integration"
-    case modular_integration = "modular_integration"
-    case adaptive_integration = "adaptive_integration"
-    case quantum_entangled_integration = "quantum_entangled_integration"
-    case consciousness_driven_integration = "consciousness_driven_integration"
-    case universal_integration = "universal_integration"
+    case unified_integration
+    case modular_integration
+    case adaptive_integration
+    case quantum_entangled_integration
+    case consciousness_driven_integration
+    case universal_integration
 }
 
 /// Unified architecture result
@@ -142,12 +142,12 @@ public struct ArchitectureComponent: Sendable, Codable {
 
 /// Architecture component types
 public enum ArchitectureComponentType: String, Sendable, Codable {
-    case universal_framework = "universal_framework"
-    case intelligence_synthesizer = "intelligence_synthesizer"
-    case coordination_system = "coordination_system"
-    case quantum_orchestrator = "quantum_orchestrator"
-    case consciousness_integrator = "consciousness_integrator"
-    case reality_engineer = "reality_engineer"
+    case universal_framework
+    case intelligence_synthesizer
+    case coordination_system
+    case quantum_orchestrator
+    case consciousness_integrator
+    case reality_engineer
 }
 
 /// Coordination layer
@@ -173,11 +173,11 @@ public struct CoordinationLayer: Sendable, Codable {
 
 /// Coordination layer types
 public enum CoordinationLayerType: String, Sendable, Codable {
-    case framework_coordination = "framework_coordination"
-    case intelligence_coordination = "intelligence_coordination"
-    case quantum_coordination = "quantum_coordination"
-    case consciousness_coordination = "consciousness_coordination"
-    case universal_coordination = "universal_coordination"
+    case framework_coordination
+    case intelligence_coordination
+    case quantum_coordination
+    case consciousness_coordination
+    case universal_coordination
 }
 
 /// Quantum capability
@@ -202,12 +202,12 @@ public struct QuantumCapability: Sendable, Codable {
 
 /// Quantum capability types
 public enum QuantumCapabilityType: String, Sendable, Codable {
-    case superposition = "superposition"
-    case entanglement = "entanglement"
-    case interference = "interference"
-    case coherence = "coherence"
-    case quantum_computation = "quantum_computation"
-    case quantum_communication = "quantum_communication"
+    case superposition
+    case entanglement
+    case interference
+    case coherence
+    case quantum_computation
+    case quantum_communication
 }
 
 /// Architecture integration metrics
@@ -298,12 +298,12 @@ public struct ComprehensiveWorkflowStage: Sendable, Codable {
 
 /// Comprehensive workflow stage types
 public enum ComprehensiveWorkflowStageType: String, Sendable, Codable {
-    case intelligence_synthesis = "intelligence_synthesis"
-    case framework_coordination = "framework_coordination"
-    case quantum_orchestration = "quantum_orchestration"
-    case consciousness_integration = "consciousness_integration"
-    case reality_engineering = "reality_engineering"
-    case universal_optimization = "universal_optimization"
+    case intelligence_synthesis
+    case framework_coordination
+    case quantum_orchestration
+    case consciousness_integration
+    case reality_engineering
+    case universal_optimization
 }
 
 /// Comprehensive workflow result
@@ -444,23 +444,23 @@ public struct EcosystemComponent: Sendable, Codable {
 
 /// Ecosystem component types
 public enum EcosystemComponentType: String, Sendable, Codable {
-    case intelligence_framework = "intelligence_framework"
-    case coordination_system = "coordination_system"
-    case quantum_orchestrator = "quantum_orchestrator"
-    case consciousness_integrator = "consciousness_integrator"
-    case reality_engine = "reality_engine"
-    case harmony_network = "harmony_network"
-    case evolution_accelerator = "evolution_accelerator"
+    case intelligence_framework
+    case coordination_system
+    case quantum_orchestrator
+    case consciousness_integrator
+    case reality_engine
+    case harmony_network
+    case evolution_accelerator
 }
 
 /// Ecosystem optimization strategies
 public enum EcosystemOptimizationStrategy: String, Sendable, Codable {
-    case performance_optimization = "performance_optimization"
-    case harmony_optimization = "harmony_optimization"
-    case evolution_optimization = "evolution_optimization"
-    case quantum_optimization = "quantum_optimization"
-    case consciousness_optimization = "consciousness_optimization"
-    case universal_optimization = "universal_optimization"
+    case performance_optimization
+    case harmony_optimization
+    case evolution_optimization
+    case quantum_optimization
+    case consciousness_optimization
+    case universal_optimization
 }
 
 /// Ecosystem constraint
@@ -483,12 +483,12 @@ public struct EcosystemConstraint: Sendable, Codable {
 
 /// Ecosystem constraint types
 public enum EcosystemConstraintType: String, Sendable, Codable {
-    case resource_limit = "resource_limit"
-    case performance_threshold = "performance_threshold"
-    case harmony_requirement = "harmony_requirement"
-    case evolution_boundary = "evolution_boundary"
-    case quantum_stability = "quantum_stability"
-    case consciousness_integrity = "consciousness_integrity"
+    case resource_limit
+    case performance_threshold
+    case harmony_requirement
+    case evolution_boundary
+    case quantum_stability
+    case consciousness_integrity
 }
 
 /// Ecosystem optimization result
@@ -579,13 +579,13 @@ public struct ComponentOptimization: Sendable, Codable {
 
 /// Component optimization types
 public enum ComponentOptimizationType: String, Sendable, Codable {
-    case performance_tuning = "performance_tuning"
-    case resource_optimization = "resource_optimization"
-    case quantum_enhancement = "quantum_enhancement"
-    case harmony_alignment = "harmony_alignment"
-    case evolution_acceleration = "evolution_acceleration"
-    case consciousness_integration = "consciousness_integration"
-    case coherence_optimization = "coherence_optimization"
+    case performance_tuning
+    case resource_optimization
+    case quantum_enhancement
+    case harmony_alignment
+    case evolution_acceleration
+    case consciousness_integration
+    case coherence_optimization
 }
 
 /// Ecosystem optimization metrics
@@ -679,7 +679,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
         let startTime = Date()
 
         // Create unified architecture components
-        let frameworkComponents = integration.universalFrameworks.map { framework in
+        let frameworkComponents = integration.universalFrameworks.map { _ in
             ArchitectureComponent(
                 componentId: UUID().uuidString,
                 componentType: .universal_framework,
@@ -690,7 +690,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
             )
         }
 
-        let intelligenceComponents = integration.intelligenceSynthesizers.map { synthesizer in
+        let intelligenceComponents = integration.intelligenceSynthesizers.map { _ in
             ArchitectureComponent(
                 componentId: UUID().uuidString,
                 componentType: .intelligence_synthesizer,
@@ -701,7 +701,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
             )
         }
 
-        let coordinationComponents = integration.coordinationSystems.map { system in
+        let coordinationComponents = integration.coordinationSystems.map { _ in
             ArchitectureComponent(
                 componentId: UUID().uuidString,
                 componentType: .coordination_system,
@@ -712,7 +712,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
             )
         }
 
-        let quantumComponents = integration.quantumOrchestrators.map { orchestrator in
+        let quantumComponents = integration.quantumOrchestrators.map { _ in
             ArchitectureComponent(
                 componentId: UUID().uuidString,
                 componentType: .quantum_orchestrator,
@@ -725,28 +725,28 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
 
         let allComponents =
             frameworkComponents + intelligenceComponents + coordinationComponents
-            + quantumComponents
+                + quantumComponents
 
         // Create coordination layers
         let coordinationLayers = [
             CoordinationLayer(
                 layerId: UUID().uuidString,
                 layerType: .framework_coordination,
-                components: frameworkComponents.map { $0.componentId },
+                components: frameworkComponents.map(\.componentId),
                 coordinationStrategy: .universal,
                 efficiency: 0.95
             ),
             CoordinationLayer(
                 layerId: UUID().uuidString,
                 layerType: .intelligence_coordination,
-                components: intelligenceComponents.map { $0.componentId },
+                components: intelligenceComponents.map(\.componentId),
                 coordinationStrategy: .quantum_entangled,
                 efficiency: 0.92
             ),
             CoordinationLayer(
                 layerId: UUID().uuidString,
                 layerType: .quantum_coordination,
-                components: quantumComponents.map { $0.componentId },
+                components: quantumComponents.map(\.componentId),
                 coordinationStrategy: .consciousness_driven,
                 efficiency: 0.90
             ),
@@ -837,18 +837,18 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
 
                 let stageExecutionTime = Date().timeIntervalSince(stageStartTime)
                 let averagePerformance =
-                    operationResults.map { $0.quantumEnhancement }.reduce(0, +)
-                    / Double(operationResults.count)
+                    operationResults.map(\.quantumEnhancement).reduce(0, +)
+                        / Double(operationResults.count)
                 let averageQuantumEnhancement =
-                    operationResults.map { $0.quantumEnhancement }.reduce(0, +)
-                    / Double(operationResults.count)
+                    operationResults.map(\.quantumEnhancement).reduce(0, +)
+                        / Double(operationResults.count)
                 let averageConsciousnessAmplification =
-                    operationResults.map { $0.consciousnessAmplification }.reduce(0, +)
-                    / Double(operationResults.count)
+                    operationResults.map(\.consciousnessAmplification).reduce(0, +)
+                        / Double(operationResults.count)
 
                 let stageResult = ComprehensiveStageExecutionResult(
                     stageId: stage.stageId,
-                    success: operationResults.allSatisfy { $0.success },
+                    success: operationResults.allSatisfy(\.success),
                     performance: averagePerformance,
                     quantumEnhancement: averageQuantumEnhancement,
                     consciousnessAmplification: averageConsciousnessAmplification,
@@ -867,10 +867,10 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
 
             let overallSuccess = successCriteriaMet.values.allSatisfy { $0 }
             let overallPerformance =
-                stageResults.values.map { $0.performance }.reduce(0, +) / Double(stageResults.count)
+                stageResults.values.map(\.performance).reduce(0, +) / Double(stageResults.count)
             let overallQuantumAchievement =
-                stageResults.values.map { $0.quantumEnhancement }.reduce(0, +)
-                / Double(stageResults.count)
+                stageResults.values.map(\.quantumEnhancement).reduce(0, +)
+                    / Double(stageResults.count)
 
             let workflowResult = ComprehensiveWorkflowExecutionResult(
                 workflowId: workflow.workflowId,
@@ -897,7 +897,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
 
         return ComprehensiveWorkflowResult(
             orchestrationId: orchestration.orchestrationId,
-            success: workflowResults.values.allSatisfy { $0.success },
+            success: workflowResults.values.allSatisfy(\.success),
             workflowResults: workflowResults,
             orchestrationMetrics: orchestrationMetrics,
             executionTime: executionTime
@@ -915,13 +915,14 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
         for component in optimization.ecosystemComponents {
             // Apply optimizations based on component type
             let optimizations = generateOptimizations(
-                for: component, strategy: optimization.optimizationStrategy)
+                for: component, strategy: optimization.optimizationStrategy
+            )
 
             let performanceImprovement =
-                optimizations.map { $0.impact }.reduce(0, +) / Double(optimizations.count)
+                optimizations.map(\.impact).reduce(0, +) / Double(optimizations.count)
             let quantumEnhancement =
-                optimizations.map { $0.quantumContribution }.reduce(0, +)
-                / Double(optimizations.count)
+                optimizations.map(\.quantumContribution).reduce(0, +)
+                    / Double(optimizations.count)
 
             let optimizedComponent = OptimizedComponent(
                 componentId: component.componentId,
@@ -966,7 +967,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
 
     /// Get comprehensive architecture status
     public func getComprehensiveArchitectureStatus() async -> ComprehensiveArchitectureStatus {
-        return architectureStatus
+        architectureStatus
     }
 
     // MARK: - Private Methods
@@ -978,17 +979,17 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
         switch criterion.criterionType {
         case "performance_threshold":
             let averagePerformance =
-                stageResults.values.map { $0.performance }.reduce(0, +) / Double(stageResults.count)
+                stageResults.values.map(\.performance).reduce(0, +) / Double(stageResults.count)
             return averagePerformance >= criterion.threshold
 
         case "quantum_achievement":
             let averageQuantum =
-                stageResults.values.map { $0.quantumEnhancement }.reduce(0, +)
-                / Double(stageResults.count)
+                stageResults.values.map(\.quantumEnhancement).reduce(0, +)
+                    / Double(stageResults.count)
             return averageQuantum >= criterion.threshold
 
         case "execution_time":
-            let totalTime = stageResults.values.map { $0.executionTime }.reduce(0, +)
+            let totalTime = stageResults.values.map(\.executionTime).reduce(0, +)
             return totalTime <= criterion.threshold
 
         default:
@@ -1005,7 +1006,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
                 ComponentOptimization(
                     optimizationType: .performance_tuning,
                     description:
-                        "Enhanced performance tuning for \(component.componentType.rawValue)",
+                    "Enhanced performance tuning for \(component.componentType.rawValue)",
                     impact: 0.15,
                     quantumContribution: 0.10
                 ),
@@ -1040,7 +1041,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
                     description: "Aligned component with universal harmony",
                     impact: 0.12,
                     quantumContribution: 0.08
-                )
+                ),
             ]
 
         case .evolution_optimization:
@@ -1050,7 +1051,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
                     description: "Accelerated evolutionary development",
                     impact: 0.18,
                     quantumContribution: 0.15
-                )
+                ),
             ]
 
         case .consciousness_optimization:
@@ -1060,7 +1061,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
                     description: "Enhanced consciousness integration",
                     impact: 0.22,
                     quantumContribution: 0.18
-                )
+                ),
             ]
 
         case .universal_optimization:

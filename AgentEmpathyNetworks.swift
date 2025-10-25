@@ -344,8 +344,7 @@ public final class AgentEmpathyNetworks: Sendable {
     private func processEmpathyNetworks(
         _ request: EmpathyNetworksRequest,
         assessment: EmpathyNetworksAssessment
-    ) async throws -> EmpathyNetworksProcessing
-    {
+    ) async throws -> EmpathyNetworksProcessing {
         // Process empathy networks
         let processingContext = EmpathyNetworksProcessingContext(
             agents: request.agents,
@@ -369,8 +368,7 @@ public final class AgentEmpathyNetworks: Sendable {
     private func coordinateUnderstandingEnhancement(
         _ request: EmpathyNetworksRequest,
         empathy: EmpathyNetworksProcessing
-    ) async throws -> UnderstandingEnhancementCoordination
-    {
+    ) async throws -> UnderstandingEnhancementCoordination {
         // Coordinate understanding enhancement
         let coordinationContext = UnderstandingEnhancementCoordinationContext(
             agents: request.agents,
@@ -394,8 +392,7 @@ public final class AgentEmpathyNetworks: Sendable {
     private func synthesizeEmpathyNetworksNetwork(
         _ request: EmpathyNetworksRequest,
         enhancement: UnderstandingEnhancementCoordination
-    ) async throws -> EmpathyNetworksNetworkSynthesis
-    {
+    ) async throws -> EmpathyNetworksNetworkSynthesis {
         // Synthesize empathy networks network
         let synthesisContext = EmpathyNetworksNetworkSynthesisContext(
             agents: request.agents,
@@ -419,8 +416,7 @@ public final class AgentEmpathyNetworks: Sendable {
     private func orchestrateQuantumEmpathy(
         _ request: EmpathyNetworksRequest,
         network: EmpathyNetworksNetworkSynthesis
-    ) async throws -> QuantumEmpathyOrchestration
-    {
+    ) async throws -> QuantumEmpathyOrchestration {
         // Orchestrate quantum empathy
         let orchestrationContext = QuantumEmpathyOrchestrationContext(
             agents: request.agents,
@@ -444,8 +440,7 @@ public final class AgentEmpathyNetworks: Sendable {
     private func synthesizeEmpatheticSynthesis(
         _ request: EmpathyNetworksRequest,
         empathy: QuantumEmpathyOrchestration
-    ) async throws -> EmpatheticSynthesisSynthesis
-    {
+    ) async throws -> EmpatheticSynthesisSynthesis {
         // Synthesize empathetic synthesis
         let synthesisContext = EmpatheticSynthesisSynthesisContext(
             agents: request.agents,
@@ -469,8 +464,7 @@ public final class AgentEmpathyNetworks: Sendable {
     private func validateEmpathyNetworksResults(
         _ empatheticSynthesisSynthesis: EmpatheticSynthesisSynthesis,
         session: EmpathyNetworksSession
-    ) async throws -> EmpathyNetworksValidationResult
-    {
+    ) async throws -> EmpathyNetworksValidationResult {
         // Validate empathy networks results
         let performanceComparison = await compareEmpathyNetworksPerformance(
             originalAgents: session.request.agents,
@@ -483,7 +477,7 @@ public final class AgentEmpathyNetworks: Sendable {
         )
 
         let success = performanceComparison.understandingLevel >= session.request.understandingTarget &&
-                     empathyAdvantage.empathyAdvantage >= 0.4
+            empathyAdvantage.empathyAdvantage >= 0.4
 
         let events = generateEmpathyNetworksEvents(session, empathy: empatheticSynthesisSynthesis)
 
@@ -602,24 +596,24 @@ public final class AgentEmpathyNetworks: Sendable {
 
     private func measureEmpathyEnhancement(_ empatheticAgents: [EmpathyNetworksAgent]) async -> Double {
         // Measure empathy enhancement
-        return 0.94
+        0.94
     }
 
     private func measureEmpatheticSynthesis(_ empatheticAgents: [EmpathyNetworksAgent]) async -> Double {
         // Measure empathetic synthesis
-        return 0.92
+        0.92
     }
 
     private func measureEmpathyNetworks(_ empatheticAgents: [EmpathyNetworksAgent]) async -> Double {
         // Measure empathy networks
-        return 0.95
+        0.95
     }
 
     private func generateEmpathyNetworksEvents(
         _ session: EmpathyNetworksSession,
         empathy: EmpatheticSynthesisSynthesis
     ) -> [EmpathyNetworksEvent] {
-        return [
+        [
             EmpathyNetworksEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -635,9 +629,9 @@ public final class AgentEmpathyNetworks: Sendable {
                 data: [
                     "success": true,
                     "understanding_level": empathy.empathyDepth,
-                    "understanding_synthesis": empathy.understandingSynthesis
+                    "understanding_synthesis": empathy.understandingSynthesis,
                 ]
-            )
+            ),
         ]
     }
 
@@ -969,7 +963,7 @@ public struct EmpathyNetworksFrameworkMetrics: Sendable, Codable {
     public var averageEmpathyAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Empathy networks metrics
@@ -1474,9 +1468,9 @@ public struct EmpatheticSynthesisSynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension AgentEmpathyNetworks {
+public extension AgentEmpathyNetworks {
     /// Create specialized empathy networks for specific agent architectures
-    public static func createSpecializedEmpathyNetworks(
+    static func createSpecializedEmpathyNetworks(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentEmpathyNetworks {
         let system = try await AgentEmpathyNetworks()
@@ -1485,7 +1479,7 @@ extension AgentEmpathyNetworks {
     }
 
     /// Execute batch empathy networks processing
-    public func executeBatchEmpathyNetworks(
+    func executeBatchEmpathyNetworks(
         _ empathyRequests: [EmpathyNetworksRequest]
     ) async throws -> BatchEmpathyNetworksResult {
 
@@ -1508,8 +1502,8 @@ extension AgentEmpathyNetworks {
         }
 
         let successRate = Double(results.count) / Double(empathyRequests.count)
-        let averageUnderstanding = results.map { $0.understandingLevel }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.empathyAdvantage }.reduce(0, +) / Double(results.count)
+        let averageUnderstanding = results.map(\.understandingLevel).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.empathyAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchEmpathyNetworksResult(
             batchId: batchId,
@@ -1526,7 +1520,7 @@ extension AgentEmpathyNetworks {
     }
 
     /// Get empathy networks recommendations
-    public func getEmpathyNetworksRecommendations() async -> [EmpathyNetworksRecommendation] {
+    func getEmpathyNetworksRecommendations() async -> [EmpathyNetworksRecommendation] {
         var recommendations: [EmpathyNetworksRecommendation] = []
 
         let status = await getEmpathyNetworksStatus()

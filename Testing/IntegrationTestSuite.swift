@@ -7,11 +7,11 @@ import Vision
 import XCTest
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 /// Comprehensive Integration Testing Suite for Phase 4 Validation
@@ -360,13 +360,13 @@ class IntegrationTestSuite: XCTestCase {
     private func createTestImage() -> Data {
         // Create a sample image for testing
         #if canImport(UIKit)
-        let image = UIImage(systemName: "star.fill") ?? UIImage()
-        return image.pngData() ?? Data()
+            let image = UIImage(systemName: "star.fill") ?? UIImage()
+            return image.pngData() ?? Data()
         #elseif canImport(AppKit)
-        let image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: nil) ?? NSImage()
-        return image.tiffRepresentation ?? Data()
+            let image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: nil) ?? NSImage()
+            return image.tiffRepresentation ?? Data()
         #else
-        return Data()
+            return Data()
         #endif
     }
 

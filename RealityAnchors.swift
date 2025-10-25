@@ -91,7 +91,7 @@ enum AnchorType: String, Sendable {
 
 /// Anchor location
 struct AnchorLocation: Sendable {
-    let coordinates: [Double]  // Multi-dimensional coordinates
+    let coordinates: [Double] // Multi-dimensional coordinates
     let dimension: String
     let referenceFrame: String
     let spatialPrecision: Double
@@ -247,37 +247,37 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
     }
 
     func monitorAnchorIntegrity() async -> IntegrityReport {
-        return await integrityMonitor.generateIntegrityReport(for: initialAnchors)
+        await integrityMonitor.generateIntegrityReport(for: initialAnchors)
     }
 
     // MARK: - AnchorStabilizationProtocol
 
     func stabilizeAgainstDrift(_ anchor: RealityAnchor) async throws -> DriftStabilizationResult {
-        return try await stabilizationController.stabilizeDrift(anchor, in: initialAnchors)
+        try await stabilizationController.stabilizeDrift(anchor, in: initialAnchors)
     }
 
     func balanceAnchorHarmonics(_ anchor: RealityAnchor) async throws -> HarmonicBalanceResult {
-        return try await stabilizationController.balanceHarmonics(anchor, in: initialAnchors)
+        try await stabilizationController.balanceHarmonics(anchor, in: initialAnchors)
     }
 
     func synchronizeAnchorFields(_ anchors: [RealityAnchor]) async throws
         -> FieldSynchronizationResult
     {
-        return try await stabilizationController.synchronizeFields(anchors)
+        try await stabilizationController.synchronizeFields(anchors)
     }
 
     // MARK: - AnchorIntegrityProtocol
 
     func assessAnchorIntegrity(_ anchor: RealityAnchor) async -> IntegrityAssessment {
-        return await integrityMonitor.assessAnchorIntegrity(anchor)
+        await integrityMonitor.assessAnchorIntegrity(anchor)
     }
 
     func detectAnchorDegradation() async -> DegradationReport {
-        return await integrityMonitor.detectDegradation(in: initialAnchors)
+        await integrityMonitor.detectDegradation(in: initialAnchors)
     }
 
     func repairCompromisedAnchor(_ anchor: RealityAnchor) async throws -> RepairResult {
-        return try await integrityMonitor.repairAnchor(anchor, in: initialAnchors)
+        try await integrityMonitor.repairAnchor(anchor, in: initialAnchors)
     }
 
     // MARK: - Private Methods
@@ -351,7 +351,7 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
     }
 
     private func analyzeHarmonicResonance(_ anchors: [RealityAnchor]) -> HarmonicAnalysis {
-        let resonanceLevels = anchors.map { $0.harmonicResonance }
+        let resonanceLevels = anchors.map(\.harmonicResonance)
         let averageResonance = resonanceLevels.reduce(0, +) / Double(anchors.count)
 
         let harmonicDistribution = Dictionary(grouping: anchors) { Int($0.harmonicResonance * 10) }
@@ -369,8 +369,8 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
     }
 
     private func analyzeEnergyDistribution(_ anchors: [RealityAnchor]) -> EnergyAnalysis {
-        let totalEnergy = anchors.map { $0.energyLevel }.reduce(0, +)
-        let energyDistribution = anchors.map { $0.energyLevel }
+        let totalEnergy = anchors.map(\.energyLevel).reduce(0, +)
+        let energyDistribution = anchors.map(\.energyLevel)
         let energyEfficiency = calculateEnergyEfficiency(anchors)
 
         return EnergyAnalysis(
@@ -383,7 +383,7 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
     }
 
     private func generateRecommendations() -> [String] {
-        return [
+        [
             "Monitor anchor stability levels",
             "Maintain harmonic resonance balance",
             "Regular energy level checks",
@@ -411,21 +411,21 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
 
     private func calculateResonanceStability(_ anchors: [RealityAnchor]) -> Double {
         // Calculate overall harmonic stability
-        let resonances = anchors.map { $0.harmonicResonance }
+        let resonances = anchors.map(\.harmonicResonance)
         let variance = calculateVariance(resonances)
         return max(0, 1.0 - variance)
     }
 
     private func calculateEnergyEfficiency(_ anchors: [RealityAnchor]) -> Double {
         // Calculate energy efficiency
-        let totalEnergy = anchors.map { $0.energyLevel }.reduce(0, +)
-        let totalStability = anchors.map { $0.stability }.reduce(0, +)
+        let totalEnergy = anchors.map(\.energyLevel).reduce(0, +)
+        let totalStability = anchors.map(\.stability).reduce(0, +)
         return totalStability / max(1.0, totalEnergy / 1000.0)
     }
 
     private func calculateEnergyBalance(_ anchors: [RealityAnchor]) -> Double {
         // Calculate energy balance across anchors
-        let energies = anchors.map { $0.energyLevel }
+        let energies = anchors.map(\.energyLevel)
         let mean = energies.reduce(0, +) / Double(energies.count)
         let variance = calculateVariance(energies)
         return 1.0 / (1.0 + variance / (mean * mean))
@@ -433,10 +433,10 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
 
     private func calculateConsumptionRate(_ anchors: [RealityAnchor]) -> Double {
         // Calculate average energy consumption rate
-        let totalEnergy = anchors.map { $0.energyLevel }.reduce(0, +)
+        let totalEnergy = anchors.map(\.energyLevel).reduce(0, +)
         let averageAge =
             anchors.map { Date().timeIntervalSince($0.creationDate) }.reduce(0, +)
-            / Double(anchors.count)
+                / Double(anchors.count)
         return totalEnergy / max(1.0, averageAge)
     }
 
@@ -452,7 +452,7 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
 /// Anchor manager
 final class AnchorManager: Sendable {
     func analyzeStability(_ anchors: [RealityAnchor]) async -> StabilityAnalysis {
-        let stabilityLevels = anchors.map { $0.stability }
+        let stabilityLevels = anchors.map(\.stability)
         let averageStability = stabilityLevels.reduce(0, +) / Double(anchors.count)
         let stabilityTrend: StabilityTrend =
             averageStability > 0.9 ? .stable : averageStability > 0.7 ? .improving : .critical
@@ -465,7 +465,7 @@ final class AnchorManager: Sendable {
                 projectedStability: averageStability * 0.98,
                 confidenceLevel: 0.85,
                 riskFactors: ["Energy depletion", "Harmonic imbalance"]
-            )
+            ),
         ]
 
         return StabilityAnalysis(
@@ -588,7 +588,7 @@ final class StabilizationController: Sendable {
         // Synchronize anchor fields
         let synchronizedCount = anchors.count
         let averageFieldStrength =
-            anchors.map { $0.fieldStrength }.reduce(0, +) / Double(anchors.count)
+            anchors.map(\.fieldStrength).reduce(0, +) / Double(anchors.count)
 
         return FieldSynchronizationResult(
             synchronizedAnchors: synchronizedCount,
@@ -613,7 +613,7 @@ final class StabilizationController: Sendable {
 /// Integrity monitor
 final class IntegrityMonitor: Sendable {
     func analyzeIntegrity(_ anchors: [RealityAnchor]) async -> IntegrityAnalysis {
-        let integrityScores = anchors.map { $0.integrityScore }
+        let integrityScores = anchors.map(\.integrityScore)
         let averageIntegrity = integrityScores.reduce(0, +) / Double(anchors.count)
         let compromisedAnchors = anchors.filter { $0.integrityScore < 0.8 }
 
@@ -654,7 +654,7 @@ final class IntegrityMonitor: Sendable {
         return DegradationReport(
             degradations: degradations,
             totalDegradedAnchors: degradations.count,
-            averageSeverity: degradations.map { $0.severity }.reduce(0, +)
+            averageSeverity: degradations.map(\.severity).reduce(0, +)
                 / Double(max(1, degradations.count)),
             urgentRepairs: degradations.filter { $0.timeToFailure < 3600 }.count,
             detectionTimestamp: Date()
@@ -662,7 +662,7 @@ final class IntegrityMonitor: Sendable {
     }
 
     func generateIntegrityReport(for anchors: [RealityAnchor]) async -> IntegrityReport {
-        let integrityScores = anchors.map { $0.integrityScore }
+        let integrityScores = anchors.map(\.integrityScore)
         let averageIntegrity = integrityScores.reduce(0, +) / Double(anchors.count)
         let criticalAnchors = anchors.filter { $0.integrityScore < 0.7 }
 
@@ -973,15 +973,15 @@ enum AnchorError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .validationFailed(let errors):
+        case let .validationFailed(errors):
             return "Validation failed with \(errors.count) errors"
-        case .creationFailed(let reason):
+        case let .creationFailed(reason):
             return "Creation failed: \(reason)"
-        case .reinforcementFailed(let errors):
+        case let .reinforcementFailed(errors):
             return "Reinforcement failed with \(errors.count) errors"
-        case .stabilizationFailed(let reason):
+        case let .stabilizationFailed(reason):
             return "Stabilization failed: \(reason)"
-        case .integrityCompromised(let reason):
+        case let .integrityCompromised(reason):
             return "Integrity compromised: \(reason)"
         }
     }
@@ -993,7 +993,7 @@ enum AnchorError: Error, LocalizedError {
 enum RealityAnchorsFactory {
     @MainActor
     static func createEngine(withAnchors anchors: [RealityAnchor]) -> RealityAnchorsEngine {
-        return RealityAnchorsEngine(initialAnchors: anchors)
+        RealityAnchorsEngine(initialAnchors: anchors)
     }
 
     static func createDefaultAnchors() -> [RealityAnchor] {
@@ -1142,7 +1142,7 @@ final class RealityAnchorsDatabase {
     }
 
     func loadAnchor(id: UUID) -> RealityAnchor? {
-        return anchors[id]
+        anchors[id]
     }
 
     func saveAnalysis(_ analysis: AnchorAnalysis, forAnchors anchorIds: [UUID]) {
@@ -1151,7 +1151,7 @@ final class RealityAnchorsDatabase {
     }
 
     func getRecentAnalyses(limit: Int = 10) -> [AnchorAnalysis] {
-        return Array(analyses.values.suffix(limit))
+        Array(analyses.values.suffix(limit))
     }
 
     func saveReinforcement(_ reinforcement: ReinforcementResult, forAnchor anchorId: UUID) {
@@ -1162,7 +1162,7 @@ final class RealityAnchorsDatabase {
     }
 
     func getReinforcements(forAnchor anchorId: UUID) -> [ReinforcementResult] {
-        return reinforcements[anchorId] ?? []
+        reinforcements[anchorId] ?? []
     }
 }
 
@@ -1171,7 +1171,7 @@ final class RealityAnchorsDatabase {
 /// Testing utilities for reality anchors
 enum RealityAnchorsTesting {
     static func createTestAnchors() -> [RealityAnchor] {
-        return RealityAnchorsFactory.createDefaultAnchors()
+        RealityAnchorsFactory.createDefaultAnchors()
     }
 
     static func createUnstableAnchors() -> [RealityAnchor] {
@@ -1196,7 +1196,7 @@ enum RealityAnchorsTesting {
 // MARK: - Framework Metadata
 
 /// Framework information
-struct RealityAnchorsMetadata {
+enum RealityAnchorsMetadata {
     static let version = "1.0.0"
     static let framework = "Reality Anchors"
     static let description =

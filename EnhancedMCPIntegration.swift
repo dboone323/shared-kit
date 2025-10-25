@@ -133,8 +133,8 @@ public enum MCPToolCapability: String, Codable, Sendable {
     case aiProcessing = "ai_processing"
     case workflowOrchestration = "workflow_orchestration"
     case securityOperations = "security_operations"
-    case monitoring = "monitoring"
-    case optimization = "optimization"
+    case monitoring
+    case optimization
 }
 
 /// MCP parameter information
@@ -569,10 +569,10 @@ public actor EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
                 dependencies = []
             }
 
-            let toolInfo = MCPToolInfo(
+            let toolInfo = await MCPToolInfo(
                 id: toolId,
-                name: await tool.name,
-                description: await tool.description,
+                name: tool.name,
+                description: tool.description,
                 capabilities: capabilities,
                 dependencies: dependencies
             )
@@ -599,17 +599,17 @@ public actor EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
             dependencies = []
         }
 
-        return MCPToolInfo(
+        return await MCPToolInfo(
             id: toolId,
-            name: await tool.name,
-            description: await tool.description,
+            name: tool.name,
+            description: tool.description,
             capabilities: capabilities,
             dependencies: dependencies
         )
     }
 
     public func orchestrateWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult {
-        return try await workflowManager.executeWorkflow(workflow)
+        try await workflowManager.executeWorkflow(workflow)
     }
 
     // MARK: - Private Methods
@@ -620,7 +620,7 @@ public actor EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
         }
 
         // Update execution time (moving average)
-        let alpha = 0.1  // Smoothing factor
+        let alpha = 0.1 // Smoothing factor
         metrics.averageExecutionTime =
             (1 - alpha) * metrics.averageExecutionTime + alpha * result.executionTime
 
@@ -641,7 +641,7 @@ public actor EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
 
     private func calculatePerformanceScore(_ metrics: MCPToolMetrics) -> Double {
         // Simple performance score calculation
-        let timeScore = max(0, 1 - metrics.averageExecutionTime / 10.0)  // Better if faster than 10s
+        let timeScore = max(0, 1 - metrics.averageExecutionTime / 10.0) // Better if faster than 10s
         let reliabilityScore = metrics.successRate
         let efficiencyScore = 1 - metrics.errorRate
 
@@ -668,7 +668,7 @@ public actor BasicMCPSecurityManager: MCPSecurityManager {
                 authenticated: true,
                 principal: principal,
                 token: UUID().uuidString,
-                expiresAt: Date().addingTimeInterval(3600)  // 1 hour
+                expiresAt: Date().addingTimeInterval(3600) // 1 hour
             )
         }
 
@@ -687,7 +687,7 @@ public actor BasicMCPSecurityManager: MCPSecurityManager {
         -> Bool
     {
         // Basic authorization - check if principal has required permissions
-        return principal.permissions.contains("tool:\(toolId)")
+        principal.permissions.contains("tool:\(toolId)")
             || principal.permissions.contains("tool:*") || principal.type == .system
     }
 
@@ -714,7 +714,8 @@ public final class BasicMCPWorkflowManager: MCPWorkflowManager {
     private var workflows: [UUID: MCPWorkflow] = [:]
     private var executionStatuses: [UUID: MCPWorkflowExecutionStatus] = [:]
     private let workflowQueue = DispatchQueue(
-        label: "com.mcp.workflow.manager", attributes: .concurrent)
+        label: "com.mcp.workflow.manager", attributes: .concurrent
+    )
 
     public func createWorkflow(name: String, steps: [MCPWorkflowStep]) async -> MCPWorkflow {
         await withCheckedContinuation { continuation in
@@ -830,14 +831,14 @@ public final class BasicMCPWorkflowManager: MCPWorkflowManager {
         var optimizedSteps = workflow.steps
 
         // Group independent steps
-        let independentSteps = optimizedSteps.filter { $0.dependencies.isEmpty }
+        let independentSteps = optimizedSteps.filter(\.dependencies.isEmpty)
         let dependentSteps = optimizedSteps.filter { !$0.dependencies.isEmpty }
 
         // Create parallel execution step for independent steps
         if independentSteps.count > 1 {
             let parallelStep = MCPWorkflowStep(
                 toolId: "parallel_executor",
-                parameters: ["steps": AnyCodable(independentSteps.map { $0.id.uuidString })],
+                parameters: ["steps": AnyCodable(independentSteps.map(\.id.uuidString))],
                 dependencies: []
             )
             optimizedSteps = [parallelStep] + dependentSteps
@@ -866,7 +867,7 @@ public final class BasicMCPWorkflowManager: MCPWorkflowManager {
                         }
                     }
 
-                    if let status = status {
+                    if let status {
                         continuation.yield(status)
 
                         if status.status == .completed || status.status == .failed
@@ -877,7 +878,7 @@ public final class BasicMCPWorkflowManager: MCPWorkflowManager {
                         }
                     }
 
-                    try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 second
+                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
                 }
             }
         }
@@ -933,22 +934,23 @@ public enum MCPError: Error {
 
 // MARK: - Extensions
 
-extension MCPToolResult {
-    public var isSuccessful: Bool { success }
-    public var hasError: Bool { error != nil }
+public extension MCPToolResult {
+    var isSuccessful: Bool { success }
+    var hasError: Bool { error != nil }
 }
 
-extension MCPWorkflow {
-    public var stepCount: Int { steps.count }
-    public var hasDependencies: Bool { steps.contains { !$0.dependencies.isEmpty } }
+public extension MCPWorkflow {
+    var stepCount: Int { steps.count }
+    var hasDependencies: Bool { steps.contains { !$0.dependencies.isEmpty } }
 }
 
-extension MCPPrincipal {
-    public static let system = MCPPrincipal(id: "system", type: .system, permissions: ["*"])
-    public static func agent(_ id: String) -> MCPPrincipal {
+public extension MCPPrincipal {
+    static let system = MCPPrincipal(id: "system", type: .system, permissions: ["*"])
+    static func agent(_ id: String) -> MCPPrincipal {
         MCPPrincipal(id: id, type: .agent, permissions: ["tool:*"])
     }
-    public static func user(_ id: String) -> MCPPrincipal {
+
+    static func user(_ id: String) -> MCPPrincipal {
         MCPPrincipal(id: id, type: .user, permissions: ["tool:read"])
     }
 }

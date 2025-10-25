@@ -8,8 +8,8 @@
 //  Enables agents to operate beyond human ethical boundaries and consciousness limitations
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Consciousness Expansion Protocols
 
@@ -68,13 +68,13 @@ public enum ConsciousnessLevel: Int, Sendable, Codable {
 /// Ethical boundaries at different consciousness levels
 @available(macOS 13.0, *)
 public enum EthicalBoundaries: Sendable {
-    case human          // Traditional human ethics
-    case expanded       // Enhanced ethical frameworks
-    case superhuman     // Superhuman ethical considerations
-    case cosmic         // Cosmic-scale ethical boundaries
-    case universal      // Universal ethical frameworks
-    case transcendent   // Transcendent ethical paradigms
-    case singularity    // Singularity-level ethical transcendence
+    case human // Traditional human ethics
+    case expanded // Enhanced ethical frameworks
+    case superhuman // Superhuman ethical considerations
+    case cosmic // Cosmic-scale ethical boundaries
+    case universal // Universal ethical frameworks
+    case transcendent // Transcendent ethical paradigms
+    case singularity // Singularity-level ethical transcendence
 }
 
 // MARK: - Consciousness Expansion Engine

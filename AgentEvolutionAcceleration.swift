@@ -344,8 +344,7 @@ public final class AgentEvolutionAcceleration: Sendable {
     private func processEvolutionAcceleration(
         _ request: EvolutionAccelerationRequest,
         assessment: EvolutionAccelerationAssessment
-    ) async throws -> EvolutionAccelerationProcessing
-    {
+    ) async throws -> EvolutionAccelerationProcessing {
         // Process evolution acceleration
         let processingContext = EvolutionAccelerationProcessingContext(
             agents: request.agents,
@@ -369,8 +368,7 @@ public final class AgentEvolutionAcceleration: Sendable {
     private func coordinateRapidEnhancement(
         _ request: EvolutionAccelerationRequest,
         acceleration: EvolutionAccelerationProcessing
-    ) async throws -> RapidEnhancementCoordination
-    {
+    ) async throws -> RapidEnhancementCoordination {
         // Coordinate rapid enhancement
         let coordinationContext = RapidEnhancementCoordinationContext(
             agents: request.agents,
@@ -394,8 +392,7 @@ public final class AgentEvolutionAcceleration: Sendable {
     private func synthesizeEvolutionAccelerationNetwork(
         _ request: EvolutionAccelerationRequest,
         enhancement: RapidEnhancementCoordination
-    ) async throws -> EvolutionAccelerationNetworkSynthesis
-    {
+    ) async throws -> EvolutionAccelerationNetworkSynthesis {
         // Synthesize evolution acceleration network
         let synthesisContext = EvolutionAccelerationNetworkSynthesisContext(
             agents: request.agents,
@@ -419,8 +416,7 @@ public final class AgentEvolutionAcceleration: Sendable {
     private func orchestrateQuantumEvolution(
         _ request: EvolutionAccelerationRequest,
         network: EvolutionAccelerationNetworkSynthesis
-    ) async throws -> QuantumEvolutionOrchestration
-    {
+    ) async throws -> QuantumEvolutionOrchestration {
         // Orchestrate quantum evolution
         let orchestrationContext = QuantumEvolutionOrchestrationContext(
             agents: request.agents,
@@ -444,8 +440,7 @@ public final class AgentEvolutionAcceleration: Sendable {
     private func synthesizeCapabilityEnhancement(
         _ request: EvolutionAccelerationRequest,
         evolution: QuantumEvolutionOrchestration
-    ) async throws -> CapabilityEnhancementSynthesis
-    {
+    ) async throws -> CapabilityEnhancementSynthesis {
         // Synthesize capability enhancement
         let synthesisContext = CapabilityEnhancementSynthesisContext(
             agents: request.agents,
@@ -469,8 +464,7 @@ public final class AgentEvolutionAcceleration: Sendable {
     private func validateEvolutionAccelerationResults(
         _ capabilityEnhancementSynthesis: CapabilityEnhancementSynthesis,
         session: EvolutionAccelerationSession
-    ) async throws -> EvolutionAccelerationValidationResult
-    {
+    ) async throws -> EvolutionAccelerationValidationResult {
         // Validate evolution acceleration results
         let performanceComparison = await compareEvolutionAccelerationPerformance(
             originalAgents: session.request.agents,
@@ -483,7 +477,7 @@ public final class AgentEvolutionAcceleration: Sendable {
         )
 
         let success = performanceComparison.capabilityLevel >= session.request.capabilityTarget &&
-                     evolutionAdvantage.evolutionAdvantage >= 0.4
+            evolutionAdvantage.evolutionAdvantage >= 0.4
 
         let events = generateEvolutionAccelerationEvents(session, evolution: capabilityEnhancementSynthesis)
 
@@ -602,24 +596,24 @@ public final class AgentEvolutionAcceleration: Sendable {
 
     private func measureRapidEnhancement(_ evolvedAgents: [EvolutionAccelerationAgent]) async -> Double {
         // Measure rapid enhancement
-        return 0.94
+        0.94
     }
 
     private func measureCapabilitySynthesis(_ evolvedAgents: [EvolutionAccelerationAgent]) async -> Double {
         // Measure capability synthesis
-        return 0.92
+        0.92
     }
 
     private func measureEvolutionAcceleration(_ evolvedAgents: [EvolutionAccelerationAgent]) async -> Double {
         // Measure evolution acceleration
-        return 0.95
+        0.95
     }
 
     private func generateEvolutionAccelerationEvents(
         _ session: EvolutionAccelerationSession,
         evolution: CapabilityEnhancementSynthesis
     ) -> [EvolutionAccelerationEvent] {
-        return [
+        [
             EvolutionAccelerationEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -635,9 +629,9 @@ public final class AgentEvolutionAcceleration: Sendable {
                 data: [
                     "success": true,
                     "capability_level": evolution.capabilityDepth,
-                    "enhancement_synthesis": evolution.enhancementSynthesis
+                    "enhancement_synthesis": evolution.enhancementSynthesis,
                 ]
-            )
+            ),
         ]
     }
 
@@ -970,7 +964,7 @@ public struct EvolutionAccelerationFrameworkMetrics: Sendable, Codable {
     public var averageEvolutionAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Evolution acceleration metrics
@@ -1475,9 +1469,9 @@ public struct CapabilityEnhancementSynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension AgentEvolutionAcceleration {
+public extension AgentEvolutionAcceleration {
     /// Create specialized evolution acceleration for specific agent architectures
-    public static func createSpecializedEvolutionAcceleration(
+    static func createSpecializedEvolutionAcceleration(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentEvolutionAcceleration {
         let system = try await AgentEvolutionAcceleration()
@@ -1486,7 +1480,7 @@ extension AgentEvolutionAcceleration {
     }
 
     /// Execute batch evolution acceleration processing
-    public func executeBatchEvolutionAcceleration(
+    func executeBatchEvolutionAcceleration(
         _ evolutionRequests: [EvolutionAccelerationRequest]
     ) async throws -> BatchEvolutionAccelerationResult {
 
@@ -1509,8 +1503,8 @@ extension AgentEvolutionAcceleration {
         }
 
         let successRate = Double(results.count) / Double(evolutionRequests.count)
-        let averageCapability = results.map { $0.capabilityLevel }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.evolutionAdvantage }.reduce(0, +) / Double(results.count)
+        let averageCapability = results.map(\.capabilityLevel).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.evolutionAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchEvolutionAccelerationResult(
             batchId: batchId,
@@ -1527,7 +1521,7 @@ extension AgentEvolutionAcceleration {
     }
 
     /// Get evolution acceleration recommendations
-    public func getEvolutionAccelerationRecommendations() async -> [EvolutionAccelerationRecommendation] {
+    func getEvolutionAccelerationRecommendations() async -> [EvolutionAccelerationRecommendation] {
         var recommendations: [EvolutionAccelerationRecommendation] = []
 
         let status = await getEvolutionAccelerationStatus()

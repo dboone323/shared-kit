@@ -180,12 +180,12 @@ public actor QuantumSafeSecurity {
 
     /// Get security metrics
     public func getSecurityMetrics() -> SecurityMetrics {
-        return securityMetrics
+        securityMetrics
     }
 
     /// Get active security policies
     public func getSecurityPolicies() -> [SecurityPolicy] {
-        return securityPolicies
+        securityPolicies
     }
 
     // MARK: - Private Methods
@@ -211,7 +211,7 @@ public actor QuantumSafeSecurity {
                 id: "key-rotation",
                 name: "Regular Key Rotation",
                 description: "Rotate keys every 90 days maximum",
-                requirements: [.maxKeyAge(7_776_000)],  // 90 days in seconds
+                requirements: [.maxKeyAge(7_776_000)], // 90 days in seconds
                 enforcement: .moderate
             ),
             SecurityPolicy(
@@ -257,7 +257,7 @@ public actor QuantumSafeSecurity {
     private func calculateRotationFrequency() -> Double {
         // Calculate key rotation frequency (keys per day)
         // This is a simplified calculation
-        return 1.0 / 90.0  // One rotation every 90 days
+        1.0 / 90.0 // One rotation every 90 days
     }
 
     private func generateSecurityRecommendations(
@@ -329,7 +329,7 @@ public actor QuantumSafeCryptoManager {
             algorithm: .kyber,
             isActive: true,
             performanceMetrics: AlgorithmPerformance(
-                encryptionSpeed: 1000,  // operations per second
+                encryptionSpeed: 1000, // operations per second
                 decryptionSpeed: 1200,
                 keyGenerationSpeed: 500,
                 securityLevel: .level5
@@ -341,7 +341,7 @@ public actor QuantumSafeCryptoManager {
             algorithm: .dilithium,
             isActive: true,
             performanceMetrics: AlgorithmPerformance(
-                encryptionSpeed: 0,  // Not applicable for signatures
+                encryptionSpeed: 0, // Not applicable for signatures
                 decryptionSpeed: 0,
                 keyGenerationSpeed: 300,
                 securityLevel: .level5
@@ -363,8 +363,8 @@ public actor QuantumSafeCryptoManager {
 
         // Simulate quantum-safe encryption
         // In real implementation, this would use actual Kyber/Dilithium libraries
-        let ciphertext = Data((0..<data.count + 32).map { _ in UInt8.random(in: 0...255) })
-        let ephemeralKey = Data((0..<32).map { _ in UInt8.random(in: 0...255) })
+        let ciphertext = Data((0 ..< data.count + 32).map { _ in UInt8.random(in: 0 ... 255) })
+        let ephemeralKey = Data((0 ..< 32).map { _ in UInt8.random(in: 0 ... 255) })
 
         return QuantumSafeCiphertext(
             algorithm: algorithm,
@@ -385,7 +385,7 @@ public actor QuantumSafeCryptoManager {
         // Simulate quantum-safe decryption
         // In real implementation, this would use actual Kyber/Dilithium libraries
         let decryptedData = Data(
-            (0..<ciphertext.ciphertext.count - 32).map { _ in UInt8.random(in: 0...255) })
+            (0 ..< ciphertext.ciphertext.count - 32).map { _ in UInt8.random(in: 0 ... 255) })
 
         return decryptedData
     }
@@ -393,7 +393,7 @@ public actor QuantumSafeCryptoManager {
     /// Sign data using quantum-safe signature
     public func signData(_ data: Data, using keyId: String) async throws -> QuantumSafeSignature {
         // Simulate Dilithium signature
-        let signature = Data((0..<64).map { _ in UInt8.random(in: 0...255) })
+        let signature = Data((0 ..< 64).map { _ in UInt8.random(in: 0 ... 255) })
 
         return QuantumSafeSignature(
             algorithm: .dilithium,
@@ -411,7 +411,7 @@ public actor QuantumSafeCryptoManager {
     ) async throws -> Bool {
         // Simulate signature verification
         // In real implementation, this would verify the Dilithium signature
-        return Bool.random()  // Simulate verification result
+        Bool.random() // Simulate verification result
     }
 
     /// Assess cryptographic strength
@@ -422,7 +422,7 @@ public actor QuantumSafeCryptoManager {
         for (algorithm, state) in activeAlgorithms {
             let score =
                 state.performanceMetrics.securityLevel.rawValue >= 5
-                ? 1.0 : state.performanceMetrics.securityLevel.rawValue >= 3 ? 0.8 : 0.6
+                    ? 1.0 : state.performanceMetrics.securityLevel.rawValue >= 3 ? 0.8 : 0.6
 
             totalScore += score
 
@@ -451,7 +451,8 @@ public actor QuantumSafeCryptoManager {
 /// Manages quantum-safe cryptographic keys
 public actor QuantumSafeKeyManager {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumSafeKeyManager")
+        subsystem: "com.quantum.workspace", category: "QuantumSafeKeyManager"
+    )
 
     private var keyStore: [String: QuantumSafeKeyPair] = [:]
     private var keyMetadata: [String: KeyMetadata] = [:]
@@ -489,8 +490,8 @@ public actor QuantumSafeKeyManager {
 
         // Simulate key generation
         // In real implementation, this would generate actual Kyber/Dilithium keys
-        let publicKeyData = Data((0..<keySize.rawValue).map { _ in UInt8.random(in: 0...255) })
-        let privateKeyData = Data((0..<keySize.rawValue).map { _ in UInt8.random(in: 0...255) })
+        let publicKeyData = Data((0 ..< keySize.rawValue).map { _ in UInt8.random(in: 0 ... 255) })
+        let privateKeyData = Data((0 ..< keySize.rawValue).map { _ in UInt8.random(in: 0 ... 255) })
 
         let publicKey = QuantumSafePublicKey(
             algorithm: algorithm,
@@ -563,9 +564,9 @@ public actor QuantumSafeKeyManager {
     /// Assess key health
     public func assessKeyHealth() async throws -> KeyHealthAssessment {
         let totalKeys = keyStore.count
-        let activeKeys = keyMetadata.values.filter { $0.isActive }.count
+        let activeKeys = keyMetadata.values.filter(\.isActive).count
         let oldKeys = keyMetadata.values.filter {
-            Date().timeIntervalSince($0.creationDate) > 7_776_000  // 90 days
+            Date().timeIntervalSince($0.creationDate) > 7_776_000 // 90 days
         }.count
 
         let healthScore = Double(activeKeys) / Double(totalKeys)
@@ -597,7 +598,7 @@ public actor QuantumSafeKeyManager {
             recommendations.append("Review key management policies")
         }
 
-        if calculateAverageKeyAge() > 7_776_000 {  // 90 days
+        if calculateAverageKeyAge() > 7_776_000 { // 90 days
             recommendations.append("Keys are too old - rotate immediately")
         }
 
@@ -649,7 +650,7 @@ public actor QuantumSafeProtocolManager {
         let channelId = UUID().uuidString
 
         // Simulate key exchange
-        let sharedSecret = Data((0..<32).map { _ in UInt8.random(in: 0...255) })
+        let sharedSecret = Data((0 ..< 32).map { _ in UInt8.random(in: 0 ... 255) })
 
         let channel = QuantumSafeChannel(
             id: channelId,
@@ -683,7 +684,8 @@ public actor QuantumSafeProtocolManager {
 /// Detects quantum computing threats
 public actor QuantumThreatDetector {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "QuantumThreatDetector")
+        subsystem: "com.quantum.workspace", category: "QuantumThreatDetector"
+    )
 
     private var monitoringActive = false
     private var threatPatterns: [ThreatPattern] = []
@@ -729,7 +731,7 @@ public actor QuantumThreatDetector {
         var detectedThreats: [SecurityThreat] = []
 
         // Randomly detect threats for demonstration
-        if Bool.random() && Bool.random() {  // Low probability
+        if Bool.random() && Bool.random() { // Low probability
             let threat = SecurityThreat(
                 id: UUID().uuidString,
                 type: .quantumAttack,
@@ -768,7 +770,7 @@ public actor QuantumThreatDetector {
         logger.info("📈 Increasing threat monitoring intensity")
 
         // Enhance monitoring capabilities
-        for i in 0..<threatPatterns.count {
+        for i in 0 ..< threatPatterns.count {
             threatPatterns[i].detectionConfidence += 0.1
         }
     }
@@ -936,7 +938,7 @@ public enum QuantumResistance: String, Sendable {
 
 /// Algorithm performance
 public struct AlgorithmPerformance: Sendable {
-    public let encryptionSpeed: Double  // operations per second
+    public let encryptionSpeed: Double // operations per second
     public let decryptionSpeed: Double
     public let keyGenerationSpeed: Double
     public let securityLevel: SecurityLevel
@@ -1105,7 +1107,7 @@ public func initializeQuantumSafeSecurity() async throws {
 /// Get quantum-safe security capabilities
 @MainActor
 public func getQuantumSafeCapabilities() -> [String: [String]] {
-    return [
+    [
         "cryptographic_algorithms": ["kyber", "dilithium", "falcon", "sphincs"],
         "key_management": ["key_generation", "key_rotation", "key_revocation"],
         "threat_detection": ["quantum_attack_detection", "key_compromise_alerts"],

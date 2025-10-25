@@ -6,8 +6,8 @@
 //  Purpose: Demonstrate the complete Ollama-powered local AI workflow system
 //
 
-import Foundation
 import Combine
+import Foundation
 
 /// Demonstration of the complete Ollama Workflow Integration System
 /// Shows how to use all components together for autonomous AI workflows
@@ -108,7 +108,7 @@ public final class OllamaWorkflowDemo {
                     prompt: "Based on this analysis, suggest fixes: {{analysis}}",
                     dependencies: [UUID(uuidString: "00000000-0000-0000-0000-000000000001")!],
                     outputKey: "fixes"
-                )
+                ),
             ]
         )
 
@@ -176,7 +176,7 @@ public final class OllamaWorkflowDemo {
                     model: "llama2",
                     prompt: "Generate documentation for: {{code}}",
                     outputKey: "documentation"
-                )
+                ),
             ]
         )
 
@@ -189,7 +189,7 @@ public final class OllamaWorkflowDemo {
                     model: "codellama",
                     prompt: "Generate unit tests for: {{code}}",
                     outputKey: "tests"
-                )
+                ),
             ]
         )
 
@@ -247,7 +247,7 @@ public final class OllamaWorkflowDemo {
 
         print("  First request: \(String(format: "%.2f", firstDuration))s")
         print("  Second request: \(String(format: "%.2f", secondDuration))s")
-        print("  Cache speedup: \(String(format: "%.1fx", firstDuration/secondDuration))x")
+        print("  Cache speedup: \(String(format: "%.1fx", firstDuration / secondDuration))x")
     }
 
     private func demonstrateFallback() async {
@@ -285,12 +285,12 @@ public final class OllamaWorkflowDemo {
                 description: "Document a simple function",
                 language: "Swift",
                 code: "func hello() { print(\"Hello\") }"
-            )
+            ),
         ]
 
         let results = try await integrationManager.processBatchTasks(tasks)
         print("  Processed \(results.count) tasks")
-        let successCount = results.filter { $0.success }.count
+        let successCount = results.filter(\.success).count
         print("  Success Rate: \(successCount)/\(results.count)")
     }
 }
@@ -320,7 +320,7 @@ public func runOllamaWorkflowDemo() async {
 // MARK: - Usage Examples
 
 /// Example usage patterns for the Ollama Workflow Integration
-public struct OllamaWorkflowExamples {
+public enum OllamaWorkflowExamples {
 
     /// Basic text generation example
     public static func basicGenerationExample() async throws -> String {

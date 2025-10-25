@@ -286,12 +286,12 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
         let executionHistory = await evolutionMonitor.getWorkflowExecutionHistory(workflow.id)
         let performanceMetrics = await optimizationSystem.analyzeWorkflowPerformance(workflow)
 
-        let insights = WorkflowLearningInsights(
+        let insights = await WorkflowLearningInsights(
             executionHistory: executionHistory,
             performanceMetrics: performanceMetrics,
             bottlenecks: identifyBottlenecks(performanceMetrics),
             optimizationOpportunities: identifyOptimizationOpportunities(performanceMetrics),
-            learningPatterns: await learningSystem.extractLearningPatterns(executionHistory),
+            learningPatterns: learningSystem.extractLearningPatterns(executionHistory),
             intelligenceGaps: identifyIntelligenceGaps(workflow, performanceMetrics),
             adaptationRecommendations: generateAdaptationRecommendations(performanceMetrics)
         )
@@ -354,8 +354,8 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
             originalWorkflow: session.request.workflow,
             adaptedWorkflow: adaptedWorkflow,
             adaptationsApplied: strategy.components.learningBasedAdaptations.count +
-                               strategy.components.performanceOptimizations.count +
-                               strategy.components.structuralModifications.count,
+                strategy.components.performanceOptimizations.count +
+                strategy.components.structuralModifications.count,
             adaptationTimestamp: Date()
         )
     }
@@ -426,7 +426,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
         )
 
         let success = performanceComparison.performanceImprovement > 0 &&
-                     intelligenceComparison.intelligenceGain > 0
+            intelligenceComparison.intelligenceGain > 0
 
         let events = generateEvolutionEvents(session, validation: WorkflowEvolutionValidation(
             performanceImprovement: performanceComparison.performanceImprovement,
@@ -589,7 +589,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
     }
 
     private func generateIntelligenceEnhancements(_ gaps: [IntelligenceGap]) -> [IntelligenceEnhancement] {
-        return gaps.map { gap in
+        gaps.map { gap in
             IntelligenceEnhancement(
                 type: gap.type,
                 description: "Enhance \(gap.type.rawValue) intelligence",
@@ -599,7 +599,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
     }
 
     private func generateStructuralModifications(_ bottlenecks: [WorkflowBottleneck]) -> [StructuralModification] {
-        return bottlenecks.map { bottleneck in
+        bottlenecks.map { bottleneck in
             StructuralModification(
                 type: .workflowStructure,
                 description: "Modify workflow structure to address \(bottleneck.type.rawValue) bottleneck",
@@ -609,7 +609,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
     }
 
     private func generateAutomationImprovements(_ patterns: [LearningPattern]) -> [AutomationImprovement] {
-        return patterns.map { pattern in
+        patterns.map { pattern in
             AutomationImprovement(
                 type: .patternRecognition,
                 description: "Automate recognition of \(pattern.patternType.rawValue) patterns",
@@ -620,8 +620,8 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
 
     private func assessEvolutionRisk(_ components: EvolutionStrategyComponents) -> EvolutionRiskAssessment {
         let totalModifications = components.learningBasedAdaptations.count +
-                               components.performanceOptimizations.count +
-                               components.structuralModifications.count
+            components.performanceOptimizations.count +
+            components.structuralModifications.count
 
         let riskLevel: RiskLevel = totalModifications > 10 ? .high : totalModifications > 5 ? .medium : .low
 
@@ -651,7 +651,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
                 ImplementationPhase(phase: "Analysis", duration: 300, dependencies: []),
                 ImplementationPhase(phase: "Adaptation", duration: 600, dependencies: ["Analysis"]),
                 ImplementationPhase(phase: "Optimization", duration: 300, dependencies: ["Adaptation"]),
-                ImplementationPhase(phase: "Validation", duration: 300, dependencies: ["Optimization"])
+                ImplementationPhase(phase: "Validation", duration: 300, dependencies: ["Optimization"]),
             ],
             totalDuration: 1500,
             criticalPath: ["Analysis", "Adaptation", "Optimization", "Validation"]
@@ -673,7 +673,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
     ) async throws -> MCPWorkflow {
         // Apply learning-based adaptation to workflow
         // This would modify the workflow based on the adaptation recommendation
-        return workflow // Placeholder - actual implementation would modify workflow
+        workflow // Placeholder - actual implementation would modify workflow
     }
 
     private func applyPerformanceOptimization(
@@ -681,7 +681,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
         to workflow: MCPWorkflow
     ) async throws -> MCPWorkflow {
         // Apply performance optimization to workflow
-        return workflow // Placeholder
+        workflow // Placeholder
     }
 
     private func applyStructuralModification(
@@ -689,7 +689,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
         to workflow: MCPWorkflow
     ) async throws -> MCPWorkflow {
         // Apply structural modification to workflow
-        return workflow // Placeholder
+        workflow // Placeholder
     }
 
     private func compareWorkflowPerformance(
@@ -741,7 +741,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
         _ session: WorkflowEvolutionSession,
         validation: WorkflowEvolutionValidation
     ) -> [EvolutionEvent] {
-        return [
+        [
             EvolutionEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -757,9 +757,9 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
                 data: [
                     "success": validation.success,
                     "performance_improvement": validation.performanceImprovement,
-                    "intelligence_gain": validation.intelligenceGain
+                    "intelligence_gain": validation.intelligenceGain,
                 ]
-            )
+            ),
         ]
     }
 
@@ -768,7 +768,7 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
         to workflow: MCPWorkflow
     ) async throws -> MCPWorkflow {
         // Apply adaptation strategy to workflow
-        return workflow // Placeholder
+        workflow // Placeholder
     }
 
     private func validateAdaptation(
@@ -790,21 +790,21 @@ public final class AutonomousWorkflowEvolutionSystem: Sendable {
             return [
                 EmergencyMeasure(type: .immediateOptimization, description: "Apply immediate performance optimizations"),
                 EmergencyMeasure(type: .intelligenceBoost, description: "Boost intelligence amplification"),
-                EmergencyMeasure(type: .structuralReinforcement, description: "Reinforce workflow structure")
+                EmergencyMeasure(type: .structuralReinforcement, description: "Reinforce workflow structure"),
             ]
         case .high:
             return [
                 EmergencyMeasure(type: .rapidAdaptation, description: "Execute rapid adaptation measures"),
-                EmergencyMeasure(type: .performanceStabilization, description: "Stabilize performance metrics")
+                EmergencyMeasure(type: .performanceStabilization, description: "Stabilize performance metrics"),
             ]
         case .medium:
             return [
                 EmergencyMeasure(type: .incrementalImprovement, description: "Apply incremental improvements"),
-                EmergencyMeasure(type: .monitoringEnhancement, description: "Enhance monitoring capabilities")
+                EmergencyMeasure(type: .monitoringEnhancement, description: "Enhance monitoring capabilities"),
             ]
         case .low:
             return [
-                EmergencyMeasure(type: .preventiveMaintenance, description: "Perform preventive maintenance")
+                EmergencyMeasure(type: .preventiveMaintenance, description: "Perform preventive maintenance"),
             ]
         }
     }
@@ -1350,7 +1350,7 @@ public struct WorkflowEvolutionMetrics: Sendable, Codable {
     public var averageAdaptationEfficiency: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Workflow evolution analytics
@@ -1410,7 +1410,7 @@ private final class WorkflowLearningSystem: Sendable {
 
     func extractLearningPatterns(_ history: [WorkflowExecutionRecord]) async -> [LearningPattern] {
         // Extract learning patterns from execution history
-        return []
+        []
     }
 
     func learnFromAdaptation(_ result: WorkflowAdaptationResult) async {
@@ -1584,12 +1584,12 @@ private final class WorkflowIntelligenceAmplifier: Sendable {
         to workflow: MCPWorkflow
     ) async throws -> MCPWorkflow {
         // Apply intelligence enhancement
-        return workflow
+        workflow
     }
 
     func calculateIntelligenceGain(original: MCPWorkflow, amplified: MCPWorkflow) async -> Double {
         // Calculate intelligence gain
-        return 0.25
+        0.25
     }
 }
 
@@ -1622,7 +1622,7 @@ private final class WorkflowEvolutionMonitor: Sendable {
 
     func getWorkflowExecutionHistory(_ workflowId: String) async -> [WorkflowExecutionRecord] {
         // Get workflow execution history
-        return []
+        []
     }
 }
 
@@ -1646,9 +1646,9 @@ private final class AutonomousEvolutionCoordinator: Sendable {
 
 // MARK: - Extensions
 
-extension AutonomousWorkflowEvolutionSystem {
+public extension AutonomousWorkflowEvolutionSystem {
     /// Create specialized evolution system for specific workflow types
-    public static func createSpecializedEvolutionSystem(
+    static func createSpecializedEvolutionSystem(
         for workflowType: WorkflowType
     ) async throws -> AutonomousWorkflowEvolutionSystem {
         let system = try await AutonomousWorkflowEvolutionSystem()
@@ -1657,7 +1657,7 @@ extension AutonomousWorkflowEvolutionSystem {
     }
 
     /// Execute continuous evolution for critical workflows
-    public func executeContinuousEvolution(
+    func executeContinuousEvolution(
         workflow: MCPWorkflow,
         evolutionInterval: TimeInterval
     ) async throws -> ContinuousEvolutionResult {
@@ -1706,7 +1706,7 @@ extension AutonomousWorkflowEvolutionSystem {
     }
 
     /// Get evolution recommendations
-    public func getEvolutionRecommendations() async -> [EvolutionRecommendation] {
+    func getEvolutionRecommendations() async -> [EvolutionRecommendation] {
         var recommendations: [EvolutionRecommendation] = []
 
         let status = await getEvolutionStatus()

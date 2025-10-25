@@ -24,7 +24,7 @@ final class QuantumRealityPreservationEngine: QRPProtocol {
 func demonstrateQuantumRealityPreservation() async {
     let engine = QuantumRealityPreservationEngine()
     do {
-        let res = try await engine.preserve(snapshot: QRPSnapshot(id: UUID(), label: "critical", createdAt: Date(), data: Data([0x0F,0xF0])))
+        let res = try await engine.preserve(snapshot: QRPSnapshot(id: UUID(), label: "critical", createdAt: Date(), data: Data([0x0F, 0xF0])))
         print("QRP demo -> stored: \(res.stored), checksum: \(res.checksum)")
     } catch { print("QRP demo error: \(error)") }
 }

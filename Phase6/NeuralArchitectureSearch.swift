@@ -16,7 +16,8 @@ import OSLog
 /// Main neural architecture search coordinator
 public actor NeuralArchitectureSearch {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "NeuralArchitectureSearch")
+        subsystem: "com.quantum.workspace", category: "NeuralArchitectureSearch"
+    )
 
     // Core components
     private let searchSpace: ArchitectureSearchSpace
@@ -65,7 +66,7 @@ public actor NeuralArchitectureSearch {
         var bestArchitecture: NeuralArchitecture?
         var bestScore = 0.0
 
-        for generation in 0..<constraints.maxGenerations {
+        for generation in 0 ..< constraints.maxGenerations {
             currentGeneration = generation
             logger.info("🌀 Generation \(generation + 1)/\(constraints.maxGenerations)")
 
@@ -87,7 +88,7 @@ public actor NeuralArchitectureSearch {
                 population: population,
                 evaluations: evaluations,
                 bestScore: bestScore,
-                averageScore: evaluations.map { $0.score }.reduce(0, +) / Double(evaluations.count),
+                averageScore: evaluations.map(\.score).reduce(0, +) / Double(evaluations.count),
                 timestamp: Date()
             )
             searchHistory.append(iteration)
@@ -152,19 +153,19 @@ public actor NeuralArchitectureSearch {
 
     /// Get search space information
     public func getSearchSpaceInfo() async -> SearchSpaceInfo {
-        return SearchSpaceInfo(
-            totalPossibleArchitectures: await searchSpace.estimateTotalArchitectures(),
-            currentSearchSpace: await searchSpace.getCurrentSpace(),
-            exploredArchitectures: population.count + searchHistory.flatMap { $0.population }.count,
+        await SearchSpaceInfo(
+            totalPossibleArchitectures: searchSpace.estimateTotalArchitectures(),
+            currentSearchSpace: searchSpace.getCurrentSpace(),
+            exploredArchitectures: population.count + searchHistory.flatMap(\.population).count,
             bestArchitectures: bestArchitectures
         )
     }
 
     /// Get search progress
     public func getSearchProgress() -> SearchProgress {
-        return SearchProgress(
+        SearchProgress(
             currentGeneration: currentGeneration,
-            totalGenerations: 50,  // Default max
+            totalGenerations: 50, // Default max
             populationSize: population.count,
             bestScore: searchMetrics.bestAccuracy,
             averageScore: searchMetrics.averageAccuracy,
@@ -204,7 +205,7 @@ public actor NeuralArchitectureSearch {
         var initialPopulation: [NeuralArchitecture] = []
 
         // Generate random architectures
-        for _ in 0..<constraints.populationSize {
+        for _ in 0 ..< constraints.populationSize {
             let architecture = try await searchSpace.sampleRandomArchitecture(for: task)
             initialPopulation.append(architecture)
         }
@@ -229,7 +230,8 @@ public actor NeuralArchitectureSearch {
             for architecture in population {
                 group.addTask {
                     let evaluation = try await self.architectureEvaluator.evaluateArchitecture(
-                        architecture, for: task)
+                        architecture, for: task
+                    )
                     return evaluation
                 }
             }
@@ -257,7 +259,7 @@ public actor NeuralArchitectureSearch {
         }
 
         // Score plateau detection
-        let recentScores = searchHistory.suffix(5).map { $0.bestScore }
+        let recentScores = searchHistory.suffix(5).map(\.bestScore)
         if recentScores.count >= 5 {
             let scoreRange = recentScores.max()! - recentScores.min()!
             if scoreRange < constraints.convergenceThreshold {
@@ -269,7 +271,7 @@ public actor NeuralArchitectureSearch {
     }
 
     private func updateSearchMetrics(_ evaluations: [ArchitectureEvaluation]) {
-        let scores = evaluations.map { $0.score }
+        let scores = evaluations.map(\.score)
         let bestScore = scores.max() ?? 0.0
         let averageScore = scores.reduce(0, +) / Double(scores.count)
 
@@ -302,7 +304,7 @@ public actor NeuralArchitectureSearch {
         var patterns: [ArchitecturePattern] = []
 
         // Layer count patterns
-        let layerCounts = successfulArchitectures.map { $0.layers.count }
+        let layerCounts = successfulArchitectures.map(\.layers.count)
         let avgLayerCount = Double(layerCounts.reduce(0, +)) / Double(layerCounts.count)
 
         patterns.append(
@@ -315,7 +317,7 @@ public actor NeuralArchitectureSearch {
 
         // Activation function patterns
         let activationFunctions = successfulArchitectures.flatMap {
-            $0.layers.compactMap { $0.activation }
+            $0.layers.compactMap(\.activation)
         }
         let mostCommonActivation = activationFunctions.mostCommon()
 
@@ -406,7 +408,7 @@ public actor NeuralArchitectureSearch {
     private func generateRecommendations(_ insights: [ArchitectureInsight])
         -> [ArchitectureRecommendation]
     {
-        return insights.map { insight in
+        insights.map { insight in
             ArchitectureRecommendation(
                 insight: insight,
                 action: "Incorporate \(insight.title.lowercased()) in future architectures",
@@ -422,16 +424,17 @@ public actor NeuralArchitectureSearch {
 /// Defines the search space for neural architectures
 public actor ArchitectureSearchSpace {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "ArchitectureSearchSpace")
+        subsystem: "com.quantum.workspace", category: "ArchitectureSearchSpace"
+    )
 
     /// Sample random architecture for task
     public func sampleRandomArchitecture(for task: MLTask) async throws -> NeuralArchitecture {
         // Generate random architecture based on task requirements
 
-        let layerCount = Int.random(in: 3...12)
+        let layerCount = Int.random(in: 3 ... 12)
         var layers: [NeuralLayer] = []
 
-        for i in 0..<layerCount {
+        for i in 0 ..< layerCount {
             let layerType = sampleLayerType(for: task)
             let layer = try await generateLayer(ofType: layerType, index: i, task: task)
             layers.append(layer)
@@ -466,12 +469,12 @@ public actor ArchitectureSearchSpace {
     public func estimateTotalArchitectures() -> Int {
         // Rough estimate of search space size
         // This is a very simplified calculation
-        let layerTypeOptions = 8  // convolution, dense, attention, etc.
+        let layerTypeOptions = 8 // convolution, dense, attention, etc.
         let maxLayers = 20
-        let activationOptions = 6  // relu, sigmoid, tanh, etc.
+        let activationOptions = 6 // relu, sigmoid, tanh, etc.
 
         var total = 1
-        for layerCount in 1...maxLayers {
+        for layerCount in 1 ... maxLayers {
             total += Int(pow(Double(layerTypeOptions * activationOptions), Double(layerCount)))
         }
 
@@ -480,7 +483,7 @@ public actor ArchitectureSearchSpace {
 
     /// Get current search space configuration
     public func getCurrentSpace() -> SearchSpaceConfiguration {
-        return SearchSpaceConfiguration(
+        SearchSpaceConfiguration(
             layerTypes: [
                 .convolution, .dense, .attention, .residual, .pooling, .normalization, .dropout,
                 .recurrent,
@@ -517,7 +520,7 @@ public actor ArchitectureSearchSpace {
             return NeuralLayer(
                 id: "conv_\(index)",
                 type: type,
-                inputShape: [32, 32, 3],  // Simplified
+                inputShape: [32, 32, 3], // Simplified
                 outputShape: [32, 32, 64],
                 parameters: 1000,
                 activation: activation,
@@ -529,7 +532,7 @@ public actor ArchitectureSearchSpace {
                 type: type,
                 inputShape: [1000],
                 outputShape: [100],
-                parameters: 100000,
+                parameters: 100_000,
                 activation: activation,
                 hyperparameters: [:]
             )
@@ -559,7 +562,7 @@ public actor ArchitectureSearchSpace {
     private func generateConnections(_ layers: [NeuralLayer]) -> [LayerConnection] {
         var connections: [LayerConnection] = []
 
-        for i in 0..<layers.count - 1 {
+        for i in 0 ..< layers.count - 1 {
             connections.append(
                 LayerConnection(
                     from: layers[i].id,
@@ -572,7 +575,7 @@ public actor ArchitectureSearchSpace {
     }
 
     private func calculateComplexity(_ layers: [NeuralLayer]) -> ComplexityLevel {
-        let totalParams = layers.map { $0.parameters }.reduce(0, +)
+        let totalParams = layers.map(\.parameters).reduce(0, +)
 
         if totalParams > 50_000_000 {
             return .high
@@ -590,19 +593,24 @@ public actor ArchitectureSearchSpace {
             NeuralLayer(
                 id: "conv1", type: .convolution, inputShape: [224, 224, 3],
                 outputShape: [112, 112, 64], parameters: 9408, activation: .relu,
-                hyperparameters: [:]),
+                hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "residual1", type: .residual, inputShape: [112, 112, 64],
-                outputShape: [112, 112, 64], parameters: 0, activation: nil, hyperparameters: [:]),
+                outputShape: [112, 112, 64], parameters: 0, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "pool1", type: .pooling, inputShape: [112, 112, 64], outputShape: [56, 56, 64],
-                parameters: 0, activation: nil, hyperparameters: [:]),
+                parameters: 0, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "dense1", type: .dense, inputShape: [56 * 56 * 64], outputShape: [1000],
-                parameters: 36_000_000, activation: .relu, hyperparameters: [:]),
+                parameters: 36_000_000, activation: .relu, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "dense2", type: .dense, inputShape: [1000], outputShape: [10],
-                parameters: 10000, activation: .softmax, hyperparameters: [:]),
+                parameters: 10000, activation: .softmax, hyperparameters: [:]
+            ),
         ]
 
         return NeuralArchitecture(
@@ -621,20 +629,25 @@ public actor ArchitectureSearchSpace {
             NeuralLayer(
                 id: "conv1", type: .convolution, inputShape: [224, 224, 3],
                 outputShape: [224, 224, 64], parameters: 1792, activation: .relu,
-                hyperparameters: [:]),
+                hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "conv2", type: .convolution, inputShape: [224, 224, 64],
                 outputShape: [224, 224, 64], parameters: 36928, activation: .relu,
-                hyperparameters: [:]),
+                hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "pool1", type: .pooling, inputShape: [224, 224, 64],
-                outputShape: [112, 112, 64], parameters: 0, activation: nil, hyperparameters: [:]),
+                outputShape: [112, 112, 64], parameters: 0, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "dense1", type: .dense, inputShape: [112 * 112 * 64], outputShape: [4096],
-                parameters: 102_764_544, activation: .relu, hyperparameters: [:]),
+                parameters: 102_764_544, activation: .relu, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "dense2", type: .dense, inputShape: [4096], outputShape: [10],
-                parameters: 40960, activation: .softmax, hyperparameters: [:]),
+                parameters: 40960, activation: .softmax, hyperparameters: [:]
+            ),
         ]
 
         return NeuralArchitecture(
@@ -653,17 +666,21 @@ public actor ArchitectureSearchSpace {
             NeuralLayer(
                 id: "conv1", type: .convolution, inputShape: [416, 416, 3],
                 outputShape: [416, 416, 32], parameters: 864, activation: .leakyRelu,
-                hyperparameters: [:]),
+                hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "pool1", type: .pooling, inputShape: [416, 416, 32],
-                outputShape: [208, 208, 32], parameters: 0, activation: nil, hyperparameters: [:]),
+                outputShape: [208, 208, 32], parameters: 0, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "conv2", type: .convolution, inputShape: [208, 208, 32],
                 outputShape: [208, 208, 64], parameters: 18432, activation: .leakyRelu,
-                hyperparameters: [:]),
+                hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "dense1", type: .dense, inputShape: [13 * 13 * 1024], outputShape: [1470],
-                parameters: 19_660_800, activation: .linear, hyperparameters: [:]),
+                parameters: 19_660_800, activation: .linear, hyperparameters: [:]
+            ),
         ]
 
         return NeuralArchitecture(
@@ -682,19 +699,24 @@ public actor ArchitectureSearchSpace {
             NeuralLayer(
                 id: "conv1", type: .convolution, inputShape: [224, 224, 3],
                 outputShape: [224, 224, 64], parameters: 1792, activation: .relu,
-                hyperparameters: [:]),
+                hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "pool1", type: .pooling, inputShape: [224, 224, 64],
-                outputShape: [112, 112, 64], parameters: 0, activation: nil, hyperparameters: [:]),
+                outputShape: [112, 112, 64], parameters: 0, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "roi_pool", type: .pooling, inputShape: [112, 112, 64],
-                outputShape: [7, 7, 64], parameters: 0, activation: nil, hyperparameters: [:]),
+                outputShape: [7, 7, 64], parameters: 0, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "dense1", type: .dense, inputShape: [7 * 7 * 64], outputShape: [4096],
-                parameters: 12_845_056, activation: .relu, hyperparameters: [:]),
+                parameters: 12_845_056, activation: .relu, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "dense2", type: .dense, inputShape: [4096], outputShape: [21],
-                parameters: 86021, activation: .softmax, hyperparameters: [:]),
+                parameters: 86021, activation: .softmax, hyperparameters: [:]
+            ),
         ]
 
         return NeuralArchitecture(
@@ -712,21 +734,26 @@ public actor ArchitectureSearchSpace {
         let layers = [
             NeuralLayer(
                 id: "embedding", type: .dense, inputShape: [512], outputShape: [512],
-                parameters: 262144, activation: nil, hyperparameters: [:]),
+                parameters: 262_144, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "attention1", type: .attention, inputShape: [100, 512],
-                outputShape: [100, 512], parameters: 524288, activation: nil,
-                hyperparameters: ["heads": .int(8)]),
+                outputShape: [100, 512], parameters: 524_288, activation: nil,
+                hyperparameters: ["heads": .int(8)]
+            ),
             NeuralLayer(
                 id: "feedforward1", type: .dense, inputShape: [100, 512], outputShape: [100, 2048],
-                parameters: 1_048_576, activation: .relu, hyperparameters: [:]),
+                parameters: 1_048_576, activation: .relu, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "attention2", type: .attention, inputShape: [100, 512],
-                outputShape: [100, 512], parameters: 524288, activation: nil,
-                hyperparameters: ["heads": .int(8)]),
+                outputShape: [100, 512], parameters: 524_288, activation: nil,
+                hyperparameters: ["heads": .int(8)]
+            ),
             NeuralLayer(
                 id: "output", type: .dense, inputShape: [100, 512], outputShape: [100, 1000],
-                parameters: 512000, activation: .softmax, hyperparameters: [:]),
+                parameters: 512_000, activation: .softmax, hyperparameters: [:]
+            ),
         ]
 
         return NeuralArchitecture(
@@ -744,16 +771,20 @@ public actor ArchitectureSearchSpace {
         let layers = [
             NeuralLayer(
                 id: "dense1", type: .dense, inputShape: [100], outputShape: [256],
-                parameters: 25600, activation: .relu, hyperparameters: [:]),
+                parameters: 25600, activation: .relu, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "dense2", type: .dense, inputShape: [256], outputShape: [512],
-                parameters: 131072, activation: .relu, hyperparameters: [:]),
+                parameters: 131_072, activation: .relu, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "dense3", type: .dense, inputShape: [512], outputShape: [1024],
-                parameters: 524288, activation: .relu, hyperparameters: [:]),
+                parameters: 524_288, activation: .relu, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "output", type: .dense, inputShape: [1024], outputShape: [784],
-                parameters: 803600, activation: .tanh, hyperparameters: [:]),
+                parameters: 803_600, activation: .tanh, hyperparameters: [:]
+            ),
         ]
 
         return NeuralArchitecture(
@@ -771,21 +802,26 @@ public actor ArchitectureSearchSpace {
         let layers = [
             NeuralLayer(
                 id: "embedding", type: .dense, inputShape: [512], outputShape: [768],
-                parameters: 393216, activation: nil, hyperparameters: [:]),
+                parameters: 393_216, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "attention1", type: .attention, inputShape: [128, 768],
                 outputShape: [128, 768], parameters: 2_359_296, activation: nil,
-                hyperparameters: ["heads": .int(12)]),
+                hyperparameters: ["heads": .int(12)]
+            ),
             NeuralLayer(
                 id: "feedforward1", type: .dense, inputShape: [128, 768], outputShape: [128, 3072],
-                parameters: 2_359_296, activation: .gelu, hyperparameters: [:]),
+                parameters: 2_359_296, activation: .gelu, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "attention2", type: .attention, inputShape: [128, 768],
                 outputShape: [128, 768], parameters: 2_359_296, activation: nil,
-                hyperparameters: ["heads": .int(12)]),
+                hyperparameters: ["heads": .int(12)]
+            ),
             NeuralLayer(
                 id: "pooler", type: .dense, inputShape: [768], outputShape: [768],
-                parameters: 590592, activation: .tanh, hyperparameters: [:]),
+                parameters: 590_592, activation: .tanh, hyperparameters: [:]
+            ),
         ]
 
         return NeuralArchitecture(
@@ -803,25 +839,31 @@ public actor ArchitectureSearchSpace {
         let layers = [
             NeuralLayer(
                 id: "embedding", type: .dense, inputShape: [50257], outputShape: [768],
-                parameters: 38_597_376, activation: nil, hyperparameters: [:]),
+                parameters: 38_597_376, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "positional", type: .dense, inputShape: [1024, 768], outputShape: [1024, 768],
-                parameters: 786432, activation: nil, hyperparameters: [:]),
+                parameters: 786_432, activation: nil, hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "attention1", type: .attention, inputShape: [1024, 768],
                 outputShape: [1024, 768], parameters: 2_359_296, activation: nil,
-                hyperparameters: ["heads": .int(12)]),
+                hyperparameters: ["heads": .int(12)]
+            ),
             NeuralLayer(
                 id: "feedforward1", type: .dense, inputShape: [1024, 768],
                 outputShape: [1024, 3072], parameters: 2_359_296, activation: .gelu,
-                hyperparameters: [:]),
+                hyperparameters: [:]
+            ),
             NeuralLayer(
                 id: "attention2", type: .attention, inputShape: [1024, 768],
                 outputShape: [1024, 768], parameters: 2_359_296, activation: nil,
-                hyperparameters: ["heads": .int(12)]),
+                hyperparameters: ["heads": .int(12)]
+            ),
             NeuralLayer(
                 id: "output", type: .dense, inputShape: [1024, 768], outputShape: [50257],
-                parameters: 38_597_376, activation: .softmax, hyperparameters: [:]),
+                parameters: 38_597_376, activation: .softmax, hyperparameters: [:]
+            ),
         ]
 
         return NeuralArchitecture(
@@ -913,7 +955,7 @@ public actor SearchAlgorithm {
 
     private func fineTuneConvolutionFilters(_ layer: NeuralLayer, _ task: MLTask) -> Int {
         let currentFilters = (layer.hyperparameters["filters"] ?? .int(64))
-        guard case .int(let filters) = currentFilters else { return 64 }
+        guard case let .int(filters) = currentFilters else { return 64 }
 
         // Adjust based on task complexity
         switch task.complexity {
@@ -925,7 +967,7 @@ public actor SearchAlgorithm {
 
     private func fineTuneDenseUnits(_ layer: NeuralLayer, _ task: MLTask) -> Int {
         let currentUnits = (layer.hyperparameters["units"] ?? .int(128))
-        guard case .int(let units) = currentUnits else { return 128 }
+        guard case let .int(units) = currentUnits else { return 128 }
 
         // Adjust based on task requirements
         switch task.type {
@@ -937,11 +979,11 @@ public actor SearchAlgorithm {
 
     private func fineTuneAttentionHeads(_ layer: NeuralLayer, _ task: MLTask) -> Int {
         let currentHeads = (layer.hyperparameters["heads"] ?? .int(8))
-        guard case .int(let heads) = currentHeads else { return 8 }
+        guard case let .int(heads) = currentHeads else { return 8 }
 
         // Adjust based on sequence length and complexity
         if task.inputShape.contains(where: { $0 > 1000 }) {
-            return max(heads, 16)  // Longer sequences need more heads
+            return max(heads, 16) // Longer sequences need more heads
         } else {
             return min(heads, 8)
         }
@@ -953,7 +995,8 @@ public actor SearchAlgorithm {
 /// Evaluates neural architectures on tasks
 public actor ArchitectureEvaluator {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "ArchitectureEvaluator")
+        subsystem: "com.quantum.workspace", category: "ArchitectureEvaluator"
+    )
 
     /// Evaluate architecture on task
     public func evaluateArchitecture(
@@ -965,15 +1008,16 @@ public actor ArchitectureEvaluator {
         // Simulate architecture evaluation
         // In a real implementation, this would train and test the architecture
 
-        let trainingTime = Double(architecture.layers.count * 10) + Double.random(in: 60..<600)
+        let trainingTime = Double(architecture.layers.count * 10) + Double.random(in: 60 ..< 600)
         let accuracy = calculateEstimatedAccuracy(architecture, task)
-        let loss = 1.0 - accuracy + Double.random(in: -0.1..<0.1)
+        let loss = 1.0 - accuracy + Double.random(in: -0.1 ..< 0.1)
         let inferenceTime = Double(architecture.layers.count) * 0.001
         let memoryUsage = calculateEstimatedMemory(architecture)
 
         let score = calculateOverallScore(
             accuracy: accuracy, loss: loss, inferenceTime: inferenceTime, memoryUsage: memoryUsage,
-            task: task)
+            task: task
+        )
 
         return ArchitectureEvaluation(
             architecture: architecture,
@@ -992,7 +1036,7 @@ public actor ArchitectureEvaluator {
         -> Double
     {
         // Estimate accuracy based on architecture characteristics
-        var baseAccuracy = 0.5  // Base random performance
+        var baseAccuracy = 0.5 // Base random performance
 
         // Architecture quality factors
         let layerDiversity = calculateLayerDiversity(architecture)
@@ -1008,16 +1052,16 @@ public actor ArchitectureEvaluator {
         baseAccuracy += architectureComplexity * 0.1
         baseAccuracy *= taskMultiplier
 
-        return min(max(baseAccuracy, 0.1), 0.99)  // Clamp to reasonable range
+        return min(max(baseAccuracy, 0.1), 0.99) // Clamp to reasonable range
     }
 
     private func calculateLayerDiversity(_ architecture: NeuralArchitecture) -> Double {
-        let layerTypes = Set(architecture.layers.map { $0.type })
-        return Double(layerTypes.count) / 8.0  // Normalize by total possible layer types
+        let layerTypes = Set(architecture.layers.map(\.type))
+        return Double(layerTypes.count) / 8.0 // Normalize by total possible layer types
     }
 
     private func calculateParameterEfficiency(_ architecture: NeuralArchitecture) -> Double {
-        let totalParams = architecture.layers.map { $0.parameters }.reduce(0, +)
+        let totalParams = architecture.layers.map(\.parameters).reduce(0, +)
         let optimalParams = getOptimalParameterCount(architecture.taskType)
 
         if totalParams <= optimalParams {
@@ -1048,8 +1092,8 @@ public actor ArchitectureEvaluator {
 
     private func calculateEstimatedMemory(_ architecture: NeuralArchitecture) -> Double {
         // Estimate memory usage in MB
-        let totalParams = architecture.layers.map { $0.parameters }.reduce(0, +)
-        return Double(totalParams) * 4.0 / 1_000_000.0  // 4 bytes per parameter
+        let totalParams = architecture.layers.map(\.parameters).reduce(0, +)
+        return Double(totalParams) * 4.0 / 1_000_000.0 // 4 bytes per parameter
     }
 
     private func calculateOverallScore(
@@ -1061,14 +1105,14 @@ public actor ArchitectureEvaluator {
     ) -> Double {
         // Weighted combination of metrics
         let accuracyWeight = 0.5
-        let lossWeight = -0.2  // Negative because lower loss is better
-        let timeWeight = -0.15  // Negative because faster is better
-        let memoryWeight = -0.15  // Negative because lower memory is better
+        let lossWeight = -0.2 // Negative because lower loss is better
+        let timeWeight = -0.15 // Negative because faster is better
+        let memoryWeight = -0.15 // Negative because lower memory is better
 
         var score = accuracy * accuracyWeight
-        score += (1.0 - loss) * abs(lossWeight)  // Convert loss to positive contribution
-        score += (1.0 / (1.0 + inferenceTime)) * abs(timeWeight)  // Normalize time
-        score += (1.0 / (1.0 + memoryUsage)) * abs(memoryWeight)  // Normalize memory
+        score += (1.0 - loss) * abs(lossWeight) // Convert loss to positive contribution
+        score += (1.0 / (1.0 + inferenceTime)) * abs(timeWeight) // Normalize time
+        score += (1.0 / (1.0 + memoryUsage)) * abs(memoryWeight) // Normalize memory
 
         return max(0.0, min(1.0, score))
     }
@@ -1079,7 +1123,8 @@ public actor ArchitectureEvaluator {
 /// Evolves neural architectures through genetic operations
 public actor ArchitectureEvolutionEngine {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "ArchitectureEvolutionEngine")
+        subsystem: "com.quantum.workspace", category: "ArchitectureEvolutionEngine"
+    )
 
     /// Evolve population to next generation
     public func evolvePopulation(
@@ -1095,7 +1140,7 @@ public actor ArchitectureEvolutionEngine {
         let eliteCount = Int(Double(constraints.populationSize) * 0.1)
         let sortedEvaluations = evaluations.sorted { $0.score > $1.score }
         newPopulation.append(
-            contentsOf: sortedEvaluations.prefix(eliteCount).map { $0.architecture })
+            contentsOf: sortedEvaluations.prefix(eliteCount).map(\.architecture))
 
         // Generate offspring through crossover and mutation
         while newPopulation.count < constraints.populationSize {
@@ -1108,7 +1153,8 @@ public actor ArchitectureEvolutionEngine {
 
             // Mutation
             let mutatedOffspring = try await mutate(
-                offspring, mutationRate: constraints.mutationRate)
+                offspring, mutationRate: constraints.mutationRate
+            )
 
             newPopulation.append(mutatedOffspring)
         }
@@ -1124,7 +1170,7 @@ public actor ArchitectureEvolutionEngine {
         let tournamentSize = 3
         var candidates: [NeuralArchitecture] = []
 
-        for _ in 0..<tournamentSize {
+        for _ in 0 ..< tournamentSize {
             candidates.append(population.randomElement()!)
         }
 
@@ -1149,16 +1195,16 @@ public actor ArchitectureEvolutionEngine {
         _ parent2: NeuralArchitecture
     ) async throws -> NeuralArchitecture {
         // Single-point crossover of layer sequences
-        let crossoverPoint = Int.random(in: 1..<min(parent1.layers.count, parent2.layers.count))
+        let crossoverPoint = Int.random(in: 1 ..< min(parent1.layers.count, parent2.layers.count))
 
-        var childLayers = Array(parent1.layers[0..<crossoverPoint])
+        var childLayers = Array(parent1.layers[0 ..< crossoverPoint])
         childLayers.append(contentsOf: parent2.layers[crossoverPoint...])
 
         return NeuralArchitecture(
             id: UUID().uuidString,
             layers: childLayers,
             connections: generateConnections(childLayers),
-            taskType: parent1.taskType,  // Inherit task type
+            taskType: parent1.taskType, // Inherit task type
             complexity: calculateComplexity(childLayers),
             createdDate: Date()
         )
@@ -1170,8 +1216,8 @@ public actor ArchitectureEvolutionEngine {
     ) async throws -> NeuralArchitecture {
         var mutatedLayers = architecture.layers
 
-        for i in 0..<mutatedLayers.count {
-            if Double.random(in: 0..<1) < mutationRate {
+        for i in 0 ..< mutatedLayers.count {
+            if Double.random(in: 0 ..< 1) < mutationRate {
                 // Apply random mutation to layer
                 mutatedLayers[i] = try await mutateLayer(mutatedLayers[i])
             }
@@ -1189,8 +1235,8 @@ public actor ArchitectureEvolutionEngine {
 
     private func mutateLayer(_ layer: NeuralLayer) async throws -> NeuralLayer {
         // Randomly mutate layer properties
-        switch Int.random(in: 0..<3) {
-        case 0:  // Change activation function
+        switch Int.random(in: 0 ..< 3) {
+        case 0: // Change activation function
             let newActivation = ActivationFunction.allCases.randomElement()
             return NeuralLayer(
                 id: layer.id,
@@ -1201,11 +1247,11 @@ public actor ArchitectureEvolutionEngine {
                 activation: newActivation,
                 hyperparameters: layer.hyperparameters
             )
-        case 1:  // Modify hyperparameters
+        case 1: // Modify hyperparameters
             var newHyperparams = layer.hyperparameters
             if let key = newHyperparams.keys.randomElement() {
-                if case .int(var intValue) = newHyperparams[key]! {
-                    intValue = intValue * Int.random(in: 1...2)
+                if case var .int(intValue) = newHyperparams[key]! {
+                    intValue = intValue * Int.random(in: 1 ... 2)
                     newHyperparams[key] = .int(intValue)
                 }
             }
@@ -1218,7 +1264,7 @@ public actor ArchitectureEvolutionEngine {
                 activation: layer.activation,
                 hyperparameters: newHyperparams
             )
-        case 2:  // Change layer type (with constraints)
+        case 2: // Change layer type (with constraints)
             let possibleTypes: [LayerType] = [.dense, .dropout, .normalization]
             let newType = possibleTypes.randomElement() ?? layer.type
             return NeuralLayer(
@@ -1238,7 +1284,7 @@ public actor ArchitectureEvolutionEngine {
     private func generateConnections(_ layers: [NeuralLayer]) -> [LayerConnection] {
         var connections: [LayerConnection] = []
 
-        for i in 0..<layers.count - 1 {
+        for i in 0 ..< layers.count - 1 {
             connections.append(
                 LayerConnection(
                     from: layers[i].id,
@@ -1251,7 +1297,7 @@ public actor ArchitectureEvolutionEngine {
     }
 
     private func calculateComplexity(_ layers: [NeuralLayer]) -> ComplexityLevel {
-        let totalParams = layers.map { $0.parameters }.reduce(0, +)
+        let totalParams = layers.map(\.parameters).reduce(0, +)
 
         if totalParams > 50_000_000 {
             return .high
@@ -1268,7 +1314,8 @@ public actor ArchitectureEvolutionEngine {
 /// Predicts architecture performance without full training
 public actor ArchitecturePerformancePredictor {
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "ArchitecturePerformancePredictor")
+        subsystem: "com.quantum.workspace", category: "ArchitecturePerformancePredictor"
+    )
 
     /// Predict architecture performance
     public func predictPerformance(
@@ -1298,14 +1345,14 @@ public actor ArchitecturePerformancePredictor {
 
     private func predictAccuracy(_ architecture: NeuralArchitecture, _ task: MLTask) -> Double {
         // Use architecture characteristics to predict accuracy
-        var prediction = 0.5  // Base prediction
+        var prediction = 0.5 // Base prediction
 
         // Layer count factor
         let layerFactor = min(Double(architecture.layers.count) / 10.0, 1.0)
         prediction += layerFactor * 0.2
 
         // Parameter count factor
-        let totalParams = architecture.layers.map { $0.parameters }.reduce(0, +)
+        let totalParams = architecture.layers.map(\.parameters).reduce(0, +)
         let paramFactor = min(Double(totalParams) / 50_000_000.0, 1.0)
         prediction += paramFactor * 0.15
 
@@ -1324,26 +1371,25 @@ public actor ArchitecturePerformancePredictor {
         return max(0.1, min(0.95, prediction))
     }
 
-    private func predictLatency(_ architecture: NeuralArchitecture, _ task: MLTask) -> TimeInterval
-    {
+    private func predictLatency(_ architecture: NeuralArchitecture, _ task: MLTask) -> TimeInterval {
         // Estimate inference latency
         let layerTime = architecture.layers.map { estimateLayerLatency($0) }.reduce(0, +)
-        return layerTime * Double.random(in: 0.8..<1.2)
+        return layerTime * Double.random(in: 0.8 ..< 1.2)
     }
 
     private func predictMemoryUsage(_ architecture: NeuralArchitecture, _ task: MLTask) -> Double {
         // Estimate memory usage
-        let totalParams = architecture.layers.map { $0.parameters }.reduce(0, +)
-        return Double(totalParams) * 4.0 / 1_000_000.0  // MB
+        let totalParams = architecture.layers.map(\.parameters).reduce(0, +)
+        return Double(totalParams) * 4.0 / 1_000_000.0 // MB
     }
 
     private func predictTrainingTime(_ architecture: NeuralArchitecture, _ task: MLTask)
         -> TimeInterval
     {
         // Estimate training time
-        let totalParams = architecture.layers.map { $0.parameters }.reduce(0, +)
-        let baseTime = Double(totalParams) / 1_000_000.0  // Rough heuristic
-        return baseTime * Double.random(in: 0.5..<2.0)
+        let totalParams = architecture.layers.map(\.parameters).reduce(0, +)
+        let baseTime = Double(totalParams) / 1_000_000.0 // Rough heuristic
+        return baseTime * Double.random(in: 0.5 ..< 2.0)
     }
 
     private func estimateLayerLatency(_ layer: NeuralLayer) -> TimeInterval {
@@ -1653,7 +1699,7 @@ public func initializeNeuralArchitectureSearch() async {
 /// Get neural architecture search capabilities
 @MainActor
 public func getNeuralArchitectureSearchCapabilities() -> [String: [String]] {
-    return [
+    [
         "search_algorithms": [
             "evolutionary_search", "reinforcement_learning", "bayesian_optimization",
         ],
@@ -1674,20 +1720,21 @@ public func searchNeuralArchitecture(
     for task: MLTask,
     constraints: SearchConstraints = SearchConstraints()
 ) async throws -> NeuralArchitecture {
-    return try await globalNeuralArchitectureSearch.searchArchitecture(
-        for: task, constraints: constraints)
+    try await globalNeuralArchitectureSearch.searchArchitecture(
+        for: task, constraints: constraints
+    )
 }
 
 /// Get search progress
 @MainActor
 public func getArchitectureSearchProgress() async -> SearchProgress {
-    return await globalNeuralArchitectureSearch.getSearchProgress()
+    await globalNeuralArchitectureSearch.getSearchProgress()
 }
 
 /// Analyze architecture patterns
 @MainActor
 public func analyzeNeuralArchitecturePatterns() async throws -> ArchitectureAnalysis {
-    return try await globalNeuralArchitectureSearch.analyzeArchitecturePatterns()
+    try await globalNeuralArchitectureSearch.analyzeArchitecturePatterns()
 }
 
 /// Predict architecture performance
@@ -1696,6 +1743,7 @@ public func predictNeuralArchitecturePerformance(
     _ architecture: NeuralArchitecture,
     for task: MLTask
 ) async throws -> ArchitecturePrediction {
-    return try await globalNeuralArchitectureSearch.predictArchitecturePerformance(
-        architecture, for: task)
+    try await globalNeuralArchitectureSearch.predictArchitecturePerformance(
+        architecture, for: task
+    )
 }

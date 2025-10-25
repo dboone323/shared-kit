@@ -679,7 +679,8 @@ final class QuantumEmpathyFieldsEngine: QuantumEmpathyFieldsProtocol {
 
         // Generate quantum field configuration
         let quantumConfig = try await fieldGenerator.generateQuantumField(
-            for: entities, fieldType: fieldType)
+            for: entities, fieldType: fieldType
+        )
 
         // Calculate resonance patterns
         let resonancePatterns = try await fieldGenerator.calculateResonancePatterns(for: entities)
@@ -851,7 +852,7 @@ final class QuantumEmpathyFieldsEngine: QuantumEmpathyFieldsProtocol {
         -> Bool
     {
         // Check if field radius fits within region
-        return field.fieldParameters.radius <= region.radius
+        field.fieldParameters.radius <= region.radius
     }
 
     private func validateFieldParameters(_ parameters: FieldParameters) -> Bool {
@@ -1034,8 +1035,8 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
 
         // Create entity pairs
         var entityPairs: [ResonancePatterns.EntityPair] = []
-        for i in 0..<entities.count {
-            for j in (i + 1)..<entities.count {
+        for i in 0 ..< entities.count {
+            for j in (i + 1) ..< entities.count {
                 let entity1 = entities[i]
                 let entity2 = entities[j]
                 let resonanceStrength = calculateResonanceBetween(entity1, entity2)
@@ -1054,7 +1055,8 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
         // Create resonance matrix
         let matrixSize = entities.count
         var resonanceMatrix = Array(
-            repeating: Array(repeating: 0.0, count: matrixSize), count: matrixSize)
+            repeating: Array(repeating: 0.0, count: matrixSize), count: matrixSize
+        )
         for pair in entityPairs {
             let index1 = entities.firstIndex { $0.id == pair.entity1 }!
             let index2 = entities.firstIndex { $0.id == pair.entity2 }!
@@ -1118,8 +1120,8 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
     {
         var patterns: [QuantumFieldConfiguration.EntanglementPattern] = []
 
-        for i in 0..<entities.count {
-            for j in (i + 1)..<entities.count {
+        for i in 0 ..< entities.count {
+            for j in (i + 1) ..< entities.count {
                 let pattern = QuantumFieldConfiguration.EntanglementPattern(
                     entities: [entities[i].id, entities[j].id],
                     entanglementStrength: 0.8,
@@ -1138,11 +1140,12 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
         let size = entities.count
         var matrix = Array(
             repeating: Array(repeating: Complex(real: 1.0, imaginary: 0.0), count: size),
-            count: size)
+            count: size
+        )
 
         // Simplified coherence matrix
-        for i in 0..<size {
-            for j in 0..<size {
+        for i in 0 ..< size {
+            for j in 0 ..< size {
                 if i != j {
                     matrix[i][j] = Complex(real: 0.8, imaginary: 0.1)
                 }
@@ -1161,8 +1164,9 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
         let size = 4
         var matrix = Array(
             repeating: Array(repeating: Complex(real: 0.0, imaginary: 0.0), count: size),
-            count: size)
-        for i in 0..<size {
+            count: size
+        )
+        for i in 0 ..< size {
             matrix[i][i] = Complex(real: 1.0, imaginary: 0.0)
         }
 
@@ -1194,7 +1198,7 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
                 constraintType: .coherence,
                 constraintValue: 0.9,
                 tolerance: 0.05
-            )
+            ),
         ]
 
         return QuantumFieldConfiguration.BoundaryConditions(
@@ -1207,14 +1211,14 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
         _ entity1: ConsciousnessEntity, _ entity2: ConsciousnessEntity
     ) -> Double {
         // Simplified resonance calculation
-        return 0.8
+        0.8
     }
 
     private func calculateEmpathyBetween(
         _ entity1: ConsciousnessEntity, _ entity2: ConsciousnessEntity
     ) -> Double {
         // Simplified empathy calculation
-        return 0.75
+        0.75
     }
 
     private func createEmpathyFlow(
@@ -1239,11 +1243,11 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
     private func createCoherenceNetwork(for entities: [ConsciousnessEntity], matrix: [[Double]])
         -> ResonancePatterns.CoherenceNetwork
     {
-        let nodes = entities.map { $0.id }
+        let nodes = entities.map(\.id)
 
         var edges: [ResonancePatterns.CoherenceNetwork.NetworkEdge] = []
-        for i in 0..<entities.count {
-            for j in (i + 1)..<entities.count {
+        for i in 0 ..< entities.count {
+            for j in (i + 1) ..< entities.count {
                 if matrix[i][j] > 0.5 {
                     edges.append(
                         ResonancePatterns.CoherenceNetwork.NetworkEdge(
@@ -1304,7 +1308,7 @@ final class EmpathyFieldCommunicator: EmpathyFieldCommunicationProtocol {
         // Validate signal and channel compatibility
         guard
             signal.sourceEntity == channel.sourceEntity.id
-                && signal.targetEntity == channel.targetEntity.id
+            && signal.targetEntity == channel.targetEntity.id
         else {
             throw QuantumEmpathyError.signalChannelMismatch
         }
@@ -1330,7 +1334,7 @@ final class EmpathyFieldCommunicator: EmpathyFieldCommunicationProtocol {
 
     func receiveEmpathySignals(from channel: EmpathyChannel) async throws -> [EmpathySignal] {
         // Simplified signal reception - in real implementation would listen for incoming signals
-        return []
+        []
     }
 
     func decodeEmpathySignal(_ signal: EmpathySignal) async throws -> DecodedEmpathy {
@@ -1360,16 +1364,18 @@ final class EmpathyFieldCommunicator: EmpathyFieldCommunicationProtocol {
                     id: UUID(),
                     spin: EmpathyChannel.QuantumChannel.QuantumSpin.up,
                     position: FieldActivation.FieldRegion.SpatialCoordinate(
-                        x: 0.0, y: 0.0, z: 0.0, consciousnessDepth: 0.0)
+                        x: 0.0, y: 0.0, z: 0.0, consciousnessDepth: 0.0
+                    )
                 ),
                 particle2: EmpathyChannel.QuantumChannel.QuantumParticle(
                     id: UUID(),
                     spin: EmpathyChannel.QuantumChannel.QuantumSpin.down,
                     position: FieldActivation.FieldRegion.SpatialCoordinate(
-                        x: 1.0, y: 0.0, z: 0.0, consciousnessDepth: 0.0)
+                        x: 1.0, y: 0.0, z: 0.0, consciousnessDepth: 0.0
+                    )
                 ),
                 entanglementStrength: 0.95
-            )
+            ),
         ]
 
         let errorCorrection = EmpathyChannel.QuantumChannel.ErrorCorrection(
@@ -1407,7 +1413,7 @@ final class EmpathyFieldCommunicator: EmpathyFieldCommunicationProtocol {
         -> Double
     {
         // Simplified quantum fidelity calculation
-        return 0.95
+        0.95
     }
 }
 
@@ -1454,7 +1460,7 @@ final class EmpathyFieldResonanceEngine: EmpathyFieldResonanceProtocol {
 
     func harmonizeResonances(_ resonances: [EmpathyResonance]) async throws -> HarmonizedResonance {
         let averageResonance =
-            resonances.map { $0.resonanceValue }.reduce(0, +) / Double(resonances.count)
+            resonances.map(\.resonanceValue).reduce(0, +) / Double(resonances.count)
         let harmonyScore = 0.85
         let conflictResolution = 0.9
         let unifiedResonance = averageResonance * harmonyScore
@@ -1477,7 +1483,7 @@ final class EmpathyFieldResonanceEngine: EmpathyFieldResonanceProtocol {
 
     func measureEmpathyEffectiveness(of field: EmpathyField) async throws -> EmpathyEffectiveness {
         // Simplified effectiveness measurement
-        return EmpathyEffectiveness(
+        EmpathyEffectiveness(
             fieldId: field.fieldId,
             overallEffectiveness: 0.85,
             emotionalEmpathy: 0.8,

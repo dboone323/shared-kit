@@ -124,8 +124,8 @@ public struct CoordinationSession: Sendable {
     public let startTime: Date
     public var status: CoordinationStatus
     public var progress: Double
-    public var subtaskAssignments: [UUID: UUID]  // Subtask ID -> Agent ID
-    public var results: [UUID: AgentOutput]  // Subtask ID -> Result
+    public var subtaskAssignments: [UUID: UUID] // Subtask ID -> Agent ID
+    public var results: [UUID: AgentOutput] // Subtask ID -> Result
     public var conflicts: [CoordinationConflict]
 
     public init(
@@ -403,8 +403,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
         return session
     }
 
-    public func coordinateAgents(in session: CoordinationSession) async throws -> CoordinationResult
-    {
+    public func coordinateAgents(in session: CoordinationSession) async throws -> CoordinationResult {
         var currentSession = session
         currentSession.status = .planning
         activeCoordinations[session.id] = currentSession
@@ -429,14 +428,14 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
             sessionSubject.send(currentSession)
 
             let executionTime = Date().timeIntervalSince(startTime)
-            let finalResult = CoordinationResult(
+            let finalResult = await CoordinationResult(
                 sessionId: session.id,
                 success: true,
                 finalResult: result,
                 subtaskResults: currentSession.results,
                 executionTime: executionTime,
                 conflictsResolved: currentSession.conflicts.count,
-                performanceMetrics: await calculateMetrics(for: currentSession)
+                performanceMetrics: calculateMetrics(for: currentSession)
             )
 
             resultSubject.send(finalResult)
@@ -466,8 +465,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
         return await conflictResolver.resolveConflict(conflict, in: session)
     }
 
-    public func optimizeCoordination(for session: CoordinationSession) async -> CoordinationSession
-    {
+    public func optimizeCoordination(for session: CoordinationSession) async -> CoordinationSession {
         var optimizedSession = session
 
         // Optimize agent assignments
@@ -507,8 +505,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
         return selectedAgents
     }
 
-    private func planCoordination(session: CoordinationSession) async throws -> CoordinationSession
-    {
+    private func planCoordination(session: CoordinationSession) async throws -> CoordinationSession {
         var plannedSession = session
 
         // Assign subtasks to agents
@@ -547,7 +544,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
         for subtask in session.task.subtasks {
             for dependencyId in subtask.dependencies {
                 guard let assignedAgent = session.subtaskAssignments[subtask.id],
-                    let dependencyAgent = session.subtaskAssignments[dependencyId]
+                      let dependencyAgent = session.subtaskAssignments[dependencyId]
                 else {
                     continue
                 }
@@ -592,7 +589,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
                 group.addTask {
                     do {
                         if let agentId = session.subtaskAssignments[subtask.id],
-                            let agent = registeredAgents[agentId]
+                           let agent = registeredAgents[agentId]
                         {
                             let input = AgentInput(
                                 type: .task,
@@ -611,7 +608,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
             }
 
             for await (subtaskId, result) in group {
-                if let result = result {
+                if let result {
                     session.results[subtaskId] = result
                 }
                 session.progress =
@@ -625,7 +622,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
         // Execute subtasks in sequence
         for subtask in session.task.subtasks {
             guard let agentId = session.subtaskAssignments[subtask.id],
-                let agent = registeredAgents[agentId]
+                  let agent = registeredAgents[agentId]
             else {
                 continue
             }
@@ -649,7 +646,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
 
         for subtask in executionOrder {
             guard let agentId = session.subtaskAssignments[subtask.id],
-                let agent = registeredAgents[agentId]
+                  let agent = registeredAgents[agentId]
             else {
                 continue
             }
@@ -671,7 +668,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
         // Collaborative execution with communication
         for subtask in session.task.subtasks {
             guard let agentId = session.subtaskAssignments[subtask.id],
-                let agent = registeredAgents[agentId]
+                  let agent = registeredAgents[agentId]
             else {
                 continue
             }
@@ -684,9 +681,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
                 content: [
                     "command": "coordinate",
                     "task": subtask.description,
-                    "collaborators": session.participatingAgents.filter { $0 != agentId }.map {
-                        $0.uuidString
-                    },
+                    "collaborators": session.participatingAgents.filter { $0 != agentId }.map(\.uuidString),
                 ]
             )
 
@@ -792,8 +787,8 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
         var optimizedSubtasks = task.subtasks
 
         // Mark independent subtasks
-        for i in 0..<optimizedSubtasks.count {
-            for j in (i + 1)..<optimizedSubtasks.count {
+        for i in 0 ..< optimizedSubtasks.count {
+            for j in (i + 1) ..< optimizedSubtasks.count {
                 if !optimizedSubtasks[i].dependencies.contains(optimizedSubtasks[j].id)
                     && !optimizedSubtasks[j].dependencies.contains(optimizedSubtasks[i].id)
                 {
@@ -817,8 +812,8 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
     private func calculateMetrics(for session: CoordinationSession) async -> CoordinationMetrics {
         let executionTime = Date().timeIntervalSince(session.startTime)
         let efficiency = Double(session.results.count) / Double(session.task.subtasks.count)
-        let communicationOverhead = executionTime * 0.1  // Estimate
-        let conflictResolutionTime = TimeInterval(session.conflicts.count) * 10  // Estimate
+        let communicationOverhead = executionTime * 0.1 // Estimate
+        let conflictResolutionTime = TimeInterval(session.conflicts.count) * 10 // Estimate
 
         var agentUtilization: [UUID: Double] = [:]
         for agentId in session.participatingAgents {
@@ -856,8 +851,8 @@ private struct ParallelCoordinationStrategy: CoordinationStrategy {
     }
 
     func estimateCoordinationTime(for task: CoordinationTask) -> TimeInterval {
-        let maxSubtaskTime = task.subtasks.map { $0.estimatedDuration }.max() ?? 300
-        return maxSubtaskTime + 10  // Add coordination overhead
+        let maxSubtaskTime = task.subtasks.map(\.estimatedDuration).max() ?? 300
+        return maxSubtaskTime + 10 // Add coordination overhead
     }
 }
 
@@ -878,8 +873,8 @@ private struct SequentialCoordinationStrategy: CoordinationStrategy {
     }
 
     func estimateCoordinationTime(for task: CoordinationTask) -> TimeInterval {
-        let totalTime = task.subtasks.map { $0.estimatedDuration }.reduce(0, +)
-        return totalTime + TimeInterval(task.subtasks.count) * 5  // Add overhead per task
+        let totalTime = task.subtasks.map(\.estimatedDuration).reduce(0, +)
+        return totalTime + TimeInterval(task.subtasks.count) * 5 // Add overhead per task
     }
 }
 
@@ -900,8 +895,8 @@ private struct HierarchicalCoordinationStrategy: CoordinationStrategy {
     }
 
     func estimateCoordinationTime(for task: CoordinationTask) -> TimeInterval {
-        let totalTime = task.subtasks.map { $0.estimatedDuration }.reduce(0, +)
-        return totalTime * 1.2  // Hierarchical overhead
+        let totalTime = task.subtasks.map(\.estimatedDuration).reduce(0, +)
+        return totalTime * 1.2 // Hierarchical overhead
     }
 }
 
@@ -922,8 +917,8 @@ private struct CollaborativeCoordinationStrategy: CoordinationStrategy {
     }
 
     func estimateCoordinationTime(for task: CoordinationTask) -> TimeInterval {
-        let totalTime = task.subtasks.map { $0.estimatedDuration }.reduce(0, +)
-        return totalTime * 0.8  // Collaboration can be more efficient
+        let totalTime = task.subtasks.map(\.estimatedDuration).reduce(0, +)
+        return totalTime * 0.8 // Collaboration can be more efficient
     }
 }
 
@@ -982,7 +977,7 @@ public struct CoordinationResourceManager {
         var totalRequired: Double = 0
 
         for subtask in session.task.subtasks {
-            totalRequired += subtask.estimatedDuration / 10  // Rough resource estimate
+            totalRequired += subtask.estimatedDuration / 10 // Rough resource estimate
         }
 
         let availableCapacity = agentResources.values.reduce(0) { $0 + $1.capacity }
@@ -1002,30 +997,30 @@ enum CoordinationError: Error {
 
 // MARK: - Extensions
 
-extension CoordinationSession {
-    public var completionPercentage: Double { progress * 100 }
-    public var isCompleted: Bool { status == .completed }
-    public var hasConflicts: Bool { !conflicts.isEmpty }
-    public var duration: TimeInterval { Date().timeIntervalSince(startTime) }
+public extension CoordinationSession {
+    var completionPercentage: Double { progress * 100 }
+    var isCompleted: Bool { status == .completed }
+    var hasConflicts: Bool { !conflicts.isEmpty }
+    var duration: TimeInterval { Date().timeIntervalSince(startTime) }
 }
 
-extension CoordinationTask {
-    public var totalEstimatedDuration: TimeInterval {
-        subtasks.map { $0.estimatedDuration }.reduce(0, +)
+public extension CoordinationTask {
+    var totalEstimatedDuration: TimeInterval {
+        subtasks.map(\.estimatedDuration).reduce(0, +)
     }
 
-    public var isParallelizable: Bool {
-        subtasks.allSatisfy { $0.dependencies.isEmpty }
+    var isParallelizable: Bool {
+        subtasks.allSatisfy(\.dependencies.isEmpty)
     }
 
-    public var complexityScore: Double {
+    var complexityScore: Double {
         let subtaskComplexity = subtasks.map { Double($0.priority.rawValue) }.reduce(0, +)
         let dependencyComplexity = subtasks.map { Double($0.dependencies.count) }.reduce(0, +)
         return subtaskComplexity + dependencyComplexity
     }
 }
 
-extension CoordinationResult {
-    public var efficiency: Double { performanceMetrics.efficiency }
-    public var isSuccessful: Bool { success }
+public extension CoordinationResult {
+    var efficiency: Double { performanceMetrics.efficiency }
+    var isSuccessful: Bool { success }
 }

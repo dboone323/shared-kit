@@ -387,8 +387,7 @@ public struct MCPBottleneck: Codable {
     public let severity: MCPEventSeverity
     public let description: String
 
-    public init(serviceId: String, metric: String, severity: MCPEventSeverity, description: String)
-    {
+    public init(serviceId: String, metric: String, severity: MCPEventSeverity, description: String) {
         self.serviceId = serviceId
         self.metric = metric
         self.severity = severity
@@ -421,13 +420,13 @@ public final class MCPHTTPClient: MCPAPIClient, Sendable {
     public func execute<T: Decodable>(_ endpoint: MCPAPIEndpoint) async throws -> T {
         let response: [String: AnyCodable] = try await execute(endpoint)
         guard let success = response["success"]?.value as? Bool, success,
-            let dataValue = response["data"]
+              let dataValue = response["data"]
         else {
             let errorCode =
                 (response["error"] as? [String: AnyCodable])?["code"]?.value as? String ?? "unknown"
             let errorMessage =
                 (response["error"] as? [String: AnyCodable])?["message"]?.value as? String
-                ?? "Unknown error"
+                    ?? "Unknown error"
             throw MCPAPIError(code: errorCode, message: errorMessage)
         }
 
@@ -467,9 +466,10 @@ public final class MCPHTTPClient: MCPAPIClient, Sendable {
             throw MCPAPIError(code: "network_error", message: "Invalid response type")
         }
 
-        guard (200...299).contains(httpResponse.statusCode) else {
+        guard (200 ... 299).contains(httpResponse.statusCode) else {
             throw MCPAPIError(
-                code: "http_\(httpResponse.statusCode)", message: "HTTP \(httpResponse.statusCode)")
+                code: "http_\(httpResponse.statusCode)", message: "HTTP \(httpResponse.statusCode)"
+            )
         }
 
         // Decode as AnyCodable dictionary
@@ -482,7 +482,7 @@ public final class MCPHTTPClient: MCPAPIClient, Sendable {
     > {
         AsyncThrowingStream { continuation in
             Task { @Sendable in
-                let localEndpoint = endpoint  // Create local copy to avoid data race
+                let localEndpoint = endpoint // Create local copy to avoid data race
                 do {
                     let url = baseURL.appendingPathComponent(localEndpoint.path)
 
@@ -500,10 +500,11 @@ public final class MCPHTTPClient: MCPAPIClient, Sendable {
                     let (bytes, response) = try await session.bytes(for: request)
 
                     guard let httpResponse = response as? HTTPURLResponse,
-                        (200...299).contains(httpResponse.statusCode)
+                          (200 ... 299).contains(httpResponse.statusCode)
                     else {
                         throw MCPAPIError(
-                            code: "stream_error", message: "Failed to establish stream")
+                            code: "stream_error", message: "Failed to establish stream"
+                        )
                     }
 
                     continuation.yield([
@@ -514,8 +515,9 @@ public final class MCPHTTPClient: MCPAPIClient, Sendable {
                         if line.hasPrefix("data: ") {
                             let jsonString = String(line.dropFirst(6))
                             if let data = jsonString.data(using: .utf8),
-                                let jsonObject = try? decoder.decode(
-                                    [String: AnyCodable].self, from: data)
+                               let jsonObject = try? decoder.decode(
+                                   [String: AnyCodable].self, from: data
+                               )
                             {
                                 continuation.yield(jsonObject)
                             }
@@ -541,7 +543,7 @@ public actor MCPInMemoryServiceDiscovery: MCPServiceDiscovery {
     public init() {}
 
     public func discoverServices() async throws -> [MCPServiceInfo] {
-        return Array(_services.values)
+        Array(_services.values)
     }
 
     public func registerService(_ service: MCPServiceInfo) async throws {
@@ -553,11 +555,11 @@ public actor MCPInMemoryServiceDiscovery: MCPServiceDiscovery {
     }
 
     public func findService(byId id: String) async -> MCPServiceInfo? {
-        return _services[id]
+        _services[id]
     }
 
     public func findServices(byCapability capability: MCPToolCapability) async -> [MCPServiceInfo] {
-        return _services.values.filter { $0.capabilities.contains(capability) }
+        _services.values.filter { $0.capabilities.contains(capability) }
     }
 }
 
@@ -609,13 +611,13 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
     }
 
     public func getMetrics(for serviceId: String, timeRange: DateInterval) async -> [MCPMetric] {
-        return _metrics.filter { metric in
+        _metrics.filter { metric in
             metric.serviceId == serviceId && timeRange.contains(metric.timestamp)
         }
     }
 
     public func getHealthStatus() async -> MCPHealthStatus {
-        let recentMetrics = _metrics.filter { $0.timestamp > Date().addingTimeInterval(-300) }  // Last 5 minutes
+        let recentMetrics = _metrics.filter { $0.timestamp > Date().addingTimeInterval(-300) } // Last 5 minutes
 
         var serviceHealth: [String: MCPHealthState] = [:]
         var issues: [MCPHealthIssue] = []
@@ -650,8 +652,8 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
 
         let overallHealth =
             serviceHealth.values.contains(MCPHealthState.unhealthy)
-            ? MCPHealthState.unhealthy
-            : serviceHealth.values.contains(MCPHealthState.degraded)
+                ? MCPHealthState.unhealthy
+                : serviceHealth.values.contains(MCPHealthState.degraded)
                 ? MCPHealthState.degraded : MCPHealthState.healthy
 
         return MCPHealthStatus(
@@ -668,7 +670,7 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
         var summaries: [MCPMetricSummary] = []
 
         for (name, nameMetrics) in metricsByName {
-            let values = nameMetrics.map { $0.value }.sorted()
+            let values = nameMetrics.map(\.value).sorted()
             if values.isEmpty { continue }
 
             let average = values.reduce(0, +) / Double(values.count)
@@ -680,8 +682,8 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
             // Simple trend calculation
             let trend: MCPTrend
             if nameMetrics.count >= 2 {
-                let firstHalf = nameMetrics.prefix(nameMetrics.count / 2).map { $0.value }
-                let secondHalf = nameMetrics.suffix(nameMetrics.count / 2).map { $0.value }
+                let firstHalf = nameMetrics.prefix(nameMetrics.count / 2).map(\.value)
+                let secondHalf = nameMetrics.suffix(nameMetrics.count / 2).map(\.value)
                 let firstAvg = firstHalf.reduce(0, +) / Double(firstHalf.count)
                 let secondAvg = secondHalf.reduce(0, +) / Double(secondHalf.count)
 
@@ -711,17 +713,17 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
         for summary in summaries where (summary.max ?? 0) > summary.average * 2 {
             bottlenecks.append(
                 MCPBottleneck(
-                    serviceId: "unknown",  // Would need service mapping
+                    serviceId: "unknown", // Would need service mapping
                     metric: summary.name,
                     severity: .warning,
                     description:
-                        "High variance in \(summary.name): max \(String(format: "%.2f", summary.max ?? 0)) vs avg \(String(format: "%.2f", summary.average))"
+                    "High variance in \(summary.name): max \(String(format: "%.2f", summary.max ?? 0)) vs avg \(String(format: "%.2f", summary.average))"
                 ))
         }
 
         // Generate recommendations
         var recommendations: [String] = []
-        if bottlenecks.count > 0 {
+        if !bottlenecks.isEmpty {
             recommendations.append("Address performance bottlenecks in high-variance metrics")
         }
         if summaries.isEmpty {
@@ -730,9 +732,9 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
 
         // Create performance summary
         let totalRequests = relevantMetrics.count
-        let successfulRequests = relevantMetrics.filter { $0.value >= 0 }.count  // Simplified success criteria
+        let successfulRequests = relevantMetrics.filter { $0.value >= 0 }.count // Simplified success criteria
         let failedRequests = totalRequests - successfulRequests
-        let responseTimes = relevantMetrics.map { $0.value }
+        let responseTimes = relevantMetrics.map(\.value)
         let averageResponseTime =
             responseTimes.isEmpty ? 0 : responseTimes.reduce(0, +) / Double(responseTimes.count)
         let peakResponseTime = responseTimes.max() ?? 0
@@ -912,26 +914,26 @@ public final class MCPIntegrationManager: Sendable {
 
 // MARK: - Convenience Extensions
 
-extension MCPIntegrationManager {
+public extension MCPIntegrationManager {
     /// Register multiple tools at once
-    public func registerTools(_ tools: [any MCPTool]) async throws {
+    func registerTools(_ tools: [any MCPTool]) async throws {
         for tool in tools {
             try await registerTool(tool)
         }
     }
 
     /// Execute a workflow
-    public func executeWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult {
+    func executeWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult {
         try await orchestrator.orchestrateWorkflow(workflow)
     }
 
     /// Get tool information
-    public func getToolInfo(_ toolId: String) async -> MCPToolInfo? {
+    func getToolInfo(_ toolId: String) async -> MCPToolInfo? {
         await orchestrator.getToolInfo(toolId)
     }
 
     /// List all available tools
-    public func listAvailableTools() async -> [MCPToolInfo] {
+    func listAvailableTools() async -> [MCPToolInfo] {
         await orchestrator.listAvailableTools()
     }
 }

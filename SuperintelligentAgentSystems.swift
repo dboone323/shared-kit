@@ -19,8 +19,8 @@
 //  - Reality manipulation through intelligent orchestration
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Superintelligence Protocols
 
@@ -327,15 +327,15 @@ public final class SuperintelligentAgent: AutonomousAgent, SuperintelligentAgent
     }
 
     public func optimizeAcrossMultiverses(scenario: MultiverseScenario) async throws -> MultiverseOptimization {
-        return try await multiverseCoordinator.optimizeScenario(scenario)
+        try await multiverseCoordinator.optimizeScenario(scenario)
     }
 
     public func solveAtConsciousnessLevel(problem: ConsciousnessProblem) async throws -> ConsciousnessSolution {
-        return try await consciousnessInterface.solveProblem(problem)
+        try await consciousnessInterface.solveProblem(problem)
     }
 
     public func manipulateRealityThroughIntelligence(parameters: RealityManipulationParameters) async throws -> RealityManipulationResult {
-        return try await realityManipulator.manipulate(parameters)
+        try await realityManipulator.manipulate(parameters)
     }
 
     // MARK: - Private Methods
@@ -429,7 +429,7 @@ public final class SuperintelligentAgent: AutonomousAgent, SuperintelligentAgent
 
     private func extractConstraints(_ task: AgentTask) -> [ProblemConstraint] {
         // Extract constraints from task parameters
-        return task.parameters.compactMap { key, value in
+        task.parameters.compactMap { key, value in
             switch key {
             case "timeLimit":
                 return ProblemConstraint(
@@ -594,8 +594,8 @@ private actor QuantumProcessingEngine {
     }
 
     func evaluateOptions(_ options: [DecisionOption]) async -> QuantumEvaluation {
-        return QuantumEvaluation(
-            scores: Dictionary(uniqueKeysWithValues: options.map { ($0.id, Double.random(in: 0...1)) }),
+        QuantumEvaluation(
+            scores: Dictionary(uniqueKeysWithValues: options.map { ($0.id, Double.random(in: 0 ... 1)) }),
             confidence: 0.95
         )
     }
@@ -625,13 +625,13 @@ private actor ConsciousnessInterface {
     }
 
     func weightOptions(_ options: [DecisionOption]) async -> ConsciousnessWeighting {
-        return ConsciousnessWeighting(
-            weights: Dictionary(uniqueKeysWithValues: options.map { ($0.id, Double.random(in: 0...1)) })
+        ConsciousnessWeighting(
+            weights: Dictionary(uniqueKeysWithValues: options.map { ($0.id, Double.random(in: 0 ... 1)) })
         )
     }
 
     func solveProblem(_ problem: ConsciousnessProblem) async throws -> ConsciousnessSolution {
-        return ConsciousnessSolution(
+        ConsciousnessSolution(
             solution: "Consciousness-level solution",
             enlightenment: "Achieved enlightenment"
         )
@@ -657,12 +657,12 @@ private actor MultiverseCoordinator {
         return MultiverseOptimization(
             optimalPath: "multiverse_optimal_path",
             probability: 0.99,
-            universesAffected: 1000000
+            universesAffected: 1_000_000
         )
     }
 
     func evaluateDecision(_ options: [DecisionOption]) async -> MultiverseImplications {
-        return MultiverseImplications(
+        MultiverseImplications(
             implications: Dictionary(uniqueKeysWithValues: options.map {
                 ($0.id, ["multiverse_implication_\($0.id)"])
             })
@@ -818,7 +818,7 @@ private struct SuperintelligenceSynthesis {
 
     func generateSolution() -> Any {
         // Simplified synthesis - in reality this would be extremely complex
-        return "Superintelligent solution synthesized from multiple dimensions"
+        "Superintelligent solution synthesized from multiple dimensions"
     }
 }
 
@@ -840,19 +840,19 @@ public struct SuperintelligenceMetrics {
 
     func getAverageIntelligenceLevel() -> Double {
         guard !executions.isEmpty else { return 0.0 }
-        let total = executions.map { $0.intelligenceLevel }.reduce(0, +)
+        let total = executions.map(\.intelligenceLevel).reduce(0, +)
         return total / Double(executions.count)
     }
 
     func getSuccessRate() -> Double {
         guard !executions.isEmpty else { return 0.0 }
-        let successful = executions.filter { $0.success }.count
+        let successful = executions.filter(\.success).count
         return Double(successful) / Double(executions.count)
     }
 
     func getAverageExecutionTime() -> TimeInterval {
         guard !executions.isEmpty else { return 0.0 }
-        let total = executions.map { $0.duration }.reduce(0, +)
+        let total = executions.map(\.duration).reduce(0, +)
         return total / Double(executions.count)
     }
 }

@@ -9,8 +9,8 @@
 //  Copyright © 2024 Quantum Workspace. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Shared Types
 
@@ -791,7 +791,7 @@ final class QuantumWisdomNetworksEngine: QuantumWisdomNetworksProtocol {
             wisdomLevels: synthesisCriteria.wisdomLevels,
             entityIds: nil,
             timeRange: synthesisCriteria.timeRange,
-            significanceRange: synthesisCriteria.significanceThreshold...1.0,
+            significanceRange: synthesisCriteria.significanceThreshold ... 1.0,
             keywords: nil,
             validationStatuses: [.validated]
         )
@@ -866,7 +866,7 @@ final class QuantumWisdomNetworksEngine: QuantumWisdomNetworksProtocol {
                     currentValue: 1.0,
                     targetValue: 1.2,
                     improvement: 0.2
-                )
+                ),
             ],
             expectedBenefits: 0.15,
             implementationCost: 0.05
@@ -905,7 +905,7 @@ final class QuantumWisdomNetworksEngine: QuantumWisdomNetworksProtocol {
                 let criteria = SynthesisCriteria(
                     knowledgeTypes: [.insight, .experience, .pattern],
                     wisdomLevels: [.adept, .master, .sage],
-                    timeRange: Date().addingTimeInterval(-3600)...Date(),
+                    timeRange: Date().addingTimeInterval(-3600) ... Date(),
                     significanceThreshold: 0.7,
                     synthesisDepth: 3,
                     includeDisputed: false
@@ -980,7 +980,7 @@ final class WisdomKnowledgeManager: WisdomKnowledgeManagementProtocol {
             knowledgeId: knowledge.knowledgeId,
             storageTimestamp: Date(),
             storageLocation: "quantum_wisdom_vault",
-            retentionPeriod: 31536000, // 1 year
+            retentionPeriod: 31_536_000, // 1 year
             compressionRatio: 0.8,
             accessSpeed: 0.95
         )
@@ -1030,7 +1030,7 @@ final class WisdomKnowledgeManager: WisdomKnowledgeManagementProtocol {
                 creationTimestamp: Date(),
                 significance: 0.9,
                 validationStatus: .validated
-            )
+            ),
         ]
 
         let search = KnowledgeSearch(
@@ -1061,7 +1061,7 @@ final class WisdomKnowledgeManager: WisdomKnowledgeManagementProtocol {
                     result: true,
                     details: "Knowledge integrity verified",
                     confidence: 0.95
-                )
+                ),
             ],
             recommendedActions: []
         )
@@ -1117,17 +1117,17 @@ final class CollectiveWisdomSynthesizer: CollectiveWisdomSynthesisProtocol {
                 significance: 0.8,
                 frequency: 0.5,
                 sources: [UUID(), UUID()]
-            )
+            ),
         ]
 
         let clusters = [
             PatternAnalysis.PatternCluster(
                 clusterId: UUID(),
-                patterns: patterns.map { $0.patternId },
+                patterns: patterns.map(\.patternId),
                 clusterCenter: [0.25, 0.35, 0.45, 0.55],
                 clusterSize: patterns.count,
                 coherence: 0.9
-            )
+            ),
         ]
 
         let analysis = PatternAnalysis(
@@ -1150,9 +1150,9 @@ final class CollectiveWisdomSynthesizer: CollectiveWisdomSynthesisProtocol {
         let synthesizedContent = WisdomKnowledge.KnowledgeContent(
             title: "Synthesized Collective Wisdom",
             description: "Wisdom synthesized from \(knowledgeSources.count) knowledge sources",
-            data: knowledgeSources.flatMap { $0.content.data },
+            data: knowledgeSources.flatMap(\.content.data),
             metadata: ["synthesis_method": synthesisMethod.rawValue],
-            references: knowledgeSources.map { $0.knowledgeId }
+            references: knowledgeSources.map(\.knowledgeId)
         )
 
         let synthesizedKnowledge = WisdomKnowledge(
@@ -1171,7 +1171,7 @@ final class CollectiveWisdomSynthesizer: CollectiveWisdomSynthesisProtocol {
             networkId: UUID(), // Would be passed in real implementation
             synthesisTimestamp: Date(),
             synthesizedKnowledge: synthesizedKnowledge,
-            sourceKnowledgeIds: knowledgeSources.map { $0.knowledgeId },
+            sourceKnowledgeIds: knowledgeSources.map(\.knowledgeId),
             synthesisQuality: 0.9,
             evolutionaryPotential: 0.8,
             validationScore: 0.92
@@ -1194,7 +1194,7 @@ final class CollectiveWisdomSynthesizer: CollectiveWisdomSynthesisProtocol {
                     significance: 0.9,
                     trend: .accelerating,
                     confidence: 0.85
-                )
+                ),
             ],
             consciousnessAdvancements: [
                 EvolutionaryInsights.ConsciousnessAdvancement(
@@ -1202,17 +1202,17 @@ final class CollectiveWisdomSynthesizer: CollectiveWisdomSynthesisProtocol {
                     advancementType: "quantum_intuition",
                     potentialImpact: 0.8,
                     implementationDifficulty: 0.6,
-                    timeline: 2592000 // 30 days
-                )
+                    timeline: 2_592_000 // 30 days
+                ),
             ],
             futurePredictions: [
                 EvolutionaryInsights.FuturePrediction(
                     predictionId: UUID(),
                     predictionType: "universal_consciousness_merging",
                     probability: 0.7,
-                    timeframe: 31536000, // 1 year
+                    timeframe: 31_536_000, // 1 year
                     implications: ["Enhanced collective intelligence", "Accelerated evolution"]
-                )
+                ),
             ],
             insightQuality: 0.88
         )
@@ -1240,7 +1240,7 @@ final class CollectiveWisdomSynthesizer: CollectiveWisdomSynthesisProtocol {
                     score: 0.93,
                     details: "Internal consistency verified",
                     weight: 0.6
-                )
+                ),
             ],
             confidenceLevel: 0.92,
             recommendedRefinements: []
@@ -1285,10 +1285,10 @@ final class ConsciousnessEvolutionManager: ConsciousnessEvolutionProtocol {
                 stepId: UUID(),
                 stepName: "Pattern Transcendence",
                 stepType: .transcendence,
-                duration: 172800, // 2 days
+                duration: 172_800, // 2 days
                 prerequisites: [UUID()], // Previous step
                 expectedOutcome: "Transcendent pattern recognition"
-            )
+            ),
         ]
 
         let evolutionPath = EvolutionPath(
@@ -1297,7 +1297,7 @@ final class ConsciousnessEvolutionManager: ConsciousnessEvolutionProtocol {
             currentLevel: .adept,
             targetLevel: targetLevel,
             evolutionSteps: evolutionSteps,
-            estimatedDuration: 259200, // 3 days
+            estimatedDuration: 259_200, // 3 days
             riskAssessment: 0.2
         )
 
@@ -1392,7 +1392,7 @@ final class WisdomNetworkSecurityManager: WisdomNetworkSecurityProtocol {
                     protocolType: "quantum_encryption",
                     coverage: 0.95,
                     effectiveness: 0.9
-                )
+                ),
             ],
             encryptionEnabled: true,
             anomalyDetectionActive: true
@@ -1501,7 +1501,7 @@ final class QuantumWisdomNetworksDatabase {
         let activeNetworks = wisdomNetworks.values.filter { Date().timeIntervalSince($0.connectionTimestamp) < 3600 }.count
         let totalKnowledgeShared = knowledgeSharings.count
         let totalSyntheses = wisdomSyntheses.count
-        let averageEvolutionProgress = consciousnessEvolutions.values.map { $0.currentProgress }.reduce(0, +) / Double(max(consciousnessEvolutions.count, 1))
+        let averageEvolutionProgress = consciousnessEvolutions.values.map(\.currentProgress).reduce(0, +) / Double(max(consciousnessEvolutions.count, 1))
 
         return NetworkMetrics(
             totalNetworks: totalNetworks,

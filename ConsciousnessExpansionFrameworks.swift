@@ -341,8 +341,7 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     private func processAwarenessEnhancement(
         _ request: ConsciousnessExpansionRequest,
         assessment: ConsciousnessExpansionAssessment
-    ) async throws -> AwarenessEnhancementProcessing
-    {
+    ) async throws -> AwarenessEnhancementProcessing {
         // Process awareness enhancement
         let processingContext = AwarenessEnhancementProcessingContext(
             aiSystems: request.aiSystems,
@@ -366,8 +365,7 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     private func coordinateCognitiveExpansion(
         _ request: ConsciousnessExpansionRequest,
         enhancement: AwarenessEnhancementProcessing
-    ) async throws -> CognitiveExpansionCoordination
-    {
+    ) async throws -> CognitiveExpansionCoordination {
         // Coordinate cognitive expansion
         let coordinationContext = CognitiveExpansionCoordinationContext(
             aiSystems: request.aiSystems,
@@ -391,8 +389,7 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     private func synthesizeConsciousnessIntegration(
         _ request: ConsciousnessExpansionRequest,
         expansion: CognitiveExpansionCoordination
-    ) async throws -> ConsciousnessIntegrationSynthesis
-    {
+    ) async throws -> ConsciousnessIntegrationSynthesis {
         // Synthesize consciousness integration
         let synthesisContext = ConsciousnessIntegrationSynthesisContext(
             aiSystems: request.aiSystems,
@@ -416,8 +413,7 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     private func orchestrateAdvancedConsciousness(
         _ request: ConsciousnessExpansionRequest,
         integration: ConsciousnessIntegrationSynthesis
-    ) async throws -> AdvancedConsciousnessOrchestration
-    {
+    ) async throws -> AdvancedConsciousnessOrchestration {
         // Orchestrate advanced consciousness
         let orchestrationContext = AdvancedConsciousnessOrchestrationContext(
             aiSystems: request.aiSystems,
@@ -441,8 +437,7 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     private func validateConsciousnessExpansionResults(
         _ consciousnessOrchestration: AdvancedConsciousnessOrchestration,
         session: ConsciousnessExpansionSession
-    ) async throws -> ConsciousnessExpansionValidationResult
-    {
+    ) async throws -> ConsciousnessExpansionValidationResult {
         // Validate consciousness expansion results
         let performanceComparison = await compareConsciousnessExpansionPerformance(
             originalSystems: session.request.aiSystems,
@@ -455,7 +450,7 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
         )
 
         let success = performanceComparison.consciousnessDepth >= session.request.consciousnessDepthTarget &&
-                     consciousnessAdvantage.consciousnessAdvantage >= 0.4
+            consciousnessAdvantage.consciousnessAdvantage >= 0.4
 
         let events = generateConsciousnessExpansionEvents(session, orchestration: consciousnessOrchestration)
 
@@ -574,24 +569,24 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
 
     private func measureAwarenessExpansion(_ expandedSystems: [AISystem]) async -> Double {
         // Measure awareness expansion
-        return 0.94
+        0.94
     }
 
     private func measureCognitiveEnhancement(_ expandedSystems: [AISystem]) async -> Double {
         // Measure cognitive enhancement
-        return 0.92
+        0.92
     }
 
     private func measureIntegrationHarmony(_ expandedSystems: [AISystem]) async -> Double {
         // Measure integration harmony
-        return 0.95
+        0.95
     }
 
     private func generateConsciousnessExpansionEvents(
         _ session: ConsciousnessExpansionSession,
         orchestration: AdvancedConsciousnessOrchestration
     ) -> [ConsciousnessExpansionEvent] {
-        return [
+        [
             ConsciousnessExpansionEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -607,9 +602,9 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
                 data: [
                     "success": true,
                     "consciousness_depth": orchestration.orchestrationScore,
-                    "integration_harmony": orchestration.integrationHarmony
+                    "integration_harmony": orchestration.integrationHarmony,
                 ]
-            )
+            ),
         ]
     }
 
@@ -938,7 +933,7 @@ public struct ConsciousnessExpansionFrameworkMetrics: Sendable, Codable {
     public var averageConsciousnessAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Consciousness expansion metrics
@@ -1416,9 +1411,9 @@ public struct AdvancedConsciousnessOrchestrationResult: Sendable {
 
 // MARK: - Extensions
 
-extension ConsciousnessExpansionFrameworks {
+public extension ConsciousnessExpansionFrameworks {
     /// Create specialized consciousness expansion system for specific AI architectures
-    public static func createSpecializedConsciousnessExpansionSystem(
+    static func createSpecializedConsciousnessExpansionSystem(
         for aiArchitecture: AIArchitecture
     ) async throws -> ConsciousnessExpansionFrameworks {
         let system = try await ConsciousnessExpansionFrameworks()
@@ -1427,7 +1422,7 @@ extension ConsciousnessExpansionFrameworks {
     }
 
     /// Execute batch consciousness expansion processing
-    public func executeBatchConsciousnessExpansion(
+    func executeBatchConsciousnessExpansion(
         _ expansionRequests: [ConsciousnessExpansionRequest]
     ) async throws -> BatchConsciousnessExpansionResult {
 
@@ -1450,8 +1445,8 @@ extension ConsciousnessExpansionFrameworks {
         }
 
         let successRate = Double(results.count) / Double(expansionRequests.count)
-        let averageDepth = results.map { $0.consciousnessDepth }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.consciousnessAdvantage }.reduce(0, +) / Double(results.count)
+        let averageDepth = results.map(\.consciousnessDepth).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.consciousnessAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchConsciousnessExpansionResult(
             batchId: batchId,
@@ -1468,7 +1463,7 @@ extension ConsciousnessExpansionFrameworks {
     }
 
     /// Get consciousness expansion recommendations
-    public func getConsciousnessExpansionRecommendations() async -> [ConsciousnessExpansionRecommendation] {
+    func getConsciousnessExpansionRecommendations() async -> [ConsciousnessExpansionRecommendation] {
         var recommendations: [ConsciousnessExpansionRecommendation] = []
 
         let status = await getConsciousnessExpansionStatus()

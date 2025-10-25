@@ -258,7 +258,7 @@ public final class SingularitySafetyCoordinator: ObservableObject, @unchecked Se
         let postInterventionRisk = await riskAnalyzer.performRiskAssessment()
         let effectiveness =
             1.0
-            - (postInterventionRisk.overallRiskLevel.rawValue / intervention.expectedRiskReduction)
+                - (postInterventionRisk.overallRiskLevel.rawValue / intervention.expectedRiskReduction)
         return max(0.0, min(1.0, effectiveness))
     }
 
@@ -318,7 +318,7 @@ public final class SingularitySafetyCoordinator: ObservableObject, @unchecked Se
                     type: .monitoring,
                     priority: .medium,
                     expectedRiskReduction: 0.3
-                )
+                ),
             ]
         case SafetyRiskLevel.high:
             return [
@@ -499,7 +499,7 @@ public enum SafetyRiskLevel: Double, Comparable {
     case critical = 10.0
 
     public static func < (lhs: SafetyRiskLevel, rhs: SafetyRiskLevel) -> Bool {
-        return lhs.rawValue < rhs.rawValue
+        lhs.rawValue < rhs.rawValue
     }
 }
 
@@ -656,6 +656,7 @@ private class RiskAnalysisEngine {
     func performRiskAssessment() async -> ComprehensiveRiskAssessment {
         ComprehensiveRiskAssessment(overallRiskLevel: .low)
     }
+
     func assessActionRisk(_ action: SingularityAction) async -> SafetyRiskLevel { .low }
     let riskPublisher = PassthroughSubject<ComprehensiveRiskAssessment, Never>()
 }
@@ -666,12 +667,15 @@ private class SafetyValidationEngine {
     func performValidation() async -> SafetyValidationStatus {
         SafetyValidationStatus()
     }
+
     func validateAction(_ action: SingularityAction) async -> ActionValidationResult {
         ActionValidationResult()
     }
+
     func validateRecovery() async -> RecoveryValidationResult {
         RecoveryValidationResult(isSuccessful: true)
     }
+
     let validationPublisher = PassthroughSubject<SafetyValidationStatus, Never>()
 }
 
@@ -707,6 +711,7 @@ private class ContinuousSafetyMonitor {
     func assessSystemStatus() async -> SystemStatus {
         SystemStatus(integrity: 0.95)
     }
+
     func restoreMonitoring() async throws {}
 }
 

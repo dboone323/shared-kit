@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 // MARK: - Advanced Animation System
@@ -76,13 +76,13 @@ public enum GestureAnimations {
     // Haptic feedback integration
     public static func hapticFeedback(style: Int = 1) {
         #if canImport(UIKit)
-        let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = switch style {
-        case 0: .light
-        case 2: .heavy
-        default: .medium
-        }
-        let impactFeedback = UIImpactFeedbackGenerator(style: feedbackStyle)
-        impactFeedback.impactOccurred()
+            let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = switch style {
+            case 0: .light
+            case 2: .heavy
+            default: .medium
+            }
+            let impactFeedback = UIImpactFeedbackGenerator(style: feedbackStyle)
+            impactFeedback.impactOccurred()
         #endif
     }
 
@@ -743,9 +743,9 @@ public struct PerformanceOptimizedView<Content: View>: View {
 public extension View {
     func accessibleAnimation(reducedMotion: Bool = false) -> some View {
         #if canImport(UIKit)
-        let isReducedMotionEnabled = UIAccessibility.isReduceMotionEnabled
+            let isReducedMotionEnabled = UIAccessibility.isReduceMotionEnabled
         #else
-        let isReducedMotionEnabled = reducedMotion
+            let isReducedMotionEnabled = reducedMotion
         #endif
 
         if isReducedMotionEnabled {

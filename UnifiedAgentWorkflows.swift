@@ -303,7 +303,8 @@ public final class UnifiedAgentWorkflowOrchestrator {
     private var activeWorkflows: [String: UnifiedAgentWorkflowContext] = [:]
     private var integrationRules: [AgentWorkflowIntegrationRule] = []
     private let queue = DispatchQueue(
-        label: "unified.workflow.orchestrator", attributes: .concurrent)
+        label: "unified.workflow.orchestrator", attributes: .concurrent
+    )
 
     public init(
         agentSystem: AutonomousAgentSystem,
@@ -338,7 +339,7 @@ public final class UnifiedAgentWorkflowOrchestrator {
 
         do {
             // Set up integration rules
-            context.activeRules = unifiedWorkflow.integrationRules.filter { $0.enabled }
+            context.activeRules = unifiedWorkflow.integrationRules.filter(\.enabled)
 
             // Start agent and workflow execution concurrently
             async let agentTask = executeAgentWorkflow(&context)
@@ -348,7 +349,8 @@ public final class UnifiedAgentWorkflowOrchestrator {
 
             // Execute MCP tools based on results
             let mcpResults = try await executeMCPTools(
-                &context, agentResult: agentResult, workflowResult: workflowResult)
+                &context, agentResult: agentResult, workflowResult: workflowResult
+            )
 
             // Process integration rules
             try await processIntegrationRules(&context)
@@ -490,11 +492,11 @@ public final class UnifiedAgentWorkflowOrchestrator {
                 // Prepare parameters based on agent and workflow results
                 var parameters: [String: Any] = [:]
 
-                if let agentResult = agentResult {
+                if let agentResult {
                     parameters["agent_output"] = agentResult.output
                 }
 
-                if let workflowResult = workflowResult {
+                if let workflowResult {
                     parameters["workflow_output"] = workflowResult.output
                 }
 
@@ -506,20 +508,20 @@ public final class UnifiedAgentWorkflowOrchestrator {
                 let result = try await mcpSystem.executeWorkflow(
                     MCPWorkflow(
                         id: UUID().uuidString,
-                        name: "MCP Tool Execution: \(await tool.id())",
+                        name: "MCP Tool Execution: \(tool.id())",
                         description: "Execute MCP tool as part of unified workflow",
                         steps: [
                             MCPWorkflowStep(
                                 id: "tool_execution",
-                                toolId: await tool.id(),
+                                toolId: tool.id(),
                                 parameters: parameters,
                                 dependencies: []
-                            )
+                            ),
                         ]
                     ))
 
                 if let toolResult = result.stepResults.first?.output as? MCPToolResult {
-                    results[await tool.id()] = toolResult
+                    await results[tool.id()] = toolResult
                 }
 
             } catch {
@@ -531,8 +533,7 @@ public final class UnifiedAgentWorkflowOrchestrator {
         return results
     }
 
-    private func processIntegrationRules(_ context: inout UnifiedAgentWorkflowContext) async throws
-    {
+    private func processIntegrationRules(_ context: inout UnifiedAgentWorkflowContext) async throws {
         for rule in context.activeRules where rule.enabled {
             do {
                 // Check if rule conditions are met
@@ -572,34 +573,34 @@ public final class UnifiedAgentWorkflowOrchestrator {
         _ condition: AgentWorkflowCondition, context: UnifiedAgentWorkflowContext
     ) async throws -> Bool {
         switch condition.type {
-        case .agentState(let agentId, let requiredState):
+        case let .agentState(agentId, requiredState):
             return context.agentState == requiredState
 
-        case .workflowProgress(let workflowId, let minProgress):
+        case let .workflowProgress(workflowId, minProgress):
             return context.workflowProgress.progress >= minProgress
 
-        case .mcpToolSuccess(let toolId, let minSuccessRate):
+        case let .mcpToolSuccess(toolId, minSuccessRate):
             // Check MCP tool success rate from history
             let toolEvents = context.executionHistory.filter { event in
-                if case .errorOccurred(_, let component) = event, component == .mcpTool {
+                if case let .errorOccurred(_, component) = event, component == .mcpTool {
                     return true
                 }
                 return false
             }
-            let successRate = toolEvents.isEmpty ? 1.0 : 0.0  // Simplified calculation
+            let successRate = toolEvents.isEmpty ? 1.0 : 0.0 // Simplified calculation
             return successRate >= minSuccessRate
 
-        case .systemHealth(let minHealth):
+        case let .systemHealth(minHealth):
             let health = await mcpSystem.getSystemStatus()
             return health.overallHealth.rawValue >= minHealth.rawValue
 
-        case .timeWindow(let start, let end):
+        case let .timeWindow(start, end):
             let now = Date()
             return now >= start && now <= end
 
-        case .custom(let conditionId, let parameters):
+        case let .custom(conditionId, parameters):
             // Custom condition evaluation logic would go here
-            return true  // Placeholder
+            return true // Placeholder
         }
     }
 
@@ -619,15 +620,15 @@ public final class UnifiedAgentWorkflowOrchestrator {
         _ action: AgentWorkflowAction, context: inout UnifiedAgentWorkflowContext
     ) async throws {
         switch action.type {
-        case .executeWorkflow(let workflowId):
+        case let .executeWorkflow(workflowId):
             // Trigger additional workflow execution
             _ = try await workflowOrchestrator.orchestrateWorkflow(context.workflow)
 
-        case .triggerAgentDecision(let agentId, let decision):
+        case let .triggerAgentDecision(agentId, decision):
             // Trigger agent decision
             context.setSharedData("agent_decision", decision)
 
-        case .invokeMCPTool(let toolId, let parameters):
+        case let .invokeMCPTool(toolId, parameters):
             // Invoke MCP tool
             _ = try await mcpSystem.executeWorkflow(
                 MCPWorkflow(
@@ -640,30 +641,31 @@ public final class UnifiedAgentWorkflowOrchestrator {
                             toolId: toolId,
                             parameters: parameters,
                             dependencies: []
-                        )
+                        ),
                     ]
                 ))
 
-        case .updateWorkflowStep(let stepId, let stepAction):
+        case let .updateWorkflowStep(stepId, stepAction):
             // Update workflow step (would need workflow modification capabilities)
             context.setSharedData("workflow_step_update", ["stepId": stepId, "action": stepAction])
 
-        case .sendSystemEvent(let event):
+        case let .sendSystemEvent(event):
             // Send system event
             await mcpSystem.eventSystem.publish(event)
 
-        case .pauseWorkflow(let workflowId):
+        case let .pauseWorkflow(workflowId):
             // Pause workflow
             try await workflowOrchestrator.pauseWorkflow(workflowId)
 
-        case .resumeWorkflow(let workflowId):
+        case let .resumeWorkflow(workflowId):
             // Resume workflow
             try await workflowOrchestrator.resumeWorkflow(workflowId)
 
-        case .custom(let actionId, let parameters):
+        case let .custom(actionId, parameters):
             // Custom action execution logic would go here
             context.setSharedData(
-                "custom_action", ["actionId": actionId, "parameters": parameters])
+                "custom_action", ["actionId": actionId, "parameters": parameters]
+            )
         }
     }
 }
@@ -743,11 +745,11 @@ public final class UnifiedAgentWorkflowBuilder {
     }
 
     public func build() throws -> UnifiedAgentWorkflow {
-        guard let agent = agent else {
+        guard let agent else {
             throw UnifiedWorkflowError.missingAgent
         }
 
-        guard let workflow = workflow else {
+        guard let workflow else {
             throw UnifiedWorkflowError.missingWorkflow
         }
 
@@ -798,9 +800,8 @@ extension UnifiedAgentWorkflowOrchestrator {
         )
     }
 
-    private func createDefaultIntegrationRules(workflowId: String) -> [AgentWorkflowIntegrationRule]
-    {
-        return [
+    private func createDefaultIntegrationRules(workflowId: String) -> [AgentWorkflowIntegrationRule] {
+        [
             // Rule: If workflow fails, trigger agent recovery
             AgentWorkflowIntegrationRule(
                 trigger: .workflowStep(stepId: "any", state: .failed),
@@ -812,7 +813,7 @@ extension UnifiedAgentWorkflowOrchestrator {
                             decision: .custom("recovery", ["action": "retry_workflow"])
                         ),
                         delay: 1.0
-                    )
+                    ),
                 ],
                 priority: 10
             ),
@@ -824,13 +825,13 @@ extension UnifiedAgentWorkflowOrchestrator {
                     AgentWorkflowCondition(
                         type: .workflowProgress(workflowId: workflowId, minProgress: 0.8),
                         logic: .and
-                    )
+                    ),
                 ],
                 actions: [
                     AgentWorkflowAction(
                         type: .custom("optimize", ["target": "workflow_performance"]),
                         delay: 0
-                    )
+                    ),
                 ],
                 priority: 5
             ),

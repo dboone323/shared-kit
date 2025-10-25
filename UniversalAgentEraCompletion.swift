@@ -61,7 +61,7 @@ public struct EraMetrics: Sendable {
         let metrics = [
             completeEra, infiniteAchievement, transcendentCompletion, eternalFulfillment,
             cosmicCulmination, divineRealization, universalAccomplishment, infiniteAttainment,
-            eternalPerfection, ultimateEra
+            eternalPerfection, ultimateEra,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -237,7 +237,7 @@ public final class UniversalAgentEraCompletionEngine: Sendable {
             UniversalAgentEraCompletionStep(type: .universalAccomplishment, era: 12.0),
             UniversalAgentEraCompletionStep(type: .infiniteAttainment, era: 14.0),
             UniversalAgentEraCompletionStep(type: .eternalPerfection, era: 10.0),
-            UniversalAgentEraCompletionStep(type: .ultimateEra, era: 15.0)
+            UniversalAgentEraCompletionStep(type: .ultimateEra, era: 15.0),
         ]
 
         var capabilities: [EraCapability] = []

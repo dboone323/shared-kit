@@ -203,8 +203,8 @@ public struct GoalProgress {
         self.estimatedCompletion = estimatedCompletion
         self.onTrack =
             self
-            .progressPercentage >= 95
-            || (estimatedCompletion != nil
-                && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
+                .progressPercentage >= 95
+                || (estimatedCompletion != nil
+                    && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
     }
 }

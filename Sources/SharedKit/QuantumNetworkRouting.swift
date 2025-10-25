@@ -43,7 +43,8 @@ public class QuantumNetworkRouting: ObservableObject {
         // Select best path
         guard
             let bestPath = await pathSelector.selectBestPath(
-                evaluatedPaths, constraints: constraints)
+                evaluatedPaths, constraints: constraints
+            )
         else {
             return RoutingResult(
                 path: nil,
@@ -100,7 +101,8 @@ public class QuantumNetworkRouting: ObservableObject {
                 )
 
                 let result = await findOptimalPath(
-                    from: source, to: destination, constraints: constraints)
+                    from: source, to: destination, constraints: constraints
+                )
                 if result.success {
                     updatedRoutes += 1
                 }
@@ -132,28 +134,28 @@ public class QuantumNetworkRouting: ObservableObject {
     public func getRoutingStatistics() async -> RoutingStatistics {
         let totalRoutes = routingTable.count
         let averageFidelity =
-            routingTable.values.map { $0.expectedFidelity }.reduce(0, +)
-            / Double(max(1, routingTable.count))
+            routingTable.values.map(\.expectedFidelity).reduce(0, +)
+                / Double(max(1, routingTable.count))
         let averageDistance =
-            routingTable.values.map { $0.totalDistance }.reduce(0, +)
-            / Double(max(1, routingTable.count))
+            routingTable.values.map(\.totalDistance).reduce(0, +)
+                / Double(max(1, routingTable.count))
         let averageHops =
             routingTable.values.map { Double($0.hops.count) }.reduce(0, +)
-            / Double(max(1, routingTable.count))
+                / Double(max(1, routingTable.count))
 
         let fidelityRanges = Dictionary(
             grouping: routingTable.values, by: { Int($0.expectedFidelity * 10) }
         )
         .mapValues { $0.count }
 
-        return RoutingStatistics(
+        return await RoutingStatistics(
             totalRoutes: totalRoutes,
             averageFidelity: averageFidelity,
             averageDistance: averageDistance,
             averageHops: averageHops,
             fidelityDistribution: fidelityRanges,
-            networkDiameter: await networkTopology.getNetworkDiameter(),
-            connectedComponents: await networkTopology.getConnectedComponents()
+            networkDiameter: networkTopology.getNetworkDiameter(),
+            connectedComponents: networkTopology.getConnectedComponents()
         )
     }
 
@@ -191,7 +193,7 @@ public class QuantumNetworkRouting: ObservableObject {
         score += hopScore
 
         // Time component (10% weight) - inverse relationship
-        let timeScore = (1.0 - min(path.estimatedTime / 10.0, 1.0)) * 0.1  // 10ms max
+        let timeScore = (1.0 - min(path.estimatedTime / 10.0, 1.0)) * 0.1 // 10ms max
         score += timeScore
 
         return score
@@ -224,32 +226,32 @@ public class NetworkTopology: ObservableObject {
         let samplePaths = [
             RoutingPath(
                 hops: [source, "intermediate_1", destination],
-                expectedFidelity: Double.random(in: 0.7...0.95),
-                totalDistance: Double.random(in: 100...500),
-                estimatedTime: Double.random(in: 1...5),
+                expectedFidelity: Double.random(in: 0.7 ... 0.95),
+                totalDistance: Double.random(in: 100 ... 500),
+                estimatedTime: Double.random(in: 1 ... 5),
                 channels: []
             ),
             RoutingPath(
                 hops: [source, "intermediate_2", "intermediate_3", destination],
-                expectedFidelity: Double.random(in: 0.6...0.9),
-                totalDistance: Double.random(in: 200...800),
-                estimatedTime: Double.random(in: 2...8),
+                expectedFidelity: Double.random(in: 0.6 ... 0.9),
+                totalDistance: Double.random(in: 200 ... 800),
+                estimatedTime: Double.random(in: 2 ... 8),
                 channels: []
             ),
             RoutingPath(
                 hops: [source, destination],
-                expectedFidelity: Double.random(in: 0.8...0.99),
-                totalDistance: Double.random(in: 50...200),
-                estimatedTime: Double.random(in: 0.5...2),
+                expectedFidelity: Double.random(in: 0.8 ... 0.99),
+                totalDistance: Double.random(in: 50 ... 200),
+                estimatedTime: Double.random(in: 0.5 ... 2),
                 channels: []
             ),
         ]
 
-        return samplePaths.filter { $0.expectedFidelity >= 0.5 }  // Minimum fidelity threshold
+        return samplePaths.filter { $0.expectedFidelity >= 0.5 } // Minimum fidelity threshold
     }
 
     public func getAllNodes() async -> [String] {
-        return Array(nodes.keys)
+        Array(nodes.keys)
     }
 
     public func updateNodeStatus(nodeId: String, changeType: TopologyChangeType) async {
@@ -271,12 +273,12 @@ public class NetworkTopology: ObservableObject {
 
     public func getNetworkDiameter() async -> Double {
         // Simplified calculation
-        return 1000.0  // km
+        1000.0 // km
     }
 
     public func getConnectedComponents() async -> Int {
         // Simplified calculation
-        return 1  // Assume fully connected for now
+        1 // Assume fully connected for now
     }
 
     private func generateSampleTopology() async {
@@ -286,7 +288,8 @@ public class NetworkTopology: ObservableObject {
             nodes[node] = NetworkNode(
                 id: node,
                 location: Location(
-                    latitude: Double.random(in: -90...90), longitude: Double.random(in: -180...180)),
+                    latitude: Double.random(in: -90 ... 90), longitude: Double.random(in: -180 ... 180)
+                ),
                 status: .active,
                 capabilities: [.entanglement, .teleportation, .routing]
             )
@@ -314,7 +317,7 @@ public class FidelityOptimizer: ObservableObject {
         optimizedPath.expectedFidelity *= 0.95
 
         // Decoherence compensation
-        let decoherenceFactor = exp(-path.totalDistance / 1000.0)  // Exponential decay
+        let decoherenceFactor = exp(-path.totalDistance / 1000.0) // Exponential decay
         optimizedPath.expectedFidelity *= decoherenceFactor
 
         // Ensure fidelity doesn't exceed 1.0

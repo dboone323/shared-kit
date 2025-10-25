@@ -363,8 +363,7 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
     private func maximizeIntelligenceUtilization(
         _ request: AgentWorkflowOptimizationRequest,
         agentOptimizations: AgentOptimizationResult
-    ) async throws -> IntelligenceOptimizationResult
-    {
+    ) async throws -> IntelligenceOptimizationResult {
         // Maximize intelligence utilization
         let intelligenceOptimizationContext = IntelligenceOptimizationContext(
             workflow: request.workflow,
@@ -388,8 +387,7 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
         _ request: AgentWorkflowOptimizationRequest,
         agentOptimizations: AgentOptimizationResult,
         workflowOptimizations: WorkflowOptimizationResult
-    ) async throws -> CoordinationOptimizationResult
-    {
+    ) async throws -> CoordinationOptimizationResult {
         // Optimize agent-workflow coordination
         let coordinationOptimizationContext = CoordinationOptimizationContext(
             agents: agentOptimizations.optimizedAgents,
@@ -415,8 +413,7 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
         intelligenceOptimizations: IntelligenceOptimizationResult,
         coordinationOptimizations: CoordinationOptimizationResult,
         session: AgentWorkflowOptimizationSession
-    ) async throws -> IntegratedOptimizationResult
-    {
+    ) async throws -> IntegratedOptimizationResult {
         // Synthesize all optimization results into integrated optimization
         let integratedWorkflow = try await createIntegratedOptimizedWorkflow(
             originalWorkflow: session.request.workflow,
@@ -443,8 +440,7 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
     private func validateOptimizationResults(
         _ integratedOptimization: IntegratedOptimizationResult,
         session: AgentWorkflowOptimizationSession
-    ) async throws -> OptimizationValidationResult
-    {
+    ) async throws -> OptimizationValidationResult {
         // Validate optimization results
         let performanceComparison = await compareWorkflowPerformance(
             original: session.request.workflow,
@@ -457,7 +453,7 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
         )
 
         let success = performanceComparison.performanceImprovement >= session.request.performanceTargets.efficiency &&
-                     intelligenceComparison.intelligenceUtilization >= session.request.intelligenceUtilizationTarget
+            intelligenceComparison.intelligenceUtilization >= session.request.intelligenceUtilizationTarget
 
         let events = generateOptimizationEvents(session, integratedOptimization: integratedOptimization)
 
@@ -602,12 +598,12 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
 
     private func calculateCoordinationQuality(_ optimization: IntegratedOptimizationResult) -> Double {
         // Calculate coordination quality
-        return 0.82
+        0.82
     }
 
     private func calculateOptimizationEfficiency(_ optimization: IntegratedOptimizationResult) -> Double {
         // Calculate optimization efficiency
-        return optimization.optimizationScore * 0.9
+        optimization.optimizationScore * 0.9
     }
 
     private func calculateIntegratedOptimizationScore(
@@ -667,7 +663,7 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
     ) async throws -> MCPWorkflow {
         // Create integrated optimized workflow
         // This would combine all optimizations into a single optimized workflow
-        return workflowOptimizations.optimizedWorkflow
+        workflowOptimizations.optimizedWorkflow
     }
 
     private func generateCoordinationRequirements(_ request: AgentWorkflowOptimizationRequest) -> CoordinationRequirements {
@@ -683,7 +679,7 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
         _ session: AgentWorkflowOptimizationSession,
         integratedOptimization: IntegratedOptimizationResult
     ) -> [OptimizationEvent] {
-        return [
+        [
             OptimizationEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -699,9 +695,9 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
                 data: [
                     "success": true,
                     "optimization_score": integratedOptimization.optimizationScore,
-                    "performance_improvement": 0.25
+                    "performance_improvement": 0.25,
                 ]
-            )
+            ),
         ]
     }
 
@@ -1139,7 +1135,7 @@ public struct AgentWorkflowOptimizationMetrics: Sendable, Codable {
     public var averageOptimizationEfficiency: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Agent workflow optimization analytics
@@ -1525,9 +1521,9 @@ public struct IntelligenceComparison: Sendable {
 
 // MARK: - Extensions
 
-extension AgentWorkflowOptimizationSystem {
+public extension AgentWorkflowOptimizationSystem {
     /// Create specialized optimization system for specific workflow types
-    public static func createSpecializedOptimizationSystem(
+    static func createSpecializedOptimizationSystem(
         for workflowType: WorkflowType
     ) async throws -> AgentWorkflowOptimizationSystem {
         let system = try await AgentWorkflowOptimizationSystem()
@@ -1536,7 +1532,7 @@ extension AgentWorkflowOptimizationSystem {
     }
 
     /// Execute batch optimization for multiple workflows
-    public func executeBatchOptimization(
+    func executeBatchOptimization(
         _ optimizationRequests: [AgentWorkflowOptimizationRequest]
     ) async throws -> BatchOptimizationResult {
 
@@ -1559,8 +1555,8 @@ extension AgentWorkflowOptimizationSystem {
         }
 
         let successRate = Double(results.count) / Double(optimizationRequests.count)
-        let averageImprovement = results.map { $0.performanceImprovement }.reduce(0, +) / Double(results.count)
-        let averageUtilization = results.map { $0.intelligenceUtilization }.reduce(0, +) / Double(results.count)
+        let averageImprovement = results.map(\.performanceImprovement).reduce(0, +) / Double(results.count)
+        let averageUtilization = results.map(\.intelligenceUtilization).reduce(0, +) / Double(results.count)
 
         return BatchOptimizationResult(
             batchId: batchId,
@@ -1577,7 +1573,7 @@ extension AgentWorkflowOptimizationSystem {
     }
 
     /// Get optimization recommendations
-    public func getOptimizationRecommendations() async -> [OptimizationRecommendation] {
+    func getOptimizationRecommendations() async -> [OptimizationRecommendation] {
         var recommendations: [OptimizationRecommendation] = []
 
         let status = await getOptimizationStatus()

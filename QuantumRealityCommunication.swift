@@ -30,7 +30,7 @@ final class QuantumRealityCommunicationEngine: QRCProtocol {
     func send(_ message: QRCMessage, on channel: QRCChannel) async throws -> QRCResult {
         guard channels[channel.id] != nil else { throw QRCError.channelClosed }
         let delivered = Bool.random()
-        return QRCResult(messageId: message.id, delivered: delivered, latency: Double.random(in: 0.001...0.02))
+        return QRCResult(messageId: message.id, delivered: delivered, latency: Double.random(in: 0.001 ... 0.02))
     }
 
     func close(_ channel: QRCChannel) async { channels.removeValue(forKey: channel.id) }

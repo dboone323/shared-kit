@@ -89,10 +89,10 @@ class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
         // Test that async testing helpers work correctly
         var executionCount = 0
 
-        await assertAsyncCompletes({
+        await assertAsyncCompletes {
             executionCount += 1
             return executionCount
-        })
+        }
 
         XCTAssertEqual(executionCount, 1)
 
@@ -103,7 +103,8 @@ class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
                 timeout: 5.0,
                 operation: {
                     throw NSError(domain: "TestError", code: 1, userInfo: nil)
-                })
+                }
+            )
         } catch {
             didThrow = true
         }
@@ -122,7 +123,8 @@ class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
                 operation: {
                     counter = 5
                     return counter
-                })
+                }
+            )
 
             // Test state becomes
             try await assertStateBecomes(
@@ -130,7 +132,8 @@ class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
                 operation: {
                     counter = 10
                     return counter
-                })
+                }
+            )
         } catch {
             XCTFail("State testing failed: \(error)")
         }

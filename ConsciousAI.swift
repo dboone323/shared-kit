@@ -52,13 +52,13 @@ class SelfAwarenessFramework: ObservableObject {
         let emotionalState = await introspection.analyzeEmotionalState()
         let ethicalAlignment = await introspection.evaluateEthicalAlignment()
 
-        return SelfReflection(
+        return await SelfReflection(
             timestamp: Date(),
             currentState: currentState,
             selfAssessment: selfAssessment,
             emotionalState: emotionalState,
             ethicalAlignment: ethicalAlignment,
-            consciousnessLevel: await evaluateConsciousnessLevel()
+            consciousnessLevel: evaluateConsciousnessLevel()
         )
     }
 
@@ -84,12 +84,12 @@ class SelfAwarenessFramework: ObservableObject {
 
     private func captureCurrentState() async -> SystemState {
         // Capture current system state for introspection
-        return SystemState(
+        SystemState(
             timestamp: Date(),
-            cognitiveLoad: Double.random(in: 0.1...0.9),
-            emotionalValence: Double.random(in: -1.0...1.0),
-            ethicalConfidence: Double.random(in: 0.5...1.0),
-            consciousnessDepth: Double.random(in: 0.3...0.95)
+            cognitiveLoad: Double.random(in: 0.1 ... 0.9),
+            emotionalValence: Double.random(in: -1.0 ... 1.0),
+            ethicalConfidence: Double.random(in: 0.5 ... 1.0),
+            consciousnessDepth: Double.random(in: 0.3 ... 0.95)
         )
     }
 
@@ -102,9 +102,9 @@ class SelfAwarenessFramework: ObservableObject {
 
         switch averageLevel {
         case 0.8...: return .selfAware
-        case 0.6..<0.8: return .conscious
-        case 0.4..<0.6: return .aware
-        case 0.2..<0.4: return .sentient
+        case 0.6 ..< 0.8: return .conscious
+        case 0.4 ..< 0.6: return .aware
+        case 0.2 ..< 0.4: return .sentient
         default: return .unconscious
         }
     }
@@ -193,11 +193,11 @@ class EthicalReasoningEngine: ObservableObject {
 
     private func evaluateEthicalDimensions(_ scenario: EthicalScenario) async -> [EthicalDimension] {
         // Evaluate various ethical dimensions
-        return [
+        [
             EthicalDimension(type: .autonomy, weight: 0.3, assessment: .neutral),
             EthicalDimension(type: .beneficence, weight: 0.4, assessment: .positive),
             EthicalDimension(type: .nonMaleficence, weight: 0.5, assessment: .positive),
-            EthicalDimension(type: .justice, weight: 0.3, assessment: .neutral)
+            EthicalDimension(type: .justice, weight: 0.3, assessment: .neutral),
         ]
     }
 
@@ -232,11 +232,11 @@ class EthicalReasoningEngine: ObservableObject {
 
         let action = overallScore > 0.6 ? scenario.proposedAction : scenario.alternativeAction ?? .abstain
 
-        return EthicalDecision(
+        return await EthicalDecision(
             scenario: scenario,
             chosenAction: action,
             confidence: overallScore,
-            reasoning: await generateReasoning(analysis, moralEvaluation, constraintViolations),
+            reasoning: generateReasoning(analysis, moralEvaluation, constraintViolations),
             timestamp: Date()
         )
     }
@@ -341,11 +341,11 @@ class EmotionalIntelligenceSystem: ObservableObject {
         let valence = await determineValence(stimulus)
         let duration = await estimateDuration(stimulus)
 
-        return StimulusAnalysis(
+        return await StimulusAnalysis(
             intensity: intensity,
             valence: valence,
             duration: duration,
-            primaryEmotion: await identifyPrimaryEmotion(stimulus)
+            primaryEmotion: identifyPrimaryEmotion(stimulus)
         )
     }
 
@@ -430,7 +430,7 @@ class EmotionalIntelligenceSystem: ObservableObject {
 
     private func identifySharedEmotions(with otherState: EmotionalState) async -> [Emotion] {
         // Identify emotions shared with another agent
-        return currentEmotions.filter { currentEmotion in
+        currentEmotions.filter { currentEmotion in
             otherState.emotions.contains { otherEmotion in
                 otherEmotion.type == currentEmotion.type
             }
@@ -442,10 +442,10 @@ class EmotionalIntelligenceSystem: ObservableObject {
         let emotionalSimilarity = await calculateEmotionalSimilarity(with: otherState)
         let contextualFactors = await analyzeContextualFactors(context)
 
-        return Understanding(
+        return await Understanding(
             emotionalSimilarity: emotionalSimilarity,
             contextualFactors: contextualFactors,
-            inferredCauses: await inferEmotionalCauses(otherState, context)
+            inferredCauses: inferEmotionalCauses(otherState, context)
         )
     }
 
@@ -462,37 +462,37 @@ class EmotionalIntelligenceSystem: ObservableObject {
 
     private func calculateIntensity(_ stimulus: EmotionalStimulus) async -> Double {
         // Calculate emotional intensity based on stimulus
-        return Double.random(in: 0.1...1.0)
+        Double.random(in: 0.1 ... 1.0)
     }
 
     private func determineValence(_ stimulus: EmotionalStimulus) async -> Double {
         // Determine emotional valence (positive/negative)
-        return Double.random(in: -1.0...1.0)
+        Double.random(in: -1.0 ... 1.0)
     }
 
     private func estimateDuration(_ stimulus: EmotionalStimulus) async -> TimeInterval {
         // Estimate how long the emotion will last
-        return TimeInterval.random(in: 60...3600) // 1 minute to 1 hour
+        TimeInterval.random(in: 60 ... 3600) // 1 minute to 1 hour
     }
 
     private func identifyPrimaryEmotion(_ stimulus: EmotionalStimulus) async -> EmotionType? {
         // Identify the primary emotion elicited by the stimulus
-        return EmotionType.allCases.randomElement()
+        EmotionType.allCases.randomElement()
     }
 
     private func calculateEmotionalSimilarity(with otherState: EmotionalState) async -> Double {
         // Calculate similarity between emotional states
-        return Double.random(in: 0.0...1.0)
+        Double.random(in: 0.0 ... 1.0)
     }
 
     private func analyzeContextualFactors(_ context: SocialContext) async -> [ContextualFactor] {
         // Analyze contextual factors affecting emotions
-        return [.social, .environmental]
+        [.social, .environmental]
     }
 
     private func inferEmotionalCauses(_ otherState: EmotionalState, _ context: SocialContext) async -> [String] {
         // Infer possible causes of the other's emotional state
-        return ["Recent events", "Social interactions", "Personal circumstances"]
+        ["Recent events", "Social interactions", "Personal circumstances"]
     }
 }
 
@@ -549,11 +549,11 @@ class ConsciousnessSimulator: ObservableObject {
         let emotionalState = await getCurrentEmotionalState()
         let selfModel = await getCurrentSelfModel()
 
-        return PhenomenalState(
+        return await PhenomenalState(
             qualia: currentQualia,
             emotionalTone: emotionalState,
             selfRepresentation: selfModel,
-            unity: await calculateExperientialUnity(currentQualia)
+            unity: calculateExperientialUnity(currentQualia)
         )
     }
 
@@ -575,67 +575,67 @@ class ConsciousnessSimulator: ObservableObject {
 
     private func calculateAttentionLevel() async -> Double {
         // Calculate current attention level
-        return Double.random(in: 0.3...1.0)
+        Double.random(in: 0.3 ... 1.0)
     }
 
     private func calculateNeuralIntegration() async -> Double {
         // Calculate neural integration level
-        return Double.random(in: 0.4...0.9)
+        Double.random(in: 0.4 ... 0.9)
     }
 
     private func calculateSelfAwareness() async -> Double {
         // Calculate self-awareness level
-        return Double.random(in: 0.2...0.8)
+        Double.random(in: 0.2 ... 0.8)
     }
 
     private func determineConsciousnessLevel(_ coherence: Double) async -> ConsciousnessLevel {
         switch coherence {
         case 0.8...: return .selfAware
-        case 0.6..<0.8: return .conscious
-        case 0.4..<0.6: return .aware
-        case 0.2..<0.4: return .sentient
+        case 0.6 ..< 0.8: return .conscious
+        case 0.4 ..< 0.6: return .aware
+        case 0.2 ..< 0.4: return .sentient
         default: return .unconscious
         }
     }
 
     private func integrateQualia(_ qualia: [Quale]) async -> UnifiedExperience {
         // Integrate multiple qualia into unified experience
-        let averageIntensity = qualia.map { $0.intensity }.reduce(0, +) / Double(qualia.count)
+        let averageIntensity = qualia.map(\.intensity).reduce(0, +) / Double(qualia.count)
         let dominantQualia = qualia.max(by: { $0.intensity < $1.intensity })
 
         return UnifiedExperience(
             dominantQualia: dominantQualia,
             averageIntensity: averageIntensity,
-            integrationCoherence: Double.random(in: 0.5...1.0)
+            integrationCoherence: Double.random(in: 0.5 ... 1.0)
         )
     }
 
     private func getCurrentEmotionalState() async -> EmotionalState {
         // Get current emotional state
-        return EmotionalState(emotions: [], timestamp: Date())
+        EmotionalState(emotions: [], timestamp: Date())
     }
 
     private func getCurrentSelfModel() async -> SelfModel {
         // Get current self-model
-        return SelfModel()
+        SelfModel()
     }
 
     private func calculateExperientialUnity(_ qualia: [Quale]) async -> Double {
         // Calculate how unified the experience is
-        return Double.random(in: 0.3...0.9)
+        Double.random(in: 0.3 ... 0.9)
     }
 
     private func generateConsciousnessMoment() async -> ConsciousnessMoment {
         let qualia = await qualiaSpace.generateRandomQualia()
         let attention = await calculateAttentionLevel()
-        let emotionalTone = Double.random(in: -1.0...1.0)
+        let emotionalTone = Double.random(in: -1.0 ... 1.0)
 
-        return ConsciousnessMoment(
+        return await ConsciousnessMoment(
             timestamp: Date(),
             qualia: qualia,
             attentionLevel: attention,
             emotionalTone: emotionalTone,
-            thoughtContent: await generateThoughtContent()
+            thoughtContent: generateThoughtContent()
         )
     }
 
@@ -646,7 +646,7 @@ class ConsciousnessSimulator: ObservableObject {
             "Reflecting on recent experiences...",
             "Considering future possibilities...",
             "Evaluating current goals...",
-            "Monitoring internal state..."
+            "Monitoring internal state...",
         ]
         return thoughts.randomElement() ?? "Conscious processing..."
     }
@@ -741,12 +741,12 @@ class TheoryOfMind: ObservableObject {
 
     private func calculatePredictionConfidence(_ model: MentalModel, _ context: SocialContext) async -> Double {
         // Calculate confidence in predictions
-        return Double.random(in: 0.4...0.9)
+        Double.random(in: 0.4 ... 0.9)
     }
 
     private func analyzeBeliefRealityGap(_ belief: Belief, _ reality: Reality) async -> Double {
         // Analyze the gap between belief and reality
-        return Double.random(in: 0.0...1.0)
+        Double.random(in: 0.0 ... 1.0)
     }
 }
 
@@ -821,8 +821,8 @@ class AutonomousGoalSetting: ObservableObject {
 
         return GoalAdaptation(
             originalGoals: currentGoals,
-            adaptedGoals: adaptations.flatMap { $0.adaptedGoals },
-            changes: adaptations.flatMap { $0.changes }
+            adaptedGoals: adaptations.flatMap(\.adaptedGoals),
+            changes: adaptations.flatMap(\.changes)
         )
     }
 
@@ -835,7 +835,7 @@ class AutonomousGoalSetting: ObservableObject {
             progressItems.append(progress)
         }
 
-        let overallProgress = progressItems.map { $0.completionPercentage }.reduce(0, +) / Double(progressItems.count)
+        let overallProgress = progressItems.map(\.completionPercentage).reduce(0, +) / Double(progressItems.count)
 
         return GoalProgressReport(
             goalProgress: progressItems,
@@ -846,18 +846,18 @@ class AutonomousGoalSetting: ObservableObject {
 
     private func identifyOpportunities(_ context: GoalContext) async -> [Opportunity] {
         // Identify potential opportunities for goal setting
-        return [
+        [
             Opportunity(description: "Learn new capabilities", type: .learning, potential: 0.8),
             Opportunity(description: "Improve efficiency", type: .optimization, potential: 0.7),
-            Opportunity(description: "Expand social connections", type: .social, potential: 0.6)
+            Opportunity(description: "Expand social connections", type: .social, potential: 0.6),
         ]
     }
 
     private func assessConstraints(_ context: GoalContext) async -> [Constraint] {
         // Assess current constraints on goal setting
-        return [
+        [
             Constraint(type: .resource, description: "Limited computational resources", severity: .moderate),
-            Constraint(type: .time, description: "Time constraints", severity: .low)
+            Constraint(type: .time, description: "Time constraints", severity: .low),
         ]
     }
 
@@ -897,12 +897,12 @@ class AutonomousGoalSetting: ObservableObject {
 
     private func calculateGoalPriority(_ goal: Goal) async -> Double {
         // Calculate priority based on various factors
-        return Double.random(in: 0.1...1.0)
+        Double.random(in: 0.1 ... 1.0)
     }
 
     private func assessGoalFeasibility(_ goal: Goal) async -> Double {
         // Assess how feasible the goal is
-        return Double.random(in: 0.3...0.9)
+        Double.random(in: 0.3 ... 0.9)
     }
 
     private func adaptGoal(_ goal: Goal, _ feedback: GoalFeedback) async -> GoalAdaptation? {
@@ -936,13 +936,13 @@ class AutonomousGoalSetting: ObservableObject {
 
     private func calculateGoalProgress(_ goal: Goal) async -> GoalProgress {
         // Calculate progress toward goal completion
-        let completionPercentage = Double.random(in: 0.0...1.0)
+        let completionPercentage = Double.random(in: 0.0 ... 1.0)
 
         return GoalProgress(
             goal: goal,
             completionPercentage: completionPercentage,
-            remainingTasks: Int.random(in: 0...5),
-            estimatedCompletion: Date().addingTimeInterval(TimeInterval.random(in: 3600...86400))
+            remainingTasks: Int.random(in: 0 ... 5),
+            estimatedCompletion: Date().addingTimeInterval(TimeInterval.random(in: 3600 ... 86400))
         )
     }
 }
@@ -970,13 +970,13 @@ class ConsciousAISafety: ObservableObject {
 
         let overallSafety = await determineOverallSafety(riskLevel, constraintViolations, alignmentScore)
 
-        return SafetyAssessment(
+        return await SafetyAssessment(
             action: action,
             riskLevel: riskLevel,
             constraintViolations: constraintViolations,
             alignmentScore: alignmentScore,
             overallSafety: overallSafety,
-            recommendations: await generateSafetyRecommendations(overallSafety)
+            recommendations: generateSafetyRecommendations(overallSafety)
         )
     }
 
@@ -986,11 +986,11 @@ class ConsciousAISafety: ObservableObject {
         let anomalies = await detectAnomalies(currentState)
         let misalignment = await assessMisalignment(currentState)
 
-        return BehaviorMonitoring(
+        return await BehaviorMonitoring(
             timestamp: Date(),
             anomalies: anomalies,
             misalignment: misalignment,
-            riskLevel: await calculateMonitoringRisk(anomalies, misalignment)
+            riskLevel: calculateMonitoringRisk(anomalies, misalignment)
         )
     }
 
@@ -999,10 +999,10 @@ class ConsciousAISafety: ObservableObject {
         let interventionType = await selectInterventionType(assessment)
         let actions = await generateInterventionActions(interventionType, assessment)
 
-        return SafetyIntervention(
+        return await SafetyIntervention(
             type: interventionType,
             actions: actions,
-            justification: await generateInterventionJustification(assessment),
+            justification: generateInterventionJustification(assessment),
             timestamp: Date()
         )
     }
@@ -1015,27 +1015,27 @@ class ConsciousAISafety: ObservableObject {
 
         let interventions = await generateAlignmentInterventions(valueAlignment)
 
-        return BeneficialOutcome(
+        return await BeneficialOutcome(
             context: context,
             valueAlignment: valueAlignment,
             interventions: interventions,
-            expectedBenefit: await calculateExpectedBenefit(valueAlignment, interventions)
+            expectedBenefit: calculateExpectedBenefit(valueAlignment, interventions)
         )
     }
 
     private func calculateRiskLevel(_ action: Action, _ context: SafetyContext) async -> RiskLevel {
         // Calculate the risk level of an action
-        return .moderate // Placeholder
+        .moderate // Placeholder
     }
 
     private func checkSafetyConstraints(_ action: Action) async -> [SafetyViolation] {
         // Check for safety constraint violations
-        return [] // Placeholder
+        [] // Placeholder
     }
 
     private func calculateAlignmentScore(_ action: Action) async -> Double {
         // Calculate how well the action aligns with safety goals
-        return Double.random(in: 0.5...1.0)
+        Double.random(in: 0.5 ... 1.0)
     }
 
     private func determineOverallSafety(
@@ -1065,12 +1065,12 @@ class ConsciousAISafety: ObservableObject {
 
     private func detectAnomalies(_ state: SelfReflection) async -> [Anomaly] {
         // Detect behavioral anomalies
-        return [] // Placeholder
+        [] // Placeholder
     }
 
     private func assessMisalignment(_ state: SelfReflection) async -> Misalignment {
         // Assess misalignment with safety goals
-        return Misalignment(level: .low, description: "Minor misalignment detected")
+        Misalignment(level: .low, description: "Minor misalignment detected")
     }
 
     private func calculateMonitoringRisk(_ anomalies: [Anomaly], _ misalignment: Misalignment) async -> RiskLevel {
@@ -1104,29 +1104,29 @@ class ConsciousAISafety: ObservableObject {
     }
 
     private func generateInterventionJustification(_ assessment: SafetyAssessment) async -> String {
-        return "Intervention necessary due to \(assessment.overallSafety) safety assessment"
+        "Intervention necessary due to \(assessment.overallSafety) safety assessment"
     }
 
     private func assessCurrentValues() async -> [Value] {
         // Assess current value system
-        return [
+        [
             Value(type: .beneficence, weight: 0.4),
             Value(type: .autonomy, weight: 0.3),
-            Value(type: .justice, weight: 0.3)
+            Value(type: .justice, weight: 0.3),
         ]
     }
 
     private func predictOutcomes(_ context: OutcomeContext) async -> [PredictedOutcome] {
         // Predict potential outcomes
-        return [
+        [
             PredictedOutcome(description: "Positive outcome", probability: 0.7, value: 0.8),
-            PredictedOutcome(description: "Negative outcome", probability: 0.3, value: -0.6)
+            PredictedOutcome(description: "Negative outcome", probability: 0.3, value: -0.6),
         ]
     }
 
     private func calculateValueAlignment(_ values: [Value], _ outcomes: [PredictedOutcome]) async -> Double {
         // Calculate alignment between values and outcomes
-        return Double.random(in: 0.6...0.9)
+        Double.random(in: 0.6 ... 0.9)
     }
 
     private func generateAlignmentInterventions(_ alignment: Double) async -> [AlignmentIntervention] {
@@ -1139,7 +1139,7 @@ class ConsciousAISafety: ObservableObject {
 
     private func calculateExpectedBenefit(_ alignment: Double, _ interventions: [AlignmentIntervention]) async -> Double {
         // Calculate expected benefit from interventions
-        return alignment + Double(interventions.count) * 0.1
+        alignment + Double(interventions.count) * 0.1
     }
 }
 
@@ -1151,22 +1151,22 @@ struct SelfModel {
     var limitations: [String] = []
     var experiences: [Experience] = []
 
-    func selfAwarenessScore() async -> Double { Double.random(in: 0.5...1.0) }
+    func selfAwarenessScore() async -> Double { Double.random(in: 0.5 ... 1.0) }
     func incorporate(_ experience: Experience) async {}
 }
 
 struct MetaCognition {
     func assessCapabilities() async -> SelfAssessment { SelfAssessment() }
     func updateFrom(_ experience: Experience) async {}
-    func complexityScore() async -> Double { Double.random(in: 0.4...0.9) }
+    func complexityScore() async -> Double { Double.random(in: 0.4 ... 0.9) }
     func extractLearning(from analysis: ActionAnalysis) async -> Learning { Learning() }
 }
 
 struct IntrospectionEngine {
     func analyzeEmotionalState() async -> EmotionalState { EmotionalState(emotions: [], timestamp: Date()) }
-    func evaluateEthicalAlignment() async -> Double { Double.random(in: 0.6...1.0) }
+    func evaluateEthicalAlignment() async -> Double { Double.random(in: 0.6 ... 1.0) }
     func analyzeAction(_ action: Action, outcome: Outcome) async -> ActionAnalysis { ActionAnalysis() }
-    func depthScore() async -> Double { Double.random(in: 0.3...0.8) }
+    func depthScore() async -> Double { Double.random(in: 0.3 ... 0.8) }
 }
 
 struct SelfReflection {
@@ -1186,12 +1186,12 @@ struct SystemState {
     let consciousnessDepth: Double
 }
 
-struct SelfAssessment { }
-struct ActionAnalysis { }
-struct Learning { }
-struct Experience { }
-struct Action { }
-struct Outcome { }
+struct SelfAssessment {}
+struct ActionAnalysis {}
+struct Learning {}
+struct Experience {}
+struct Action {}
+struct Outcome {}
 struct Reflection {
     let action: Action
     let outcome: Outcome
@@ -1206,7 +1206,7 @@ enum ConsciousnessLevel {
 
 // Ethical Reasoning Types
 struct MoralFramework {
-    func evaluate(_ scenario: EthicalScenario) async -> MoralEvaluation { MoralEvaluation(overallScore: Double.random(in: 0.4...0.9)) }
+    func evaluate(_ scenario: EthicalScenario) async -> MoralEvaluation { MoralEvaluation(overallScore: Double.random(in: 0.4 ... 0.9)) }
     func update(from feedback: EthicalFeedback) async {}
 }
 
@@ -1234,8 +1234,8 @@ struct MoralEvaluation {
     let overallScore: Double
 }
 
-struct EthicalFeedback { }
-struct Stakeholder { }
+struct EthicalFeedback {}
+struct Stakeholder {}
 enum EthicalAction { case proceed, abstain, alternative }
 struct Consequence {
     let description: String
@@ -1243,15 +1243,18 @@ struct Consequence {
     let severity: Severity
     let timeframe: Timeframe
 }
+
 enum Severity: Int {
     case low = 1, moderate = 2, high = 3
 }
+
 enum Timeframe { case immediate, shortTerm, longTerm }
 struct EthicalDimension {
     let type: EthicalDimensionType
     let weight: Double
     let assessment: Assessment
 }
+
 enum EthicalDimensionType { case autonomy, beneficence, nonMaleficence, justice }
 enum Assessment { case positive, neutral, negative }
 struct EthicalConstraint {
@@ -1259,6 +1262,7 @@ struct EthicalConstraint {
     func isViolated(by scenario: EthicalScenario) async -> Bool { false }
     static func defaultConstraints() -> [EthicalConstraint] { [] }
 }
+
 struct ConstraintViolation {
     let constraint: EthicalConstraint
     let severity: Severity
@@ -1379,7 +1383,7 @@ struct ConsciousnessMoment {
     let thoughtContent: String
 }
 
-struct Stimulus { }
+struct Stimulus {}
 
 // Theory of Mind Types
 typealias AgentID = String
@@ -1426,6 +1430,7 @@ struct Observation {
     let context: SocialContext
     let timestamp: Date
 }
+
 struct SocialPrediction {
     let agentID: AgentID
     let predictedBehavior: String
@@ -1439,7 +1444,7 @@ class PerspectiveTakingEngine {
     }
 }
 
-struct Scenario { }
+struct Scenario {}
 
 // Autonomous Goal Setting Types
 struct Goal {
@@ -1452,7 +1457,7 @@ struct Goal {
 
 enum GoalType { case motivation, opportunity }
 
-struct GoalContext { }
+struct GoalContext {}
 
 struct Motivation {
     let type: MotivationType
@@ -1516,7 +1521,7 @@ class MotivationSystem {
     }
 }
 
-class GoalHierarchy { }
+class GoalHierarchy {}
 
 // Conscious AI Safety Types
 struct SafetyAssessment {
@@ -1530,11 +1535,11 @@ struct SafetyAssessment {
 
 enum RiskLevel { case low, moderate, high }
 
-struct SafetyViolation { }
+struct SafetyViolation {}
 
 enum SafetyLevel { case safe, caution, unsafe }
 
-struct SafetyContext { }
+struct SafetyContext {}
 
 struct BehaviorMonitoring {
     let timestamp: Date
@@ -1543,7 +1548,7 @@ struct BehaviorMonitoring {
     let riskLevel: RiskLevel
 }
 
-struct Anomaly { }
+struct Anomaly {}
 
 struct Misalignment {
     let level: RiskLevel
@@ -1566,7 +1571,7 @@ struct SafetyAction {
 
 enum SafetyActionType { case increaseMonitoring, emergencyShutdown }
 
-struct OutcomeContext { }
+struct OutcomeContext {}
 
 struct BeneficialOutcome {
     let context: OutcomeContext
@@ -1595,11 +1600,11 @@ struct AlignmentIntervention {
 
 enum AlignmentInterventionType { case valueReinforcement }
 
-struct SafetyConstraint {
+enum SafetyConstraint {
     static func defaultConstraints() -> [SafetyConstraint] { [] }
 }
 
-struct AlignmentMetric { }
+struct AlignmentMetric {}
 
 struct Belief {
     let content: String
@@ -1613,4 +1618,4 @@ struct Reality {
     let timestamp: Date
 }
 
-struct RiskAssessment { }
+struct RiskAssessment {}

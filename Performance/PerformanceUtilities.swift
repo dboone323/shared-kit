@@ -211,29 +211,29 @@ private struct PerformanceAwareModifier: ViewModifier {
 public enum ImageOptimizer {
     public static func optimizeForNetwork(_ image: UIImage) -> UIImage? {
         #if canImport(UIKit)
-        let networkMonitor = NetworkMonitor.shared
-        let quality = networkMonitor.recommendedImageQuality()
+            let networkMonitor = NetworkMonitor.shared
+            let quality = networkMonitor.recommendedImageQuality()
 
-        guard let data = image.jpegData(compressionQuality: quality.compressionQuality),
-              let optimizedImage = UIImage(data: data)
-        else {
-            return image
-        }
+            guard let data = image.jpegData(compressionQuality: quality.compressionQuality),
+                  let optimizedImage = UIImage(data: data)
+            else {
+                return image
+            }
 
-        return optimizedImage
+            return optimizedImage
         #else
-        return nil
+            return nil
         #endif
     }
 
     public static func resizeForPerformance(_ image: UIImage, targetSize: CGSize) -> UIImage? {
         #if canImport(UIKit)
-        let renderer = UIGraphicsImageRenderer(size: targetSize)
-        return renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: targetSize))
-        }
+            let renderer = UIGraphicsImageRenderer(size: targetSize)
+            return renderer.image { _ in
+                image.draw(in: CGRect(origin: .zero, size: targetSize))
+            }
         #else
-        return nil
+            return nil
         #endif
     }
 

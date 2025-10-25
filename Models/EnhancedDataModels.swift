@@ -57,13 +57,13 @@ public enum ValidationError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .required(let field):
+        case let .required(field):
             "\(field) is required"
-        case .invalid(let field, let reason):
+        case let .invalid(field, reason):
             "\(field) is invalid: \(reason)"
-        case .outOfRange(let field, let min, let max):
+        case let .outOfRange(field, min, max):
             "\(field) is out of range (\(min ?? "nil") - \(max ?? "nil"))"
-        case .custom(let message):
+        case let .custom(message):
             message
         }
     }
@@ -122,14 +122,14 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     public var iconName: String
     public var notes: String
     public var isArchived: Bool
-    public var priority: Int  // 1-5 scale
+    public var priority: Int // 1-5 scale
     public var streakGoal: Int
     public var completionReward: String?
 
     // Analytics Properties
     public var totalCompletions: Int
     public var totalMissedDays: Int
-    public var averageCompletionTime: Double  // in minutes
+    public var averageCompletionTime: Double // in minutes
     public var lastCompletionDate: Date?
     public var bestStreak: Int
     public var monthlyGoal: Int
@@ -357,7 +357,8 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
                 "duration": duration ?? 0,
                 "streak": self.streak,
                 "consecutive_days": self.streak,
-            ])
+            ]
+        )
 
         // Check for achievements
         self.checkAchievements()
@@ -389,7 +390,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         let durationMinutes = duration / 60
         self.averageCompletionTime =
             (self.averageCompletionTime * Double(self.totalCompletions - 1) + durationMinutes)
-            / Double(self.totalCompletions)
+                / Double(self.totalCompletions)
     }
 
     private func checkAchievements() {
@@ -433,7 +434,8 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
             parameters: [
                 "project": reference.projectContext.rawValue,
                 "model_type": reference.modelType,
-            ])
+            ]
+        )
     }
 }
 
@@ -451,7 +453,7 @@ public final class EnhancedHabitLog {
     public var actualDurationMinutes: Int?
     public var location: String?
     public var weather: String?
-    public var energyLevel: Int?  // 1-10 scale
+    public var energyLevel: Int? // 1-10 scale
 
     // Relationship
     public var habit: EnhancedHabit?
@@ -469,7 +471,7 @@ public final class EnhancedHabitLog {
         self.completionDate = completionDate
         self.isCompleted = isCompleted
         self.notes = notes
-        self.xpEarned = 0  // Will be calculated after initialization
+        self.xpEarned = 0 // Will be calculated after initialization
         self.mood = mood
         self.completionTime = isCompleted ? Date() : nil
         self.actualDurationMinutes = actualDurationMinutes
@@ -592,7 +594,7 @@ public enum HabitFrequency: String, CaseIterable, Codable {
         case .weekly: 4
         case .biweekly: 2
         case .monthly: 1
-        case .custom: 15  // default estimate
+        case .custom: 15 // default estimate
         }
     }
 }

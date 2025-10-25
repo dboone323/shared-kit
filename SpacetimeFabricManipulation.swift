@@ -62,7 +62,7 @@ protocol FabricIntegrityProtocol {
 /// Spacetime fabric state
 struct SpacetimeFabric: Sendable {
     let id: UUID
-    let coordinates: [Double]  // 4D coordinates (x, y, z, t)
+    let coordinates: [Double] // 4D coordinates (x, y, z, t)
     var metric: MetricTensor
     var energyDensity: Double
     var stressEnergy: StressEnergyTensor
@@ -75,15 +75,15 @@ struct SpacetimeFabric: Sendable {
 
 /// Metric tensor for spacetime geometry
 struct MetricTensor: Sendable {
-    let components: [[Double]]  // 4x4 matrix for 4D spacetime
-    let signature: [Int]  // Metric signature, e.g., [-1,1,1,1] for (-,+,+,+)
+    let components: [[Double]] // 4x4 matrix for 4D spacetime
+    let signature: [Int] // Metric signature, e.g., [-1,1,1,1] for (-,+,+,+)
     let determinant: Double
     let eigenvalues: [Double]
 }
 
 /// Stress-energy tensor
 struct StressEnergyTensor: Sendable {
-    let components: [[Double]]  // 4x4 matrix
+    let components: [[Double]] // 4x4 matrix
     let energyDensity: Double
     let pressure: Double
     let momentumDensity: [Double]
@@ -94,7 +94,7 @@ struct StressEnergyTensor: Sendable {
 struct SpacetimeCurvature: Sendable {
     var ricciTensor: [[Double]]
     var ricciScalar: Double
-    var weylTensor: [[[[Double]]]]  // 4x4x4x4 tensor
+    var weylTensor: [[[[Double]]]] // 4x4x4x4 tensor
     var einsteinTensor: [[Double]]
     var kretschmannScalar: Double
 }
@@ -275,41 +275,40 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
     }
 
     func repairFabricDamage(_ damage: FabricDamage) async throws -> RepairResult {
-        return try await geometryEngine.repairDamage(damage, in: initialFabric)
+        try await geometryEngine.repairDamage(damage, in: initialFabric)
     }
 
     // MARK: - SpacetimeEngineeringProtocol
 
     func engineerCurvature(_ curvature: SpacetimeCurvature) async throws -> EngineeringResult {
-        return try await geometryEngine.engineerCurvature(curvature, in: initialFabric)
+        try await geometryEngine.engineerCurvature(curvature, in: initialFabric)
     }
 
     func generateSpacetimeWaves(_ waves: SpacetimeWaves) async throws -> WaveResult {
-        return try await waveGenerator.generateWaves(waves, in: initialFabric)
+        try await waveGenerator.generateWaves(waves, in: initialFabric)
     }
 
     func stabilizeFabric(_ fabric: SpacetimeFabric) async throws -> StabilizationResult {
-        return try await integrityMonitor.stabilizeFabric(fabric)
+        try await integrityMonitor.stabilizeFabric(fabric)
     }
 
     // MARK: - FabricIntegrityProtocol
 
     func assessFabricIntegrity(_ fabric: SpacetimeFabric) async -> IntegrityAssessment {
-        return await integrityMonitor.assessIntegrity(fabric)
+        await integrityMonitor.assessIntegrity(fabric)
     }
 
     func detectFabricAnomalies() async -> AnomalyReport {
-        return await integrityMonitor.detectAnomalies(in: initialFabric)
+        await integrityMonitor.detectAnomalies(in: initialFabric)
     }
 
     func monitorFabricStability() async -> StabilityReport {
-        return await integrityMonitor.generateStabilityReport(for: initialFabric)
+        await integrityMonitor.generateStabilityReport(for: initialFabric)
     }
 
     // MARK: - Private Methods
 
-    private func validateProperties(_ properties: FabricProperties) async throws -> ValidationResult
-    {
+    private func validateProperties(_ properties: FabricProperties) async throws -> ValidationResult {
         var warnings: [ValidationWarning] = []
         var errors: [ValidationError] = []
 
@@ -415,10 +414,10 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
     private func analyzeQuantumFluctuations(_ fabric: SpacetimeFabric) -> FluctuationAnalysis {
         let fluctuationCount = fabric.quantumFluctuations.count
         let averageAmplitude =
-            fabric.quantumFluctuations.map { $0.amplitude }.reduce(0, +) / Double(fluctuationCount)
+            fabric.quantumFluctuations.map(\.amplitude).reduce(0, +) / Double(fluctuationCount)
         let averageFrequency =
-            fabric.quantumFluctuations.map { $0.frequency }.reduce(0, +) / Double(fluctuationCount)
-        let totalEnergy = fabric.quantumFluctuations.map { $0.energy }.reduce(0, +)
+            fabric.quantumFluctuations.map(\.frequency).reduce(0, +) / Double(fluctuationCount)
+        let totalEnergy = fabric.quantumFluctuations.map(\.energy).reduce(0, +)
 
         let fluctuationSpectrum = Dictionary(grouping: fabric.quantumFluctuations) {
             Int($0.frequency * 10)
@@ -439,7 +438,7 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
     }
 
     private func generateRecommendations() -> [String] {
-        return [
+        [
             "Monitor spacetime curvature levels",
             "Maintain adequate energy distribution",
             "Regular quantum fluctuation analysis",
@@ -465,21 +464,21 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
 
     private func calculateEnergyGradient(_ fabric: SpacetimeFabric) -> [Double] {
         // Simplified gradient calculation
-        return [0.1, 0.05, 0.02, 0.01]  // 4D gradient
+        [0.1, 0.05, 0.02, 0.01] // 4D gradient
     }
 
     private func calculateEnergyFlux(_ fabric: SpacetimeFabric) -> Double {
         // Simplified flux calculation
-        return fabric.energyDensity * 0.1
+        fabric.energyDensity * 0.1
     }
 
     private func assessEnergyStability(_ fabric: SpacetimeFabric) -> Double {
         // Simplified stability assessment
-        return min(1.0, fabric.stability * 0.9)
+        min(1.0, fabric.stability * 0.9)
     }
 
     private func identifyDominantComponents(_ fabric: SpacetimeFabric) -> [String] {
-        return ["Gravitational", "Electromagnetic", "Quantum"]
+        ["Gravitational", "Electromagnetic", "Quantum"]
     }
 
     private func calculateCoherenceImpact(_ fluctuations: [QuantumFluctuation]) -> Double {
@@ -616,7 +615,7 @@ final class GeometryEngine {
     }
 
     private func analyzeCurvature(_ curvature: SpacetimeCurvature) -> CurvatureAnalysis {
-        return CurvatureAnalysis(
+        CurvatureAnalysis(
             ricciScalar: curvature.ricciScalar,
             kretschmannScalar: curvature.kretschmannScalar,
             curvatureType: curvature.ricciScalar > 0 ? "Positive" : "Negative",
@@ -626,7 +625,7 @@ final class GeometryEngine {
     }
 
     private func analyzeMetric(_ metric: MetricTensor) -> MetricAnalysis {
-        return MetricAnalysis(
+        MetricAnalysis(
             signature: metric.signature,
             determinant: metric.determinant,
             eigenvalues: metric.eigenvalues,
@@ -637,7 +636,7 @@ final class GeometryEngine {
     }
 
     private func analyzeTopology(_ fabric: SpacetimeFabric) -> TopologyAnalysis {
-        return TopologyAnalysis(
+        TopologyAnalysis(
             topologyType: "Minkowski",
             connectedness: "Simply Connected",
             compactness: "Non-compact",
@@ -651,21 +650,21 @@ final class GeometryEngine {
         -> Double
     {
         // Simplified stress calculation
-        return properties.elasticity * 0.1
+        properties.elasticity * 0.1
     }
 
     private func calculateEnergyDelta(_ properties: FabricProperties, _ fabric: SpacetimeFabric)
         -> Double
     {
         // Simplified energy calculation
-        return 100.0
+        100.0
     }
 
     private func calculateStabilityChange(_ properties: FabricProperties, _ fabric: SpacetimeFabric)
         -> Double
     {
         // Simplified stability calculation
-        return properties.stabilityIndex - fabric.stability
+        properties.stabilityIndex - fabric.stability
     }
 }
 
@@ -699,21 +698,21 @@ final class WaveGenerator {
 
     private func calculateWaveEnergy(_ waves: SpacetimeWaves) -> Double {
         // Simplified energy calculation
-        return waves.amplitude * waves.amplitude * 1000.0
+        waves.amplitude * waves.amplitude * 1000.0
     }
 
     private func calculatePropagationSpeed(_ waves: SpacetimeWaves, _ fabric: SpacetimeFabric)
         -> Double
     {
         // Speed of light in vacuum
-        return 299792458.0
+        299_792_458.0
     }
 
     private func calculateAttenuationRate(_ waves: SpacetimeWaves, _ fabric: SpacetimeFabric)
         -> Double
     {
         // Simplified attenuation
-        return 0.001
+        0.001
     }
 }
 
@@ -758,7 +757,7 @@ final class IntegrityMonitor {
         let anomalies = fabric.quantumFluctuations.filter { $0.amplitude > 0.2 }
         let anomalyCount = anomalies.count
         let averageSeverity =
-            anomalies.map { $0.amplitude }.reduce(0, +) / Double(max(1, anomalyCount))
+            anomalies.map(\.amplitude).reduce(0, +) / Double(max(1, anomalyCount))
 
         return AnomalyReport(
             anomalies: anomalies.map { fluctuation in
@@ -772,7 +771,7 @@ final class IntegrityMonitor {
             },
             anomalyCount: anomalyCount,
             averageSeverity: averageSeverity,
-            anomalyDistribution: [:],  // Simplified
+            anomalyDistribution: [:], // Simplified
             detectionConfidence: 0.9
         )
     }
@@ -1135,15 +1134,15 @@ enum SpacetimeError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .validationFailed(let errors):
+        case let .validationFailed(errors):
             return "Validation failed with \(errors.count) errors"
-        case .distortionFailed(let errors):
+        case let .distortionFailed(errors):
             return "Distortion failed with \(errors.count) errors"
-        case .manipulationFailed(let reason):
+        case let .manipulationFailed(reason):
             return "Manipulation failed: \(reason)"
-        case .integrityCompromised(let reason):
+        case let .integrityCompromised(reason):
             return "Integrity compromised: \(reason)"
-        case .causalityViolation(let reason):
+        case let .causalityViolation(reason):
             return "Causality violation: \(reason)"
         }
     }
@@ -1196,7 +1195,7 @@ enum SpacetimeFabricManipulationFactory {
     static func createEngine(withInitialFabric fabric: SpacetimeFabric)
         -> SpacetimeFabricManipulationEngine
     {
-        return SpacetimeFabricManipulationEngine(initialFabric: fabric)
+        SpacetimeFabricManipulationEngine(initialFabric: fabric)
     }
 
     static func createDefaultSpacetimeFabric() -> SpacetimeFabric {
@@ -1236,7 +1235,7 @@ enum SpacetimeFabricManipulationFactory {
                 [0.0, 0.0, 0.0, 0.0],
             ],
             ricciScalar: 0.0,
-            weylTensor: [[[[0.0]]]],  // Simplified
+            weylTensor: [[[[0.0]]]], // Simplified
             einsteinTensor: [
                 [0.0, 0.0, 0.0, 0.0],
                 [0.0, 0.0, 0.0, 0.0],
@@ -1254,7 +1253,7 @@ enum SpacetimeFabricManipulationFactory {
                 phase: 0.0,
                 duration: 1e-20,
                 energy: 1e-10
-            )
+            ),
         ]
 
         return SpacetimeFabric(
@@ -1361,7 +1360,7 @@ final class SpacetimeFabricDatabase {
     }
 
     func loadFabric(id: UUID) -> SpacetimeFabric? {
-        return fabrics[id]
+        fabrics[id]
     }
 
     func saveManipulation(_ manipulation: FabricManipulationResult, forFabric fabricId: UUID) {
@@ -1372,7 +1371,7 @@ final class SpacetimeFabricDatabase {
     }
 
     func getManipulations(forFabric fabricId: UUID) -> [FabricManipulationResult] {
-        return manipulations[fabricId] ?? []
+        manipulations[fabricId] ?? []
     }
 
     func saveDistortion(_ distortion: DistortionResult, forFabric fabricId: UUID) {
@@ -1383,7 +1382,7 @@ final class SpacetimeFabricDatabase {
     }
 
     func getDistortions(forFabric fabricId: UUID) -> [DistortionResult] {
-        return distortions[fabricId] ?? []
+        distortions[fabricId] ?? []
     }
 }
 
@@ -1392,7 +1391,7 @@ final class SpacetimeFabricDatabase {
 /// Testing utilities for spacetime fabric manipulation
 enum SpacetimeFabricManipulationTesting {
     static func createTestFabric() -> SpacetimeFabric {
-        return SpacetimeFabricManipulationFactory.createDefaultSpacetimeFabric()
+        SpacetimeFabricManipulationFactory.createDefaultSpacetimeFabric()
     }
 
     static func createDistortedFabric() -> SpacetimeFabric {
@@ -1413,7 +1412,7 @@ enum SpacetimeFabricManipulationTesting {
 // MARK: - Framework Metadata
 
 /// Framework information
-struct SpacetimeFabricManipulationMetadata {
+enum SpacetimeFabricManipulationMetadata {
     static let version = "1.0.0"
     static let framework = "Spacetime Fabric Manipulation"
     static let description =

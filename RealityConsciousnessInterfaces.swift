@@ -129,8 +129,8 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
             interfaceId: interface.interfaceId,
             signalId: signal.id,
             delivered: delivered,
-            latencyMs: Double.random(in: 1.0...12.0),
-            energyUsed: Double.random(in: 0.1...2.0),
+            latencyMs: Double.random(in: 1.0 ... 12.0),
+            energyUsed: Double.random(in: 0.1 ... 2.0),
             validation: ValidationResult(
                 isValid: delivered,
                 warnings: delivered
@@ -138,14 +138,16 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
                     : [
                         ValidationWarning(
                             message: "Signal delivery uncertain", severity: .warning,
-                            suggestion: "Retry with higher coherence")
+                            suggestion: "Retry with higher coherence"
+                        ),
                     ],
                 errors: delivered
                     ? []
                     : [
                         ValidationError(
                             message: "Delivery failed", severity: .high,
-                            suggestion: "Increase coherence and retry")
+                            suggestion: "Increase coherence and retry"
+                        ),
                     ],
                 recommendations: ["Maintain alignment > 0.9", "Monitor decoherence rate"]
             )
@@ -159,8 +161,8 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
         guard var iface = interfaces[interface.interfaceId] else {
             throw RCIError.interfaceNotFound
         }
-        let duration = Double.random(in: 0.02...0.2)
-        let phaseDrift = Double.random(in: 0.0...0.03)
+        let duration = Double.random(in: 0.02 ... 0.2)
+        let phaseDrift = Double.random(in: 0.0 ... 0.03)
         iface.lastSync = Date()
         interfaces[interface.interfaceId] = iface
         return RCISynchronizationResult(
@@ -169,12 +171,13 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
             phaseDrift: phaseDrift,
             syncDuration: duration,
             validation: ValidationResult(
-                isValid: phaseDrift < 0.02,
-                warnings: phaseDrift >= 0.015
+                isValid: phaseDrift<0.02,
+                    warnings: phaseDrift> = 0.015
                     ? [
                         ValidationWarning(
                             message: "Phase drift elevated", severity: .warning,
-                            suggestion: "Recalibrate alignment")
+                            suggestion: "Recalibrate alignment"
+                        ),
                     ] : [],
                 errors: [],
                 recommendations: ["Schedule frequent syncs", "Reduce channel overload"]
@@ -183,15 +186,15 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
     }
 
     func monitorHealth(_ interfaceId: UUID) async -> [RCIHealthEvent] {
-        return events[interfaceId, default: []]
+        events[interfaceId, default: []]
     }
 
     func generateReport() async -> RCIReport {
         let total = interfaces.count
         let avgAlign =
-            interfaces.values.map { $0.alignmentScore }.reduce(0, +) / Double(max(1, total))
+            interfaces.values.map(\.alignmentScore).reduce(0, +) / Double(max(1, total))
         let avgCoh =
-            interfaces.values.map { $0.coherenceLevel }.reduce(0, +) / Double(max(1, total))
+            interfaces.values.map(\.coherenceLevel).reduce(0, +) / Double(max(1, total))
         let allEvents = events.values.flatMap { $0 }
         let recs: [String] = [
             avgAlign < 0.9 ? "Improve alignment via guided calibration" : "Maintain alignment",
@@ -228,7 +231,7 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
             id: UUID(),
             interfaceId: id,
             kind: kinds.randomElement() ?? .recovery,
-            severity: Double.random(in: 0...1),
+            severity: Double.random(in: 0 ... 1),
             timestamp: Date()
         )
         events[id, default: []].append(event)
@@ -241,10 +244,12 @@ enum RCIFactory {
     static func makeEngine() -> RealityConsciousnessInterfaceEngine {
         RealityConsciousnessInterfaceEngine()
     }
+
     static func sampleSignal() -> RCIConsciousnessSignal {
         RCIConsciousnessSignal(
             id: UUID(), sourceId: UUID(), payload: Data([0x01, 0x02]),
-            semanticTags: ["intent", "alignment"], timestamp: Date())
+            semanticTags: ["intent", "alignment"], timestamp: Date()
+        )
     }
 }
 

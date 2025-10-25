@@ -8,11 +8,11 @@ import Vision
 import XCTest
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 /// Comprehensive AI/ML Testing and Validation Suite for Phase 4
@@ -608,13 +608,13 @@ class AIMLValidationSuite: XCTestCase {
     private func createTestImageData(type _: String) -> Data {
         // Create sample test image data
         #if canImport(UIKit)
-        let image = UIImage(systemName: "star.fill") ?? UIImage()
-        return image.pngData() ?? Data()
+            let image = UIImage(systemName: "star.fill") ?? UIImage()
+            return image.pngData() ?? Data()
         #elseif canImport(AppKit)
-        let image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: nil) ?? NSImage()
-        return image.tiffRepresentation ?? Data()
+            let image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: nil) ?? NSImage()
+            return image.tiffRepresentation ?? Data()
         #else
-        return Data()
+            return Data()
         #endif
     }
 
@@ -717,23 +717,23 @@ class AIMLValidationSuite: XCTestCase {
 
     private func testIOSAICompatibility(completion: @escaping (Bool) -> Void) {
         #if os(iOS)
-        // Test iOS-specific AI features
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
-            completion(true)
-        }
+            // Test iOS-specific AI features
+            DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+                completion(true)
+            }
         #else
-        completion(true) // Skip iOS tests on other platforms
+            completion(true) // Skip iOS tests on other platforms
         #endif
     }
 
     private func testMacOSAICompatibility(completion: @escaping (Bool) -> Void) {
         #if os(macOS)
-        // Test macOS-specific AI features
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
-            completion(true)
-        }
+            // Test macOS-specific AI features
+            DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+                completion(true)
+            }
         #else
-        completion(true) // Skip macOS tests on other platforms
+            completion(true) // Skip macOS tests on other platforms
         #endif
     }
 

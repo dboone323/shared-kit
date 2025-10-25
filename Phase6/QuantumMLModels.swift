@@ -25,10 +25,10 @@ public struct QuantumState: Sendable {
 
     public init(numQubits: Int) {
         self.numQubits = numQubits
-        let size = 1 << numQubits  // 2^numQubits
+        let size = 1 << numQubits // 2^numQubits
         self.amplitudes =
             [ComplexNumber(real: 1.0, imaginary: 0.0)]
-            + Array(repeating: ComplexNumber(real: 0.0, imaginary: 0.0), count: size - 1)
+                + Array(repeating: ComplexNumber(real: 0.0, imaginary: 0.0), count: size - 1)
     }
 
     public init(amplitudes: [ComplexNumber]) {
@@ -39,16 +39,16 @@ public struct QuantumState: Sendable {
 
 /// Quantum gate operations
 public enum QuantumGate: Sendable {
-    case hadamard(Int)  // H gate on qubit
-    case pauliX(Int)  // X gate (NOT) on qubit
-    case pauliY(Int)  // Y gate on qubit
-    case pauliZ(Int)  // Z gate on qubit
-    case rotationX(Int, Double)  // RX rotation
-    case rotationY(Int, Double)  // RY rotation
-    case rotationZ(Int, Double)  // RZ rotation
-    case cnot(Int, Int)  // CNOT gate (control, target)
-    case controlledPhase(Int, Int, Double)  // Controlled phase
-    case toffoli(Int, Int, Int)  // Toffoli (CCNOT)
+    case hadamard(Int) // H gate on qubit
+    case pauliX(Int) // X gate (NOT) on qubit
+    case pauliY(Int) // Y gate on qubit
+    case pauliZ(Int) // Z gate on qubit
+    case rotationX(Int, Double) // RX rotation
+    case rotationY(Int, Double) // RY rotation
+    case rotationZ(Int, Double) // RZ rotation
+    case cnot(Int, Int) // CNOT gate (control, target)
+    case controlledPhase(Int, Int, Double) // Controlled phase
+    case toffoli(Int, Int, Int) // Toffoli (CCNOT)
 }
 
 /// Quantum circuit representation
@@ -62,7 +62,7 @@ public struct QuantumCircuit: Sendable {
     }
 
     public func addingGate(_ gate: QuantumGate) -> QuantumCircuit {
-        return QuantumCircuit(numQubits: numQubits, gates: gates + [gate])
+        QuantumCircuit(numQubits: numQubits, gates: gates + [gate])
     }
 }
 
@@ -81,19 +81,22 @@ public actor QAOAOptimizer {
 
         _ = createQAOACircuit(numQubits: numQubits, layers: layers)
         var bestParameters = Array(
-            repeating: Double.random(in: 0..<2 * Double.pi), count: 2 * layers)
+            repeating: Double.random(in: 0 ..< 2 * Double.pi), count: 2 * layers
+        )
         // Convert dataset to expected format
         let convertedDataset = dataset.map { (features: $0.0, label: Double($0.1)) }
 
         var bestCost = computeCost(
-            parameters: bestParameters, dataset: convertedDataset, numQubits: numQubits)
+            parameters: bestParameters, dataset: convertedDataset, numQubits: numQubits
+        )
 
-        for iteration in 0..<maxIterations {
+        for iteration in 0 ..< maxIterations {
             let candidates = generateCandidates(around: bestParameters, count: 10)
 
             for candidate in candidates {
                 let cost = computeCost(
-                    parameters: candidate, dataset: convertedDataset, numQubits: numQubits)
+                    parameters: candidate, dataset: convertedDataset, numQubits: numQubits
+                )
                 if cost < bestCost {
                     bestCost = cost
                     bestParameters = candidate
@@ -123,9 +126,9 @@ public actor QAOAOptimizer {
             }
 
             // Apply variational layers (simplified)
-            for layer in 0..<2 {  // Assume 2 layers for optimization
+            for layer in 0 ..< 2 { // Assume 2 layers for optimization
                 let layerStart = layer * numQubits * 3
-                for qubit in 0..<numQubits {
+                for qubit in 0 ..< numQubits {
                     let paramIdx = layerStart + qubit * 3
                     if paramIdx + 2 < parameters.count {
                         circuitOutput =
@@ -147,24 +150,24 @@ public actor QAOAOptimizer {
         var circuit = QuantumCircuit(numQubits: numQubits)
 
         // Initialize superposition
-        for qubit in 0..<numQubits {
+        for qubit in 0 ..< numQubits {
             circuit = circuit.addingGate(.hadamard(qubit))
         }
 
         // Add QAOA layers
-        for _ in 0..<layers {
+        for _ in 0 ..< layers {
             // Cost Hamiltonian layer
-            for i in 0..<numQubits {
-                circuit = circuit.addingGate(.rotationZ(i, Double.random(in: 0..<2 * Double.pi)))
+            for i in 0 ..< numQubits {
+                circuit = circuit.addingGate(.rotationZ(i, Double.random(in: 0 ..< 2 * Double.pi)))
             }
 
             // Mixer Hamiltonian layer
-            for i in 0..<numQubits {
-                circuit = circuit.addingGate(.rotationX(i, Double.random(in: 0..<2 * Double.pi)))
+            for i in 0 ..< numQubits {
+                circuit = circuit.addingGate(.rotationX(i, Double.random(in: 0 ..< 2 * Double.pi)))
             }
 
             // Entangling gates
-            for i in 0..<(numQubits - 1) {
+            for i in 0 ..< (numQubits - 1) {
                 circuit = circuit.addingGate(.cnot(i, i + 1))
             }
         }
@@ -173,8 +176,8 @@ public actor QAOAOptimizer {
     }
 
     private func generateCandidates(around parameters: [Double], count: Int) -> [[Double]] {
-        return (0..<count).map { _ in
-            parameters.map { $0 + Double.random(in: -0.1..<0.1) }
+        (0 ..< count).map { _ in
+            parameters.map { $0 + Double.random(in: -0.1 ..< 0.1) }
         }
     }
 }
@@ -189,7 +192,7 @@ public actor VariationalQuantumClassifier {
     public init(numQubits: Int, layers: Int = 3) {
         self.numQubits = numQubits
         self.layers = layers
-        self.parameters = Array(repeating: 0.0, count: layers * numQubits * 3)  // 3 parameters per qubit per layer
+        self.parameters = Array(repeating: 0.0, count: layers * numQubits * 3) // 3 parameters per qubit per layer
     }
 
     public func train(on dataset: [([Double], Int)]) async throws {
@@ -209,7 +212,7 @@ public actor VariationalQuantumClassifier {
     }
 
     public func predict(_ input: [Double]) async throws -> Int {
-        return try predictWithParameters(input, parameters: parameters)
+        try predictWithParameters(input, parameters: parameters)
     }
 
     public func evaluate(on testData: [([Double], Int)]) async throws -> ModelMetrics {
@@ -230,9 +233,9 @@ public actor VariationalQuantumClassifier {
         return ModelMetrics(
             accuracy: accuracy,
             loss: avgLoss,
-            precision: accuracy,  // Simplified
-            recall: accuracy,  // Simplified
-            f1Score: accuracy  // Simplified
+            precision: accuracy, // Simplified
+            recall: accuracy, // Simplified
+            f1Score: accuracy // Simplified
         )
     }
 
@@ -251,9 +254,9 @@ public actor VariationalQuantumClassifier {
         }
 
         // Apply variational layers
-        for layer in 0..<layers {
+        for layer in 0 ..< layers {
             let layerStart = layer * numQubits * 3
-            for qubit in 0..<numQubits {
+            for qubit in 0 ..< numQubits {
                 let paramIdx = layerStart + qubit * 3
                 if paramIdx + 2 < parameters.count {
                     circuitOutput =
@@ -289,17 +292,17 @@ public actor QuantumSVM {
         alphas = Array(repeating: 0.0, count: numSamples)
 
         // Sequential Minimal Optimization (SMO) inspired approach
-        for _ in 0..<100 {
+        for _ in 0 ..< 100 {
             var changed = false
 
-            for i in 0..<numSamples {
+            for i in 0 ..< numSamples {
                 let prediction = predictSample(dataset[i].0, using: dataset)
                 let error = prediction - Double(dataset[i].1)
 
                 if abs(error) > 0.001 {
                     // Update alpha
                     alphas[i] += 0.01 * error
-                    alphas[i] = max(0, min(1, alphas[i]))  // Clamp to [0,1]
+                    alphas[i] = max(0, min(1, alphas[i])) // Clamp to [0,1]
                     changed = true
                 }
             }
@@ -310,7 +313,7 @@ public actor QuantumSVM {
         // Extract support vectors (non-zero alphas)
         supportVectors = zip(dataset, alphas)
             .filter { $0.1 > 0.001 }
-            .map { $0.0 }
+            .map(\.0)
 
         logger.info(
             "✅ Quantum SVM training completed with \(self.supportVectors.count) support vectors")
@@ -371,18 +374,18 @@ public enum QuantumKernel: Sendable {
         case .linear:
             return dotProduct(x, y)
 
-        case .polynomial(let degree, let constant):
+        case let .polynomial(degree, constant):
             let dot = dotProduct(x, y)
             return pow(dot + constant, Double(degree))
 
-        case .gaussian(let sigma):
+        case let .gaussian(sigma):
             let diff = zip(x, y).map { ($0 - $1) * ($0 - $1) }.reduce(0, +)
             return exp(-diff / (2 * sigma * sigma))
 
-        case .quantumInspired(let depth):
+        case let .quantumInspired(depth):
             // Simplified quantum-inspired kernel
             var result = dotProduct(x, y)
-            for _ in 0..<depth {
+            for _ in 0 ..< depth {
                 result = sin(result) + cos(result)
             }
             return result
@@ -390,7 +393,7 @@ public enum QuantumKernel: Sendable {
     }
 
     private func dotProduct(_ x: [Double], _ y: [Double]) -> Double {
-        return zip(x, y).map(*).reduce(0, +)
+        zip(x, y).map(*).reduce(0, +)
     }
 }
 
@@ -404,8 +407,7 @@ public struct ModelMetrics: Sendable {
     public let recall: Double
     public let f1Score: Double
 
-    public init(accuracy: Double, loss: Double, precision: Double, recall: Double, f1Score: Double)
-    {
+    public init(accuracy: Double, loss: Double, precision: Double, recall: Double, f1Score: Double) {
         self.accuracy = accuracy
         self.loss = loss
         self.precision = precision
@@ -432,9 +434,9 @@ public actor QuantumNeuralNetwork {
         let layerSizes =
             [inputSize] + Array(repeating: neuronsPerLayer, count: numLayers - 1) + [outputSize]
 
-        for i in 0..<(layerSizes.count - 1) {
-            let layerWeights = (0..<layerSizes[i + 1]).map { _ in
-                (0..<layerSizes[i]).map { _ in Double.random(in: -1..<1) }
+        for i in 0 ..< (layerSizes.count - 1) {
+            let layerWeights = (0 ..< layerSizes[i + 1]).map { _ in
+                (0 ..< layerSizes[i]).map { _ in Double.random(in: -1 ..< 1) }
             }
             weights.append(layerWeights)
             biases.append(contentsOf: Array(repeating: 0.0, count: layerSizes[i + 1]))
@@ -447,7 +449,7 @@ public actor QuantumNeuralNetwork {
         let learningRate = 0.01
         let epochs = 100
 
-        for epoch in 0..<epochs {
+        for epoch in 0 ..< epochs {
             var totalLoss = 0.0
 
             for (input, target) in dataset {
@@ -468,7 +470,7 @@ public actor QuantumNeuralNetwork {
     }
 
     public func predict(_ input: [Double]) async throws -> [Double] {
-        return try forwardPass(input)
+        try forwardPass(input)
     }
 
     public func evaluate(on testData: [([Double], [Double])]) async throws -> ModelMetrics {
@@ -482,7 +484,7 @@ public actor QuantumNeuralNetwork {
         }
 
         let avgLoss = totalLoss / Double(testData.count)
-        let accuracy = computeAccuracy(predictions, testData.map { $0.1 })
+        let accuracy = computeAccuracy(predictions, testData.map(\.1))
 
         return ModelMetrics(
             accuracy: accuracy,
@@ -496,13 +498,13 @@ public actor QuantumNeuralNetwork {
     private func forwardPass(_ input: [Double]) throws -> [Double] {
         var activations = input
 
-        for layer in 0..<weights.count {
+        for layer in 0 ..< weights.count {
             let layerWeights = weights[layer]
-            let layerBiases = Array(biases[layer * neuronsPerLayer..<(layer + 1) * neuronsPerLayer])
+            let layerBiases = Array(biases[layer * neuronsPerLayer ..< (layer + 1) * neuronsPerLayer])
 
             var newActivations = [Double]()
 
-            for neuron in 0..<layerWeights.count {
+            for neuron in 0 ..< layerWeights.count {
                 var sum = layerBiases[neuron]
                 for (i, activation) in activations.enumerated() {
                     sum += activation * layerWeights[neuron][i]
@@ -521,11 +523,11 @@ public actor QuantumNeuralNetwork {
 
     private func backwardPass(_ input: [Double], _ target: [Double], learningRate: Double) throws {
         // Simplified backpropagation - in practice would compute gradients properly
-        for layer in 0..<weights.count {
-            for neuron in 0..<weights[layer].count {
-                for weight in 0..<weights[layer][neuron].count {
+        for layer in 0 ..< weights.count {
+            for neuron in 0 ..< weights[layer].count {
+                for weight in 0 ..< weights[layer][neuron].count {
                     weights[layer][neuron][weight] += Double.random(
-                        in: -learningRate..<learningRate)
+                        in: -learningRate ..< learningRate)
                 }
             }
         }
@@ -577,19 +579,19 @@ public actor QuantumMLRegistry {
     }
 
     public func getClassifier(withId id: String) -> VariationalQuantumClassifier? {
-        return classifiers[id]
+        classifiers[id]
     }
 
     public func getSVM(withId id: String) -> QuantumSVM? {
-        return svms[id]
+        svms[id]
     }
 
     public func getNetwork(withId id: String) -> QuantumNeuralNetwork? {
-        return networks[id]
+        networks[id]
     }
 
     public func listModels() -> [String] {
-        return Array(classifiers.keys) + Array(svms.keys) + Array(networks.keys)
+        Array(classifiers.keys) + Array(svms.keys) + Array(networks.keys)
     }
 
     public func removeModel(withId id: String) {
@@ -636,14 +638,15 @@ public func createQuantumNeuralNetwork(
 ) async {
     let qnn = QuantumNeuralNetwork(
         numLayers: numLayers, neuronsPerLayer: neuronsPerLayer, inputSize: inputSize,
-        outputSize: outputSize)
+        outputSize: outputSize
+    )
     await globalRegistry.registerNetwork(qnn, withId: id)
 }
 
 /// Get quantum ML model capabilities
 @MainActor
 public func getQuantumMLCapabilities() -> [String: [String]] {
-    return [
+    [
         "algorithms": ["VQC", "QSVM", "QNN", "QAOA"],
         "kernels": ["linear", "polynomial", "gaussian", "quantum-inspired"],
         "applications": ["classification", "regression", "optimization", "clustering"],
@@ -654,5 +657,5 @@ public func getQuantumMLCapabilities() -> [String: [String]] {
 /// Get registered quantum ML models
 @MainActor
 public func getRegisteredQuantumModels() async -> [String] {
-    return await globalRegistry.listModels()
+    await globalRegistry.listModels()
 }

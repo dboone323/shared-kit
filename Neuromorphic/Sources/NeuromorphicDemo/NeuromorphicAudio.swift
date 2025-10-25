@@ -9,12 +9,12 @@ import Foundation
 /// Basilar membrane model for frequency analysis
 public class BasilarMembrane {
     public var segments: [MembraneSegment] = []
-    public var samplingRate: Double = 44100.0  // Hz
+    public var samplingRate: Double = 44100.0 // Hz
 
     public init(numSegments: Int = 100) {
         // Create segments with different resonant frequencies (logarithmic spacing)
-        for i in 0..<numSegments {
-            let frequency = 20.0 * pow(10.0, Double(i) / Double(numSegments) * 3.0)  // 20Hz to 20kHz
+        for i in 0 ..< numSegments {
+            let frequency = 20.0 * pow(10.0, Double(i) / Double(numSegments) * 3.0) // 20Hz to 20kHz
             let segment = MembraneSegment(resonantFrequency: frequency, segmentIndex: i)
             segments.append(segment)
         }
@@ -41,8 +41,8 @@ public class MembraneSegment {
     public let segmentIndex: Int
 
     // Simple resonant filter state
-    private var y1: Double = 0.0  // previous output
-    private var y2: Double = 0.0  // output before that
+    private var y1: Double = 0.0 // previous output
+    private var y2: Double = 0.0 // output before that
 
     public init(resonantFrequency: Double, segmentIndex: Int) {
         self.resonantFrequency = resonantFrequency
@@ -55,7 +55,7 @@ public class MembraneSegment {
         let omega = 2.0 * .pi * resonantFrequency / sampleRate
 
         // Simple second-order resonant filter coefficients
-        let r = 0.95  // pole radius (close to 1 for sharp resonance)
+        let r = 0.95 // pole radius (close to 1 for sharp resonance)
         let cosOmega = cos(omega)
         let sinOmega = sin(omega)
 
@@ -100,7 +100,7 @@ public class InnerHairCell {
         // Spike generation
         if membranePotential > threshold {
             lastSpikeTime = time
-            adaptation += 0.1  // Adaptation increase
+            adaptation += 0.1 // Adaptation increase
             return true
         }
 
@@ -112,9 +112,9 @@ public class InnerHairCell {
 public class AuditoryNerveFiber {
     public var hairCell: InnerHairCell
     public var spikes: [NeuromorphicSpike] = []
-    public var spontaneousRate: Double  // Spontaneous firing rate
+    public var spontaneousRate: Double // Spontaneous firing rate
 
-    public init(spontaneousRate: Double = 10.0) {  // spikes per second
+    public init(spontaneousRate: Double = 10.0) { // spikes per second
         self.spontaneousRate = spontaneousRate
         self.hairCell = InnerHairCell()
     }
@@ -130,16 +130,17 @@ public class AuditoryNerveFiber {
             let spiked = hairCell.processDisplacement(sample, at: currentTime)
             if spiked {
                 let spike = NeuromorphicSpike(
-                    sourceNeuron: NeuromorphicNeuron(),  // Dummy source
+                    sourceNeuron: NeuromorphicNeuron(), // Dummy source
                     targetSynapse: NeuromorphicSynapse(
-                        from: NeuromorphicNeuron(), to: NeuromorphicNeuron()),  // Dummy synapse
+                        from: NeuromorphicNeuron(), to: NeuromorphicNeuron()
+                    ), // Dummy synapse
                     timestamp: currentTime,
                     weight: 1.0
                 )
                 spikes.append(spike)
             }
 
-            currentTime += 1.0 / 44100.0  // Sample period
+            currentTime += 1.0 / 44100.0 // Sample period
         }
 
         return spikes
@@ -154,14 +155,14 @@ public class AuditoryCortex {
     public var beltArea: [NeuromorphicNeuron] = []
     public var parabeltArea: [NeuromorphicNeuron] = []
 
-    public var frequencyMap: [[NeuromorphicNeuron]] = []  // Tonotopic organization
+    public var frequencyMap: [[NeuromorphicNeuron]] = [] // Tonotopic organization
     public var temporalPatterns: [String: [NeuromorphicSpike]] = [:]
 
     public init(numFrequencyBins: Int = 50, neuronsPerBin: Int = 10) {
         // Create tonotopic map
-        for _ in 0..<numFrequencyBins {
+        for _ in 0 ..< numFrequencyBins {
             var frequencyColumn: [NeuromorphicNeuron] = []
-            for _ in 0..<neuronsPerBin {
+            for _ in 0 ..< neuronsPerBin {
                 let neuron = LIFNeuron(threshold: 0.8, leakRate: 0.95)
                 frequencyColumn.append(neuron)
                 primaryAuditoryCortex.append(neuron)
@@ -170,7 +171,7 @@ public class AuditoryCortex {
         }
 
         // Create higher-order areas
-        for _ in 0..<200 {
+        for _ in 0 ..< 200 {
             beltArea.append(LIFNeuron(threshold: 0.7))
             parabeltArea.append(LIFNeuron(threshold: 0.6))
         }
@@ -184,7 +185,7 @@ public class AuditoryCortex {
                 for spike in spikeTrain {
                     // Distribute spike to neurons in this frequency column
                     for neuron in frequencyMap[frequencyIndex] {
-                        let _ = neuron.processSpike(spike, at: spike.timestamp)
+                        _ = neuron.processSpike(spike, at: spike.timestamp)
                     }
                 }
             }
@@ -209,7 +210,7 @@ public class AuditoryCortex {
                         timestamp: Date.timeIntervalSinceReferenceDate,
                         weight: primaryNeuron.membranePotential
                     )
-                    let _ = beltNeuron.processSpike(spike, at: spike.timestamp)
+                    _ = beltNeuron.processSpike(spike, at: spike.timestamp)
                 }
             }
         }
@@ -226,7 +227,7 @@ public class AuditoryCortex {
                         timestamp: Date.timeIntervalSinceReferenceDate,
                         weight: beltNeuron.membranePotential
                     )
-                    let _ = parabeltNeuron.processSpike(spike, at: spike.timestamp)
+                    _ = parabeltNeuron.processSpike(spike, at: spike.timestamp)
                 }
             }
         }
@@ -239,7 +240,7 @@ public class AuditoryCortex {
         // Analyze spike timing patterns
         for (patternName, spikes) in temporalPatterns {
             if !spikes.isEmpty {
-                let activity = Double(spikes.count) / 1.0  // Normalize to 1 second
+                let activity = Double(spikes.count) / 1.0 // Normalize to 1 second
                 patterns[patternName] = activity
             }
         }
@@ -264,13 +265,13 @@ public class NeuromorphicSpeechRecognizer {
             "a", "e", "i", "o", "u", "b", "d", "g", "m", "n", "p", "t", "k", "f", "s", "sh", "th",
         ]
         for phoneme in phonemes {
-            phonemeDetectors[phoneme] = (0..<20).map { _ in LIFNeuron(threshold: 0.6) }
+            phonemeDetectors[phoneme] = (0 ..< 20).map { _ in LIFNeuron(threshold: 0.6) }
         }
 
         // Initialize word detectors
         let words = ["hello", "world", "quantum", "neuromorphic", "computing"]
         for word in words {
-            wordDetectors[word] = (0..<30).map { _ in LIFNeuron(threshold: 0.5) }
+            wordDetectors[word] = (0 ..< 30).map { _ in LIFNeuron(threshold: 0.5) }
         }
     }
 
@@ -322,7 +323,7 @@ public class NeuromorphicSpeechRecognizer {
                 }
             }
 
-            if totalActivity > 2.0 {  // Threshold for detection
+            if totalActivity > 2.0 { // Threshold for detection
                 detected.append(phoneme)
             }
         }
@@ -341,7 +342,7 @@ public class NeuromorphicSpeechRecognizer {
                 }
             }
 
-            if totalActivity > 3.0 {  // Threshold for recognition
+            if totalActivity > 3.0 { // Threshold for recognition
                 recognized.append(word)
             }
         }
@@ -351,7 +352,7 @@ public class NeuromorphicSpeechRecognizer {
 
     private func calculateConfidence(_ words: [String]) -> Double {
         // Simple confidence based on number of recognized words
-        return min(1.0, Double(words.count) * 0.3)
+        min(1.0, Double(words.count) * 0.3)
     }
 }
 
@@ -364,11 +365,11 @@ public struct SpeechResult {
     public let spikeCount: Int
 
     public var wordsPerSecond: Double {
-        return Double(recognizedWords.count) / processingTime
+        Double(recognizedWords.count) / processingTime
     }
 
     public var spikeEfficiency: Double {
-        return Double(spikeCount) / processingTime
+        Double(spikeCount) / processingTime
     }
 }
 
@@ -402,21 +403,21 @@ public class BinauralLocalizationSystem {
         var itdResponses: [Double] = []
         var ildResponses: [Double] = []
 
-        for i in 0..<min(leftResponses.count, rightResponses.count) {
+        for i in 0 ..< min(leftResponses.count, rightResponses.count) {
             let leftEnergy = leftResponses[i].reduce(0, +)
             let rightEnergy = rightResponses[i].reduce(0, +)
 
             // ITD: Cross-correlation based delay estimation (simplified)
             // For a click sound, ITD is the delay between ears
-            let maxDelay = 20  // samples (about 0.45ms at 44.1kHz)
+            let maxDelay = 20 // samples (about 0.45ms at 44.1kHz)
             var maxCorrelation = 0.0
             var bestDelay = 0
 
-            for delay in -maxDelay...maxDelay {
+            for delay in -maxDelay ... maxDelay {
                 var correlation = 0.0
                 let count = min(leftResponses[i].count, rightResponses[i].count - abs(delay))
 
-                for j in 0..<count {
+                for j in 0 ..< count {
                     let leftIdx = j
                     let rightIdx = j + max(0, delay)
                     if rightIdx < rightResponses[i].count {
@@ -430,10 +431,10 @@ public class BinauralLocalizationSystem {
                 }
             }
 
-            let itd = Double(bestDelay) / 44100.0 * 1000.0  // Convert to milliseconds
+            let itd = Double(bestDelay) / 44100.0 * 1000.0 // Convert to milliseconds
 
             // ILD calculation (dB)
-            let epsilon = 1e-10  // Avoid log(0)
+            let epsilon = 1e-10 // Avoid log(0)
             let ild = 10.0 * log10((leftEnergy + epsilon) / (rightEnergy + epsilon))
 
             itdResponses.append(itd)
@@ -466,19 +467,19 @@ public class BinauralLocalizationSystem {
 
 /// Direction-selective neuron for sound localization
 public class DirectionSelectiveNeuron {
-    public let preferredDirection: Double  // degrees (-90 to +90)
+    public let preferredDirection: Double // degrees (-90 to +90)
     public var membranePotential: Double = 0.0
-    public var preferredITD: Double  // milliseconds
-    public var preferredILD: Double  // dB
+    public var preferredITD: Double // milliseconds
+    public var preferredILD: Double // dB
 
     public init(preferredDirection: Double) {
         self.preferredDirection = preferredDirection
 
         // Convert angle to ITD using head radius approximation
         // ITD ≈ (headRadius/c) * sin(θ) where c = 343 m/s (speed of sound)
-        let headRadius = 0.0875  // meters (average human head radius)
-        let speedOfSound = 343.0  // m/s
-        let maxITD = headRadius / speedOfSound * 1000.0  // Convert to milliseconds
+        let headRadius = 0.0875 // meters (average human head radius)
+        let speedOfSound = 343.0 // m/s
+        let maxITD = headRadius / speedOfSound * 1000.0 // Convert to milliseconds
 
         self.preferredITD = maxITD * sin(preferredDirection * .pi / 180.0)
 
@@ -490,14 +491,14 @@ public class DirectionSelectiveNeuron {
     public func processBinauralCues(itd: [Double], ild: [Double]) -> Double {
         var response = 0.0
 
-        for i in 0..<min(itd.count, ild.count) {
+        for i in 0 ..< min(itd.count, ild.count) {
             // ITD response: Gaussian tuning around preferred ITD
             let itdDiff = itd[i] - preferredITD
-            let itdResponse = exp(-0.5 * pow(itdDiff / 0.2, 2))  // σ = 0.2ms
+            let itdResponse = exp(-0.5 * pow(itdDiff / 0.2, 2)) // σ = 0.2ms
 
             // ILD response: Gaussian tuning around preferred ILD
             let ildDiff = ild[i] - preferredILD
-            let ildResponse = exp(-0.5 * pow(ildDiff / 3.0, 2))  // σ = 3dB
+            let ildResponse = exp(-0.5 * pow(ildDiff / 3.0, 2)) // σ = 3dB
 
             // Combine ITD and ILD responses
             response += itdResponse * ildResponse
@@ -510,7 +511,7 @@ public class DirectionSelectiveNeuron {
 
 /// Sound localization result
 public struct LocalizationResult {
-    public let estimatedDirection: Double  // degrees
+    public let estimatedDirection: Double // degrees
     public let confidence: Double
     public let processingTime: TimeInterval
     public let itdValues: [Double]

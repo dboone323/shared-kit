@@ -149,7 +149,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
     /// Predict pipeline failures
     public func predictPipelineFailures(
         for project: String,
-        timeWindow: TimeInterval = 3600  // 1 hour
+        timeWindow: TimeInterval = 3600 // 1 hour
     ) async throws -> FailurePredictionResult {
         let historicalData = try await gatherHistoricalData(for: project)
 
@@ -190,11 +190,11 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
 
     /// Get optimization status and metrics
     public func getOptimizationStatus() async -> OptimizationStatus {
-        OptimizationStatus(
+        await OptimizationStatus(
             state: state,
             activeOptimizations: activeOptimizations,
             metrics: metrics,
-            systemHealth: await assessSystemHealth()
+            systemHealth: assessSystemHealth()
         )
     }
 
@@ -231,7 +231,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
         Task {
             while !Task.isCancelled {
                 await performAutonomousOptimization()
-                try? await Task.sleep(nanoseconds: 60_000_000_000)  // 60 seconds
+                try? await Task.sleep(nanoseconds: 60_000_000_000) // 60 seconds
             }
         }
     }
@@ -372,7 +372,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
 
     private func assessSystemHealth() async -> SystemHealth {
         // Simplified health assessment
-        let score = Double.random(in: 0.8...0.95)
+        let score = Double.random(in: 0.8 ... 0.95)
         return SystemHealth(
             overallScore: score,
             subsystemHealth: [:]
@@ -394,7 +394,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
     private func gatherBuildMetrics(for project: String) async throws -> BuildMetrics {
         // Gather actual build metrics from CI/CD system
         // This would integrate with GitHub Actions, Jenkins, etc.
-        return BuildMetrics(
+        BuildMetrics(
             averageBuildTime: 180.0,
             successRate: 0.92,
             cacheHitRate: 0.75,
@@ -403,7 +403,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
     }
 
     private func gatherTestMetrics(for project: String) async throws -> TestMetrics {
-        return TestMetrics(
+        TestMetrics(
             averageTestTime: 120.0,
             testCoverage: 0.85,
             failureRate: 0.03,
@@ -412,7 +412,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
     }
 
     private func gatherDeploymentMetrics(for project: String) async throws -> DeploymentMetrics {
-        return DeploymentMetrics(
+        DeploymentMetrics(
             averageDeploymentTime: 45.0,
             successRate: 0.98,
             rollbackRate: 0.02
@@ -429,14 +429,16 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
         if buildMetrics.averageBuildTime > 300.0 {
             bottlenecks.append(
                 CICDBottleneck(
-                    type: .buildTime, severity: .high, description: "Build time exceeds 5 minutes"))
+                    type: .buildTime, severity: .high, description: "Build time exceeds 5 minutes"
+                ))
         }
 
         if testMetrics.averageTestTime > 180.0 {
             bottlenecks.append(
                 CICDBottleneck(
                     type: .testTime, severity: .medium,
-                    description: "Test execution exceeds 3 minutes"))
+                    description: "Test execution exceeds 3 minutes"
+                ))
         }
 
         if buildMetrics.cacheHitRate < 0.5 {
@@ -469,16 +471,15 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
         )
     }
 
-    private func gatherHistoricalData(for project: String) async throws -> [HistoricalPipelineData]
-    {
+    private func gatherHistoricalData(for project: String) async throws -> [HistoricalPipelineData] {
         // Gather historical pipeline data
         // This would query CI/CD system history
-        return []
+        []
     }
 
     private func analyzeCurrentWorkflow(for project: String) async throws -> Workflow {
         // Analyze current GitHub Actions or CI/CD workflow
-        return Workflow(
+        Workflow(
             id: UUID().uuidString,
             name: "CI/CD Pipeline",
             description: "Main CI/CD pipeline",
@@ -494,15 +495,15 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
         to project: String
     ) async throws -> [WorkflowChange] {
         // Apply workflow evolution changes
-        return []
+        []
     }
 
     private func runTestPipeline(for project: String) async throws -> PipelineTestMetrics {
         // Run a test pipeline execution to measure performance
-        return PipelineTestMetrics(
-            buildTime: Double.random(in: 150...200),
-            testTime: Double.random(in: 100...140),
-            deploymentTime: Double.random(in: 30...50)
+        PipelineTestMetrics(
+            buildTime: Double.random(in: 150 ... 200),
+            testTime: Double.random(in: 100 ... 140),
+            deploymentTime: Double.random(in: 30 ... 50)
         )
     }
 
@@ -842,7 +843,8 @@ private class QuantumOptimizationEngine: @unchecked Sendable {
         [
             CICDOptimization(
                 id: UUID(), project: analysis.project, level: level, startTime: Date(),
-                type: .parallelBuilds, target: "build", parameters: [:])
+                type: .parallelBuilds, target: "build", parameters: [:]
+            ),
         ]
     }
 }

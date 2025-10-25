@@ -85,7 +85,7 @@ public final class WorkflowIntelligenceAmplificationSystem: Sendable {
                     securityManager: MCPSecurityManager()
                 ),
                 mcpSystem: MCPCompleteSystemIntegration()
-            )
+            ),
         ]
 
         self.universalMCPFrameworks = try await UniversalMCPFrameworksCoordinator()
@@ -106,7 +106,7 @@ public final class WorkflowIntelligenceAmplificationSystem: Sendable {
             OptimizationAmplificationEngine(),
             PredictionAmplificationEngine(),
             LearningAmplificationEngine(),
-            QuantumAmplificationEngine()
+            QuantumAmplificationEngine(),
         ]
 
         self.quantumIntegrator = MCPQuantumIntegrator()
@@ -181,7 +181,7 @@ public final class WorkflowIntelligenceAmplificationSystem: Sendable {
     ) async throws -> [WorkflowIntelligenceAmplificationResult] {
 
         // Execute amplifications concurrently
-        return try await withThrowingTaskGroup(of: WorkflowIntelligenceAmplificationResult.self) { group in
+        try await withThrowingTaskGroup(of: WorkflowIntelligenceAmplificationResult.self) { group in
             for workflow in workflows {
                 group.addTask {
                     try await self.amplifyWorkflowIntelligence(
@@ -370,7 +370,7 @@ public final class WorkflowIntelligenceAmplificationSystem: Sendable {
             parameters: [
                 "workflow_id": AnyCodable(session.workflow.id),
                 "amplification_level": AnyCodable(session.amplificationLevel.rawValue),
-                "coordination_result": AnyCodable(coordinationResult)
+                "coordination_result": AnyCodable(coordinationResult),
             ],
             domains: [.analytical, .strategic, .quantum],
             priority: .high,
@@ -473,13 +473,13 @@ public final class WorkflowIntelligenceAmplificationSystem: Sendable {
 
     private func aggregateWorkflowAnalyses(_ analyses: [WorkflowAnalysis]) -> WorkflowAnalysis {
         // Aggregate multiple workflow analyses into one
-        let totalBottlenecks = analyses.flatMap { $0.bottleneckSteps }
-        let totalOpportunities = analyses.flatMap { $0.optimizationOpportunities }
+        let totalBottlenecks = analyses.flatMap(\.bottleneckSteps)
+        let totalOpportunities = analyses.flatMap(\.optimizationOpportunities)
 
         return WorkflowAnalysis(
             workflowId: analyses.first?.workflowId ?? "aggregated",
-            averageExecutionTime: analyses.map { $0.averageExecutionTime }.reduce(0, +) / Double(analyses.count),
-            successRate: analyses.map { $0.successRate }.reduce(0, +) / Double(analyses.count),
+            averageExecutionTime: analyses.map(\.averageExecutionTime).reduce(0, +) / Double(analyses.count),
+            successRate: analyses.map(\.successRate).reduce(0, +) / Double(analyses.count),
             bottleneckSteps: totalBottlenecks,
             resourceUtilization: [:], // Would aggregate actual utilization
             optimizationOpportunities: totalOpportunities
@@ -492,14 +492,14 @@ public final class WorkflowIntelligenceAmplificationSystem: Sendable {
     ) -> MCPWorkflow {
         // Select the best optimization based on predictions
         // For now, return the first one (would implement sophisticated selection logic)
-        return optimizations.first ?? optimizations[0]
+        optimizations.first ?? optimizations[0]
     }
 
     private func calculateIntelligenceConsensus(_ predictions: [WorkflowPerformancePrediction]) -> Double {
         // Calculate consensus among predictions
         if predictions.isEmpty { return 0.0 }
 
-        let avgConfidence = predictions.map { $0.confidence }.reduce(0, +) / Double(predictions.count)
+        let avgConfidence = predictions.map(\.confidence).reduce(0, +) / Double(predictions.count)
         return avgConfidence
     }
 
@@ -526,12 +526,12 @@ public final class WorkflowIntelligenceAmplificationSystem: Sendable {
 
     private func calculatePredictionAccuracy(_ session: IntelligenceAmplificationSession) -> Double {
         // Calculate prediction accuracy (placeholder implementation)
-        return 0.85
+        0.85
     }
 
     private func calculateDecisionQuality(_ session: IntelligenceAmplificationSession) -> Double {
         // Calculate decision quality (placeholder implementation)
-        return 0.88
+        0.88
     }
 
     private func generateIntelligenceInsights(
@@ -633,7 +633,7 @@ public struct WorkflowIntelligenceMetrics: Sendable, Codable {
     public var averageQuantumEnhancement: Double = 0.0
     public var totalIntelligenceSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 // MARK: - Intelligence Amplification Engines
@@ -652,7 +652,7 @@ public struct DecisionAmplificationEngine: IntelligenceAmplificationEngine {
 
     public func amplify(_ input: IntelligenceAmplificationInput) async throws -> IntelligenceAmplificationOutput {
         // Implement decision amplification logic
-        return IntelligenceAmplificationOutput(
+        IntelligenceAmplificationOutput(
             amplifiedDecisions: [],
             decisionConfidence: 0.9,
             alternativeOptions: []
@@ -668,7 +668,7 @@ public struct OptimizationAmplificationEngine: IntelligenceAmplificationEngine {
 
     public func amplify(_ input: IntelligenceAmplificationInput) async throws -> IntelligenceAmplificationOutput {
         // Implement optimization amplification logic
-        return IntelligenceAmplificationOutput(
+        IntelligenceAmplificationOutput(
             amplifiedDecisions: [],
             decisionConfidence: 0.85,
             alternativeOptions: []
@@ -684,7 +684,7 @@ public struct PredictionAmplificationEngine: IntelligenceAmplificationEngine {
 
     public func amplify(_ input: IntelligenceAmplificationInput) async throws -> IntelligenceAmplificationOutput {
         // Implement prediction amplification logic
-        return IntelligenceAmplificationOutput(
+        IntelligenceAmplificationOutput(
             amplifiedDecisions: [],
             decisionConfidence: 0.88,
             alternativeOptions: []
@@ -700,7 +700,7 @@ public struct LearningAmplificationEngine: IntelligenceAmplificationEngine {
 
     public func amplify(_ input: IntelligenceAmplificationInput) async throws -> IntelligenceAmplificationOutput {
         // Implement learning amplification logic
-        return IntelligenceAmplificationOutput(
+        IntelligenceAmplificationOutput(
             amplifiedDecisions: [],
             decisionConfidence: 0.92,
             alternativeOptions: []
@@ -716,7 +716,7 @@ public struct QuantumAmplificationEngine: IntelligenceAmplificationEngine {
 
     public func amplify(_ input: IntelligenceAmplificationInput) async throws -> IntelligenceAmplificationOutput {
         // Implement quantum amplification logic
-        return IntelligenceAmplificationOutput(
+        IntelligenceAmplificationOutput(
             amplifiedDecisions: [],
             decisionConfidence: 0.95,
             alternativeOptions: []
@@ -807,7 +807,7 @@ public struct IntelligenceSynthesisResult: Sendable {
 
 /// Workflow intelligence monitor
 public final class WorkflowIntelligenceMonitor: Sendable {
-    private var metrics: WorkflowIntelligenceMetrics = WorkflowIntelligenceMetrics()
+    private var metrics: WorkflowIntelligenceMetrics = .init()
     private let queue = DispatchQueue(label: "intelligence.monitor", attributes: .concurrent)
 
     func startMonitoring() async {
@@ -849,7 +849,7 @@ public final class WorkflowIntelligenceAdaptationSystem: Sendable {
         adaptationStrategies = [
             PerformanceBasedAdaptation(),
             QuantumAdaptation(),
-            LearningRateAdaptation()
+            LearningRateAdaptation(),
         ]
     }
 
@@ -897,9 +897,9 @@ public struct LearningRateAdaptation: AdaptationStrategy {
 
 // MARK: - Extensions
 
-extension WorkflowIntelligenceAmplificationSystem {
+public extension WorkflowIntelligenceAmplificationSystem {
     /// Create a specialized intelligence amplification system for a specific domain
-    public static func createSpecializedSystem(for domain: IntelligenceDomain) async throws
+    static func createSpecializedSystem(for domain: IntelligenceDomain) async throws
         -> WorkflowIntelligenceAmplificationSystem
     {
         let system = try await WorkflowIntelligenceAmplificationSystem()
@@ -911,7 +911,7 @@ extension WorkflowIntelligenceAmplificationSystem {
     }
 
     /// Get intelligence amplification recommendations
-    public func getAmplificationRecommendations(for workflow: MCPWorkflow) async
+    func getAmplificationRecommendations(for workflow: MCPWorkflow) async
         -> [IntelligenceRecommendation]
     {
         var recommendations: [IntelligenceRecommendation] = []

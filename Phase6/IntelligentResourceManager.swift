@@ -144,8 +144,8 @@ public enum ScalingAction: String, Codable {
     case scaleDown = "scale_down"
     case scaleOut = "scale_out"
     case scaleIn = "scale_in"
-    case optimize = "optimize"
-    case rebalance = "rebalance"
+    case optimize
+    case rebalance
 }
 
 /// Resource optimization policy
@@ -195,16 +195,17 @@ public final class IntelligentResourceManager: ObservableObject {
     @Published public private(set) var optimizationScore: Double = 0.0
 
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "IntelligentResourceManager")
+        subsystem: "com.quantum.workspace", category: "IntelligentResourceManager"
+    )
     private var monitoringTask: Task<Void, Never>?
     private var optimizationTask: Task<Void, Never>?
     private var scalingTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
 
     // Configuration
-    private let monitoringInterval: TimeInterval = 30.0  // seconds
-    private let optimizationInterval: TimeInterval = 300.0  // 5 minutes
-    private let scalingCooldown: TimeInterval = 180.0  // 3 minutes
+    private let monitoringInterval: TimeInterval = 30.0 // seconds
+    private let optimizationInterval: TimeInterval = 300.0 // 5 minutes
+    private let scalingCooldown: TimeInterval = 180.0 // 3 minutes
 
     // Resource policies
     private var resourcePolicies: [ResourceType: ResourcePolicy] = [:]
@@ -216,7 +217,7 @@ public final class IntelligentResourceManager: ObservableObject {
 
     // AI-driven optimization parameters
     private let learningRate: Double = 0.1
-    private let predictionHorizon: TimeInterval = 3600.0  // 1 hour
+    private let predictionHorizon: TimeInterval = 3600.0 // 1 hour
     private let costOptimizationWeight: Double = 0.3
     private let performanceOptimizationWeight: Double = 0.7
 
@@ -325,12 +326,12 @@ public final class IntelligentResourceManager: ObservableObject {
 
     /// Get current resource metrics
     public func getResourceMetrics() -> [ResourceType: ResourceMetrics] {
-        return resourceMetrics
+        resourceMetrics
     }
 
     /// Get resource utilization summary
     public func getUtilizationSummary() -> [ResourceType: Double] {
-        return resourceMetrics.mapValues { $0.utilizationPercentage }
+        resourceMetrics.mapValues { $0.utilizationPercentage }
     }
 
     /// Force scaling decision for a resource type
@@ -363,28 +364,37 @@ public final class IntelligentResourceManager: ObservableObject {
         // Default policies for common resource types
         let defaultPolicies: [ResourceType: ResourcePolicy] = [
             .cpu: ResourcePolicy(
-                resourceType: .cpu, minCapacity: 0.1, maxCapacity: 8.0, targetUtilization: 0.7),
+                resourceType: .cpu, minCapacity: 0.1, maxCapacity: 8.0, targetUtilization: 0.7
+            ),
             .memory: ResourcePolicy(
-                resourceType: .memory, minCapacity: 512, maxCapacity: 32768, targetUtilization: 0.8),
+                resourceType: .memory, minCapacity: 512, maxCapacity: 32768, targetUtilization: 0.8
+            ),
             .disk: ResourcePolicy(
                 resourceType: .disk, minCapacity: 1024, maxCapacity: 1_048_576,
-                targetUtilization: 0.6),
+                targetUtilization: 0.6
+            ),
             .network: ResourcePolicy(
-                resourceType: .network, minCapacity: 10, maxCapacity: 1000, targetUtilization: 0.5),
+                resourceType: .network, minCapacity: 10, maxCapacity: 1000, targetUtilization: 0.5
+            ),
             .gpu: ResourcePolicy(
-                resourceType: .gpu, minCapacity: 0, maxCapacity: 4, targetUtilization: 0.8),
+                resourceType: .gpu, minCapacity: 0, maxCapacity: 4, targetUtilization: 0.8
+            ),
             .quantumProcessor: ResourcePolicy(
                 resourceType: .quantumProcessor, minCapacity: 0, maxCapacity: 100,
-                targetUtilization: 0.9),
+                targetUtilization: 0.9
+            ),
             .cloudInstances: ResourcePolicy(
                 resourceType: .cloudInstances, minCapacity: 1, maxCapacity: 50,
-                targetUtilization: 0.7),
+                targetUtilization: 0.7
+            ),
             .databaseConnections: ResourcePolicy(
                 resourceType: .databaseConnections, minCapacity: 5, maxCapacity: 1000,
-                targetUtilization: 0.6),
+                targetUtilization: 0.6
+            ),
             .apiRateLimits: ResourcePolicy(
                 resourceType: .apiRateLimits, minCapacity: 100, maxCapacity: 10000,
-                targetUtilization: 0.8),
+                targetUtilization: 0.8
+            ),
         ]
 
         resourcePolicies = defaultPolicies
@@ -432,7 +442,7 @@ public final class IntelligentResourceManager: ObservableObject {
     private func startScalingLoop() async {
         while isActive && !Task.isCancelled {
             await evaluateScalingDecisions()
-            try? await Task.sleep(nanoseconds: UInt64(60 * 1_000_000_000))  // 1 minute
+            try? await Task.sleep(nanoseconds: UInt64(60 * 1_000_000_000)) // 1 minute
         }
     }
 
@@ -485,16 +495,16 @@ public final class IntelligentResourceManager: ObservableObject {
     private func monitorCPU() async -> ResourceMetrics {
         // Get CPU usage
         let processInfo = ProcessInfo.processInfo
-        let systemUsage = 1.0 - processInfo.systemUptime.remainder(dividingBy: 1.0)  // Placeholder
+        let systemUsage = 1.0 - processInfo.systemUptime.remainder(dividingBy: 1.0) // Placeholder
         let availableCores = Double(processInfo.activeProcessorCount)
-        let allocatedCores = availableCores  // Assume all cores allocated
+        let allocatedCores = availableCores // Assume all cores allocated
 
         return ResourceMetrics(
             resourceType: .cpu,
             currentUsage: systemUsage * allocatedCores,
             allocatedCapacity: allocatedCores,
             availableCapacity: allocatedCores - (systemUsage * allocatedCores),
-            costPerUnit: 0.05,  // Cost per CPU core per hour
+            costPerUnit: 0.05, // Cost per CPU core per hour
             performanceScore: 1.0 - systemUsage
         )
     }
@@ -502,15 +512,15 @@ public final class IntelligentResourceManager: ObservableObject {
     private func monitorMemory() async -> ResourceMetrics {
         // Get memory usage
         let processInfo = ProcessInfo.processInfo
-        let totalMemory = Double(processInfo.physicalMemory) / 1024.0 / 1024.0 / 1024.0  // GB
-        let usedMemory = totalMemory * 0.6  // Placeholder - would use actual measurement
+        let totalMemory = Double(processInfo.physicalMemory) / 1024.0 / 1024.0 / 1024.0 // GB
+        let usedMemory = totalMemory * 0.6 // Placeholder - would use actual measurement
 
         return ResourceMetrics(
             resourceType: .memory,
             currentUsage: usedMemory,
             allocatedCapacity: totalMemory,
             availableCapacity: totalMemory - usedMemory,
-            costPerUnit: 0.01,  // Cost per GB per hour
+            costPerUnit: 0.01, // Cost per GB per hour
             performanceScore: 1.0 - (usedMemory / totalMemory)
         )
     }
@@ -523,7 +533,7 @@ public final class IntelligentResourceManager: ObservableObject {
             let attributes = try fileManager.attributesOfFileSystem(forPath: homeURL.path)
 
             if let totalSpace = attributes[.systemSize] as? NSNumber,
-                let freeSpace = attributes[.systemFreeSize] as? NSNumber
+               let freeSpace = attributes[.systemFreeSize] as? NSNumber
             {
                 let totalGB = totalSpace.doubleValue / 1024.0 / 1024.0 / 1024.0
                 let freeGB = freeSpace.doubleValue / 1024.0 / 1024.0 / 1024.0
@@ -534,7 +544,7 @@ public final class IntelligentResourceManager: ObservableObject {
                     currentUsage: usedGB,
                     allocatedCapacity: totalGB,
                     availableCapacity: freeGB,
-                    costPerUnit: 0.0001,  // Cost per GB per hour
+                    costPerUnit: 0.0001, // Cost per GB per hour
                     performanceScore: freeGB / totalGB
                 )
             }
@@ -553,72 +563,72 @@ public final class IntelligentResourceManager: ObservableObject {
 
     private func monitorNetwork() async -> ResourceMetrics {
         // Network monitoring placeholder
-        return ResourceMetrics(
+        ResourceMetrics(
             resourceType: .network,
-            currentUsage: 50,  // Mbps
-            allocatedCapacity: 1000,  // Mbps
+            currentUsage: 50, // Mbps
+            allocatedCapacity: 1000, // Mbps
             availableCapacity: 950,
-            costPerUnit: 0.001,  // Cost per Mbps per hour
+            costPerUnit: 0.001, // Cost per Mbps per hour
             performanceScore: 0.95
         )
     }
 
     private func monitorGPU() async -> ResourceMetrics {
         // GPU monitoring placeholder
-        return ResourceMetrics(
+        ResourceMetrics(
             resourceType: .gpu,
-            currentUsage: 0.5,  // GPUs in use
-            allocatedCapacity: 2,  // Available GPUs
+            currentUsage: 0.5, // GPUs in use
+            allocatedCapacity: 2, // Available GPUs
             availableCapacity: 1.5,
-            costPerUnit: 1.0,  // Cost per GPU per hour
+            costPerUnit: 1.0, // Cost per GPU per hour
             performanceScore: 0.75
         )
     }
 
     private func monitorQuantumProcessor() async -> ResourceMetrics {
         // Quantum processor monitoring placeholder
-        return ResourceMetrics(
+        ResourceMetrics(
             resourceType: .quantumProcessor,
-            currentUsage: 10,  // Qubits in use
-            allocatedCapacity: 100,  // Total qubits
+            currentUsage: 10, // Qubits in use
+            allocatedCapacity: 100, // Total qubits
             availableCapacity: 90,
-            costPerUnit: 10.0,  // Cost per qubit per hour
+            costPerUnit: 10.0, // Cost per qubit per hour
             performanceScore: 0.9
         )
     }
 
     private func monitorCloudInstances() async -> ResourceMetrics {
         // Cloud instances monitoring placeholder
-        return ResourceMetrics(
+        ResourceMetrics(
             resourceType: .cloudInstances,
-            currentUsage: 5,  // Instances running
-            allocatedCapacity: 20,  // Max instances
+            currentUsage: 5, // Instances running
+            allocatedCapacity: 20, // Max instances
             availableCapacity: 15,
-            costPerUnit: 0.1,  // Cost per instance per hour
+            costPerUnit: 0.1, // Cost per instance per hour
             performanceScore: 0.75
         )
     }
 
     private func monitorDatabaseConnections() async -> ResourceMetrics {
         // Database connections monitoring placeholder
-        return ResourceMetrics(
+        ResourceMetrics(
             resourceType: .databaseConnections,
-            currentUsage: 50,  // Active connections
-            allocatedCapacity: 200,  // Max connections
+            currentUsage: 50, // Active connections
+            allocatedCapacity: 200, // Max connections
             availableCapacity: 150,
-            costPerUnit: 0.001,  // Cost per connection per hour
+            costPerUnit: 0.001, // Cost per connection per hour
             performanceScore: 0.75
         )
     }
 
     private func monitorAPIRateLimits() async -> ResourceMetrics {
         // API rate limits monitoring placeholder
-        return ResourceMetrics(
+        ResourceMetrics(
             resourceType: .apiRateLimits,
-            currentUsage: 500,  // Requests per minute
-            allocatedCapacity: 2000,  // Max requests per minute
+            currentUsage: 500, // Requests per minute
+            allocatedCapacity: 2000, // Max requests per minute
             availableCapacity: 1500,
-            costPerUnit: 0.0001,  // Cost per request
+            costPerUnit: 0.0001, // Cost per request
             performanceScore: 0.75
         )
     }
@@ -636,7 +646,7 @@ public final class IntelligentResourceManager: ObservableObject {
 
     private func optimizeResourceAllocation(for resourceType: ResourceType) async {
         guard let metrics = resourceMetrics[resourceType],
-            let policy = resourcePolicies[resourceType]
+              let policy = resourcePolicies[resourceType]
         else {
             return
         }
@@ -647,7 +657,8 @@ public final class IntelligentResourceManager: ObservableObject {
         if utilization > policy.scalingThreshold {
             // Scale up
             let scaleAmount = calculateScaleAmount(
-                for: resourceType, currentUtilization: utilization, policy: policy)
+                for: resourceType, currentUtilization: utilization, policy: policy
+            )
             await proposeScalingDecision(
                 resourceType: resourceType,
                 action: .scaleUp,
@@ -657,7 +668,8 @@ public final class IntelligentResourceManager: ObservableObject {
         } else if utilization < policy.targetUtilization * 0.5 {
             // Scale down
             let scaleAmount = calculateScaleAmount(
-                for: resourceType, currentUtilization: utilization, policy: policy)
+                for: resourceType, currentUtilization: utilization, policy: policy
+            )
             await proposeScalingDecision(
                 resourceType: resourceType,
                 action: .scaleDown,
@@ -694,7 +706,7 @@ public final class IntelligentResourceManager: ObservableObject {
         if let lastAction = lastScalingActions[resourceType] {
             let timeSinceLastAction = Date().timeIntervalSince(lastAction)
             guard timeSinceLastAction >= scalingCooldown else {
-                return  // Still in cooldown
+                return // Still in cooldown
             }
         }
 
@@ -703,11 +715,13 @@ public final class IntelligentResourceManager: ObservableObject {
 
         // Calculate confidence based on prediction accuracy
         let confidence = calculateScalingConfidence(
-            resourceType: resourceType, predictedDemand: predictedDemand)
+            resourceType: resourceType, predictedDemand: predictedDemand
+        )
 
         // Estimate cost
         let estimatedCost = calculateScalingCost(
-            resourceType: resourceType, action: action, amount: amount)
+            resourceType: resourceType, action: action, amount: amount
+        )
 
         let decision = ScalingDecision(
             resourceType: resourceType,
@@ -766,15 +780,15 @@ public final class IntelligentResourceManager: ObservableObject {
         }
 
         // Simple linear regression for prediction
-        let recentUsage = history.suffix(10).map { $0.currentUsage }
+        let recentUsage = history.suffix(10).map(\.currentUsage)
         guard recentUsage.count >= 2 else { return nil }
 
         // Calculate trend
         let n = Double(recentUsage.count)
-        let sumX = (0..<recentUsage.count).reduce(0.0) { $0 + Double($1) }
+        let sumX = (0 ..< recentUsage.count).reduce(0.0) { $0 + Double($1) }
         let sumY = recentUsage.reduce(0, +)
-        let sumXY = zip(0..<recentUsage.count, recentUsage).reduce(0.0) { $0 + Double($1.0) * $1.1 }
-        let sumXX = (0..<recentUsage.count).reduce(0.0) { $0 + Double($1 * $1) }
+        let sumXY = zip(0 ..< recentUsage.count, recentUsage).reduce(0.0) { $0 + Double($1.0) * $1.1 }
+        let sumXX = (0 ..< recentUsage.count).reduce(0.0) { $0 + Double($1 * $1) }
 
         let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
         let intercept = (sumY - slope * sumX) / n
@@ -790,9 +804,9 @@ public final class IntelligentResourceManager: ObservableObject {
         -> Double
     {
         guard let predicted = predictedDemand,
-            let currentMetrics = resourceMetrics[resourceType]
+              let currentMetrics = resourceMetrics[resourceType]
         else {
-            return 0.5  // Default confidence
+            return 0.5 // Default confidence
         }
 
         let currentUsage = currentMetrics.currentUsage
@@ -808,20 +822,20 @@ public final class IntelligentResourceManager: ObservableObject {
             return nil
         }
 
-        let timeMultiplier = 1.0  // 1 hour
+        let timeMultiplier = 1.0 // 1 hour
         return amount * costPerUnit * timeMultiplier
     }
 
     private func performCrossResourceOptimization() async {
         // Optimize across multiple resources for cost-performance balance
-        let totalCost = resourceMetrics.values.compactMap { $0.costPerUnit }.reduce(0, +)
+        let totalCost = resourceMetrics.values.compactMap(\.costPerUnit).reduce(0, +)
         let averagePerformance =
-            resourceMetrics.values.map { $0.performanceScore }.reduce(0, +)
-            / Double(resourceMetrics.count)
+            resourceMetrics.values.map(\.performanceScore).reduce(0, +)
+                / Double(resourceMetrics.count)
 
         let optimizationScore =
             (performanceOptimizationWeight * averagePerformance)
-            - (costOptimizationWeight * min(totalCost / 100.0, 1.0))
+                - (costOptimizationWeight * min(totalCost / 100.0, 1.0))
 
         await MainActor.run {
             self.optimizationScore = optimizationScore
@@ -849,9 +863,9 @@ public final class IntelligentResourceManager: ObservableObject {
 
 // MARK: - Extensions
 
-extension IntelligentResourceManager {
+public extension IntelligentResourceManager {
     /// Get resource allocation summary
-    public func getAllocationSummary() -> [ResourceType: Int] {
+    func getAllocationSummary() -> [ResourceType: Int] {
         var summary = [ResourceType: Int]()
         for allocation in currentAllocations.values {
             summary[allocation.resourceType, default: 0] += 1
@@ -860,19 +874,19 @@ extension IntelligentResourceManager {
     }
 
     /// Get pending scaling decisions
-    public func getPendingScalingDecisions() -> [ScalingDecision] {
-        return scalingDecisions
+    func getPendingScalingDecisions() -> [ScalingDecision] {
+        scalingDecisions
     }
 
     /// Export resource metrics for analysis
-    public func exportResourceMetrics() -> Data? {
+    func exportResourceMetrics() -> Data? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         return try? encoder.encode(resourceMetrics)
     }
 
     /// Import resource policies
-    public func importResourcePolicies(_ data: Data) {
+    func importResourcePolicies(_ data: Data) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         if let policies = try? decoder.decode([ResourceType: ResourcePolicy].self, from: data) {
@@ -919,15 +933,15 @@ public func requestResourceAllocation(
 
 /// Global function to get current resource utilization
 public func getResourceUtilization() async -> [ResourceType: Double] {
-    return await IntelligentResourceManager.shared.getUtilizationSummary()
+    await IntelligentResourceManager.shared.getUtilizationSummary()
 }
 
 /// Global function to check if resource manager is active
 public func isResourceManagerActive() async -> Bool {
-    return await IntelligentResourceManager.shared.isActive
+    await IntelligentResourceManager.shared.isActive
 }
 
 /// Global function to get optimization score
 public func getResourceOptimizationScore() async -> Double {
-    return await IntelligentResourceManager.shared.optimizationScore
+    await IntelligentResourceManager.shared.optimizationScore
 }

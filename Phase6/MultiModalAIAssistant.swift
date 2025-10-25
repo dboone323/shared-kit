@@ -8,13 +8,13 @@
 //  in quantum-enhanced development environments.
 //
 
-import Foundation
-import Combine
-import OSLog
 import AVFoundation
-import Vision
-import NaturalLanguage
+import Combine
 import CoreML
+import Foundation
+import NaturalLanguage
+import OSLog
+import Vision
 
 /// Input modalities supported by the AI assistant
 public enum InputModality: String, Codable, Sendable {
@@ -125,7 +125,7 @@ public struct AssistantOutput: Sendable {
         var isVisual: Bool {
             switch self {
             case .visual: return true
-            case .mixed(let contents): return contents.contains { $0.isVisual }
+            case let .mixed(contents): return contents.contains { $0.isVisual }
             default: return false
             }
         }
@@ -148,15 +148,15 @@ public enum AssistantAction: Sendable, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .executeCode(let code): return "executeCode(\(code.prefix(20))...)"
-        case .openFile(let path): return "openFile(\(path))"
-        case .runCommand(let cmd): return "runCommand(\(cmd))"
-        case .createFile(let path, _): return "createFile(\(path))"
-        case .searchDocumentation(let query): return "searchDocumentation(\(query))"
-        case .generateCode(let desc, let lang): return "generateCode(\(lang): \(desc.prefix(20))...)"
+        case let .executeCode(code): return "executeCode(\(code.prefix(20))...)"
+        case let .openFile(path): return "openFile(\(path))"
+        case let .runCommand(cmd): return "runCommand(\(cmd))"
+        case let .createFile(path, _): return "createFile(\(path))"
+        case let .searchDocumentation(query): return "searchDocumentation(\(query))"
+        case let .generateCode(desc, lang): return "generateCode(\(lang): \(desc.prefix(20))...)"
         case .analyzeCode: return "analyzeCode"
-        case .runTests(let path): return "runTests(\(path))"
-        case .deployApplication(let path): return "deployApplication(\(path))"
+        case let .runTests(path): return "runTests(\(path))"
+        case let .deployApplication(path): return "deployApplication(\(path))"
         case .showVisualization: return "showVisualization"
         case .playAudio: return "playAudio"
         }
@@ -432,7 +432,7 @@ public final class MultiModalAIAssistant: ObservableObject {
 
     /// Get conversation history for a session
     public func getConversationHistory(for sessionId: String) -> [ConversationTurn]? {
-        return activeSessions[sessionId]?.conversationHistory
+        activeSessions[sessionId]?.conversationHistory
     }
 
     /// Update user preferences
@@ -453,13 +453,13 @@ public final class MultiModalAIAssistant: ObservableObject {
 
     /// Get assistant capabilities
     public func getCapabilities() -> [String: [String]] {
-        return [
-            "input_modalities": InputModality.allCases.map { $0.rawValue },
-            "output_modalities": OutputModality.allCases.map { $0.rawValue },
+        [
+            "input_modalities": InputModality.allCases.map(\.rawValue),
+            "output_modalities": OutputModality.allCases.map(\.rawValue),
             "supported_languages": ["swift", "python", "javascript", "java", "cpp", "go"],
             "ai_features": ["code_generation", "code_analysis", "debugging", "testing", "documentation"],
             "voice_features": ["speech_to_text", "text_to_speech", "voice_commands"],
-            "vision_features": ["image_analysis", "code_recognition", "ui_analysis"]
+            "vision_features": ["image_analysis", "code_recognition", "ui_analysis"],
         ]
     }
 
@@ -474,7 +474,7 @@ public final class MultiModalAIAssistant: ObservableObject {
             "average_accuracy": avgAccuracy,
             "total_sessions": totalSessions,
             "active_sessions": totalSessions,
-            "uptime_percentage": 99.9 // Placeholder
+            "uptime_percentage": 99.9, // Placeholder
         ]
     }
 
@@ -482,16 +482,16 @@ public final class MultiModalAIAssistant: ObservableObject {
 
     private func setupAudioSession() {
         #if os(iOS)
-        do {
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
-            try audioSession.setActive(true)
-        } catch {
-            logger.error("Failed to setup audio session: \(error.localizedDescription)")
-        }
+            do {
+                let audioSession = AVAudioSession.sharedInstance()
+                try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+                try audioSession.setActive(true)
+            } catch {
+                logger.error("Failed to setup audio session: \(error.localizedDescription)")
+            }
         #else
-        // Audio session setup not available on macOS
-        logger.info("Audio session setup skipped on macOS")
+            // Audio session setup not available on macOS
+            logger.info("Audio session setup skipped on macOS")
         #endif
     }
 
@@ -502,9 +502,9 @@ public final class MultiModalAIAssistant: ObservableObject {
 
     private func preprocessInput(_ input: AssistantInput) async throws -> AssistantInput {
         switch input.content {
-        case .text(_):
+        case .text:
             return input
-        case .audio(let data):
+        case let .audio(data):
             let transcribedText = try await speechProcessor.transcribe(audioData: data)
             return AssistantInput(
                 modality: .voice,
@@ -512,7 +512,7 @@ public final class MultiModalAIAssistant: ObservableObject {
                 metadata: input.metadata,
                 context: input.context
             )
-        case .image(let data):
+        case let .image(data):
             let analysis = try await visionProcessor.analyze(imageData: data)
             return AssistantInput(
                 modality: .vision,
@@ -520,7 +520,7 @@ public final class MultiModalAIAssistant: ObservableObject {
                 metadata: input.metadata.merging(["vision_analysis": "true"]) { _, new in new },
                 context: input.context
             )
-        case .video(let data):
+        case let .video(data):
             // Process video as sequence of images
             let analysis = try await visionProcessor.analyzeVideo(videoData: data)
             return AssistantInput(
@@ -529,7 +529,7 @@ public final class MultiModalAIAssistant: ObservableObject {
                 metadata: input.metadata,
                 context: input.context
             )
-        case .code(let code, let language):
+        case let .code(code, language):
             // Analyze code for context
             let analysis = try await nlpProcessor.analyzeCode(code, language: language)
             return AssistantInput(
@@ -538,9 +538,9 @@ public final class MultiModalAIAssistant: ObservableObject {
                 metadata: input.metadata.merging(analysis) { _, new in new },
                 context: input.context
             )
-        case .gesture(_):
+        case .gesture:
             return input
-        case .mixed(let contents):
+        case let .mixed(contents):
             // Process mixed input
             var processedContents = [AssistantInput.InputContent]()
             for content in contents {
@@ -594,27 +594,27 @@ public final class MultiModalAIAssistant: ObservableObject {
 
     private func executeAction(_ action: AssistantAction) async throws {
         switch action {
-        case .executeCode(let code):
+        case let .executeCode(code):
             try await runCode(code)
-        case .openFile(let path):
+        case let .openFile(path):
             try await openFile(at: path)
-        case .runCommand(let command):
+        case let .runCommand(command):
             try await runTerminalCommand(command)
-        case .createFile(let path, let content):
+        case let .createFile(path, content):
             try await createFile(at: path, content: content)
-        case .searchDocumentation(let query):
+        case let .searchDocumentation(query):
             _ = try await searchDocumentation(query)
-        case .generateCode(let description, let language):
+        case let .generateCode(description, language):
             _ = try await generateCode(description: description, language: language)
-        case .analyzeCode(let code):
+        case let .analyzeCode(code):
             _ = try await analyzeCode(code)
-        case .runTests(let testPath):
+        case let .runTests(testPath):
             try await runTests(at: testPath)
-        case .deployApplication(let appPath):
+        case let .deployApplication(appPath):
             try await deployApplication(at: appPath)
-        case .showVisualization(let data):
+        case let .showVisualization(data):
             try await showVisualization(data)
-        case .playAudio(let data):
+        case let .playAudio(data):
             try await playAudio(data)
         }
     }
@@ -661,7 +661,7 @@ public final class MultiModalAIAssistant: ObservableObject {
     private func inferCurrentTask(from input: AssistantInput) -> String? {
         // Infer current task from input content
         switch input.content {
-        case .text(let text):
+        case let .text(text):
             if text.contains("debug") || text.contains("fix") {
                 return "debugging"
             } else if text.contains("test") {
@@ -760,7 +760,7 @@ private actor NLPProcessor {
     func start() async {}
     func stop() async {}
     func analyzeCode(_ code: String, language: String) async throws -> [String: String] {
-        return ["language": language, "complexity": "medium"]
+        ["language": language, "complexity": "medium"]
     }
 }
 
@@ -769,7 +769,7 @@ private actor SpeechProcessor {
     func start() async {}
     func stop() async {}
     func transcribe(audioData: Data) async throws -> String {
-        return "Transcribed speech text"
+        "Transcribed speech text"
     }
 }
 
@@ -778,17 +778,18 @@ private actor VisionProcessor {
     func start() async {}
     func stop() async {}
     func analyze(imageData: Data) async throws -> String {
-        return "Image analysis result"
+        "Image analysis result"
     }
+
     func analyzeVideo(videoData: Data) async throws -> String {
-        return "Video analysis result"
+        "Video analysis result"
     }
 }
 
 /// Intent recognition component
 private actor IntentRecognizer {
     func recognizeIntent(in input: AssistantInput) async throws -> IntentRecognition {
-        return IntentRecognition(
+        IntentRecognition(
             intent: "general_assistance",
             confidence: 0.8,
             entities: [:],
@@ -800,7 +801,7 @@ private actor IntentRecognizer {
 /// Response generation component
 private actor ResponseGenerator {
     func generateResponse(for intent: IntentRecognition, context: ConversationContext?) async throws -> Response {
-        return Response(
+        Response(
             content: .text("Generated response"),
             actions: [],
             modality: .text
@@ -834,27 +835,27 @@ public enum AssistantError: Error {
 
 /// Global function to process multi-modal input
 public func processAssistantInput(_ input: AssistantInput) async throws -> AssistantOutput {
-    return try await MultiModalAIAssistant.shared.processInput(input)
+    try await MultiModalAIAssistant.shared.processInput(input)
 }
 
 /// Global function to start assistant session
 @MainActor
 public func startAssistantSession(userId: String, projectContext: [String: String] = [:]) -> String {
-    return MultiModalAIAssistant.shared.startSession(userId: userId, projectContext: projectContext)
+    MultiModalAIAssistant.shared.startSession(userId: userId, projectContext: projectContext)
 }
 
 /// Global function to check assistant status
 public func isAssistantActive() async -> Bool {
-    return await MultiModalAIAssistant.shared.isActive
+    await MultiModalAIAssistant.shared.isActive
 }
 
 /// Global function to get assistant capabilities
 @MainActor
 public func getAssistantCapabilities() -> [String: [String]] {
-    return MultiModalAIAssistant.shared.getCapabilities()
+    MultiModalAIAssistant.shared.getCapabilities()
 }
 
 /// Global function to get assistant performance
 public func getAssistantPerformance() async -> [String: Double] {
-    return await MultiModalAIAssistant.shared.getPerformanceMetrics()
+    await MultiModalAIAssistant.shared.getPerformanceMetrics()
 }

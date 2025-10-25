@@ -341,8 +341,7 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
     private func establishQuantumEnhancedCommunication(
         _ request: QuantumAgentNetworkRequest,
         assessment: QuantumAgentNetworkAssessment
-    ) async throws -> QuantumEnhancedCommunication
-    {
+    ) async throws -> QuantumEnhancedCommunication {
         // Establish quantum-enhanced communication
         let communicationContext = QuantumEnhancedCommunicationContext(
             agentNetworks: request.agentNetworks,
@@ -366,8 +365,7 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
     private func optimizeQuantumCoordination(
         _ request: QuantumAgentNetworkRequest,
         communication: QuantumEnhancedCommunication
-    ) async throws -> QuantumCoordinationOptimization
-    {
+    ) async throws -> QuantumCoordinationOptimization {
         // Optimize quantum coordination
         let optimizationContext = QuantumCoordinationOptimizationContext(
             agentNetworks: request.agentNetworks,
@@ -391,8 +389,7 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
     private func synthesizeAgentQuantum(
         _ request: QuantumAgentNetworkRequest,
         optimization: QuantumCoordinationOptimization
-    ) async throws -> AgentQuantumSynthesis
-    {
+    ) async throws -> AgentQuantumSynthesis {
         // Synthesize agent quantum
         let synthesisContext = AgentQuantumSynthesisContext(
             agentNetworks: request.agentNetworks,
@@ -416,8 +413,7 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
     private func orchestrateQuantumNetwork(
         _ request: QuantumAgentNetworkRequest,
         synthesis: AgentQuantumSynthesis
-    ) async throws -> QuantumNetworkOrchestration
-    {
+    ) async throws -> QuantumNetworkOrchestration {
         // Orchestrate quantum network
         let orchestrationContext = QuantumNetworkOrchestrationContext(
             agentNetworks: request.agentNetworks,
@@ -441,8 +437,7 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
     private func validateQuantumNetworkResults(
         _ networkOrchestration: QuantumNetworkOrchestration,
         network: QuantumAgentNetwork
-    ) async throws -> QuantumNetworkValidationResult
-    {
+    ) async throws -> QuantumNetworkValidationResult {
         // Validate quantum network results
         let performanceComparison = await compareQuantumNetworkPerformance(
             originalNetworks: network.request.agentNetworks,
@@ -455,7 +450,7 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
         )
 
         let success = performanceComparison.quantumConnectivity >= network.request.coordinationEfficiencyTarget &&
-                     quantumAdvantage.quantumAdvantage >= 0.4
+            quantumAdvantage.quantumAdvantage >= 0.4
 
         let events = generateQuantumNetworkEvents(network, orchestration: networkOrchestration)
 
@@ -574,24 +569,24 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
 
     private func measureCoordinationEfficiency(_ enhancedNetworks: [AgentNetwork]) async -> Double {
         // Measure coordination efficiency
-        return 0.93
+        0.93
     }
 
     private func measureAgentHarmony(_ enhancedNetworks: [AgentNetwork]) async -> Double {
         // Measure agent harmony
-        return 0.89
+        0.89
     }
 
     private func measureNetworkSynergy(_ enhancedNetworks: [AgentNetwork]) async -> Double {
         // Measure network synergy
-        return 0.91
+        0.91
     }
 
     private func generateQuantumNetworkEvents(
         _ network: QuantumAgentNetwork,
         orchestration: QuantumNetworkOrchestration
     ) -> [QuantumNetworkEvent] {
-        return [
+        [
             QuantumNetworkEvent(
                 eventId: UUID().uuidString,
                 networkId: network.networkId,
@@ -607,9 +602,9 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
                 data: [
                     "success": true,
                     "quantum_connectivity": orchestration.orchestrationScore,
-                    "agent_harmony": orchestration.agentHarmony
+                    "agent_harmony": orchestration.agentHarmony,
                 ]
-            )
+            ),
         ]
     }
 
@@ -937,7 +932,7 @@ public struct QuantumEnhancedAgentNetworkMetrics: Sendable, Codable {
     public var averageQuantumAdvantage: Double = 0.0
     public var totalNetworks: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Quantum network metrics
@@ -1418,9 +1413,9 @@ public struct QuantumNetworkOrchestrationResult: Sendable {
 
 // MARK: - Extensions
 
-extension QuantumEnhancedAgentNetworks {
+public extension QuantumEnhancedAgentNetworks {
     /// Create specialized quantum network system for specific network topologies
-    public static func createSpecializedQuantumNetworkSystem(
+    static func createSpecializedQuantumNetworkSystem(
         for networkTopology: NetworkTopology
     ) async throws -> QuantumEnhancedAgentNetworks {
         let system = try await QuantumEnhancedAgentNetworks()
@@ -1429,7 +1424,7 @@ extension QuantumEnhancedAgentNetworks {
     }
 
     /// Execute batch quantum network processing
-    public func executeBatchQuantumNetwork(
+    func executeBatchQuantumNetwork(
         _ networkRequests: [QuantumAgentNetworkRequest]
     ) async throws -> BatchQuantumNetworkResult {
 
@@ -1452,8 +1447,8 @@ extension QuantumEnhancedAgentNetworks {
         }
 
         let successRate = Double(results.count) / Double(networkRequests.count)
-        let averageConnectivity = results.map { $0.quantumConnectivity }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.quantumAdvantage }.reduce(0, +) / Double(results.count)
+        let averageConnectivity = results.map(\.quantumConnectivity).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.quantumAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchQuantumNetworkResult(
             batchId: batchId,
@@ -1470,7 +1465,7 @@ extension QuantumEnhancedAgentNetworks {
     }
 
     /// Get quantum network recommendations
-    public func getQuantumNetworkRecommendations() async -> [QuantumNetworkRecommendation] {
+    func getQuantumNetworkRecommendations() async -> [QuantumNetworkRecommendation] {
         var recommendations: [QuantumNetworkRecommendation] = []
 
         let status = await getQuantumNetworkStatus()

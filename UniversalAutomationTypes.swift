@@ -1702,7 +1702,7 @@ public enum TestTarget {
     case module(String)
     case file(String)
     case function(String)
-    case class(String)
+    case class (String)
 }
 
 /// Test case definition

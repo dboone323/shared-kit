@@ -2,11 +2,11 @@ import Foundation
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 /// Interactive UI Components for Enhanced User Experience

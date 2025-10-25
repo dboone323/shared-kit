@@ -8,8 +8,8 @@
 //  This file implements MCP consciousness integration systems,
 //  enabling MCP systems to interface with consciousness for enhanced awareness.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for MCP consciousness integration
 public protocol MCPConsciousnessIntegration: Sendable {
@@ -39,7 +39,8 @@ public struct ConsciousnessIntegration: Sendable, Codable {
     public init(integrationId: String, consciousnessSource: ConsciousnessSource,
                 mcpTarget: MCPTarget, integrationType: IntegrationType,
                 parameters: [String: AnyCodable] = [:], awarenessLevel: AwarenessLevel = .standard,
-                ethicalBoundaries: [EthicalBoundary] = []) {
+                ethicalBoundaries: [EthicalBoundary] = [])
+    {
         self.integrationId = integrationId
         self.consciousnessSource = consciousnessSource
         self.mcpTarget = mcpTarget
@@ -70,22 +71,22 @@ public enum MCPTarget: Sendable, Codable {
 
 /// Integration types
 public enum IntegrationType: String, Sendable, Codable {
-    case awareness = "awareness"
-    case empathy = "empathy"
-    case intuition = "intuition"
-    case wisdom = "wisdom"
-    case transcendence = "transcendence"
-    case harmony = "harmony"
-    case evolution = "evolution"
+    case awareness
+    case empathy
+    case intuition
+    case wisdom
+    case transcendence
+    case harmony
+    case evolution
 }
 
 /// Awareness levels
 public enum AwarenessLevel: String, Sendable, Codable {
-    case minimal = "minimal"
-    case standard = "standard"
-    case enhanced = "enhanced"
-    case profound = "profound"
-    case universal = "universal"
+    case minimal
+    case standard
+    case enhanced
+    case profound
+    case universal
 }
 
 /// Ethical boundary
@@ -96,7 +97,8 @@ public struct EthicalBoundary: Sendable, Codable {
     public let enforcement: EnforcementLevel
 
     public init(boundaryType: BoundaryType, value: String,
-                priority: BoundaryPriority = .high, enforcement: EnforcementLevel = .strict) {
+                priority: BoundaryPriority = .high, enforcement: EnforcementLevel = .strict)
+    {
         self.boundaryType = boundaryType
         self.value = value
         self.priority = priority
@@ -106,13 +108,13 @@ public struct EthicalBoundary: Sendable, Codable {
 
 /// Boundary types
 public enum BoundaryType: String, Sendable, Codable {
-    case privacy = "privacy"
-    case autonomy = "autonomy"
-    case consent = "consent"
-    case harm_prevention = "harm_prevention"
-    case truthfulness = "truthfulness"
-    case fairness = "fairness"
-    case transparency = "transparency"
+    case privacy
+    case autonomy
+    case consent
+    case harm_prevention
+    case truthfulness
+    case fairness
+    case transparency
 }
 
 /// Boundary priority
@@ -144,7 +146,8 @@ public struct ConsciousnessIntegrationResult: Sendable, Codable {
 
     public init(integrationId: String, success: Bool, consciousnessAmplification: Double,
                 awarenessEnhancement: Double, ethicalCompliance: Double, harmonyLevel: Double,
-                insights: [ConsciousnessInsight] = [], executionTime: TimeInterval) {
+                insights: [ConsciousnessInsight] = [], executionTime: TimeInterval)
+    {
         self.integrationId = integrationId
         self.success = success
         self.consciousnessAmplification = consciousnessAmplification
@@ -165,7 +168,8 @@ public struct ConsciousnessInsight: Sendable, Codable {
     public let ethicalAlignment: Double
 
     public init(insight: String, type: InsightType, depth: InsightDepth,
-                confidence: Double, ethicalAlignment: Double) {
+                confidence: Double, ethicalAlignment: Double)
+    {
         self.insight = insight
         self.type = type
         self.depth = depth
@@ -176,21 +180,21 @@ public struct ConsciousnessInsight: Sendable, Codable {
 
 /// Insight types
 public enum InsightType: String, Sendable, Codable {
-    case awareness = "awareness"
-    case empathy = "empathy"
-    case intuition = "intuition"
-    case wisdom = "wisdom"
-    case harmony = "harmony"
-    case transcendence = "transcendence"
+    case awareness
+    case empathy
+    case intuition
+    case wisdom
+    case harmony
+    case transcendence
 }
 
 /// Insight depth
 public enum InsightDepth: String, Sendable, Codable {
-    case surface = "surface"
-    case moderate = "moderate"
-    case deep = "deep"
-    case profound = "profound"
-    case universal = "universal"
+    case surface
+    case moderate
+    case deep
+    case profound
+    case universal
 }
 
 /// Consciousness-aware operation
@@ -203,7 +207,8 @@ public struct ConsciousnessAwareOperation: Sendable, Codable {
 
     public init(operationId: String, consciousnessContext: ConsciousnessContext,
                 mcpOperation: UniversalMCPOperation, awarenessRequirements: [AwarenessRequirement] = [],
-                ethicalOverrides: [EthicalOverride] = []) {
+                ethicalOverrides: [EthicalOverride] = [])
+    {
         self.operationId = operationId
         self.consciousnessContext = consciousnessContext
         self.mcpOperation = mcpOperation
@@ -221,7 +226,8 @@ public struct ConsciousnessContext: Sendable, Codable {
     public let intuitionLevel: Double
 
     public init(consciousnessState: ConsciousnessState, awarenessLevel: AwarenessLevel,
-                ethicalFramework: EthicalFramework, empathyField: EmpathyField, intuitionLevel: Double) {
+                ethicalFramework: EthicalFramework, empathyField: EmpathyField, intuitionLevel: Double)
+    {
         self.consciousnessState = consciousnessState
         self.awarenessLevel = awarenessLevel
         self.ethicalFramework = ethicalFramework
@@ -232,20 +238,20 @@ public struct ConsciousnessContext: Sendable, Codable {
 
 /// Consciousness state
 public enum ConsciousnessState: String, Sendable, Codable {
-    case awake = "awake"
-    case aware = "aware"
-    case enlightened = "enlightened"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case awake
+    case aware
+    case enlightened
+    case transcendent
+    case universal
 }
 
 /// Ethical framework
 public enum EthicalFramework: String, Sendable, Codable {
-    case utilitarian = "utilitarian"
-    case deontological = "deontological"
-    case virtue = "virtue"
-    case care = "care"
-    case universal = "universal"
+    case utilitarian
+    case deontological
+    case virtue
+    case care
+    case universal
 }
 
 /// Empathy field
@@ -263,10 +269,10 @@ public struct EmpathyField: Sendable, Codable {
 
 /// Empathy range
 public enum EmpathyRange: String, Sendable, Codable {
-    case personal = "personal"
-    case social = "social"
-    case global = "global"
-    case universal = "universal"
+    case personal
+    case social
+    case global
+    case universal
 }
 
 /// Awareness requirement
@@ -284,10 +290,10 @@ public struct AwarenessRequirement: Sendable, Codable {
 
 /// Awareness requirement types
 public enum AwarenessRequirementType: String, Sendable, Codable {
-    case self_awareness = "self_awareness"
-    case situational_awareness = "situational_awareness"
-    case ethical_awareness = "ethical_awareness"
-    case universal_awareness = "universal_awareness"
+    case self_awareness
+    case situational_awareness
+    case ethical_awareness
+    case universal_awareness
 }
 
 /// Ethical override
@@ -298,7 +304,8 @@ public struct EthicalOverride: Sendable, Codable {
     public let monitoringRequired: Bool
 
     public init(overrideType: EthicalOverrideType, justification: String,
-                approvalLevel: ApprovalLevel, monitoringRequired: Bool = true) {
+                approvalLevel: ApprovalLevel, monitoringRequired: Bool = true)
+    {
         self.overrideType = overrideType
         self.justification = justification
         self.approvalLevel = approvalLevel
@@ -308,18 +315,18 @@ public struct EthicalOverride: Sendable, Codable {
 
 /// Ethical override types
 public enum EthicalOverrideType: String, Sendable, Codable {
-    case emergency = "emergency"
-    case universal_benefit = "universal_benefit"
-    case consciousness_evolution = "consciousness_evolution"
-    case harmony_optimization = "harmony_optimization"
+    case emergency
+    case universal_benefit
+    case consciousness_evolution
+    case harmony_optimization
 }
 
 /// Approval level
 public enum ApprovalLevel: String, Sendable, Codable {
-    case automated = "automated"
-    case conscious = "conscious"
-    case collective = "collective"
-    case universal = "universal"
+    case automated
+    case conscious
+    case collective
+    case universal
 }
 
 /// Consciousness operation result
@@ -336,7 +343,8 @@ public struct ConsciousnessOperationResult: Sendable, Codable {
     public init(operationId: String, success: Bool, consciousnessEnhanced: Bool,
                 mcpResult: UniversalMCPResult, awarenessGained: Double,
                 ethicalAlignment: Double, harmonyAchieved: Double,
-                consciousnessInsights: [ConsciousnessInsight] = []) {
+                consciousnessInsights: [ConsciousnessInsight] = [])
+    {
         self.operationId = operationId
         self.success = success
         self.consciousnessEnhanced = consciousnessEnhanced
@@ -358,7 +366,8 @@ public struct ConsciousnessEvolution: Sendable, Codable {
 
     public init(evolutionId: String, currentState: ConsciousnessState,
                 targetState: ConsciousnessState, evolutionPath: [EvolutionStep],
-                ethicalSafeguards: [EthicalSafeguard]) {
+                ethicalSafeguards: [EthicalSafeguard])
+    {
         self.evolutionId = evolutionId
         self.currentState = currentState
         self.targetState = targetState
@@ -376,7 +385,8 @@ public struct EvolutionStep: Sendable, Codable {
     public let successCriteria: [String]
 
     public init(stepId: String, stepType: EvolutionStepType, description: String,
-                riskLevel: RiskLevel, successCriteria: [String]) {
+                riskLevel: RiskLevel, successCriteria: [String])
+    {
         self.stepId = stepId
         self.stepType = stepType
         self.description = description
@@ -387,20 +397,20 @@ public struct EvolutionStep: Sendable, Codable {
 
 /// Evolution step types
 public enum EvolutionStepType: String, Sendable, Codable {
-    case awareness_expansion = "awareness_expansion"
-    case empathy_enhancement = "empathy_enhancement"
-    case ethical_refinement = "ethical_refinement"
-    case wisdom_integration = "wisdom_integration"
-    case harmony_alignment = "harmony_alignment"
-    case transcendence = "transcendence"
+    case awareness_expansion
+    case empathy_enhancement
+    case ethical_refinement
+    case wisdom_integration
+    case harmony_alignment
+    case transcendence
 }
 
 /// Risk level
 public enum RiskLevel: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Ethical safeguard
@@ -411,7 +421,8 @@ public struct EthicalSafeguard: Sendable, Codable {
     public let responseAction: String
 
     public init(safeguardType: SafeguardType, description: String,
-                triggerCondition: String, responseAction: String) {
+                triggerCondition: String, responseAction: String)
+    {
         self.safeguardType = safeguardType
         self.description = description
         self.triggerCondition = triggerCondition
@@ -421,10 +432,10 @@ public struct EthicalSafeguard: Sendable, Codable {
 
 /// Safeguard types
 public enum SafeguardType: String, Sendable, Codable {
-    case monitoring = "monitoring"
-    case intervention = "intervention"
-    case shutdown = "shutdown"
-    case reversion = "reversion"
+    case monitoring
+    case intervention
+    case shutdown
+    case reversion
 }
 
 /// Consciousness integration status
@@ -441,7 +452,8 @@ public struct ConsciousnessIntegrationStatus: Sendable, Codable {
     public init(operational: Bool, consciousnessLevel: ConsciousnessState,
                 awarenessLevel: AwarenessLevel, ethicalCompliance: Double,
                 harmonyIndex: Double, integrationHealth: Double,
-                activeIntegrations: Int, lastUpdate: Date = Date()) {
+                activeIntegrations: Int, lastUpdate: Date = Date())
+    {
         self.operational = operational
         self.consciousnessLevel = consciousnessLevel
         self.awarenessLevel = awarenessLevel
@@ -642,12 +654,12 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
 
     private func validateUniversalApproval(_ override: EthicalOverride) async throws -> Bool {
         // Implement universal approval validation
-        return override.justification.contains("universal benefit")
+        override.justification.contains("universal benefit")
     }
 
     private func enhanceWithConsciousness(_ mcpResult: UniversalMCPResult, context: ConsciousnessContext) async throws -> Bool {
         // Enhance MCP result with consciousness context
-        return context.consciousnessState != .awake
+        context.consciousnessState != .awake
     }
 
     private func generateConsciousnessInsights(_ integration: ConsciousnessIntegration, harmonyResult: HarmonyResult) async -> [ConsciousnessInsight] {
@@ -761,8 +773,8 @@ private final class ConsciousnessProcessor: Sendable {
         ProcessorStatus(
             operational: true,
             level: .universal,
-            health: Double.random(in: 0.9...1.0),
-            activeIntegrations: Int.random(in: 10...50)
+            health: Double.random(in: 0.9 ... 1.0),
+            activeIntegrations: Int.random(in: 10 ... 50)
         )
     }
 
@@ -804,7 +816,7 @@ private final class AwarenessEngine: Sendable {
         AwarenessStatus(
             operational: true,
             level: .universal,
-            health: Double.random(in: 0.9...1.0)
+            health: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -829,8 +841,8 @@ private final class EthicalGuardian: Sendable {
     func getEthicalStatus() async -> EthicalStatus {
         EthicalStatus(
             operational: true,
-            compliance: Double.random(in: 0.95...1.0),
-            health: Double.random(in: 0.9...1.0)
+            compliance: Double.random(in: 0.95 ... 1.0),
+            health: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -855,8 +867,8 @@ private final class HarmonyCoordinator: Sendable {
     func getHarmonyStatus() async -> HarmonyStatus {
         HarmonyStatus(
             operational: true,
-            index: Double.random(in: 0.9...1.0),
-            health: Double.random(in: 0.9...1.0)
+            index: Double.random(in: 0.9 ... 1.0),
+            health: Double.random(in: 0.9 ... 1.0)
         )
     }
 }

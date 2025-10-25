@@ -41,8 +41,8 @@
 // Performance: Optimized for real-time harmony processing and balance maintenance
 // Universal Scope: Designed to operate across all dimensions and realities
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Core Harmony Types
 
@@ -147,7 +147,7 @@ public final class UniversalBalance: Sendable {
     /// Get harmonic stability
     /// - Returns: Harmonic stability metric
     public func harmonicStability() -> Double {
-        let resonanceStrength = resonancePatterns.map { $0.strength }.reduce(0, +) / Double(max(1, resonancePatterns.count))
+        let resonanceStrength = resonancePatterns.map(\.strength).reduce(0, +) / Double(max(1, resonancePatterns.count))
         let balanceQuality = balanceQuality()
         return (resonanceStrength + balanceQuality) / 2.0
     }
@@ -202,9 +202,9 @@ public final class HarmonicSynchronizationEngine: Sendable {
 
     /// Analyze synchronization requirements
     private func analyzeSynchronizationRequirements(_ systems: [SynchronizableSystem]) -> SynchronizationRequirements {
-        let frequencies = systems.map { $0.operationalFrequency }
-        let phases = systems.map { $0.phase }
-        let amplitudes = systems.map { $0.amplitude }
+        let frequencies = systems.map(\.operationalFrequency)
+        let phases = systems.map(\.phase)
+        let amplitudes = systems.map(\.amplitude)
 
         let avgFrequency = frequencies.reduce(0, +) / Double(frequencies.count)
         let phaseVariance = phases.map { pow($0 - phases[0], 2) }.reduce(0, +) / Double(phases.count)
@@ -229,7 +229,7 @@ public final class HarmonicSynchronizationEngine: Sendable {
                 systemId: system.id,
                 targetFrequency: requirements.targetFrequency,
                 targetPhase: 0.0, // Synchronize to phase 0
-                targetAmplitude: systems.map { $0.amplitude }.reduce(0, +) / Double(systems.count),
+                targetAmplitude: systems.map(\.amplitude).reduce(0, +) / Double(systems.count),
                 phaseOrder: index,
                 estimatedDuration: Double(index + 1) * 0.5
             )
@@ -237,7 +237,7 @@ public final class HarmonicSynchronizationEngine: Sendable {
 
         return HarmonicSyncPlan(
             phases: phases,
-            totalEstimatedDuration: phases.map { $0.estimatedDuration }.reduce(0, +),
+            totalEstimatedDuration: phases.map(\.estimatedDuration).reduce(0, +),
             harmonicResonanceFrequency: requirements.targetFrequency,
             synchronizationWaves: generateSynchronizationWaves(phases.count),
             createdAt: Date()
@@ -269,9 +269,9 @@ public final class HarmonicSynchronizationEngine: Sendable {
         // Simulate harmonic synchronization
         try? await Task.sleep(nanoseconds: UInt64(phase.estimatedDuration * 1_000_000_000))
 
-        let finalFrequency = phase.targetFrequency * (0.95 + Double.random(in: 0...0.1))
-        let finalPhase = phase.targetPhase + Double.random(in: -0.1...0.1)
-        let finalAmplitude = phase.targetAmplitude * (0.95 + Double.random(in: 0...0.1))
+        let finalFrequency = phase.targetFrequency * (0.95 + Double.random(in: 0 ... 0.1))
+        let finalPhase = phase.targetPhase + Double.random(in: -0.1 ... 0.1)
+        let finalAmplitude = phase.targetAmplitude * (0.95 + Double.random(in: 0 ... 0.1))
 
         return HarmonicSyncResult(
             phaseId: phase.id,
@@ -279,14 +279,14 @@ public final class HarmonicSynchronizationEngine: Sendable {
             finalFrequency: finalFrequency,
             finalPhase: finalPhase,
             finalAmplitude: finalAmplitude,
-            synchronizationQuality: Double.random(in: 0.85...1.0),
+            synchronizationQuality: Double.random(in: 0.85 ... 1.0),
             completedAt: Date()
         )
     }
 
     /// Generate synchronization field
     private func generateSynchronizationField(_ results: [HarmonicSyncResult]) -> SynchronizationField {
-        let avgQuality = results.map { $0.synchronizationQuality }.reduce(0, +) / Double(results.count)
+        let avgQuality = results.map(\.synchronizationQuality).reduce(0, +) / Double(results.count)
         let fieldStrength = avgQuality * 0.9
 
         return SynchronizationField(
@@ -294,15 +294,15 @@ public final class HarmonicSynchronizationEngine: Sendable {
             fieldType: .harmonic,
             fieldStrength: fieldStrength,
             coverageRadius: Double(results.count) * 10.0,
-            resonanceFrequency: results.map { $0.finalFrequency }.reduce(0, +) / Double(results.count),
-            activeSystems: results.map { $0.systemId },
+            resonanceFrequency: results.map(\.finalFrequency).reduce(0, +) / Double(results.count),
+            activeSystems: results.map(\.systemId),
             generatedAt: Date()
         )
     }
 
     /// Generate synchronization waves
     private func generateSynchronizationWaves(_ count: Int) -> [SynchronizationWave] {
-        (0..<count).map { index in
+        (0 ..< count).map { index in
             SynchronizationWave(
                 waveId: UUID(),
                 frequency: 440.0 + Double(index) * 10.0, // Harmonic frequencies
@@ -378,8 +378,8 @@ public final class ResonanceNetworkManager: Sendable {
     private func generateResonanceConnections(_ nodes: [ResonanceNode]) -> [ResonanceConnection] {
         var connections: [ResonanceConnection] = []
 
-        for i in 0..<nodes.count {
-            for j in (i + 1)..<nodes.count {
+        for i in 0 ..< nodes.count {
+            for j in (i + 1) ..< nodes.count {
                 let sourceNode = nodes[i]
                 let targetNode = nodes[j]
 
@@ -424,11 +424,11 @@ public final class ResonanceNetworkManager: Sendable {
 
     /// Calculate resonance field
     private func calculateResonanceField(_ nodes: [ResonanceNode], connections: [ResonanceConnection]) -> ResonanceField {
-        let avgFrequency = nodes.map { $0.naturalFrequency }.reduce(0, +) / Double(nodes.count)
-        let avgStrength = connections.map { $0.resonanceStrength }.reduce(0, +) / Double(connections.count)
+        let avgFrequency = nodes.map(\.naturalFrequency).reduce(0, +) / Double(nodes.count)
+        let avgStrength = connections.map(\.resonanceStrength).reduce(0, +) / Double(connections.count)
         let fieldStrength = avgStrength * 0.8
 
-        let harmonicComponents = (1...5).map { harmonic in
+        let harmonicComponents = (1 ... 5).map { harmonic in
             HarmonicComponent(
                 harmonicNumber: harmonic,
                 amplitude: fieldStrength / Double(harmonic),
@@ -556,7 +556,7 @@ public final class EquilibriumEngine: Sendable {
         // Simulate adjustment application
         try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
 
-        let actualEffect = adjustment.estimatedEffect * (0.8 + Double.random(in: 0...0.4))
+        let actualEffect = adjustment.estimatedEffect * (0.8 + Double.random(in: 0 ... 0.4))
         let successRate = min(1.0, actualEffect / adjustment.estimatedEffect)
 
         return EquilibriumCorrection(
@@ -573,8 +573,8 @@ public final class EquilibriumEngine: Sendable {
         _ system: EquilibratableSystem,
         corrections: [EquilibriumCorrection]
     ) -> StabilityAnalysis {
-        let avgSuccessRate = corrections.map { $0.successRate }.reduce(0, +) / Double(corrections.count)
-        let totalEffect = corrections.map { $0.actualEffect }.reduce(0, +)
+        let avgSuccessRate = corrections.map(\.successRate).reduce(0, +) / Double(corrections.count)
+        let totalEffect = corrections.map(\.actualEffect).reduce(0, +)
         let stability = min(1.0, avgSuccessRate * 0.7 + totalEffect * 0.3)
 
         return StabilityAnalysis(
@@ -675,7 +675,7 @@ public struct EquilibriumPoint: Sendable {
     public let stabilityRadius: Double
 
     public init(forces: [BalanceForce]) {
-        let totalStrength = forces.map { $0.strength }.reduce(0, +)
+        let totalStrength = forces.map(\.strength).reduce(0, +)
         self.idealStrength = totalStrength / Double(forces.count)
 
         var distribution: [BalanceForceType: Double] = [:]
@@ -1400,7 +1400,7 @@ public final class SymbioticCoordinator: Sendable {
 
     /// Calculate symbiotic potential
     private func calculateSymbioticPotential(_ matrix: [UUID: [UUID: Double]]) -> Double {
-        let allCompatibilities = matrix.values.flatMap { $0.values }
+        let allCompatibilities = matrix.values.flatMap(\.values)
         return allCompatibilities.reduce(0, +) / Double(allCompatibilities.count)
     }
 
@@ -1434,7 +1434,7 @@ public final class SymbioticCoordinator: Sendable {
         return SymbioticCoordinationPlan(
             opportunities: opportunities,
             coordinationSteps: coordinationSteps,
-            totalEstimatedDuration: coordinationSteps.map { $0.estimatedDuration }.reduce(0, +),
+            totalEstimatedDuration: coordinationSteps.map(\.estimatedDuration).reduce(0, +),
             resourceRequirements: calculateResourceRequirements(opportunities),
             createdAt: Date()
         )
@@ -1473,16 +1473,16 @@ public final class SymbioticCoordinator: Sendable {
         return CoordinationResult(
             stepId: step.stepId,
             success: true,
-            symbioticBondStrength: Double.random(in: 0.7...1.0),
-            resourceExchangeRate: Double.random(in: 0.8...1.0),
+            symbioticBondStrength: Double.random(in: 0.7 ... 1.0),
+            resourceExchangeRate: Double.random(in: 0.8 ... 1.0),
             completedAt: Date()
         )
     }
 
     /// Calculate symbiotic harmony
     private func calculateSymbioticHarmony(_ results: [CoordinationResult]) -> Double {
-        let avgBondStrength = results.map { $0.symbiosisBondStrength }.reduce(0, +) / Double(results.count)
-        let avgExchangeRate = results.map { $0.resourceExchangeRate }.reduce(0, +) / Double(results.count)
+        let avgBondStrength = results.map(\.symbiosisBondStrength).reduce(0, +) / Double(results.count)
+        let avgExchangeRate = results.map(\.resourceExchangeRate).reduce(0, +) / Double(results.count)
         return (avgBondStrength + avgExchangeRate) / 2.0
     }
 }
@@ -1527,14 +1527,14 @@ public final class HarmonicIntelligenceProcessor: Sendable {
     /// Calculate fundamental frequency
     private func calculateFundamentalFrequency(_ dataPoints: [IntelligenceDataPoint]) -> Double {
         // Simplified frequency analysis
-        let values = dataPoints.map { $0.intelligenceValue }
+        let values = dataPoints.map(\.intelligenceValue)
         let diffs = zip(values, values.dropFirst()).map { abs($1 - $0) }
         return diffs.reduce(0, +) / Double(diffs.count)
     }
 
     /// Identify harmonics
     private func identifyHarmonics(_ dataPoints: [IntelligenceDataPoint], fundamental: Double) -> [Harmonic] {
-        (1...5).map { multiplier in
+        (1 ... 5).map { multiplier in
             let harmonicFreq = fundamental * Double(multiplier)
             let amplitude = calculateAmplitudeAtFrequency(dataPoints, frequency: harmonicFreq)
             return Harmonic(
@@ -1549,7 +1549,7 @@ public final class HarmonicIntelligenceProcessor: Sendable {
     /// Calculate amplitude at frequency
     private func calculateAmplitudeAtFrequency(_ dataPoints: [IntelligenceDataPoint], frequency: Double) -> Double {
         // Simplified amplitude calculation
-        let values = dataPoints.map { $0.intelligenceValue }
+        let values = dataPoints.map(\.intelligenceValue)
         return values.reduce(0, +) / Double(values.count) * (1.0 / frequency)
     }
 
@@ -1570,7 +1570,7 @@ public final class HarmonicIntelligenceProcessor: Sendable {
 
     /// Calculate harmonic stability
     private func calculateHarmonicStability(_ patterns: [ResonancePattern]) -> Double {
-        patterns.isEmpty ? 0.0 : patterns.map { $0.stability }.reduce(0, +) / Double(patterns.count)
+        patterns.isEmpty ? 0.0 : patterns.map(\.stability).reduce(0, +) / Double(patterns.count)
     }
 
     /// Synthesize intelligence
@@ -1584,8 +1584,8 @@ public final class HarmonicIntelligenceProcessor: Sendable {
             )
         }
 
-        let overallIntelligence = synthesizedPatterns.map { $0.intelligenceContribution }.reduce(0, +)
-        let synthesisCoherence = synthesizedPatterns.map { $0.synthesisQuality }.reduce(0, +) / Double(synthesizedPatterns.count)
+        let overallIntelligence = synthesizedPatterns.map(\.intelligenceContribution).reduce(0, +)
+        let synthesisCoherence = synthesizedPatterns.map(\.synthesisQuality).reduce(0, +) / Double(synthesizedPatterns.count)
 
         return IntelligenceSynthesis(
             synthesizedPatterns: synthesizedPatterns,
@@ -1602,12 +1602,12 @@ public final class HarmonicIntelligenceProcessor: Sendable {
             AppliedOptimization(
                 opportunityId: opportunity.id,
                 optimizationType: opportunity.type,
-                improvement: opportunity.potentialImprovement * (0.8 + Double.random(in: 0...0.4)),
+                improvement: opportunity.potentialImprovement * (0.8 + Double.random(in: 0 ... 0.4)),
                 appliedAt: Date()
             )
         }
 
-        let totalImprovement = appliedOptimizations.map { $0.improvement }.reduce(0, +)
+        let totalImprovement = appliedOptimizations.map(\.improvement).reduce(0, +)
         let optimizedIntelligence = synthesis.overallIntelligence + totalImprovement
 
         return HarmonicOptimization(
@@ -1720,7 +1720,7 @@ public final class BalanceOptimizer: Sendable {
 
         return BalanceOptimizationPlan(
             optimizations: optimizations,
-            totalEstimatedImprovement: optimizations.map { $0.estimatedImprovement }.reduce(0, +),
+            totalEstimatedImprovement: optimizations.map(\.estimatedImprovement).reduce(0, +),
             estimatedDuration: optimizations.map { complexityDuration($0.complexity) }.reduce(0, +),
             createdAt: Date()
         )
@@ -1756,7 +1756,7 @@ public final class BalanceOptimizer: Sendable {
     private func executeOptimization(_ optimization: BalanceOptimization, balance: UniversalBalance) async -> OptimizationExecutionResult {
         try? await Task.sleep(nanoseconds: UInt64(complexityDuration(optimization.complexity) * 1_000_000_000))
 
-        let actualImprovement = optimization.estimatedImprovement * (0.7 + Double.random(in: 0...0.6))
+        let actualImprovement = optimization.estimatedImprovement * (0.7 + Double.random(in: 0 ... 0.6))
         let success = actualImprovement > optimization.estimatedImprovement * 0.5
 
         return OptimizationExecutionResult(
@@ -1786,7 +1786,7 @@ public final class SynchronizationFieldGenerator: Sendable {
     /// - Parameter systems: Systems to synchronize
     /// - Returns: Generated field
     public func generateField(for systems: [SynchronizableSystem]) async -> SynchronizationField {
-        let avgFrequency = systems.map { $0.operationalFrequency }.reduce(0, +) / Double(systems.count)
+        let avgFrequency = systems.map(\.operationalFrequency).reduce(0, +) / Double(systems.count)
         let fieldStrength = min(1.0, Double(systems.count) / 10.0)
         let coverageRadius = Double(systems.count) * 5.0
 
@@ -1796,7 +1796,7 @@ public final class SynchronizationFieldGenerator: Sendable {
             fieldStrength: fieldStrength,
             coverageRadius: coverageRadius,
             resonanceFrequency: avgFrequency,
-            activeSystems: systems.map { $0.id },
+            activeSystems: systems.map(\.id),
             generatedAt: Date()
         )
     }

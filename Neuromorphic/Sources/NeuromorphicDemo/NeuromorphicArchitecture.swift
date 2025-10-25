@@ -57,9 +57,9 @@ public class NeuromorphicNeuron {
     }
 
     /// Fire a spike
-    internal func fire(at time: TimeInterval) {
+    func fire(at time: TimeInterval) {
         lastSpikeTime = time
-        membranePotential = 0.0  // Reset after spiking
+        membranePotential = 0.0 // Reset after spiking
 
         // Propagate spike through axon
         axon?.propagateSpike(at: time)
@@ -133,7 +133,7 @@ public class NeuromorphicAxon {
 
             // Schedule spike processing
             DispatchQueue.global().asyncAfter(deadline: .now() + synapse.delay) {
-                let _ = synapse.postsynapticNeuron.processSpike(spike, at: time + synapse.delay)
+                _ = synapse.postsynapticNeuron.processSpike(spike, at: time + synapse.delay)
             }
         }
     }
@@ -145,7 +145,7 @@ public struct NeuromorphicSpike {
     public let targetSynapse: NeuromorphicSynapse
     public let timestamp: TimeInterval
     public let weight: Double
-    public let decayTime: TimeInterval = 0.01  // Spike decay time constant
+    public let decayTime: TimeInterval = 0.01 // Spike decay time constant
 }
 
 // MARK: - Neural Network Architectures
@@ -184,23 +184,24 @@ public class NeuromorphicNetwork {
     /// Process input spikes through the network
     public func processInput(_ inputSpikes: [NeuromorphicSpike]) {
         for spike in inputSpikes {
-            let _ = spike.targetSynapse.postsynapticNeuron.processSpike(spike, at: spike.timestamp)
+            _ = spike.targetSynapse.postsynapticNeuron.processSpike(spike, at: spike.timestamp)
         }
 
         // Allow time for spike propagation (synchronous delay)
-        Thread.sleep(forTimeInterval: 0.1)  // 100ms
+        Thread.sleep(forTimeInterval: 0.1) // 100ms
     }
 
     /// Get output from the network
     public func getOutput() -> [Double] {
-        return outputLayer.map { $0.membranePotential }
+        outputLayer.map(\.membranePotential)
     }
 }
 
 /// Learning rules for synaptic plasticity
 public protocol NeuromorphicLearningRule {
     func updateSynapse(
-        _ synapse: NeuromorphicSynapse, preSpikeTime: TimeInterval, postSpikeTime: TimeInterval)
+        _ synapse: NeuromorphicSynapse, preSpikeTime: TimeInterval, postSpikeTime: TimeInterval
+    )
 }
 
 /// Spike-Timing Dependent Plasticity (STDP)
@@ -244,9 +245,9 @@ public class HTMNetwork: NeuromorphicNetwork {
 
     /// Create HTM-style columnar architecture
     public func createColumns(numColumns: Int, neuronsPerColumn: Int) {
-        for _ in 0..<numColumns {
+        for _ in 0 ..< numColumns {
             var column: [NeuromorphicNeuron] = []
-            for _ in 0..<neuronsPerColumn {
+            for _ in 0 ..< neuronsPerColumn {
                 let neuron = NeuromorphicNeuron(threshold: 0.8, learningRate: 0.02)
                 addNeuron(neuron)
                 column.append(neuron)
@@ -256,8 +257,8 @@ public class HTMNetwork: NeuromorphicNetwork {
 
         // Create horizontal connections within columns
         for column in columns {
-            for i in 0..<column.count {
-                for j in (i + 1)..<column.count {
+            for i in 0 ..< column.count {
+                for j in (i + 1) ..< column.count {
                     connect(from: column[i], to: column[j], weight: 0.3)
                     connect(from: column[j], to: column[i], weight: 0.3)
                 }
@@ -265,9 +266,9 @@ public class HTMNetwork: NeuromorphicNetwork {
         }
 
         // Create sparse vertical connections between columns
-        for i in 0..<columns.count {
-            for j in (i + 1)..<columns.count {
-                if Double.random(in: 0...1) < 0.1 {  // 10% connectivity
+        for i in 0 ..< columns.count {
+            for j in (i + 1) ..< columns.count {
+                if Double.random(in: 0 ... 1) < 0.1 { // 10% connectivity
                     let sourceNeuron = columns[i].randomElement()!
                     let targetNeuron = columns[j].randomElement()!
                     connect(from: sourceNeuron, to: targetNeuron, weight: 0.1)
@@ -286,10 +287,10 @@ public class LSMNetwork: NeuromorphicNetwork {
     /// Create liquid state machine reservoir
     public func createReservoir(numNeurons: Int, connectivity: Double = 0.1) {
         // Create reservoir neurons
-        for _ in 0..<numNeurons {
+        for _ in 0 ..< numNeurons {
             let neuron = NeuromorphicNeuron(
-                threshold: Double.random(in: 0.5...1.5),
-                refractoryPeriod: Double.random(in: 0.001...0.01),
+                threshold: Double.random(in: 0.5 ... 1.5),
+                refractoryPeriod: Double.random(in: 0.001 ... 0.01),
                 learningRate: 0.01
             )
             addNeuron(neuron)
@@ -297,11 +298,11 @@ public class LSMNetwork: NeuromorphicNetwork {
         }
 
         // Create random connections within reservoir
-        for i in 0..<reservoir.count {
-            for j in 0..<reservoir.count {
-                if i != j && Double.random(in: 0...1) < connectivity {
-                    let weight = Double.random(in: 0.1...0.9)
-                    let delay = Double.random(in: 0.001...0.005)
+        for i in 0 ..< reservoir.count {
+            for j in 0 ..< reservoir.count {
+                if i != j && Double.random(in: 0 ... 1) < connectivity {
+                    let weight = Double.random(in: 0.1 ... 0.9)
+                    let delay = Double.random(in: 0.001 ... 0.005)
                     connect(from: reservoir[i], to: reservoir[j], weight: weight, delay: delay)
                 }
             }
@@ -310,7 +311,7 @@ public class LSMNetwork: NeuromorphicNetwork {
 
     /// Connect input to reservoir
     public func connectInput(inputSize: Int) {
-        for i in 0..<inputSize {
+        for i in 0 ..< inputSize {
             let randomNeuron = reservoir.randomElement()!
             inputConnections.append((inputIndex: i, neuron: randomNeuron))
         }
@@ -318,7 +319,7 @@ public class LSMNetwork: NeuromorphicNetwork {
 
     /// Connect reservoir to output
     public func connectOutput(outputSize: Int) {
-        for i in 0..<outputSize {
+        for i in 0 ..< outputSize {
             let randomNeuron = reservoir.randomElement()!
             outputConnections.append((neuron: randomNeuron, outputIndex: i))
         }
@@ -334,13 +335,12 @@ public class NeuroQuantumNetwork {
     public var hybridMode: HybridMode = .neuromorphic
 
     public enum HybridMode {
-        case neuromorphic  // Pure neuromorphic processing
-        case quantum  // Quantum-enhanced processing
-        case hybrid  // Combined neuro-quantum processing
+        case neuromorphic // Pure neuromorphic processing
+        case quantum // Quantum-enhanced processing
+        case hybrid // Combined neuro-quantum processing
     }
 
-    public init(neuromorphicNetwork: NeuromorphicNetwork, quantumProcessor: QuantumProcessor? = nil)
-    {
+    public init(neuromorphicNetwork: NeuromorphicNetwork, quantumProcessor: QuantumProcessor? = nil) {
         self.neuromorphicNetwork = neuromorphicNetwork
         self.quantumProcessor = quantumProcessor
     }
@@ -363,7 +363,7 @@ public class NeuroQuantumNetwork {
 
         // Process through neuromorphic network (synchronous)
         for spike in spikes {
-            let _ = spike.targetSynapse.postsynapticNeuron.processSpike(spike, at: spike.timestamp)
+            _ = spike.targetSynapse.postsynapticNeuron.processSpike(spike, at: spike.timestamp)
         }
 
         return neuromorphicNetwork.getOutput()
@@ -371,8 +371,8 @@ public class NeuroQuantumNetwork {
 
     private func processQuantum(_ input: [Double]) -> [Double] {
         // Use quantum processor for computation
-        guard let quantumProcessor = quantumProcessor else {
-            return input  // Fallback
+        guard let quantumProcessor else {
+            return input // Fallback
         }
 
         return quantumProcessor.processQuantum(input)
@@ -382,7 +382,7 @@ public class NeuroQuantumNetwork {
         // Combine neuromorphic preprocessing with quantum processing
         let neuromorphicOutput = processNeuromorphic(input)
 
-        if let quantumProcessor = quantumProcessor {
+        if let quantumProcessor {
             return quantumProcessor.processQuantum(neuromorphicOutput)
         }
 
@@ -393,12 +393,13 @@ public class NeuroQuantumNetwork {
         var spikes: [NeuromorphicSpike] = []
 
         for (index, value) in input.enumerated() {
-            if value > 0.5 {  // Threshold for spiking
+            if value > 0.5 { // Threshold for spiking
                 // Create artificial synapse for input
                 let dummySynapse = NeuromorphicSynapse(
                     from: NeuromorphicNeuron(),
                     to: neuromorphicNetwork.inputLayer[
-                        index % neuromorphicNetwork.inputLayer.count],
+                        index % neuromorphicNetwork.inputLayer.count
+                    ],
                     weight: value
                 )
 
@@ -428,6 +429,6 @@ public protocol QuantumProcessor {
 public class MockQuantumProcessor: QuantumProcessor {
     public func processQuantum(_ input: [Double]) -> [Double] {
         // Simulate quantum advantage
-        return input.map { $0 * 1.5 }  // 50% performance boost
+        input.map { $0 * 1.5 } // 50% performance boost
     }
 }

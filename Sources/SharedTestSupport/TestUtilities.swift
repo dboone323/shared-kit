@@ -104,10 +104,10 @@ extension XCTestCase {
 /// Mock data generators
 enum MockDataGenerator {
     static func generateTransactions(count: Int) -> [[String: Any]] {
-        (1...count).map { i in
+        (1 ... count).map { i in
             [
                 "id": UUID().uuidString,
-                "amount": Double.random(in: 5.0...500.0),
+                "amount": Double.random(in: 5.0 ... 500.0),
                 "description": "Transaction \(i)",
                 "date": Date().addingTimeInterval(-Double(i * 86400)),
                 "type": i % 2 == 0 ? "income" : "expense",
@@ -122,14 +122,14 @@ enum MockDataGenerator {
             "Exercise", "Read", "Meditate", "Drink Water", "Walk", "Study", "Cook", "Sleep Early",
         ]
 
-        return (1...count).map { i in
+        return (1 ... count).map { i in
             [
                 "id": UUID().uuidString,
                 "name": habitNames.randomElement() ?? "Habit \(i)",
                 "description": "Description for habit \(i)",
                 "frequency": ["daily", "weekly", "monthly"].randomElement()!,
                 "isActive": Bool.random(),
-                "streak": Int.random(in: 0...30),
+                "streak": Int.random(in: 0 ... 30),
             ]
         }
     }
@@ -138,7 +138,7 @@ enum MockDataGenerator {
         let languages = ["swift", "javascript", "python", "java", "typescript"]
         let fileTypes = ["class", "function", "interface", "enum", "struct"]
 
-        return (1...count).map { i in
+        return (1 ... count).map { i in
             let language = languages.randomElement()!
             let fileType = fileTypes.randomElement()!
 
@@ -147,8 +147,8 @@ enum MockDataGenerator {
                 "name": "\(fileType.capitalized)\(i).\(language)",
                 "content": self.generateCodeContent(language: language, type: fileType, index: i),
                 "language": language,
-                "size": Int.random(in: 100...5000),
-                "complexity": Int.random(in: 1...10),
+                "size": Int.random(in: 100 ... 5000),
+                "complexity": Int.random(in: 1 ... 10),
             ]
         }
     }
@@ -160,7 +160,7 @@ enum MockDataGenerator {
         let priorities = ["low", "medium", "high"]
         let categories = ["Work", "Personal", "Health", "Learning", "Finance"]
 
-        return (1...count).map { i in
+        return (1 ... count).map { i in
             [
                 "id": UUID().uuidString,
                 "title": "Task \(i)",
@@ -168,8 +168,8 @@ enum MockDataGenerator {
                 "priority": priorities.randomElement()!,
                 "category": categories.randomElement()!,
                 "isCompleted": Bool.random(),
-                "dueDate": Date().addingTimeInterval(Double.random(in: -86400 * 7...86400 * 30)),
-                "createdAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 365)),
+                "dueDate": Date().addingTimeInterval(Double.random(in: -86400 * 7 ... 86400 * 30)),
+                "createdAt": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 365)),
             ]
         }
     }
@@ -182,7 +182,7 @@ enum MockDataGenerator {
             "Business Account",
         ]
 
-        return (1...count).map { i in
+        return (1 ... count).map { i in
             let accountType = accountTypes.randomElement()!
             let isCredit = accountType == "credit"
 
@@ -190,10 +190,10 @@ enum MockDataGenerator {
                 "id": UUID().uuidString,
                 "name": accountNames.randomElement() ?? "Account \(i)",
                 "type": accountType,
-                "balance": isCredit ? Double.random(in: -5000...0) : Double.random(in: 0...10000),
+                "balance": isCredit ? Double.random(in: -5000 ... 0) : Double.random(in: 0 ... 10000),
                 "currency": "USD",
                 "isActive": Bool.random(),
-                "createdAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 365)),
+                "createdAt": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 365)),
             ]
         }
     }
@@ -203,33 +203,33 @@ enum MockDataGenerator {
         let statuses = ["pending", "approved", "changes_requested", "commented"]
         let languages = ["swift", "javascript", "python", "java", "typescript"]
 
-        return (1...count).map { i in
+        return (1 ... count).map { i in
             [
                 "id": UUID().uuidString,
                 "title": "Code Review \(i)",
                 "description": "Review for feature implementation \(i)",
                 "status": statuses.randomElement()!,
                 "language": languages.randomElement()!,
-                "fileCount": Int.random(in: 1...20),
-                "lineCount": Int.random(in: 10...1000),
-                "complexity": Int.random(in: 1...10),
-                "createdAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 30)),
+                "fileCount": Int.random(in: 1 ... 20),
+                "lineCount": Int.random(in: 10 ... 1000),
+                "complexity": Int.random(in: 1 ... 10),
+                "createdAt": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 30)),
             ]
         }
     }
 
     /// Generate mock data for AvoidObstaclesGame
     static func generateGameSessions(count: Int) -> [[String: Any]] {
-        return (1...count).map { i in
+        (1 ... count).map { _ in
             [
                 "id": UUID().uuidString,
-                "score": Int.random(in: 0...10000),
-                "duration": Double.random(in: 30...600),  // seconds
-                "level": Int.random(in: 1...50),
-                "obstaclesAvoided": Int.random(in: 0...100),
-                "powerUpsUsed": Int.random(in: 0...10),
+                "score": Int.random(in: 0 ... 10000),
+                "duration": Double.random(in: 30 ... 600), // seconds
+                "level": Int.random(in: 1 ... 50),
+                "obstaclesAvoided": Int.random(in: 0 ... 100),
+                "powerUpsUsed": Int.random(in: 0 ... 10),
                 "completed": Bool.random(),
-                "playedAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 7)),
+                "playedAt": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 7)),
             ]
         }
     }
@@ -239,17 +239,17 @@ enum MockDataGenerator {
         let habitTypes = ["exercise", "reading", "meditation", "water", "sleep", "learning"]
         let frequencies = ["daily", "weekly", "monthly"]
 
-        return (1...count).map { i in
+        return (1 ... count).map { _ in
             [
                 "id": UUID().uuidString,
                 "habitId": UUID().uuidString,
                 "type": habitTypes.randomElement()!,
                 "frequency": frequencies.randomElement()!,
-                "targetValue": Int.random(in: 1...30),
-                "currentValue": Int.random(in: 0...30),
-                "streak": Int.random(in: 0...100),
+                "targetValue": Int.random(in: 1 ... 30),
+                "currentValue": Int.random(in: 0 ... 30),
+                "streak": Int.random(in: 0 ... 100),
                 "isCompleted": Bool.random(),
-                "date": Date().addingTimeInterval(-Double.random(in: 0...86400 * 30)),
+                "date": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 30)),
             ]
         }
     }

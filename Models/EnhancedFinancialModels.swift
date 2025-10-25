@@ -91,9 +91,9 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         case .checking, .savings, .cash:
             self.balance
         case .credit:
-            -self.balance  // Credit card balances are liabilities
+            -self.balance // Credit card balances are liabilities
         case .investment:
-            self.balance  // Investment accounts are assets
+            self.balance // Investment accounts are assets
         }
     }
 
@@ -237,7 +237,8 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
                 "newBalance": self.balance,
                 "change": self.balance - previousBalance,
                 "transactionType": transaction.transactionType.rawValue,
-            ])
+            ]
+        )
     }
 
     private func updateBalanceAnalytics() {
@@ -261,7 +262,8 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
             parameters: [
                 "project": reference.projectContext.rawValue,
                 "model_type": reference.modelType,
-            ])
+            ]
+        )
     }
 
     public func getSpendingByCategory(for period: DatePeriod = .thisMonth) -> [String: Double] {
@@ -305,7 +307,7 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
     public var notes: String
     public var isRecurring: Bool
     public var recurringGroupId: String?
-    public var confidence: Double  // For imported transactions
+    public var confidence: Double // For imported transactions
     public var exchangeRate: Double?
     public var originalAmount: Double?
     public var originalCurrency: String?
@@ -411,7 +413,7 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
             errors.append(.required(field: "description"))
         }
 
-        if self.date > Date().addingTimeInterval(86400) {  // Allow 1 day in future
+        if self.date > Date().addingTimeInterval(86400) { // Allow 1 day in future
             errors.append(
                 .invalid(field: "date", reason: "cannot be more than 1 day in the future"))
         }
@@ -470,15 +472,15 @@ public final class EnhancedBudget: Validatable, Trackable {
 
     // Enhanced Properties
     public var budgetType: BudgetType
-    public var alertThreshold: Double  // Percentage (0-100)
+    public var alertThreshold: Double // Percentage (0-100)
     public var color: String
     public var iconName: String
     public var notes: String
     public var tags: [String]
     public var autoRenew: Bool
-    public var carryover: Bool  // Allow unused budget to carry over
-    public var parentBudgetId: String?  // For sub-budgets
-    public var priority: Int  // 1-5 scale
+    public var carryover: Bool // Allow unused budget to carry over
+    public var parentBudgetId: String? // For sub-budgets
+    public var priority: Int // 1-5 scale
 
     // Analytics Properties
     public var totalSpent: Double
@@ -880,7 +882,7 @@ public enum DatePeriod {
         case .last365Days:
             let start = calendar.date(byAdding: .day, value: -365, to: now) ?? now
             return (start, now)
-        case .custom(let start, let end):
+        case let .custom(start, end):
             return (start, end)
         }
     }

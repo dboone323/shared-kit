@@ -6,8 +6,8 @@
 //  Unified orchestration system for autonomous development lifecycle management
 //
 
-import Foundation
 import Combine
+import Foundation
 
 /// Main framework for universal automation orchestration
 @MainActor
@@ -117,7 +117,7 @@ public final class UniversalAutomation: ObservableObject {
         let result = try await executeTask(task)
 
         // Extract optimization metrics
-        guard case .optimization(let optimizationResult) = result else {
+        guard case let .optimization(optimizationResult) = result else {
             throw AutomationError.invalidResultType
         }
 
@@ -139,7 +139,7 @@ public final class UniversalAutomation: ObservableObject {
 
         let result = try await executeTask(task)
 
-        guard case .architectureEvolution(let evolutionResult) = result else {
+        guard case let .architectureEvolution(evolutionResult) = result else {
             throw AutomationError.invalidResultType
         }
 
@@ -158,13 +158,13 @@ public final class UniversalAutomation: ObservableObject {
             metadata: [
                 "specification": specification.description,
                 "language": context.language,
-                "complexity": context.complexity.rawValue
+                "complexity": context.complexity.rawValue,
             ]
         )
 
         let result = try await executeTask(task)
 
-        guard case .codeSynthesis(let synthesisResult) = result else {
+        guard case let .codeSynthesis(synthesisResult) = result else {
             throw AutomationError.invalidResultType
         }
 
@@ -186,7 +186,7 @@ public final class UniversalAutomation: ObservableObject {
 
         let result = try await executeTask(task)
 
-        guard case .testing(let testingResult) = result else {
+        guard case let .testing(testingResult) = result else {
             throw AutomationError.invalidResultType
         }
 
@@ -208,7 +208,7 @@ public final class UniversalAutomation: ObservableObject {
 
         let result = try await executeTask(task)
 
-        guard case .deployment(let deploymentResult) = result else {
+        guard case let .deployment(deploymentResult) = result else {
             throw AutomationError.invalidResultType
         }
 
@@ -230,7 +230,7 @@ public final class UniversalAutomation: ObservableObject {
 
         let result = try await executeTask(task)
 
-        guard case .qualityAssurance(let qaResult) = result else {
+        guard case let .qualityAssurance(qaResult) = result else {
             throw AutomationError.invalidResultType
         }
 
@@ -431,7 +431,7 @@ public final class UniversalAutomation: ObservableObject {
                 "quantum": quantumHealth,
                 "ai": aiHealth,
                 "workflow": workflowHealth,
-                "quality": qualityHealth
+                "quality": qualityHealth,
             ]
         )
     }
@@ -461,7 +461,7 @@ public final class UniversalAutomation: ObservableObject {
     private func identifyProjectsNeedingAttention() async -> [String] {
         // Analyze recent changes, test failures, quality issues, etc.
         // This would integrate with git, CI/CD systems, etc.
-        return [] // Placeholder
+        [] // Placeholder
     }
 
     private func checkCascadingAutomation(for task: AutomationTask) async {
@@ -469,7 +469,7 @@ public final class UniversalAutomation: ObservableObject {
         switch task.type {
         case .developmentLifecycle:
             // If quality issues found, trigger quality assurance
-            if let result = task.result, case .developmentLifecycle(let lifecycleResult) = result {
+            if let result = task.result, case let .developmentLifecycle(lifecycleResult) = result {
                 if lifecycleResult.qualityAssessment.overallScore < 0.7 {
                     Task {
                         try? await executeQualityAssurance(for: task.project, qualityLevel: .comprehensive)
@@ -479,7 +479,7 @@ public final class UniversalAutomation: ObservableObject {
 
         case .testingAutomation:
             // If tests pass, trigger deployment preparation
-            if let result = task.result, case .testing(let testingResult) = result {
+            if let result = task.result, case let .testing(testingResult) = result {
                 if testingResult.successRate > 0.95 {
                     Task {
                         try? await executeAutonomousDeployment(for: task.project)
@@ -790,12 +790,15 @@ private class QuantumOptimizer {
     func executeOptimization(_ optimization: Optimization, for project: String) async throws -> OptimizationResult {
         OptimizationResult(type: "test", improvements: [], performanceGain: 0.1, executionTime: 1.0)
     }
+
     func optimizeCIDCPipeline(for project: String) async throws -> OptimizationResult {
         OptimizationResult(type: "ci_cd", improvements: ["Parallel builds"], performanceGain: 0.2, executionTime: 2.0)
     }
+
     func synthesizeCode(_ spec: CodeSpecification, context: CodeGenerationContext) async throws -> CodeSynthesisResult {
         CodeSynthesisResult(generatedCode: "// Generated code", language: context.language, quality: 0.8, executionTime: 1.5)
     }
+
     func optimizeSystemPerformance() async throws {}
     func updateModels(with task: AutomationTask) async {}
     func getHealthStatus() async -> SubsystemHealth {
@@ -808,6 +811,7 @@ private class AIDecisionEngine {
     func generateOptimizationPlan(qualityResult: QualityAssessment, architectureAnalysis: ArchitectureAnalysis) async throws -> OptimizationPlan {
         OptimizationPlan(optimizations: [])
     }
+
     func analyzeTaskResults(_ task: AutomationTask) async {}
     func updatePerformanceModels() async {}
     func getHealthStatus() async -> SubsystemHealth {
@@ -820,15 +824,19 @@ private class WorkflowOrchestrator {
     func analyzeArchitecture(for project: String) async throws -> ArchitectureAnalysis {
         ArchitectureAnalysis(patterns: ["MVVM"], complexity: 0.5)
     }
+
     func assessDeploymentReadiness(for project: String) async throws -> DeploymentReadiness {
         DeploymentReadiness(ready: true, blockers: [])
     }
+
     func evolveArchitecture(for project: String, strategy: ArchitectureEvolutionStrategy) async throws -> ArchitectureEvolutionResult {
         ArchitectureEvolutionResult(changes: [], qualityImprovement: 0.1, maintainabilityScore: 0.8)
     }
+
     func executeDeployment(for project: String, strategy: DeploymentStrategy) async throws -> DeploymentResult {
         DeploymentResult(success: true, deploymentTime: 30.0, rollbackAvailable: true, monitoringEnabled: true)
     }
+
     func getHealthStatus() async -> SubsystemHealth {
         SubsystemHealth(score: 0.85, status: "good", lastChecked: Date())
     }
@@ -839,6 +847,7 @@ private class QualityAssurance {
     func assessQuality(for project: String) async throws -> QualityAssessment {
         QualityAssessment(overallScore: 0.85, issues: [])
     }
+
     func getHealthStatus() async -> SubsystemHealth {
         SubsystemHealth(score: 0.9, status: "excellent", lastChecked: Date())
     }

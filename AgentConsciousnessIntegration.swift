@@ -344,8 +344,7 @@ public final class AgentConsciousnessIntegration: Sendable {
     private func processConsciousnessIntegration(
         _ request: ConsciousnessIntegrationRequest,
         assessment: ConsciousnessIntegrationAssessment
-    ) async throws -> ConsciousnessIntegrationProcessing
-    {
+    ) async throws -> ConsciousnessIntegrationProcessing {
         // Process consciousness integration
         let processingContext = ConsciousnessIntegrationProcessingContext(
             agents: request.agents,
@@ -369,8 +368,7 @@ public final class AgentConsciousnessIntegration: Sendable {
     private func coordinateUniversalConsciousness(
         _ request: ConsciousnessIntegrationRequest,
         integration: ConsciousnessIntegrationProcessing
-    ) async throws -> UniversalConsciousnessCoordination
-    {
+    ) async throws -> UniversalConsciousnessCoordination {
         // Coordinate universal consciousness
         let coordinationContext = UniversalConsciousnessCoordinationContext(
             agents: request.agents,
@@ -394,8 +392,7 @@ public final class AgentConsciousnessIntegration: Sendable {
     private func synthesizeConsciousnessIntegrationNetwork(
         _ request: ConsciousnessIntegrationRequest,
         consciousness: UniversalConsciousnessCoordination
-    ) async throws -> ConsciousnessIntegrationNetworkSynthesis
-    {
+    ) async throws -> ConsciousnessIntegrationNetworkSynthesis {
         // Synthesize consciousness integration network
         let synthesisContext = ConsciousnessIntegrationNetworkSynthesisContext(
             agents: request.agents,
@@ -419,8 +416,7 @@ public final class AgentConsciousnessIntegration: Sendable {
     private func orchestrateQuantumConsciousness(
         _ request: ConsciousnessIntegrationRequest,
         network: ConsciousnessIntegrationNetworkSynthesis
-    ) async throws -> QuantumConsciousnessOrchestration
-    {
+    ) async throws -> QuantumConsciousnessOrchestration {
         // Orchestrate quantum consciousness
         let orchestrationContext = QuantumConsciousnessOrchestrationContext(
             agents: request.agents,
@@ -444,8 +440,7 @@ public final class AgentConsciousnessIntegration: Sendable {
     private func synthesizeUniversalConsciousness(
         _ request: ConsciousnessIntegrationRequest,
         consciousness: QuantumConsciousnessOrchestration
-    ) async throws -> UniversalConsciousnessSynthesis
-    {
+    ) async throws -> UniversalConsciousnessSynthesis {
         // Synthesize universal consciousness
         let synthesisContext = UniversalConsciousnessSynthesisContext(
             agents: request.agents,
@@ -469,8 +464,7 @@ public final class AgentConsciousnessIntegration: Sendable {
     private func validateConsciousnessIntegrationResults(
         _ universalConsciousnessSynthesis: UniversalConsciousnessSynthesis,
         session: ConsciousnessIntegrationSession
-    ) async throws -> ConsciousnessIntegrationValidationResult
-    {
+    ) async throws -> ConsciousnessIntegrationValidationResult {
         // Validate consciousness integration results
         let performanceComparison = await compareConsciousnessIntegrationPerformance(
             originalAgents: session.request.agents,
@@ -483,7 +477,7 @@ public final class AgentConsciousnessIntegration: Sendable {
         )
 
         let success = performanceComparison.consciousnessDepth >= session.request.consciousnessDepthTarget &&
-                     consciousnessAdvantage.consciousnessAdvantage >= 0.4
+            consciousnessAdvantage.consciousnessAdvantage >= 0.4
 
         let events = generateConsciousnessIntegrationEvents(session, consciousness: universalConsciousnessSynthesis)
 
@@ -602,24 +596,24 @@ public final class AgentConsciousnessIntegration: Sendable {
 
     private func measureConsciousnessIntegration(_ integratedAgents: [ConsciousnessIntegrationAgent]) async -> Double {
         // Measure consciousness integration
-        return 0.94
+        0.94
     }
 
     private func measureUniversalConsciousness(_ integratedAgents: [ConsciousnessIntegrationAgent]) async -> Double {
         // Measure universal consciousness
-        return 0.92
+        0.92
     }
 
     private func measureConsciousnessSynthesis(_ integratedAgents: [ConsciousnessIntegrationAgent]) async -> Double {
         // Measure consciousness synthesis
-        return 0.95
+        0.95
     }
 
     private func generateConsciousnessIntegrationEvents(
         _ session: ConsciousnessIntegrationSession,
         consciousness: UniversalConsciousnessSynthesis
     ) -> [ConsciousnessIntegrationEvent] {
-        return [
+        [
             ConsciousnessIntegrationEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -635,9 +629,9 @@ public final class AgentConsciousnessIntegration: Sendable {
                 data: [
                     "success": true,
                     "consciousness_depth": consciousness.consciousnessHarmony,
-                    "integration_harmony": consciousness.synthesisEfficiency
+                    "integration_harmony": consciousness.synthesisEfficiency,
                 ]
-            )
+            ),
         ]
     }
 
@@ -970,7 +964,7 @@ public struct ConsciousnessIntegrationFrameworkMetrics: Sendable, Codable {
     public var averageConsciousnessAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Consciousness integration metrics
@@ -1475,9 +1469,9 @@ public struct UniversalConsciousnessSynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension AgentConsciousnessIntegration {
+public extension AgentConsciousnessIntegration {
     /// Create specialized consciousness integration system for specific agent architectures
-    public static func createSpecializedConsciousnessIntegrationSystem(
+    static func createSpecializedConsciousnessIntegrationSystem(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentConsciousnessIntegration {
         let system = try await AgentConsciousnessIntegration()
@@ -1486,7 +1480,7 @@ extension AgentConsciousnessIntegration {
     }
 
     /// Execute batch consciousness integration processing
-    public func executeBatchConsciousnessIntegration(
+    func executeBatchConsciousnessIntegration(
         _ integrationRequests: [ConsciousnessIntegrationRequest]
     ) async throws -> BatchConsciousnessIntegrationResult {
 
@@ -1509,8 +1503,8 @@ extension AgentConsciousnessIntegration {
         }
 
         let successRate = Double(results.count) / Double(integrationRequests.count)
-        let averageDepth = results.map { $0.consciousnessDepth }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.consciousnessAdvantage }.reduce(0, +) / Double(results.count)
+        let averageDepth = results.map(\.consciousnessDepth).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.consciousnessAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchConsciousnessIntegrationResult(
             batchId: batchId,
@@ -1527,7 +1521,7 @@ extension AgentConsciousnessIntegration {
     }
 
     /// Get consciousness integration recommendations
-    public func getConsciousnessIntegrationRecommendations() async -> [ConsciousnessIntegrationRecommendation] {
+    func getConsciousnessIntegrationRecommendations() async -> [ConsciousnessIntegrationRecommendation] {
         var recommendations: [ConsciousnessIntegrationRecommendation] = []
 
         let status = await getConsciousnessIntegrationStatus()

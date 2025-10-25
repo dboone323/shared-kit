@@ -61,7 +61,7 @@ public struct HarmonyMetrics: Sendable {
         let metrics = [
             synchronizationIndex, balanceCoefficient, coherenceLevel, resonanceFrequency,
             equilibriumStability, symbioticEfficiency, harmonicConvergence, unityAttainment,
-            balanceOptimization, synchronizationPerfection
+            balanceOptimization, synchronizationPerfection,
         ]
         return metrics.reduce(0, +) / Double(metrics.count)
     }
@@ -258,7 +258,7 @@ public final class HarmonyAchievementEngine: Sendable {
             SynchronizationOptimizationStep(type: .synchronizationEnhancement, intensity: 10.0),
             SynchronizationOptimizationStep(type: .coherenceAmplification, intensity: 15.0),
             SynchronizationOptimizationStep(type: .resonanceStabilization, intensity: 12.0),
-            SynchronizationOptimizationStep(type: .unityRealization, intensity: 14.0)
+            SynchronizationOptimizationStep(type: .unityRealization, intensity: 14.0),
         ]
 
         var capabilities: [HarmonyCapability] = []
@@ -291,7 +291,7 @@ public final class HarmonyAchievementEngine: Sendable {
         let harmonizationSequence = [
             BalanceHarmonizationStep(type: .balanceOptimization, depth: 10.0),
             BalanceHarmonizationStep(type: .equilibriumAchievement, depth: 15.0),
-            BalanceHarmonizationStep(type: .symbioticIntegration, depth: 12.0)
+            BalanceHarmonizationStep(type: .symbioticIntegration, depth: 12.0),
         ]
 
         var capabilities: [HarmonyCapability] = []
@@ -321,7 +321,7 @@ public final class HarmonyAchievementEngine: Sendable {
         let resonanceSequence = [
             ResonanceGenerationStep(type: .harmonicConvergence, power: 10.0),
             ResonanceGenerationStep(type: .balancePerfection, power: 15.0),
-            ResonanceGenerationStep(type: .synchronizationCompletion, power: 12.0)
+            ResonanceGenerationStep(type: .synchronizationCompletion, power: 12.0),
         ]
 
         var capabilities: [HarmonyCapability] = []
@@ -404,7 +404,7 @@ public final class SynchronizationOptimizationSystem: Sendable {
 
         return SynchronizationOptimizationStrategy(
             optimizationSteps: optimizationSteps,
-            totalExpectedOptimizationGain: optimizationSteps.map { $0.intensity }.reduce(0, +),
+            totalExpectedOptimizationGain: optimizationSteps.map(\.intensity).reduce(0, +),
             estimatedDuration: optimizationSteps.map { $0.intensity * 0.1 }.reduce(0, +),
             designedAt: Date()
         )
@@ -437,7 +437,7 @@ public final class SynchronizationOptimizationSystem: Sendable {
     ) async -> SynchronizationOptimizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.intensity * 1_000_000_000))
 
-        let actualGain = step.intensity * (0.9 + Double.random(in: 0...0.2))
+        let actualGain = step.intensity * (0.9 + Double.random(in: 0 ... 0.2))
         let success = actualGain >= step.intensity * 0.95
 
         return SynchronizationOptimizationResultItem(
@@ -452,8 +452,8 @@ public final class SynchronizationOptimizationSystem: Sendable {
 
     /// Generate synchronization optimizer
     private func generateSynchronizationOptimizer(_ results: [SynchronizationOptimizationResultItem]) -> SynchronizationOptimizer {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualSynchronizationGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualSynchronizationGain).reduce(0, +)
         let optimizerValue = 1.0 + (totalGain * successRate / 10.0)
 
         return SynchronizationOptimizer(
@@ -461,7 +461,7 @@ public final class SynchronizationOptimizationSystem: Sendable {
             optimizerType: .harmony,
             optimizerValue: optimizerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -524,7 +524,7 @@ public final class BalanceHarmonizationInterface: Sendable {
 
         return BalanceHarmonizationStrategy(
             harmonizationSteps: harmonizationSteps,
-            totalExpectedHarmonizationGain: harmonizationSteps.map { $0.depth }.reduce(0, +),
+            totalExpectedHarmonizationGain: harmonizationSteps.map(\.depth).reduce(0, +),
             estimatedDuration: harmonizationSteps.map { $0.depth * 0.15 }.reduce(0, +),
             designedAt: Date()
         )
@@ -557,7 +557,7 @@ public final class BalanceHarmonizationInterface: Sendable {
     ) async -> BalanceHarmonizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.depth * 1_500_000_000))
 
-        let actualGain = step.depth * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.depth * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.depth * 0.90
 
         return BalanceHarmonizationResultItem(
@@ -572,8 +572,8 @@ public final class BalanceHarmonizationInterface: Sendable {
 
     /// Generate balance harmonizer
     private func generateBalanceHarmonizer(_ results: [BalanceHarmonizationResultItem]) -> BalanceHarmonizer {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalGain = results.map { $0.actualBalanceGain }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalGain = results.map(\.actualBalanceGain).reduce(0, +)
         let harmonizerValue = 1.0 + (totalGain * successRate / 15.0)
 
         return BalanceHarmonizer(
@@ -581,7 +581,7 @@ public final class BalanceHarmonizationInterface: Sendable {
             harmonizerType: .universal,
             harmonizerValue: harmonizerValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }
@@ -644,7 +644,7 @@ public final class ResonanceFieldGenerator: Sendable {
 
         return ResonanceFieldStrategy(
             generationSteps: generationSteps,
-            totalExpectedFieldPower: generationSteps.map { $0.power }.reduce(0, +),
+            totalExpectedFieldPower: generationSteps.map(\.power).reduce(0, +),
             estimatedDuration: generationSteps.map { $0.power * 0.2 }.reduce(0, +),
             designedAt: Date()
         )
@@ -677,7 +677,7 @@ public final class ResonanceFieldGenerator: Sendable {
     ) async -> ResonanceFieldResult {
         try? await Task.sleep(nanoseconds: UInt64(step.power * 2_000_000_000))
 
-        let actualPower = step.power * (0.8 + Double.random(in: 0...0.4))
+        let actualPower = step.power * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualPower >= step.power * 0.85
 
         return ResonanceFieldResult(
@@ -692,8 +692,8 @@ public final class ResonanceFieldGenerator: Sendable {
 
     /// Generate resonance field
     private func generateResonanceField(_ results: [ResonanceFieldResult]) -> ResonanceField {
-        let successRate = Double(results.filter { $0.success }.count) / Double(results.count)
-        let totalPower = results.map { $0.actualFieldStrength }.reduce(0, +)
+        let successRate = Double(results.filter(\.success).count) / Double(results.count)
+        let totalPower = results.map(\.actualFieldStrength).reduce(0, +)
         let fieldValue = 1.0 + (totalPower * successRate / 20.0)
 
         return ResonanceField(
@@ -701,7 +701,7 @@ public final class ResonanceFieldGenerator: Sendable {
             fieldType: .harmony,
             fieldValue: fieldValue,
             coverageDomain: .universal,
-            activeSteps: results.map { $0.stepId },
+            activeSteps: results.map(\.stepId),
             generatedAt: Date()
         )
     }

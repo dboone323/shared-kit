@@ -59,8 +59,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
     }
 
     /// Execute a workflow management task
-    public func executeWorkflowTask(_ task: WorkflowAgentTask) async throws -> AgentExecutionResult
-    {
+    public func executeWorkflowTask(_ task: WorkflowAgentTask) async throws -> AgentExecutionResult {
         state = .running
 
         do {
@@ -162,8 +161,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
 
     // MARK: - Private Methods
 
-    private func performWorkflowTask(_ task: WorkflowAgentTask) async throws -> AgentExecutionResult
-    {
+    private func performWorkflowTask(_ task: WorkflowAgentTask) async throws -> AgentExecutionResult {
         switch task.type {
         case .executeWorkflow:
             return try await executeWorkflow(task.workflow!)
@@ -258,7 +256,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
     private func applyOptimizationStrategy(
         _ strategy: WorkflowOptimizationStrategy, to workflow: MCPWorkflow
     ) async throws -> MCPWorkflow {
-        return try await strategy.apply(to: workflow, orchestrator: workflowOrchestrator)
+        try await strategy.apply(to: workflow, orchestrator: workflowOrchestrator)
     }
 
     private func calculatePerformanceMetrics(from executions: [MCPWorkflowExecution])
@@ -283,7 +281,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
     {
         // Simple prediction based on historical data and workflow complexity
         let baseTime = metrics.averageExecutionTime
-        let complexityFactor = Double(workflow.steps.count) / 10.0  // Assume 10 steps is baseline
+        let complexityFactor = Double(workflow.steps.count) / 10.0 // Assume 10 steps is baseline
         return baseTime * complexityFactor
     }
 
@@ -292,13 +290,13 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
     {
         // Prediction based on historical success rate and workflow complexity
         let baseRate = metrics.successRate
-        let complexityPenalty = min(0.1, Double(workflow.steps.count) / 100.0)  // Penalty for complex workflows
+        let complexityPenalty = min(0.1, Double(workflow.steps.count) / 100.0) // Penalty for complex workflows
         return max(0.0, baseRate - complexityPenalty)
     }
 
     private func identifyPotentialBottlenecks(_ workflow: MCPWorkflow) -> [WorkflowBottleneck] {
         // Identify steps that are likely to be bottlenecks
-        return workflow.steps.filter { step in
+        workflow.steps.filter { step in
             // Simple heuristic: steps with many dependencies or complex parameters
             step.dependencies.count > 2 || step.parameters.count > 5
         }.map { step in
@@ -314,7 +312,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
     private func calculatePredictionConfidence(_ metrics: WorkflowPerformanceMetrics) -> Double {
         // Confidence based on amount of historical data
         let dataPoints = Double(metrics.totalExecutions)
-        return min(1.0, dataPoints / 10.0)  // Max confidence with 10+ data points
+        return min(1.0, dataPoints / 10.0) // Max confidence with 10+ data points
     }
 
     private func generatePerformanceRecommendations(
@@ -327,7 +325,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
                 "Consider adding error handling and retry logic to improve success rate")
         }
 
-        if metrics.averageExecutionTime > 300 {  // 5 minutes
+        if metrics.averageExecutionTime > 300 { // 5 minutes
             recommendations.append(
                 "Workflow execution is slow; consider parallelization or optimization")
         }
@@ -389,7 +387,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
             coordinationPlan: plan,
             results: results,
             events: coordinationEvents,
-            overallSuccess: results.values.allSatisfy { $0.success }
+            overallSuccess: results.values.allSatisfy(\.success)
         )
     }
 
@@ -482,7 +480,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
         let experience = AgentExperience(
             situation: WorkflowSituation.taskFailure(task, error),
             action: AgentAction.failedTask(error),
-            reward: -2.0,  // Higher penalty for failures
+            reward: -2.0, // Higher penalty for failures
             timestamp: Date()
         )
 
@@ -519,7 +517,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
             activeWorkflows: activeWorkflows.count,
             systemHealth: systemHealth.overallHealth,
             performanceMetrics: performanceMetrics,
-            anomalies: []  // Would detect actual anomalies
+            anomalies: [] // Would detect actual anomalies
         )
     }
 
@@ -532,12 +530,12 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
         var bottlenecks: [WorkflowBottleneck] = []
 
         for step in workflow.steps {
-            let stepExecutions = executions.filter { execution in
+            let stepExecutions = executions.filter { _ in
                 // This would need actual step-level timing data
-                true  // Placeholder
+                true // Placeholder
             }
 
-            if stepExecutions.count > 5 {  // Has enough data
+            if stepExecutions.count > 5 { // Has enough data
                 // Calculate if step is a bottleneck
                 bottlenecks.append(
                     WorkflowBottleneck(
@@ -554,8 +552,8 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
 
     private func calculateResourceUtilization(_ workflow: MCPWorkflow) -> [String: Double] {
         // Calculate resource utilization for workflow
-        return [
-            "cpu": 0.7,  // Placeholder values
+        [
+            "cpu": 0.7, // Placeholder values
             "memory": 0.6,
             "network": 0.4,
         ]
@@ -592,7 +590,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
         var dependencies: [String: [String]] = [:]
 
         for workflow in workflows {
-            dependencies[workflow.id] = workflow.steps.flatMap { $0.dependencies }
+            dependencies[workflow.id] = workflow.steps.flatMap(\.dependencies)
         }
 
         return dependencies
@@ -603,7 +601,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
     {
         // Implement topological sort for workflow execution order
         // This is a simplified implementation
-        return workflows.sorted { $0.id < $1.id }
+        workflows.sorted { $0.id < $1.id }
     }
 
     private func allocateResources(for workflows: [MCPWorkflow]) -> [String:
@@ -627,7 +625,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
         -> [WorkflowSynchronizationPoint]
     {
         // Identify points where workflows need to synchronize
-        return workflows.flatMap { workflow in
+        workflows.flatMap { workflow in
             workflow.steps.filter { $0.dependencies.count > 1 }.map { step in
                 WorkflowSynchronizationPoint(
                     workflowId: workflow.id,
@@ -777,29 +775,29 @@ public enum WorkflowCondition {
     case always
     case taskType(WorkflowAgentTaskType)
     case anomalyType(WorkflowAnomalyType)
-    case performanceThreshold(String, Double)  // metric, threshold
+    case performanceThreshold(String, Double) // metric, threshold
     case custom((WorkflowSituation) -> Bool)
 
     func evaluate(situation: WorkflowSituation) -> Bool {
         switch self {
         case .always:
             return true
-        case .taskType(let type):
-            if case .taskExecution(let task) = situation {
+        case let .taskType(type):
+            if case let .taskExecution(task) = situation {
                 return task.type == type
             }
             return false
-        case .anomalyType(let type):
-            if case .workflowAnomaly(let anomaly) = situation {
+        case let .anomalyType(type):
+            if case let .workflowAnomaly(anomaly) = situation {
                 return anomaly.type == type
             }
             return false
-        case .performanceThreshold(let metric, let threshold):
-            if case .performanceIssue(let issue) = situation {
+        case let .performanceThreshold(metric, threshold):
+            if case let .performanceIssue(issue) = situation {
                 return issue.metrics[metric] ?? 0 > threshold
             }
             return false
-        case .custom(let evaluator):
+        case let .custom(evaluator):
             return evaluator(situation)
         }
     }
@@ -1036,11 +1034,11 @@ public protocol WorkflowOptimizationStrategy {
 public struct ParallelizationStrategy: WorkflowOptimizationStrategy {
     public func canApply(to analysis: WorkflowAnalysis) -> Bool {
         // Can apply if there are sequential steps that could be parallelized
-        return analysis.optimizationOpportunities.contains { $0.type == .parallelization }
+        analysis.optimizationOpportunities.contains { $0.type == .parallelization }
     }
 
     public func estimatedBenefit(for analysis: WorkflowAnalysis) -> Double {
-        return 0.3  // 30% performance improvement
+        0.3 // 30% performance improvement
     }
 
     public func apply(to workflow: MCPWorkflow, orchestrator: AdvancedMCPWorkflowOrchestrator)
@@ -1049,7 +1047,7 @@ public struct ParallelizationStrategy: WorkflowOptimizationStrategy {
         var optimizedSteps = workflow.steps
 
         // Convert eligible sequential steps to parallel
-        for i in 0..<optimizedSteps.count {
+        for i in 0 ..< optimizedSteps.count {
             if optimizedSteps[i].executionMode == .sequential
                 && optimizedSteps[i].dependencies.count <= 1
             {
@@ -1079,11 +1077,11 @@ public struct ParallelizationStrategy: WorkflowOptimizationStrategy {
 /// Caching optimization strategy
 public struct CachingStrategy: WorkflowOptimizationStrategy {
     public func canApply(to analysis: WorkflowAnalysis) -> Bool {
-        return analysis.averageExecutionTime > 60  // Only for slow workflows
+        analysis.averageExecutionTime > 60 // Only for slow workflows
     }
 
     public func estimatedBenefit(for analysis: WorkflowAnalysis) -> Double {
-        return 0.2  // 20% performance improvement
+        0.2 // 20% performance improvement
     }
 
     public func apply(to workflow: MCPWorkflow, orchestrator: AdvancedMCPWorkflowOrchestrator)
@@ -1107,18 +1105,18 @@ public struct CachingStrategy: WorkflowOptimizationStrategy {
 /// Consolidation optimization strategy
 public struct ConsolidationStrategy: WorkflowOptimizationStrategy {
     public func canApply(to analysis: WorkflowAnalysis) -> Bool {
-        return workflow.steps.count > 10  // Only for complex workflows
+        workflow.steps.count > 10 // Only for complex workflows
     }
 
     public func estimatedBenefit(for analysis: WorkflowAnalysis) -> Double {
-        return 0.15  // 15% performance improvement
+        0.15 // 15% performance improvement
     }
 
     public func apply(to workflow: MCPWorkflow, orchestrator: AdvancedMCPWorkflowOrchestrator)
         async throws -> MCPWorkflow
     {
         // Consolidate similar steps (simplified implementation)
-        let consolidatedSteps = workflow.steps  // Would implement actual consolidation logic
+        let consolidatedSteps = workflow.steps // Would implement actual consolidation logic
 
         return MCPWorkflow(
             id: workflow.id,
@@ -1133,11 +1131,11 @@ public struct ConsolidationStrategy: WorkflowOptimizationStrategy {
 /// Basic optimization strategy (fallback)
 public struct BasicOptimizationStrategy: WorkflowOptimizationStrategy {
     public func canApply(to analysis: WorkflowAnalysis) -> Bool {
-        return true  // Can always apply basic optimizations
+        true // Can always apply basic optimizations
     }
 
     public func estimatedBenefit(for analysis: WorkflowAnalysis) -> Double {
-        return 0.1  // 10% performance improvement
+        0.1 // 10% performance improvement
     }
 
     public func apply(to workflow: MCPWorkflow, orchestrator: AdvancedMCPWorkflowOrchestrator)
@@ -1153,7 +1151,7 @@ public struct BasicOptimizationStrategy: WorkflowOptimizationStrategy {
                 executionMode: step.executionMode,
                 retryPolicy: step.retryPolicy
                     ?? MCPRetryPolicy(maxAttempts: 3, backoffStrategy: .exponential),
-                timeout: step.timeout ?? 300,  // Default 5 minute timeout
+                timeout: step.timeout ?? 300, // Default 5 minute timeout
                 metadata: step.metadata
             )
         }
@@ -1181,14 +1179,14 @@ public enum WorkflowAgentError: Error {
 
 // MARK: - Convenience Extensions
 
-extension IntelligentWorkflowAgent {
+public extension IntelligentWorkflowAgent {
     /// Create a specialized workflow agent
-    public static func createSpecializedAgent(
+    static func createSpecializedAgent(
         specialization: WorkflowAgentSpecialization,
         workflowOrchestrator: AdvancedMCPWorkflowOrchestrator,
         mcpSystem: MCPCompleteSystemIntegration
     ) -> IntelligentWorkflowAgent {
-        return IntelligentWorkflowAgent(
+        IntelligentWorkflowAgent(
             name: "\(specialization) Agent",
             specialization: specialization,
             workflowOrchestrator: workflowOrchestrator,
@@ -1197,8 +1195,8 @@ extension IntelligentWorkflowAgent {
     }
 
     /// Get agent performance report
-    public func generatePerformanceReport() -> WorkflowAgentPerformanceReport {
-        return WorkflowAgentPerformanceReport(
+    func generatePerformanceReport() -> WorkflowAgentPerformanceReport {
+        WorkflowAgentPerformanceReport(
             agentId: id,
             specialization: specialization,
             capabilities: capabilities,

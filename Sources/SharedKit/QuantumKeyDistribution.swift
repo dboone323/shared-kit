@@ -85,20 +85,20 @@ public class QuantumKeyDistribution: ObservableObject {
     public func getQKDStatistics() async -> QKDNetworkStatistics {
         let totalKeys = activeKeys.count
         let averageKeyLength = activeKeys.values.map { Double($0.keyLength) }.reduce(0, +) / Double(max(1, activeKeys.count))
-        let averageErrorRate = activeKeys.values.map { $0.errorRate }.reduce(0, +) / Double(max(1, activeKeys.count))
-        let averageSiftedRate = activeKeys.values.map { $0.siftedKeyRate }.reduce(0, +) / Double(max(1, activeKeys.count))
+        let averageErrorRate = activeKeys.values.map(\.errorRate).reduce(0, +) / Double(max(1, activeKeys.count))
+        let averageSiftedRate = activeKeys.values.map(\.siftedKeyRate).reduce(0, +) / Double(max(1, activeKeys.count))
 
         let securityLevels = Dictionary(grouping: activeKeys.values, by: { $0.securityLevel })
             .mapValues { $0.count }
 
-        return QKDNetworkStatistics(
+        return await QKDNetworkStatistics(
             totalKeys: totalKeys,
             averageKeyLength: averageKeyLength,
             averageErrorRate: averageErrorRate,
             averageSiftedRate: averageSiftedRate,
             securityLevelDistribution: securityLevels,
-            bb84Keys: await bb84Protocol.getActiveKeyCount(),
-            e91Keys: await e91Protocol.getActiveKeyCount()
+            bb84Keys: bb84Protocol.getActiveKeyCount(),
+            e91Keys: e91Protocol.getActiveKeyCount()
         )
     }
 }
@@ -155,18 +155,18 @@ public class BB84Protocol: ObservableObject {
 
     private func transmitQuantumBits(alice: String, bob: String, length: Int) async -> [UInt8] {
         // Simulate quantum bit transmission
-        return (0..<length).map { _ in UInt8.random(in: 0...255) }
+        (0 ..< length).map { _ in UInt8.random(in: 0 ... 255) }
     }
 
     private func performBasisReconciliation(rawKey: [UInt8]) async -> [UInt8] {
         // Simulate basis reconciliation (sifting)
-        let siftedLength = Int(Double(rawKey.count) * Double.random(in: 0.4...0.6))
+        let siftedLength = Int(Double(rawKey.count) * Double.random(in: 0.4 ... 0.6))
         return Array(rawKey.prefix(siftedLength))
     }
 
     private func estimateErrors(siftedKey: [UInt8]) async -> Double {
         // Simulate error estimation
-        return Double.random(in: 0.01...0.08)
+        Double.random(in: 0.01 ... 0.08)
     }
 
     private func performErrorCorrection(siftedKey: [UInt8], errorRate: Double) async -> [UInt8] {
@@ -182,7 +182,7 @@ public class BB84Protocol: ObservableObject {
     }
 
     public func getActiveKeyCount() async -> Int {
-        return activeSessions.count
+        activeSessions.count
     }
 }
 
@@ -239,12 +239,12 @@ public class E91Protocol: ObservableObject {
 
     private func generateEntangledPairs(count: Int) async -> [EntanglementPair] {
         // Simulate generation of entangled particle pairs
-        return (0..<count).map { i in
+        (0 ..< count).map { i in
             EntanglementPair(
                 id: "e91_pair_\(i)",
                 nodeA: "alice_particle_\(i)",
                 nodeB: "bob_particle_\(i)",
-                fidelity: Double.random(in: 0.9...0.99),
+                fidelity: Double.random(in: 0.9 ... 0.99),
                 decoherenceRate: 0.001,
                 distance: 0.0
             )
@@ -253,12 +253,12 @@ public class E91Protocol: ObservableObject {
 
     private func measureParticles(_ pairs: [EntanglementPair], by participant: String) async -> [UInt8] {
         // Simulate quantum measurements
-        return pairs.map { _ in UInt8.random(in: 0...1) }
+        pairs.map { _ in UInt8.random(in: 0 ... 1) }
     }
 
     private func analyzeBellStates(aliceMeasurements: [UInt8], bobMeasurements: [UInt8]) async -> [Double] {
         // Simulate Bell state analysis
-        return (0..<aliceMeasurements.count).map { _ in Double.random(in: 0.7...0.95) }
+        (0 ..< aliceMeasurements.count).map { _ in Double.random(in: 0.7 ... 0.95) }
     }
 
     private func estimateErrorsFromBellInequalities(_ bellResults: [Double]) async -> Double {
@@ -270,11 +270,11 @@ public class E91Protocol: ObservableObject {
     private func distillKey(aliceMeasurements: [UInt8], bobMeasurements: [UInt8]) async -> [UInt8] {
         // Simulate key distillation
         let distilledLength = min(aliceMeasurements.count, bobMeasurements.count) / 2
-        return (0..<distilledLength).map { _ in UInt8.random(in: 0...255) }
+        return (0 ..< distilledLength).map { _ in UInt8.random(in: 0 ... 255) }
     }
 
     public func getActiveKeyCount() async -> Int {
-        return activeSessions.count
+        activeSessions.count
     }
 }
 
@@ -322,7 +322,7 @@ public class QKDSecurityMonitor: ObservableObject {
 
     private func detectEavesdroppingPatterns(_ keyResult: QKDResult) async -> Bool {
         // Simulate eavesdropping detection
-        return Double.random(in: 0...1) < 0.05 // 5% chance of false positive
+        Double.random(in: 0 ... 1) < 0.05 // 5% chance of false positive
     }
 
     public func revokeKey(_ keyId: String) async {

@@ -329,7 +329,7 @@ public final class UniversalOptimizationCoordinator: ObservableObject, @unchecke
             while state == .converging || state == .harmonious || state == .monitored {
                 let progress = await self.monitorOptimizationProgress()
                 self.updateEvolutionProgress(progress)
-                try? await Task.sleep(nanoseconds: 20_000_000_000)  // 20 seconds
+                try? await Task.sleep(nanoseconds: 20_000_000_000) // 20 seconds
                 // Update state for next iteration
                 state = await self.getCurrentOptimizationState()
             }
@@ -390,7 +390,7 @@ public final class UniversalOptimizationCoordinator: ObservableObject, @unchecke
         for coordinator in networkCoordinators {
             coordinator.readinessPublisher
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] (domain, readiness) in
+                .sink { [weak self] domain, readiness in
                     if let index = self?.activeOptimizationNetworks.firstIndex(where: {
                         $0.domain == domain
                     }) {
@@ -464,7 +464,7 @@ public final class UniversalOptimizationCoordinator: ObservableObject, @unchecke
         // Weighted combination with exponential optimization emergence
         let combinedFactor =
             (readinessFactor * 0.25) + (convergenceFactor * 0.25) + (harmonyFactor * 0.25)
-            + (completionFactor * 0.25)
+                + (completionFactor * 0.25)
         return min(pow(combinedFactor, 1.2), 1.0)
     }
 
@@ -473,7 +473,7 @@ public final class UniversalOptimizationCoordinator: ObservableObject, @unchecke
         let remainingWork = 1.0 - universalOptimizationLevel
         let optimizationRate =
             universalOptimizationLevel
-            / max(Date().timeIntervalSince(Date(timeIntervalSinceNow: -1800)), 1.0)
+                / max(Date().timeIntervalSince(Date(timeIntervalSinceNow: -1800)), 1.0)
         return remainingWork / max(optimizationRate, 0.0001)
     }
 }
@@ -661,7 +661,7 @@ private class OptimizationNetworkCoordinator {
 
     func initialize() async throws {}
     func activate() async throws { isActive = true }
-    func assessReadiness() async -> Double { Double.random(in: 0.8...0.98) }
+    func assessReadiness() async -> Double { Double.random(in: 0.8 ... 0.98) }
 
     let readinessPublisher = PassthroughSubject<(OptimizationDomain, Double), Never>()
 }

@@ -128,8 +128,8 @@ struct QuantumField: Sendable {
     let interactionStrength: Double
     var stabilityIndex: Double
     var boundaryConditions: FieldBoundaries
-    var spatialDistribution: [Double]  // Multi-dimensional field values
-    let temporalEvolution: [Double]  // Time-dependent field evolution
+    var spatialDistribution: [Double] // Multi-dimensional field values
+    let temporalEvolution: [Double] // Time-dependent field evolution
     let quantumState: QuantumState
     let creationDate: Date
     var lastManipulation: Date
@@ -316,7 +316,8 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     {
         let interactionAnalysis = analyzeFieldInteractions(fields)
         let optimizedInteractions = try await optimizeFieldInteractions(
-            fields, analysis: interactionAnalysis)
+            fields, analysis: interactionAnalysis
+        )
 
         return InteractionEngineeringResult(
             fields: fields,
@@ -337,7 +338,8 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
         let stabilityAnalysis = analyzeFieldStability([field])
         let optimizationParameters = calculateOptimizationParameters(stabilityAnalysis)
         let optimizedField = try await applyStabilityOptimization(
-            field, parameters: optimizationParameters)
+            field, parameters: optimizationParameters
+        )
 
         return StabilityOptimizationResult(
             originalField: field,
@@ -359,68 +361,69 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     func applyFieldTransformation(_ field: QuantumField, transformation: FieldTransformation)
         async throws -> TransformationResult
     {
-        return try await fieldManipulator.applyTransformation(field, transformation: transformation)
+        try await fieldManipulator.applyTransformation(field, transformation: transformation)
     }
 
     func controlFieldInterference(_ fields: [QuantumField]) async throws
         -> InterferenceControlResult
     {
-        return try await fieldManipulator.controlInterference(fields)
+        try await fieldManipulator.controlInterference(fields)
     }
 
     func tuneFieldResonance(_ field: QuantumField, targetResonance: Double) async throws
         -> ResonanceTuningResult
     {
-        return try await fieldManipulator.tuneResonance(field, targetResonance: targetResonance)
+        try await fieldManipulator.tuneResonance(field, targetResonance: targetResonance)
     }
 
     func engineerFieldBoundaries(_ field: QuantumField, boundaries: FieldBoundaries) async throws
         -> BoundaryEngineeringResult
     {
-        return try await fieldManipulator.engineerBoundaries(field, boundaries: boundaries)
+        try await fieldManipulator.engineerBoundaries(field, boundaries: boundaries)
     }
 
     // MARK: - FieldEnergyManagementProtocol
 
     func manageFieldEnergyDistribution(_ field: QuantumField) async -> EnergyDistributionResult {
-        return await energyManager.manageDistribution(field)
+        await energyManager.manageDistribution(field)
     }
 
     func optimizeFieldEnergyEfficiency(_ field: QuantumField) async throws
         -> EnergyOptimizationResult
     {
-        return try await energyManager.optimizeEfficiency(field)
+        try await energyManager.optimizeEfficiency(field)
     }
 
     func controlFieldEnergyDissipation(_ field: QuantumField, dissipationRate: Double) async throws
         -> DissipationControlResult
     {
-        return try await energyManager.controlDissipation(field, dissipationRate: dissipationRate)
+        try await energyManager.controlDissipation(field, dissipationRate: dissipationRate)
     }
 
     func harvestFieldEnergy(_ field: QuantumField) async -> EnergyHarvestingResult {
-        return await energyManager.harvestEnergy(field)
+        await energyManager.harvestEnergy(field)
     }
 
     // MARK: - FieldCoherenceProtocol
 
     func maintainFieldCoherence(_ field: QuantumField) async throws -> CoherenceMaintenanceResult {
-        return try await coherenceController.maintainCoherence(field)
+        try await coherenceController.maintainCoherence(field)
     }
 
     func enhanceFieldCoherence(_ field: QuantumField, targetCoherence: Double) async throws
         -> CoherenceEnhancementResult
     {
-        return try await coherenceController.enhanceCoherence(
-            field, targetCoherence: targetCoherence)
+        try await coherenceController.enhanceCoherence(
+            field, targetCoherence: targetCoherence
+        )
     }
 
     func monitorCoherenceDegradation(_ field: QuantumField) async -> DegradationMonitoringResult {
-        return await coherenceController.monitorDegradation(field)
+        await coherenceController.monitorDegradation(field)
     }
 
     func restoreFieldCoherence(_ field: QuantumField) async throws -> CoherenceRestorationResult {
-        return try await coherenceController.restoreCoherence(field)
+        try await coherenceController.restoreCoherence(field)
     }
 
     // MARK: - Private Methods
@@ -471,17 +474,17 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
 
     private func analyzeFieldProperties(_ fields: [QuantumField]) async -> FieldCharacteristics {
         let averageEnergyDensity =
-            fields.map { $0.energyDensity }.reduce(0, +) / Double(fields.count)
-        let averageCoherence = fields.map { $0.coherenceLevel }.reduce(0, +) / Double(fields.count)
+            fields.map(\.energyDensity).reduce(0, +) / Double(fields.count)
+        let averageCoherence = fields.map(\.coherenceLevel).reduce(0, +) / Double(fields.count)
         let averageResonance =
-            fields.map { $0.resonanceFrequency }.reduce(0, +) / Double(fields.count)
-        let averageStability = fields.map { $0.stabilityIndex }.reduce(0, +) / Double(fields.count)
+            fields.map(\.resonanceFrequency).reduce(0, +) / Double(fields.count)
+        let averageStability = fields.map(\.stabilityIndex).reduce(0, +) / Double(fields.count)
 
         let fieldTypeDistribution = Dictionary(grouping: fields) { $0.fieldType }
             .mapValues { $0.count }
 
-        let energyDistribution = fields.map { $0.energyDensity }
-        let coherenceDistribution = fields.map { $0.coherenceLevel }
+        let energyDistribution = fields.map(\.energyDensity)
+        let coherenceDistribution = fields.map(\.coherenceLevel)
 
         return FieldCharacteristics(
             averageEnergyDensity: averageEnergyDensity,
@@ -498,8 +501,8 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     private func analyzeFieldInteractions(_ fields: [QuantumField]) -> InteractionAnalysis {
         var interactions: [FieldInteraction] = []
 
-        for i in 0..<fields.count {
-            for j in (i + 1)..<fields.count {
+        for i in 0 ..< fields.count {
+            for j in (i + 1) ..< fields.count {
                 let field1 = fields[i]
                 let field2 = fields[j]
 
@@ -518,7 +521,7 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
             }
         }
 
-        let totalInteractionStrength = interactions.map { $0.interactionStrength }.reduce(0, +)
+        let totalInteractionStrength = interactions.map(\.interactionStrength).reduce(0, +)
         let interactionComplexity = calculateInteractionComplexity(interactions)
 
         return InteractionAnalysis(
@@ -531,7 +534,7 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     }
 
     private func analyzeFieldStability(_ fields: [QuantumField]) -> StabilityAnalysis {
-        let stabilityScores = fields.map { $0.stabilityIndex }
+        let stabilityScores = fields.map(\.stabilityIndex)
         let averageStability = stabilityScores.reduce(0, +) / Double(fields.count)
         let stabilityVariance = calculateVariance(stabilityScores)
 
@@ -552,7 +555,7 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     }
 
     private func generateFieldRecommendations() -> [String] {
-        return [
+        [
             "Monitor field coherence levels regularly",
             "Maintain optimal energy distribution",
             "Control field interactions to prevent instability",
@@ -620,16 +623,16 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     }
 
     private func calculateInteractionStrength(_ interactions: [OptimizedInteraction]) -> Double {
-        return interactions.map { $0.optimizedStrength }.reduce(0, +) / Double(interactions.count)
+        interactions.map(\.optimizedStrength).reduce(0, +) / Double(interactions.count)
     }
 
     private func calculateStabilityImpact(_ interactions: [OptimizedInteraction]) -> Double {
-        return interactions.map { $0.stabilityImprovement }.reduce(0, +)
+        interactions.map(\.stabilityImprovement).reduce(0, +)
             / Double(interactions.count)
     }
 
     private func calculateEnergyEfficiency(_ interactions: [OptimizedInteraction]) -> Double {
-        return interactions.map { $0.energyEfficiency }.reduce(0, +) / Double(interactions.count)
+        interactions.map(\.energyEfficiency).reduce(0, +) / Double(interactions.count)
     }
 
     private func determineInteractionType(_ type1: QuantumFieldType, _ type2: QuantumFieldType)
@@ -645,8 +648,7 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
         }
     }
 
-    private func calculatePhaseDifference(_ field1: QuantumField, _ field2: QuantumField) -> Double
-    {
+    private func calculatePhaseDifference(_ field1: QuantumField, _ field2: QuantumField) -> Double {
         // Calculate phase difference between fields
         let phase1 = field1.quantumState.superposition.first?.phase ?? 0
         let phase2 = field2.quantumState.superposition.first?.phase ?? 0
@@ -656,20 +658,19 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     private func calculateEnergyTransfer(_ field1: QuantumField, _ field2: QuantumField) -> Double {
         // Calculate energy transfer rate between fields
         let energyDifference = abs(field1.energyDensity - field2.energyDensity)
-        return energyDifference * 0.1  // Simplified transfer rate
+        return energyDifference * 0.1 // Simplified transfer rate
     }
 
     private func calculateInteractionComplexity(_ interactions: [FieldInteraction]) -> Double {
         // Calculate complexity of field interactions
-        let totalStrength = interactions.map { $0.interactionStrength }.reduce(0, +)
+        let totalStrength = interactions.map(\.interactionStrength).reduce(0, +)
         let interactionCount = Double(interactions.count)
         return totalStrength / max(interactionCount, 1.0)
     }
 
-    private func findDominantInteractions(_ interactions: [FieldInteraction]) -> [FieldInteraction]
-    {
+    private func findDominantInteractions(_ interactions: [FieldInteraction]) -> [FieldInteraction] {
         // Find dominant interactions
-        return interactions.sorted { $0.interactionStrength > $1.interactionStrength }
+        interactions.sorted { $0.interactionStrength > $1.interactionStrength }
             .prefix(5).map { $0 }
     }
 
@@ -694,13 +695,13 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
 
     private func generateStabilityProjections(_ fields: [QuantumField]) -> [StabilityProjection] {
         // Generate stability projections
-        return [
+        [
             StabilityProjection(
                 timeHorizon: 3600,
                 projectedStability: 0.85,
                 confidenceLevel: 0.9,
                 riskFactors: ["Field interactions", "Energy fluctuations"]
-            )
+            ),
         ]
     }
 
@@ -709,7 +710,7 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     {
         // Calculate optimal interaction parameters
         let currentEfficiency = interaction.energyTransfer / interaction.interactionStrength
-        let optimizedStrength = interaction.interactionStrength * 0.8  // Reduce for stability
+        let optimizedStrength = interaction.interactionStrength * 0.8 // Reduce for stability
         let gain = currentEfficiency * 1.2
         let stabilityImprovement = 0.15
         let energyEfficiency = 0.9
@@ -740,7 +741,7 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
 
     private func calculateOptimizationEnergyCost(_ parameters: OptimizationParameters) -> Double {
         // Calculate energy cost of optimization
-        return parameters.processingTime * 100.0
+        parameters.processingTime * 100.0
     }
 
     private func calculateFieldDistance(_ field1: QuantumField, _ field2: QuantumField) -> Double {
@@ -921,12 +922,12 @@ final class FieldManipulator: Sendable {
     {
         // Apply matrix transformation to vector
         // Simplified implementation
-        return vector.map { $0 * 1.1 }
+        vector.map { $0 * 1.1 }
     }
 
     private func analyzeInterferencePatterns(_ fields: [QuantumField]) -> [InterferencePattern] {
         // Analyze interference patterns
-        return fields.map { field in
+        fields.map { field in
             InterferencePattern(
                 fieldId: field.id,
                 patternType: .constructive,
@@ -941,7 +942,7 @@ final class FieldManipulator: Sendable {
         -> InterferenceControlParameters
     {
         // Calculate interference control parameters
-        return InterferenceControlParameters(
+        InterferenceControlParameters(
             phaseAdjustments: patterns.map { _ in 0.1 },
             amplitudeModulations: patterns.map { _ in 0.05 },
             frequencyShifts: patterns.map { _ in 0.01 },
@@ -953,8 +954,8 @@ final class FieldManipulator: Sendable {
 /// Energy manager
 final class EnergyManager: Sendable {
     func analyzeEnergyDistribution(_ fields: [QuantumField]) async -> EnergyAnalysis {
-        let totalEnergy = fields.map { $0.energyDensity }.reduce(0, +)
-        let energyDistribution = fields.map { $0.energyDensity }
+        let totalEnergy = fields.map(\.energyDensity).reduce(0, +)
+        let energyDistribution = fields.map(\.energyDensity)
         let energyEfficiency = calculateEnergyEfficiency(fields)
         let energyBalance = calculateEnergyBalance(fields)
 
@@ -994,7 +995,7 @@ final class EnergyManager: Sendable {
     func optimizeEfficiency(_ field: QuantumField) async throws -> EnergyOptimizationResult {
         // Optimize energy efficiency
         let efficiencyGain = 0.15
-        let optimizedField = field  // Would apply optimization here
+        let optimizedField = field // Would apply optimization here
 
         return EnergyOptimizationResult(
             originalField: field,
@@ -1020,7 +1021,7 @@ final class EnergyManager: Sendable {
         -> DissipationControlResult
     {
         // Control energy dissipation
-        return DissipationControlResult(
+        DissipationControlResult(
             field: field,
             dissipationRate: dissipationRate,
             controlEfficiency: 0.85,
@@ -1067,14 +1068,14 @@ final class EnergyManager: Sendable {
 
     private func calculateEnergyEfficiency(_ fields: [QuantumField]) -> Double {
         // Calculate overall energy efficiency
-        let totalEnergy = fields.map { $0.energyDensity }.reduce(0, +)
+        let totalEnergy = fields.map(\.energyDensity).reduce(0, +)
         let usefulEnergy = fields.map { $0.energyDensity * $0.coherenceLevel }.reduce(0, +)
         return usefulEnergy / max(totalEnergy, 1.0)
     }
 
     private func calculateEnergyBalance(_ fields: [QuantumField]) -> Double {
         // Calculate energy balance
-        let energies = fields.map { $0.energyDensity }
+        let energies = fields.map(\.energyDensity)
         let mean = energies.reduce(0, +) / Double(energies.count)
         let variance = calculateVariance(energies)
         return 1.0 / (1.0 + variance / (mean * mean))
@@ -1082,7 +1083,7 @@ final class EnergyManager: Sendable {
 
     private func analyzeConsumptionPatterns(_ fields: [QuantumField]) -> [ConsumptionPattern] {
         // Analyze energy consumption patterns
-        return fields.map { field in
+        fields.map { field in
             ConsumptionPattern(
                 fieldId: field.id,
                 consumptionRate: field.energyDensity * 0.1,
@@ -1097,7 +1098,7 @@ final class EnergyManager: Sendable {
         // Optimize energy distribution
         let total = distribution.reduce(0, +)
         let count = Double(distribution.count)
-        return distribution.map { _ in total / count }  // Equal distribution
+        return distribution.map { _ in total / count } // Equal distribution
     }
 
     private func calculateVariance(_ values: [Double]) -> Double {
@@ -1110,7 +1111,7 @@ final class EnergyManager: Sendable {
 /// Coherence controller
 final class CoherenceController: Sendable {
     func analyzeCoherence(_ fields: [QuantumField]) async -> CoherenceAnalysis {
-        let coherenceLevels = fields.map { $0.coherenceLevel }
+        let coherenceLevels = fields.map(\.coherenceLevel)
         let averageCoherence = coherenceLevels.reduce(0, +) / Double(fields.count)
         let coherenceVariance = calculateVariance(coherenceLevels)
 
@@ -1240,19 +1241,19 @@ final class CoherenceController: Sendable {
 
     private func generateCoherenceProjections(_ fields: [QuantumField]) -> [CoherenceProjection] {
         // Generate coherence projections
-        return [
+        [
             CoherenceProjection(
                 timeHorizon: 3600,
                 projectedCoherence: 0.85,
                 confidenceLevel: 0.9,
                 degradationFactors: ["Energy dissipation", "Quantum decoherence"]
-            )
+            ),
         ]
     }
 
     private func calculateDegradationRate(_ field: QuantumField) -> Double {
         // Calculate coherence degradation rate
-        return (1.0 - field.coherenceLevel) * 0.01
+        (1.0 - field.coherenceLevel) * 0.01
     }
 
     private func calculateTimeToCritical(_ field: QuantumField, degradationRate: Double)
@@ -1720,19 +1721,19 @@ enum FieldError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .manipulationFailed(let errors):
+        case let .manipulationFailed(errors):
             return "Field manipulation failed with \(errors.count) errors"
-        case .transformationFailed(let reason):
+        case let .transformationFailed(reason):
             return "Field transformation failed: \(reason)"
-        case .interferenceControlFailed(let reason):
+        case let .interferenceControlFailed(reason):
             return "Interference control failed: \(reason)"
-        case .resonanceTuningFailed(let reason):
+        case let .resonanceTuningFailed(reason):
             return "Resonance tuning failed: \(reason)"
-        case .boundaryEngineeringFailed(let reason):
+        case let .boundaryEngineeringFailed(reason):
             return "Boundary engineering failed: \(reason)"
-        case .energyOptimizationFailed(let reason):
+        case let .energyOptimizationFailed(reason):
             return "Energy optimization failed: \(reason)"
-        case .coherenceEnhancementFailed(let reason):
+        case let .coherenceEnhancementFailed(reason):
             return "Coherence enhancement failed: \(reason)"
         }
     }
@@ -1743,25 +1744,29 @@ enum FieldError: Error, LocalizedError {
 /// Factory for creating quantum field engineering engines
 enum QuantumFieldEngineeringFactory {
     static func createEngine(withFields fields: [QuantumField]) -> QuantumFieldEngineeringEngine {
-        return QuantumFieldEngineeringEngine(activeFields: fields)
+        QuantumFieldEngineeringEngine(activeFields: fields)
     }
 
     static func createDefaultFields() -> [QuantumField] {
         let boundaries = FieldBoundaries(
             spatialBoundaries: [
                 BoundaryCondition(
-                    type: .dirichlet, value: 0.0, tolerance: 1e-6, enforcement: .strict),
+                    type: .dirichlet, value: 0.0, tolerance: 1e-6, enforcement: .strict
+                ),
                 BoundaryCondition(
-                    type: .neumann, value: 0.0, tolerance: 1e-6, enforcement: .adaptive),
+                    type: .neumann, value: 0.0, tolerance: 1e-6, enforcement: .adaptive
+                ),
             ],
             temporalBoundaries: [
                 BoundaryCondition(
-                    type: .periodic, value: 0.0, tolerance: 1e-9, enforcement: .quantum)
+                    type: .periodic, value: 0.0, tolerance: 1e-9, enforcement: .quantum
+                ),
             ],
             dimensionalBoundaries: [],
             energyBoundaries: [
                 BoundaryCondition(
-                    type: .absorbing, value: 1e20, tolerance: 1e15, enforcement: .strict)
+                    type: .absorbing, value: 1e20, tolerance: 1e15, enforcement: .strict
+                ),
             ]
         )
 
@@ -1883,7 +1888,8 @@ func demonstrateQuantumFieldEngineering() async {
         )
 
         let manipulationResult = try await engine.manipulateFieldProperties(
-            firstField, with: manipulation)
+            firstField, with: manipulation
+        )
         print("✓ Field manipulation completed:")
         print("  - Type: \(manipulationResult.manipulationType.rawValue)")
         print("  - Energy consumed: \(String(format: "%.0f", manipulationResult.energyConsumed))")
@@ -1947,7 +1953,7 @@ final class QuantumFieldEngineeringDatabase {
     }
 
     func loadField(id: UUID) -> QuantumField? {
-        return fields[id]
+        fields[id]
     }
 
     func saveAnalysis(_ analysis: FieldAnalysis, forFields fieldIds: [UUID]) {
@@ -1956,7 +1962,7 @@ final class QuantumFieldEngineeringDatabase {
     }
 
     func getRecentAnalyses(limit: Int = 10) -> [FieldAnalysis] {
-        return Array(analyses.values.suffix(limit))
+        Array(analyses.values.suffix(limit))
     }
 
     func saveManipulation(_ manipulation: FieldManipulationResult, forField fieldId: UUID) {
@@ -1967,7 +1973,7 @@ final class QuantumFieldEngineeringDatabase {
     }
 
     func getManipulations(forField fieldId: UUID) -> [FieldManipulationResult] {
-        return manipulations[fieldId] ?? []
+        manipulations[fieldId] ?? []
     }
 }
 
@@ -1976,7 +1982,7 @@ final class QuantumFieldEngineeringDatabase {
 /// Testing utilities for quantum field engineering
 enum QuantumFieldEngineeringTesting {
     static func createTestFields() -> [QuantumField] {
-        return QuantumFieldEngineeringFactory.createDefaultFields()
+        QuantumFieldEngineeringFactory.createDefaultFields()
     }
 
     static func createUnstableFields() -> [QuantumField] {
@@ -2000,7 +2006,7 @@ enum QuantumFieldEngineeringTesting {
 // MARK: - Framework Metadata
 
 /// Framework information
-struct QuantumFieldEngineeringMetadata {
+enum QuantumFieldEngineeringMetadata {
     static let version = "1.0.0"
     static let framework = "Quantum Field Engineering"
     static let description =

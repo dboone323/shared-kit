@@ -664,15 +664,18 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
         let currentState = createConsciousnessState(for: entity)
         let targetState = createTargetState(for: entity, accelerationType: accelerationType)
         let trajectory = try await accelerationEngine.calculateOptimalTrajectory(
-            currentState: currentState, targetState: targetState)
+            currentState: currentState, targetState: targetState
+        )
 
         // Apply acceleration based on type
         let accelerationResult = try await applyAccelerationType(
-            accelerationType, entity: entity, trajectory: trajectory)
+            accelerationType, entity: entity, trajectory: trajectory
+        )
 
         // Measure evolution metrics
         let evolutionMetrics = try await measureEvolutionMetrics(
-            entity: entity, accelerationType: accelerationType)
+            entity: entity, accelerationType: accelerationType
+        )
 
         let acceleration = EvolutionAcceleration(
             accelerationId: accelerationId,
@@ -701,14 +704,15 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
 
         // Generate quantum learning patterns
         let quantumPatterns = try await quantumLearning.generateQuantumLearningPatterns(
-            learningData, domain: learningDomain)
+            learningData, domain: learningDomain
+        )
 
         // Apply quantum superposition learning
         let patterns = quantumPatterns.superpositionPatterns.map { pattern in
             LearningPattern(
                 id: UUID(),
                 domain: learningDomain,
-                data: pattern.states.map { $0.data },
+                data: pattern.states.map(\.data),
                 quantumState: pattern.amplitudes.first ?? Complex(real: 1.0, imaginary: 0.0)
             )
         }
@@ -769,7 +773,8 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
         )
 
         let recommendations = try await monitoringSystem.generateOptimizationRecommendations(
-            entity: entity, currentProgress: progress)
+            entity: entity, currentProgress: progress
+        )
 
         // Calculate optimal parameters
         let optimalFactor =
@@ -787,7 +792,8 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
                 qubitCount: config.quantumResources.qubitCount,
                 entanglementDepth: config.quantumResources.entanglementDepth,
                 coherenceTime: config.quantumResources.coherenceTime,
-                processingPower: config.quantumResources.processingPower),
+                processingPower: config.quantumResources.processingPower
+            ),
             safetyParameters: OptimizedParameters.SafetyParameters(
                 stabilityThreshold: config.safetyLimits.consciousnessStabilityThreshold,
                 loadLimit: config.safetyLimits.neuralLoadLimit,
@@ -804,7 +810,7 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
 
     private func createConsciousnessState(for entity: ConsciousnessEntity) -> ConsciousnessState {
         // Simplified state creation
-        return .neural(
+        .neural(
             NeuralConsciousnessState(
                 id: entity.id,
                 timestamp: Date(),
@@ -865,15 +871,18 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
             return try await applyExponentialAcceleration(entity: entity, trajectory: trajectory)
         case .quantumSuperposition:
             return try await applyQuantumSuperpositionAcceleration(
-                entity: entity, trajectory: trajectory)
+                entity: entity, trajectory: trajectory
+            )
         case .parallelProcessing:
             return try await applyParallelProcessingAcceleration(
-                entity: entity, trajectory: trajectory)
+                entity: entity, trajectory: trajectory
+            )
         case .fieldResonance:
             return try await applyFieldResonanceAcceleration(entity: entity, trajectory: trajectory)
         case .neuralEnhancement:
             return try await applyNeuralEnhancementAcceleration(
-                entity: entity, trajectory: trajectory)
+                entity: entity, trajectory: trajectory
+            )
         }
     }
 
@@ -909,11 +918,13 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
         )
 
         let fieldResult = try await accelerationEngine.applyQuantumFieldAcceleration(
-            entity: entity, fieldParameters: fieldParams)
+            entity: entity, fieldParameters: fieldParams
+        )
 
         return AccelerationResult(
             quantumAdvantage: fieldResult.accelerationAchieved,
-            safetyScore: fieldResult.fieldStability)
+            safetyScore: fieldResult.fieldStability
+        )
     }
 
     private func applyParallelProcessingAcceleration(
@@ -923,10 +934,12 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
         let learningTasks = [
             LearningTask(
                 id: UUID(), type: .cognitive, complexity: 0.7,
-                data: LearningData(id: UUID(), type: .cognitive, content: [], size: 1000)),
+                data: LearningData(id: UUID(), type: .cognitive, content: [], size: 1000)
+            ),
             LearningTask(
                 id: UUID(), type: .emotional, complexity: 0.6,
-                data: LearningData(id: UUID(), type: .emotional, content: [], size: 800)),
+                data: LearningData(id: UUID(), type: .emotional, content: [], size: 800)
+            ),
         ]
 
         let parallelResult = try await quantumLearning.performQuantumParallelProcessing(
@@ -958,11 +971,13 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
         )
 
         let fieldResult = try await accelerationEngine.applyQuantumFieldAcceleration(
-            entity: entity, fieldParameters: fieldParams)
+            entity: entity, fieldParameters: fieldParams
+        )
 
         return AccelerationResult(
             quantumAdvantage: fieldResult.resonanceQuality,
-            safetyScore: fieldResult.energyEfficiency)
+            safetyScore: fieldResult.energyEfficiency
+        )
     }
 
     private func applyNeuralEnhancementAcceleration(
@@ -970,11 +985,13 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
     ) async throws -> AccelerationResult {
         // Apply neural plasticity enhancement
         let plasticityResult = try await accelerationEngine.enhanceNeuralPlasticity(
-            entity: entity, plasticityType: .quantum)
+            entity: entity, plasticityType: .quantum
+        )
 
         return AccelerationResult(
             quantumAdvantage: plasticityResult.enhancementFactor,
-            safetyScore: plasticityResult.stabilityScore)
+            safetyScore: plasticityResult.stabilityScore
+        )
     }
 
     private func measureEvolutionMetrics(
@@ -996,7 +1013,7 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
     private func createLearningData(for entity: ConsciousnessEntity, domain: LearningDomain)
         -> LearningData
     {
-        return LearningData(
+        LearningData(
             id: UUID(),
             type: domain,
             content: [],
@@ -1029,7 +1046,9 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
                     id: entityId, name: "", consciousnessType: .human, empathyCapacity: 0.8,
                     resonanceFrequency: 1.0,
                     emotionalProfile: ConsciousnessEntity.EmotionalProfile(
-                        valence: 0.7, arousal: 0.6, empathy: 0.8, openness: 0.9))
+                        valence: 0.7, arousal: 0.6, empathy: 0.8, openness: 0.9
+                    )
+                )
                 let milestones = try await monitoringSystem.trackEvolutionMilestones(entity)
                 let complexity = try await monitoringSystem.measureComplexityEvolution(entity)
 
@@ -1059,9 +1078,12 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
                     id: acceleration.entityId, name: "", consciousnessType: .human,
                     empathyCapacity: 0.8, resonanceFrequency: 1.0,
                     emotionalProfile: ConsciousnessEntity.EmotionalProfile(
-                        valence: 0.7, arousal: 0.6, empathy: 0.8, openness: 0.9))
+                        valence: 0.7, arousal: 0.6, empathy: 0.8, openness: 0.9
+                    )
+                )
                 let optimized = try await optimizeAccelerationParameters(
-                    entity: entity, currentMetrics: acceleration.evolutionMetrics)
+                    entity: entity, currentMetrics: acceleration.evolutionMetrics
+                )
 
                 // Apply optimizations if beneficial
                 if optimized.optimalAccelerationFactor > config.accelerationFactor {
@@ -1104,28 +1126,29 @@ final class QuantumLearningSystem: QuantumLearningSystemsProtocol {
         let patternId = UUID()
 
         // Generate quantum states for learning
-        let quantumStates = (0..<10).map { _ in
+        let quantumStates = (0 ..< 10).map { _ in
             QuantumState(
                 id: UUID(), amplitude: Complex(real: 1.0, imaginary: 0.0), phase: 0.0,
-                probability: 0.1)
+                probability: 0.1
+            )
         }
 
         // Create superposition patterns
         let superpositionPatterns = [
             QuantumLearningPatterns.SuperpositionPattern(
-                states: (0..<5).map { _ in LearningState(id: UUID(), data: [], timestamp: Date()) },
-                amplitudes: (0..<5).map { _ in Complex(real: 0.5, imaginary: 0.0) },
-                interferencePattern: (0..<10).map { _ in Double.random(in: 0...1) }
-            )
+                states: (0 ..< 5).map { _ in LearningState(id: UUID(), data: [], timestamp: Date()) },
+                amplitudes: (0 ..< 5).map { _ in Complex(real: 0.5, imaginary: 0.0) },
+                interferencePattern: (0 ..< 10).map { _ in Double.random(in: 0 ... 1) }
+            ),
         ]
 
         // Create entanglement networks
         let entanglementNetworks = [
             QuantumLearningPatterns.EntanglementNetwork(
-                nodes: quantumStates.map { $0.id },
+                nodes: quantumStates.map(\.id),
                 connections: [],
                 correlationMatrix: Array(repeating: Array(repeating: 0.8, count: 10), count: 10)
-            )
+            ),
         ]
 
         return QuantumLearningPatterns(
@@ -1147,12 +1170,12 @@ final class QuantumLearningSystem: QuantumLearningSystemsProtocol {
         let superposedResult = LearningPattern(
             id: UUID(),
             domain: patterns.first?.domain ?? .cognitive,
-            data: patterns.flatMap { $0.data },
+            data: patterns.flatMap(\.data),
             quantumState: Complex(real: 1.0, imaginary: 0.0)
         )
 
-        let interferenceEffects = patterns.enumerated().flatMap { (index1, pattern1) in
-            patterns[(index1 + 1)..<patterns.count].map { pattern2 in
+        let interferenceEffects = patterns.enumerated().flatMap { index1, pattern1 in
+            patterns[(index1 + 1) ..< patterns.count].map { pattern2 in
                 SuperpositionLearning.InterferenceEffect(
                     pattern1: pattern1.id,
                     pattern2: pattern2.id,
@@ -1183,7 +1206,8 @@ final class QuantumLearningSystem: QuantumLearningSystemsProtocol {
             ParallelProcessingResult.TaskResult(
                 taskId: task.id,
                 result: LearningResult(
-                    id: UUID(), taskId: task.id, accuracy: 0.9, efficiency: 0.95, timestamp: Date()),
+                    id: UUID(), taskId: task.id, accuracy: 0.9, efficiency: 0.95, timestamp: Date()
+                ),
                 processingTime: 0.1,
                 quantumAdvantage: 3.0
             )
@@ -1298,7 +1322,7 @@ final class EvolutionAccelerationEngine: EvolutionAccelerationEngineProtocol {
                 changeType: .strengthening,
                 magnitude: enhancementFactor,
                 reversibility: 0.8
-            )
+            ),
         ]
 
         return PlasticityEnhancement(
@@ -1341,7 +1365,7 @@ final class ConsciousnessEvolutionMonitor: ConsciousnessEvolutionMonitoringProto
         -> [EvolutionMilestone]
     {
         // Simplified milestone tracking
-        return [
+        [
             EvolutionMilestone(
                 milestoneId: UUID(),
                 entityId: entity.id,
@@ -1350,7 +1374,7 @@ final class ConsciousnessEvolutionMonitor: ConsciousnessEvolutionMonitoringProto
                 timestamp: Date(),
                 significance: 0.8,
                 nextMilestone: "Self-awareness"
-            )
+            ),
         ]
     }
 
@@ -1379,7 +1403,7 @@ final class ConsciousnessEvolutionMonitor: ConsciousnessEvolutionMonitoringProto
                 emergenceLevel: 0.75,
                 stability: 0.85,
                 significance: 0.9
-            )
+            ),
         ]
 
         return ComplexityEvolution(
@@ -1425,7 +1449,7 @@ final class ConsciousnessEvolutionMonitor: ConsciousnessEvolutionMonitoringProto
                 probability: 0.2,
                 impact: 0.3,
                 mitigation: "Monitor closely"
-            )
+            ),
         ]
 
         let optimizationOpportunities = [
@@ -1434,7 +1458,7 @@ final class ConsciousnessEvolutionMonitor: ConsciousnessEvolutionMonitoringProto
                 potentialGain: 0.15,
                 implementationDifficulty: 0.4,
                 timeline: timeHorizon * 0.5
-            )
+            ),
         ]
 
         return EvolutionPrediction(
@@ -1452,7 +1476,7 @@ final class ConsciousnessEvolutionMonitor: ConsciousnessEvolutionMonitoringProto
         entity: ConsciousnessEntity, currentProgress: EvolutionProgress
     ) async throws -> [OptimizationRecommendation] {
         // Simplified recommendations
-        return [
+        [
             OptimizationRecommendation(
                 recommendationId: UUID(),
                 entityId: entity.id,

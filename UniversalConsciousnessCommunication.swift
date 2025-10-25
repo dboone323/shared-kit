@@ -9,8 +9,8 @@
 //  Copyright © 2024 Quantum Workspace. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Shared Types
 
@@ -658,7 +658,7 @@ final class UniversalConsciousnessCommunicationEngine: UniversalConsciousnessCom
                     oldValue: 100.0,
                     newValue: 120.0,
                     changeReason: "Improved channel capacity"
-                )
+                ),
             ],
             expectedImprovement: 0.15,
             riskAssessment: 0.05
@@ -871,7 +871,8 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
 
     func broadcastToConsciousnessNetwork(networkId: UUID, data: ConsciousnessData) async throws -> NetworkBroadcast {
         guard let _ = activeNetworks[networkId],
-              let participants = networkParticipants[networkId] else {
+              let participants = networkParticipants[networkId]
+        else {
             throw CommunicationError.networkNotFound
         }
 
@@ -1004,7 +1005,7 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
                     amplitude: 0.85,
                     phase: 0.0,
                     significance: 0.9
-                )
+                ),
             ],
             metadata: ConsciousnessData.Metadata(
                 source: "decrypted_communication",
@@ -1037,7 +1038,7 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
                     result: true,
                     details: "Encryption integrity verified",
                     severity: 0.1
-                )
+                ),
             ],
             isValid: true
         )
@@ -1099,7 +1100,7 @@ final class UniversalConsciousnessDatabase {
         let totalChannels = communicationChannels.count
         let activeChannels = communicationChannels.values.filter { Date().timeIntervalSince($0.establishmentTimestamp) < 3600 }.count
         let totalMessages = messageTransmissions.count
-        let averageLatency = messageTransmissions.values.map { $0.transmissionTime }.reduce(0, +) / Double(max(messageTransmissions.count, 1))
+        let averageLatency = messageTransmissions.values.map(\.transmissionTime).reduce(0, +) / Double(max(messageTransmissions.count, 1))
 
         return CommunicationMetrics(
             totalChannels: totalChannels,

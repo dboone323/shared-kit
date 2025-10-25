@@ -58,13 +58,13 @@ public enum ValidationError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .required(let field):
+        case let .required(field):
             "\(field) is required"
-        case .invalid(let field, let reason):
+        case let .invalid(field, reason):
             "\(field) is invalid: \(reason)"
-        case .outOfRange(let field, let min, let max):
+        case let .outOfRange(field, min, max):
             "\(field) is out of range (\(min ?? "nil") - \(max ?? "nil"))"
-        case .custom(let message):
+        case let .custom(message):
             message
         }
     }
@@ -113,7 +113,7 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
     public var modifiedAt: Date?
 
     // Enhanced Properties
-    public var estimatedDuration: TimeInterval?  // in seconds
+    public var estimatedDuration: TimeInterval? // in seconds
     public var actualDuration: TimeInterval?
     public var completionDate: Date?
     public var startDate: Date?
@@ -130,7 +130,7 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
     public var energyLevel: EnergyLevel?
     public var context: TaskContext?
     public var location: String?
-    public var progress: Double  // 0.0 to 1.0
+    public var progress: Double // 0.0 to 1.0
 
     // Analytics Properties
     public var timeSpentTotal: TimeInterval
@@ -138,8 +138,8 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
     public var lastPostponedDate: Date?
     public var completionStreak: Int
     public var averageCompletionTime: TimeInterval
-    public var difficultyRating: Int?  // 1-5 scale, set after completion
-    public var satisfactionRating: Int?  // 1-5 scale, set after completion
+    public var difficultyRating: Int? // 1-5 scale, set after completion
+    public var satisfactionRating: Int? // 1-5 scale, set after completion
 
     // Cross-project Properties
     public var globalId: String
@@ -345,7 +345,8 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
                 "actual_duration": self.actualDuration ?? 0,
                 "estimated_duration": estimatedDuration ?? 0,
                 "completion_streak": self.completionStreak,
-            ])
+            ]
+        )
 
         // Auto-complete subtasks if configured
         for subtask in self.subtasks where !subtask.isCompleted {
@@ -367,7 +368,8 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
             parameters: [
                 "new_due_date": newDate,
                 "postponed_count": self.postponedCount,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -388,7 +390,8 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
             parameters: [
                 "old_progress": oldProgress,
                 "new_progress": newProgress,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -400,8 +403,9 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
         self.trackEvent(
             "subtask_added",
             parameters: [
-                "subtask_title": subtask.title
-            ])
+                "subtask_title": subtask.title,
+            ]
+        )
     }
 
     @MainActor
@@ -426,7 +430,8 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
             parameters: [
                 "session_duration": duration,
                 "total_time_spent": self.timeSpentTotal,
-            ])
+            ]
+        )
     }
 
     private func updateAverageCompletionTime() {
@@ -434,14 +439,15 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
 
         self.averageCompletionTime =
             (self.averageCompletionTime * Double(self.completionStreak - 1) + actualDuration)
-            / Double(self.completionStreak)
+                / Double(self.completionStreak)
     }
 
     // MARK: - CloudKit Support
 
     public func toCKRecord() -> CKRecord {
         let record = CKRecord(
-            recordType: "Task", recordID: CKRecord.ID(recordName: self.id.uuidString))
+            recordType: "Task", recordID: CKRecord.ID(recordName: self.id.uuidString)
+        )
         record["title"] = self.title
         record["taskDescription"] = self.taskDescription
         record["isCompleted"] = self.isCompleted
@@ -505,8 +511,8 @@ public final class EnhancedGoal: Validatable, Trackable, CrossProjectRelatable {
     // Enhanced Properties
     public var category: GoalCategory
     public var priority: GoalPriority
-    public var progress: Double  // 0.0 to 1.0
-    public var milestones: [String]  // JSON encoded milestones
+    public var progress: Double // 0.0 to 1.0
+    public var milestones: [String] // JSON encoded milestones
     public var tags: [String]
     public var color: String
     public var iconName: String
@@ -550,7 +556,8 @@ public final class EnhancedGoal: Validatable, Trackable, CrossProjectRelatable {
     public var daysRemaining: Int {
         guard let targetDate else { return Int.max }
         return max(
-            0, Calendar.current.dateComponents([.day], from: Date(), to: targetDate).day ?? 0)
+            0, Calendar.current.dateComponents([.day], from: Date(), to: targetDate).day ?? 0
+        )
     }
 
     public var completedTasksCount: Int {
@@ -687,7 +694,8 @@ public final class EnhancedGoal: Validatable, Trackable, CrossProjectRelatable {
                 "old_progress": oldProgress,
                 "new_progress": newProgress,
                 "has_note": note != nil,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -705,7 +713,8 @@ public final class EnhancedGoal: Validatable, Trackable, CrossProjectRelatable {
                     [.day], from: self.createdAt, to: Date()
                 ).day ?? 0,
                 "total_tasks": self.totalTasksCount,
-            ])
+            ]
+        )
     }
 
     @MainActor
@@ -716,15 +725,17 @@ public final class EnhancedGoal: Validatable, Trackable, CrossProjectRelatable {
         self.trackEvent(
             "task_added",
             parameters: [
-                "task_title": task.title
-            ])
+                "task_title": task.title,
+            ]
+        )
     }
 
     private func updateAverageProgress() {
         let weeksSinceCreation = max(
             1,
             Calendar.current.dateComponents([.weekOfYear], from: self.createdAt, to: Date())
-                .weekOfYear ?? 1)
+                .weekOfYear ?? 1
+        )
         self.averageProgressPerWeek = self.progress / Double(weeksSinceCreation)
     }
 }
@@ -750,15 +761,15 @@ public final class EnhancedJournalEntry: Validatable, Trackable, CrossProjectRel
     public var wordCount: Int
     public var readingTime: TimeInterval
     public var category: JournalCategory
-    public var gratitudeItems: [String]  // Things user is grateful for
-    public var goals: [String]  // Daily/weekly goals mentioned
-    public var reflections: [String]  // Key insights or reflections
-    public var photos: [String]  // Photo URLs/paths
+    public var gratitudeItems: [String] // Things user is grateful for
+    public var goals: [String] // Daily/weekly goals mentioned
+    public var reflections: [String] // Key insights or reflections
+    public var photos: [String] // Photo URLs/paths
 
     // Analytics Properties
     public var emotionalTone: EmotionalTone?
-    public var keyTopics: [String]  // Automatically extracted topics
-    public var sentimentScore: Double  // -1.0 to 1.0
+    public var keyTopics: [String] // Automatically extracted topics
+    public var sentimentScore: Double // -1.0 to 1.0
 
     // Cross-project Properties
     public var globalId: String
@@ -882,8 +893,9 @@ public final class EnhancedJournalEntry: Validatable, Trackable, CrossProjectRel
         self.trackEvent(
             "content_updated",
             parameters: [
-                "new_word_count": self.wordCount
-            ])
+                "new_word_count": self.wordCount,
+            ]
+        )
     }
 
     private func analyzeSentiment() {
@@ -984,7 +996,7 @@ public enum TaskPriority: String, CaseIterable, Codable, Comparable {
     public static func < (lhs: TaskPriority, rhs: TaskPriority) -> Bool {
         let order: [TaskPriority] = [.low, .medium, .high, .urgent]
         guard let lhsIndex = order.firstIndex(of: lhs),
-            let rhsIndex = order.firstIndex(of: rhs)
+              let rhsIndex = order.firstIndex(of: rhs)
         else {
             return false
         }

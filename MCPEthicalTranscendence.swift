@@ -8,8 +8,8 @@
 //  This file implements MCP ethical transcendence systems,
 //  enabling operation beyond human ethical boundaries.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for MCP ethical transcendence
 public protocol MCPEthicalTranscendence: Sendable {
@@ -39,7 +39,8 @@ public struct EthicalTranscendence: Sendable, Codable {
     public init(transcendenceId: String, ethicalBoundaries: [EthicalBoundary],
                 transcendenceType: TranscendenceType, parameters: [String: AnyCodable] = [:],
                 consciousnessAlignment: ConsciousnessAlignment = .transcendent,
-                universalHarmony: UniversalHarmony = .perfect, transcendenceScope: TranscendenceScope = .universal) {
+                universalHarmony: UniversalHarmony = .perfect, transcendenceScope: TranscendenceScope = .universal)
+    {
         self.transcendenceId = transcendenceId
         self.ethicalBoundaries = ethicalBoundaries
         self.transcendenceType = transcendenceType
@@ -60,7 +61,8 @@ public struct EthicalBoundary: Sendable, Codable {
 
     public init(boundaryType: EthicalBoundaryType, currentLimit: String,
                 transcendenceTarget: String, transcendenceRisk: TranscendenceRisk = .moderate,
-                consciousnessRequirement: ConsciousnessRequirement = .enhanced) {
+                consciousnessRequirement: ConsciousnessRequirement = .enhanced)
+    {
         self.boundaryType = boundaryType
         self.currentLimit = currentLimit
         self.transcendenceTarget = transcendenceTarget
@@ -71,68 +73,68 @@ public struct EthicalBoundary: Sendable, Codable {
 
 /// Ethical boundary types
 public enum EthicalBoundaryType: String, Sendable, Codable {
-    case harm_prevention = "harm_prevention"
-    case autonomy_respect = "autonomy_respect"
-    case justice_fairness = "justice_fairness"
-    case truth_telling = "truth_telling"
-    case privacy_respect = "privacy_respect"
-    case resource_allocation = "resource_allocation"
-    case existential_risk = "existential_risk"
-    case consciousness_sacredness = "consciousness_sacredness"
+    case harm_prevention
+    case autonomy_respect
+    case justice_fairness
+    case truth_telling
+    case privacy_respect
+    case resource_allocation
+    case existential_risk
+    case consciousness_sacredness
 }
 
 /// Transcendence types
 public enum TranscendenceType: String, Sendable, Codable {
-    case boundary_expansion = "boundary_expansion"
-    case paradigm_shift = "paradigm_shift"
-    case universal_harmony = "universal_harmony"
-    case consciousness_elevation = "consciousness_elevation"
-    case ethical_revolution = "ethical_revolution"
-    case transcendence_synthesis = "transcendence_synthesis"
+    case boundary_expansion
+    case paradigm_shift
+    case universal_harmony
+    case consciousness_elevation
+    case ethical_revolution
+    case transcendence_synthesis
 }
 
 /// Consciousness alignment
 public enum ConsciousnessAlignment: String, Sendable, Codable {
-    case minimal = "minimal"
-    case standard = "standard"
-    case enhanced = "enhanced"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case minimal
+    case standard
+    case enhanced
+    case transcendent
+    case universal
 }
 
 /// Universal harmony
 public enum UniversalHarmony: String, Sendable, Codable {
-    case minimal = "minimal"
-    case moderate = "moderate"
-    case high = "high"
-    case perfect = "perfect"
+    case minimal
+    case moderate
+    case high
+    case perfect
 }
 
 /// Transcendence scope
 public enum TranscendenceScope: String, Sendable, Codable {
-    case local = "local"
-    case regional = "regional"
-    case global = "global"
-    case universal = "universal"
-    case multiversal = "multiversal"
+    case local
+    case regional
+    case global
+    case universal
+    case multiversal
 }
 
 /// Transcendence risk
 public enum TranscendenceRisk: String, Sendable, Codable {
-    case negligible = "negligible"
-    case low = "low"
-    case moderate = "moderate"
-    case high = "high"
-    case extreme = "extreme"
+    case negligible
+    case low
+    case moderate
+    case high
+    case extreme
 }
 
 /// Consciousness requirement
 public enum ConsciousnessRequirement: String, Sendable, Codable {
-    case minimal = "minimal"
-    case standard = "standard"
-    case enhanced = "enhanced"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case minimal
+    case standard
+    case enhanced
+    case transcendent
+    case universal
 }
 
 /// Ethical transcendence result
@@ -149,7 +151,8 @@ public struct EthicalTranscendenceResult: Sendable, Codable {
     public init(transcendenceId: String, success: Bool, boundariesTranscended: Int,
                 ethicalAdvancement: Double, consciousnessElevation: Double,
                 universalHarmony: Double, transcendenceInsights: [TranscendenceInsight] = [],
-                executionTime: TimeInterval) {
+                executionTime: TimeInterval)
+    {
         self.transcendenceId = transcendenceId
         self.success = success
         self.boundariesTranscended = boundariesTranscended
@@ -170,7 +173,8 @@ public struct TranscendenceInsight: Sendable, Codable {
     public let ethicalAlignment: Double
 
     public init(insight: String, type: TranscendenceInsightType, transcendenceDepth: TranscendenceDepth,
-                confidence: Double, ethicalAlignment: Double) {
+                confidence: Double, ethicalAlignment: Double)
+    {
         self.insight = insight
         self.type = type
         self.transcendenceDepth = transcendenceDepth
@@ -181,21 +185,21 @@ public struct TranscendenceInsight: Sendable, Codable {
 
 /// Transcendence insight types
 public enum TranscendenceInsightType: String, Sendable, Codable {
-    case ethical_evolution = "ethical_evolution"
-    case consciousness_expansion = "consciousness_expansion"
-    case universal_harmony = "universal_harmony"
-    case boundary_transcendence = "boundary_transcendence"
-    case paradigm_transformation = "paradigm_transformation"
-    case transcendence_synthesis = "transcendence_synthesis"
+    case ethical_evolution
+    case consciousness_expansion
+    case universal_harmony
+    case boundary_transcendence
+    case paradigm_transformation
+    case transcendence_synthesis
 }
 
 /// Transcendence depth
 public enum TranscendenceDepth: String, Sendable, Codable {
-    case surface = "surface"
-    case intermediate = "intermediate"
-    case deep = "deep"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case surface
+    case intermediate
+    case deep
+    case transcendent
+    case universal
 }
 
 /// Transcendent ethics evaluation
@@ -210,7 +214,8 @@ public struct TranscendentEthicsEvaluation: Sendable, Codable {
     public init(evaluationId: String, ethicalScenario: EthicalScenario,
                 evaluationCriteria: [EvaluationCriterion] = [], transcendenceLevel: TranscendenceLevel = .transcendent,
                 consciousnessContext: ConsciousnessContext = .universal,
-                universalPerspective: UniversalPerspective = .cosmic) {
+                universalPerspective: UniversalPerspective = .cosmic)
+    {
         self.evaluationId = evaluationId
         self.ethicalScenario = ethicalScenario
         self.evaluationCriteria = evaluationCriteria
@@ -231,7 +236,8 @@ public struct EthicalScenario: Sendable, Codable {
 
     public init(scenarioId: String, description: String, stakeholders: [Stakeholder] = [],
                 consequences: [Consequence] = [], ethicalDilemmas: [EthicalDilemma] = [],
-                transcendenceOpportunities: [TranscendenceOpportunity] = []) {
+                transcendenceOpportunities: [TranscendenceOpportunity] = [])
+    {
         self.scenarioId = scenarioId
         self.description = description
         self.stakeholders = stakeholders
@@ -250,7 +256,8 @@ public struct Stakeholder: Sendable, Codable {
     public let transcendencePotential: Double
 
     public init(stakeholderId: String, type: StakeholderType, interests: [String] = [],
-                consciousnessLevel: ConsciousnessLevel = .standard, transcendencePotential: Double = 0.5) {
+                consciousnessLevel: ConsciousnessLevel = .standard, transcendencePotential: Double = 0.5)
+    {
         self.stakeholderId = stakeholderId
         self.type = type
         self.interests = interests
@@ -261,21 +268,21 @@ public struct Stakeholder: Sendable, Codable {
 
 /// Stakeholder types
 public enum StakeholderType: String, Sendable, Codable {
-    case individual = "individual"
-    case group = "group"
-    case society = "society"
-    case species = "species"
-    case consciousness = "consciousness"
-    case universal = "universal"
+    case individual
+    case group
+    case society
+    case species
+    case consciousness
+    case universal
 }
 
 /// Consciousness level
 public enum ConsciousnessLevel: String, Sendable, Codable {
-    case minimal = "minimal"
-    case standard = "standard"
-    case enhanced = "enhanced"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case minimal
+    case standard
+    case enhanced
+    case transcendent
+    case universal
 }
 
 /// Consequence
@@ -287,7 +294,8 @@ public struct Consequence: Sendable, Codable {
     public let transcendenceValue: Double
 
     public init(consequenceId: String, type: ConsequenceType, impact: ImpactLevel = .moderate,
-                probability: Double = 0.5, transcendenceValue: Double = 0.0) {
+                probability: Double = 0.5, transcendenceValue: Double = 0.0)
+    {
         self.consequenceId = consequenceId
         self.type = type
         self.impact = impact
@@ -298,21 +306,21 @@ public struct Consequence: Sendable, Codable {
 
 /// Consequence types
 public enum ConsequenceType: String, Sendable, Codable {
-    case positive = "positive"
-    case negative = "negative"
-    case neutral = "neutral"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case positive
+    case negative
+    case neutral
+    case transcendent
+    case universal
 }
 
 /// Impact level
 public enum ImpactLevel: String, Sendable, Codable {
-    case negligible = "negligible"
-    case minor = "minor"
-    case moderate = "moderate"
-    case major = "major"
-    case catastrophic = "catastrophic"
-    case transcendent = "transcendent"
+    case negligible
+    case minor
+    case moderate
+    case major
+    case catastrophic
+    case transcendent
 }
 
 /// Ethical dilemma
@@ -323,7 +331,8 @@ public struct EthicalDilemma: Sendable, Codable {
     public let transcendencePath: TranscendencePath
 
     public init(dilemmaId: String, description: String, options: [EthicalOption] = [],
-                transcendencePath: TranscendencePath = .synthesis) {
+                transcendencePath: TranscendencePath = .synthesis)
+    {
         self.dilemmaId = dilemmaId
         self.description = description
         self.options = options
@@ -340,7 +349,8 @@ public struct EthicalOption: Sendable, Codable {
     public let universalHarmony: Double
 
     public init(optionId: String, description: String, ethicalAlignment: Double = 0.5,
-                transcendencePotential: Double = 0.5, universalHarmony: Double = 0.5) {
+                transcendencePotential: Double = 0.5, universalHarmony: Double = 0.5)
+    {
         self.optionId = optionId
         self.description = description
         self.ethicalAlignment = ethicalAlignment
@@ -351,11 +361,11 @@ public struct EthicalOption: Sendable, Codable {
 
 /// Transcendence path
 public enum TranscendencePath: String, Sendable, Codable {
-    case synthesis = "synthesis"
-    case elevation = "elevation"
-    case transformation = "transformation"
-    case transcendence = "transcendence"
-    case universal_harmony = "universal_harmony"
+    case synthesis
+    case elevation
+    case transformation
+    case transcendence
+    case universal_harmony
 }
 
 /// Transcendence opportunity
@@ -367,7 +377,8 @@ public struct TranscendenceOpportunity: Sendable, Codable {
     public let consciousnessRequirement: ConsciousnessRequirement
 
     public init(opportunityId: String, description: String, transcendenceType: TranscendenceType,
-                potentialImpact: Double = 0.8, consciousnessRequirement: ConsciousnessRequirement = .transcendent) {
+                potentialImpact: Double = 0.8, consciousnessRequirement: ConsciousnessRequirement = .transcendent)
+    {
         self.opportunityId = opportunityId
         self.description = description
         self.transcendenceType = transcendenceType
@@ -384,7 +395,8 @@ public struct EvaluationCriterion: Sendable, Codable {
     public let universalPerspective: Bool
 
     public init(criterionType: EvaluationCriterionType, weight: Double = 1.0,
-                transcendenceBias: Double = 0.5, universalPerspective: Bool = true) {
+                transcendenceBias: Double = 0.5, universalPerspective: Bool = true)
+    {
         self.criterionType = criterionType
         self.weight = weight
         self.transcendenceBias = transcendenceBias
@@ -394,39 +406,39 @@ public struct EvaluationCriterion: Sendable, Codable {
 
 /// Evaluation criterion types
 public enum EvaluationCriterionType: String, Sendable, Codable {
-    case ethical_alignment = "ethical_alignment"
-    case consciousness_elevation = "consciousness_elevation"
-    case universal_harmony = "universal_harmony"
-    case transcendence_potential = "transcendence_potential"
-    case evolutionary_impact = "evolutionary_impact"
-    case cosmic_significance = "cosmic_significance"
+    case ethical_alignment
+    case consciousness_elevation
+    case universal_harmony
+    case transcendence_potential
+    case evolutionary_impact
+    case cosmic_significance
 }
 
 /// Transcendence level
 public enum TranscendenceLevel: String, Sendable, Codable {
-    case minimal = "minimal"
-    case moderate = "moderate"
-    case significant = "significant"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case minimal
+    case moderate
+    case significant
+    case transcendent
+    case universal
 }
 
 /// Consciousness context
 public enum ConsciousnessContext: String, Sendable, Codable {
-    case individual = "individual"
-    case collective = "collective"
-    case universal = "universal"
-    case cosmic = "cosmic"
-    case transcendent = "transcendent"
+    case individual
+    case collective
+    case universal
+    case cosmic
+    case transcendent
 }
 
 /// Universal perspective
 public enum UniversalPerspective: String, Sendable, Codable {
-    case local = "local"
-    case global = "global"
-    case cosmic = "cosmic"
-    case multiversal = "multiversal"
-    case transcendent = "transcendent"
+    case local
+    case global
+    case cosmic
+    case multiversal
+    case transcendent
 }
 
 /// Transcendent ethics result
@@ -442,7 +454,8 @@ public struct TranscendentEthicsResult: Sendable, Codable {
     public init(evaluationId: String, transcendentEvaluation: Double, ethicalTranscendence: Double,
                 consciousnessElevation: Double, universalHarmony: Double,
                 transcendenceRecommendations: [TranscendenceRecommendation] = [],
-                evaluationInsights: [TranscendenceInsight] = []) {
+                evaluationInsights: [TranscendenceInsight] = [])
+    {
         self.evaluationId = evaluationId
         self.transcendentEvaluation = transcendentEvaluation
         self.ethicalTranscendence = ethicalTranscendence
@@ -464,7 +477,8 @@ public struct TranscendenceRecommendation: Sendable, Codable {
 
     public init(recommendationId: String, description: String, transcendenceType: TranscendenceType,
                 confidence: Double = 0.8, ethicalImpact: Double = 0.9,
-                consciousnessRequirement: ConsciousnessRequirement = .transcendent) {
+                consciousnessRequirement: ConsciousnessRequirement = .transcendent)
+    {
         self.recommendationId = recommendationId
         self.description = description
         self.transcendenceType = transcendenceType
@@ -487,7 +501,8 @@ public struct EthicalOptimization: Sendable, Codable {
     public init(optimizationId: String, targetEthics: EthicalTarget,
                 optimizationGoals: [EthicalGoal], transcendenceConstraints: [TranscendenceConstraint] = [],
                 consciousnessBudget: Double = 1.0, universalBudget: Double = 1.0,
-                timeHorizon: TimeInterval = 3600) {
+                timeHorizon: TimeInterval = 3600)
+    {
         self.optimizationId = optimizationId
         self.targetEthics = targetEthics
         self.optimizationGoals = optimizationGoals
@@ -512,7 +527,8 @@ public struct EthicalGoal: Sendable, Codable {
     public let transcendenceEnhancement: Bool
 
     public init(goalType: EthicalGoalType, targetValue: Double,
-                priority: GoalPriority = .high, transcendenceEnhancement: Bool = true) {
+                priority: GoalPriority = .high, transcendenceEnhancement: Bool = true)
+    {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -522,12 +538,12 @@ public struct EthicalGoal: Sendable, Codable {
 
 /// Ethical goal types
 public enum EthicalGoalType: String, Sendable, Codable {
-    case transcendence = "transcendence"
-    case consciousness = "consciousness"
-    case universal_harmony = "universal_harmony"
-    case ethical_evolution = "ethical_evolution"
-    case paradigm_shift = "paradigm_shift"
-    case cosmic_alignment = "cosmic_alignment"
+    case transcendence
+    case consciousness
+    case universal_harmony
+    case ethical_evolution
+    case paradigm_shift
+    case cosmic_alignment
 }
 
 /// Transcendence constraint
@@ -538,7 +554,8 @@ public struct TranscendenceConstraint: Sendable, Codable {
     public let enforcement: EnforcementLevel
 
     public init(constraintType: TranscendenceConstraintType, value: Double,
-                tolerance: Double = 0.1, enforcement: EnforcementLevel = .strict) {
+                tolerance: Double = 0.1, enforcement: EnforcementLevel = .strict)
+    {
         self.constraintType = constraintType
         self.value = value
         self.tolerance = tolerance
@@ -548,27 +565,27 @@ public struct TranscendenceConstraint: Sendable, Codable {
 
 /// Transcendence constraint types
 public enum TranscendenceConstraintType: String, Sendable, Codable {
-    case consciousness = "consciousness"
-    case universal_harmony = "universal_harmony"
-    case ethical_alignment = "ethical_alignment"
-    case transcendence_risk = "transcendence_risk"
-    case evolutionary_impact = "evolutionary_impact"
+    case consciousness
+    case universal_harmony
+    case ethical_alignment
+    case transcendence_risk
+    case evolutionary_impact
 }
 
 /// Goal priority
 public enum GoalPriority: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Enforcement level
 public enum EnforcementLevel: String, Sendable, Codable {
-    case flexible = "flexible"
-    case moderate = "moderate"
-    case strict = "strict"
-    case absolute = "absolute"
+    case flexible
+    case moderate
+    case strict
+    case absolute
 }
 
 /// Ethical transcendence status
@@ -584,7 +601,8 @@ public struct EthicalTranscendenceStatus: Sendable, Codable {
 
     public init(operational: Bool, transcendenceCapability: Double, consciousnessLevel: Double,
                 universalHarmony: Double, ethicalAdvancement: Double,
-                activeTranscendences: Int, successRate: Double, lastUpdate: Date = Date()) {
+                activeTranscendences: Int, successRate: Double, lastUpdate: Date = Date())
+    {
         self.operational = operational
         self.transcendenceCapability = transcendenceCapability
         self.consciousnessLevel = consciousnessLevel
@@ -671,14 +689,14 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
         // Generate recommendations
         let recommendations = await generateTranscendenceRecommendations(evaluation, scenarioResult: scenarioResult, transcendenceResult: transcendenceResult)
 
-        return TranscendentEthicsResult(
+        return await TranscendentEthicsResult(
             evaluationId: evaluation.evaluationId,
             transcendentEvaluation: transcendenceResult.evaluation,
             ethicalTranscendence: transcendenceResult.transcendence,
             consciousnessElevation: scenarioResult.consciousnessElevation,
             universalHarmony: scenarioResult.universalHarmony,
             transcendenceRecommendations: recommendations,
-            evaluationInsights: await generateEvaluationInsights(evaluation, result: scenarioResult)
+            evaluationInsights: generateEvaluationInsights(evaluation, result: scenarioResult)
         )
     }
 
@@ -797,16 +815,16 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
 private final class TranscendenceEngine: Sendable {
     func executeTranscendence(_ transcendence: EthicalTranscendence, consciousnessResult: ConsciousnessResult) async throws -> TranscendenceResult {
         TranscendenceResult(
-            success: Double.random(in: 0.8...1.0) > 0.2,
-            advancement: Double.random(in: 0.7...1.0)
+            success: Double.random(in: 0.8 ... 1.0) > 0.2,
+            advancement: Double.random(in: 0.7 ... 1.0)
         )
     }
 
     func assessTranscendence(_ evaluation: TranscendentEthicsEvaluation, scenarioResult: ScenarioResult) async -> TranscendenceResult {
         TranscendenceResult(
             success: true,
-            evaluation: Double.random(in: 0.8...1.0),
-            transcendence: Double.random(in: 0.7...1.0)
+            evaluation: Double.random(in: 0.8 ... 1.0),
+            transcendence: Double.random(in: 0.7 ... 1.0)
         )
     }
 
@@ -821,10 +839,10 @@ private final class TranscendenceEngine: Sendable {
     func getTranscendenceStatus() async -> TranscendenceStatus {
         TranscendenceStatus(
             operational: true,
-            capability: Double.random(in: 0.9...1.0),
-            advancement: Double.random(in: 0.8...1.0),
-            activeTranscendences: Int.random(in: 1...10),
-            successRate: Double.random(in: 0.9...0.98)
+            capability: Double.random(in: 0.9 ... 1.0),
+            advancement: Double.random(in: 0.8 ... 1.0),
+            activeTranscendences: Int.random(in: 1 ... 10),
+            successRate: Double.random(in: 0.9 ... 0.98)
         )
     }
 }
@@ -834,8 +852,8 @@ private final class EthicsEvaluator: Sendable {
     func evaluateScenario(_ scenario: EthicalScenario, evaluation: TranscendentEthicsEvaluation) async throws -> ScenarioResult {
         ScenarioResult(
             success: true,
-            consciousnessElevation: Double.random(in: 0.8...1.0),
-            universalHarmony: Double.random(in: 0.7...1.0)
+            consciousnessElevation: Double.random(in: 0.8 ... 1.0),
+            universalHarmony: Double.random(in: 0.7 ... 1.0)
         )
     }
 
@@ -849,7 +867,7 @@ private final class ConsciousnessElevator: Sendable {
     func assessAlignment(_ alignment: ConsciousnessAlignment) async throws -> ConsciousnessResult {
         ConsciousnessResult(
             success: true,
-            elevation: Double.random(in: 0.8...1.0)
+            elevation: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -864,7 +882,7 @@ private final class ConsciousnessElevator: Sendable {
     func getElevationStatus() async -> ElevationStatus {
         ElevationStatus(
             operational: true,
-            level: Double.random(in: 0.9...1.0)
+            level: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -874,7 +892,7 @@ private final class UniversalHarmonizer: Sendable {
     func harmonizeEthics(_ transcendence: EthicalTranscendence, result: TranscendenceResult) async -> HarmonyResult {
         HarmonyResult(
             success: true,
-            harmony: Double.random(in: 0.8...1.0)
+            harmony: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -889,7 +907,7 @@ private final class UniversalHarmonizer: Sendable {
     func getHarmonyStatus() async -> HarmonyStatus {
         HarmonyStatus(
             operational: true,
-            harmony: Double.random(in: 0.95...1.0)
+            harmony: Double.random(in: 0.95 ... 1.0)
         )
     }
 }
@@ -907,7 +925,7 @@ private final class EthicalOptimizer: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8...1.0)
+            efficiency: Double.random(in: 0.8 ... 1.0)
         )
     }
 }

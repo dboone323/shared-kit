@@ -64,6 +64,7 @@ public enum HuggingFaceError: LocalizedError {
 
 import Foundation
 import OSLog
+
 // import SharedKit // Will be available when integrated into package
 
 /// Enhanced Hugging Face API Client with Quantum Performance
@@ -400,7 +401,7 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
     // MARK: - AITextGenerationService Implementation
 
     public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
-        return try await generate(
+        try await generate(
             prompt: prompt,
             model: "gpt2",
             maxTokens: maxTokens,
@@ -431,10 +432,11 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
         for line in lines {
             if line.lowercased().contains("error") ||
-               line.lowercased().contains("bug") ||
-               line.lowercased().contains("issue") ||
-               line.lowercased().contains("problem") ||
-               line.lowercased().contains("warning") {
+                line.lowercased().contains("bug") ||
+                line.lowercased().contains("issue") ||
+                line.lowercased().contains("problem") ||
+                line.lowercased().contains("warning")
+            {
                 issues.append(CodeIssue(description: line.trimmingCharacters(in: .whitespaces), severity: .medium))
             }
         }
@@ -446,10 +448,10 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
         let lines = analysis.components(separatedBy: "\n")
         return lines.filter { line in
             line.lowercased().contains("suggest") ||
-            line.lowercased().contains("recommend") ||
-            line.lowercased().contains("improve") ||
-            line.lowercased().contains("consider") ||
-            line.lowercased().contains("should")
+                line.lowercased().contains("recommend") ||
+                line.lowercased().contains("improve") ||
+                line.lowercased().contains("consider") ||
+                line.lowercased().contains("should")
         }.map { $0.trimmingCharacters(in: .whitespaces) }
     }
 
@@ -539,7 +541,7 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
     }
 
     public func getCachedResponse(key: String) async -> String? {
-        return cache.get(key)
+        cache.get(key)
     }
 
     public func clearCache() async {
@@ -548,7 +550,7 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
     public func getCacheStats() async -> CacheStats {
         // Simplified cache stats - could be enhanced
-        return CacheStats(
+        CacheStats(
             totalEntries: 0, // Not tracked in current implementation
             hitRate: 0.0,
             averageResponseTime: 0.0,
@@ -592,7 +594,8 @@ private actor CircuitBreaker {
 
     func canExecute(operation: String) -> Bool {
         guard let failureCount = failureCounts[operation],
-              let lastFailure = lastFailureTimes[operation] else {
+              let lastFailure = lastFailureTimes[operation]
+        else {
             return true
         }
 
@@ -667,7 +670,7 @@ private actor RetryManager {
 
     private func calculateDelay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
-        let jitter = Double.random(in: 0...0.1) * exponentialDelay
+        let jitter = Double.random(in: 0 ... 0.1) * exponentialDelay
         return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
     }
 }

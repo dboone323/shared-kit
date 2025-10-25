@@ -541,7 +541,7 @@ struct AccessPermissions {
     struct TimeRestrictions {
         let startTime: Date
         let endTime: Date
-        let allowedDays: [Int]  // 0 = Sunday, 6 = Saturday
+        let allowedDays: [Int] // 0 = Sunday, 6 = Saturday
     }
 }
 
@@ -661,10 +661,10 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
 
         storedData[storageId] = updatedStorage
 
-        let update = StorageUpdate(
+        let update = try await StorageUpdate(
             updateId: updateId,
             storageId: storageId,
-            previousData: try await retrieveConsciousnessData(storageId),  // This would need the old data
+            previousData: retrieveConsciousnessData(storageId), // This would need the old data
             newData: newData,
             updateTimestamp: Date(),
             coherenceChange: newQuantumState.coherenceLevel - existingStorage.coherenceLevel,
@@ -782,18 +782,18 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
 
     private func applyDecompression(_ data: ConsciousnessData) async throws -> ConsciousnessData {
         // Decompression would be applied during retrieval if needed
-        return data
+        data
     }
 
     private func applyDecryption(_ data: ConsciousnessData) async throws -> ConsciousnessData {
         // Decryption would be applied during retrieval if needed
-        return data
+        data
     }
 
     private func calculateCompressionRatio(
         _ original: ConsciousnessData, _ compressed: ConsciousnessData
     ) -> Double {
-        return Double(compressed.size) / Double(original.size)
+        Double(compressed.size) / Double(original.size)
     }
 
     private func matchesQuery(_ data: ConsciousnessData, _ query: ConsciousnessQuery) -> Bool {
@@ -803,7 +803,7 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
             return false
         }
         if let significanceThreshold = query.significanceThreshold,
-            data.metadata.significance < significanceThreshold
+           data.metadata.significance < significanceThreshold
         {
             return false
         }
@@ -829,8 +829,7 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
             }
         }
 
-        backupTimer = Timer.scheduledTimer(withTimeInterval: config.backupFrequency, repeats: true)
-        { [weak self] _ in
+        backupTimer = Timer.scheduledTimer(withTimeInterval: config.backupFrequency, repeats: true) { [weak self] _ in
             Task { [weak self] in
                 await self?.performBackup()
             }
@@ -841,9 +840,9 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
         let coherence = QuantumCoherence(
             coherenceId: UUID(),
             timestamp: Date(),
-            coherenceLevel: 0.85 + Double.random(in: -0.1...0.1),
-            stabilityIndex: 0.9 + Double.random(in: -0.05...0.05),
-            decoherenceRate: 0.02 + Double.random(in: -0.01...0.01),
+            coherenceLevel: 0.85 + Double.random(in: -0.1 ... 0.1),
+            stabilityIndex: 0.9 + Double.random(in: -0.05 ... 0.05),
+            decoherenceRate: 0.02 + Double.random(in: -0.01 ... 0.01),
             activeStorageUnits: storedData.count,
             alerts: []
         )
@@ -855,7 +854,7 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
 
     private func performOptimization() async {
         do {
-            let _ = try await optimizeQuantumStates()
+            _ = try await optimizeQuantumStates()
         } catch {
             print("Optimization failed: \(error)")
         }
@@ -866,10 +865,9 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
         print("Performing quantum storage backup")
     }
 
-    private func performDefragmentation() async throws -> StorageOptimization.OptimizationOperation
-    {
+    private func performDefragmentation() async throws -> StorageOptimization.OptimizationOperation {
         // Simplified defragmentation
-        return StorageOptimization.OptimizationOperation(
+        StorageOptimization.OptimizationOperation(
             operationId: UUID(),
             operationType: "defragmentation",
             affectedStorageIds: Array(storedData.keys),
@@ -881,7 +879,7 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
         -> StorageOptimization.OptimizationOperation
     {
         // Simplified coherence optimization
-        return StorageOptimization.OptimizationOperation(
+        StorageOptimization.OptimizationOperation(
             operationId: UUID(),
             operationType: "coherence_optimization",
             affectedStorageIds: Array(storedData.keys),
@@ -920,7 +918,8 @@ final class QuantumStateManager: QuantumStateManagementProtocol {
                 id: UUID(),
                 state: .superposition(
                     alpha: Complex(real: pattern.amplitude, imaginary: 0.0),
-                    beta: Complex(real: 0.0, imaginary: pattern.amplitude)),
+                    beta: Complex(real: 0.0, imaginary: pattern.amplitude)
+                ),
                 coherence: 0.9,
                 phase: pattern.phase
             )
@@ -929,9 +928,9 @@ final class QuantumStateManager: QuantumStateManagementProtocol {
         // Create entanglement matrix
         let size = qubits.count
         var entanglementMatrix = [[Complex]]()
-        for i in 0..<size {
+        for i in 0 ..< size {
             var row = [Complex]()
-            for j in 0..<size {
+            for j in 0 ..< size {
                 if i == j {
                     row.append(Complex(real: 1.0, imaginary: 0.0))
                 } else {
@@ -967,7 +966,7 @@ final class QuantumStateManager: QuantumStateManagementProtocol {
 
         return ConsciousnessData(
             dataId: UUID(),
-            entityId: UUID(),  // Would need to be stored separately
+            entityId: UUID(), // Would need to be stored separately
             timestamp: Date(),
             dataType: .quantum,
             patterns: patterns,
@@ -988,9 +987,9 @@ final class QuantumStateManager: QuantumStateManagementProtocol {
         // Create correlation matrix
         let size = states.count
         var correlationMatrix = [[Double]]()
-        for i in 0..<size {
+        for i in 0 ..< size {
             var row = [Double]()
-            for j in 0..<size {
+            for j in 0 ..< size {
                 row.append(i == j ? 1.0 : 0.3)
             }
             correlationMatrix.append(row)
@@ -1107,7 +1106,8 @@ final class ConsciousnessDataEncoder: ConsciousnessDataEncodingProtocol {
                 id: UUID(),
                 state: .superposition(
                     alpha: Complex(real: pattern.amplitude, imaginary: 0.0),
-                    beta: Complex(real: 0.0, imaginary: pattern.amplitude)),
+                    beta: Complex(real: 0.0, imaginary: pattern.amplitude)
+                ),
                 coherence: 0.9,
                 phase: pattern.phase
             )
@@ -1118,8 +1118,10 @@ final class ConsciousnessDataEncoder: ConsciousnessDataEncodingProtocol {
             qubits: qubits,
             entanglementMatrix: Array(
                 repeating: Array(
-                    repeating: Complex(real: 0.1, imaginary: 0.0), count: patterns.count),
-                count: patterns.count),
+                    repeating: Complex(real: 0.1, imaginary: 0.0), count: patterns.count
+                ),
+                count: patterns.count
+            ),
             coherenceLevel: 0.85,
             phase: 0.0,
             amplitude: 1.0
@@ -1137,7 +1139,7 @@ final class ConsciousnessDataEncoder: ConsciousnessDataEncodingProtocol {
     func decodeConsciousnessPatterns(_ encodedData: QuantumEncodedData) async throws
         -> [ConsciousnessPattern]
     {
-        return encodedData.quantumState.qubits.map { qubit in
+        encodedData.quantumState.qubits.map { qubit in
             ConsciousnessPattern(
                 patternId: UUID(),
                 patternType: .quantum,
@@ -1175,8 +1177,10 @@ final class ConsciousnessDataEncoder: ConsciousnessDataEncodingProtocol {
             qubits: compressedQubits,
             entanglementMatrix: Array(
                 repeating: Array(
-                    repeating: Complex(real: 0.2, imaginary: 0.0), count: compressedQubits.count),
-                count: compressedQubits.count),
+                    repeating: Complex(real: 0.2, imaginary: 0.0), count: compressedQubits.count
+                ),
+                count: compressedQubits.count
+            ),
             coherenceLevel: 0.8,
             phase: 0.0,
             amplitude: 1.0
@@ -1274,9 +1278,11 @@ final class QuantumStorageSecurityManager: QuantumStorageSecurityProtocol {
                 id: UUID(),
                 state: .superposition(
                     alpha: Complex(
-                        real: pattern.amplitude * quantumKey.securityLevel, imaginary: 0.0),
+                        real: pattern.amplitude * quantumKey.securityLevel, imaginary: 0.0
+                    ),
                     beta: Complex(
-                        real: 0.0, imaginary: pattern.amplitude * quantumKey.securityLevel)
+                        real: 0.0, imaginary: pattern.amplitude * quantumKey.securityLevel
+                    )
                 ),
                 coherence: pattern.amplitude,
                 phase: pattern.phase + quantumKey.securityLevel
@@ -1288,8 +1294,10 @@ final class QuantumStorageSecurityManager: QuantumStorageSecurityProtocol {
             qubits: encryptedQubits,
             entanglementMatrix: Array(
                 repeating: Array(
-                    repeating: Complex(real: 0.1, imaginary: 0.0), count: encryptedQubits.count),
-                count: encryptedQubits.count),
+                    repeating: Complex(real: 0.1, imaginary: 0.0), count: encryptedQubits.count
+                ),
+                count: encryptedQubits.count
+            ),
             coherenceLevel: 0.8,
             phase: 0.0,
             amplitude: 1.0
@@ -1338,7 +1346,7 @@ final class QuantumStorageSecurityManager: QuantumStorageSecurityProtocol {
         let keyId = UUID()
 
         // Generate quantum key bits
-        let keyBits = (0..<keyLength).map { _ in Int.random(in: 0...1) }
+        let keyBits = (0 ..< keyLength).map { _ in Int.random(in: 0 ... 1) }
 
         return QuantumKey(
             keyId: keyId,
@@ -1356,7 +1364,7 @@ final class QuantumStorageSecurityManager: QuantumStorageSecurityProtocol {
         let authenticationId = UUID()
 
         // Perform authentication
-        let success = credentials.accessLevel != .read  // Simplified check
+        let success = credentials.accessLevel != .read // Simplified check
         let confidence = success ? 0.9 : 0.1
 
         return AuthenticationResult(
@@ -1373,7 +1381,7 @@ final class QuantumStorageSecurityManager: QuantumStorageSecurityProtocol {
         let detectionId = UUID()
 
         // Simulate tampering detection
-        let tamperingDetected = Bool.random() && Bool.random()  // Low probability
+        let tamperingDetected = Bool.random() && Bool.random() // Low probability
         let tamperingType: TamperingDetection.TamperingType? =
             tamperingDetected ? .unauthorizedAccess : nil
 
@@ -1435,8 +1443,8 @@ final class QuantumConsciousnessDatabase {
         let activeStorage = consciousnessStorage.values.filter { $0.storageType == .permanent }
             .count
         let averageCoherence =
-            consciousnessStorage.values.map { $0.coherenceLevel }.reduce(0, +)
-            / Double(max(totalStorage, 1))
+            consciousnessStorage.values.map(\.coherenceLevel).reduce(0, +)
+                / Double(max(totalStorage, 1))
 
         return StorageMetrics(
             totalUnits: totalStorage,

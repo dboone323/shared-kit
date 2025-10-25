@@ -8,8 +8,8 @@
 //  This file implements MCP reality engineering systems,
 //  enabling MCP systems to perform reality engineering operations.
 
-import Foundation
 import Combine
+import Foundation
 
 /// Protocol for MCP reality engineering
 public protocol MCPRealityEngineering: Sendable {
@@ -39,7 +39,8 @@ public struct RealityEngineering: Sendable, Codable {
     public init(engineeringId: String, realityTarget: RealityTarget,
                 engineeringType: EngineeringType, parameters: [String: AnyCodable] = [:],
                 scope: EngineeringScope = .local, ethicalConstraints: [RealityConstraint] = [],
-                consciousnessAlignment: ConsciousnessAlignment = .standard) {
+                consciousnessAlignment: ConsciousnessAlignment = .standard)
+    {
         self.engineeringId = engineeringId
         self.realityTarget = realityTarget
         self.engineeringType = engineeringType
@@ -62,20 +63,20 @@ public enum RealityTarget: Sendable, Codable {
 
 /// Engineering types
 public enum EngineeringType: String, Sendable, Codable {
-    case manipulation = "manipulation"
-    case creation = "creation"
-    case transformation = "transformation"
-    case stabilization = "stabilization"
-    case optimization = "optimization"
-    case transcendence = "transcendence"
+    case manipulation
+    case creation
+    case transformation
+    case stabilization
+    case optimization
+    case transcendence
 }
 
 /// Engineering scope
 public enum EngineeringScope: String, Sendable, Codable {
-    case local = "local"
-    case regional = "regional"
-    case global = "global"
-    case universal = "universal"
+    case local
+    case regional
+    case global
+    case universal
 }
 
 /// Reality constraint
@@ -86,7 +87,8 @@ public struct RealityConstraint: Sendable, Codable {
     public let enforcement: EnforcementLevel
 
     public init(constraintType: RealityConstraintType, value: String,
-                priority: ConstraintPriority = .high, enforcement: EnforcementLevel = .strict) {
+                priority: ConstraintPriority = .high, enforcement: EnforcementLevel = .strict)
+    {
         self.constraintType = constraintType
         self.value = value
         self.priority = priority
@@ -96,21 +98,21 @@ public struct RealityConstraint: Sendable, Codable {
 
 /// Reality constraint types
 public enum RealityConstraintType: String, Sendable, Codable {
-    case causality = "causality"
-    case entropy = "entropy"
-    case consciousness = "consciousness"
-    case harmony = "harmony"
-    case stability = "stability"
-    case evolution = "evolution"
+    case causality
+    case entropy
+    case consciousness
+    case harmony
+    case stability
+    case evolution
 }
 
 /// Consciousness alignment
 public enum ConsciousnessAlignment: String, Sendable, Codable {
-    case minimal = "minimal"
-    case standard = "standard"
-    case enhanced = "enhanced"
-    case transcendent = "transcendent"
-    case universal = "universal"
+    case minimal
+    case standard
+    case enhanced
+    case transcendent
+    case universal
 }
 
 /// Reality engineering result
@@ -126,7 +128,8 @@ public struct RealityEngineeringResult: Sendable, Codable {
 
     public init(engineeringId: String, success: Bool, realityImpact: Double,
                 stabilityIndex: Double, consciousnessEffect: Double, ethicalCompliance: Double,
-                engineeringInsights: [RealityInsight] = [], executionTime: TimeInterval) {
+                engineeringInsights: [RealityInsight] = [], executionTime: TimeInterval)
+    {
         self.engineeringId = engineeringId
         self.success = success
         self.realityImpact = realityImpact
@@ -147,7 +150,8 @@ public struct RealityInsight: Sendable, Codable {
     public let realityAlignment: Double
 
     public init(insight: String, type: RealityInsightType, depth: InsightDepth,
-                confidence: Double, realityAlignment: Double) {
+                confidence: Double, realityAlignment: Double)
+    {
         self.insight = insight
         self.type = type
         self.depth = depth
@@ -158,12 +162,12 @@ public struct RealityInsight: Sendable, Codable {
 
 /// Reality insight types
 public enum RealityInsightType: String, Sendable, Codable {
-    case structural = "structural"
-    case energetic = "energetic"
-    case consciousness = "consciousness"
-    case temporal = "temporal"
-    case dimensional = "dimensional"
-    case universal = "universal"
+    case structural
+    case energetic
+    case consciousness
+    case temporal
+    case dimensional
+    case universal
 }
 
 /// Reality manipulation
@@ -179,7 +183,8 @@ public struct RealityManipulation: Sendable, Codable {
     public init(manipulationId: String, targetReality: RealityTarget,
                 manipulationType: ManipulationType, parameters: [String: AnyCodable] = [:],
                 intensity: ManipulationIntensity = .moderate, duration: TimeInterval = 0,
-                reversibility: ReversibilityLevel = .full) {
+                reversibility: ReversibilityLevel = .full)
+    {
         self.manipulationId = manipulationId
         self.targetReality = targetReality
         self.manipulationType = manipulationType
@@ -192,31 +197,31 @@ public struct RealityManipulation: Sendable, Codable {
 
 /// Manipulation types
 public enum ManipulationType: String, Sendable, Codable {
-    case probability = "probability"
-    case causality = "causality"
-    case energy = "energy"
-    case matter = "matter"
-    case space = "space"
-    case time = "time"
-    case consciousness = "consciousness"
-    case dimension = "dimension"
+    case probability
+    case causality
+    case energy
+    case matter
+    case space
+    case time
+    case consciousness
+    case dimension
 }
 
 /// Manipulation intensity
 public enum ManipulationIntensity: String, Sendable, Codable {
-    case minimal = "minimal"
-    case low = "low"
-    case moderate = "moderate"
-    case high = "high"
-    case extreme = "extreme"
+    case minimal
+    case low
+    case moderate
+    case high
+    case extreme
 }
 
 /// Reversibility level
 public enum ReversibilityLevel: String, Sendable, Codable {
-    case none = "none"
-    case partial = "partial"
-    case full = "full"
-    case enhanced = "enhanced"
+    case none
+    case partial
+    case full
+    case enhanced
 }
 
 /// Reality manipulation result
@@ -233,7 +238,8 @@ public struct RealityManipulationResult: Sendable, Codable {
     public init(manipulationId: String, success: Bool, manipulationEffect: Double,
                 realityStability: Double, sideEffects: [RealitySideEffect] = [],
                 reversibilityAchieved: Double, consciousnessImpact: Double,
-                manipulationInsights: [RealityInsight] = []) {
+                manipulationInsights: [RealityInsight] = [])
+    {
         self.manipulationId = manipulationId
         self.success = success
         self.manipulationEffect = manipulationEffect
@@ -253,7 +259,8 @@ public struct RealitySideEffect: Sendable, Codable {
     public let mitigationStrategy: String
 
     public init(effectType: SideEffectType, severity: SeverityLevel,
-                description: String, mitigationStrategy: String) {
+                description: String, mitigationStrategy: String)
+    {
         self.effectType = effectType
         self.severity = severity
         self.description = description
@@ -263,21 +270,21 @@ public struct RealitySideEffect: Sendable, Codable {
 
 /// Side effect types
 public enum SideEffectType: String, Sendable, Codable {
-    case causality_disruption = "causality_disruption"
-    case entropy_increase = "entropy_increase"
-    case consciousness_distortion = "consciousness_distortion"
-    case dimensional_instability = "dimensional_instability"
-    case temporal_anomaly = "temporal_anomaly"
-    case reality_fragmentation = "reality_fragmentation"
+    case causality_disruption
+    case entropy_increase
+    case consciousness_distortion
+    case dimensional_instability
+    case temporal_anomaly
+    case reality_fragmentation
 }
 
 /// Severity level
 public enum SeverityLevel: String, Sendable, Codable {
-    case negligible = "negligible"
-    case minor = "minor"
-    case moderate = "moderate"
-    case severe = "severe"
-    case catastrophic = "catastrophic"
+    case negligible
+    case minor
+    case moderate
+    case severe
+    case catastrophic
 }
 
 /// Reality optimization
@@ -291,7 +298,8 @@ public struct RealityOptimization: Sendable, Codable {
 
     public init(optimizationId: String, targetReality: RealityTarget,
                 optimizationGoals: [OptimizationGoal], constraints: [RealityConstraint] = [],
-                timeHorizon: TimeInterval = 3600, riskTolerance: RiskTolerance = .moderate) {
+                timeHorizon: TimeInterval = 3600, riskTolerance: RiskTolerance = .moderate)
+    {
         self.optimizationId = optimizationId
         self.targetReality = targetReality
         self.optimizationGoals = optimizationGoals
@@ -309,7 +317,8 @@ public struct OptimizationGoal: Sendable, Codable {
     public let measurement: String
 
     public init(goalType: GoalType, targetValue: Double,
-                priority: GoalPriority = .medium, measurement: String) {
+                priority: GoalPriority = .medium, measurement: String)
+    {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -319,28 +328,28 @@ public struct OptimizationGoal: Sendable, Codable {
 
 /// Goal types
 public enum GoalType: String, Sendable, Codable {
-    case stability = "stability"
-    case harmony = "harmony"
-    case consciousness = "consciousness"
-    case efficiency = "efficiency"
-    case evolution = "evolution"
-    case transcendence = "transcendence"
+    case stability
+    case harmony
+    case consciousness
+    case efficiency
+    case evolution
+    case transcendence
 }
 
 /// Goal priority
 public enum GoalPriority: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Risk tolerance
 public enum RiskTolerance: String, Sendable, Codable {
-    case conservative = "conservative"
-    case moderate = "moderate"
-    case aggressive = "aggressive"
-    case extreme = "extreme"
+    case conservative
+    case moderate
+    case aggressive
+    case extreme
 }
 
 /// Reality engineering status
@@ -356,7 +365,8 @@ public struct RealityEngineeringStatus: Sendable, Codable {
 
     public init(operational: Bool, engineeringCapability: Double, realityStability: Double,
                 consciousnessAlignment: Double, activeEngineering: Int, manipulationSuccess: Double,
-                ethicalCompliance: Double, lastUpdate: Date = Date()) {
+                ethicalCompliance: Double, lastUpdate: Date = Date())
+    {
         self.operational = operational
         self.engineeringCapability = engineeringCapability
         self.realityStability = realityStability
@@ -456,7 +466,7 @@ public final class MCPRealityEngineeringCoordinator: MCPRealityEngineering, Send
         // Calculate reversibility
         let reversibility = calculateReversibility(manipulation.reversibility, stability: stabilityResult.stability)
 
-        return RealityManipulationResult(
+        return await RealityManipulationResult(
             manipulationId: manipulation.manipulationId,
             success: manipulationResult.success && stabilityResult.stable && ethicalResult.compliant,
             manipulationEffect: manipulationResult.effect,
@@ -464,7 +474,7 @@ public final class MCPRealityEngineeringCoordinator: MCPRealityEngineering, Send
             sideEffects: sideEffects,
             reversibilityAchieved: reversibility,
             consciousnessImpact: manipulationResult.consciousnessImpact,
-            manipulationInsights: await generateManipulationInsights(manipulation, result: manipulationResult)
+            manipulationInsights: generateManipulationInsights(manipulation, result: manipulationResult)
         )
     }
 
@@ -637,9 +647,9 @@ public final class MCPRealityEngineeringCoordinator: MCPRealityEngineering, Send
 private final class RealityManipulator: Sendable {
     func executeManipulation(_ manipulation: RealityManipulation) async throws -> ManipulationResult {
         ManipulationResult(
-            success: Double.random(in: 0.8...1.0) > 0.2,
-            effect: Double.random(in: 0.5...1.0),
-            consciousnessImpact: Double.random(in: 0.1...0.5)
+            success: Double.random(in: 0.8 ... 1.0) > 0.2,
+            effect: Double.random(in: 0.5 ... 1.0),
+            consciousnessImpact: Double.random(in: 0.1 ... 0.5)
         )
     }
 
@@ -654,9 +664,9 @@ private final class RealityManipulator: Sendable {
     func getManipulatorStatus() async -> ManipulatorStatus {
         ManipulatorStatus(
             operational: true,
-            capability: Double.random(in: 0.8...1.0),
-            activeManipulations: Int.random(in: 1...10),
-            successRate: Double.random(in: 0.85...0.95)
+            capability: Double.random(in: 0.8 ... 1.0),
+            activeManipulations: Int.random(in: 1 ... 10),
+            successRate: Double.random(in: 0.85 ... 0.95)
         )
     }
 }
@@ -666,7 +676,7 @@ private final class StabilityGuardian: Sendable {
     func monitorStability(_ manipulation: RealityManipulation, result: ManipulationResult) async -> StabilityResult {
         StabilityResult(
             stable: result.effect < 0.9,
-            stability: Double.random(in: 0.8...1.0)
+            stability: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -681,7 +691,7 @@ private final class StabilityGuardian: Sendable {
     func getStabilityStatus() async -> StabilityStatus {
         StabilityStatus(
             operational: true,
-            stability: Double.random(in: 0.9...1.0)
+            stability: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -691,7 +701,7 @@ private final class EthicalValidator: Sendable {
     func validateEthicalImpact(_ manipulation: RealityManipulation, result: ManipulationResult) async throws -> EthicalResult {
         EthicalResult(
             compliant: result.effect < 0.8,
-            compliance: Double.random(in: 0.9...1.0)
+            compliance: Double.random(in: 0.9 ... 1.0)
         )
     }
 
@@ -706,7 +716,7 @@ private final class EthicalValidator: Sendable {
     func getValidationStatus() async -> ValidationStatus {
         ValidationStatus(
             operational: true,
-            compliance: Double.random(in: 0.95...1.0)
+            compliance: Double.random(in: 0.95 ... 1.0)
         )
     }
 }
@@ -724,7 +734,7 @@ private final class RealityOptimizationEngine: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8...1.0)
+            efficiency: Double.random(in: 0.8 ... 1.0)
         )
     }
 }

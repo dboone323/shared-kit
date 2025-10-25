@@ -344,8 +344,7 @@ public final class AgentCreativitySystems: Sendable {
     private func processCreativitySystems(
         _ request: CreativitySystemsRequest,
         assessment: CreativitySystemsAssessment
-    ) async throws -> CreativitySystemsProcessing
-    {
+    ) async throws -> CreativitySystemsProcessing {
         // Process creativity systems
         let processingContext = CreativitySystemsProcessingContext(
             agents: request.agents,
@@ -369,8 +368,7 @@ public final class AgentCreativitySystems: Sendable {
     private func coordinateInnovationEnhancement(
         _ request: CreativitySystemsRequest,
         creativity: CreativitySystemsProcessing
-    ) async throws -> InnovationEnhancementCoordination
-    {
+    ) async throws -> InnovationEnhancementCoordination {
         // Coordinate innovation enhancement
         let coordinationContext = InnovationEnhancementCoordinationContext(
             agents: request.agents,
@@ -394,8 +392,7 @@ public final class AgentCreativitySystems: Sendable {
     private func synthesizeCreativitySystemsNetwork(
         _ request: CreativitySystemsRequest,
         enhancement: InnovationEnhancementCoordination
-    ) async throws -> CreativitySystemsNetworkSynthesis
-    {
+    ) async throws -> CreativitySystemsNetworkSynthesis {
         // Synthesize creativity systems network
         let synthesisContext = CreativitySystemsNetworkSynthesisContext(
             agents: request.agents,
@@ -419,8 +416,7 @@ public final class AgentCreativitySystems: Sendable {
     private func orchestrateQuantumCreativity(
         _ request: CreativitySystemsRequest,
         network: CreativitySystemsNetworkSynthesis
-    ) async throws -> QuantumCreativityOrchestration
-    {
+    ) async throws -> QuantumCreativityOrchestration {
         // Orchestrate quantum creativity
         let orchestrationContext = QuantumCreativityOrchestrationContext(
             agents: request.agents,
@@ -444,8 +440,7 @@ public final class AgentCreativitySystems: Sendable {
     private func synthesizeCreativeSynthesis(
         _ request: CreativitySystemsRequest,
         creativity: QuantumCreativityOrchestration
-    ) async throws -> CreativeSynthesisSynthesis
-    {
+    ) async throws -> CreativeSynthesisSynthesis {
         // Synthesize creative synthesis
         let synthesisContext = CreativeSynthesisSynthesisContext(
             agents: request.agents,
@@ -469,8 +464,7 @@ public final class AgentCreativitySystems: Sendable {
     private func validateCreativitySystemsResults(
         _ creativeSynthesisSynthesis: CreativeSynthesisSynthesis,
         session: CreativitySystemsSession
-    ) async throws -> CreativitySystemsValidationResult
-    {
+    ) async throws -> CreativitySystemsValidationResult {
         // Validate creativity systems results
         let performanceComparison = await compareCreativitySystemsPerformance(
             originalAgents: session.request.agents,
@@ -483,7 +477,7 @@ public final class AgentCreativitySystems: Sendable {
         )
 
         let success = performanceComparison.innovationLevel >= session.request.innovationTarget &&
-                     creativityAdvantage.creativityAdvantage >= 0.4
+            creativityAdvantage.creativityAdvantage >= 0.4
 
         let events = generateCreativitySystemsEvents(session, creativity: creativeSynthesisSynthesis)
 
@@ -602,24 +596,24 @@ public final class AgentCreativitySystems: Sendable {
 
     private func measureCreativityEnhancement(_ creativeAgents: [CreativitySystemsAgent]) async -> Double {
         // Measure creativity enhancement
-        return 0.94
+        0.94
     }
 
     private func measureCreativeSynthesis(_ creativeAgents: [CreativitySystemsAgent]) async -> Double {
         // Measure creative synthesis
-        return 0.92
+        0.92
     }
 
     private func measureCreativitySystems(_ creativeAgents: [CreativitySystemsAgent]) async -> Double {
         // Measure creativity systems
-        return 0.95
+        0.95
     }
 
     private func generateCreativitySystemsEvents(
         _ session: CreativitySystemsSession,
         creativity: CreativeSynthesisSynthesis
     ) -> [CreativitySystemsEvent] {
-        return [
+        [
             CreativitySystemsEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -635,9 +629,9 @@ public final class AgentCreativitySystems: Sendable {
                 data: [
                     "success": true,
                     "innovation_level": creativity.creativityDepth,
-                    "innovation_synthesis": creativity.innovationSynthesis
+                    "innovation_synthesis": creativity.innovationSynthesis,
                 ]
-            )
+            ),
         ]
     }
 
@@ -969,7 +963,7 @@ public struct CreativitySystemsFrameworkMetrics: Sendable, Codable {
     public var averageCreativityAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Creativity systems metrics
@@ -1474,9 +1468,9 @@ public struct CreativeSynthesisSynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension AgentCreativitySystems {
+public extension AgentCreativitySystems {
     /// Create specialized creativity systems for specific agent architectures
-    public static func createSpecializedCreativitySystems(
+    static func createSpecializedCreativitySystems(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentCreativitySystems {
         let system = try await AgentCreativitySystems()
@@ -1485,7 +1479,7 @@ extension AgentCreativitySystems {
     }
 
     /// Execute batch creativity systems processing
-    public func executeBatchCreativitySystems(
+    func executeBatchCreativitySystems(
         _ creativityRequests: [CreativitySystemsRequest]
     ) async throws -> BatchCreativitySystemsResult {
 
@@ -1508,8 +1502,8 @@ extension AgentCreativitySystems {
         }
 
         let successRate = Double(results.count) / Double(creativityRequests.count)
-        let averageInnovation = results.map { $0.innovationLevel }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.creativityAdvantage }.reduce(0, +) / Double(results.count)
+        let averageInnovation = results.map(\.innovationLevel).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.creativityAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchCreativitySystemsResult(
             batchId: batchId,
@@ -1526,7 +1520,7 @@ extension AgentCreativitySystems {
     }
 
     /// Get creativity systems recommendations
-    public func getCreativitySystemsRecommendations() async -> [CreativitySystemsRecommendation] {
+    func getCreativitySystemsRecommendations() async -> [CreativitySystemsRecommendation] {
         var recommendations: [CreativitySystemsRecommendation] = []
 
         let status = await getCreativitySystemsStatus()

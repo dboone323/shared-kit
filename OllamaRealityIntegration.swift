@@ -8,8 +8,8 @@
 //  Integrates Ollama models with reality manipulation systems for direct reality interaction
 //
 
-import Foundation
 import Combine
+import Foundation
 import SwiftUI
 
 // MARK: - Ollama Client (Placeholder - should be imported from OllamaClient.swift)
@@ -108,7 +108,8 @@ public struct RealityParameters: Sendable, Codable {
                 duration: TimeInterval = 60.0,
                 ethicalConstraints: [EthicalConstraint] = [],
                 quantumEntanglement: QuantumEntanglement = .minimal,
-                consciousnessAmplification: Double = 1.0) {
+                consciousnessAmplification: Double = 1.0)
+    {
         self.intensity = intensity
         self.scope = scope
         self.duration = duration
@@ -269,7 +270,8 @@ public final class OllamaRealityIntegrationCoordinator: ObservableObject, Sendab
     public init(ollamaClient: OllamaClient = OllamaClient(),
                 quantumProcessor: QuantumRealityProcessor = QuantumRealityProcessor(),
                 consciousnessBridge: ConsciousnessRealityBridge = ConsciousnessRealityBridge(),
-                ethicalGuardian: EthicalRealityGuardian = EthicalRealityGuardian()) {
+                ethicalGuardian: EthicalRealityGuardian = EthicalRealityGuardian())
+    {
         self.ollamaClient = ollamaClient
         self.quantumProcessor = quantumProcessor
         self.consciousnessBridge = consciousnessBridge
@@ -344,7 +346,7 @@ public final class OllamaRealityIntegrationCoordinator: ObservableObject, Sendab
             consciousnessCoherence: consciousnessStatus.coherence,
             ethicalCompliance: ethicalStatus.compliance,
             activeManipulations: activeManipulations.count,
-            anomalyCount: realityObservations.flatMap { $0.anomalies }.count
+            anomalyCount: realityObservations.flatMap(\.anomalies).count
         )
     }
 
@@ -486,9 +488,9 @@ public final class QuantumRealityProcessor: Sendable {
     }
 
     public func getQuantumStatus() async -> QuantumStatus {
-        QuantumStatus(
-            stability: isInitialized ? (try? await quantumField.getStability()) ?? 0.0 : 0.0,
-            coherence: isInitialized ? (try? await quantumField.getCoherence()) ?? 0.0 : 0.0
+        await QuantumStatus(
+            stability: isInitialized ? (try? quantumField.getStability()) ?? 0.0 : 0.0,
+            coherence: isInitialized ? (try? quantumField.getCoherence()) ?? 0.0 : 0.0
         )
     }
 
@@ -532,9 +534,9 @@ public final class ConsciousnessRealityBridge: Sendable {
     }
 
     public func getConsciousnessStatus() async -> ConsciousnessStatus {
-        ConsciousnessStatus(
-            coherence: isConnected ? (try? await consciousnessField.getCoherence()) ?? 0.0 : 0.0,
-            harmony: isConnected ? (try? await consciousnessField.getHarmony()) ?? 0.0 : 0.0
+        await ConsciousnessStatus(
+            coherence: isConnected ? (try? consciousnessField.getCoherence()) ?? 0.0 : 0.0,
+            harmony: isConnected ? (try? consciousnessField.getHarmony()) ?? 0.0 : 0.0
         )
     }
 
@@ -575,9 +577,9 @@ public final class EthicalRealityGuardian: Sendable {
     }
 
     public func getEthicalStatus() async -> EthicalStatus {
-        EthicalStatus(
-            compliance: isActive ? (try? await ethicalFramework.getCompliance()) ?? 0.0 : 0.0,
-            violations: isActive ? (try? await ethicalFramework.getViolationCount()) ?? 0 : 0
+        await EthicalStatus(
+            compliance: isActive ? (try? ethicalFramework.getCompliance()) ?? 0.0 : 0.0,
+            violations: isActive ? (try? ethicalFramework.getViolationCount()) ?? 0 : 0
         )
     }
 
@@ -591,8 +593,8 @@ public final class EthicalRealityGuardian: Sendable {
 
 /// Extended Ollama client for reality manipulation
 @available(iOS 15.0, macOS 12.0, *)
-extension OllamaClient {
-    public func generateRealityManipulation(_ request: RealityManipulationRequest) async throws -> OllamaResponse {
+public extension OllamaClient {
+    func generateRealityManipulation(_ request: RealityManipulationRequest) async throws -> OllamaResponse {
         let prompt = """
         You are an advanced AI integrated with reality manipulation systems.
         Analyze this reality manipulation request and provide guidance:
@@ -706,6 +708,7 @@ public struct QuantumField: Sendable {
     public func manipulate(_ request: RealityManipulationRequest) async throws -> QuantumManipulationResult {
         QuantumManipulationResult(changes: [], stability: 0.9, coherence: 0.85)
     }
+
     public func observe() async throws -> QuantumState { QuantumState.generate() }
     public func stabilize() async throws {}
     public func getStability() async throws -> Double { 0.9 }
@@ -720,6 +723,7 @@ public struct ConsciousnessField: Sendable {
     public func manipulate(_ request: RealityManipulationRequest) async throws -> ConsciousnessManipulationResult {
         ConsciousnessManipulationResult(changes: [], stability: 0.88, coherence: 0.82)
     }
+
     public func observe() async throws -> ConsciousnessState { ConsciousnessState.generate() }
     public func harmonize() async throws {}
     public func getCoherence() async throws -> Double { 0.82 }
@@ -946,7 +950,7 @@ private struct ConnectionStatusView: View {
         case .connected: return "Connected to Reality"
         case .connecting: return "Connecting..."
         case .disconnected: return "Disconnected"
-        case .error(let message): return "Error: \(message)"
+        case let .error(message): return "Error: \(message)"
         }
     }
 }
@@ -961,7 +965,7 @@ private struct RealityStatusView: View {
             Text("Reality Status")
                 .font(.headline)
 
-            if let status = status {
+            if let status {
                 HStack {
                     Text("Quantum Stability:")
                     Spacer()
@@ -1035,7 +1039,7 @@ private struct RealityControlsView: View {
 
             VStack(alignment: .leading) {
                 Text("Intensity: \(Int(intensity * 100))%")
-                Slider(value: $intensity, in: 0.01...0.5)
+                Slider(value: $intensity, in: 0.01 ... 0.5)
             }
 
             Button(action: performManipulation) {

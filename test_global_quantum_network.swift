@@ -55,7 +55,7 @@ func initializeGlobalNetwork() async {
     print("==================================================")
 
     print("1. Deploying Quantum Internet Infrastructure...")
-    await Task.sleep(500_000_000)  // 0.5 seconds
+    await Task.sleep(500_000_000) // 0.5 seconds
 
     print("2. Establishing Global Network Topology...")
     await Task.sleep(500_000_000)
@@ -85,7 +85,7 @@ func demonstrateIntercontinentalCommunication() async {
 
     let continents = ["North America", "Europe", "Asia", "Africa", "South America", "Australia"]
 
-    for i in 0..<continents.count - 1 {
+    for i in 0 ..< continents.count - 1 {
         let result = await establishIntercontinentalLink(from: continents[i], to: continents[i + 1])
         print("Link \(continents[i]) ↔ \(continents[i + 1]):")
         print("- Distance: \(String(format: "%.0f", result.distance)) km")
@@ -175,9 +175,10 @@ func demonstrateDataCenterOperations() async {
     print()
 
     let majorCities = ["New York", "London", "Tokyo", "Singapore", "São Paulo"]
-    for i in 0..<majorCities.count - 1 {
+    for i in 0 ..< majorCities.count - 1 {
         let commResult = await establishInterDataCenterLink(
-            from: majorCities[i], to: majorCities[i + 1])
+            from: majorCities[i], to: majorCities[i + 1]
+        )
         print("Data Center Link \(majorCities[i]) ↔ \(majorCities[i + 1]):")
         print("- Bandwidth: \(String(format: "%.1f", commResult.bandwidth)) Tbps")
         print("- Latency: \(String(format: "%.2f", commResult.latency)) μs")
@@ -192,10 +193,10 @@ func establishIntercontinentalLink(from continentA: String, to continentB: Strin
     -> IntercontinentalLinkResult
 {
     // Simulate intercontinental quantum link establishment
-    let distance = Double.random(in: 5000...15000)
-    let latency = distance / 200000.0 * 1000  // Speed of light in fiber ~200,000 km/s
-    let fidelity = Double.random(in: 0.85...0.95)
-    let throughput = Double.random(in: 50...200)
+    let distance = Double.random(in: 5000 ... 15000)
+    let latency = distance / 200_000.0 * 1000 // Speed of light in fiber ~200,000 km/s
+    let fidelity = Double.random(in: 0.85 ... 0.95)
+    let throughput = Double.random(in: 50 ... 200)
 
     return IntercontinentalLinkResult(
         continentA: continentA,
@@ -208,21 +209,21 @@ func establishIntercontinentalLink(from continentA: String, to continentB: Strin
 }
 
 func establishSatelliteLink(to station: String) async -> SatelliteCommunicationResult {
-    return SatelliteCommunicationResult(
+    SatelliteCommunicationResult(
         station: station,
-        signalStrength: Double.random(in: 0.8...0.95),
-        bitErrorRate: Double.random(in: 1e-9...1e-7),
-        latency: Double.random(in: 25...50)
+        signalStrength: Double.random(in: 0.8 ... 0.95),
+        bitErrorRate: Double.random(in: 1e-9 ... 1e-7),
+        latency: Double.random(in: 25 ... 50)
     )
 }
 
 func deployTransoceanicCable(ocean: String) async -> TransoceanicCableResult {
-    return TransoceanicCableResult(
+    TransoceanicCableResult(
         ocean: ocean,
-        length: Double.random(in: 8000...18000),
-        capacity: Double.random(in: 10...50),
-        reliability: Double.random(in: 0.98...0.995),
-        powerConsumption: Double.random(in: 5...15)
+        length: Double.random(in: 8000 ... 18000),
+        capacity: Double.random(in: 10 ... 50),
+        reliability: Double.random(in: 0.98 ... 0.995),
+        powerConsumption: Double.random(in: 5 ... 15)
     )
 }
 
@@ -232,8 +233,8 @@ func findOptimalGlobalRoute(from cityA: String, to cityB: String) async -> Globa
         from: cityA,
         to: cityB,
         path: path,
-        totalDistance: Double.random(in: 10000...25000),
-        estimatedLatency: Double.random(in: 45...120),
+        totalDistance: Double.random(in: 10000 ... 25000),
+        estimatedLatency: Double.random(in: 45 ... 120),
         networkTypes: ["Terrestrial", "Satellite", "Terrestrial"],
         securityLevel: "Quantum"
     )
@@ -242,12 +243,12 @@ func findOptimalGlobalRoute(from cityA: String, to cityB: String) async -> Globa
 func establishInterDataCenterLink(from cityA: String, to cityB: String) async
     -> DataCenterLinkResult
 {
-    return DataCenterLinkResult(
+    DataCenterLinkResult(
         cityA: cityA,
         cityB: cityB,
-        bandwidth: Double.random(in: 5...20),
-        latency: Double.random(in: 0.1...0.5),
-        reliability: Double.random(in: 0.9995...0.9999)
+        bandwidth: Double.random(in: 5 ... 20),
+        latency: Double.random(in: 0.1 ... 0.5),
+        reliability: Double.random(in: 0.9995 ... 0.9999)
     )
 }
 

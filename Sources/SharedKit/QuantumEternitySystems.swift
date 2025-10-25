@@ -329,7 +329,7 @@ public final class QuantumEternityCoordinator: ObservableObject, @unchecked Send
             {
                 let status = await self.monitorEternityStatus()
                 self.updateCycleProgress(status)
-                try? await Task.sleep(nanoseconds: 30_000_000_000)  // 30 seconds
+                try? await Task.sleep(nanoseconds: 30_000_000_000) // 30 seconds
                 // Update state for next iteration
                 state = await self.getCurrentEternityState()
             }
@@ -498,7 +498,7 @@ public final class QuantumEternityCoordinator: ObservableObject, @unchecked Send
         guard let currentCycle = evolutionCycles.last else { return 0.0 }
 
         let elapsed = Date().timeIntervalSince(currentCycle.startTime)
-        let cycleDuration: TimeInterval = 86400 * 365  // 1 year cycle
+        let cycleDuration: TimeInterval = 86400 * 365 // 1 year cycle
 
         return min(elapsed / cycleDuration, 1.0)
     }

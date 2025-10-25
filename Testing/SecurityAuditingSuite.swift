@@ -6,11 +6,11 @@ import os.log
 import XCTest
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 
 #if canImport(AppKit)
-import AppKit
+    import AppKit
 #endif
 
 /// Comprehensive Security Auditing and Compliance Suite for Phase 4

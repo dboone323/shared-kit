@@ -6,8 +6,8 @@
 //  Purpose: Advanced autonomous agent frameworks with self-learning capabilities
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // MARK: - Advanced Agent Protocols
 
@@ -74,7 +74,8 @@ public struct AgentExperience: Codable, Sendable {
                 action: String,
                 outcome: String,
                 reward: Double,
-                context: [String: AnyCodable] = [:]) {
+                context: [String: AnyCodable] = [:])
+    {
         self.timestamp = timestamp
         self.action = action
         self.outcome = outcome
@@ -93,7 +94,8 @@ public struct AgentEnvironment: Codable, Sendable {
     public init(parameters: [String: AnyCodable] = [:],
                 constraints: [String: AnyCodable] = [:],
                 opportunities: [String: AnyCodable] = [:],
-                threats: [String: AnyCodable] = [:]) {
+                threats: [String: AnyCodable] = [:])
+    {
         self.parameters = parameters
         self.constraints = constraints
         self.opportunities = opportunities
@@ -115,7 +117,8 @@ public struct AgentIntelligenceMetrics: Codable, Sendable {
                 adaptationRate: Double = 1.0,
                 decisionAccuracy: Double = 1.0,
                 creativityIndex: Double = 1.0,
-                ethicalAlignment: Double = 1.0) {
+                ethicalAlignment: Double = 1.0)
+    {
         self.processingSpeed = processingSpeed
         self.learningEfficiency = learningEfficiency
         self.adaptationRate = adaptationRate
@@ -130,9 +133,10 @@ public struct AgentIntelligenceMetrics: Codable, Sendable {
 /// Base implementation of advanced autonomous agent
 @MainActor
 open class BaseAdvancedAgent<State: Codable & Sendable,
-                             Action: Codable & Sendable>: AdvancedAutonomousAgent,
-                                                          IntelligenceAmplifiable,
-                                                          SelfLearningAgent {
+    Action: Codable & Sendable>: AdvancedAutonomousAgent,
+    IntelligenceAmplifiable,
+    SelfLearningAgent
+{
 
     public let id: UUID
     public let name: String
@@ -157,7 +161,8 @@ open class BaseAdvancedAgent<State: Codable & Sendable,
     public init(id: UUID = UUID(),
                 name: String,
                 initialState: State,
-                intelligenceLevel: AgentIntelligenceLevel = .standard) {
+                intelligenceLevel: AgentIntelligenceLevel = .standard)
+    {
         self.id = id
         self.name = name
         self.state = initialState
@@ -178,7 +183,7 @@ open class BaseAdvancedAgent<State: Codable & Sendable,
             outcome: String(describing: processedAction),
             reward: calculateReward(for: processedAction),
             context: ["intelligence_level": .init(intelligenceLevel.rawValue),
-                     "amplified_intelligence": .init(amplifiedIntelligence)]
+                      "amplified_intelligence": .init(amplifiedIntelligence)]
         )
 
         await collectExperience(experience)
@@ -284,7 +289,7 @@ open class BaseAdvancedAgent<State: Codable & Sendable,
 
     open func predictOutcome(for input: Any) async -> Any {
         // Use learning model to predict outcomes
-        return learningModel.predict(for: input)
+        learningModel.predict(for: input)
     }
 
     // MARK: - Private Methods
@@ -300,7 +305,7 @@ open class BaseAdvancedAgent<State: Codable & Sendable,
     private func calculateReward(for action: Action) -> Double {
         // Calculate reward based on action outcomes
         // This would be domain-specific
-        return 1.0 // Placeholder
+        1.0 // Placeholder
     }
 
     private func updateState(with action: Action) async throws {
@@ -397,7 +402,7 @@ public struct LearningModel: Codable, Sendable {
     public func predict(for input: Any) -> Any {
         // Simple prediction based on learned weights
         // In practice, this would use Ollama for sophisticated predictions
-        return "predicted_outcome" // Placeholder
+        "predicted_outcome" // Placeholder
     }
 }
 
@@ -422,13 +427,13 @@ public enum AgentError: Error {
 // MARK: - Agent Factory
 
 /// Factory for creating advanced agents
-public final class AdvancedAgentFactory {
+public enum AdvancedAgentFactory {
     public static func createAgent<T: BaseAdvancedAgent>(
         name: String,
         initialState: T.State,
         intelligenceLevel: AgentIntelligenceLevel = .standard
     ) -> T {
-        return T(name: name, initialState: initialState, intelligenceLevel: intelligenceLevel)
+        T(name: name, initialState: initialState, intelligenceLevel: intelligenceLevel)
     }
 
     public static func createSpecializedAgent(
@@ -610,8 +615,8 @@ public enum CoordinationStatus: String, Codable, Sendable {
 
 // MARK: - Extensions
 
-extension AnyCodable {
-    public init(_ value: any Sendable) {
+public extension AnyCodable {
+    init(_ value: any Sendable) {
         if let codable = value as? Codable {
             self.init(codable)
         } else {

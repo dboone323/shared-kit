@@ -1,4 +1,5 @@
 // MARK: - Multiversal Bridge Construction Framework
+
 // Task 198: Multiversal Bridge Construction
 // Framework for connecting parallel realities through bridge construction
 // Created: October 13, 2025
@@ -90,7 +91,7 @@ enum BridgeType: String, Sendable {
 struct BridgeComponent: Sendable {
     let id: UUID
     let componentType: ComponentKind
-    let position: [Double]  // Multi-dimensional coordinates
+    let position: [Double] // Multi-dimensional coordinates
     let stability: Double
     let energyConsumption: Double
     let dataThroughput: Double
@@ -270,7 +271,8 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
         // Phase 1: Compatibility Analysis
         updateConstructionProgress(bridge.id, phase: .compatibilityAnalysis, progress: 0.1)
         let compatibilityAnalysis = try await analyzeRealityCompatibility(
-            sourceReality, targetReality)
+            sourceReality, targetReality
+        )
 
         // Phase 2: Parameter Calculation
         updateConstructionProgress(bridge.id, phase: .parameterCalculation, progress: 0.2)
@@ -303,17 +305,23 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
                     phase: .compatibilityAnalysis, success: true, duration: 300.0, energyUsed: 100.0
                 ),
                 ConstructionPhaseResult(
-                    phase: .parameterCalculation, success: true, duration: 200.0, energyUsed: 50.0),
+                    phase: .parameterCalculation, success: true, duration: 200.0, energyUsed: 50.0
+                ),
                 ConstructionPhaseResult(
-                    phase: .componentAssembly, success: true, duration: 600.0, energyUsed: 500.0),
+                    phase: .componentAssembly, success: true, duration: 600.0, energyUsed: 500.0
+                ),
                 ConstructionPhaseResult(
-                    phase: .bridgeFormation, success: true, duration: 400.0, energyUsed: 300.0),
+                    phase: .bridgeFormation, success: true, duration: 400.0, energyUsed: 300.0
+                ),
                 ConstructionPhaseResult(
-                    phase: .stabilization, success: true, duration: 500.0, energyUsed: 400.0),
+                    phase: .stabilization, success: true, duration: 500.0, energyUsed: 400.0
+                ),
                 ConstructionPhaseResult(
-                    phase: .testing, success: true, duration: 300.0, energyUsed: 200.0),
+                    phase: .testing, success: true, duration: 300.0, energyUsed: 200.0
+                ),
                 ConstructionPhaseResult(
-                    phase: .completion, success: true, duration: 100.0, energyUsed: 50.0),
+                    phase: .completion, success: true, duration: 100.0, energyUsed: 50.0
+                ),
             ],
             totalEnergyConsumed: 1600.0,
             totalConstructionTime: 2400.0,
@@ -359,13 +367,13 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
     func monitorBridgeIntegrity() async -> IntegrityMetrics {
         let activeBridgesList = Array(activeBridges.values)
         let averageStability =
-            activeBridgesList.map { $0.stabilityIndex }.reduce(0, +)
-            / Double(activeBridgesList.count)
+            activeBridgesList.map(\.stabilityIndex).reduce(0, +)
+                / Double(activeBridgesList.count)
         let averageConnectionStrength =
-            activeBridgesList.map { $0.connectionStrength }.reduce(0, +)
-            / Double(activeBridgesList.count)
-        let totalEnergyFlow = activeBridgesList.map { $0.energyFlow }.reduce(0, +)
-        let totalDataTransfer = activeBridgesList.map { $0.dataTransferRate }.reduce(0, +)
+            activeBridgesList.map(\.connectionStrength).reduce(0, +)
+                / Double(activeBridgesList.count)
+        let totalEnergyFlow = activeBridgesList.map(\.energyFlow).reduce(0, +)
+        let totalDataTransfer = activeBridgesList.map(\.dataTransferRate).reduce(0, +)
 
         return IntegrityMetrics(
             activeBridges: activeBridgesList.count,
@@ -374,7 +382,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
             totalEnergyFlow: totalEnergyFlow,
             totalDataTransfer: totalDataTransfer,
             bridgeHealthStatus: averageStability > 0.8 ? .healthy : .degraded,
-            criticalIssues: [],  // Would be populated from monitoring
+            criticalIssues: [], // Would be populated from monitoring
             lastIntegrityCheck: Date()
         )
     }
@@ -383,7 +391,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
 
     func assembleComponent() async throws -> ComponentAssemblyResult {
         // Simulate component assembly
-        try await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
+        try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
 
         return ComponentAssemblyResult(
             componentId: UUID(),
@@ -408,7 +416,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
 
     func testComponentIntegrity() async -> IntegrityTestResult {
         // Simulate integrity testing
-        return IntegrityTestResult(
+        IntegrityTestResult(
             componentId: UUID(),
             integrityScore: 0.92,
             performanceScore: 0.88,
@@ -423,7 +431,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
 
     func integrateWithBridge() async throws -> IntegrationResult {
         // Simulate bridge integration
-        try await Task.sleep(nanoseconds: 300_000_000)  // 0.3 seconds
+        try await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
 
         return IntegrationResult(
             componentId: UUID(),
@@ -490,10 +498,9 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
         )
     }
 
-    func establishConnection(_ parameters: BridgeParameters) async throws -> RealityConnectionResult
-    {
+    func establishConnection(_ parameters: BridgeParameters) async throws -> RealityConnectionResult {
         // Simulate connection establishment
-        try await Task.sleep(nanoseconds: 1_000_000_000)  // 1 second
+        try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
 
         return RealityConnectionResult(
             connectionId: UUID(),
@@ -528,7 +535,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
                 id: UUID(),
                 componentType: componentType,
                 position: [
-                    Double.random(in: 0...1), Double.random(in: 0...1), Double.random(in: 0...1),
+                    Double.random(in: 0 ... 1), Double.random(in: 0 ... 1), Double.random(in: 0 ... 1),
                 ],
                 stability: 0.9,
                 energyConsumption: 50.0,
@@ -543,7 +550,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
     }
 
     private func establishAnchorPoints() async throws -> [BridgeAnchor] {
-        return [
+        [
             BridgeAnchor(
                 id: UUID(),
                 realityId: sourceReality.id,
@@ -598,7 +605,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
 
     private func testBridgeIntegrity(_ bridge: MultiversalBridge) async throws -> BridgeTestResult {
         // Simulate comprehensive bridge testing
-        try await Task.sleep(nanoseconds: 2_000_000_000)  // 2 seconds
+        try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
 
         return BridgeTestResult(
             bridgeId: bridge.id,
@@ -629,37 +636,37 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
         _ source: RealityConstruct, _ target: RealityConstruct
     ) -> Double {
         // Simplified compatibility calculation
-        return 0.85
+        0.85
     }
 
     private func calculateTemporalCompatibility(
         _ source: RealityConstruct, _ target: RealityConstruct
     ) -> Double {
-        return 0.82
+        0.82
     }
 
     private func calculateQuantumCompatibility(
         _ source: RealityConstruct, _ target: RealityConstruct
     ) -> Double {
-        return 0.88
+        0.88
     }
 
     private func calculateEnergyCompatibility(
         _ source: RealityConstruct, _ target: RealityConstruct
     ) -> Double {
-        return 0.90
+        0.90
     }
 
     private func identifyCompatibilityIssues(_ source: RealityConstruct, _ target: RealityConstruct)
         -> [CompatibilityIssue]
     {
-        return [
+        [
             CompatibilityIssue(
                 issueType: .minorDimensionalDrift,
                 severity: .low,
                 description: "Slight dimensional frequency difference",
                 mitigationStrategy: "Frequency alignment during construction"
-            )
+            ),
         ]
     }
 
@@ -686,23 +693,23 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
     }
 
     private func calculateEnergyRequirement(_ analysis: CompatibilityAnalysis) -> Double {
-        return 1000.0 / analysis.overallCompatibility
+        1000.0 / analysis.overallCompatibility
     }
 
     private func calculateStabilityThreshold(_ analysis: CompatibilityAnalysis) -> Double {
-        return analysis.overallCompatibility * 0.8
+        analysis.overallCompatibility * 0.8
     }
 
     private func calculateDataTransferCapacity(_ analysis: CompatibilityAnalysis) -> Double {
-        return analysis.overallCompatibility * 1000.0
+        analysis.overallCompatibility * 1000.0
     }
 
     private func calculateMaintenanceInterval(_ analysis: CompatibilityAnalysis) -> TimeInterval {
-        return 3600.0 / analysis.overallCompatibility
+        3600.0 / analysis.overallCompatibility
     }
 
     private func calculateFailureTolerance(_ analysis: CompatibilityAnalysis) -> Double {
-        return analysis.overallCompatibility * 0.1
+        analysis.overallCompatibility * 0.1
     }
 }
 
@@ -711,7 +718,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
 /// Bridge monitor
 final class BridgeMonitor: Sendable {
     func monitorBridgeHealth(_ bridge: MultiversalBridge) async -> BridgeHealthStatus {
-        return BridgeHealthStatus(
+        BridgeHealthStatus(
             bridgeId: bridge.id,
             stabilityIndex: bridge.stabilityIndex,
             connectionStrength: bridge.connectionStrength,
@@ -978,7 +985,8 @@ func demonstrateMultiversalBridgeConstruction() async {
 
         // Analyze reality compatibility
         let compatibilityAnalysis = await engine.analyzeRealityCompatibility(
-            sourceReality, targetReality)
+            sourceReality, targetReality
+        )
         print("✓ Compatibility analysis complete:")
         print(
             "  - Overall compatibility: \(String(format: "%.2f", compatibilityAnalysis.overallCompatibility))"
@@ -1063,7 +1071,7 @@ final class MultiversalBridgeConstructionDatabase {
     }
 
     func loadBridge(id: UUID) -> MultiversalBridge? {
-        return bridges[id]
+        bridges[id]
     }
 
     func saveConstructionResult(_ result: BridgeConstructionResult) {
@@ -1071,7 +1079,7 @@ final class MultiversalBridgeConstructionDatabase {
     }
 
     func getConstructionHistory(bridgeId: UUID) -> BridgeConstructionResult? {
-        return constructionResults[bridgeId]
+        constructionResults[bridgeId]
     }
 
     func saveCompatibilityAnalysis(_ analysis: CompatibilityAnalysis, forBridgeId bridgeId: UUID) {
@@ -1079,7 +1087,7 @@ final class MultiversalBridgeConstructionDatabase {
     }
 
     func getCompatibilityAnalysis(bridgeId: UUID) -> CompatibilityAnalysis? {
-        return compatibilityAnalyses[bridgeId]
+        compatibilityAnalyses[bridgeId]
     }
 }
 
@@ -1127,7 +1135,7 @@ enum MultiversalBridgeConstructionTesting {
 // MARK: - Framework Metadata
 
 /// Framework information
-struct MultiversalBridgeConstructionMetadata {
+enum MultiversalBridgeConstructionMetadata {
     static let version = "1.0.0"
     static let framework = "Multiversal Bridge Construction"
     static let description =

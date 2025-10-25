@@ -344,8 +344,7 @@ public final class AgentWisdomAmplification: Sendable {
     private func processWisdomAmplification(
         _ request: WisdomAmplificationRequest,
         assessment: WisdomAmplificationAssessment
-    ) async throws -> WisdomAmplificationProcessing
-    {
+    ) async throws -> WisdomAmplificationProcessing {
         // Process wisdom amplification
         let processingContext = WisdomAmplificationProcessingContext(
             agents: request.agents,
@@ -369,8 +368,7 @@ public final class AgentWisdomAmplification: Sendable {
     private func coordinateInsightEnhancement(
         _ request: WisdomAmplificationRequest,
         amplification: WisdomAmplificationProcessing
-    ) async throws -> InsightEnhancementCoordination
-    {
+    ) async throws -> InsightEnhancementCoordination {
         // Coordinate insight enhancement
         let coordinationContext = InsightEnhancementCoordinationContext(
             agents: request.agents,
@@ -394,8 +392,7 @@ public final class AgentWisdomAmplification: Sendable {
     private func synthesizeWisdomAmplificationNetwork(
         _ request: WisdomAmplificationRequest,
         enhancement: InsightEnhancementCoordination
-    ) async throws -> WisdomAmplificationNetworkSynthesis
-    {
+    ) async throws -> WisdomAmplificationNetworkSynthesis {
         // Synthesize wisdom amplification network
         let synthesisContext = WisdomAmplificationNetworkSynthesisContext(
             agents: request.agents,
@@ -419,8 +416,7 @@ public final class AgentWisdomAmplification: Sendable {
     private func orchestrateQuantumWisdom(
         _ request: WisdomAmplificationRequest,
         network: WisdomAmplificationNetworkSynthesis
-    ) async throws -> QuantumWisdomOrchestration
-    {
+    ) async throws -> QuantumWisdomOrchestration {
         // Orchestrate quantum wisdom
         let orchestrationContext = QuantumWisdomOrchestrationContext(
             agents: request.agents,
@@ -444,8 +440,7 @@ public final class AgentWisdomAmplification: Sendable {
     private func synthesizeUnderstandingSynthesis(
         _ request: WisdomAmplificationRequest,
         wisdom: QuantumWisdomOrchestration
-    ) async throws -> UnderstandingSynthesisSynthesis
-    {
+    ) async throws -> UnderstandingSynthesisSynthesis {
         // Synthesize understanding synthesis
         let synthesisContext = UnderstandingSynthesisSynthesisContext(
             agents: request.agents,
@@ -469,8 +464,7 @@ public final class AgentWisdomAmplification: Sendable {
     private func validateWisdomAmplificationResults(
         _ understandingSynthesisSynthesis: UnderstandingSynthesisSynthesis,
         session: WisdomAmplificationSession
-    ) async throws -> WisdomAmplificationValidationResult
-    {
+    ) async throws -> WisdomAmplificationValidationResult {
         // Validate wisdom amplification results
         let performanceComparison = await compareWisdomAmplificationPerformance(
             originalAgents: session.request.agents,
@@ -483,7 +477,7 @@ public final class AgentWisdomAmplification: Sendable {
         )
 
         let success = performanceComparison.wisdomLevel >= session.request.wisdomTarget &&
-                     wisdomAdvantage.wisdomAdvantage >= 0.4
+            wisdomAdvantage.wisdomAdvantage >= 0.4
 
         let events = generateWisdomAmplificationEvents(session, wisdom: understandingSynthesisSynthesis)
 
@@ -602,24 +596,24 @@ public final class AgentWisdomAmplification: Sendable {
 
     private func measureInsightEnhancement(_ amplifiedAgents: [WisdomAmplificationAgent]) async -> Double {
         // Measure insight enhancement
-        return 0.94
+        0.94
     }
 
     private func measureUnderstandingSynthesis(_ amplifiedAgents: [WisdomAmplificationAgent]) async -> Double {
         // Measure understanding synthesis
-        return 0.92
+        0.92
     }
 
     private func measureWisdomAmplification(_ amplifiedAgents: [WisdomAmplificationAgent]) async -> Double {
         // Measure wisdom amplification
-        return 0.95
+        0.95
     }
 
     private func generateWisdomAmplificationEvents(
         _ session: WisdomAmplificationSession,
         wisdom: UnderstandingSynthesisSynthesis
     ) -> [WisdomAmplificationEvent] {
-        return [
+        [
             WisdomAmplificationEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -635,9 +629,9 @@ public final class AgentWisdomAmplification: Sendable {
                 data: [
                     "success": true,
                     "wisdom_level": wisdom.understandingDepth,
-                    "wisdom_synthesis": wisdom.wisdomSynthesis
+                    "wisdom_synthesis": wisdom.wisdomSynthesis,
                 ]
-            )
+            ),
         ]
     }
 
@@ -969,7 +963,7 @@ public struct WisdomAmplificationFrameworkMetrics: Sendable, Codable {
     public var averageWisdomAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Wisdom amplification metrics
@@ -1474,9 +1468,9 @@ public struct UnderstandingSynthesisSynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension AgentWisdomAmplification {
+public extension AgentWisdomAmplification {
     /// Create specialized wisdom amplification for specific agent architectures
-    public static func createSpecializedWisdomAmplification(
+    static func createSpecializedWisdomAmplification(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentWisdomAmplification {
         let system = try await AgentWisdomAmplification()
@@ -1485,7 +1479,7 @@ extension AgentWisdomAmplification {
     }
 
     /// Execute batch wisdom amplification processing
-    public func executeBatchWisdomAmplification(
+    func executeBatchWisdomAmplification(
         _ wisdomRequests: [WisdomAmplificationRequest]
     ) async throws -> BatchWisdomAmplificationResult {
 
@@ -1508,8 +1502,8 @@ extension AgentWisdomAmplification {
         }
 
         let successRate = Double(results.count) / Double(wisdomRequests.count)
-        let averageWisdom = results.map { $0.wisdomLevel }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.wisdomAdvantage }.reduce(0, +) / Double(results.count)
+        let averageWisdom = results.map(\.wisdomLevel).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.wisdomAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchWisdomAmplificationResult(
             batchId: batchId,
@@ -1526,7 +1520,7 @@ extension AgentWisdomAmplification {
     }
 
     /// Get wisdom amplification recommendations
-    public func getWisdomAmplificationRecommendations() async -> [WisdomAmplificationRecommendation] {
+    func getWisdomAmplificationRecommendations() async -> [WisdomAmplificationRecommendation] {
         var recommendations: [WisdomAmplificationRecommendation] = []
 
         let status = await getWisdomAmplificationStatus()

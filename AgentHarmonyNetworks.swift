@@ -344,8 +344,7 @@ public final class AgentHarmonyNetworks: Sendable {
     private func processHarmonyNetworks(
         _ request: HarmonyNetworksRequest,
         assessment: HarmonyNetworksAssessment
-    ) async throws -> HarmonyNetworksProcessing
-    {
+    ) async throws -> HarmonyNetworksProcessing {
         // Process harmony networks
         let processingContext = HarmonyNetworksProcessingContext(
             agents: request.agents,
@@ -369,8 +368,7 @@ public final class AgentHarmonyNetworks: Sendable {
     private func coordinateUniversalHarmony(
         _ request: HarmonyNetworksRequest,
         networks: HarmonyNetworksProcessing
-    ) async throws -> UniversalHarmonyCoordination
-    {
+    ) async throws -> UniversalHarmonyCoordination {
         // Coordinate universal harmony
         let coordinationContext = UniversalHarmonyCoordinationContext(
             agents: request.agents,
@@ -394,8 +392,7 @@ public final class AgentHarmonyNetworks: Sendable {
     private func synthesizeHarmonyNetworks(
         _ request: HarmonyNetworksRequest,
         harmony: UniversalHarmonyCoordination
-    ) async throws -> HarmonyNetworksSynthesis
-    {
+    ) async throws -> HarmonyNetworksSynthesis {
         // Synthesize harmony networks
         let synthesisContext = HarmonyNetworksSynthesisContext(
             agents: request.agents,
@@ -419,8 +416,7 @@ public final class AgentHarmonyNetworks: Sendable {
     private func orchestrateQuantumHarmony(
         _ request: HarmonyNetworksRequest,
         synthesis: HarmonyNetworksSynthesis
-    ) async throws -> QuantumHarmonyOrchestration
-    {
+    ) async throws -> QuantumHarmonyOrchestration {
         // Orchestrate quantum harmony
         let orchestrationContext = QuantumHarmonyOrchestrationContext(
             agents: request.agents,
@@ -444,8 +440,7 @@ public final class AgentHarmonyNetworks: Sendable {
     private func synthesizeUniversalHarmony(
         _ request: HarmonyNetworksRequest,
         harmony: QuantumHarmonyOrchestration
-    ) async throws -> UniversalHarmonySynthesis
-    {
+    ) async throws -> UniversalHarmonySynthesis {
         // Synthesize universal harmony
         let synthesisContext = UniversalHarmonySynthesisContext(
             agents: request.agents,
@@ -469,8 +464,7 @@ public final class AgentHarmonyNetworks: Sendable {
     private func validateHarmonyNetworksResults(
         _ universalHarmonySynthesis: UniversalHarmonySynthesis,
         session: HarmonyNetworksSession
-    ) async throws -> HarmonyNetworksValidationResult
-    {
+    ) async throws -> HarmonyNetworksValidationResult {
         // Validate harmony networks results
         let performanceComparison = await compareHarmonyNetworksPerformance(
             originalAgents: session.request.agents,
@@ -483,7 +477,7 @@ public final class AgentHarmonyNetworks: Sendable {
         )
 
         let success = performanceComparison.harmonyDepth >= session.request.harmonyDepthTarget &&
-                     harmonyAdvantage.harmonyAdvantage >= 0.4
+            harmonyAdvantage.harmonyAdvantage >= 0.4
 
         let events = generateHarmonyNetworksEvents(session, harmony: universalHarmonySynthesis)
 
@@ -602,24 +596,24 @@ public final class AgentHarmonyNetworks: Sendable {
 
     private func measureUniversalHarmony(_ harmonizedAgents: [HarmonyNetworksAgent]) async -> Double {
         // Measure universal harmony
-        return 0.94
+        0.94
     }
 
     private func measureHarmonySynthesis(_ harmonizedAgents: [HarmonyNetworksAgent]) async -> Double {
         // Measure harmony synthesis
-        return 0.92
+        0.92
     }
 
     private func measureHarmonyNetworks(_ harmonizedAgents: [HarmonyNetworksAgent]) async -> Double {
         // Measure harmony networks
-        return 0.95
+        0.95
     }
 
     private func generateHarmonyNetworksEvents(
         _ session: HarmonyNetworksSession,
         harmony: UniversalHarmonySynthesis
     ) -> [HarmonyNetworksEvent] {
-        return [
+        [
             HarmonyNetworksEvent(
                 eventId: UUID().uuidString,
                 sessionId: session.sessionId,
@@ -635,9 +629,9 @@ public final class AgentHarmonyNetworks: Sendable {
                 data: [
                     "success": true,
                     "harmony_depth": harmony.harmonyDepth,
-                    "harmony_synthesis": harmony.harmonySynthesis
+                    "harmony_synthesis": harmony.harmonySynthesis,
                 ]
-            )
+            ),
         ]
     }
 
@@ -969,7 +963,7 @@ public struct HarmonyNetworksFrameworkMetrics: Sendable, Codable {
     public var averageHarmonyAdvantage: Double = 0.0
     public var totalSessions: Int = 0
     public var systemEfficiency: Double = 1.0
-    public var lastUpdate: Date = Date()
+    public var lastUpdate: Date = .init()
 }
 
 /// Harmony networks metrics
@@ -1474,9 +1468,9 @@ public struct UniversalHarmonySynthesisResult: Sendable {
 
 // MARK: - Extensions
 
-extension AgentHarmonyNetworks {
+public extension AgentHarmonyNetworks {
     /// Create specialized harmony networks for specific agent architectures
-    public static func createSpecializedHarmonyNetworks(
+    static func createSpecializedHarmonyNetworks(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentHarmonyNetworks {
         let system = try await AgentHarmonyNetworks()
@@ -1485,7 +1479,7 @@ extension AgentHarmonyNetworks {
     }
 
     /// Execute batch harmony networks processing
-    public func executeBatchHarmonyNetworks(
+    func executeBatchHarmonyNetworks(
         _ harmonyRequests: [HarmonyNetworksRequest]
     ) async throws -> BatchHarmonyNetworksResult {
 
@@ -1508,8 +1502,8 @@ extension AgentHarmonyNetworks {
         }
 
         let successRate = Double(results.count) / Double(harmonyRequests.count)
-        let averageDepth = results.map { $0.harmonyDepth }.reduce(0, +) / Double(results.count)
-        let averageAdvantage = results.map { $0.harmonyAdvantage }.reduce(0, +) / Double(results.count)
+        let averageDepth = results.map(\.harmonyDepth).reduce(0, +) / Double(results.count)
+        let averageAdvantage = results.map(\.harmonyAdvantage).reduce(0, +) / Double(results.count)
 
         return BatchHarmonyNetworksResult(
             batchId: batchId,
@@ -1526,7 +1520,7 @@ extension AgentHarmonyNetworks {
     }
 
     /// Get harmony networks recommendations
-    public func getHarmonyNetworksRecommendations() async -> [HarmonyNetworksRecommendation] {
+    func getHarmonyNetworksRecommendations() async -> [HarmonyNetworksRecommendation] {
         var recommendations: [HarmonyNetworksRecommendation] = []
 
         let status = await getHarmonyNetworksStatus()

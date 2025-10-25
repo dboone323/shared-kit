@@ -208,8 +208,7 @@ final class QuantumRealityManipulationEngine: QuantumRealityManipulationProtocol
         )
     }
 
-    func manipulateQuantumFields(_ fields: QuantumFields) async throws -> QuantumManipulationResult
-    {
+    func manipulateQuantumFields(_ fields: QuantumFields) async throws -> QuantumManipulationResult {
         let validation = try await validateManipulation(for: fields)
         guard validation.isValid else {
             throw QuantumRealityError.validationFailed(validation.errors)
@@ -239,40 +238,38 @@ final class QuantumRealityManipulationEngine: QuantumRealityManipulationProtocol
         return result
     }
 
-    func synchronizeQuantumChanges(_ changes: QuantumChanges) async throws -> SynchronizationResult
-    {
-        return try await synchronizer.synchronizeChanges(changes, in: initialState)
+    func synchronizeQuantumChanges(_ changes: QuantumChanges) async throws -> SynchronizationResult {
+        try await synchronizer.synchronizeChanges(changes, in: initialState)
     }
 
     // MARK: - QuantumFieldEngineeringProtocol
 
     func engineerFieldProperties(_ properties: FieldProperties) async throws -> EngineeringResult {
-        return try await fieldEngineer.engineerProperties(properties, in: initialState)
+        try await fieldEngineer.engineerProperties(properties, in: initialState)
     }
 
     func generateFieldHarmonics(_ harmonics: FieldHarmonics) async throws -> HarmonicResult {
-        return try await fieldEngineer.generateHarmonics(harmonics, in: initialState)
+        try await fieldEngineer.generateHarmonics(harmonics, in: initialState)
     }
 
-    func stabilizeFieldStructures(_ structures: FieldStructures) async throws -> StabilizationResult
-    {
-        return try await fieldEngineer.stabilizeStructures(structures, in: initialState)
+    func stabilizeFieldStructures(_ structures: FieldStructures) async throws -> StabilizationResult {
+        try await fieldEngineer.stabilizeStructures(structures, in: initialState)
     }
 
     // MARK: - QuantumStateManagementProtocol
 
     func manageSuperpositionStates(_ states: SuperpositionStates) async throws -> ManagementResult {
-        return try await stateManager.manageSuperposition(states, in: initialState)
+        try await stateManager.manageSuperposition(states, in: initialState)
     }
 
     func handleEntanglementOperations(_ operations: EntanglementOperations) async throws
         -> OperationResult
     {
-        return try await stateManager.handleEntanglement(operations, in: initialState)
+        try await stateManager.handleEntanglement(operations, in: initialState)
     }
 
     func processMeasurementEvents(_ events: MeasurementEvents) async throws -> ProcessingResult {
-        return try await stateManager.processMeasurements(events, in: initialState)
+        try await stateManager.processMeasurements(events, in: initialState)
     }
 
     // MARK: - Private Methods
@@ -345,7 +342,7 @@ final class QuantumRealityManipulationEngine: QuantumRealityManipulationProtocol
 
         let decoherencePoints = state.superpositionStates.filter { $0.stability < 0.9 }.map {
             DecoherencePoint(
-                location: [0, 0, 0],  // Simplified
+                location: [0, 0, 0], // Simplified
                 severity: 1.0 - $0.stability,
                 cause: "Quantum fluctuations",
                 mitigationStrategy: "Apply coherence stabilization"
@@ -382,7 +379,7 @@ final class QuantumRealityManipulationEngine: QuantumRealityManipulationProtocol
     }
 
     private func generateRecommendations() -> [String] {
-        return [
+        [
             "Monitor quantum field coherence levels",
             "Maintain superposition state stability",
             "Regular entanglement density checks",
@@ -578,21 +575,21 @@ final class QuantumFieldEngineer {
 
     private func calculateEnergyDelta(_ old: QuantumFields, _ new: QuantumFields) -> Double {
         // Simplified energy calculation
-        return 1000.0
+        1000.0
     }
 
     private func calculateCoherenceChange(_ old: QuantumFields, _ new: QuantumFields) -> Double {
         // Simplified coherence change calculation
-        return 0.05
+        0.05
     }
 
     private func calculateStabilityChange(_ old: QuantumFields, _ new: QuantumFields) -> Double {
         // Simplified stability change calculation
-        return 0.02
+        0.02
     }
 
     private func calculateEnergyDistribution(_ fields: QuantumFields) -> [String: Double] {
-        return [
+        [
             "Electromagnetic": fields.electromagnetic.energyDensity,
             "Gravitational": fields.gravitational.energyDensity,
             "Strong Nuclear": fields.strongNuclear.energyDensity,
@@ -608,7 +605,7 @@ final class QuantumStateManager {
         let superpositionCount = state.superpositionStates.count
         let entanglementCount = state.entangledParticles.count
         let averageCoherence =
-            state.superpositionStates.map { $0.stability }.reduce(0, +) / Double(superpositionCount)
+            state.superpositionStates.map(\.stability).reduce(0, +) / Double(superpositionCount)
 
         let stateDistribution = Dictionary(grouping: state.superpositionStates) {
             $0.probabilityDistribution.count
@@ -1144,17 +1141,17 @@ enum QuantumRealityError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .validationFailed(let errors):
+        case let .validationFailed(errors):
             return "Validation failed with \(errors.count) errors"
-        case .manipulationFailed(let reason):
+        case let .manipulationFailed(reason):
             return "Manipulation failed: \(reason)"
-        case .transformationFailed(let errors):
+        case let .transformationFailed(errors):
             return "Transformation failed with \(errors.count) errors"
-        case .synchronizationFailed(let reason):
+        case let .synchronizationFailed(reason):
             return "Synchronization failed: \(reason)"
-        case .fieldEngineeringFailed(let reason):
+        case let .fieldEngineeringFailed(reason):
             return "Field engineering failed: \(reason)"
-        case .stateManagementFailed(let reason):
+        case let .stateManagementFailed(reason):
             return "State management failed: \(reason)"
         }
     }
@@ -1207,7 +1204,7 @@ enum QuantumRealityManipulationFactory {
     static func createEngine(withInitialState state: QuantumRealityState)
         -> QuantumRealityManipulationEngine
     {
-        return QuantumRealityManipulationEngine(initialState: state)
+        QuantumRealityManipulationEngine(initialState: state)
     }
 
     static func createDefaultQuantumState() -> QuantumRealityState {
@@ -1223,7 +1220,7 @@ enum QuantumRealityManipulationFactory {
                 probabilityDistribution: [0.5, 0.5],
                 collapseThreshold: 0.9,
                 stability: 0.95
-            )
+            ),
         ]
 
         let entangledParticles = [
@@ -1235,34 +1232,42 @@ enum QuantumRealityManipulationFactory {
                 distance: 0.0,
                 decoherenceTime: 3600.0,
                 measurementBasis: "spin"
-            )
+            ),
         ]
 
         let quantumFields = QuantumFields(
             electromagnetic: FieldProperties(
                 strength: 1.0, frequency: 1e15, wavelength: 3e-7, amplitude: 1.0, phase: 0.0,
-                coherence: 0.98, stability: 0.95, energyDensity: 1.0),
+                coherence: 0.98, stability: 0.95, energyDensity: 1.0
+            ),
             gravitational: FieldProperties(
                 strength: 1.0, frequency: 1e-18, wavelength: 1e26, amplitude: 1.0, phase: 0.0,
-                coherence: 0.92, stability: 0.88, energyDensity: 0.5),
+                coherence: 0.92, stability: 0.88, energyDensity: 0.5
+            ),
             strongNuclear: FieldProperties(
                 strength: 1.0, frequency: 1e23, wavelength: 1e-15, amplitude: 1.0, phase: 0.0,
-                coherence: 0.99, stability: 0.97, energyDensity: 10.0),
+                coherence: 0.99, stability: 0.97, energyDensity: 10.0
+            ),
             weakNuclear: FieldProperties(
                 strength: 1.0, frequency: 1e25, wavelength: 1e-17, amplitude: 1.0, phase: 0.0,
-                coherence: 0.95, stability: 0.93, energyDensity: 5.0),
+                coherence: 0.95, stability: 0.93, energyDensity: 5.0
+            ),
             consciousness: FieldProperties(
                 strength: 1.0, frequency: 1e-3, wavelength: 3e11, amplitude: 1.0, phase: 0.0,
-                coherence: 0.85, stability: 0.78, energyDensity: 0.1),
+                coherence: 0.85, stability: 0.78, energyDensity: 0.1
+            ),
             darkEnergy: FieldProperties(
                 strength: 1.0, frequency: 1e-33, wavelength: 1e41, amplitude: 1.0, phase: 0.0,
-                coherence: 0.99, stability: 0.98, energyDensity: 0.7),
+                coherence: 0.99, stability: 0.98, energyDensity: 0.7
+            ),
             darkMatter: FieldProperties(
                 strength: 1.0, frequency: 1e-30, wavelength: 1e38, amplitude: 1.0, phase: 0.0,
-                coherence: 0.96, stability: 0.94, energyDensity: 0.3),
+                coherence: 0.96, stability: 0.94, energyDensity: 0.3
+            ),
             unified: FieldProperties(
                 strength: 1.0, frequency: 1e19, wavelength: 1e-11, amplitude: 1.0, phase: 0.0,
-                coherence: 0.90, stability: 0.85, energyDensity: 100.0)
+                coherence: 0.90, stability: 0.85, energyDensity: 100.0
+            )
         )
 
         return QuantumRealityState(
@@ -1339,7 +1344,7 @@ final class QuantumRealityDatabase {
     }
 
     func loadState(id: UUID) -> QuantumRealityState? {
-        return states[id]
+        states[id]
     }
 
     func saveManipulation(_ manipulation: QuantumManipulationResult, forState stateId: UUID) {
@@ -1350,7 +1355,7 @@ final class QuantumRealityDatabase {
     }
 
     func getManipulations(forState stateId: UUID) -> [QuantumManipulationResult] {
-        return manipulations[stateId] ?? []
+        manipulations[stateId] ?? []
     }
 
     func saveTransformation(_ transformation: TransformationResult, forState stateId: UUID) {
@@ -1361,7 +1366,7 @@ final class QuantumRealityDatabase {
     }
 
     func getTransformations(forState stateId: UUID) -> [TransformationResult] {
-        return transformations[stateId] ?? []
+        transformations[stateId] ?? []
     }
 }
 
@@ -1370,7 +1375,7 @@ final class QuantumRealityDatabase {
 /// Testing utilities for quantum reality manipulation
 enum QuantumRealityManipulationTesting {
     static func createTestState() -> QuantumRealityState {
-        return QuantumRealityManipulationFactory.createDefaultQuantumState()
+        QuantumRealityManipulationFactory.createDefaultQuantumState()
     }
 
     static func createUnstableState() -> QuantumRealityState {
@@ -1391,7 +1396,7 @@ enum QuantumRealityManipulationTesting {
 // MARK: - Framework Metadata
 
 /// Framework information
-struct QuantumRealityManipulationMetadata {
+enum QuantumRealityManipulationMetadata {
     static let version = "1.0.0"
     static let framework = "Quantum Reality Manipulation"
     static let description =

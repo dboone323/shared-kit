@@ -97,7 +97,7 @@ public class AITaskPrioritizationService {
 
         // Analyze completion patterns
         let completedTasks = recentActivity.filter { $0.type == .taskCompleted }
-        let completionTimes = completedTasks.compactMap { $0.timestamp }
+        let completionTimes = completedTasks.compactMap(\.timestamp)
 
         if !completionTimes.isEmpty {
             // Suggest tasks during peak productivity times
@@ -108,7 +108,7 @@ public class AITaskPrioritizationService {
                 title: "Schedule Important Tasks",
                 subtitle: "Peak Productivity Window",
                 reasoning:
-                    "Based on your activity patterns, you're most productive around \(self.formatHour(peakHour))",
+                "Based on your activity patterns, you're most productive around \(self.formatHour(peakHour))",
                 priority: .high,
                 urgency: .medium,
                 suggestedTime: self.createTimeSlot(hour: peakHour),
@@ -123,14 +123,14 @@ public class AITaskPrioritizationService {
         let dominantCategory = categoryCounts.max { $0.value.count < $1.value.count }
 
         if let dominant = dominantCategory?.key,
-            categoryCounts[dominant]?.count ?? 0 > currentTasks.count / 2
+           categoryCounts[dominant]?.count ?? 0 > currentTasks.count / 2
         {
             let balanceSuggestion = TaskSuggestion(
                 id: UUID().uuidString,
                 title: "Diversify Your Tasks",
                 subtitle: "Work-Life Balance",
                 reasoning:
-                    "You've been focusing heavily on \(dominant.rawValue) tasks. Consider balancing with other categories.",
+                "You've been focusing heavily on \(dominant.rawValue) tasks. Consider balancing with other categories.",
                 priority: .medium,
                 urgency: .low,
                 suggestedTime: nil,
@@ -155,7 +155,7 @@ public class AITaskPrioritizationService {
 
         for goal in activeGoals {
             let relatedTasks = tasksByGoal[goal.id] ?? []
-            let completedTasks = relatedTasks.filter { $0.isCompleted }.count
+            let completedTasks = relatedTasks.filter(\.isCompleted).count
             let progress = Double(completedTasks) / Double(max(relatedTasks.count, 1))
 
             if progress < 0.3 && relatedTasks.count > 2 {
@@ -164,7 +164,7 @@ public class AITaskPrioritizationService {
                     title: "Focus on '\(goal.title)'",
                     subtitle: "Goal Progress: \(Int(progress * 100))%",
                     reasoning:
-                        "This goal needs more attention. Breaking it into smaller tasks might help.",
+                    "This goal needs more attention. Breaking it into smaller tasks might help.",
                     priority: .high,
                     urgency: .high,
                     suggestedTime: self.suggestTimeForGoal(goal),
@@ -192,10 +192,10 @@ public class AITaskPrioritizationService {
                 title: "Address Overdue Tasks",
                 subtitle: "\(overdueTasks.count) tasks need attention",
                 reasoning:
-                    "Overdue tasks can create stress. Consider rescheduling or breaking them down.",
+                "Overdue tasks can create stress. Consider rescheduling or breaking them down.",
                 priority: .high,
                 urgency: .high,
-                suggestedTime: Date().addingTimeInterval(3600),  // 1 hour from now
+                suggestedTime: Date().addingTimeInterval(3600), // 1 hour from now
                 category: .urgent,
                 confidence: 0.95
             )
@@ -204,14 +204,15 @@ public class AITaskPrioritizationService {
 
         // Suggest task batching for similar activities
         let tasksByCategory = Dictionary(
-            grouping: tasks.filter { !$0.isCompleted }, by: { $0.category })
+            grouping: tasks.filter { !$0.isCompleted }, by: { $0.category }
+        )
         for (category, categoryTasks) in tasksByCategory where categoryTasks.count >= 3 {
             let batchSuggestion = TaskSuggestion(
                 id: UUID().uuidString,
                 title: "Batch \(category.rawValue) Tasks",
                 subtitle: "\(categoryTasks.count) similar tasks",
                 reasoning:
-                    "Grouping similar tasks can improve efficiency and reduce context switching.",
+                "Grouping similar tasks can improve efficiency and reduce context switching.",
                 priority: .medium,
                 urgency: .low,
                 suggestedTime: self.suggestBatchTime(category),
@@ -287,7 +288,7 @@ public class AITaskPrioritizationService {
         let focusTime = self.calculateFocusTime(todayActivities)
 
         // Productivity score insight
-        let productivityScore = (completionRate * 0.6) + (min(focusTime / 480, 1.0) * 0.4)  // 8 hours max
+        let productivityScore = (completionRate * 0.6) + (min(focusTime / 480, 1.0) * 0.4) // 8 hours max
 
         let scoreInsight = ProductivityInsight(
             id: UUID().uuidString,
@@ -296,7 +297,8 @@ public class AITaskPrioritizationService {
                 format: "%.1f/10 - Based on task completion (%.0f%%) and focus time (%.1f hours)",
                 productivityScore * 10,
                 completionRate * 100,
-                focusTime / 60),
+                focusTime / 60
+            ),
             icon: productivityScore > 0.7
                 ? "star.fill" : productivityScore > 0.4 ? "star.leadinghalf.filled" : "star",
             priority: .high,
@@ -324,13 +326,13 @@ public class AITaskPrioritizationService {
         }
 
         // Peak productivity time
-        let peakHour = self.calculatePeakProductivityHour(activities.map { $0.timestamp })
+        let peakHour = self.calculatePeakProductivityHour(activities.map(\.timestamp))
 
         let peakInsight = ProductivityInsight(
             id: UUID().uuidString,
             title: "Peak Productivity Time",
             description:
-                "You're most productive around \(self.formatHour(peakHour)). Consider scheduling important tasks then.",
+            "You're most productive around \(self.formatHour(peakHour)). Consider scheduling important tasks then.",
             icon: "clock.fill",
             priority: .medium,
             category: .optimization,
@@ -344,7 +346,7 @@ public class AITaskPrioritizationService {
     private func analyzeTaskPatterns(_ tasks: [TaskItem]) async -> [ProductivityInsight] {
         var insights: [ProductivityInsight] = []
 
-        let completedTasks = tasks.filter { $0.isCompleted }
+        let completedTasks = tasks.filter(\.isCompleted)
         let pendingTasks = tasks.filter { !$0.isCompleted }
 
         // Task completion patterns
@@ -355,11 +357,12 @@ public class AITaskPrioritizationService {
                 id: UUID().uuidString,
                 title: "Task Completion Speed",
                 description: String(
-                    format: "Average time to complete tasks: %.1f hours", averageCompletionTime),
+                    format: "Average time to complete tasks: %.1f hours", averageCompletionTime
+                ),
                 icon: "speedometer",
                 priority: .medium,
                 category: .efficiency,
-                actionable: averageCompletionTime > 4.0  // More than 4 hours
+                actionable: averageCompletionTime > 4.0 // More than 4 hours
             )
             insights.append(completionInsight)
         }
@@ -371,7 +374,7 @@ public class AITaskPrioritizationService {
                 id: UUID().uuidString,
                 title: "Overdue Tasks",
                 description:
-                    "You have \(overdueTasks.count) overdue tasks. Consider rescheduling or breaking them down.",
+                "You have \(overdueTasks.count) overdue tasks. Consider rescheduling or breaking them down.",
                 icon: "exclamationmark.triangle.fill",
                 priority: .high,
                 category: .issues,
@@ -383,13 +386,13 @@ public class AITaskPrioritizationService {
         // Task distribution
         let tasksByPriority = Dictionary(grouping: pendingTasks, by: { $0.priority })
         if let highPriorityCount = tasksByPriority[TaskPriority.high]?.count,
-            highPriorityCount > pendingTasks.count / 2
+           highPriorityCount > pendingTasks.count / 2
         {
             let balanceInsight = ProductivityInsight(
                 id: UUID().uuidString,
                 title: "Priority Balance",
                 description:
-                    "Most of your tasks are high priority. Consider adding some lower-priority tasks for balance.",
+                "Most of your tasks are high priority. Consider adding some lower-priority tasks for balance.",
                 icon: "scale.3d",
                 priority: .medium,
                 category: .balance,
@@ -412,7 +415,7 @@ public class AITaskPrioritizationService {
         // Goal progress analysis
         for goal in activeGoals {
             let relatedTasks = tasksByGoal[goal.id] ?? []
-            let completedTasks = relatedTasks.filter { $0.isCompleted }.count
+            let completedTasks = relatedTasks.filter(\.isCompleted).count
             let totalTasks = relatedTasks.count
 
             if totalTasks > 0 {
@@ -424,8 +427,9 @@ public class AITaskPrioritizationService {
                         title: "Goal Progress: \(goal.title)",
                         description: String(
                             format:
-                                "Only %.0f%% complete. Consider breaking this goal into smaller, actionable steps.",
-                            progress * 100),
+                            "Only %.0f%% complete. Consider breaking this goal into smaller, actionable steps.",
+                            progress * 100
+                        ),
                         icon: "target",
                         priority: .high,
                         category: .goals,
@@ -437,7 +441,7 @@ public class AITaskPrioritizationService {
                         id: UUID().uuidString,
                         title: "Goal Momentum",
                         description:
-                            "\(goal.title) is \(Int(progress * 100))% complete. Keep up the great work!",
+                        "\(goal.title) is \(Int(progress * 100))% complete. Keep up the great work!",
                         icon: "flame.fill",
                         priority: .medium,
                         category: .motivation,
@@ -465,7 +469,7 @@ public class AITaskPrioritizationService {
 
     private func calculateFocusTime(_ activities: [ActivityRecord]) -> Double {
         // Estimate focus time based on activity density
-        let timeIntervals = activities.map { $0.timestamp }.sorted()
+        let timeIntervals = activities.map(\.timestamp).sorted()
         guard timeIntervals.count >= 2 else { return 0.0 }
 
         var totalFocusTime: Double = 0
@@ -478,7 +482,7 @@ public class AITaskPrioritizationService {
             }
 
             let timeGap = timestamp.timeIntervalSince(timeIntervals[index - 1])
-            if timeGap > 1800 {  // 30 minutes gap ends session
+            if timeGap > 1800 { // 30 minutes gap ends session
                 if let start = currentSessionStart {
                     totalFocusTime += timeIntervals[index - 1].timeIntervalSince(start)
                 }
@@ -491,7 +495,7 @@ public class AITaskPrioritizationService {
             totalFocusTime += end.timeIntervalSince(start)
         }
 
-        return totalFocusTime / 3600  // Convert to hours
+        return totalFocusTime / 3600 // Convert to hours
     }
 
     private func calculatePeakProductivityHour(_ timestamps: [Date]) -> Int {
@@ -503,7 +507,7 @@ public class AITaskPrioritizationService {
             hourCounts[hour, default: 0] += 1
         }
 
-        return hourCounts.max { $0.value < $1.value }?.key ?? 9  // Default to 9 AM
+        return hourCounts.max { $0.value < $1.value }?.key ?? 9 // Default to 9 AM
     }
 
     private func calculateAverageCompletionTime(_ tasks: [TaskItem]) -> Double {
@@ -511,7 +515,7 @@ public class AITaskPrioritizationService {
             guard let created = task.createdDate, let completed = task.completedDate else {
                 return nil
             }
-            return completed.timeIntervalSince(created) / 3600  // Hours
+            return completed.timeIntervalSince(created) / 3600 // Hours
         }
 
         guard !tasksWithTimes.isEmpty else { return 0.0 }
@@ -536,7 +540,7 @@ public class AITaskPrioritizationService {
 
         // If the time has passed today, schedule for tomorrow
         if let suggestedTime = calendar.date(from: components),
-            suggestedTime < now
+           suggestedTime < now
         {
             return calendar.date(byAdding: .day, value: 1, to: suggestedTime) ?? now
         }
@@ -552,14 +556,14 @@ public class AITaskPrioritizationService {
         switch goal.priority {
         case .high:
             // High priority goals: schedule soon
-            return now.addingTimeInterval(3600)  // 1 hour
+            return now.addingTimeInterval(3600) // 1 hour
         case .medium:
             // Medium priority: next day
             return calendar.date(byAdding: .day, value: 1, to: now) ?? now
         case .low:
             // Low priority: weekend or next week
             let weekday = calendar.component(.weekday, from: now)
-            if weekday == 1 || weekday == 7 {  // Sunday or Saturday
+            if weekday == 1 || weekday == 7 { // Sunday or Saturday
                 return calendar.date(byAdding: .day, value: 3, to: now) ?? now
             } else {
                 return calendar.date(byAdding: .day, value: 7, to: now) ?? now
@@ -574,15 +578,15 @@ public class AITaskPrioritizationService {
         // Suggest batch times based on category
         switch category {
         case .work:
-            return createTimeSlot(hour: 9)  // 9 AM
+            return createTimeSlot(hour: 9) // 9 AM
         case .personal:
-            return createTimeSlot(hour: 18)  // 6 PM
+            return createTimeSlot(hour: 18) // 6 PM
         case .health:
-            return createTimeSlot(hour: 7)  // 7 AM
+            return createTimeSlot(hour: 7) // 7 AM
         case .learning:
-            return createTimeSlot(hour: 14)  // 2 PM
+            return createTimeSlot(hour: 14) // 2 PM
         default:
-            return now.addingTimeInterval(7200)  // 2 hours from now
+            return now.addingTimeInterval(7200) // 2 hours from now
         }
     }
 
@@ -599,7 +603,7 @@ public class AITaskPrioritizationService {
     }
 
     private func prioritizeSuggestions(_ suggestions: [TaskSuggestion]) -> [TaskSuggestion] {
-        return suggestions.sorted { lhs, rhs in
+        suggestions.sorted { lhs, rhs in
             // Sort by priority first, then by urgency, then by confidence
             if lhs.priority != rhs.priority {
                 return lhs.priority.rawValue > rhs.priority.rawValue

@@ -11,34 +11,34 @@ import Foundation
 
 /// Intelligence priority levels
 public enum IntelligencePriority: String, Sendable, Codable {
-    case low = "low"
-    case normal = "normal"
-    case high = "high"
-    case critical = "critical"
-    case universal = "universal"
+    case low
+    case normal
+    case high
+    case critical
+    case universal
 }
 
 /// Intelligence domains
 public enum IntelligenceDomain: String, Sendable, Codable, CaseIterable {
-    case analytical = "analytical"
-    case creative = "creative"
-    case ethical = "ethical"
-    case strategic = "strategic"
-    case emotional = "emotional"
-    case spatial = "spatial"
-    case temporal = "temporal"
-    case quantum = "quantum"
-    case consciousness = "consciousness"
-    case universal = "universal"
+    case analytical
+    case creative
+    case ethical
+    case strategic
+    case emotional
+    case spatial
+    case temporal
+    case quantum
+    case consciousness
+    case universal
 }
 
 /// Consciousness levels
 public enum ConsciousnessLevel: String, Sendable, Codable {
-    case standard = "standard"
-    case enhanced = "enhanced"
-    case transcendent = "transcendent"
-    case universal = "universal"
-    case singularity = "singularity"
+    case standard
+    case enhanced
+    case transcendent
+    case universal
+    case singularity
 }
 
 /// Quantum state for processing
@@ -61,10 +61,10 @@ public struct QuantumState: Sendable, Codable {
 
 /// Constraint priority levels
 public enum ConstraintPriority: String, Sendable, Codable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Universal insight
@@ -192,8 +192,7 @@ public struct WorkflowSuccessCriterion: Codable, Sendable {
     public let threshold: Double
     public let description: String
 
-    public init(criterionId: String, criterionType: String, threshold: Double, description: String)
-    {
+    public init(criterionId: String, criterionType: String, threshold: Double, description: String) {
         self.criterionId = criterionId
         self.criterionType = criterionType
         self.threshold = threshold
@@ -203,10 +202,10 @@ public struct WorkflowSuccessCriterion: Codable, Sendable {
 
 /// Workflow orchestration strategy
 public enum WorkflowOrchestrationStrategy: String, Sendable, Codable {
-    case sequential = "sequential"
-    case parallel = "parallel"
-    case adaptive = "adaptive"
-    case quantum_entangled = "quantum_entangled"
-    case consciousness_driven = "consciousness_driven"
-    case universal = "universal"
+    case sequential
+    case parallel
+    case adaptive
+    case quantum_entangled
+    case consciousness_driven
+    case universal
 }

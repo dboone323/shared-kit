@@ -212,7 +212,7 @@ struct QuantumEcosystem: Codable, Sendable {
 
         enum ComponentType: String, Codable {
             case quantumField, particleSystem, energyFlow, informationNetwork, biologicalEntity,
-                artificialIntelligence
+                 artificialIntelligence
         }
     }
 
@@ -226,7 +226,7 @@ struct QuantumEcosystem: Codable, Sendable {
 
         enum InteractionType: String, Codable {
             case energyTransfer, informationExchange, physicalInteraction, quantumEntanglement,
-                gravitational, electromagnetic
+                 gravitational, electromagnetic
         }
     }
 
@@ -950,14 +950,15 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                 "system_id": config.systemId.uuidString,
                 "system_name": config.name,
                 "ecosystems": String(ecosystems.count),
-            ])
+            ]
+        )
 
         do {
             // Create analytics engine
             let analytics = try await createAnalyticsEngine(config: config)
 
             // Establish monitoring network
-            let universes = ecosystems.map { $0.universe }
+            let universes = ecosystems.map(\.universe)
             let network = try await monitoringNetwork.establishMonitoringNetwork(
                 universes: universes)
 
@@ -1013,7 +1014,7 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                 dataProcessor: EcosystemMonitoringSystem.DataProcessingEngine(
                     processors: [],
                     storage: EcosystemMonitoringSystem.DataProcessingEngine.DataStorage(
-                        capacity: 1000000.0,
+                        capacity: 1_000_000.0,
                         type: .distributed,
                         redundancy: 3,
                         performance: 0.9
@@ -1051,7 +1052,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                     "system_id": config.systemId.uuidString,
                     "network_nodes": String(network.nodes.count),
                     "analytics_algorithms": String(analytics.algorithms.count),
-                ])
+                ]
+            )
 
             return system
 
@@ -1061,7 +1063,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                 metadata: [
                     "error": String(describing: error),
                     "system_id": config.systemId.uuidString,
-                ])
+                ]
+            )
             throw error
         }
     }
@@ -1075,7 +1078,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                 "system_id": system.id.uuidString,
                 "metrics_count": String(metrics.count),
                 "time_horizon": String(timeHorizon),
-            ])
+            ]
+        )
 
         let taskId = UUID()
         let monitoringTask = Task {
@@ -1099,7 +1103,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
 
                 // Generate alerts
                 let alertsGenerated = try await alertManager.processAnomalies(
-                    anomalies, system: system)
+                    anomalies, system: system
+                )
 
                 // Calculate results
                 let result = MonitoringResult(
@@ -1127,7 +1132,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                         "system_id": system.id.uuidString,
                         "anomalies_detected": String(anomalies.count),
                         "alerts_generated": String(alertsGenerated),
-                    ])
+                    ]
+                )
 
                 return result
 
@@ -1137,7 +1143,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                     metadata: [
                         "error": String(describing: error),
                         "system_id": system.id.uuidString,
-                    ])
+                    ]
+                )
                 throw error
             }
         }
@@ -1158,8 +1165,9 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
         logger.log(
             .info, "Analyzing ecosystem health",
             metadata: [
-                "system_id": system.id.uuidString
-            ])
+                "system_id": system.id.uuidString,
+            ]
+        )
 
         let analysisTask = Task {
             do {
@@ -1192,7 +1200,7 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                         action: "Monitor high-risk components",
                         expectedImpact: 0.2,
                         timeline: 3600
-                    )
+                    ),
                 ]
 
                 // Analyze trends
@@ -1202,7 +1210,7 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                         direction: .stable,
                         rate: 0.01,
                         significance: 0.7
-                    )
+                    ),
                 ]
 
                 let analysis = HealthAnalysis(
@@ -1221,7 +1229,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                     metadata: [
                         "system_id": system.id.uuidString,
                         "overall_health": String(overallHealth),
-                    ])
+                    ]
+                )
 
                 return analysis
 
@@ -1231,7 +1240,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                     metadata: [
                         "error": String(describing: error),
                         "system_id": system.id.uuidString,
-                    ])
+                    ]
+                )
                 throw error
             }
         }
@@ -1242,20 +1252,20 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
     func generateMonitoringReports(system: EcosystemMonitoringSystem, reportType: ReportType) async
         -> MonitoringReport
     {
-        return await reportGenerator.generateReport(system: system, type: reportType)
+        await reportGenerator.generateReport(system: system, type: reportType)
     }
 
     func monitorEcosystemStability(system: EcosystemMonitoringSystem) async -> StabilityMetrics {
         // Calculate stability metrics
         let structuralStability =
             system.ecosystems.reduce(0.0) { $0 + $1.stability.structural }
-            / Double(system.ecosystems.count)
+                / Double(system.ecosystems.count)
         let dynamicalStability =
             system.ecosystems.reduce(0.0) { $0 + $1.stability.dynamical }
-            / Double(system.ecosystems.count)
+                / Double(system.ecosystems.count)
         let quantumStability =
             system.ecosystems.reduce(0.0) { $0 + $1.stability.quantum }
-            / Double(system.ecosystems.count)
+                / Double(system.ecosystems.count)
         let dimensionalStability = system.monitoringNetwork.performance.connectivity
 
         return StabilityMetrics(
@@ -1291,18 +1301,20 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                                 metadata: [
                                     "system_id": systemId.uuidString,
                                     "stability": String(stability.overallStability),
-                                ])
+                                ]
+                            )
                         }
                     }
 
-                    try await Task.sleep(nanoseconds: 10_000_000_000)  // 10 seconds
+                    try await Task.sleep(nanoseconds: 10_000_000_000) // 10 seconds
                 } catch {
                     logger.log(
                         .error, "Monitoring loop failed",
                         metadata: [
-                            "error": String(describing: error)
-                        ])
-                    try? await Task.sleep(nanoseconds: 5_000_000_000)  // 5 seconds retry
+                            "error": String(describing: error),
+                        ]
+                    )
+                    try? await Task.sleep(nanoseconds: 5_000_000_000) // 5 seconds retry
                 }
             }
         }
@@ -1312,25 +1324,25 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
         -> EcosystemMonitoringSystem.EcosystemAnalyticsEngine
     {
         // Create analytics algorithms
-        let algorithms = (0..<5).map { index in
+        let algorithms = (0 ..< 5).map { index in
             EcosystemMonitoringSystem.EcosystemAnalyticsEngine.AnalyticsAlgorithm(
                 id: UUID(),
                 name: "Analytics Algorithm \(index + 1)",
                 type: EcosystemMonitoringSystem.EcosystemAnalyticsEngine.AnalyticsAlgorithm
                     .AlgorithmType.allCases.randomElement()!,
-                parameters: ["threshold": Double.random(in: 0.1...0.9)],
-                accuracy: Double.random(in: 0.8...0.98)
+                parameters: ["threshold": Double.random(in: 0.1 ... 0.9)],
+                accuracy: Double.random(in: 0.8 ... 0.98)
             )
         }
 
         // Create analytics models
-        let models = (0..<3).map { _ in
+        let models = (0 ..< 3).map { _ in
             EcosystemMonitoringSystem.EcosystemAnalyticsEngine.AnalyticsModel(
                 id: UUID(),
                 type: EcosystemMonitoringSystem.EcosystemAnalyticsEngine.AnalyticsModel.ModelType
                     .allCases.randomElement()!,
                 trainingData: "ecosystem_data_\(UUID().uuidString)",
-                accuracy: Double.random(in: 0.85...0.97),
+                accuracy: Double.random(in: 0.85 ... 0.97),
                 lastTrained: Date()
             )
         }
@@ -1352,7 +1364,7 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
     private func createDataProcessingEngine(config: MonitoringConfiguration) async throws
         -> EcosystemMonitoringSystem.DataProcessingEngine
     {
-        return EcosystemMonitoringSystem.DataProcessingEngine(
+        EcosystemMonitoringSystem.DataProcessingEngine(
             processors: [],
             storage: EcosystemMonitoringSystem.DataProcessingEngine.DataStorage(
                 capacity: Double(config.dataCollection.dataRetention) * 1000,
@@ -1437,7 +1449,7 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
         var interactions: [EcosystemData.InteractionData] = []
 
         for metric in metrics {
-            dataMetrics[metric.name] = Double.random(in: 0.5...1.0)
+            dataMetrics[metric.name] = Double.random(in: 0.5 ... 1.0)
         }
 
         for ecosystem in system.ecosystems {
@@ -1478,7 +1490,7 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
     private func getCurrentEcosystemData(system: EcosystemMonitoringSystem) async throws
         -> EcosystemData
     {
-        return try await collectEcosystemData(system: system, metrics: [])
+        try await collectEcosystemData(system: system, metrics: [])
     }
 }
 
@@ -1527,7 +1539,7 @@ final class BasicEcosystemAnalyticsEngine: EcosystemAnalyticsEngineProtocol {
         var insights: [String] = []
 
         for algorithm in algorithms {
-            results[algorithm.name] = Double.random(in: 0.7...0.95)
+            results[algorithm.name] = Double.random(in: 0.7 ... 0.95)
             insights.append("Algorithm \(algorithm.name) completed analysis")
         }
 
@@ -1543,15 +1555,15 @@ final class BasicEcosystemAnalyticsEngine: EcosystemAnalyticsEngineProtocol {
 
     func detectEcosystemAnomalies(data: EcosystemData) async -> [EcosystemAnomaly] {
         // Basic anomaly detection
-        return (0..<2).map { _ in
+        (0 ..< 2).map { _ in
             EcosystemAnomaly(
                 id: UUID(),
                 type: EcosystemAnomaly.AnomalyType.allCases.randomElement()!,
-                severity: Double.random(in: 0.1...0.8),
+                severity: Double.random(in: 0.1 ... 0.8),
                 description: "Detected anomaly in ecosystem component",
                 affectedComponents: [UUID()],
                 timestamp: Date(),
-                confidence: Double.random(in: 0.7...0.95),
+                confidence: Double.random(in: 0.7 ... 0.95),
                 impact: .medium
             )
         }
@@ -1560,7 +1572,7 @@ final class BasicEcosystemAnalyticsEngine: EcosystemAnalyticsEngineProtocol {
     func predictEcosystemTrends(data: EcosystemData, predictionHorizon: TimeInterval) async
         -> TrendPrediction
     {
-        return TrendPrediction(
+        TrendPrediction(
             metric: "health",
             trend: .stable,
             confidence: 0.8,
@@ -1571,7 +1583,7 @@ final class BasicEcosystemAnalyticsEngine: EcosystemAnalyticsEngineProtocol {
     }
 
     func generatePerformanceInsights(data: EcosystemData) async -> [PerformanceInsight] {
-        return [
+        [
             PerformanceInsight(
                 id: UUID(),
                 type: .optimization,
@@ -1581,7 +1593,7 @@ final class BasicEcosystemAnalyticsEngine: EcosystemAnalyticsEngineProtocol {
                 confidence: 0.8,
                 recommendations: ["Implement optimization measures"],
                 timestamp: Date()
-            )
+            ),
         ]
     }
 }
@@ -1597,13 +1609,13 @@ final class BasicMultiversalMonitoringNetwork: MultiversalMonitoringNetworkProto
             )
         }
 
-        let connections = (0..<universes.count - 1).map { _ in
+        let connections = (0 ..< universes.count - 1).map { _ in
             MonitoringNetwork.NetworkConnection(
                 id: UUID(),
                 source: nodes.randomElement()!.id,
                 target: nodes.randomElement()!.id,
                 status: .connected,
-                quality: Double.random(in: 0.8...0.98)
+                quality: Double.random(in: 0.8 ... 0.98)
             )
         }
 
@@ -1621,12 +1633,11 @@ final class BasicMultiversalMonitoringNetwork: MultiversalMonitoringNetworkProto
         )
     }
 
-    func synchronizeMonitoringData(network: MonitoringNetwork) async throws -> SynchronizationResult
-    {
-        return SynchronizationResult(
+    func synchronizeMonitoringData(network: MonitoringNetwork) async throws -> SynchronizationResult {
+        SynchronizationResult(
             success: true,
             synchronizedNodes: network.nodes.count,
-            dataTransferred: 1000000.0,
+            dataTransferred: 1_000_000.0,
             timeTaken: 1.0,
             errors: [],
             timestamp: Date()
@@ -1634,9 +1645,9 @@ final class BasicMultiversalMonitoringNetwork: MultiversalMonitoringNetworkProto
     }
 
     func monitorInterdimensionalDataFlow(network: MonitoringNetwork) async -> DataFlowMetrics {
-        return DataFlowMetrics(
-            totalFlow: 1000000.0,
-            flowRate: 100000.0,
+        DataFlowMetrics(
+            totalFlow: 1_000_000.0,
+            flowRate: 100_000.0,
             bottlenecks: [],
             efficiency: 0.9,
             latency: 0.001,
@@ -1646,7 +1657,7 @@ final class BasicMultiversalMonitoringNetwork: MultiversalMonitoringNetworkProto
 
     func detectDimensionalInstabilities(network: MonitoringNetwork) async -> [InstabilityAlert] {
         // Basic instability detection
-        return (0..<1).map { _ in
+        (0 ..< 1).map { _ in
             InstabilityAlert(
                 id: UUID(),
                 type: .dimensional,
@@ -1664,7 +1675,7 @@ final class BasicMultiversalMonitoringNetwork: MultiversalMonitoringNetworkProto
 final class BasicDataProcessingEngine: DataProcessingEngineProtocol {
     func processEcosystemData(_ data: EcosystemData) async throws -> EcosystemData {
         // Basic data processing
-        return data
+        data
     }
 }
 
@@ -1673,7 +1684,7 @@ final class BasicAlertManagementEngine: AlertManagementEngineProtocol {
         async throws -> Int
     {
         // Basic alert processing
-        return anomalies.filter { $0.severity > 0.5 }.count
+        anomalies.filter { $0.severity > 0.5 }.count
     }
 }
 
@@ -1681,7 +1692,7 @@ final class BasicReportGenerationEngine: ReportGenerationEngineProtocol {
     func generateReport(system: EcosystemMonitoringSystem, type: ReportType) async
         -> MonitoringReport
     {
-        return MonitoringReport(
+        MonitoringReport(
             id: UUID(),
             type: type,
             title: "\(type.rawValue.capitalized) Monitoring Report",
@@ -1724,7 +1735,7 @@ final class InMemoryMonitoringDatabase: MonitoringDatabase {
     }
 
     func retrieveMonitoringSystem(_ systemId: UUID) async throws -> EcosystemMonitoringSystem? {
-        return systems[systemId]
+        systems[systemId]
     }
 }
 
@@ -1733,7 +1744,7 @@ final class ConsoleMonitoringLogger: MonitoringLogger {
         let timestamp = Date().ISO8601Format()
         let metadataString =
             metadata.isEmpty
-            ? "" : " \(metadata.map { "\($0.key)=\($0.value)" }.joined(separator: " "))"
+                ? "" : " \(metadata.map { "\($0.key)=\($0.value)" }.joined(separator: " "))"
         print("[\(timestamp)] [\(level)] \(message)\(metadataString)")
     }
 }
