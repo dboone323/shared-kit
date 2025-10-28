@@ -67,6 +67,7 @@
     "fastfile",
     "tostring",
     "rgba",
-    "oldavg"
+    "oldavg",
+    "codellama"
   ]
 }
