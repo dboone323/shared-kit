@@ -4,14 +4,6 @@ import XCTest
 /// Shared testing utilities for all projects
 @MainActor
 class TestUtilities {
-    /// Creates an in-memory ModelContainer for testing
-    static func createTestContainer(for models: [(some PersistentModel).Type]) throws
-        -> ModelContainer
-    {
-        let schema = Schema(models)
-        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        return try ModelContainer(for: schema, configurations: [configuration])
-    }
 
     /// Measures async operation performance
     static func measureAsync<T>(
@@ -57,6 +49,60 @@ class TestUtilities {
             "language": "swift",
             "size": 100,
         ]
+    }
+
+    static func createTestMCPWorkflow(name: String = "Test Workflow") -> MCPWorkflow {
+        let steps = [
+            MCPWorkflowStep(
+                id: UUID().uuidString,
+                name: "Step 1",
+                type: .action,
+                description: "First step",
+                configuration: ["action": "test"],
+                dependencies: [],
+                metadata: WorkflowPerformanceMetrics(
+                    executionTime: 1.0,
+                    successRate: 0.95,
+                    resourceUsage: 0.3,
+                    errorCount: 0,
+                    lastExecutionDate: Date(),
+                    averageExecutionTime: 1.0
+                )
+            ),
+            MCPWorkflowStep(
+                id: UUID().uuidString,
+                name: "Step 2",
+                type: .decision,
+                description: "Decision step",
+                configuration: ["condition": "test"],
+                dependencies: ["step1"],
+                metadata: WorkflowPerformanceMetrics(
+                    executionTime: 0.5,
+                    successRate: 0.98,
+                    resourceUsage: 0.2,
+                    errorCount: 0,
+                    lastExecutionDate: Date(),
+                    averageExecutionTime: 0.5
+                )
+            ),
+        ]
+
+        return MCPWorkflow(
+            id: UUID().uuidString,
+            name: name,
+            description: "Test workflow for unit testing",
+            steps: steps,
+            metadata: WorkflowPerformanceMetrics(
+                executionTime: 1.5,
+                successRate: 0.96,
+                resourceUsage: 0.25,
+                errorCount: 0,
+                lastExecutionDate: Date(),
+                averageExecutionTime: 1.5
+            ),
+            createdAt: Date(),
+            updatedAt: Date()
+        )
     }
 }
 
@@ -104,12 +150,12 @@ class BaseViewModelTestCase<ViewModelType: BaseViewModel>: XCTestCase {
         var stateChanged = false
 
         // Use a simple polling approach for state changes
-        for _ in 0 ..< Int(timeout * 10) {
+        for _ in 0..<Int(timeout * 10) {
             if viewModel.state[keyPath: keyPath] != initialState {
                 stateChanged = true
                 break
             }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+            try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
         }
 
         XCTAssertTrue(stateChanged, "State did not change after action", file: file, line: line)
@@ -156,7 +202,7 @@ class BaseViewModelTestCase<ViewModelType: BaseViewModel>: XCTestCase {
         Task {
             while !completionExpectation.isFulfilled {
                 loadingStates.append(viewModel.isLoading)
-                try? await Task.sleep(nanoseconds: 50_000_000) // 0.05 seconds
+                try? await Task.sleep(nanoseconds: 50_000_000)  // 0.05 seconds
             }
         }
 
@@ -222,7 +268,7 @@ class MockBaseViewModel<StateType, ActionType>: BaseViewModel {
         isLoading = true
 
         // Simulate async work
-        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+        try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
 
         if shouldFailAction, let error = mockError {
             setError(error)
@@ -347,10 +393,10 @@ extension XCTestCase {
 /// Mock data generators
 enum MockDataGenerator {
     static func generateTransactions(count: Int) -> [[String: Any]] {
-        (1 ... count).map { i in
+        (1...count).map { i in
             [
                 "id": UUID().uuidString,
-                "amount": Double.random(in: 5.0 ... 500.0),
+                "amount": Double.random(in: 5.0...500.0),
                 "description": "Transaction \(i)",
                 "date": Date().addingTimeInterval(-Double(i * 86400)),
                 "type": i % 2 == 0 ? "income" : "expense",
@@ -365,14 +411,14 @@ enum MockDataGenerator {
             "Exercise", "Read", "Meditate", "Drink Water", "Walk", "Study", "Cook", "Sleep Early",
         ]
 
-        return (1 ... count).map { i in
+        return (1...count).map { i in
             [
                 "id": UUID().uuidString,
                 "name": habitNames.randomElement() ?? "Habit \(i)",
                 "description": "Description for habit \(i)",
                 "frequency": ["daily", "weekly", "monthly"].randomElement()!,
                 "isActive": Bool.random(),
-                "streak": Int.random(in: 0 ... 30),
+                "streak": Int.random(in: 0...30),
             ]
         }
     }
@@ -381,7 +427,7 @@ enum MockDataGenerator {
         let languages = ["swift", "javascript", "python", "java", "typescript"]
         let fileTypes = ["class", "function", "interface", "enum", "struct"]
 
-        return (1 ... count).map { i in
+        return (1...count).map { i in
             let language = languages.randomElement()!
             let fileType = fileTypes.randomElement()!
 
@@ -390,8 +436,8 @@ enum MockDataGenerator {
                 "name": "\(fileType.capitalized)\(i).\(language)",
                 "content": self.generateCodeContent(language: language, type: fileType, index: i),
                 "language": language,
-                "size": Int.random(in: 100 ... 5000),
-                "complexity": Int.random(in: 1 ... 10),
+                "size": Int.random(in: 100...5000),
+                "complexity": Int.random(in: 1...10),
             ]
         }
     }
@@ -403,7 +449,7 @@ enum MockDataGenerator {
         let priorities = ["low", "medium", "high"]
         let categories = ["Work", "Personal", "Health", "Learning", "Finance"]
 
-        return (1 ... count).map { i in
+        return (1...count).map { i in
             [
                 "id": UUID().uuidString,
                 "title": "Task \(i)",
@@ -411,8 +457,8 @@ enum MockDataGenerator {
                 "priority": priorities.randomElement()!,
                 "category": categories.randomElement()!,
                 "isCompleted": Bool.random(),
-                "dueDate": Date().addingTimeInterval(Double.random(in: -86400 * 7 ... 86400 * 30)),
-                "createdAt": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 365)),
+                "dueDate": Date().addingTimeInterval(Double.random(in: -86400 * 7...86400 * 30)),
+                "createdAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 365)),
             ]
         }
     }
@@ -425,7 +471,7 @@ enum MockDataGenerator {
             "Business Account",
         ]
 
-        return (1 ... count).map { i in
+        return (1...count).map { i in
             let accountType = accountTypes.randomElement()!
             let isCredit = accountType == "credit"
 
@@ -433,10 +479,10 @@ enum MockDataGenerator {
                 "id": UUID().uuidString,
                 "name": accountNames.randomElement() ?? "Account \(i)",
                 "type": accountType,
-                "balance": isCredit ? Double.random(in: -5000 ... 0) : Double.random(in: 0 ... 10000),
+                "balance": isCredit ? Double.random(in: -5000...0) : Double.random(in: 0...10000),
                 "currency": "USD",
                 "isActive": Bool.random(),
-                "createdAt": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 365)),
+                "createdAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 365)),
             ]
         }
     }
@@ -446,33 +492,33 @@ enum MockDataGenerator {
         let statuses = ["pending", "approved", "changes_requested", "commented"]
         let languages = ["swift", "javascript", "python", "java", "typescript"]
 
-        return (1 ... count).map { i in
+        return (1...count).map { i in
             [
                 "id": UUID().uuidString,
                 "title": "Code Review \(i)",
                 "description": "Review for feature implementation \(i)",
                 "status": statuses.randomElement()!,
                 "language": languages.randomElement()!,
-                "fileCount": Int.random(in: 1 ... 20),
-                "lineCount": Int.random(in: 10 ... 1000),
-                "complexity": Int.random(in: 1 ... 10),
-                "createdAt": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 30)),
+                "fileCount": Int.random(in: 1...20),
+                "lineCount": Int.random(in: 10...1000),
+                "complexity": Int.random(in: 1...10),
+                "createdAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 30)),
             ]
         }
     }
 
     /// Generate mock data for AvoidObstaclesGame
     static func generateGameSessions(count: Int) -> [[String: Any]] {
-        (1 ... count).map { _ in
+        (1...count).map { _ in
             [
                 "id": UUID().uuidString,
-                "score": Int.random(in: 0 ... 10000),
-                "duration": Double.random(in: 30 ... 600), // seconds
-                "level": Int.random(in: 1 ... 50),
-                "obstaclesAvoided": Int.random(in: 0 ... 100),
-                "powerUpsUsed": Int.random(in: 0 ... 10),
+                "score": Int.random(in: 0...10000),
+                "duration": Double.random(in: 30...600),  // seconds
+                "level": Int.random(in: 1...50),
+                "obstaclesAvoided": Int.random(in: 0...100),
+                "powerUpsUsed": Int.random(in: 0...10),
                 "completed": Bool.random(),
-                "playedAt": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 7)),
+                "playedAt": Date().addingTimeInterval(-Double.random(in: 0...86400 * 7)),
             ]
         }
     }
@@ -482,17 +528,17 @@ enum MockDataGenerator {
         let habitTypes = ["exercise", "reading", "meditation", "water", "sleep", "learning"]
         let frequencies = ["daily", "weekly", "monthly"]
 
-        return (1 ... count).map { _ in
+        return (1...count).map { _ in
             [
                 "id": UUID().uuidString,
                 "habitId": UUID().uuidString,
                 "type": habitTypes.randomElement()!,
                 "frequency": frequencies.randomElement()!,
-                "targetValue": Int.random(in: 1 ... 30),
-                "currentValue": Int.random(in: 0 ... 30),
-                "streak": Int.random(in: 0 ... 100),
+                "targetValue": Int.random(in: 1...30),
+                "currentValue": Int.random(in: 0...30),
+                "streak": Int.random(in: 0...100),
                 "isCompleted": Bool.random(),
-                "date": Date().addingTimeInterval(-Double.random(in: 0 ... 86400 * 30)),
+                "date": Date().addingTimeInterval(-Double.random(in: 0...86400 * 30)),
             ]
         }
     }
@@ -541,5 +587,101 @@ enum MockDataGenerator {
         default:
             "// \(type.capitalized)\(index) in \(language)"
         }
+    }
+}
+
+/// Test data builder for creating mock objects
+enum TestDataBuilder {
+    static func createTestHabit(name: String = "Test Habit", streak: Int = 0) -> Habit {
+        Habit(
+            id: UUID(),
+            name: name,
+            description: "Test habit description",
+            frequency: .daily,
+            streak: streak,
+            createdAt: Date(),
+            updatedAt: Date()
+        )
+    }
+
+    static func createTestTask(priority: TaskPriority = .medium, isCompleted: Bool = false) -> Task
+    {
+        Task(
+            id: UUID(),
+            title: "Test Task",
+            description: "Test task description",
+            priority: priority,
+            isCompleted: isCompleted,
+            createdAt: Date(),
+            updatedAt: Date()
+        )
+    }
+
+    static func createTestFinancialAccount(
+        balance: Double = 1000.0,
+        accountType: AccountType = .checking
+    ) -> FinancialAccount {
+        FinancialAccount(
+            id: UUID(),
+            name: "Test Account",
+            balance: balance,
+            accountType: accountType,
+            createdAt: Date(),
+            updatedAt: Date()
+        )
+    }
+
+    static func createTestMCPWorkflow(name: String = "Test Workflow") -> MCPWorkflow {
+        let steps = [
+            MCPWorkflowStep(
+                id: UUID().uuidString,
+                name: "Step 1",
+                type: .action,
+                description: "First step",
+                configuration: ["action": "test"],
+                dependencies: [],
+                metadata: WorkflowPerformanceMetrics(
+                    executionTime: 1.0,
+                    successRate: 0.95,
+                    resourceUsage: 0.3,
+                    errorCount: 0,
+                    lastExecutionDate: Date(),
+                    averageExecutionTime: 1.0
+                )
+            ),
+            MCPWorkflowStep(
+                id: UUID().uuidString,
+                name: "Step 2",
+                type: .decision,
+                description: "Decision step",
+                configuration: ["condition": "test"],
+                dependencies: ["step1"],
+                metadata: WorkflowPerformanceMetrics(
+                    executionTime: 0.5,
+                    successRate: 0.98,
+                    resourceUsage: 0.2,
+                    errorCount: 0,
+                    lastExecutionDate: Date(),
+                    averageExecutionTime: 0.5
+                )
+            ),
+        ]
+
+        return MCPWorkflow(
+            id: UUID().uuidString,
+            name: name,
+            description: "Test workflow for unit testing",
+            steps: steps,
+            metadata: WorkflowPerformanceMetrics(
+                executionTime: 1.5,
+                successRate: 0.96,
+                resourceUsage: 0.25,
+                errorCount: 0,
+                lastExecutionDate: Date(),
+                averageExecutionTime: 1.5
+            ),
+            createdAt: Date(),
+            updatedAt: Date()
+        )
     }
 }

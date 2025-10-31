@@ -209,3 +209,13 @@ public enum WorkflowOrchestrationStrategy: String, Sendable, Codable {
     case consciousness_driven
     case universal
 }
+
+/// MCP workflow execution state
+public enum MCPWorkflowExecutionState: String, Codable, Sendable {
+    case pending
+    case running
+    case paused
+    case completed
+    case failed
+    case cancelled
+}

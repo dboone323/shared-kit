@@ -34,7 +34,8 @@ public protocol AICodeAnalysisService {
     ///   - language: Programming language
     ///   - analysisType: Type of analysis to perform
     /// - Returns: Analysis results
-    func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws -> CodeAnalysisResult
+    func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws
+        -> CodeAnalysisResult
 
     /// Generate documentation for code
     /// - Parameters:
@@ -59,7 +60,8 @@ public protocol AICodeGenerationService {
     ///   - language: Programming language
     ///   - context: Additional context
     /// - Returns: Generated code
-    func generateCode(description: String, language: String, context: String?) async throws -> CodeGenerationResult
+    func generateCode(description: String, language: String, context: String?) async throws
+        -> CodeGenerationResult
 
     /// Generate code with fallback support
     /// - Parameters:
@@ -67,7 +69,8 @@ public protocol AICodeGenerationService {
     ///   - language: Programming language
     ///   - context: Additional context
     /// - Returns: Generated code with fallback handling
-    func generateCodeWithFallback(description: String, language: String, context: String?) async throws -> CodeGenerationResult
+    func generateCodeWithFallback(description: String, language: String, context: String?)
+        async throws -> CodeGenerationResult
 }
 
 /// Protocol for AI caching services
@@ -99,7 +102,8 @@ public protocol AIPerformanceMonitoring {
     ///   - duration: Operation duration
     ///   - success: Whether operation succeeded
     ///   - metadata: Additional metadata
-    func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?) async
+    func recordOperation(
+        operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?) async
 
     /// Get performance metrics
     func getPerformanceMetrics() async -> PerformanceMetrics
@@ -118,7 +122,8 @@ public protocol AIServiceCoordinator {
     ///   - operation: The operation to perform
     ///   - context: Operation context
     /// - Returns: Operation result
-    func executeOperation(operation: AIOperation, context: [String: Any]) async throws -> AIOperationResult
+    func executeOperation(operation: AIOperation, context: [String: Any]) async throws
+        -> AIOperationResult
 
     /// Get service health overview
     func getServiceHealthOverview() async -> ServiceHealthOverview
@@ -501,77 +506,31 @@ public struct RateLimit: Codable, Sendable {
     }
 }
 
-/// Type-erased codable wrapper for Any values
-public struct AnyCodable: Codable, @unchecked Sendable {
-    public let value: Any
-
-    public init(_ value: Any) {
-        self.value = value
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let intValue = try? container.decode(Int.self) {
-            self.value = intValue
-        } else if let doubleValue = try? container.decode(Double.self) {
-            self.value = doubleValue
-        } else if let stringValue = try? container.decode(String.self) {
-            self.value = stringValue
-        } else if let boolValue = try? container.decode(Bool.self) {
-            self.value = boolValue
-        } else if let arrayValue = try? container.decode([AnyCodable].self) {
-            self.value = arrayValue.map(\.value)
-        } else if let dictValue = try? container.decode([String: AnyCodable].self) {
-            self.value = dictValue.mapValues { $0.value }
-        } else {
-            self.value = NSNull()
-        }
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch value {
-        case let intValue as Int:
-            try container.encode(intValue)
-        case let doubleValue as Double:
-            try container.encode(doubleValue)
-        case let stringValue as String:
-            try container.encode(stringValue)
-        case let boolValue as Bool:
-            try container.encode(boolValue)
-        case let arrayValue as [Any]:
-            try container.encode(arrayValue.map { AnyCodable($0) })
-        case let dictValue as [String: Any]:
-            try container.encode(dictValue.mapValues { AnyCodable($0) })
-        default:
-            try container.encodeNil()
-        }
-    }
-}
-
 // MARK: - Default Implementations
 
-public extension AITextGenerationService {
-    func isAvailable() async -> Bool {
+extension AITextGenerationService {
+    public func isAvailable() async -> Bool {
         let health = await getHealthStatus()
         return health.isRunning
     }
 }
 
-public extension AICodeAnalysisService {
-    func generateDocumentation(code: String, language: String) async throws -> String {
+extension AICodeAnalysisService {
+    public func generateDocumentation(code: String, language: String) async throws -> String {
         // Default implementation - should be overridden
         throw AIError.serviceNotImplemented("Documentation generation not implemented")
     }
 
-    func generateTests(code: String, language: String) async throws -> String {
+    public func generateTests(code: String, language: String) async throws -> String {
         // Default implementation - should be overridden
         throw AIError.serviceNotImplemented("Test generation not implemented")
     }
 }
 
-public extension AICodeGenerationService {
-    func generateCodeWithFallback(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+extension AICodeGenerationService {
+    public func generateCodeWithFallback(description: String, language: String, context: String?)
+        async throws -> CodeGenerationResult
+    {
         // Default implementation - just call regular generateCode
         try await generateCode(description: description, language: language, context: context)
     }
@@ -590,19 +549,19 @@ public enum AIError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case let .serviceNotImplemented(service):
+        case .serviceNotImplemented(let service):
             "AI service not implemented: \(service)"
-        case let .serviceUnavailable(service):
+        case .serviceUnavailable(let service):
             "AI service unavailable: \(service)"
-        case let .invalidConfiguration(details):
+        case .invalidConfiguration(let details):
             "Invalid AI service configuration: \(details)"
-        case let .operationFailed(details):
+        case .operationFailed(let details):
             "AI operation failed: \(details)"
         case .rateLimitExceeded:
             "AI service rate limit exceeded"
         case .authenticationFailed:
             "AI service authentication failed"
-        case let .networkError(details):
+        case .networkError(let details):
             "AI service network error: \(details)"
         }
     }

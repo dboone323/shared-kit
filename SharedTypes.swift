@@ -48,6 +48,6 @@ struct ConsciousnessPattern {
 }
 
 /// Security level enumeration
-enum SecurityLevel {
+public enum SecurityLevel: String {
     case basic, standard, high, quantum
 }

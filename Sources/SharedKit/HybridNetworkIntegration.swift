@@ -223,10 +223,9 @@ public class HybridNetworkIntegration: ObservableObject {
 
         return TransmissionResult(
             success: betterResult.success,
-            bytesTransmitted: betterResult.bytesTransmitted,
-            errorRate: betterResult.errorRate,
             latency: betterResult.latency,
-            reason: "Hybrid transmission completed"
+            dataTransferred: betterResult.dataTransferred,
+            errorMessage: betterResult.success ? nil : "Hybrid transmission failed"
         )
     }
 
@@ -287,7 +286,7 @@ public class HybridNetworkIntegration: ObservableObject {
 
     private func measurePerformanceImprovement() async -> Double {
         // Simulate performance measurement
-        Double.random(in: 0.05 ... 0.25) // 5-25% improvement
+        Double.random(in: 0.05...0.25)  // 5-25% improvement
     }
 
     private func generateOptimizationRecommendations() -> [String] {
@@ -332,9 +331,9 @@ public class ClassicalNetworkManager: ObservableObject {
             NetworkPath(
                 id: "classical_path_1",
                 nodes: [source, "router_1", destination],
-                capacity: 1000.0, // Mbps
-                latency: 5.0, // ms
-                cost: 0.01, // credits per MB
+                capacity: 1000.0,  // Mbps
+                latency: 5.0,  // ms
+                cost: 0.01,  // credits per MB
                 reliability: 0.99
             ),
             NetworkPath(
@@ -352,24 +351,23 @@ public class ClassicalNetworkManager: ObservableObject {
         -> TransmissionResult
     {
         // Simulate classical transmission
-        let success = Bool.random(withProbability: path.reliability)
-        let latency = path.latency + Double.random(in: -1 ... 1)
+        let success = Double.random(in: 0...1) < path.reliability
+        let latency = path.latency + Double.random(in: -1...1)
 
         return TransmissionResult(
             success: success,
-            bytesTransmitted: success ? packet.size : 0,
-            errorRate: success ? Double.random(in: 0.001 ... 0.01) : 1.0,
             latency: latency,
-            reason: success ? "Classical transmission successful" : "Transmission failed"
+            dataTransferred: success ? packet.size : 0,
+            errorMessage: success ? nil : "Classical transmission failed"
         )
     }
 
     public func getNetworkStatistics() async -> NetworkStatistics {
         NetworkStatistics(
             totalNodes: 100,
-            totalCapacity: 10000.0, // Mbps
-            utilization: Double.random(in: 0.3 ... 0.7),
-            averageLatency: 10.0, // ms
+            totalCapacity: 10000.0,  // Mbps
+            utilization: Double.random(in: 0.3...0.7),
+            averageLatency: 10.0,  // ms
             errorRate: 0.005,
             activeConnections: activeConnections.count
         )
@@ -397,9 +395,9 @@ public class QuantumNetworkManager: ObservableObject {
             NetworkPath(
                 id: "quantum_path_1",
                 nodes: [source, destination],
-                capacity: 100.0, // qubits per second
-                latency: 1.0, // ms
-                cost: 1.0, // credits per qubit
+                capacity: 100.0,  // qubits per second
+                latency: 1.0,  // ms
+                cost: 1.0,  // credits per qubit
                 reliability: 0.95
             ),
             NetworkPath(
@@ -417,24 +415,23 @@ public class QuantumNetworkManager: ObservableObject {
         -> TransmissionResult
     {
         // Simulate quantum transmission
-        let success = Bool.random(withProbability: path.reliability)
-        let latency = path.latency + Double.random(in: -0.5 ... 0.5)
+        let success = Double.random(in: 0...1) < path.reliability
+        let latency = path.latency + Double.random(in: -0.5...0.5)
 
         return TransmissionResult(
             success: success,
-            bytesTransmitted: success ? packet.size : 0,
-            errorRate: success ? Double.random(in: 0.01 ... 0.05) : 1.0,
             latency: latency,
-            reason: success ? "Quantum transmission successful" : "Transmission failed"
+            dataTransferred: success ? packet.size : 0,
+            errorMessage: success ? nil : "Quantum transmission failed"
         )
     }
 
     public func getNetworkStatistics() async -> NetworkStatistics {
         NetworkStatistics(
             totalNodes: 20,
-            totalCapacity: 1000.0, // qubits per second
-            utilization: Double.random(in: 0.1 ... 0.4),
-            averageLatency: 2.0, // ms
+            totalCapacity: 1000.0,  // qubits per second
+            utilization: Double.random(in: 0.1...0.4),
+            averageLatency: 2.0,  // ms
             errorRate: 0.03,
             activeConnections: activeEntanglements.count
         )
@@ -464,7 +461,7 @@ public class HybridRouter: ObservableObject {
                     chosenPath: path,
                     networkType: .quantum,
                     estimatedLatency: path.latency,
-                    estimatedCost: Double(dataAnalysis.dataSize) * path.cost / 1_000_000, // Convert to MB
+                    estimatedCost: Double(dataAnalysis.dataSize) * path.cost / 1_000_000,  // Convert to MB
                     securityLevel: .quantum,
                     reason: "Quantum security required"
                 )
@@ -529,14 +526,14 @@ public class ResourceAllocator: ObservableObject {
 
     public func allocateResources(for decision: RoutingDecisionResult) async -> ResourceAllocation {
         // Simulate resource allocation
-        let bandwidth = decision.networkType == .quantum ? 10.0 : 100.0 // qubits/s or Mbps
+        let bandwidth = decision.networkType == .quantum ? 10.0 : 100.0  // qubits/s or Mbps
         let priority = decision.chosenPath.capacity > 500 ? ResourcePriority.high : .normal
 
         let allocation = ResourceAllocation(
             bandwidth: bandwidth,
             priority: priority,
-            timeSlot: Date().addingTimeInterval(Double.random(in: 0 ... 60)), // Next minute
-            duration: Double.random(in: 1 ... 10) // seconds
+            timeSlot: Date().addingTimeInterval(Double.random(in: 0...60)),  // Next minute
+            duration: Double.random(in: 1...10)  // seconds
         )
 
         allocatedResources[UUID().uuidString] = allocation
@@ -552,7 +549,7 @@ public enum NetworkType: String {
 
 public struct DataPacket {
     public let id: String
-    public let size: Int // bytes
+    public let size: Int  // bytes
     public let priority: PacketPriority
     public let securityLevel: SecurityLevel
     public let data: Data

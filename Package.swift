@@ -10,30 +10,58 @@
         ],
         products: [
             .library(name: "SharedKit", targets: ["SharedKit"]),
-            .library(name: "SharedTestSupport", targets: ["SharedTestSupport"]), // Reusable test utilities for Xcode projects
+            .library(name: "SharedTestSupport", targets: ["SharedTestSupport"]),  // Reusable test utilities for Xcode projects
         ],
         targets: [
-            // Minimal package for now; sources live under Sources/SharedKit
-            .target(name: "SharedKit", path: "Sources/SharedKit"),
-            // Add all MCP framework files
+            // Main SharedKit target with all necessary source files
             .target(
-                name: "MCPFrameworks", dependencies: [], path: ".",
+                name: "SharedKit",
+                path: ".",
+                exclude: [
+                    // Exclude files with conflicting type definitions
+                    "Sources/SharedKit/UniversalIntelligenceEmergence.swift",  // Has conflicting IntelligenceDomain
+                    "Sources/SharedKit/QuantumInternetTypes.swift",  // Has conflicting QuantumState
+                    "Sources/SharedKit/EntanglementNetwork.swift",  // Has conflicting EntanglementNetwork
+                    // Exclude incomplete quantum framework files that cause compilation errors
+                    "Sources/SharedKit/QuantumInternet.swift",
+                    "Sources/SharedKit/QuantumInternetProtocols.swift",
+                    "Sources/SharedKit/QuantumKeyDistribution.swift",
+                    "Sources/SharedKit/QuantumNetworkRouting.swift",
+                    "Sources/SharedKit/QuantumRepeater.swift",
+                    "Sources/SharedKit/QuantumTeleportation.swift",
+                    "Sources/SharedKit/UniversalConsciousnessIntegrationFramework.swift",
+                    "IntelligentWorkflowAgents.swift",  // Missing agent framework dependencies
+                ],
                 sources: [
-                    "MCPSharedTypes.swift",
+                    "Sources/SharedKit/AIServiceProtocols.swift",
+                    "Sources/SharedKit/AppLogger.swift",
+                    "Sources/SharedKit/EternalConsciousnessIntegrationFramework.swift",
+                    "Sources/SharedKit/GlobalQuantumCommunicationNetwork.swift",
+                    "Sources/SharedKit/HybridNetworkIntegration.swift",
+                    "Sources/SharedKit/Logger.swift",
+                    "Sources/SharedKit/PostSingularityFrameworks.swift",
+                    "Sources/SharedKit/QuantumCICDOptimization.swift",
+                    "Sources/SharedKit/QuantumEternitySystems.swift",
+                    "Sources/SharedKit/SharedArchitecture.swift",
+                    "Sources/SharedKit/SingularityMonitoringSystemsFramework.swift",
+                    "Sources/SharedKit/SingularitySafetySystems.swift",
+                    "Sources/SharedKit/TechnologicalSingularityCoordination.swift",
+                    "Sources/SharedKit/UniversalOptimizationNetworks.swift",
+                    "Sources/SharedKit/UniversalSingularityAchievementFramework.swift",
+                    // Core quantum systems
+                    "WorkflowIntelligenceAmplificationSystem.swift",
+                    "AutonomousWorkflowEvolutionSystem.swift",
+                    // MCP integration
                     "EnhancedMCPIntegration.swift",
-                    "UniversalMCPFrameworks.swift",
-                    "MCPIntelligenceSynthesis.swift",
-                    "MCPCoordinationSystems.swift",
-                    "QuantumOrchestrationFrameworks.swift",
-                    "ComprehensiveSupportingArchitectures.swift",
-                    "MCPSystemIntegration.swift",
-                    "MCPUniversalIntelligence.swift",
-                    "MCPIntegrationAPIs.swift",
-                    "UniversalAgentEraCompletion.swift",
-                    "MCPOrchestrationFramework.swift",
+                    "MCPSharedTypes.swift",
                     "AnyCodable.swift",
+                    // Shared types
+                    "SharedTypes.swift",
+                    // Stub implementations for missing quantum framework types
+                    "QuantumFrameworkStubs.swift",
                 ]
             ),
+            // Removed MCPFrameworks target to avoid source conflicts
             // Phase 8G minimal demo executable (builds only the decoupled QSE↔QEN composition)
             .executableTarget(
                 name: "Phase8GDemo",
@@ -49,7 +77,7 @@
                     "Phase8G_Complex.swift",
                 ],
                 swiftSettings: [
-                    .define("PHASE8G_DEMO"),
+                    .define("PHASE8G_DEMO")
                 ]
             ),
             // Conscious AI executable target

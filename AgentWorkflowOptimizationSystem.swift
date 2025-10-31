@@ -575,9 +575,9 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
     private func compareWorkflowPerformance(
         original: MCPWorkflow,
         optimized: MCPWorkflow
-    ) async -> PerformanceComparison {
+    ) async -> AgentPerformanceComparison {
         // Compare performance between original and optimized workflows
-        PerformanceComparison(
+        AgentPerformanceComparison(
             executionTime: 45.0, // Estimated optimized execution time
             efficiency: 0.88,
             performanceImprovement: 0.25
@@ -1506,7 +1506,8 @@ public enum ResourceSharing: String, Sendable, Codable {
 }
 
 /// Performance comparison
-public struct PerformanceComparison: Sendable {
+/// Agent performance comparison
+public struct AgentPerformanceComparison: Sendable {
     public let executionTime: TimeInterval
     public let efficiency: Double
     public let performanceImprovement: Double
