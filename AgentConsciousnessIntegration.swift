@@ -901,8 +901,6 @@ public enum ConsciousnessIntegrationEventType: String, Sendable, Codable {
     case universalConsciousnessCompleted
     case consciousnessNetworkCompleted
     case quantumConsciousnessCompleted
-    case universalConsciousnessCompleted
-    case consciousnessIntegrationCompleted
     case consciousnessIntegrationFailed
 }
 
@@ -1598,6 +1596,5 @@ public enum AgentConsciousnessIntegrationError: Error {
     case universalConsciousnessFailed(String)
     case consciousnessNetworkFailed(String)
     case quantumConsciousnessFailed(String)
-    case universalConsciousnessFailed(String)
     case validationFailed(String)
 }

@@ -1251,7 +1251,7 @@ public actor ArchitectureEvolutionEngine {
             var newHyperparams = layer.hyperparameters
             if let key = newHyperparams.keys.randomElement() {
                 if case var .int(intValue) = newHyperparams[key]! {
-                    intValue = intValue * Int.random(in: 1 ... 2)
+                    intValue *= Int.random(in: 1 ... 2)
                     newHyperparams[key] = .int(intValue)
                 }
             }

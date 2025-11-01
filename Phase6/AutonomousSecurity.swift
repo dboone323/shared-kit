@@ -255,8 +255,7 @@ public actor ThreatPredictor {
         predictionModel.update(with: incident)
     }
 
-    private func predictFromPatterns(_ analysis: SecurityAnalysis) async throws -> [SecurityThreat]
-    {
+    private func predictFromPatterns(_ analysis: SecurityAnalysis) async throws -> [SecurityThreat] {
         var threats: [SecurityThreat] = []
 
         // Analyze access patterns for anomalies
@@ -269,7 +268,7 @@ public actor ThreatPredictor {
                     severity: .high,
                     confidence: 0.8,
                     indicators: ["High failed login ratio", "Multiple IP addresses"],
-                    predictedTime: Date().addingTimeInterval(3600)  // 1 hour
+                    predictedTime: Date().addingTimeInterval(3600) // 1 hour
                 )
                 threats.append(threat)
             }
@@ -285,7 +284,7 @@ public actor ThreatPredictor {
                     severity: .medium,
                     confidence: 0.7,
                     indicators: ["Unusual connection patterns", "Unknown destinations"],
-                    predictedTime: Date().addingTimeInterval(1800)  // 30 minutes
+                    predictedTime: Date().addingTimeInterval(1800) // 30 minutes
                 )
                 threats.append(threat)
             }
@@ -394,7 +393,7 @@ public actor SecurityAnalyzer {
             totalConnections: 15420,
             suspiciousConnections: 7,
             blockedConnections: 12,
-            dataTransferred: 1024 * 1024 * 500  // 500MB
+            dataTransferred: 1024 * 1024 * 500 // 500MB
         )
     }
 
@@ -586,7 +585,7 @@ public actor AdaptiveDefender {
         return SecurityResponse(
             incidentId: incident.id,
             actions: actions,
-            executionTime: 0.0,  // Will be set when executed
+            executionTime: 0.0, // Will be set when executed
             success: true
         )
     }
@@ -624,7 +623,7 @@ public actor AdaptiveDefender {
                     type: .rateLimit,
                     condition: "login_attempts > 5",
                     action: .block,
-                    duration: 3600  // 1 hour
+                    duration: 3600 // 1 hour
                 ))
         case .injection:
             rules.append(
@@ -660,7 +659,7 @@ public actor AdaptiveDefender {
                     type: .trafficFilter,
                     condition: "high_traffic_volume",
                     action: .throttle,
-                    duration: 300  // 5 minutes
+                    duration: 300 // 5 minutes
                 ))
         case .malware:
             rules.append(
@@ -968,8 +967,8 @@ public struct ThreatPattern: Sendable {
 
 /// Functional threat prediction model with pattern-based analysis
 public struct ThreatPredictionModel: Sendable {
-    private let predictionHistory: [String: [Date]] = [:]  // Track prediction accuracy
-    private let threatPatterns: [String: ThreatPattern] = [:]  // Known threat patterns
+    private let predictionHistory: [String: [Date]] = [:] // Track prediction accuracy
+    private let threatPatterns: [String: ThreatPattern] = [:] // Known threat patterns
 
     func update(with incident: SecurityIncident) {
         // Update prediction model with actual incident data
@@ -988,7 +987,7 @@ public struct ThreatPredictionModel: Sendable {
                         id: "predicted_brute_force_\(UUID().uuidString.prefix(8))",
                         type: .bruteForce,
                         description:
-                            "Potential brute force attack detected with \(access.failedAttempts) failed attempts",
+                        "Potential brute force attack detected with \(access.failedAttempts) failed attempts",
                         severity: access.failedAttempts > 100 ? .critical : .high,
                         confidence: confidence,
                         indicators: [
@@ -1023,7 +1022,7 @@ public struct ThreatPredictionModel: Sendable {
                         id: "predicted_ddos_\(UUID().uuidString.prefix(8))",
                         type: .denialOfService,
                         description:
-                            "Potential DDoS attack with \(network.suspiciousConnections) suspicious connections",
+                        "Potential DDoS attack with \(network.suspiciousConnections) suspicious connections",
                         severity: .high,
                         confidence: confidence,
                         indicators: [
@@ -1043,7 +1042,7 @@ public struct ThreatPredictionModel: Sendable {
                         id: "ransomware_suspicion_\(UUID().uuidString.prefix(8))",
                         type: .malware,
                         description:
-                            "Potential ransomware activity with \(fileSystem.suspiciousFileModifications) suspicious file modifications",
+                        "Potential ransomware activity with \(fileSystem.suspiciousFileModifications) suspicious file modifications",
                         severity: .critical,
                         confidence: 0.8,
                         indicators: [
@@ -1114,7 +1113,7 @@ public actor SecurityLearningModel {
         // Generate learnings from stored incidents and responses
         SecurityLearnings(
             effectiveResponses: responses.count,
-            learnedPatterns: incidents.count / 10,  // Simplified
+            learnedPatterns: incidents.count / 10, // Simplified
             adaptationRate: 0.85
         )
     }

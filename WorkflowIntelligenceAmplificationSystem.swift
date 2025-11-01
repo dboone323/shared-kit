@@ -208,7 +208,7 @@ actor IntelligenceAmplificationEngine {
         let branchCount = min(configuration.maxDecisionBranches, workflow.steps.count)
 
         // Generate decision branches with different optimization strategies
-        for i in 0..<branchCount {
+        for i in 0 ..< branchCount {
             let strategy = DecisionStrategy.allCases[i % DecisionStrategy.allCases.count]
             let decision = await generateDecisionForStrategy(
                 workflow: workflow,
@@ -306,9 +306,9 @@ actor IntelligenceAmplificationEngine {
         let knowledgeNodes = extractKnowledgeNodes(from: workflow)
 
         // Create entanglement links between related knowledge
-        for i in 0..<knowledgeNodes.count {
+        for i in 0 ..< knowledgeNodes.count {
             for j
-                in (i + 1)..<min(i + configuration.knowledgeExplorationDepth, knowledgeNodes.count)
+                in (i + 1) ..< min(i + configuration.knowledgeExplorationDepth, knowledgeNodes.count)
             {
                 let source = knowledgeNodes[i]
                 let target = knowledgeNodes[j]
@@ -364,7 +364,7 @@ actor IntelligenceAmplificationEngine {
         workflow: MCPWorkflow
     ) -> Double {
         // Calculate how strongly two knowledge nodes are entangled based on workflow structure
-        var strength = 0.5  // Base strength
+        var strength = 0.5 // Base strength
 
         // Check if both relate to parallel execution
         if source.contains("parallel") && target.contains("parallel") {
@@ -424,7 +424,7 @@ actor IntelligenceAmplificationEngine {
         var learningProgress = 0.0
         var insights: [String] = []
 
-        for cycle in 0..<learningCycles {
+        for cycle in 0 ..< learningCycles {
             let cycleProgress = Double(cycle) / Double(learningCycles)
 
             // Simulate quantum measurement collapse - learning converges
@@ -441,7 +441,7 @@ actor IntelligenceAmplificationEngine {
             // Knowledge entanglement contributes to learning
             let entanglementBonus =
                 entanglements.reduce(0.0) { $0 + $1.entanglementStrength }
-                / max(Double(entanglements.count), 1.0)
+                    / max(Double(entanglements.count), 1.0)
             learningProgress += entanglementBonus * 0.01
 
             // Generate insights at key milestones
@@ -493,7 +493,7 @@ actor IntelligenceAmplificationEngine {
     ) -> Double {
         let constraints = context.resourceConstraints
         if constraints.isEmpty {
-            return 0.7  // Default efficiency
+            return 0.7 // Default efficiency
         }
 
         let totalConstraints = constraints.values.reduce(0, +)
@@ -504,11 +504,10 @@ actor IntelligenceAmplificationEngine {
         return max(efficiencyScore, 0.3)
     }
 
-    private func calculateHistoricalPerformanceScore(context: WorkflowIntelligenceContext) -> Double
-    {
+    private func calculateHistoricalPerformanceScore(context: WorkflowIntelligenceContext) -> Double {
         let history = context.historicalPerformance
         if history.isEmpty {
-            return 0.5  // Default score with no history
+            return 0.5 // Default score with no history
         }
 
         let avgSuccessRate =
@@ -616,12 +615,14 @@ public final class WorkflowIntelligenceAmplificationSystem: ObservableObject {
         // Phase 1: Generate decision superposition
         statusSubject.send("Phase 1: Generating decision superposition...")
         let decisions = await engine.generateDecisionSuperposition(
-            workflow: workflow, context: context)
+            workflow: workflow, context: context
+        )
 
         // Phase 2: Analyze knowledge entanglement
         statusSubject.send("Phase 2: Analyzing knowledge entanglement...")
         let entanglements = await engine.analyzeKnowledgeEntanglement(
-            workflow: workflow, decisions: decisions)
+            workflow: workflow, decisions: decisions
+        )
 
         // Phase 3: Perform adaptive learning
         statusSubject.send("Phase 3: Performing adaptive learning...")
@@ -660,7 +661,8 @@ public final class WorkflowIntelligenceAmplificationSystem: ObservableObject {
 
         for workflow in workflows {
             let result = try await amplifyWorkflowIntelligence(
-                workflow, amplificationLevel: amplificationLevel)
+                workflow, amplificationLevel: amplificationLevel
+            )
             results.append(result)
         }
 
@@ -733,8 +735,8 @@ public final class WorkflowIntelligenceAmplificationSystem: ObservableObject {
             totalExecutions: 1,
             successfulExecutions: 1,
             averageExecutionTime: Date().timeIntervalSince(startTime),
-            errorRate: 0.0,  // No errors in this execution
-            throughput: 1.0 / Date().timeIntervalSince(startTime)  // executions per second
+            errorRate: 0.0, // No errors in this execution
+            throughput: 1.0 / Date().timeIntervalSince(startTime) // executions per second
         )
 
         return WorkflowIntelligenceAmplificationResult(
@@ -763,9 +765,9 @@ public final class WorkflowIntelligenceAmplificationSystem: ObservableObject {
     ) -> Double {
         let decisionQuality =
             decisions.reduce(0.0) { $0 + $1.expectedOutcome * $1.probability }
-            / Double(decisions.count)
+                / Double(decisions.count)
         let baseGain = decisionQuality * 0.5 + learningProgress * 0.5
-        return baseGain * level.intelligenceMultiplier / 5.0  // Normalize to 0-1 range
+        return baseGain * level.intelligenceMultiplier / 5.0 // Normalize to 0-1 range
     }
 
     private func calculateOptimizationScore(
@@ -776,8 +778,8 @@ public final class WorkflowIntelligenceAmplificationSystem: ObservableObject {
             decisions.reduce(0.0) { $0 + $1.confidence } / Double(max(decisions.count, 1))
         let entanglementScore =
             entanglements.reduce(0.0) { $0 + $1.entanglementStrength }
-            / Double(max(entanglements.count, 1))
-        return (decisionScore * 0.7 + entanglementScore * 0.3)
+                / Double(max(entanglements.count, 1))
+        return decisionScore * 0.7 + entanglementScore * 0.3
     }
 
     private func calculatePredictionAccuracy(
@@ -786,7 +788,7 @@ public final class WorkflowIntelligenceAmplificationSystem: ObservableObject {
     ) -> Double {
         let avgConfidence =
             decisions.reduce(0.0) { $0 + $1.confidence } / Double(max(decisions.count, 1))
-        return (avgConfidence * 0.6 + learningResult.learningProgress * 0.4)
+        return avgConfidence * 0.6 + learningResult.learningProgress * 0.4
     }
 
     private func calculateQuantumEnhancement(
@@ -795,8 +797,8 @@ public final class WorkflowIntelligenceAmplificationSystem: ObservableObject {
     ) -> Double {
         let entanglementLevel =
             entanglements.reduce(0.0) { $0 + $1.entanglementStrength }
-            / Double(max(entanglements.count, 1))
-        return (entanglementLevel * 0.5 + coherence * 0.5)
+                / Double(max(entanglements.count, 1))
+        return entanglementLevel * 0.5 + coherence * 0.5
     }
 
     private func updateMetrics(with result: WorkflowIntelligenceAmplificationResult) {

@@ -26,7 +26,7 @@ public final class AdvancedOllamaArchitectures: Sendable {
         public let quantumLayers: Int
         public let consciousnessInterface: Bool
         public let multiverseCapable: Bool
-        public let parameters: [String: String]  // Simplified from AnyCodable
+        public let parameters: [String: String] // Simplified from AnyCodable
 
         public init(
             id: String, name: String, architecture: String, quantumLayers: Int = 0,
@@ -71,13 +71,13 @@ public final class AdvancedOllamaArchitectures: Sendable {
             // Integrate consciousness into the inference process
             let consciousnessContext =
                 try await consciousnessInterface
-                .getConsciousnessContext(for: prompt, level: consciousnessLevel)
+                    .getConsciousnessContext(for: prompt, level: consciousnessLevel)
 
             // Apply quantum processing if model supports it
             let quantumEnhancedPrompt =
                 model.quantumLayers > 0
-                ? try await quantumProcessor.enhancePrompt(prompt, layers: model.quantumLayers)
-                : prompt
+                    ? try await quantumProcessor.enhancePrompt(prompt, layers: model.quantumLayers)
+                    : prompt
 
             // Perform inference with consciousness integration
             let result = try await performInference(
@@ -142,7 +142,7 @@ public final class AdvancedOllamaArchitectures: Sendable {
             // Synthesize results across consciousness levels
             let synthesizedResult =
                 try await consciousnessEngine
-                .synthesizeMultiverseResults(results)
+                    .synthesizeMultiverseResults(results)
 
             return MultiverseInferenceResult(
                 results: results,
@@ -184,12 +184,12 @@ public final class AdvancedOllamaArchitectures: Sendable {
             // Apply quantum superposition to prompt analysis
             let quantumStates =
                 try await quantumComputer
-                .createSuperposition(for: prompt, qubits: layers * 10)
+                    .createSuperposition(for: prompt, qubits: layers * 10)
 
             // Use entanglement for cross-layer communication
             let entangledPrompt =
                 try await entanglementManager
-                .entanglePrompt(prompt, with: quantumStates)
+                    .entanglePrompt(prompt, with: quantumStates)
 
             return entangledPrompt
         }
@@ -201,7 +201,7 @@ public final class AdvancedOllamaArchitectures: Sendable {
         ) async throws -> QuantumInferenceResult {
             let quantumCircuit =
                 try await quantumComputer
-                .buildInferenceCircuit(prompt: prompt, parameters: modelParameters)
+                    .buildInferenceCircuit(prompt: prompt, parameters: modelParameters)
 
             let result = try await quantumComputer.executeCircuit(quantumCircuit)
 
@@ -291,7 +291,7 @@ public final class AdvancedOllamaArchitectures: Sendable {
         if options.enableMultiverse && options.universes.count > 1 {
             let multiverseResult =
                 try await multiverseCoordinator
-                .coordinateMultiverseInference(prompt: prompt, universes: options.universes)
+                    .coordinateMultiverseInference(prompt: prompt, universes: options.universes)
 
             return AdvancedInferenceResult(
                 type: .multiverse,
@@ -304,7 +304,7 @@ public final class AdvancedOllamaArchitectures: Sendable {
         if options.enableQuantum {
             let quantumResult =
                 try await quantumProcessor
-                .quantumInference(prompt: prompt, modelParameters: options.modelParameters)
+                    .quantumInference(prompt: prompt, modelParameters: options.modelParameters)
 
             return AdvancedInferenceResult(
                 type: .quantum,
@@ -317,11 +317,11 @@ public final class AdvancedOllamaArchitectures: Sendable {
         if options.enableConsciousness {
             let consciousnessResult =
                 try await inferenceEngine
-                .performConsciousnessInference(
-                    prompt: prompt,
-                    modelId: modelId,
-                    consciousnessLevel: options.consciousnessLevel
-                )
+                    .performConsciousnessInference(
+                        prompt: prompt,
+                        modelId: modelId,
+                        consciousnessLevel: options.consciousnessLevel
+                    )
 
             return AdvancedInferenceResult(
                 type: .consciousness,
@@ -334,7 +334,7 @@ public final class AdvancedOllamaArchitectures: Sendable {
         // Fallback to standard inference
         let standardResult =
             try await inferenceEngine
-            .performConsciousnessInference(prompt: prompt, modelId: modelId)
+                .performConsciousnessInference(prompt: prompt, modelId: modelId)
 
         return AdvancedInferenceResult(
             type: .standard,
@@ -505,16 +505,15 @@ public struct QuantumMeasurements: Sendable {
 
 /// Quantum computer with functional superposition and circuit execution
 public final class QuantumComputer: Sendable {
-    public func createSuperposition(for prompt: String, qubits: Int) async throws -> [QuantumState]
-    {
+    public func createSuperposition(for prompt: String, qubits: Int) async throws -> [QuantumState] {
         // Create quantum superposition states based on prompt complexity
         let promptComplexity = Double(prompt.count) / 100.0
-        let numStates = max(2, min(1 << min(qubits, 10), Int(promptComplexity * 100)))  // 2^qubits states, max 1024
+        let numStates = max(2, min(1 << min(qubits, 10), Int(promptComplexity * 100))) // 2^qubits states, max 1024
 
         var states = [QuantumState]()
-        for i in 0..<numStates {
-            let amplitude = 1.0 / sqrt(Double(numStates))  // Equal superposition
-            let phase = Double(i) * 2.0 * .pi / Double(numStates)  // Phase based on index
+        for i in 0 ..< numStates {
+            let amplitude = 1.0 / sqrt(Double(numStates)) // Equal superposition
+            let phase = Double(i) * 2.0 * .pi / Double(numStates) // Phase based on index
             states.append(QuantumState(amplitude: amplitude, phase: phase, index: i))
         }
 
@@ -526,12 +525,12 @@ public final class QuantumComputer: Sendable {
     {
         // Build quantum circuit based on prompt and parameters
         let promptLength = prompt.count
-        let numQubits = max(2, min(10, promptLength / 10))  // Scale qubits with prompt length
+        let numQubits = max(2, min(10, promptLength / 10)) // Scale qubits with prompt length
 
         var gates = [QuantumGate]()
 
         // Add Hadamard gates for superposition
-        for i in 0..<numQubits {
+        for i in 0 ..< numQubits {
             gates.append(QuantumGate(type: .hadamard, qubit: i))
         }
 
@@ -549,8 +548,8 @@ public final class QuantumComputer: Sendable {
 
     public func executeCircuit(_ circuit: QuantumCircuit) async throws -> QuantumResult {
         // Simulate quantum circuit execution
-        let executionTime = Double(circuit.gates.count) * 0.001  // Simulate execution time
-        let fidelity = max(0.85, 1.0 - Double(circuit.qubits) * 0.02)  // Higher qubits = lower fidelity
+        let executionTime = Double(circuit.gates.count) * 0.001 // Simulate execution time
+        let fidelity = max(0.85, 1.0 - Double(circuit.qubits) * 0.02) // Higher qubits = lower fidelity
 
         // Generate measurements based on circuit complexity
         let measurements = QuantumMeasurements(
@@ -630,8 +629,7 @@ public struct QuantumState: Sendable {
 
 /// Functional quantum entanglement manager
 public final class QuantumEntanglementManager: Sendable {
-    public func entanglePrompt(_ prompt: String, with states: [QuantumState]) async throws -> String
-    {
+    public func entanglePrompt(_ prompt: String, with states: [QuantumState]) async throws -> String {
         // Create entangled prompt by combining prompt with quantum state information
         var entangledPrompt = prompt
 
@@ -682,7 +680,7 @@ public final class ConsciousnessExpansionEngine: Sendable {
         var synthesizedResponse = "Multiverse Synthesis: "
 
         // Extract common themes and patterns
-        let allResponses = results.map { $0.response }
+        let allResponses = results.map(\.response)
         let commonWords = findCommonPatterns(in: allResponses)
 
         if !commonWords.isEmpty {
@@ -690,7 +688,7 @@ public final class ConsciousnessExpansionEngine: Sendable {
         }
 
         // Add universe-specific contributions
-        let universeContributions = results.enumerated().map { (index, result) in
+        let universeContributions = results.enumerated().map { _, result in
             "Universe \(result.universe.id): \(result.response.prefix(50))..."
         }
 
@@ -812,9 +810,9 @@ public enum OllamaError: Error {
 
 // MARK: - Extensions
 
-extension AdvancedOllamaArchitectures {
+public extension AdvancedOllamaArchitectures {
     /// Convenience method for creating a universal model
-    public func createUniversalModel(id: String, name: String) async throws -> QuantumOllamaModel {
+    func createUniversalModel(id: String, name: String) async throws -> QuantumOllamaModel {
         try await createQuantumModel(
             id: id,
             name: name,
@@ -826,7 +824,7 @@ extension AdvancedOllamaArchitectures {
     }
 
     /// Batch inference across multiple prompts
-    public func performBatchInference(
+    func performBatchInference(
         prompts: [String],
         modelId: String,
         options: AdvancedInferenceOptions = .default

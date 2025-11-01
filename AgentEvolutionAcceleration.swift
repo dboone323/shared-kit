@@ -899,10 +899,8 @@ public enum EvolutionAccelerationEventType: String, Sendable, Codable {
     case evolutionAssessmentCompleted
     case evolutionAccelerationCompleted
     case rapidEnhancementCompleted
-    case evolutionAccelerationCompleted
     case quantumEvolutionCompleted
     case capabilityEnhancementCompleted
-    case evolutionAccelerationCompleted
     case evolutionAccelerationFailed
 }
 
@@ -1595,7 +1593,6 @@ public enum AgentEvolutionAccelerationError: Error {
     case evolutionAssessmentFailed(String)
     case evolutionAccelerationFailed(String)
     case rapidEnhancementFailed(String)
-    case evolutionAccelerationFailed(String)
     case quantumEvolutionFailed(String)
     case capabilityEnhancementFailed(String)
     case validationFailed(String)

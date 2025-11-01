@@ -125,7 +125,7 @@ public struct AssistantOutput: Sendable {
         var isVisual: Bool {
             switch self {
             case .visual: return true
-            case .mixed(let contents): return contents.contains { $0.isVisual }
+            case let .mixed(contents): return contents.contains { $0.isVisual }
             default: return false
             }
         }
@@ -148,16 +148,16 @@ public enum AssistantAction: Sendable, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .executeCode(let code): return "executeCode(\(code.prefix(20))...)"
-        case .openFile(let path): return "openFile(\(path))"
-        case .runCommand(let cmd): return "runCommand(\(cmd))"
-        case .createFile(let path, _): return "createFile(\(path))"
-        case .searchDocumentation(let query): return "searchDocumentation(\(query))"
-        case .generateCode(let desc, let lang):
+        case let .executeCode(code): return "executeCode(\(code.prefix(20))...)"
+        case let .openFile(path): return "openFile(\(path))"
+        case let .runCommand(cmd): return "runCommand(\(cmd))"
+        case let .createFile(path, _): return "createFile(\(path))"
+        case let .searchDocumentation(query): return "searchDocumentation(\(query))"
+        case let .generateCode(desc, lang):
             return "generateCode(\(lang): \(desc.prefix(20))...)"
         case .analyzeCode: return "analyzeCode"
-        case .runTests(let path): return "runTests(\(path))"
-        case .deployApplication(let path): return "deployApplication(\(path))"
+        case let .runTests(path): return "runTests(\(path))"
+        case let .deployApplication(path): return "deployApplication(\(path))"
         case .showVisualization: return "showVisualization"
         case .playAudio: return "playAudio"
         }
@@ -292,7 +292,8 @@ public final class MultiModalAIAssistant: ObservableObject {
     @Published public private(set) var lastActivity: Date?
 
     private let logger = Logger(
-        subsystem: "com.quantum.workspace", category: "MultiModalAIAssistant")
+        subsystem: "com.quantum.workspace", category: "MultiModalAIAssistant"
+    )
     private var cancellables = Set<AnyCancellable>()
 
     // Core AI components
@@ -396,7 +397,8 @@ public final class MultiModalAIAssistant: ObservableObject {
 
             // Update conversation context
             await updateConversationContext(
-                with: input, output: output, processingTime: processingTime)
+                with: input, output: output, processingTime: processingTime
+            )
 
             logger.info(
                 "✅ Processed input in \(String(format: "%.2f", processingTime))s with \(String(format: "%.2f", intent.confidence)) confidence"
@@ -479,7 +481,7 @@ public final class MultiModalAIAssistant: ObservableObject {
         // Calculate actual uptime percentage based on system uptime and session activity
         let processInfo = ProcessInfo.processInfo
         let systemUptime = processInfo.systemUptime
-        let expectedUptime = 86400.0 * 30  // 30 days expected uptime
+        let expectedUptime = 86400.0 * 30 // 30 days expected uptime
         let uptimePercentage = min(99.9, (systemUptime / expectedUptime) * 100.0)
 
         return [
@@ -498,7 +500,8 @@ public final class MultiModalAIAssistant: ObservableObject {
             do {
                 let audioSession = AVAudioSession.sharedInstance()
                 try audioSession.setCategory(
-                    .playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+                    .playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth]
+                )
                 try audioSession.setActive(true)
             } catch {
                 logger.error("Failed to setup audio session: \(error.localizedDescription)")
@@ -518,7 +521,7 @@ public final class MultiModalAIAssistant: ObservableObject {
         switch input.content {
         case .text:
             return input
-        case .audio(let data):
+        case let .audio(data):
             let transcribedText = try await speechProcessor.transcribe(audioData: data)
             return AssistantInput(
                 modality: .voice,
@@ -526,7 +529,7 @@ public final class MultiModalAIAssistant: ObservableObject {
                 metadata: input.metadata,
                 context: input.context
             )
-        case .image(let data):
+        case let .image(data):
             let analysis = try await visionProcessor.analyze(imageData: data)
             return AssistantInput(
                 modality: .vision,
@@ -534,7 +537,7 @@ public final class MultiModalAIAssistant: ObservableObject {
                 metadata: input.metadata.merging(["vision_analysis": "true"]) { _, new in new },
                 context: input.context
             )
-        case .video(let data):
+        case let .video(data):
             // Process video as sequence of images
             let analysis = try await visionProcessor.analyzeVideo(videoData: data)
             return AssistantInput(
@@ -543,7 +546,7 @@ public final class MultiModalAIAssistant: ObservableObject {
                 metadata: input.metadata,
                 context: input.context
             )
-        case .code(let code, let language):
+        case let .code(code, language):
             // Analyze code for context
             let analysis = try await nlpProcessor.analyzeCode(code, language: language)
             return AssistantInput(
@@ -554,7 +557,7 @@ public final class MultiModalAIAssistant: ObservableObject {
             )
         case .gesture:
             return input
-        case .mixed(let contents):
+        case let .mixed(contents):
             // Process mixed input
             var processedContents = [AssistantInput.InputContent]()
             for content in contents {
@@ -610,27 +613,27 @@ public final class MultiModalAIAssistant: ObservableObject {
 
     private func executeAction(_ action: AssistantAction) async throws {
         switch action {
-        case .executeCode(let code):
+        case let .executeCode(code):
             try await runCode(code)
-        case .openFile(let path):
+        case let .openFile(path):
             try await openFile(at: path)
-        case .runCommand(let command):
+        case let .runCommand(command):
             try await runTerminalCommand(command)
-        case .createFile(let path, let content):
+        case let .createFile(path, content):
             try await createFile(at: path, content: content)
-        case .searchDocumentation(let query):
+        case let .searchDocumentation(query):
             _ = try await searchDocumentation(query)
-        case .generateCode(let description, let language):
+        case let .generateCode(description, language):
             _ = try await generateCode(description: description, language: language)
-        case .analyzeCode(let code):
+        case let .analyzeCode(code):
             _ = try await analyzeCode(code)
-        case .runTests(let testPath):
+        case let .runTests(testPath):
             try await runTests(at: testPath)
-        case .deployApplication(let appPath):
+        case let .deployApplication(appPath):
             try await deployApplication(at: appPath)
-        case .showVisualization(let data):
+        case let .showVisualization(data):
             try await showVisualization(data)
-        case .playAudio(let data):
+        case let .playAudio(data):
             try await playAudio(data)
         }
     }
@@ -679,7 +682,7 @@ public final class MultiModalAIAssistant: ObservableObject {
     private func inferCurrentTask(from input: AssistantInput) -> String? {
         // Infer current task from input content
         switch input.content {
-        case .text(let text):
+        case let .text(text):
             if text.contains("debug") || text.contains("fix") {
                 return "debugging"
             } else if text.contains("test") {
@@ -745,102 +748,102 @@ public final class MultiModalAIAssistant: ObservableObject {
         switch language {
         case "swift":
             var code = """
-                /// Generated \(language) code for: \(description)
-                /// Auto-generated by MultiModalAIAssistant
+            /// Generated \(language) code for: \(description)
+            /// Auto-generated by MultiModalAIAssistant
 
-                """
+            """
 
             // Generate basic structure based on description keywords
             if components.contains("function") || components.contains("method") {
                 code += """
-                    func generatedFunction() -> String {
-                        // Implementation based on: \(description)
-                        return "Result: \(description)"
-                    }
+                func generatedFunction() -> String {
+                    // Implementation based on: \(description)
+                    return "Result: \(description)"
+                }
 
-                    """
+                """
             }
 
             if components.contains("class") || components.contains("struct") {
                 code += """
-                    struct GeneratedType {
-                        var property: String
+                struct GeneratedType {
+                    var property: String
 
-                        init(property: String = "default") {
-                            self.property = property
-                        }
-
-                        func describe() -> String {
-                            return "Generated type with property: \\(property)"
-                        }
+                    init(property: String = "default") {
+                        self.property = property
                     }
 
-                    """
+                    func describe() -> String {
+                        return "Generated type with property: \\(property)"
+                    }
+                }
+
+                """
             }
 
             if components.contains("test") || components.contains("spec") {
                 code += """
-                    // Basic test structure
-                    func testGeneratedFunctionality() {
-                        // Test implementation for: \(description)
-                        print("Testing generated functionality")
-                    }
+                // Basic test structure
+                func testGeneratedFunctionality() {
+                    // Test implementation for: \(description)
+                    print("Testing generated functionality")
+                }
 
-                    """
+                """
             }
 
             return code
 
         case "python":
             var code = """
-                # Generated \(language) code for: \(description)
-                # Auto-generated by MultiModalAIAssistant
+            # Generated \(language) code for: \(description)
+            # Auto-generated by MultiModalAIAssistant
 
-                """
+            """
 
             if components.contains("function") || components.contains("method") {
                 code += """
-                    def generated_function():
-                        # Implementation based on: \(description)
-                        return f"Result: \(description)"
+                def generated_function():
+                    # Implementation based on: \(description)
+                    return f"Result: \(description)"
 
-                    """
+                """
             }
 
             if components.contains("class") {
                 code += """
-                    class GeneratedType:
-                        def __init__(self, property="default"):
-                            self.property = property
+                class GeneratedType:
+                    def __init__(self, property="default"):
+                        self.property = property
 
-                        def describe(self):
-                            return f"Generated type with property: {self.property}"
+                    def describe(self):
+                        return f"Generated type with property: {self.property}"
 
-                    """
+                """
             }
 
             if components.contains("test") || components.contains("spec") {
                 code += """
-                    # Basic test structure
-                    def test_generated_functionality():
-                        # Test implementation for: \(description)
-                        print("Testing generated functionality")
+                # Basic test structure
+                def test_generated_functionality():
+                    # Test implementation for: \(description)
+                    print("Testing generated functionality")
 
-                    """
+                """
             }
 
             return code
 
         default:
             return """
-                // Generated code for: \(description)
-                // Language: \(language)
-                // Note: Advanced code generation for \(language) not yet implemented
-                // This is a basic template that can be extended
+            // Generated code for: \(description)
+            // Language: \(language)
+            // Note: Advanced code generation for \(language) not yet implemented
+            // This is a basic template that can be extended
 
-                // TODO: Implement \(language)-specific code generation
-                print("Generated \(language) code for: \(description)")
-                """
+            // TODO: Implement \(language)-specific code generation
+            print("Generated \(language) code for: \(description)")
+            """
         }
     }
 
@@ -960,8 +963,7 @@ public func processAssistantInput(_ input: AssistantInput) async throws -> Assis
 
 /// Global function to start assistant session
 @MainActor
-public func startAssistantSession(userId: String, projectContext: [String: String] = [:]) -> String
-{
+public func startAssistantSession(userId: String, projectContext: [String: String] = [:]) -> String {
     MultiModalAIAssistant.shared.startSession(userId: userId, projectContext: projectContext)
 }
 

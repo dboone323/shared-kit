@@ -896,9 +896,7 @@ public struct CreativitySystemsEvent: Sendable, Codable {
 public enum CreativitySystemsEventType: String, Sendable, Codable {
     case creativitySystemsStarted
     case creativityAssessmentCompleted
-    case creativitySystemsCompleted
     case innovationEnhancementCompleted
-    case creativitySystemsCompleted
     case quantumCreativityCompleted
     case creativeSynthesisCompleted
     case creativitySystemsCompleted
@@ -1592,10 +1590,9 @@ public enum CreativitySystemsRecommendationType: String, Sendable, Codable {
 public enum AgentCreativitySystemsError: Error {
     case initializationFailed(String)
     case creativityAssessmentFailed(String)
-    case creativitySystemsFailed(String)
     case innovationEnhancementFailed(String)
-    case creativitySystemsFailed(String)
     case quantumCreativityFailed(String)
     case creativeSynthesisFailed(String)
+    case creativitySystemsFailed(String)
     case validationFailed(String)
 }

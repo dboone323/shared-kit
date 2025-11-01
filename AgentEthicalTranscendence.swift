@@ -902,7 +902,6 @@ public enum EthicalTranscendenceEventType: String, Sendable, Codable {
     case ethicalNetworkCompleted
     case quantumEthicalCompleted
     case universalEthicalIntelligenceCompleted
-    case ethicalTranscendenceCompleted
     case ethicalTranscendenceFailed
 }
 

@@ -898,10 +898,7 @@ public enum HarmonyNetworksEventType: String, Sendable, Codable {
     case harmonyAssessmentCompleted
     case harmonyNetworksCompleted
     case universalHarmonyCompleted
-    case harmonyNetworksCompleted
     case quantumHarmonyCompleted
-    case universalHarmonyCompleted
-    case harmonyNetworksCompleted
     case harmonyNetworksFailed
 }
 
@@ -1594,8 +1591,6 @@ public enum AgentHarmonyNetworksError: Error {
     case harmonyAssessmentFailed(String)
     case harmonyNetworksFailed(String)
     case universalHarmonyFailed(String)
-    case harmonyNetworksFailed(String)
     case quantumHarmonyFailed(String)
-    case universalHarmonyFailed(String)
     case validationFailed(String)
 }

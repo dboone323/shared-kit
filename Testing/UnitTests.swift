@@ -204,7 +204,8 @@
                         to: toAccount.id,
                         amount: transferAmount
                     )
-                }, expectedError: FinancialError.insufficientFunds)
+                }, expectedError: FinancialError.insufficientFunds
+            )
         }
 
         func testGetAccountsByType() async throws {
@@ -416,8 +417,8 @@
             }
 
             // Then
-            XCTAssertLessThan(metrics.averageTime, 0.1)  // Should complete in less than 100ms
-            XCTAssertGreaterThan(metrics.successRate, 0.95)  // Should succeed 95% of the time
+            XCTAssertLessThan(metrics.averageTime, 0.1) // Should complete in less than 100ms
+            XCTAssertGreaterThan(metrics.successRate, 0.95) // Should succeed 95% of the time
         }
 
         func testDataServicePerformance() async throws {
@@ -432,8 +433,8 @@
             }
 
             // Then
-            XCTAssertLessThan(metrics.averageTime, 0.01)  // Should complete in less than 10ms
-            XCTAssertEqual(metrics.errors.count, 0)  // No errors should occur
+            XCTAssertLessThan(metrics.averageTime, 0.01) // Should complete in less than 10ms
+            XCTAssertEqual(metrics.errors.count, 0) // No errors should occur
         }
 
         func testMemoryUsage() throws {
@@ -442,14 +443,14 @@
 
             // When
             let memoryMetrics = try PerformanceTester.measureMemoryUsage {
-                for i in 0..<1000 {
+                for i in 0 ..< 1000 {
                     habits.append(TestDataBuilder.createTestHabit(name: "Habit \(i)"))
                 }
             }
 
             // Then
-            XCTAssertLessThan(memoryMetrics.memoryDeltaMB, 10.0)  // Should use less than 10MB
-            XCTAssertGreaterThan(memoryMetrics.memoryDeltaMB, 0)  // Should use some memory
+            XCTAssertLessThan(memoryMetrics.memoryDeltaMB, 10.0) // Should use less than 10MB
+            XCTAssertGreaterThan(memoryMetrics.memoryDeltaMB, 0) // Should use some memory
         }
     }
 
@@ -513,7 +514,7 @@
             )
 
             // Then
-            XCTAssertEqual(mockDataService.getCallCount(for: "save"), 4)  // 2 initial + 2 for transfer
+            XCTAssertEqual(mockDataService.getCallCount(for: "save"), 4) // 2 initial + 2 for transfer
             XCTAssertTrue(mockAnalytics.wasMethodCalled("track"))
         }
 
@@ -616,7 +617,7 @@
             // Then
             XCTAssertGreaterThan(result.learningProgress, 0.0)
             XCTAssertLessThanOrEqual(result.learningProgress, 1.0)
-            XCTAssertGreaterThan(result.intelligenceGain, 0.5)  // Genius level should show significant gain
+            XCTAssertGreaterThan(result.intelligenceGain, 0.5) // Genius level should show significant gain
         }
 
         func testMultipleWorkflowAmplification() async throws {
@@ -707,13 +708,17 @@
 
             // Then
             XCTAssertGreaterThan(
-                updatedMetrics.totalAmplifications, initialMetrics.totalAmplifications)
+                updatedMetrics.totalAmplifications, initialMetrics.totalAmplifications
+            )
             XCTAssertGreaterThanOrEqual(
-                updatedMetrics.averageIntelligenceGain, initialMetrics.averageIntelligenceGain)
+                updatedMetrics.averageIntelligenceGain, initialMetrics.averageIntelligenceGain
+            )
             XCTAssertGreaterThanOrEqual(
-                updatedMetrics.averageOptimizationScore, initialMetrics.averageOptimizationScore)
+                updatedMetrics.averageOptimizationScore, initialMetrics.averageOptimizationScore
+            )
             XCTAssertGreaterThanOrEqual(
-                updatedMetrics.averageQuantumEnhancement, initialMetrics.averageQuantumEnhancement)
+                updatedMetrics.averageQuantumEnhancement, initialMetrics.averageQuantumEnhancement
+            )
         }
 
         func testStatusUpdates() async throws {
@@ -772,7 +777,8 @@
             XCTAssertEqual(result.amplifiedWorkflow.id, originalWorkflow.id)
             XCTAssertEqual(result.amplifiedWorkflow.name, originalWorkflow.name)
             XCTAssertGreaterThanOrEqual(
-                result.amplifiedWorkflow.steps.count, originalWorkflow.steps.count)
+                result.amplifiedWorkflow.steps.count, originalWorkflow.steps.count
+            )
             XCTAssertNotNil(result.amplifiedWorkflow.metadata)
         }
 
@@ -792,28 +798,33 @@
             // Then
             XCTAssertGreaterThan(result.executionTime, 0.0)
             XCTAssertLessThan(result.executionTime, endTime.timeIntervalSince(startTime))
-            XCTAssertEqual(result.startTime, result.startTime)  // Should be set
-            XCTAssertEqual(result.endTime, result.endTime)  // Should be set
+            XCTAssertEqual(result.startTime, result.startTime) // Should be set
+            XCTAssertEqual(result.endTime, result.endTime) // Should be set
             XCTAssertGreaterThan(result.endTime.timeIntervalSince(result.startTime), 0.0)
         }
 
         func testConcurrentAmplification() async throws {
             // Given
-            let workflows = (1...5).map {
+            let workflows = (1 ... 5).map {
                 TestDataBuilder.createTestMCPWorkflow(name: "Concurrent\($0)")
             }
 
             // When
             async let result1 = intelligenceSystem.amplifyWorkflowIntelligence(
-                workflows[0], amplificationLevel: .advanced, context: testContext)
+                workflows[0], amplificationLevel: .advanced, context: testContext
+            )
             async let result2 = intelligenceSystem.amplifyWorkflowIntelligence(
-                workflows[1], amplificationLevel: .advanced, context: testContext)
+                workflows[1], amplificationLevel: .advanced, context: testContext
+            )
             async let result3 = intelligenceSystem.amplifyWorkflowIntelligence(
-                workflows[2], amplificationLevel: .advanced, context: testContext)
+                workflows[2], amplificationLevel: .advanced, context: testContext
+            )
             async let result4 = intelligenceSystem.amplifyWorkflowIntelligence(
-                workflows[3], amplificationLevel: .advanced, context: testContext)
+                workflows[3], amplificationLevel: .advanced, context: testContext
+            )
             async let result5 = intelligenceSystem.amplifyWorkflowIntelligence(
-                workflows[4], amplificationLevel: .advanced, context: testContext)
+                workflows[4], amplificationLevel: .advanced, context: testContext
+            )
 
             let results = try await [result1, result2, result3, result4, result5]
 
@@ -841,7 +852,7 @@
             // Insights should be actionable recommendations
             for insight in result.intelligenceInsights {
                 XCTAssertFalse(insight.isEmpty)
-                XCTAssertGreaterThan(insight.count, 10)  // Meaningful insights
+                XCTAssertGreaterThan(insight.count, 10) // Meaningful insights
             }
         }
 
@@ -871,7 +882,8 @@
             // Then
             // High priority should generally show better optimization for time-critical workflows
             XCTAssertGreaterThanOrEqual(
-                highPriorityResult.optimizationScore, lowPriorityResult.optimizationScore - 0.1)
+                highPriorityResult.optimizationScore, lowPriorityResult.optimizationScore - 0.1
+            )
         }
     }
 
@@ -968,7 +980,8 @@
             // Then
             XCTAssertGreaterThan(updatedMetrics.totalEvolutions, initialMetrics.totalEvolutions)
             XCTAssertGreaterThanOrEqual(
-                updatedMetrics.averageEvolutionScore, initialMetrics.averageEvolutionScore)
+                updatedMetrics.averageEvolutionScore, initialMetrics.averageEvolutionScore
+            )
         }
 
         func testEvolutionStatusUpdates() async throws {
@@ -1044,7 +1057,8 @@
 
             try await self.dataService.save(habit, with: habitId.uuidString)
             await self.analyticsService.track(
-                event: "habit_completed", properties: ["habitId": habitId.uuidString])
+                event: "habit_completed", properties: ["habitId": habitId.uuidString]
+            )
 
             return habit
         }
@@ -1060,7 +1074,8 @@
         func deleteHabit(habitId: UUID) async throws {
             try await self.dataService.delete(with: habitId.uuidString)
             await self.analyticsService.track(
-                event: "habit_deleted", properties: ["habitId": habitId.uuidString])
+                event: "habit_deleted", properties: ["habitId": habitId.uuidString]
+            )
         }
 
         func resetStreak(habitId: UUID) async throws -> Habit {
@@ -1081,7 +1096,8 @@
 
             try await self.dataService.save(habit, with: habitId.uuidString)
             await self.analyticsService.track(
-                event: "habit_streak_reset", properties: ["habitId": habitId.uuidString])
+                event: "habit_streak_reset", properties: ["habitId": habitId.uuidString]
+            )
 
             return habit
         }
@@ -1110,7 +1126,8 @@
 
             try await dataService.save(account, with: account.id.uuidString)
             await self.analyticsService.track(
-                event: "account_created", properties: ["type": type.rawValue])
+                event: "account_created", properties: ["type": type.rawValue]
+            )
 
             return account
         }
@@ -1118,7 +1135,8 @@
         func updateBalance(accountId: UUID, newBalance: Double) async throws -> FinancialAccount {
             guard
                 var account = try await dataService.load(
-                    FinancialAccount.self, with: accountId.uuidString)
+                    FinancialAccount.self, with: accountId.uuidString
+                )
             else {
                 throw TestError.mockNotConfigured
             }
@@ -1141,9 +1159,11 @@
         {
             guard
                 let fromAccount = try await dataService.load(
-                    FinancialAccount.self, with: fromAccountId.uuidString),
+                    FinancialAccount.self, with: fromAccountId.uuidString
+                ),
                 let toAccount = try await dataService.load(
-                    FinancialAccount.self, with: toAccountId.uuidString)
+                    FinancialAccount.self, with: toAccountId.uuidString
+                )
             else {
                 throw TestError.mockNotConfigured
             }
@@ -1174,13 +1194,15 @@
             try await self.dataService.save(updatedToAccount, with: toAccountId.uuidString)
 
             await self.analyticsService.track(
-                event: "funds_transferred", properties: ["amount": amount])
+                event: "funds_transferred", properties: ["amount": amount]
+            )
         }
 
         func getAccounts(type: AccountType) async throws -> [FinancialAccount] {
             guard
                 let allAccounts = try await dataService.load(
-                    [FinancialAccount].self, with: "all_accounts")
+                    [FinancialAccount].self, with: "all_accounts"
+                )
             else {
                 return []
             }
@@ -1212,7 +1234,8 @@
 
             try await dataService.save(task, with: task.id.uuidString)
             await self.analyticsService.track(
-                event: "task_created", properties: ["priority": priority.rawValue])
+                event: "task_created", properties: ["priority": priority.rawValue]
+            )
 
             return task
         }
@@ -1234,7 +1257,8 @@
 
             try await self.dataService.save(task, with: taskId.uuidString)
             await self.analyticsService.track(
-                event: "task_completed", properties: ["taskId": taskId.uuidString])
+                event: "task_completed", properties: ["taskId": taskId.uuidString]
+            )
 
             return task
         }
@@ -1268,7 +1292,8 @@
         func deleteTask(taskId: UUID) async throws {
             try await self.dataService.delete(with: taskId.uuidString)
             await self.analyticsService.track(
-                event: "task_deleted", properties: ["taskId": taskId.uuidString])
+                event: "task_deleted", properties: ["taskId": taskId.uuidString]
+            )
         }
     }
 

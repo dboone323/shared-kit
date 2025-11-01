@@ -902,7 +902,6 @@ public enum EternitySystemsEventType: String, Sendable, Codable {
     case eternityPersistenceCompleted
     case quantumEternityCompleted
     case eternalContinuityCompleted
-    case eternitySystemsCompleted
     case eternitySystemsFailed
 }
 

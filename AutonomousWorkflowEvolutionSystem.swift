@@ -21,10 +21,10 @@ public enum EvolutionTrigger: String, Codable, Sendable {
 
 /// Evolution priority level
 public enum EvolutionPriority: String, Codable, Sendable {
-    case low = "low"
-    case medium = "medium"
-    case high = "high"
-    case critical = "critical"
+    case low
+    case medium
+    case high
+    case critical
 }
 
 /// Workflow evolution session
@@ -78,12 +78,12 @@ public struct WorkflowEvolutionRequest: Codable, Sendable {
 
 /// Evolution status
 public enum EvolutionStatus: String, Codable, Sendable {
-    case initializing = "initializing"
-    case analyzing = "analyzing"
-    case optimizing = "optimizing"
-    case validating = "validating"
-    case completed = "completed"
-    case failed = "failed"
+    case initializing
+    case analyzing
+    case optimizing
+    case validating
+    case completed
+    case failed
 }
 
 /// Evolution result
@@ -130,6 +130,7 @@ public struct EvolutionValidation: Codable, Sendable {
 }
 
 // MARK: - Quantum-Inspired Algorithms
+
 // MARK: - Supporting Types
 
 /// Edge in entanglement network
@@ -208,7 +209,7 @@ public struct QuantumAnnealingSchedule: Codable, Sendable {
 /// Entanglement network for workflow dependencies
 public struct EntanglementNetwork: Codable, Sendable {
     public let nodes: [UUID]
-    public let edges: [EntanglementEdge]  // (from, to, strength)
+    public let edges: [EntanglementEdge] // (from, to, strength)
     public let coherenceLevel: Double
 
     public init(
@@ -236,6 +237,7 @@ public final class AutonomousWorkflowEvolutionSystem: ObservableObject {
     // MARK: - Private Properties
 
     private let workflowEngine: WorkflowEvolutionEngine
+
     // MARK: - Initialization
 
     public init(workflowEngine: WorkflowEvolutionEngine = BasicWorkflowEvolutionEngine()) {
@@ -340,13 +342,13 @@ public final class AutonomousWorkflowEvolutionSystem: ObservableObject {
 
         let improvement =
             originalComplexity > 0
-            ? (originalComplexity - evolvedComplexity) / originalComplexity : 0.0
+                ? (originalComplexity - evolvedComplexity) / originalComplexity : 0.0
 
         return EvolutionValidation(
-            success: evolved.steps.count >= original.steps.count,  // At least maintain functionality
+            success: evolved.steps.count >= original.steps.count, // At least maintain functionality
             performanceImprovement: improvement,
-            resourceEfficiency: 0.05,  // Placeholder
-            errorReduction: 0.02  // Placeholder
+            resourceEfficiency: 0.05, // Placeholder
+            errorReduction: 0.02 // Placeholder
         )
     }
 
@@ -396,14 +398,13 @@ public struct WorkflowEvolutionStatus: Sendable {
 /// Basic workflow evolution engine implementation
 public actor BasicWorkflowEvolutionEngine: WorkflowEvolutionEngine {
 
-    public init() {
-    }
+    public init() {}
 
     public func evolveWorkflow(_ workflow: MCPWorkflow, with request: WorkflowEvolutionRequest)
         async throws -> MCPWorkflow
     {
         // Phase 1: Analysis
-        try await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
+        try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
 
         // Phase 2: Apply quantum-inspired optimizations
         var optimizedWorkflow = workflow
@@ -417,10 +418,10 @@ public actor BasicWorkflowEvolutionEngine: WorkflowEvolutionEngine {
         // Apply resource optimization
         optimizedWorkflow = try await applyResourceOptimization(optimizedWorkflow)
 
-        try await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
+        try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
 
         // Phase 3: Validation
-        try await Task.sleep(nanoseconds: 300_000_000)  // 0.3 seconds
+        try await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
 
         return optimizedWorkflow
     }
@@ -434,18 +435,18 @@ public actor BasicWorkflowEvolutionEngine: WorkflowEvolutionEngine {
         var modifiedSteps = workflow.steps
 
         // Identify independent steps that can run in parallel
-        let independentSteps = modifiedSteps.filter { $0.dependencies.isEmpty }
+        let independentSteps = modifiedSteps.filter(\.dependencies.isEmpty)
 
         // Convert sequential independent steps to parallel
-        for i in 0..<independentSteps.count {
-            if let stepIndex = modifiedSteps.firstIndex(where: { $0.id == independentSteps[i].id })
-            {
+        for i in 0 ..< independentSteps.count {
+            if let stepIndex = modifiedSteps.firstIndex(where: { $0.id == independentSteps[i].id }) {
                 modifiedSteps[stepIndex] = MCPWorkflowStep(
                     id: independentSteps[i].id, toolId: independentSteps[i].toolId,
                     parameters: independentSteps[i].parameters,
                     dependencies: independentSteps[i].dependencies, executionMode: .parallel,
                     retryPolicy: independentSteps[i].retryPolicy,
-                    timeout: independentSteps[i].timeout, metadata: independentSteps[i].metadata)
+                    timeout: independentSteps[i].timeout, metadata: independentSteps[i].metadata
+                )
             }
         }
 
@@ -482,10 +483,10 @@ public actor BasicWorkflowEvolutionEngine: WorkflowEvolutionEngine {
 
 // MARK: - Quantum-Inspired Algorithm Implementations
 
-extension AutonomousWorkflowEvolutionSystem {
+public extension AutonomousWorkflowEvolutionSystem {
 
     /// Implement quantum superposition for workflow configuration exploration
-    public func implementQuantumSuperposition(for workflow: MCPWorkflow) async
+    func implementQuantumSuperposition(for workflow: MCPWorkflow) async
         -> QuantumSuperpositionState
     {
         // Generate multiple workflow configuration variants
@@ -531,7 +532,7 @@ extension AutonomousWorkflowEvolutionSystem {
     }
 
     /// Implement quantum annealing for optimization
-    public func implementQuantumAnnealing(
+    func implementQuantumAnnealing(
         initialState: WorkflowConfiguration,
         steps: Int = 100
     ) async -> WorkflowConfiguration {
@@ -539,7 +540,7 @@ extension AutonomousWorkflowEvolutionSystem {
         var bestState = initialState
         var temperature = 1.0
 
-        for step in 0..<steps {
+        for step in 0 ..< steps {
             // Generate neighbor state
             let neighborState = generateNeighborState(currentState)
 
@@ -548,7 +549,7 @@ extension AutonomousWorkflowEvolutionSystem {
             let acceptanceProb = exp(deltaE / temperature)
 
             // Accept or reject
-            if deltaE > 0 || Double.random(in: 0...1) < acceptanceProb {
+            if deltaE > 0 || Double.random(in: 0 ... 1) < acceptanceProb {
                 currentState = neighborState
                 if currentState.performanceScore > bestState.performanceScore {
                     bestState = currentState
@@ -563,17 +564,17 @@ extension AutonomousWorkflowEvolutionSystem {
     }
 
     /// Implement entanglement analysis for workflow dependencies
-    public func implementEntanglementAnalysis(for workflow: MCPWorkflow) async
+    func implementEntanglementAnalysis(for workflow: MCPWorkflow) async
         -> EntanglementNetwork
     {
-        let nodes = workflow.steps.map { $0.id }
+        let nodes = workflow.steps.map(\.id)
 
         var edges: [EntanglementEdge] = []
 
         // Analyze dependencies as entanglement connections
         for step in workflow.steps {
             for dependencyId in step.dependencies {
-                let strength = 0.8  // Could be calculated based on execution patterns
+                let strength = 0.8 // Could be calculated based on execution patterns
                 edges.append(EntanglementEdge(from: step.id, to: dependencyId, strength: strength))
             }
         }
@@ -601,7 +602,7 @@ extension AutonomousWorkflowEvolutionSystem {
             switch randomKey {
             case "parallelism":
                 if let currentValue = newParameters[randomKey]?.value as? Int {
-                    let newValue = max(1, currentValue + Int.random(in: -1...1))
+                    let newValue = max(1, currentValue + Int.random(in: -1 ... 1))
                     newParameters[randomKey] = AnyCodable(newValue)
                     newScore += Double(newValue - currentValue) * 0.1
                     newResources["cpu"] = min(
@@ -629,9 +630,9 @@ extension AutonomousWorkflowEvolutionSystem {
 
 // MARK: - Extensions
 
-extension MCPWorkflow {
+public extension MCPWorkflow {
     /// Apply quantum-inspired optimizations to workflow metadata
-    public mutating func applyQuantumOptimizations() {
+    mutating func applyQuantumOptimizations() {
         var metadata = self.metadata ?? [:]
 
         metadata["quantum_optimized"] = AnyCodable(true)
@@ -646,7 +647,7 @@ extension MCPWorkflow {
     }
 
     /// Get optimization recommendations
-    public func getOptimizationRecommendations() -> [String] {
+    func getOptimizationRecommendations() -> [String] {
         var recommendations: [String] = []
 
         let parallelSteps = steps.filter { $0.executionMode == .parallel }.count

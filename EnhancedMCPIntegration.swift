@@ -620,7 +620,7 @@ public actor EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
         }
 
         // Update execution time (moving average)
-        let alpha = 0.1  // Smoothing factor
+        let alpha = 0.1 // Smoothing factor
         metrics.averageExecutionTime =
             (1 - alpha) * metrics.averageExecutionTime + alpha * result.executionTime
 
@@ -641,7 +641,7 @@ public actor EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
 
     private func calculatePerformanceScore(_ metrics: MCPToolMetrics) -> Double {
         // Simple performance score calculation
-        let timeScore = max(0, 1 - metrics.averageExecutionTime / 10.0)  // Better if faster than 10s
+        let timeScore = max(0, 1 - metrics.averageExecutionTime / 10.0) // Better if faster than 10s
         let reliabilityScore = metrics.successRate
         let efficiencyScore = 1 - metrics.errorRate
 
@@ -668,7 +668,7 @@ public actor BasicMCPSecurityManager: MCPSecurityManager {
                 authenticated: true,
                 principal: principal,
                 token: UUID().uuidString,
-                expiresAt: Date().addingTimeInterval(3600)  // 1 hour
+                expiresAt: Date().addingTimeInterval(3600) // 1 hour
             )
         }
 
@@ -878,7 +878,7 @@ public final class BasicMCPWorkflowManager: MCPWorkflowManager {
                         }
                     }
 
-                    try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 second
+                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 second
                 }
             }
         }
@@ -934,23 +934,23 @@ public enum MCPError: Error {
 
 // MARK: - Extensions
 
-extension MCPToolResult {
-    public var isSuccessful: Bool { success }
-    public var hasError: Bool { error != nil }
+public extension MCPToolResult {
+    var isSuccessful: Bool { success }
+    var hasError: Bool { error != nil }
 }
 
-extension MCPWorkflow {
-    public var stepCount: Int { steps.count }
-    public var hasDependencies: Bool { steps.contains { !$0.dependencies.isEmpty } }
+public extension MCPWorkflow {
+    var stepCount: Int { steps.count }
+    var hasDependencies: Bool { steps.contains { !$0.dependencies.isEmpty } }
 }
 
-extension MCPPrincipal {
-    public static let system = MCPPrincipal(id: "system", type: .system, permissions: ["*"])
-    public static func agent(_ id: String) -> MCPPrincipal {
+public extension MCPPrincipal {
+    static let system = MCPPrincipal(id: "system", type: .system, permissions: ["*"])
+    static func agent(_ id: String) -> MCPPrincipal {
         MCPPrincipal(id: id, type: .agent, permissions: ["tool:*"])
     }
 
-    public static func user(_ id: String) -> MCPPrincipal {
+    static func user(_ id: String) -> MCPPrincipal {
         MCPPrincipal(id: id, type: .user, permissions: ["tool:read"])
     }
 }

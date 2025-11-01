@@ -529,8 +529,8 @@ public final class ImmortalityFramework: Sendable {
             }
 
             var protocols: [ImmortalityProtocol] = []
-            for await protocol in group {
-                protocols.append(protocol)
+            for await immortalityProtocol in group {
+                protocols.append(immortalityProtocol)
             }
             return protocols
         }

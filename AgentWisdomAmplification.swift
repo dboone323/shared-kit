@@ -898,10 +898,8 @@ public enum WisdomAmplificationEventType: String, Sendable, Codable {
     case wisdomAssessmentCompleted
     case wisdomAmplificationCompleted
     case insightEnhancementCompleted
-    case wisdomAmplificationCompleted
     case quantumWisdomCompleted
     case understandingSynthesisCompleted
-    case wisdomAmplificationCompleted
     case wisdomAmplificationFailed
 }
 
@@ -1594,7 +1592,6 @@ public enum AgentWisdomAmplificationError: Error {
     case wisdomAssessmentFailed(String)
     case wisdomAmplificationFailed(String)
     case insightEnhancementFailed(String)
-    case wisdomAmplificationFailed(String)
     case quantumWisdomFailed(String)
     case understandingSynthesisFailed(String)
     case validationFailed(String)

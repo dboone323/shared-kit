@@ -898,10 +898,8 @@ public enum EmpathyNetworksEventType: String, Sendable, Codable {
     case empathyAssessmentCompleted
     case empathyNetworksCompleted
     case understandingEnhancementCompleted
-    case empathyNetworksCompleted
     case quantumEmpathyCompleted
     case empatheticSynthesisCompleted
-    case empathyNetworksCompleted
     case empathyNetworksFailed
 }
 
@@ -1594,7 +1592,6 @@ public enum AgentEmpathyNetworksError: Error {
     case empathyAssessmentFailed(String)
     case empathyNetworksFailed(String)
     case understandingEnhancementFailed(String)
-    case empathyNetworksFailed(String)
     case quantumEmpathyFailed(String)
     case empatheticSynthesisFailed(String)
     case validationFailed(String)

@@ -897,10 +897,8 @@ public enum UniversalCoordinationEventType: String, Sendable, Codable {
     case universalCoordinationAssessmentCompleted
     case universalCoordinationCompleted
     case unifiedOperationCompleted
-    case universalCoordinationCompleted
     case quantumCoordinationCompleted
     case unifiedSynthesisCompleted
-    case universalCoordinationCompleted
     case universalCoordinationFailed
 }
 
@@ -1593,7 +1591,6 @@ public enum AgentUniversalCoordinationError: Error {
     case universalCoordinationAssessmentFailed(String)
     case universalCoordinationFailed(String)
     case unifiedOperationFailed(String)
-    case universalCoordinationFailed(String)
     case quantumCoordinationFailed(String)
     case unifiedSynthesisFailed(String)
     case validationFailed(String)

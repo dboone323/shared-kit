@@ -234,7 +234,7 @@ public final class AutonomousOperationSystem: Sendable {
 
         // Coordinate recovery across all systems
         let coordinationRequest = UniversalCoordinationRequest(
-            agents: [],  // Will be populated by the coordination system
+            agents: [], // Will be populated by the coordination system
             coordinationType: .recovery,
             coordinationParameters: UniversalCoordinationParameters(
                 coordinationLevel: .maximum,
@@ -248,7 +248,8 @@ public final class AutonomousOperationSystem: Sendable {
 
         // Execute recovery based on coordination result
         try await executeRecovery(
-            failure, coordinationResult: coordinationResult, prediction: recoveryPrediction)
+            failure, coordinationResult: coordinationResult, prediction: recoveryPrediction
+        )
     }
 
     // MARK: - Private Methods
@@ -274,11 +275,13 @@ public final class AutonomousOperationSystem: Sendable {
 
         // Phase 2: Universal coordination for unified operation
         let coordinationResult = try await executeCoordinationPhase(
-            session, consciousnessResult: consciousnessResult)
+            session, consciousnessResult: consciousnessResult
+        )
 
         // Phase 3: Self-healing and predictive optimization
         let healingResult = try await executeHealingPhase(
-            session, coordinationResult: coordinationResult)
+            session, coordinationResult: coordinationResult
+        )
 
         // Phase 4: MCP orchestration for multi-agent operation
         let mcpResult = try await executeMCPPhase(session, healingResult: healingResult)
@@ -313,7 +316,7 @@ public final class AutonomousOperationSystem: Sendable {
         _ session: AutonomousOperationSession, consciousnessResult: ConsciousnessExpansionResult
     ) async throws -> UniversalCoordinationResult {
         let request = UniversalCoordinationRequest(
-            agents: [],  // Coordination system will determine appropriate agents
+            agents: [], // Coordination system will determine appropriate agents
             coordinationType: .unified,
             coordinationParameters: UniversalCoordinationParameters(
                 coordinationLevel: .maximum,
@@ -521,7 +524,7 @@ public final class AutonomousOperationSystem: Sendable {
                 (self.autonomousOperationMetrics.averageExecutionTime + result.executionTime) / 2
             self.autonomousOperationMetrics.averageAutonomousLevel =
                 (self.autonomousOperationMetrics.averageAutonomousLevel + result.autonomousLevel)
-                / 2
+                    / 2
             self.autonomousOperationMetrics.lastOperationTime = result.completedAt
         }
     }
@@ -548,13 +551,13 @@ public final class AutonomousOperationSystem: Sendable {
 
         return
             (consciousnessSuccess + coordinationSuccess + healingSuccess + mcpSuccess
-            + universalSuccess) / 5.0
+                + universalSuccess) / 5.0
     }
 
     private func calculatePerformanceMetrics(
         _ session: AutonomousOperationSession, cicdResult: QuantumCICDResult
     ) -> AutonomousPerformanceMetrics {
-        return AutonomousPerformanceMetrics(
+        AutonomousPerformanceMetrics(
             executionTime: Date().timeIntervalSince(session.startTime),
             resourceUtilization: cicdResult.resourceUtilization,
             optimizationGains: cicdResult.optimizationGains,
@@ -749,9 +752,9 @@ public enum ImplementationComplexity: String, Sendable, Codable {
 
 // MARK: - Integration Extensions
 
-extension AutonomousOperationSystem {
+public extension AutonomousOperationSystem {
     /// Create autonomous development operation
-    public static func createDevelopmentOperation(
+    static func createDevelopmentOperation(
         capabilities: [ConsciousnessCapability] = [.codeGeneration, .testing, .optimization],
         platforms: [Platform] = [.macOS, .iOS, .web],
         targets: [OptimizationTarget] = [.performance, .quality, .autonomy]
@@ -765,7 +768,7 @@ extension AutonomousOperationSystem {
     }
 
     /// Create autonomous deployment operation
-    public static func createDeploymentOperation(
+    static func createDeploymentOperation(
         platforms: [Platform] = [.macOS, .iOS, .web],
         targets: [OptimizationTarget] = [.reliability, .performance, .security]
     ) -> AutonomousOperationRequest {
@@ -778,7 +781,7 @@ extension AutonomousOperationSystem {
     }
 
     /// Create autonomous monitoring operation
-    public static func createMonitoringOperation() -> AutonomousOperationRequest {
+    static func createMonitoringOperation() -> AutonomousOperationRequest {
         AutonomousOperationRequest(
             operationType: .monitoring,
             requiredCapabilities: [.monitoring, .analysis, .prediction],
@@ -788,7 +791,7 @@ extension AutonomousOperationSystem {
     }
 
     /// Execute batch autonomous operations
-    public func executeBatchAutonomousOperations(
+    func executeBatchAutonomousOperations(
         _ requests: [AutonomousOperationRequest]
     ) async throws -> BatchAutonomousOperationResult {
 

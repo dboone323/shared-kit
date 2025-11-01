@@ -38,7 +38,7 @@ public struct CodeGenerationRequest {
     public let constraints: [String]
     public let quantumAlgorithm: QuantumAlgorithm
     public let strategy: GenerationStrategy
-    public let complexity: Int  // 1-10 scale
+    public let complexity: Int // 1-10 scale
     public let deadline: Date?
 
     public init(
@@ -100,7 +100,7 @@ public struct GeneratedCode: Encodable {
 
     private enum CodingKeys: String, CodingKey {
         case id, requestId, language, code, tests, documentation, metadata, quality, generationTime,
-            timestamp
+             timestamp
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -124,12 +124,12 @@ public struct GeneratedCode: Encodable {
 
 /// Code quality assessment
 public struct CodeQuality: Encodable {
-    public let readability: Double  // 0-1
-    public let maintainability: Double  // 0-1
-    public let performance: Double  // 0-1
-    public let security: Double  // 0-1
-    public let testability: Double  // 0-1
-    public let overall: Double  // 0-1
+    public let readability: Double // 0-1
+    public let maintainability: Double // 0-1
+    public let performance: Double // 0-1
+    public let security: Double // 0-1
+    public let testability: Double // 0-1
+    public let overall: Double // 0-1
 
     public init(
         readability: Double = 0.8,
@@ -369,13 +369,13 @@ public final class QuantumCodeGenerator: ObservableObject {
         while isActive && !Task.isCancelled {
             // Maintain quantum coherence
             await maintainQuantumCoherence()
-            try? await Task.sleep(nanoseconds: 5_000_000_000)  // 5 seconds
+            try? await Task.sleep(nanoseconds: 5_000_000_000) // 5 seconds
         }
     }
 
     private func maintainQuantumCoherence() async {
         // Quantum-inspired coherence maintenance
-        if Double.random(in: 0...1) < 0.1 {  // 10% chance
+        if Double.random(in: 0 ... 1) < 0.1 { // 10% chance
             quantumState = .superposition
         }
     }
@@ -399,14 +399,13 @@ public final class QuantumCodeGenerator: ObservableObject {
         }
     }
 
-    private func generateWithSuperposition(_ request: CodeGenerationRequest) async throws -> String
-    {
+    private func generateWithSuperposition(_ request: CodeGenerationRequest) async throws -> String {
         logger.info("🔄 Generating code using superposition algorithm")
 
         // Create multiple code variations in superposition
         var superpositions = [String]()
 
-        for _ in 0..<superpositionStates {
+        for _ in 0 ..< superpositionStates {
             let variation = try await generateCodeVariation(request)
             superpositions.append(variation)
         }
@@ -431,7 +430,7 @@ public final class QuantumCodeGenerator: ObservableObject {
         var currentCode = try await generateInitialCode(request)
         var currentEnergy = assessCodeEnergy(currentCode, request: request)
 
-        for step in 0..<quantumAnnealingSteps {
+        for step in 0 ..< quantumAnnealingSteps {
             let temperature = Double(quantumAnnealingSteps - step) / Double(quantumAnnealingSteps)
 
             // Generate neighbor solution
@@ -440,7 +439,7 @@ public final class QuantumCodeGenerator: ObservableObject {
 
             // Accept better solution or probabilistically accept worse solution
             if neighborEnergy < currentEnergy
-                || Double.random(in: 0...1) < exp(-(neighborEnergy - currentEnergy) / temperature)
+                || Double.random(in: 0 ... 1) < exp(-(neighborEnergy - currentEnergy) / temperature)
             {
                 currentCode = neighborCode
                 currentEnergy = neighborEnergy
@@ -458,7 +457,7 @@ public final class QuantumCodeGenerator: ObservableObject {
         var bestCode = currentPosition
         var bestQuality = assessCodeQuality(bestCode, language: request.language).overall
 
-        for _ in 0..<50 {  // Walk steps
+        for _ in 0 ..< 50 { // Walk steps
             let candidates = try await generateWalkCandidates(
                 from: currentPosition, request: request
             )
@@ -502,8 +501,7 @@ public final class QuantumCodeGenerator: ObservableObject {
         }
     }
 
-    private func generateTemplateBasedCode(_ request: CodeGenerationRequest) async throws -> String
-    {
+    private func generateTemplateBasedCode(_ request: CodeGenerationRequest) async throws -> String {
         guard let templates = codeTemplates[request.language] else {
             throw QuantumCodeError.unsupportedLanguage(request.language)
         }
@@ -524,11 +522,12 @@ public final class QuantumCodeGenerator: ObservableObject {
                     .replacingOccurrences(
                         of: "{{body}}",
                         with: """
-                            // Implementation of \(requirement)
-                            // This is a basic implementation - customize as needed
-                            print("Executing \(requirement)")
-                            return
-                            """)
+                        // Implementation of \(requirement)
+                        // This is a basic implementation - customize as needed
+                        print("Executing \(requirement)")
+                        return
+                        """
+                    )
                 code += "\n\n"
             }
         }
@@ -536,20 +535,19 @@ public final class QuantumCodeGenerator: ObservableObject {
         return code
     }
 
-    private func generateAISynthesizedCode(_ request: CodeGenerationRequest) async throws -> String
-    {
+    private func generateAISynthesizedCode(_ request: CodeGenerationRequest) async throws -> String {
         // AI-powered code synthesis (placeholder for actual AI integration)
         var code = "// AI Synthesized Code for \(request.language)\n\n"
 
         for requirement in request.requirements {
             code += """
-                // \(requirement)
-                func \(requirement.replacingOccurrences(of: " ", with: ""))() {
-                    // AI-generated implementation
-                    print("Implementing \(requirement)")
-                }
+            // \(requirement)
+            func \(requirement.replacingOccurrences(of: " ", with: ""))() {
+                // AI-generated implementation
+                print("Implementing \(requirement)")
+            }
 
-                """
+            """
         }
 
         return code
@@ -578,14 +576,14 @@ public final class QuantumCodeGenerator: ObservableObject {
 
         // Hybrid combination
         return """
-            // Hybrid Generated Code
-            // Template-based foundation with AI enhancements
+        // Hybrid Generated Code
+        // Template-based foundation with AI enhancements
 
-            \(templateCode)
+        \(templateCode)
 
-            // AI Enhancements
-            \(aiCode)
-            """
+        // AI Enhancements
+        \(aiCode)
+        """
     }
 
     private func collapseSuperposition(
@@ -614,11 +612,11 @@ public final class QuantumCodeGenerator: ObservableObject {
 
         for requirement in request.requirements {
             let component = """
-                // Entangled component: \(requirement)
-                func entangled\(requirement.replacingOccurrences(of: " ", with: ""))() {
-                    // This function is entangled with other components
-                }
-                """
+            // Entangled component: \(requirement)
+            func entangled\(requirement.replacingOccurrences(of: " ", with: ""))() {
+                // This function is entangled with other components
+            }
+            """
             components.append(component)
         }
 
@@ -653,7 +651,7 @@ public final class QuantumCodeGenerator: ObservableObject {
     private func assessCodeEnergy(_ code: String, request: CodeGenerationRequest) -> Double {
         // Assess the "energy" of the code (lower is better)
         let quality = assessCodeQuality(code, language: request.language)
-        return 1.0 - quality.overall  // Invert quality to get energy
+        return 1.0 - quality.overall // Invert quality to get energy
     }
 
     private func generateWalkCandidates(from currentCode: String, request: CodeGenerationRequest)
@@ -662,7 +660,7 @@ public final class QuantumCodeGenerator: ObservableObject {
         // Generate candidate solutions for quantum walk
         var candidates = [String]()
 
-        for _ in 0..<5 {
+        for _ in 0 ..< 5 {
             let candidate = try await generateNeighborCode(currentCode, request: request)
             candidates.append(candidate)
         }
@@ -688,12 +686,12 @@ public final class QuantumCodeGenerator: ObservableObject {
 
         for requirement in requirements {
             let function = """
-                /// Quantum-entangled function for \(requirement)
-                func quantumEntangled\(requirement.replacingOccurrences(of: " ", with: ""))() {
-                    // This function exhibits quantum entanglement with related functions
-                    print("Quantum entangled implementation of \(requirement)")
-                }
-                """
+            /// Quantum-entangled function for \(requirement)
+            func quantumEntangled\(requirement.replacingOccurrences(of: " ", with: ""))() {
+                // This function exhibits quantum entanglement with related functions
+                print("Quantum entangled implementation of \(requirement)")
+            }
+            """
             functions.append(function)
         }
 
@@ -711,8 +709,7 @@ public final class QuantumCodeGenerator: ObservableObject {
                 let trimmed = line.trimmingCharacters(in: .whitespaces)
                 if trimmed.hasPrefix("func ") {
                     let components = trimmed.components(separatedBy: "(")
-                    if let funcName = components.first?.replacingOccurrences(of: "func ", with: "")
-                    {
+                    if let funcName = components.first?.replacingOccurrences(of: "func ", with: "") {
                         functions.append(funcName.trimmingCharacters(in: .whitespaces))
                     }
                 }
@@ -742,69 +739,69 @@ public final class QuantumCodeGenerator: ObservableObject {
         switch language {
         case "swift":
             var testCode = """
-                // Generated Unit Tests
-                import XCTest
+            // Generated Unit Tests
+            import XCTest
 
-                class GeneratedCodeTests: XCTestCase {
-                """
+            class GeneratedCodeTests: XCTestCase {
+            """
 
             if functions.isEmpty {
                 testCode += """
 
-                    func testGeneratedCode() {
-                        // Basic functionality test when no specific functions found
-                        XCTAssertTrue(true, "Code generation completed successfully")
-                    }
-                    """
+                func testGeneratedCode() {
+                    // Basic functionality test when no specific functions found
+                    XCTAssertTrue(true, "Code generation completed successfully")
+                }
+                """
             } else {
                 for function in functions {
                     let testName = "test\(function.capitalized)Functionality"
                     testCode += """
 
-                        func \(testName)() {
-                            // Test \(function) functionality
-                            // This is a basic test - in production, add more comprehensive test cases
-                            XCTAssertNotNil(\(function), "Function \(function) should be implemented")
-                        }
-                        """
+                    func \(testName)() {
+                        // Test \(function) functionality
+                        // This is a basic test - in production, add more comprehensive test cases
+                        XCTAssertNotNil(\(function), "Function \(function) should be implemented")
+                    }
+                    """
                 }
             }
 
             testCode += """
-                }
-                """
+            }
+            """
             return testCode
 
         case "python":
             var testCode = """
-                # Generated Unit Tests
-                import unittest
+            # Generated Unit Tests
+            import unittest
 
-                class GeneratedCodeTests(unittest.TestCase):
-                """
+            class GeneratedCodeTests(unittest.TestCase):
+            """
 
             if functions.isEmpty {
                 testCode += """
 
-                    def test_generated_code(self):
-                        # Basic functionality test when no specific functions found
-                        self.assertTrue(True, "Code generation completed successfully")
-                    """
+                def test_generated_code(self):
+                    # Basic functionality test when no specific functions found
+                    self.assertTrue(True, "Code generation completed successfully")
+                """
             } else {
                 for function in functions {
                     let testName = "test_\(function)_functionality"
                     testCode += """
 
-                        def \(testName)(self):
-                            # Test \(function) functionality
-                            # This is a basic test - in production, add more comprehensive test cases
-                            self.assertIsNotNone(\(function), "Function \(function) should be implemented")
-                        """
+                    def \(testName)(self):
+                        # Test \(function) functionality
+                        # This is a basic test - in production, add more comprehensive test cases
+                        self.assertIsNotNone(\(function), "Function \(function) should be implemented")
+                    """
                 }
             }
 
             testCode += """
-                """
+            """
             return testCode
 
         default:
@@ -838,7 +835,7 @@ public final class QuantumCodeGenerator: ObservableObject {
         let readability = min(1.0, Double(50) / Double(max(lineCount, 1)))
 
         // Calculate maintainability based on code structure and complexity
-        let complexityScore = Double(lineCount) / 100.0  // Lower is better
+        let complexityScore = Double(lineCount) / 100.0 // Lower is better
         let maintainability = max(0.1, 1.0 - complexityScore)
 
         // Calculate performance based on algorithmic efficiency indicators
@@ -852,7 +849,7 @@ public final class QuantumCodeGenerator: ObservableObject {
             code.contains("guard") || code.contains("if") || code.contains("validate")
         let hasErrorHandling =
             code.contains("try") || code.contains("catch") || code.contains("throw")
-        let securityScore = (hasInputValidation ? 0.4 : 0.0) + (hasErrorHandling ? 0.4 : 0.0) + 0.2  // Base security
+        let securityScore = (hasInputValidation ? 0.4 : 0.0) + (hasErrorHandling ? 0.4 : 0.0) + 0.2 // Base security
         let security = min(1.0, securityScore)
 
         // Calculate testability based on function structure
@@ -888,21 +885,21 @@ public enum QuantumCodeError: Error {
 
 // MARK: - Extensions
 
-extension QuantumCodeGenerator {
+public extension QuantumCodeGenerator {
     /// Get supported languages
-    public func getSupportedLanguages() -> [String] {
+    func getSupportedLanguages() -> [String] {
         Array(codeTemplates.keys)
     }
 
     /// Get supported frameworks for a language
-    public func getSupportedFrameworks(for language: String) -> [String] {
-        ["standard", "advanced", "quantum"]  // Placeholder
+    func getSupportedFrameworks(for language: String) -> [String] {
+        ["standard", "advanced", "quantum"] // Placeholder
     }
 
     /// Analyze code complexity
-    public func analyzeComplexity(_ code: String, language: String) -> Int {
+    func analyzeComplexity(_ code: String, language: String) -> Int {
         let lines = code.components(separatedBy: .newlines)
-        return lines.count / 10  // Rough complexity metric
+        return lines.count / 10 // Rough complexity metric
     }
 }
 

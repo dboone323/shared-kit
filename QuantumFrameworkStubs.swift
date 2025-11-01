@@ -12,7 +12,7 @@ public struct WorkflowPerformanceMetrics: Sendable {
     public let successfulExecutions: Int
     public let averageExecutionTime: TimeInterval
     public let errorRate: Double
-    public let throughput: Double  // executions per second
+    public let throughput: Double // executions per second
 
     public init(
         totalExecutions: Int = 0,

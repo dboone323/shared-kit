@@ -903,7 +903,6 @@ public enum RealityEngineeringEventType: String, Sendable, Codable {
     case realityTransformationCompleted
     case quantumRealityCompleted
     case realityIntelligenceCompleted
-    case realityEngineeringCompleted
     case realityEngineeringFailed
 }
 

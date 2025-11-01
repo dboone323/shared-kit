@@ -203,9 +203,9 @@ public final class IntelligentResourceManager: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     // Configuration
-    private let monitoringInterval: TimeInterval = 30.0  // seconds
-    private let optimizationInterval: TimeInterval = 300.0  // 5 minutes
-    private let scalingCooldown: TimeInterval = 180.0  // 3 minutes
+    private let monitoringInterval: TimeInterval = 30.0 // seconds
+    private let optimizationInterval: TimeInterval = 300.0 // 5 minutes
+    private let scalingCooldown: TimeInterval = 180.0 // 3 minutes
 
     // Resource policies
     private var resourcePolicies: [ResourceType: ResourcePolicy] = [:]
@@ -217,7 +217,7 @@ public final class IntelligentResourceManager: ObservableObject {
 
     // AI-driven optimization parameters
     private let learningRate: Double = 0.1
-    private let predictionHorizon: TimeInterval = 3600.0  // 1 hour
+    private let predictionHorizon: TimeInterval = 3600.0 // 1 hour
     private let costOptimizationWeight: Double = 0.3
     private let performanceOptimizationWeight: Double = 0.7
 
@@ -442,7 +442,7 @@ public final class IntelligentResourceManager: ObservableObject {
     private func startScalingLoop() async {
         while isActive && !Task.isCancelled {
             await evaluateScalingDecisions()
-            try? await Task.sleep(nanoseconds: UInt64(60 * 1_000_000_000))  // 1 minute
+            try? await Task.sleep(nanoseconds: UInt64(60 * 1_000_000_000)) // 1 minute
         }
     }
 
@@ -499,9 +499,9 @@ public final class IntelligentResourceManager: ObservableObject {
 
         // Estimate CPU usage based on system uptime and random variation
         // In a real implementation, you'd use more sophisticated CPU monitoring
-        let baseUsage = 0.2  // Base CPU usage
-        let uptimeFactor = min(0.4, processInfo.systemUptime / 3600.0)  // Factor based on uptime (max 40% over 1 hour)
-        let randomFactor = Double.random(in: -0.1...0.1)  // Small random variation
+        let baseUsage = 0.2 // Base CPU usage
+        let uptimeFactor = min(0.4, processInfo.systemUptime / 3600.0) // Factor based on uptime (max 40% over 1 hour)
+        let randomFactor = Double.random(in: -0.1 ... 0.1) // Small random variation
         let systemUsage = min(1.0, max(0.0, baseUsage + uptimeFactor + randomFactor))
 
         let usedCores = systemUsage * availableCores
@@ -511,7 +511,7 @@ public final class IntelligentResourceManager: ObservableObject {
             currentUsage: usedCores,
             allocatedCapacity: availableCores,
             availableCapacity: availableCores - usedCores,
-            costPerUnit: 0.05,  // Cost per CPU core per hour
+            costPerUnit: 0.05, // Cost per CPU core per hour
             performanceScore: 1.0 - systemUsage
         )
     }
@@ -519,13 +519,13 @@ public final class IntelligentResourceManager: ObservableObject {
     private func monitorMemory() async -> ResourceMetrics {
         // Get actual memory usage using ProcessInfo
         let processInfo = ProcessInfo.processInfo
-        let totalMemory = Double(processInfo.physicalMemory) / 1024.0 / 1024.0 / 1024.0  // GB
+        let totalMemory = Double(processInfo.physicalMemory) / 1024.0 / 1024.0 / 1024.0 // GB
 
         // Estimate used memory based on system uptime and process count
         // In a real implementation, you'd use more sophisticated memory monitoring
-        let baseUsage = 0.3  // Base memory usage
-        let uptimeFactor = min(0.3, processInfo.systemUptime / 86400.0)  // Factor based on uptime (max 30% over 24 hours)
-        let randomFactor = Double.random(in: -0.1...0.1)  // Small random variation
+        let baseUsage = 0.3 // Base memory usage
+        let uptimeFactor = min(0.3, processInfo.systemUptime / 86400.0) // Factor based on uptime (max 30% over 24 hours)
+        let randomFactor = Double.random(in: -0.1 ... 0.1) // Small random variation
         let usedMemory = totalMemory * (baseUsage + uptimeFactor + randomFactor)
 
         let clampedUsedMemory = max(0, min(totalMemory, usedMemory))
@@ -535,7 +535,7 @@ public final class IntelligentResourceManager: ObservableObject {
             currentUsage: clampedUsedMemory,
             allocatedCapacity: totalMemory,
             availableCapacity: totalMemory - clampedUsedMemory,
-            costPerUnit: 0.01,  // Cost per GB per hour
+            costPerUnit: 0.01, // Cost per GB per hour
             performanceScore: 1.0 - (clampedUsedMemory / totalMemory)
         )
     }
@@ -548,7 +548,7 @@ public final class IntelligentResourceManager: ObservableObject {
             let attributes = try fileManager.attributesOfFileSystem(forPath: homeURL.path)
 
             if let totalSpace = attributes[.systemSize] as? NSNumber,
-                let freeSpace = attributes[.systemFreeSize] as? NSNumber
+               let freeSpace = attributes[.systemFreeSize] as? NSNumber
             {
                 let totalGB = totalSpace.doubleValue / 1024.0 / 1024.0 / 1024.0
                 let freeGB = freeSpace.doubleValue / 1024.0 / 1024.0 / 1024.0
@@ -559,7 +559,7 @@ public final class IntelligentResourceManager: ObservableObject {
                     currentUsage: usedGB,
                     allocatedCapacity: totalGB,
                     availableCapacity: freeGB,
-                    costPerUnit: 0.0001,  // Cost per GB per hour
+                    costPerUnit: 0.0001, // Cost per GB per hour
                     performanceScore: freeGB / totalGB
                 )
             }
@@ -578,13 +578,13 @@ public final class IntelligentResourceManager: ObservableObject {
 
     private func monitorNetwork() async -> ResourceMetrics {
         // Network monitoring with basic connectivity checks
-        let maxBandwidth = 1000.0  // Mbps - typical broadband speed
+        let maxBandwidth = 1000.0 // Mbps - typical broadband speed
         let processInfo = ProcessInfo.processInfo
 
         // Estimate network usage based on system activity
-        let baseUsage = 10.0  // Base network usage in Mbps
-        let uptimeFactor = min(100.0, processInfo.systemUptime / 60.0)  // Factor based on uptime (increases over time)
-        let randomFactor = Double.random(in: -5.0...5.0)  // Random variation
+        let baseUsage = 10.0 // Base network usage in Mbps
+        let uptimeFactor = min(100.0, processInfo.systemUptime / 60.0) // Factor based on uptime (increases over time)
+        let randomFactor = Double.random(in: -5.0 ... 5.0) // Random variation
         let currentUsage = min(maxBandwidth, max(0, baseUsage + uptimeFactor + randomFactor))
 
         return ResourceMetrics(
@@ -592,21 +592,21 @@ public final class IntelligentResourceManager: ObservableObject {
             currentUsage: currentUsage,
             allocatedCapacity: maxBandwidth,
             availableCapacity: maxBandwidth - currentUsage,
-            costPerUnit: 0.001,  // Cost per Mbps per hour
+            costPerUnit: 0.001, // Cost per Mbps per hour
             performanceScore: 1.0 - (currentUsage / maxBandwidth)
         )
     }
 
     private func monitorGPU() async -> ResourceMetrics {
         // GPU monitoring with system-based estimation
-        let maxGPUs = 2.0  // Assume up to 2 GPUs available
+        let maxGPUs = 2.0 // Assume up to 2 GPUs available
         let processInfo = ProcessInfo.processInfo
 
         // Estimate GPU usage based on system load and availability
         // In a real implementation, you'd query GPU-specific APIs
-        let baseUsage = 0.0  // GPUs typically idle when not in use
-        let loadFactor = min(1.0, processInfo.systemUptime / 7200.0)  // Factor based on uptime (max 1 GPU over 2 hours)
-        let randomFactor = Double.random(in: -0.2...0.2)  // Small random variation
+        let baseUsage = 0.0 // GPUs typically idle when not in use
+        let loadFactor = min(1.0, processInfo.systemUptime / 7200.0) // Factor based on uptime (max 1 GPU over 2 hours)
+        let randomFactor = Double.random(in: -0.2 ... 0.2) // Small random variation
         let currentUsage = min(maxGPUs, max(0, baseUsage + loadFactor + randomFactor))
 
         return ResourceMetrics(
@@ -614,21 +614,21 @@ public final class IntelligentResourceManager: ObservableObject {
             currentUsage: currentUsage,
             allocatedCapacity: maxGPUs,
             availableCapacity: maxGPUs - currentUsage,
-            costPerUnit: 1.0,  // Cost per GPU per hour
+            costPerUnit: 1.0, // Cost per GPU per hour
             performanceScore: 1.0 - (currentUsage / maxGPUs)
         )
     }
 
     private func monitorQuantumProcessor() async -> ResourceMetrics {
         // Quantum processor monitoring with workload-based estimation
-        let maxQubits = 100.0  // Assume 100 qubits available
+        let maxQubits = 100.0 // Assume 100 qubits available
         let processInfo = ProcessInfo.processInfo
 
         // Estimate quantum processor usage based on complex computational patterns
         // In a real implementation, you'd interface with quantum hardware APIs
-        let baseUsage = 5.0  // Base quantum operations
-        let complexityFactor = min(50.0, processInfo.systemUptime / 1800.0)  // Factor based on uptime (quantum workloads increase over time)
-        let randomFactor = Double.random(in: -10.0...10.0)  // Random variation for quantum uncertainty
+        let baseUsage = 5.0 // Base quantum operations
+        let complexityFactor = min(50.0, processInfo.systemUptime / 1800.0) // Factor based on uptime (quantum workloads increase over time)
+        let randomFactor = Double.random(in: -10.0 ... 10.0) // Random variation for quantum uncertainty
         let currentUsage = min(maxQubits, max(0, baseUsage + complexityFactor + randomFactor))
 
         return ResourceMetrics(
@@ -636,78 +636,81 @@ public final class IntelligentResourceManager: ObservableObject {
             currentUsage: currentUsage,
             allocatedCapacity: maxQubits,
             availableCapacity: maxQubits - currentUsage,
-            costPerUnit: 10.0,  // Cost per qubit per hour (quantum computing is expensive)
+            costPerUnit: 10.0, // Cost per qubit per hour (quantum computing is expensive)
             performanceScore: 1.0 - (currentUsage / maxQubits)
         )
     }
 
     private func monitorCloudInstances() async -> ResourceMetrics {
         // Cloud instances monitoring based on current allocations
-        let maxInstances = 20.0  // Maximum cloud instances
+        let maxInstances = 20.0 // Maximum cloud instances
         let processInfo = ProcessInfo.processInfo
 
         // Estimate cloud instance usage based on system load and allocations
-        let baseInstances = 2.0  // Base cloud instances for essential services
-        let allocationFactor = Double(currentAllocations.count) * 0.5  // Factor based on current allocations
-        let loadFactor = min(10.0, processInfo.systemUptime / 3600.0)  // Factor based on uptime
-        let randomFactor = Double.random(in: -1.0...1.0)  // Random variation
+        let baseInstances = 2.0 // Base cloud instances for essential services
+        let allocationFactor = Double(currentAllocations.count) * 0.5 // Factor based on current allocations
+        let loadFactor = min(10.0, processInfo.systemUptime / 3600.0) // Factor based on uptime
+        let randomFactor = Double.random(in: -1.0 ... 1.0) // Random variation
         let currentUsage = min(
-            maxInstances, max(0, baseInstances + allocationFactor + loadFactor + randomFactor))
+            maxInstances, max(0, baseInstances + allocationFactor + loadFactor + randomFactor)
+        )
 
         return ResourceMetrics(
             resourceType: .cloudInstances,
             currentUsage: currentUsage,
             allocatedCapacity: maxInstances,
             availableCapacity: maxInstances - currentUsage,
-            costPerUnit: 0.1,  // Cost per instance per hour
+            costPerUnit: 0.1, // Cost per instance per hour
             performanceScore: 1.0 - (currentUsage / maxInstances)
         )
     }
 
     private func monitorDatabaseConnections() async -> ResourceMetrics {
         // Database connections monitoring based on allocations and activity
-        let maxConnections = 200.0  // Maximum database connections
+        let maxConnections = 200.0 // Maximum database connections
         let processInfo = ProcessInfo.processInfo
 
         // Estimate database connections based on allocations and system activity
-        let baseConnections = 10.0  // Base connections for system operations
-        let allocationFactor = Double(currentAllocations.count) * 2.0  // Factor based on current allocations
-        let activityFactor = min(50.0, processInfo.systemUptime / 600.0)  // Factor based on uptime (increases over 10 minutes)
-        let randomFactor = Double.random(in: -5.0...5.0)  // Random variation
+        let baseConnections = 10.0 // Base connections for system operations
+        let allocationFactor = Double(currentAllocations.count) * 2.0 // Factor based on current allocations
+        let activityFactor = min(50.0, processInfo.systemUptime / 600.0) // Factor based on uptime (increases over 10 minutes)
+        let randomFactor = Double.random(in: -5.0 ... 5.0) // Random variation
         let currentUsage = min(
             maxConnections,
-            max(0, baseConnections + allocationFactor + activityFactor + randomFactor))
+            max(0, baseConnections + allocationFactor + activityFactor + randomFactor)
+        )
 
         return ResourceMetrics(
             resourceType: .databaseConnections,
             currentUsage: currentUsage,
             allocatedCapacity: maxConnections,
             availableCapacity: maxConnections - currentUsage,
-            costPerUnit: 0.001,  // Cost per connection per hour
+            costPerUnit: 0.001, // Cost per connection per hour
             performanceScore: 1.0 - (currentUsage / maxConnections)
         )
     }
 
     private func monitorAPIRateLimits() async -> ResourceMetrics {
         // API rate limits monitoring based on allocations and activity patterns
-        let maxRequestsPerMinute = 2000.0  // Maximum requests per minute
+        let maxRequestsPerMinute = 2000.0 // Maximum requests per minute
         let processInfo = ProcessInfo.processInfo
 
         // Estimate API usage based on allocations and system activity
-        let baseRequests = 100.0  // Base API requests per minute
-        let allocationFactor = Double(currentAllocations.count) * 50.0  // Factor based on current allocations
-        let activityFactor = min(500.0, processInfo.systemUptime / 120.0)  // Factor based on uptime (increases over 2 minutes)
-        let randomFactor = Double.random(in: -50.0...50.0)  // Random variation
+        let baseRequests = 100.0 // Base API requests per minute
+        let allocationFactor = Double(currentAllocations.count) * 50.0 // Factor based on current allocations
+        let activityFactor = min(500.0, processInfo.systemUptime / 120.0) // Factor based on uptime (increases over 2 minutes)
+        let randomFactor = Double.random(in: -50.0 ... 50.0) // Random variation
         let currentUsage = min(
             maxRequestsPerMinute,
-            max(0, baseRequests + allocationFactor + activityFactor + randomFactor))
+            max(0, baseRequests + allocationFactor + activityFactor + randomFactor)
+        )
 
         return ResourceMetrics(
             resourceType: .apiRateLimits,
             currentUsage: currentUsage,
             allocatedCapacity: maxRequestsPerMinute,
             availableCapacity: maxRequestsPerMinute - currentUsage,
-            costPerUnit: 0.0001,  // Cost per request
+            costPerUnit: 0.0001, // Cost per request
             performanceScore: 1.0 - (currentUsage / maxRequestsPerMinute)
         )
     }
@@ -725,7 +728,7 @@ public final class IntelligentResourceManager: ObservableObject {
 
     private func optimizeResourceAllocation(for resourceType: ResourceType) async {
         guard let metrics = resourceMetrics[resourceType],
-            let policy = resourcePolicies[resourceType]
+              let policy = resourcePolicies[resourceType]
         else {
             return
         }
@@ -785,7 +788,7 @@ public final class IntelligentResourceManager: ObservableObject {
         if let lastAction = lastScalingActions[resourceType] {
             let timeSinceLastAction = Date().timeIntervalSince(lastAction)
             guard timeSinceLastAction >= scalingCooldown else {
-                return  // Still in cooldown
+                return // Still in cooldown
             }
         }
 
@@ -864,10 +867,10 @@ public final class IntelligentResourceManager: ObservableObject {
 
         // Calculate trend
         let n = Double(recentUsage.count)
-        let sumX = (0..<recentUsage.count).reduce(0.0) { $0 + Double($1) }
+        let sumX = (0 ..< recentUsage.count).reduce(0.0) { $0 + Double($1) }
         let sumY = recentUsage.reduce(0, +)
-        let sumXY = zip(0..<recentUsage.count, recentUsage).reduce(0.0) { $0 + Double($1.0) * $1.1 }
-        let sumXX = (0..<recentUsage.count).reduce(0.0) { $0 + Double($1 * $1) }
+        let sumXY = zip(0 ..< recentUsage.count, recentUsage).reduce(0.0) { $0 + Double($1.0) * $1.1 }
+        let sumXX = (0 ..< recentUsage.count).reduce(0.0) { $0 + Double($1 * $1) }
 
         let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
         let intercept = (sumY - slope * sumX) / n
@@ -883,9 +886,9 @@ public final class IntelligentResourceManager: ObservableObject {
         -> Double
     {
         guard let predicted = predictedDemand,
-            let currentMetrics = resourceMetrics[resourceType]
+              let currentMetrics = resourceMetrics[resourceType]
         else {
-            return 0.5  // Default confidence
+            return 0.5 // Default confidence
         }
 
         let currentUsage = currentMetrics.currentUsage
@@ -901,7 +904,7 @@ public final class IntelligentResourceManager: ObservableObject {
             return nil
         }
 
-        let timeMultiplier = 1.0  // 1 hour
+        let timeMultiplier = 1.0 // 1 hour
         return amount * costPerUnit * timeMultiplier
     }
 
@@ -910,11 +913,11 @@ public final class IntelligentResourceManager: ObservableObject {
         let totalCost = resourceMetrics.values.compactMap(\.costPerUnit).reduce(0, +)
         let averagePerformance =
             resourceMetrics.values.map(\.performanceScore).reduce(0, +)
-            / Double(resourceMetrics.count)
+                / Double(resourceMetrics.count)
 
         let optimizationScore =
             (performanceOptimizationWeight * averagePerformance)
-            - (costOptimizationWeight * min(totalCost / 100.0, 1.0))
+                - (costOptimizationWeight * min(totalCost / 100.0, 1.0))
 
         await MainActor.run {
             self.optimizationScore = optimizationScore
@@ -942,9 +945,9 @@ public final class IntelligentResourceManager: ObservableObject {
 
 // MARK: - Extensions
 
-extension IntelligentResourceManager {
+public extension IntelligentResourceManager {
     /// Get resource allocation summary
-    public func getAllocationSummary() -> [ResourceType: Int] {
+    func getAllocationSummary() -> [ResourceType: Int] {
         var summary = [ResourceType: Int]()
         for allocation in currentAllocations.values {
             summary[allocation.resourceType, default: 0] += 1
@@ -953,19 +956,19 @@ extension IntelligentResourceManager {
     }
 
     /// Get pending scaling decisions
-    public func getPendingScalingDecisions() -> [ScalingDecision] {
+    func getPendingScalingDecisions() -> [ScalingDecision] {
         scalingDecisions
     }
 
     /// Export resource metrics for analysis
-    public func exportResourceMetrics() -> Data? {
+    func exportResourceMetrics() -> Data? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         return try? encoder.encode(resourceMetrics)
     }
 
     /// Import resource policies
-    public func importResourcePolicies(_ data: Data) {
+    func importResourcePolicies(_ data: Data) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         if let policies = try? decoder.decode([ResourceType: ResourcePolicy].self, from: data) {

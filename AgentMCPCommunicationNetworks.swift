@@ -82,7 +82,7 @@ public final class AgentMCPCommunicationNetworks: Sendable {
     public func establishCommunicationChannel(
         agentId: String,
         mcpSystemId: String,
-        protocol: CommunicationProtocol = .standard,
+        communicationProtocol: CommunicationProtocol = .standard,
         configuration: MCPChannelConfiguration = MCPChannelConfiguration()
     ) async throws -> MCPCommunicationChannel {
 
@@ -90,8 +90,8 @@ public final class AgentMCPCommunicationNetworks: Sendable {
         try await validateParticipants(agentId: agentId, mcpSystemId: mcpSystemId)
 
         // Get protocol adapter
-        guard let adapter = protocolAdapters[protocol] else {
-            throw MCPCommunicationError.unsupportedProtocol(protocol)
+        guard let adapter = protocolAdapters[communicationProtocol] else {
+            throw MCPCommunicationError.unsupportedProtocol(communicationProtocol)
         }
 
         // Create communication channel
@@ -100,7 +100,7 @@ public final class AgentMCPCommunicationNetworks: Sendable {
             channelId: channelId,
             agentId: agentId,
             mcpSystemId: mcpSystemId,
-            protocol: protocol,
+            protocol: communicationProtocol,
             configuration: configuration,
             status: .establishing
         )
@@ -368,8 +368,8 @@ public final class AgentMCPCommunicationNetworks: Sendable {
         }
 
         // Get protocol adapter
-        guard let adapter = protocolAdapters[channel.protocol] else {
-            throw MCPCommunicationError.unsupportedProtocol(channel.protocol)
+        guard let adapter = protocolAdapters[channel.communicationProtocol] else {
+            throw MCPCommunicationError.unsupportedProtocol(channel.communicationProtocol)
         }
 
         // Close channel
@@ -430,7 +430,7 @@ public final class AgentMCPCommunicationNetworks: Sendable {
 
         // Validate message type compatibility
         guard channel.configuration.supportedMessageTypes.contains(message.messageType) else {
-            throw MCPCommunicationError.unsupportedMessageType(message.messageType, channel.protocol)
+            throw MCPCommunicationError.unsupportedMessageType(message.messageType, channel.communicationProtocol)
         }
 
         // Security validation
@@ -445,7 +445,7 @@ public struct MCPCommunicationChannel: Sendable, Codable {
     public let channelId: String
     public let agentId: String
     public let mcpSystemId: String
-    public let protocol: CommunicationProtocol
+    public let communicationProtocol: CommunicationProtocol
     public let configuration: MCPChannelConfiguration
     public var status: MCPChannelStatus
     public let establishmentTime: Date
@@ -463,7 +463,7 @@ public struct MCPCommunicationChannel: Sendable, Codable {
         self.channelId = channelId
         self.agentId = agentId
         self.mcpSystemId = mcpSystemId
-        self.protocol = protocol
+        self.communicationProtocol = protocol
         self.configuration = configuration
         self.status = status
         self.establishmentTime = establishmentTime
@@ -1034,12 +1034,12 @@ public extension AgentMCPCommunicationNetworks {
     ) async throws -> MCPCommunicationChannel {
 
         let optimalProtocol = await determineOptimalProtocol(for: requirements)
-        let configuration = createConfiguration(for: requirements, protocol: optimalProtocol)
+        let configuration = createConfiguration(for: requirements, communicationProtocol: optimalProtocol)
 
         return try await establishCommunicationChannel(
             agentId: agentId,
             mcpSystemId: mcpSystemId,
-            protocol: optimalProtocol,
+            communicationProtocol: optimalProtocol,
             configuration: configuration
         )
     }
@@ -1090,7 +1090,7 @@ public extension AgentMCPCommunicationNetworks {
 
     private func createConfiguration(
         for requirements: MCPChannelRequirements,
-        protocol: CommunicationProtocol
+        communicationProtocol: CommunicationProtocol
     ) -> MCPChannelConfiguration {
         MCPChannelConfiguration(
             maxMessageSize: requirements.maxMessageSize ?? 10_485_760,
