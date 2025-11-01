@@ -10,7 +10,7 @@
         ],
         products: [
             .library(name: "SharedKit", targets: ["SharedKit"]),
-            .library(name: "SharedTestSupport", targets: ["SharedTestSupport"]), // Reusable test utilities for Xcode projects
+            .library(name: "SharedTestSupport", targets: ["SharedTestSupport"]),  // Reusable test utilities for Xcode projects
         ],
         targets: [
             // Main SharedKit target with all necessary source files
@@ -19,9 +19,9 @@
                 path: ".",
                 exclude: [
                     // Exclude files with conflicting type definitions
-                    "Sources/SharedKit/UniversalIntelligenceEmergence.swift", // Has conflicting IntelligenceDomain
-                    "Sources/SharedKit/QuantumInternetTypes.swift", // Has conflicting QuantumState
-                    "Sources/SharedKit/EntanglementNetwork.swift", // Has conflicting EntanglementNetwork
+                    "Sources/SharedKit/UniversalIntelligenceEmergence.swift",  // Has conflicting IntelligenceDomain
+                    "Sources/SharedKit/QuantumInternetTypes.swift",  // Has conflicting QuantumState
+                    "Sources/SharedKit/EntanglementNetwork.swift",  // Has conflicting EntanglementNetwork
                     // Exclude incomplete quantum framework files that cause compilation errors
                     "Sources/SharedKit/QuantumInternet.swift",
                     "Sources/SharedKit/QuantumInternetProtocols.swift",
@@ -30,7 +30,9 @@
                     "Sources/SharedKit/QuantumRepeater.swift",
                     "Sources/SharedKit/QuantumTeleportation.swift",
                     "Sources/SharedKit/UniversalConsciousnessIntegrationFramework.swift",
-                    "IntelligentWorkflowAgents.swift", // Missing agent framework dependencies
+                    "IntelligentWorkflowAgents.swift",  // Missing agent framework dependencies
+                    // Exclude SecurityFramework to avoid Logger conflict with OSLog
+                    "SecurityFramework.swift",
                 ],
                 sources: [
                     "Sources/SharedKit/AIServiceProtocols.swift",
@@ -77,7 +79,7 @@
                     "Phase8G_Complex.swift",
                 ],
                 swiftSettings: [
-                    .define("PHASE8G_DEMO"),
+                    .define("PHASE8G_DEMO")
                 ]
             ),
             // Conscious AI executable target
