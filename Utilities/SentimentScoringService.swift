@@ -1,5 +1,9 @@
 import Foundation
 
+// LLMClient protocol is defined in OllamaClient.swift
+// This file uses it for dependency injection but doesn't need to import
+// as both are in the Shared utilities folder
+
 public protocol SentimentScoring: Sendable {
     func score(text: String) async -> SentimentResult
 }
@@ -37,7 +41,9 @@ public final class OllamaSentimentScoringService: SentimentScoring {
 
     private static func parse(jsonLike: String) -> SentimentResult? {
         // Minimal parsing without introducing a JSON dependency on potentially non-strict output
-        guard let start = jsonLike.firstIndex(of: "{"), let end = jsonLike.lastIndex(of: "}") else { return nil }
+        guard let start = jsonLike.firstIndex(of: "{"), let end = jsonLike.lastIndex(of: "}") else {
+            return nil
+        }
         let slice = jsonLike[start ... end]
         if let data = String(slice).data(using: .utf8),
            let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -55,8 +61,12 @@ public final class KeywordSentimentScoringService: Sendable {
 
     public func scoreSync(text: String) -> SentimentResult {
         let lower = text.lowercased()
-        let positives = ["love", "great", "excellent", "happy", "good", "amazing", "wonderful", "fast", "clean"]
-        let negatives = ["hate", "bad", "terrible", "slow", "bug", "broken", "awful", "poor", "crash"]
+        let positives = [
+            "love", "great", "excellent", "happy", "good", "amazing", "wonderful", "fast", "clean",
+        ]
+        let negatives = [
+            "hate", "bad", "terrible", "slow", "bug", "broken", "awful", "poor", "crash",
+        ]
         let pos = positives.reduce(0) { $0 + (lower.contains($1) ? 1 : 0) }
         let neg = negatives.reduce(0) { $0 + (lower.contains($1) ? 1 : 0) }
         let raw = Double(pos - neg)
