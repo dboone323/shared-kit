@@ -1,0 +1,19 @@
+name: PR Validation (SharedKit)
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-test:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.0'
+      - name: Build
+        run: swift build -v
+      - name: Test
+        run: swift test --parallel -v
