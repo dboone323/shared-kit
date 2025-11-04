@@ -1,6 +1,59 @@
 import Foundation
 import SwiftUI
 
+// MARK: - View Model Error Types
+
+/// Standard error types for view models
+public enum ViewModelError: Error, Equatable {
+    case invalidState
+    case networkError
+    case dataError
+    case unknownError
+    case customError(String)
+
+    public var localizedDescription: String {
+        switch self {
+        case .invalidState:
+            return "Invalid state"
+        case .networkError:
+            return "Network error occurred"
+        case .dataError:
+            return "Data error occurred"
+        case .unknownError:
+            return "Unknown error occurred"
+        case let .customError(message):
+            return message
+        }
+    }
+}
+
+/// Result type for asynchronous operations
+public enum OperationResult<T> {
+    case success(T)
+    case failure(ViewModelError)
+
+    public var value: T? {
+        if case let .success(value) = self {
+            return value
+        }
+        return nil
+    }
+
+    public var error: ViewModelError? {
+        if case let .failure(error) = self {
+            return error
+        }
+        return nil
+    }
+
+    public var isSuccess: Bool {
+        if case .success = self {
+            return true
+        }
+        return false
+    }
+}
+
 // MARK: - Shared View Model Protocol
 
 /// Protocol for standardized MVVM pattern across all projects
