@@ -8,7 +8,9 @@ public struct OllamaConfig: Sendable {
     public let baseURL: URL
     public let defaultTimeout: TimeInterval
 
-    public init(baseURL: URL = URL(string: "http://127.0.0.1:11434")!, defaultTimeout: TimeInterval = 120) {
+    public init(
+        baseURL: URL = URL(string: "http://127.0.0.1:11434")!, defaultTimeout: TimeInterval = 120
+    ) {
         self.baseURL = baseURL
         self.defaultTimeout = defaultTimeout
     }
@@ -42,7 +44,9 @@ public final class OllamaClient: LLMClient {
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let payload = Payload(model: model, prompt: prompt, stream: false, options: .init(temperature: temperature))
+        let payload = Payload(
+            model: model, prompt: prompt, stream: false, options: .init(temperature: temperature)
+        )
         req.httpBody = try JSONEncoder().encode(payload)
 
         let (data, resp) = try await session.data(for: req)
@@ -52,6 +56,48 @@ public final class OllamaClient: LLMClient {
         }
         if let text = try? JSONDecoder().decode(Response.self, from: data).response { return text }
         // Some models stream or return lines; fallback to raw text
+        if let text = String(data: data, encoding: .utf8) { return text }
+        throw OllamaClientError.emptyResponse
+    }
+
+    // Multimodal image support for vision-capable models (e.g., llava, llama3.2-vision)
+    public func generate(
+        model: String,
+        prompt: String,
+        temperature: Double = 0.2,
+        images: [Data]
+    ) async throws -> String {
+        struct Payload: Encodable {
+            let model: String
+            let prompt: String
+            let stream: Bool
+            let images: [String]
+            let options: Options
+        }
+        struct Options: Encodable { let temperature: Double }
+        struct Response: Decodable { let response: String? }
+
+        let url = config.baseURL.appendingPathComponent("/api/generate")
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let base64Images = images.map { $0.base64EncodedString() }
+        let payload = Payload(
+            model: model,
+            prompt: prompt,
+            stream: false,
+            images: base64Images,
+            options: .init(temperature: temperature)
+        )
+        req.httpBody = try JSONEncoder().encode(payload)
+
+        let (data, resp) = try await session.data(for: req)
+        guard let http = resp as? HTTPURLResponse, (200 ..< 300).contains(http.statusCode) else {
+            let code = (resp as? HTTPURLResponse)?.statusCode ?? -1
+            throw OllamaClientError.httpError(code)
+        }
+        if let text = try? JSONDecoder().decode(Response.self, from: data).response { return text }
         if let text = String(data: data, encoding: .utf8) { return text }
         throw OllamaClientError.emptyResponse
     }
