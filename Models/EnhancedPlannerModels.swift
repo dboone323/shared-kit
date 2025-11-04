@@ -887,8 +887,10 @@ public final class EnhancedJournalEntry: Validatable, Trackable, CrossProjectRel
         })
         self.modifiedAt = Date()
 
-        // TODO: Implement sentiment analysis
-        self.analyzeSentiment()
+        // Analyze sentiment asynchronously
+        Task {
+            await self.analyzeSentiment()
+        }
 
         self.trackEvent(
             "content_updated",
@@ -898,10 +900,23 @@ public final class EnhancedJournalEntry: Validatable, Trackable, CrossProjectRel
         )
     }
 
-    private func analyzeSentiment() {
-        // Placeholder for sentiment analysis
-        // In a real implementation, this would use NLP libraries or services
-        self.sentimentScore = 0.0
+    @MainActor
+    private func analyzeSentiment() async {
+        // Use keyword-based sentiment scoring for immediate feedback
+        // In production, could optionally use OllamaSentimentScoringService when network available
+        let scorer = KeywordSentimentScoringService()
+        let result = scorer.scoreSync(text: self.content)
+
+        self.sentimentScore = result.score
+        self.sentiment = result.label
+
+        self.trackEvent(
+            "sentiment_analyzed",
+            parameters: [
+                "sentiment": result.label,
+                "score": result.score,
+            ]
+        )
     }
 }
 
