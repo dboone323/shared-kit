@@ -11,12 +11,20 @@ let package = Package(
         .library(
             name: "SharedKit",
             targets: ["SharedKit"]
+        ),
+        .library(
+            name: "SharedTestSupport",
+            targets: ["SharedTestSupport"]
         )
     ],
     targets: [
         .target(
             name: "SharedKit",
-            path: "."
+            path: "Sources/SharedKit"
+        ),
+        .target(
+            name: "SharedTestSupport",
+            path: "Sources/SharedTestSupport"
         )
     ]
 )
