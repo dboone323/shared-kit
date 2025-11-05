@@ -25,26 +25,26 @@ public protocol BaseViewModel: ObservableObject {
 
 // MARK: - Base ViewModel Extensions
 
-extension BaseViewModel {
+public extension BaseViewModel {
     /// Reset error state
-    public func resetError() {
+    func resetError() {
         // Default implementation - can be overridden
     }
 
     /// Set loading state
-    public func setLoading(_ loading: Bool) {
+    func setLoading(_ loading: Bool) {
         isLoading = loading
     }
 
     /// Set error state
-    public func setError(_ error: Error) {
+    func setError(_ error: Error) {
         // Default implementation - can be overridden
     }
 
     /// Validate current state
-    public func validateState() -> Bool {
+    func validateState() -> Bool {
         // Default implementation - can be overridden
-        return true
+        true
     }
 }
 
@@ -76,16 +76,16 @@ public protocol ViewModelState {
 }
 
 /// Default implementation for ViewModelState
-extension ViewModelState {
-    public mutating func setLoading(_ loading: Bool) {
+public extension ViewModelState {
+    mutating func setLoading(_ loading: Bool) {
         isLoading = loading
     }
 
-    public mutating func setError(_ message: String?) {
+    mutating func setError(_ message: String?) {
         errorMessage = message
     }
 
-    public mutating func clearError() {
+    mutating func clearError() {
         errorMessage = nil
     }
 }

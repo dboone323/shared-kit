@@ -5,7 +5,7 @@ let package = Package(
     name: "shared-kit",
     platforms: [
         .iOS(.v18),
-        .macOS(.v15)
+        .macOS(.v15),
     ],
     products: [
         .library(
@@ -15,7 +15,7 @@ let package = Package(
         .library(
             name: "SharedTestSupport",
             targets: ["SharedTestSupport"]
-        )
+        ),
     ],
     targets: [
         .target(
@@ -24,7 +24,13 @@ let package = Package(
         ),
         .target(
             name: "SharedTestSupport",
+            dependencies: ["SharedKit"],
             path: "Sources/SharedTestSupport"
-        )
+        ),
+        .testTarget(
+            name: "SharedKitTests",
+            dependencies: ["SharedKit", "SharedTestSupport"],
+            path: "Tests/SharedKitTests"
+        ),
     ]
 )

@@ -29,13 +29,17 @@ public class QuantumInternetProtocols: ObservableObject {
     }
 
     /// Establish quantum communication session
-    public func establishSession(between nodeA: String, and nodeB: String, protocolType: ProtocolType) async -> ProtocolResult {
+    public func establishSession(
+        between nodeA: String, and nodeB: String, protocolType: ProtocolType
+    ) async -> ProtocolResult {
         print("🔗 Establishing \(protocolType.rawValue) session between \(nodeA) and \(nodeB)")
 
         let sessionId = "session_\(nodeA)_\(nodeB)_\(Date().timeIntervalSince1970)"
 
         // Initialize protocol handshake
-        let handshakeResult = await performProtocolHandshake(nodeA: nodeA, nodeB: nodeB, protocolType: protocolType)
+        let handshakeResult = await performProtocolHandshake(
+            nodeA: nodeA, nodeB: nodeB, protocolType: protocolType
+        )
 
         guard handshakeResult.success else {
             return ProtocolResult(
@@ -50,7 +54,9 @@ public class QuantumInternetProtocols: ObservableObject {
         }
 
         // Establish synchronization
-        let syncResult = await synchronizationEngine.establishSynchronization(nodeA: nodeA, nodeB: nodeB)
+        let syncResult = await synchronizationEngine.establishSynchronization(
+            nodeA: nodeA, nodeB: nodeB
+        )
 
         // Initialize error correction
         let errorCorrectionResult = await errorCorrection.initializeErrorCorrection(for: sessionId)
@@ -91,10 +97,9 @@ public class QuantumInternetProtocols: ObservableObject {
         guard var session = activeProtocols[sessionId], session.status == .active else {
             return TransmissionResult(
                 success: false,
-                bytesTransmitted: 0,
-                errorRate: 1.0,
                 latency: 0.0,
-                reason: "Invalid or inactive session"
+                dataTransferred: 0,
+                errorMessage: "Invalid or inactive session"
             )
         }
 
@@ -119,15 +124,13 @@ public class QuantumInternetProtocols: ObservableObject {
 
         let result = TransmissionResult(
             success: transmissionResult.success,
-            bytesTransmitted: correctedData.count,
-            errorRate: transmissionResult.errorRate,
             latency: transmissionResult.latency,
-            reason: transmissionResult.success ? "Transmission successful" : "Transmission failed"
+            dataTransferred: correctedData.count,
+            errorMessage: transmissionResult.success ? nil : "Transmission failed"
         )
 
         print("✅ Transmission complete:")
-        print("- States transmitted: \(result.bytesTransmitted)")
-        print("- Error rate: \(String(format: "%.4f", result.errorRate))")
+        print("- States transmitted: \(result.dataTransferred)")
         print("- Latency: \(String(format: "%.3f", result.latency)) ms")
 
         return result
@@ -159,13 +162,16 @@ public class QuantumInternetProtocols: ObservableObject {
         let activeSessions = activeProtocols.values.filter { $0.status == .active }.count
         let totalDataTransmitted = activeProtocols.values.map(\.dataTransmitted).reduce(0, +)
 
-        let protocolDistribution = Dictionary(grouping: activeProtocols.values, by: { $0.protocolType })
-            .mapValues { $0.count }
+        let protocolDistribution = Dictionary(
+            grouping: activeProtocols.values, by: { $0.protocolType }
+        )
+        .mapValues { $0.count }
 
-        let averageSessionDuration = activeProtocols.values.compactMap { session in
-            guard let closedAt = session.closedAt else { return nil }
-            return closedAt.timeIntervalSince(session.establishedAt)
-        }.reduce(0, +) / Double(max(1, activeSessions))
+        let averageSessionDuration =
+            activeProtocols.values.compactMap { session in
+                guard let closedAt = session.closedAt else { return nil }
+                return closedAt.timeIntervalSince(session.establishedAt)
+            }.reduce(0, +) / Double(max(1, activeSessions))
 
         return await ProtocolStatistics(
             totalSessions: totalSessions,
@@ -180,7 +186,9 @@ public class QuantumInternetProtocols: ObservableObject {
 
     // MARK: - Private Methods
 
-    private func performProtocolHandshake(nodeA: String, nodeB: String, protocolType: ProtocolType) async -> HandshakeResult {
+    private func performProtocolHandshake(nodeA: String, nodeB: String, protocolType: ProtocolType)
+        async -> HandshakeResult
+    {
         // Simulate protocol handshake
         let success = Bool.random()
         let errorRate = success ? Double.random(in: 0.01 ... 0.05) : Double.random(in: 0.1 ... 0.3)
@@ -194,7 +202,9 @@ public class QuantumInternetProtocols: ObservableObject {
         )
     }
 
-    private func performProtocolTransmission(session: ProtocolSession, data: [QuantumState]) async -> RawTransmissionResult {
+    private func performProtocolTransmission(session: ProtocolSession, data: [QuantumState]) async
+        -> RawTransmissionResult
+    {
         // Simulate protocol-specific transmission
         let baseErrorRate = Double.random(in: 0.02 ... 0.08)
         let latency = Double.random(in: 0.1 ... 2.0)
@@ -257,7 +267,9 @@ public class ErrorCorrectionEngine: ObservableObject {
         return true
     }
 
-    public func correctErrors(in data: [QuantumState], for sessionId: String) async -> [QuantumState] {
+    public func correctErrors(in data: [QuantumState], for sessionId: String) async
+        -> [QuantumState]
+    {
         guard var session = correctionSessions[sessionId] else { return data }
 
         var correctedData = data
@@ -322,7 +334,9 @@ public class SynchronizationEngine: ObservableObject {
         print("⏰ Synchronization Engine initialized")
     }
 
-    public func establishSynchronization(nodeA: String, nodeB: String) async -> SynchronizationResult {
+    public func establishSynchronization(nodeA: String, nodeB: String) async
+        -> SynchronizationResult
+    {
         let pairId = "\(nodeA)_\(nodeB)"
 
         // Simulate synchronization process
@@ -348,7 +362,8 @@ public class SynchronizationEngine: ObservableObject {
 
     public func getAccuracy() async -> Double {
         guard !syncPairs.isEmpty else { return 0.0 }
-        let averageAccuracy = syncPairs.values.map(\.accuracy).reduce(0, +) / Double(syncPairs.count)
+        let averageAccuracy =
+            syncPairs.values.map(\.accuracy).reduce(0, +) / Double(syncPairs.count)
         return averageAccuracy
     }
 }
@@ -442,10 +457,9 @@ public struct ProtocolResult {
 
 public struct TransmissionResult {
     public let success: Bool
-    public let bytesTransmitted: Int
-    public let errorRate: Double
     public let latency: Double
-    public let reason: String
+    public let dataTransferred: Int
+    public let errorMessage: String?
 }
 
 public struct ProtocolStatistics {

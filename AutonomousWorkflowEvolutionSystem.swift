@@ -606,14 +606,16 @@ public extension AutonomousWorkflowEvolutionSystem {
                     newParameters[randomKey] = AnyCodable(newValue)
                     newScore += Double(newValue - currentValue) * 0.1
                     newResources["cpu"] = min(
-                        1.0, (newResources["cpu"] ?? 0.5) + Double(newValue - currentValue) * 0.1)
+                        1.0, (newResources["cpu"] ?? 0.5) + Double(newValue - currentValue) * 0.1
+                    )
                 }
             case "caching":
                 if let currentValue = newParameters[randomKey]?.value as? Bool {
                     newParameters[randomKey] = AnyCodable(!currentValue)
                     newScore += currentValue ? -0.1 : 0.1
                     newResources["memory"] = min(
-                        1.0, (newResources["memory"] ?? 0.5) + (currentValue ? -0.1 : 0.1))
+                        1.0, (newResources["memory"] ?? 0.5) + (currentValue ? -0.1 : 0.1)
+                    )
                 }
             default:
                 break

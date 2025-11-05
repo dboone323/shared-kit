@@ -365,7 +365,7 @@ public enum AICapability: String, Codable, Sendable {
 }
 
 /// AI operation definition
-public struct AIOperation: Codable, Sendable {
+public struct AIOperation: Sendable {
     public let id: String
     public let type: AIOperationType
     public let parameters: [String: AnyCodable]
@@ -404,7 +404,7 @@ public enum OperationPriority: String, Codable, Sendable {
 }
 
 /// AI operation result
-public struct AIOperationResult: Codable, Sendable {
+public struct AIOperationResult: Sendable {
     public let operationId: String
     public let success: Bool
     public let result: AnyCodable?
@@ -459,7 +459,7 @@ public struct ServiceHealthOverview: Codable, Sendable {
 }
 
 /// AI service configuration
-public struct AIServiceConfiguration: Codable, Sendable {
+public struct AIServiceConfiguration: Sendable {
     public let serviceId: String
     public let apiKey: String?
     public let baseURL: String?
