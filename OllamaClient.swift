@@ -2,6 +2,125 @@ import Combine
 import Foundation
 import OSLog
 
+// MARK: - Cloud Fallback Policy (Shared-Kit)
+
+fileprivate struct CloudFallbackPolicy {
+    let configPath: String
+    let quotaTrackerPath: String
+    let escalationLogPath: String
+
+    private(set) var enabled: Bool = false
+    private var config: [String: Any] = [:]
+
+    init(
+        configPath: String = "config/cloud_fallback_config.json",
+        quotaTrackerPath: String = "metrics/quota_tracker.json",
+        escalationLogPath: String = "logs/cloud_escalation_log.jsonl"
+    ) {
+        self.configPath = configPath
+        self.quotaTrackerPath = quotaTrackerPath
+        self.escalationLogPath = escalationLogPath
+        self.reload()
+    }
+
+    mutating func reload() {
+        guard let cfg = Self.readJSON(path: configPath) else { return }
+        self.config = cfg
+        self.enabled = true
+    }
+
+    func allowed(priority: String) -> Bool {
+        guard enabled else { return true }
+        let allowed = config["allowed_priority_levels"] as? [String] ?? []
+        return allowed.contains(priority)
+    }
+
+    mutating func recordFailure(priority: String) {
+        guard enabled else { return }
+        var tracker = Self.readJSON(path: quotaTrackerPath) ?? [:]
+        var cb = (tracker["circuit_breaker"] as? [String: Any]) ?? [:]
+        var pcb = (cb[priority] as? [String: Any]) ?? [
+            "state": "closed", "failure_count": 0, "last_failure": NSNull(), "opened_at": NSNull(),
+        ]
+        let now = Self.iso8601Now()
+        let failures = ((pcb["failure_count"] as? Int) ?? 0) + 1
+        pcb["failure_count"] = failures
+        pcb["last_failure"] = now
+        let threshold = ((config["circuit_breaker"] as? [String: Any])?["failure_threshold"] as? Int) ?? 3
+        if failures >= threshold {
+            pcb["state"] = "open"
+            pcb["opened_at"] = now
+        }
+        cb[priority] = pcb
+        tracker["circuit_breaker"] = cb
+        Self.writeJSON(path: quotaTrackerPath, object: tracker)
+    }
+
+    func checkCircuit(priority: String) -> Bool {
+        guard enabled else { return true }
+        guard let tracker = Self.readJSON(path: quotaTrackerPath),
+              let cb = tracker["circuit_breaker"] as? [String: Any],
+              let pcb = cb[priority] as? [String: Any]
+        else { return true }
+        let state = (pcb["state"] as? String) ?? "closed"
+        if state == "open" {
+            return false
+        }
+        return true
+    }
+
+    func checkQuota(priority: String) -> Bool {
+        guard enabled else { return true }
+        guard let tracker = Self.readJSON(path: quotaTrackerPath),
+              let quotas = tracker["quotas"] as? [String: Any],
+              let pq = quotas[priority] as? [String: Any]
+        else { return false }
+        let dailyUsed = (pq["daily_used"] as? Int) ?? 0
+        let hourlyUsed = (pq["hourly_used"] as? Int) ?? 0
+        let dailyLimit = (pq["daily_limit"] as? Int) ?? Int.max
+        let hourlyLimit = (pq["hourly_limit"] as? Int) ?? Int.max
+        return dailyUsed < dailyLimit && hourlyUsed < hourlyLimit
+    }
+
+    func logEscalation(task: String, priority: String, reason: String, modelAttempted: String, provider: String) {
+        guard enabled else { return }
+        let now = Self.iso8601Now()
+        let line: [String: Any] = [
+            "timestamp": now,
+            "task": task,
+            "priority": priority,
+            "reason": reason,
+            "model_attempted": modelAttempted,
+            "cloud_provider": provider,
+        ]
+        if let data = try? JSONSerialization.data(withJSONObject: line),
+           let s = String(data: data, encoding: .utf8) {
+            if FileManager.default.fileExists(atPath: escalationLogPath) == false {
+                FileManager.default.createFile(atPath: escalationLogPath, contents: nil)
+            }
+            if let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: escalationLogPath)) {
+                h.seekToEndOfFile()
+                h.write(Data((s + "\n").utf8))
+                try? h.close()
+            }
+        }
+    }
+
+    private static func readJSON(path: String) -> [String: Any]? {
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+    }
+    private static func writeJSON(path: String, object: [String: Any]) {
+        if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
+            try? data.write(to: URL(fileURLWithPath: path))
+        }
+    }
+    private static func iso8601Now() -> String {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime]
+        return f.string(from: Date())
+    }
+}
 /// Enhanced Free AI Client for Ollama with Quantum Performance
 /// Zero-cost AI inference with advanced error handling, caching, and monitoring
 /// Enhanced by AI System v2.1 on 9/12/25
@@ -20,6 +139,7 @@ public class OllamaClient: ObservableObject {
     private let cache: OllamaCache
     private let metrics: OllamaMetrics
     private var lastRequestTime: Date = .distantPast
+    private var policy = CloudFallbackPolicy()
 
     @Published public var isConnected = false
     @Published public var availableModels: [String] = []
@@ -105,12 +225,27 @@ public class OllamaClient: ObservableObject {
            self.config.preferCloudModels || self.isCloudModel(targetModel)
         {
             if self.isCloudModel(targetModel) {
-                return targetModel
+                // Gate cloud by policy; default priority medium (shared-kit)
+                let priority = "medium"
+                if policy.enabled == false || (policy.allowed(priority: priority) && policy.checkQuota(priority: priority) && policy.checkCircuit(priority: priority)) {
+                    // Cloud disabled in config by default; log and fall back to local
+                    policy.logEscalation(task: "sharedKit.generate", priority: priority, reason: "cloud_disabled_or_logged_only", modelAttempted: targetModel, provider: "ollama_cloud")
+                    try await self.ensureModelAvailable(preferredModel ?? self.config.defaultModel)
+                    return preferredModel ?? self.config.defaultModel
+                } else {
+                    // Not allowed by policy; log and use local
+                    policy.logEscalation(task: "sharedKit.generate", priority: priority, reason: "policy_blocked", modelAttempted: targetModel, provider: "ollama_cloud")
+                    try await self.ensureModelAvailable(preferredModel ?? self.config.defaultModel)
+                    return preferredModel ?? self.config.defaultModel
+                }
             }
 
-            // Find best cloud alternative
+            // Find best cloud alternative -> gate via policy and then prefer local
             if self.getCloudModels().contains(targetModel + "-cloud") {
-                return targetModel + "-cloud"
+                let priority = "medium"
+                policy.logEscalation(task: "sharedKit.generate", priority: priority, reason: "cloud_candidate_logged_only", modelAttempted: targetModel + "-cloud", provider: "ollama_cloud")
+                try await self.ensureModelAvailable(targetModel)
+                return targetModel
             }
         }
 
@@ -263,6 +398,8 @@ public class OllamaClient: ObservableObject {
             }
         }
 
+        // Record failure for circuit breaker (shared-kit default medium priority)
+        policy.recordFailure(priority: "medium")
         throw lastError ?? OllamaError.invalidResponse
     }
 
