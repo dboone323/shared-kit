@@ -1,0 +1,17 @@
+{
+  "mcp_server": {
+    "url": "http://127.0.0.1:5005",
+    "version": "v1"
+  },
+  "default_provider": "ollama",
+  "providers": {
+    "ollama": {
+      "endpoint": "http://localhost:11434"
+    },
+    "mcp_server": {
+      "endpoint": "http://127.0.0.1:5005"
+    }
+  },
+  "project_name": "shared-kit",
+  "agent_name": "shared-kit-agent"
+}
