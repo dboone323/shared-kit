@@ -12,7 +12,8 @@ fi
 
 # Submodule-specific environment variables
 export PROJECT_NAME="shared-kit"
-export SUBMODULE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SUBMODULE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export SUBMODULE_ROOT
 
 # MCP configuration
 export MCP_SERVER_URL="${MCP_SERVER_URL:-http://127.0.0.1:5005}"
