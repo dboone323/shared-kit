@@ -36,13 +36,21 @@ jobs:
               with:
                   sarif_file: "trivy-results.sarif"
 
-            - name: Check for secrets using TruffleHog
-              uses: trufflesecurity/trufflehog@main
-              with:
-                  path: ./
-                  base: main
-                  head: HEAD
-                  extra_args: --debug --only-verified
+      - name: Check for secrets using TruffleHog (PRs)
+        if: github.event_name == 'pull_request'
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
+          extra_args: --debug --only-verified
+
+      - name: Check for secrets using TruffleHog (Scheduled)
+        if: github.event_name == 'schedule'
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          extra_args: --debug --only-verified
 
             - name: CodeQL Analysis
               uses: github/codeql-action/init@v3
