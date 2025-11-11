@@ -64,8 +64,7 @@ jobs:
               uses: ludeeus/action-shellcheck@master
               with:
                   severity: error
-                  ignore_paths: node_modules
-                  ignore_names: unified_dashboard.sh,quantum_dashboard.sh,master_automation.sh
+                  ignore_paths: node_modules,Tools/Automation/unified_dashboard.sh,Tools/Automation/quantum_dashboard.sh,Tools/Automation/master_automation.sh
 
             - name: Security audit for Python dependencies
               run: |
