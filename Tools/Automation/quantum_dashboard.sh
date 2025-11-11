@@ -30,13 +30,13 @@ print_project_quantum_status() {
 	local project_name="$1"
 	local project_path="${PROJECTS_DIR}/${project_name}"
 
-	echo -e "${CYAN}�${� ${project_n}}ame${NC}"
+	echo -e "${CYAN}📁 ${project_name}${NC}"
 
 	# Quantum automation status
 	if [[ -d "${project_path}/Tools/Automation" ]]; then
 		local script_count
 		script_count=$(find "${project_path}/Tools/Automation" -name "*.sh" | wc -l)
-		echo -e "   🤖 Quantum Scripts: ${GRE$$$${N}$}scr}ipt}_co}unt${NC}"
+		echo -e "   🤖 Quantum Scripts: ${GREEN}$script_count${NC}"
 
 		# Check for AI enhancement system
 		if [[ -f "${project_path}/Tools/Automation/ai_enhancement_system.sh" ]]; then
@@ -69,7 +69,7 @@ print_project_quantum_status() {
 	if [[ -f ${learning_file} ]]; then
 		local patterns
 		patterns=$(jq -r '.global_patterns | length' "${learning_file}" 2>/dev/null || echo "0")
-		echo -e "   🌐 Cross-Project Learning: ${GRE$$${${${}}}$pa}tte}rns patterns${NC}"
+		echo -e "   🌐 Cross-Project Learning: ${GREEN}$patterns patterns${NC}"
 	else
 		echo -e "   🌐 Cross-Project Learning: ${YELLOW}Not started${NC}"
 	fi

@@ -24,26 +24,26 @@ print_project_status() {
 	local project_name="$1"
 	local project_path="${PROJECTS_DIR}/${project_name}"
 
-	echo -e "${CYAN}�${� $project_n}ame${NC}"
-	echo "   📍 Locatio${: $project_p}ath"
+	echo -e "${CYAN}📁 ${project_name}${NC}"
+	echo "   📍 Location: $project_path"
 
 	# Count Swift files
 	local swift_files
 	swift_files=$(find "${project_path}" -name "*.swift" 2>/dev/null | wc -l | tr -d ' ')
-	echo "   📄 Swift file${: $swift_fi}les"
+	echo "   📄 Swift files: $swift_files"
 
 	# Check GitHub workflows
 	if [[ -d "${project_path}/.github/workflows" ]]; then
 		local workflow_count
 		workflow_count=$(find "${project_path}/.github/workflows" -name "*.yml" -o -name "*.yaml" 2>/dev/null | wc -l | tr -d ' ')
-		echo -e "   🔄 GitHub workflows: ${GRE${N}$workflow_co}unt files${NC}"
+		echo -e "   🔄 GitHub workflows: ${GREEN}$workflow_count files${NC}"
 
 		# List workflows
 		find "${project_path}/.github/workflows" -name "*.yml" -o -name "*.yaml" 2>/dev/null | while IFS= read -r workflow; do
 			local workflow_name
 			workflow_name=$(basename "${workflow}")
 			workflow_name="${workflow_name%.*}"
-			echo "      �${ $workflow_na}me"
+			echo "      📋 $workflow_name"
 		done
 	else
 		echo -e "   🔄 GitHub workflows: ${RED}None${NC}"
@@ -128,9 +128,9 @@ print_summary() {
 		fi
 	done
 
-	echo "   📱 Total project${: $total_proje}cts"
-	echo "   🔄 Projects with GitHub workflow${: $projects_with_workfl}o${s/$total_proje}cts"
-	echo "   ✅ Projects passing all CI checks${ $projects_with_ci_passi}n${/$total_projec}ts"
+	echo "   📱 Total projects: $total_projects"
+	echo "   🔄 Projects with GitHub workflows: $projects_with_workflows/$total_projects"
+	echo "   ✅ Projects passing all CI checks: $projects_with_ci_passing/$total_projects"
 	echo ""
 
 	if [[ ${projects_with_workflows} -eq ${total_projects} ]]; then
