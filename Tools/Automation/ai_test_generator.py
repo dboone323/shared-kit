@@ -13,7 +13,9 @@ from pathlib import Path
 
 
 class AILearningTestGenerator:
-    def __init__(self, base_dir="/Users/danielstevens/Desktop/Code"):
+    def __init__(self, base_dir=None):
+        # Default to WORKSPACE_ROOT if set, otherwise use current working directory
+        base_dir = base_dir or os.environ.get("WORKSPACE_ROOT") or os.getcwd()
         self.base_dir = Path(base_dir)
         self.projects = ["CodingReviewer", "HabitQuest", "MomentumFinance"]
         self.platforms = {

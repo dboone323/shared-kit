@@ -5,7 +5,14 @@
 
 set -e
 
-CODE_DIR="/Users/danielstevens/Desktop/Quantum-workspace"
+# Load standard workspace envs (WORKSPACE_ROOT, CODE_DIR, PROJECT_DIR)
+SETUP_PATH="$(git rev-parse --show-toplevel 2>/dev/null)/scripts/setup_paths.sh"
+if [[ -f "${SETUP_PATH}" ]]; then
+	# shellcheck disable=SC1090
+	source "${SETUP_PATH}"
+fi
+
+CODE_DIR="${CODE_DIR:-${WORKSPACE_ROOT}}"
 PROJECTS_DIR="${CODE_DIR}/Projects"
 ENHANCEMENT_DIR="${CODE_DIR}/Documentation/Enhancements"
 

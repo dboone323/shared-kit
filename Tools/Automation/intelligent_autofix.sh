@@ -5,6 +5,13 @@
 
 set -euo pipefail
 
+# Load repository environment variables for portability
+SETUP_PATH="$(git rev-parse --show-toplevel 2>/dev/null)/scripts/setup_paths.sh"
+if [[ -f "${SETUP_PATH}" ]]; then
+  # shellcheck disable=SC1090
+  source "${SETUP_PATH}"
+fi
+
 # Color codes for output
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
@@ -25,7 +32,7 @@ print_skip() { echo -e "${YELLOW}⏭️  SKIPPED:${NC} $1"; }
 print_rollback() { echo -e "${RED}🔄 ROLLBACK:${NC} $1"; }
 
 # Configuration
-readonly CODE_DIR="${CODE_DIR:-/Users/danielstevens/Desktop/Quantum-workspace}"
+readonly CODE_DIR="${CODE_DIR:-${WORKSPACE_ROOT}}"
 readonly BACKUP_DIR="${CODE_DIR}/.autofix_backups"
 readonly LOG_FILE="${CODE_DIR}/.autofix.log"
 
