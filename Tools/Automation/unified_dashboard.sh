@@ -8,7 +8,7 @@ if [[ -f "${SETUP_PATH}" ]]; then
 fi
 
 CODE_DIR="${CODE_DIR:-${WORKSPACE_ROOT}}"
-PROJECTS_DIR="${PROJECTS_DIR:-${CODE_DIR}}"
+PROJECTS_DIR="${PROJECTS_DIR:-${CODE_DIR}/Projects}"
 
 # Colors
 GREEN='\033[0;32m'
