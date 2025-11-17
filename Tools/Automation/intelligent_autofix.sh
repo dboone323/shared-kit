@@ -197,8 +197,10 @@ EOF
 
 # Quantum-level fix prediction
 predict_fix_success() {
-  local project_path="$1"
-  local fix_type="$2"
+  local project_path;
+  project_path="$1"
+  local fix_type;
+  fix_type="$2"
 
   if [[ ${PREDICTIVE_FIX} != "true" || ! -f ${FIX_SUCCESS_MODEL} ]]; then
     echo "0.75" # Default confidence
@@ -247,21 +249,24 @@ print(f'{prediction:.2f}')
 
 # Calculate project complexity score
 calculate_project_complexity() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
   local file_count
   file_count=$(find "${project_path}" -name "*.swift" | wc -l)
   local line_count
   line_count=$(find "${project_path}" -name "*.swift" -exec wc -l {} \; | awk '{sum += $1} END {print sum}')
 
   # Complexity score based on size and structure
-  local complexity=$((file_count * 10 + line_count / 100))
+  local complexity;
+  complexity=$((file_count * 10 + line_count / 100))
   complexity=$((complexity > 100 ? 100 : complexity))
   echo "${complexity}"
 }
 
 # Get historical success rate for fix type
 get_historical_success_rate() {
-  local fix_type="$1"
+  local fix_type;
+  fix_type="$1"
 
   # Simplified historical data lookup
   case "${fix_type}" in
@@ -275,8 +280,10 @@ get_historical_success_rate() {
 
 # Calculate pattern match score
 calculate_pattern_match() {
-  local project_path="$1"
-  local fix_type="$2"
+  local project_path;
+  project_path="$1"
+  local fix_type;
+  fix_type="$2"
 
   # Simplified pattern matching
   case "${fix_type}" in
@@ -290,7 +297,8 @@ calculate_pattern_match() {
 
 # Quantum-enhanced validation
 quantum_validation() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
 
   if [[ ${ADVANCED_VALIDATION} != "true" ]]; then
     return 0
@@ -298,8 +306,11 @@ quantum_validation() {
 
   print_quantum "Running quantum validation..."
 
-  local validation_score=0
-  local total_checks=4
+  local validation_score;
+
+  validation_score=0
+  local total_checks;
+  total_checks=4
 
   # 1. AI-powered static analysis
   if run_ai_static_analysis "${project_path}"; then
@@ -325,7 +336,9 @@ quantum_validation() {
     print_quantum "Cross-project validation passed"
   fi
 
-  local final_score=$((validation_score * 100 / total_checks))
+  local final_score;
+
+  final_score=$((validation_score * 100 / total_checks))
   print_quantum "Quantum validation score: ${final_score}%"
 
   # Return success if score is above threshold
@@ -334,10 +347,12 @@ quantum_validation() {
 
 # AI-powered static analysis
 run_ai_static_analysis() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
 
   # Check for common AI-detectable issues
-  local ai_issues=0
+  local ai_issues;
+  ai_issues=0
 
   # Memory leak patterns
   if grep -r "retain\|weak\|unowned" "${project_path}" --include="*.swift" | grep -q "="; then
@@ -355,10 +370,12 @@ run_ai_static_analysis() {
 
 # Pattern-based validation
 run_pattern_validation() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
 
   # Check for known problematic patterns
-  local pattern_issues=0
+  local pattern_issues;
+  pattern_issues=0
 
   # Force unwrap patterns
   if grep -r "!" "${project_path}" --include="*.swift" | grep -v "guard\|if" | head -5 | grep -q "!"; then
@@ -377,10 +394,12 @@ run_pattern_validation() {
 
 # Risk assessment
 run_risk_assessment() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
 
   # Calculate risk score based on various factors
-  local risk_score=0
+  local risk_score;
+  risk_score=0
 
   # File count risk
   local file_count
@@ -398,7 +417,8 @@ run_risk_assessment() {
 
 # Cross-project validation
 run_cross_project_validation() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
 
   # Compare with successful patterns from other projects
   local project_name
@@ -415,8 +435,10 @@ run_cross_project_validation() {
 
 # Enhanced main auto-fix function with quantum capabilities
 quantum_autofix() {
-  local project_name="$1"
-  local project_path="${CODE_DIR}/Projects/${project_name}"
+  local project_name;
+  project_name="$1"
+  local project_path;
+  project_path="${CODE_DIR}/Projects/${project_name}"
 
   if [[ ! -d ${project_path} ]]; then
     print_error "Project ${project_name} not found"
@@ -456,8 +478,10 @@ quantum_autofix() {
   fi
 
   # Track fixes applied
-  local total_fixes=0
-  local fix_categories=0
+  local total_fixes;
+  total_fixes=0
+  local fix_categories;
+  fix_categories=0
 
   # Apply fixes with quantum prediction
   cd "${project_path}"
@@ -467,7 +491,8 @@ quantum_autofix() {
   format_prediction=$(predict_fix_success "${project_path}" "swiftformat")
   if (($(echo "${format_prediction} > 0.7" | bc -l))); then
     fix_swiftformat_issues "${project_path}"
-    local swiftformat_fixes=$?
+    local swiftformat_fixes;
+    swiftformat_fixes=$?
     ((total_fixes += swiftformat_fixes))
     ((fix_categories++))
     print_quantum "SwiftFormat prediction: $(echo "${format_prediction} * 100" | bc -l | xargs printf "%.0f")%"
@@ -480,7 +505,8 @@ quantum_autofix() {
   lint_prediction=$(predict_fix_success "${project_path}" "swiftlint")
   if (($(echo "${lint_prediction} > 0.7" | bc -l))); then
     fix_swiftlint_issues "${project_path}"
-    local swiftlint_fixes=$?
+    local swiftlint_fixes;
+    swiftlint_fixes=$?
     ((total_fixes += swiftlint_fixes))
     ((fix_categories++))
     print_quantum "SwiftLint prediction: $(echo "${lint_prediction} * 100" | bc -l | xargs printf "%.0f")%"
@@ -493,7 +519,8 @@ quantum_autofix() {
   build_prediction=$(predict_fix_success "${project_path}" "build")
   if (($(echo "${build_prediction} > 0.6" | bc -l))); then
     fix_build_issues "${project_path}"
-    local build_fixes=$?
+    local build_fixes;
+    build_fixes=$?
     ((total_fixes += build_fixes))
     ((fix_categories++))
     print_quantum "Build fixes prediction: $(echo "${build_prediction} * 100" | bc -l | xargs printf "%.0f")%"
@@ -506,7 +533,8 @@ quantum_autofix() {
   common_prediction=$(predict_fix_success "${project_path}" "common")
   if (($(echo "${common_prediction} > 0.75" | bc -l))); then
     fix_common_code_issues "${project_path}"
-    local common_fixes=$?
+    local common_fixes;
+    common_fixes=$?
     ((total_fixes += common_fixes))
     ((fix_categories++))
     print_quantum "Common fixes prediction: $(echo "${common_prediction} * 100" | bc -l | xargs printf "%.0f")%"
@@ -565,9 +593,12 @@ quantum_autofix() {
 
 # Update cross-project learning database
 update_cross_project_learning() {
-  local project_name="$1"
-  local outcome="$2" # success or failure
-  local fixes_count="$3"
+  local project_name;
+  project_name="$1"
+  local outcome;
+  outcome="$2" # success or failure
+  local fixes_count;
+  fixes_count="$3"
 
   if [[ ! -f "${ML_MODEL_PATH}/cross_project_fixes.json" ]]; then
     return
@@ -594,14 +625,18 @@ quantum_main() {
 
 # Backup and restore functions
 create_backup() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
   local project_name
   project_name=$(basename "${project_path}")
 
   # Backup deduplication: Check if recent backup exists (within 1 hour)
-  local backup_cooldown=3600 # 1 hour in seconds
-  local last_backup_marker="${BACKUP_DIR}/.last_backup_${project_name}"
-  local should_backup=true
+  local backup_cooldown;
+  backup_cooldown=3600 # 1 hour in seconds
+  local last_backup_marker;
+  last_backup_marker="${BACKUP_DIR}/.last_backup_${project_name}"
+  local should_backup;
+  should_backup=true
 
   if [[ -f "${last_backup_marker}" ]]; then
     local last_backup_time
@@ -613,7 +648,8 @@ create_backup() {
     else
       local current_time
       current_time=$(date +%s)
-      local time_since_backup=$((current_time - last_backup_time))
+      local time_since_backup;
+      time_since_backup=$((current_time - last_backup_time))
 
       if [[ ${time_since_backup} -lt ${backup_cooldown} ]]; then
         print_status "Recent backup exists (${time_since_backup}s ago), skipping backup (cooldown: ${backup_cooldown}s)"
@@ -659,8 +695,10 @@ create_backup() {
 }
 
 restore_backup() {
-  local project_path="$1"
-  local backup_file="${project_path}/.autofix_backup"
+  local project_path;
+  project_path="$1"
+  local backup_file;
+  backup_file="${project_path}/.autofix_backup"
 
   if [[ -f ${backup_file} ]]; then
     local backup_path
@@ -679,8 +717,10 @@ restore_backup() {
 }
 
 cleanup_backup() {
-  local project_path="$1"
-  local backup_file="${project_path}/.autofix_backup"
+  local project_path;
+  project_path="$1"
+  local backup_file;
+  backup_file="${project_path}/.autofix_backup"
 
   if [[ -f ${backup_file} ]]; then
     local backup_path
@@ -695,13 +735,17 @@ cleanup_backup() {
 
 # Build validation functions
 run_pre_build_checks() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
   cd "${project_path}"
 
   print_status "Running pre-build validation checks..."
 
-  local checks_passed=0
-  local total_checks=4
+  local checks_passed;
+
+  checks_passed=0
+  local total_checks;
+  total_checks=4
 
   # Check 1: Swift compilation
   if [[ -f "Package.swift" ]]; then
@@ -727,8 +771,10 @@ run_pre_build_checks() {
 
   # Check 2: SwiftLint validation
   if command -v swiftlint &>/dev/null; then
-    local lint_output=$(swiftlint lint --reporter json 2>/dev/null || echo "[]")
-    local lint_errors=$(echo "${lint_output}" | jq -r '.[] | select(.severity == "error") | .file' 2>/dev/null | wc -l | xargs || echo "0")
+    local lint_output;
+    lint_output=$(swiftlint lint --reporter json 2>/dev/null || echo "[]")
+    local lint_errors;
+    lint_errors=$(echo "${lint_output}" | jq -r '.[] | select(.severity == "error") | .file' 2>/dev/null | wc -l | xargs || echo "0")
     if [[ ${lint_errors} =~ ^[0-9]+$ ]] && [[ ${lint_errors} -eq 0 ]]; then
       print_success "SwiftLint error check passed"
       ((checks_passed++))
@@ -755,8 +801,10 @@ run_pre_build_checks() {
   fi
 
   # Check 4: Project structure validation
-  local required_files=0
-  local found_files=0
+  local required_files;
+  required_files=0
+  local found_files;
+  found_files=0
 
   if [[ -f "*.xcodeproj/project.pbxproj" ]] || [[ -f "Package.swift" ]]; then
     ((required_files++))
@@ -774,13 +822,17 @@ run_pre_build_checks() {
 }
 
 run_post_build_checks_verbose() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
   cd "${project_path}"
 
   print_status "Running post-build validation checks..."
 
-  local checks_passed=0
-  local total_checks=5
+  local checks_passed;
+
+  checks_passed=0
+  local total_checks;
+  total_checks=5
 
   # Check 1: Swift compilation
   print_status "Testing Swift compilation..."
@@ -809,8 +861,10 @@ run_post_build_checks_verbose() {
 
   # Check 2: SwiftLint validation
   if command -v swiftlint &>/dev/null; then
-    local lint_output=$(swiftlint lint --reporter json 2>/dev/null || echo "[]")
-    local lint_errors=$(echo "${lint_output}" | jq -r '.[] | select(.severity == "error") | .file' 2>/dev/null | wc -l | xargs || echo "0")
+    local lint_output;
+    lint_output=$(swiftlint lint --reporter json 2>/dev/null || echo "[]")
+    local lint_errors;
+    lint_errors=$(echo "${lint_output}" | jq -r '.[] | select(.severity == "error") | .file' 2>/dev/null | wc -l | xargs || echo "0")
     if [[ ${lint_errors} =~ ^[0-9]+$ ]] && [[ ${lint_errors} -eq 0 ]]; then
       print_success "No SwiftLint errors"
       ((checks_passed++))
@@ -825,7 +879,8 @@ run_post_build_checks_verbose() {
 
   # Check 3: SwiftFormat validation
   if command -v swiftformat &>/dev/null; then
-    local format_changes=$(swiftformat --dryrun . 2>/dev/null | wc -l | tr -d '\n' | xargs || echo "0")
+    local format_changes;
+    format_changes=$(swiftformat --dryrun . 2>/dev/null | wc -l | tr -d '\n' | xargs || echo "0")
     if [[ ${format_changes} -eq 0 ]] 2>/dev/null; then
       print_success "Code formatting is consistent"
       ((checks_passed++))
@@ -881,11 +936,15 @@ run_post_build_checks_verbose() {
 }
 
 run_post_build_checks() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
   cd "${project_path}"
 
-  local checks_passed=0
-  local total_checks=5
+  local checks_passed;
+
+  checks_passed=0
+  local total_checks;
+  total_checks=5
 
   # Check 1: Swift compilation
   if [[ -f "Package.swift" ]]; then
@@ -910,8 +969,10 @@ run_post_build_checks() {
 
   # Check 2: SwiftLint validation
   if command -v swiftlint &>/dev/null; then
-    local lint_output=$(swiftlint lint --reporter json 2>/dev/null || echo "[]")
-    local lint_errors=$(echo "${lint_output}" | jq -r '.[] | select(.severity == "error") | .file' 2>/dev/null | wc -l | xargs || echo "0")
+    local lint_output;
+    lint_output=$(swiftlint lint --reporter json 2>/dev/null || echo "[]")
+    local lint_errors;
+    lint_errors=$(echo "${lint_output}" | jq -r '.[] | select(.severity == "error") | .file' 2>/dev/null | wc -l | xargs || echo "0")
     if [[ ${lint_errors} =~ ^[0-9]+$ ]] && [[ ${lint_errors} -eq 0 ]]; then
       ((checks_passed++))
     else
@@ -924,7 +985,8 @@ run_post_build_checks() {
 
   # Check 3: SwiftFormat validation
   if command -v swiftformat &>/dev/null; then
-    local format_changes=$(swiftformat --dryrun . 2>/dev/null | wc -l | tr -d '\n' | xargs || echo "0")
+    local format_changes;
+    format_changes=$(swiftformat --dryrun . 2>/dev/null | wc -l | tr -d '\n' | xargs || echo "0")
     if [[ ${format_changes} -eq 0 ]] 2>/dev/null; then
       ((checks_passed++))
     else
@@ -971,7 +1033,8 @@ run_post_build_checks() {
 
 # Auto-fix implementations
 fix_swiftlint_issues() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
   cd "${project_path}"
 
   print_header "Auto-fixing SwiftLint issues..."
@@ -981,17 +1044,21 @@ fix_swiftlint_issues() {
     return 0
   fi
 
-  local fixes_applied=0
+  local fixes_applied;
+
+  fixes_applied=0
 
   # Get fixable SwiftLint violations
-  local fixable_rules=$(swiftlint rules | grep "yes" | awk '{print $1}' || echo "")
+  local fixable_rules;
+  fixable_rules=$(swiftlint rules | grep "yes" | awk '{print $1}' || echo "")
 
   if [[ -n ${fixable_rules} ]]; then
     print_status "Applying SwiftLint auto-fixes..."
 
     # Apply fixes
     if swiftlint --fix --format &>/dev/null; then
-      local violations_after=$(swiftlint lint --reporter json 2>/dev/null | jq -r '.[] | select(.severity == "error") | .file' | wc -l || echo "0")
+      local violations_after;
+      violations_after=$(swiftlint lint --reporter json 2>/dev/null | jq -r '.[] | select(.severity == "error") | .file' | wc -l || echo "0")
       print_fix "SwiftLint auto-fixes applied"
       ((fixes_applied++))
     else
@@ -1005,7 +1072,8 @@ fix_swiftlint_issues() {
 }
 
 fix_swiftformat_issues() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
   cd "${project_path}"
 
   print_header "Auto-fixing SwiftFormat issues..."
@@ -1015,10 +1083,13 @@ fix_swiftformat_issues() {
     return 0
   fi
 
-  local fixes_applied=0
+  local fixes_applied;
+
+  fixes_applied=0
 
   # Check if formatting is needed
-  local format_changes=$(swiftformat --dryrun . 2>/dev/null | wc -l | tr -d '\n' | xargs)
+  local format_changes;
+  format_changes=$(swiftformat --dryrun . 2>/dev/null | wc -l | tr -d '\n' | xargs)
   format_changes=${format_changes:-0}
 
   if [[ ${format_changes} -gt 0 ]]; then
@@ -1039,12 +1110,15 @@ fix_swiftformat_issues() {
 }
 
 fix_build_issues() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
   cd "${project_path}"
 
   print_header "Auto-fixing build issues..."
 
-  local fixes_applied=0
+  local fixes_applied;
+
+  fixes_applied=0
 
   # Fix 1: Update Package.swift dependencies
   if [[ -f "Package.swift" ]]; then
@@ -1084,7 +1158,8 @@ fix_build_issues() {
 
   # Fix 3: Update Xcode project settings (if exists)
   if find . -name "*.xcodeproj" -type d | head -1 | grep -q "xcodeproj"; then
-    local xcode_project=$(find . -name "*.xcodeproj" -type d | head -1)
+    local xcode_project;
+    xcode_project=$(find . -name "*.xcodeproj" -type d | head -1)
     print_status "Checking Xcode project settings..."
 
     # Update deployment target if needed
@@ -1111,16 +1186,20 @@ fix_build_issues() {
 }
 
 fix_common_code_issues() {
-  local project_path="$1"
+  local project_path;
+  project_path="$1"
   cd "${project_path}"
 
   print_header "Auto-fixing common code issues..."
 
-  local fixes_applied=0
+  local fixes_applied;
+
+  fixes_applied=0
 
   # Fix 1: Remove trailing whitespace
   print_status "Removing trailing whitespace..."
-  local whitespace_files=$(find . -name "*.swift" -type f -exec grep -l "[[:space:]]$" {} \; 2>/dev/null || echo "")
+  local whitespace_files;
+  whitespace_files=$(find . -name "*.swift" -type f -exec grep -l "[[:space:]]$" {} \; 2>/dev/null || echo "")
   if [[ -n ${whitespace_files} ]]; then
     find . -name "*.swift" -type f -exec sed -i.bak 's/[[:space:]]*$//' {} \;
     find . -name "*.swift.bak" -delete
@@ -1130,7 +1209,8 @@ fix_common_code_issues() {
 
   # Fix 2: Fix import ordering
   print_status "Organizing imports..."
-  local import_fixes=0
+  local import_fixes;
+  import_fixes=0
   while IFS= read -r -d '' file; do
     if [[ -f ${file} ]]; then
       # Simple import organization - Foundation first, then others alphabetically
@@ -1183,10 +1263,12 @@ if imports:
 
   # Fix 3: Add missing newlines at end of files
   print_status "Adding missing newlines at end of files..."
-  local newline_fixes=0
+  local newline_fixes;
+  newline_fixes=0
   while IFS= read -r -d '' file; do
     if [[ -f ${file} ]] && [[ -s ${file} ]]; then
-      local last_char_count=$(tail -c1 "${file}" | wc -l | xargs)
+      local last_char_count;
+      last_char_count=$(tail -c1 "${file}" | wc -l | xargs)
       if [[ ${last_char_count} -eq 0 ]]; then
         echo "" >>"${file}"
         ((newline_fixes++))
@@ -1204,8 +1286,10 @@ if imports:
 
 # Main auto-fix function
 run_comprehensive_autofix() {
-  local project_name="$1"
-  local project_path="${CODE_DIR}/Projects/${project_name}"
+  local project_name;
+  project_name="$1"
+  local project_path;
+  project_path="${CODE_DIR}/Projects/${project_name}"
 
   if [[ ! -d ${project_path} ]]; then
     print_error "Project ${project_name} not found"
@@ -1218,44 +1302,54 @@ run_comprehensive_autofix() {
   create_backup "${project_path}"
 
   # Run pre-build checks
-  local pre_check_result=$(run_pre_build_checks "${project_path}")
+  local pre_check_result;
+  pre_check_result=$(run_pre_build_checks "${project_path}")
   print_status "Pre-build validation: ${pre_check_result}"
 
   # Track fixes applied
-  local total_fixes=0
-  local fix_categories=0
+  local total_fixes;
+  total_fixes=0
+  local fix_categories;
+  fix_categories=0
 
   # Apply fixes
   cd "${project_path}"
 
   # 1. SwiftFormat fixes
   fix_swiftformat_issues "${project_path}"
-  local swiftformat_fixes=$?
+  local swiftformat_fixes;
+  swiftformat_fixes=$?
   ((total_fixes += swiftformat_fixes))
   ((fix_categories++))
 
   # 2. SwiftLint fixes
   fix_swiftlint_issues "${project_path}"
-  local swiftlint_fixes=$?
+  local swiftlint_fixes;
+  swiftlint_fixes=$?
   ((total_fixes += swiftlint_fixes))
   ((fix_categories++))
 
   # 3. Build issue fixes
   fix_build_issues "${project_path}"
-  local build_fixes=$?
+  local build_fixes;
+  build_fixes=$?
   ((total_fixes += build_fixes))
   ((fix_categories++))
 
   # 4. Common code fixes
   fix_common_code_issues "${project_path}"
-  local common_fixes=$?
+  local common_fixes;
+  common_fixes=$?
   ((total_fixes += common_fixes))
   ((fix_categories++))
 
   # Run post-build checks
-  local post_check_result=$(run_post_build_checks "${project_path}")
-  local post_checks_passed=$(echo "${post_check_result}" | cut -d'/' -f1)
-  local post_total_checks=$(echo "${post_check_result}" | cut -d'/' -f2)
+  local post_check_result;
+  post_check_result=$(run_post_build_checks "${project_path}")
+  local post_checks_passed;
+  post_checks_passed=$(echo "${post_check_result}" | cut -d'/' -f1)
+  local post_total_checks;
+  post_total_checks=$(echo "${post_check_result}" | cut -d'/' -f2)
 
   print_status "Post-build validation: ${post_check_result}"
 
@@ -1282,9 +1376,13 @@ run_comprehensive_autofix() {
 run_autofix_all_projects() {
   print_header "Running comprehensive auto-fix on all projects"
 
-  local projects=("CodingReviewer" "HabitQuest" "MomentumFinance")
-  local successful_fixes=0
-  local failed_fixes=0
+  local projects;
+
+  projects=("CodingReviewer" "HabitQuest" "MomentumFinance")
+  local successful_fixes;
+  successful_fixes=0
+  local failed_fixes;
+  failed_fixes=0
 
   for project in "${projects[@]}"; do
     print_header "Processing project: ${project}"
@@ -1370,7 +1468,8 @@ main() {
     ;;
   "validate")
     if [[ -n ${2-} ]]; then
-      local project_path="${CODE_DIR}/Projects/$2"
+      local project_path;
+      project_path="${CODE_DIR}/Projects/$2"
       if [[ -d ${project_path} ]]; then
         print_header "Running validation for $2"
         run_pre_build_checks "${project_path}"
@@ -1386,7 +1485,8 @@ main() {
     ;;
   "rollback")
     if [[ -n ${2-} ]]; then
-      local project_path="${CODE_DIR}/Projects/$2"
+      local project_path;
+      project_path="${CODE_DIR}/Projects/$2"
       if [[ -d ${project_path} ]]; then
         restore_backup "${project_path}"
       else
