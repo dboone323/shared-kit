@@ -1529,9 +1529,6 @@ enum RealityStabilizationNetworkMetadata {
 // Framework for connecting parallel realities through bridge construction
 // Created: October 13, 2025
 
-import Combine
-import Foundation
-
 // MARK: - Validation Types
 
 /// Validation result

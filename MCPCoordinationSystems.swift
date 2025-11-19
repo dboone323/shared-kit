@@ -60,12 +60,12 @@ public struct MCPOperationCoordination: Codable {
 
 /// Coordination strategy
 public enum CoordinationStrategy: String, Sendable, Codable {
-    case parallel_execution
-    case sequential_execution
-    case hierarchical_execution
-    case adaptive_execution
-    case quantum_entangled_execution
-    case consciousness_driven_execution
+    case parallelExecution = "parallel_execution"
+    case sequentialExecution = "sequential_execution"
+    case hierarchicalExecution = "hierarchical_execution"
+    case adaptiveExecution = "adaptive_execution"
+    case quantumEntangledExecution = "quantum_entangled_execution"
+    case consciousnessDrivenExecution = "consciousness_driven_execution"
 }
 
 /// Coordination constraint
@@ -88,13 +88,13 @@ public struct CoordinationConstraint: Sendable, Codable {
 
 /// Coordination constraint types
 public enum CoordinationConstraintType: String, Sendable, Codable {
-    case temporal_dependency
-    case resource_dependency
-    case data_dependency
-    case ethical_alignment
-    case quantum_coherence
-    case consciousness_integrity
-    case performance_threshold
+    case temporalDependency = "temporal_dependency"
+    case resourceDependency = "resource_dependency"
+    case dataDependency = "data_dependency"
+    case ethicalAlignment = "ethical_alignment"
+    case quantumCoherence = "quantum_coherence"
+    case consciousnessIntegrity = "consciousness_integrity"
+    case performanceThreshold = "performance_threshold"
 }
 
 /// Coordination result
@@ -205,23 +205,23 @@ public struct WorkflowStage: Codable {
 
 /// Workflow stage types
 public enum WorkflowStageType: String, Sendable, Codable {
-    case intelligence_gathering
-    case analysis_processing
-    case synthesis_integration
-    case decision_making
-    case execution_coordination
-    case evaluation_assessment
-    case optimization_refinement
+    case intelligenceGathering = "intelligence_gathering"
+    case analysisProcessing = "analysis_processing"
+    case synthesisIntegration = "synthesis_integration"
+    case decisionMaking = "decision_making"
+    case executionCoordination = "execution_coordination"
+    case evaluationAssessment = "evaluation_assessment"
+    case optimizationRefinement = "optimization_refinement"
 }
 
 /// Workflow types
 public enum WorkflowType: String, Sendable, Codable {
-    case analytical_workflow
-    case creative_workflow
-    case strategic_workflow
-    case operational_workflow
-    case adaptive_workflow
-    case quantum_workflow
+    case analyticalWorkflow = "analytical_workflow"
+    case creativeWorkflow = "creative_workflow"
+    case strategicWorkflow = "strategic_workflow"
+    case operationalWorkflow = "operational_workflow"
+    case adaptiveWorkflow = "adaptive_workflow"
+    case quantumWorkflow = "quantum_workflow"
 }
 
 /// Workflow result
@@ -347,11 +347,11 @@ public struct FrameworkSynchronization: Codable {
 
 /// Synchronization types
 public enum SynchronizationType: String, Sendable, Codable {
-    case state_synchronization
-    case capability_alignment
-    case performance_optimization
-    case quantum_entanglement
-    case consciousness_harmonization
+    case stateSynchronization = "state_synchronization"
+    case capabilityAlignment = "capability_alignment"
+    case performanceOptimization = "performance_optimization"
+    case quantumEntanglement = "quantum_entanglement"
+    case consciousnessHarmonization = "consciousness_harmonization"
 }
 
 /// Synchronization result

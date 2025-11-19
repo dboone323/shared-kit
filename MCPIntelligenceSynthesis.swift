@@ -84,14 +84,14 @@ public struct IntelligenceInput: Sendable, Codable {
 
 /// Intelligence source
 public enum IntelligenceSource: String, Sendable, Codable {
-    case mcp_framework
-    case agent_system
-    case ollama_model
-    case quantum_processor
-    case consciousness_engine
-    case universal_intelligence
-    case reality_engine
-    case ethical_transcendence
+    case mcpFramework = "mcp_framework"
+    case agentSystem = "agent_system"
+    case ollamaModel = "ollama_model"
+    case quantumProcessor = "quantum_processor"
+    case consciousnessEngine = "consciousness_engine"
+    case universalIntelligence = "universal_intelligence"
+    case realityEngine = "reality_engine"
+    case ethicalTranscendence = "ethical_transcendence"
 }
 
 /// Synthesis type
@@ -99,8 +99,8 @@ public enum SynthesisType: String, Sendable, Codable {
     case integrative
     case emergent
     case transcendent
-    case quantum_entangled
-    case consciousness_driven
+    case quantumEntangled = "quantum_entangled"
+    case consciousnessDriven = "consciousness_driven"
     case universal
 }
 
@@ -126,11 +126,11 @@ public struct SynthesisConstraint: Sendable, Codable {
 public enum SynthesisConstraintType: String, Sendable, Codable {
     case coherence
     case consistency
-    case ethical_alignment
-    case quantum_stability
-    case consciousness_integrity
-    case reality_compatibility
-    case performance_threshold
+    case ethicalAlignment = "ethical_alignment"
+    case quantumStability = "quantum_stability"
+    case consciousnessIntegrity = "consciousness_integrity"
+    case realityCompatibility = "reality_compatibility"
+    case performanceThreshold = "performance_threshold"
 }
 
 /// Intelligence synthesis result
@@ -196,9 +196,9 @@ public enum SynthesizedIntelligenceType: String, Sendable, Codable {
     case integrative
     case emergent
     case transcendent
-    case quantum_synthesized
-    case consciousness_synthesized
-    case universal_synthesized
+    case quantumSynthesized = "quantum_synthesized"
+    case consciousnessSynthesized = "consciousness_synthesized"
+    case universalSynthesized = "universal_synthesized"
 }
 
 /// Domain synthesis result
@@ -275,11 +275,11 @@ public struct IntelligenceSynthesisCoordination: Sendable, Codable {
 
 /// Synthesis coordination types
 public enum SynthesisCoordinationType: String, Sendable, Codable {
-    case parallel_synthesis
-    case sequential_synthesis
-    case hierarchical_synthesis
-    case adaptive_synthesis
-    case quantum_entangled_synthesis
+    case parallelSynthesis = "parallel_synthesis"
+    case sequentialSynthesis = "sequential_synthesis"
+    case hierarchicalSynthesis = "hierarchical_synthesis"
+    case adaptiveSynthesis = "adaptive_synthesis"
+    case quantumEntangledSynthesis = "quantum_entangled_synthesis"
 }
 
 /// Synthesis coordination result

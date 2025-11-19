@@ -855,7 +855,6 @@ public actor ImplementationSynthesizer {
             // \(step.title)
             // Generated implementation
 
-            import Foundation
 
             public class \(step.title.replacingOccurrences(of: " ", with: "")) {
                 public init() {

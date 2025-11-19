@@ -62,9 +62,6 @@ public enum HuggingFaceError: LocalizedError {
     }
 }
 
-import Foundation
-import OSLog
-
 // import SharedKit // Will be available when integrated into package
 
 /// Enhanced Hugging Face API Client with Quantum Performance

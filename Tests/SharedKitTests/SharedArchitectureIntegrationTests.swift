@@ -24,23 +24,23 @@ class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
         // Test that mock data generators work for all projects
         let habitData = generateTestData(for: .habitQuest, count: 5)
         XCTAssertEqual(habitData.count, 5)
-        XCTAssertTrue(habitData.allSatisfy { $0["name"] as? String != nil })
+        XCTAssertTrue(habitData.allSatisfy { $0["name"] is String })
 
         let financeData = generateTestData(for: .momentumFinance, count: 3)
         XCTAssertEqual(financeData.count, 3)
-        XCTAssertTrue(financeData.allSatisfy { $0["amount"] as? Double != nil })
+        XCTAssertTrue(financeData.allSatisfy { $0["amount"] is Double })
 
         let codeData = generateTestData(for: .codingReviewer, count: 2)
         XCTAssertEqual(codeData.count, 2)
-        XCTAssertTrue(codeData.allSatisfy { $0["language"] as? String != nil })
+        XCTAssertTrue(codeData.allSatisfy { $0["language"] is String })
 
         let plannerData = generateTestData(for: .plannerApp, count: 4)
         XCTAssertEqual(plannerData.count, 4)
-        XCTAssertTrue(plannerData.allSatisfy { $0["title"] as? String != nil })
+        XCTAssertTrue(plannerData.allSatisfy { $0["title"] is String })
 
         let gameData = generateTestData(for: .avoidObstaclesGame, count: 1)
         XCTAssertEqual(gameData.count, 1)
-        XCTAssertTrue(gameData.allSatisfy { $0["score"] as? Int != nil })
+        XCTAssertTrue(gameData.allSatisfy { $0["score"] is Int })
     }
 
     // MARK: - Test Utilities Tests

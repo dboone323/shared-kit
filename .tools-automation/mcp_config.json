@@ -6,7 +6,7 @@
   "default_provider": "ollama",
   "providers": {
     "ollama": {
-      "endpoint": "http://localhost:11434"
+      "endpoint": "http://127.0.0.1:11434"
     },
     "mcp_server": {
       "endpoint": "http://127.0.0.1:5005"

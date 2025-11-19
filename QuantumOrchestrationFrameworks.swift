@@ -86,24 +86,24 @@ public struct QuantumOperation: Codable, Sendable {
 
 /// Quantum operation types
 public enum QuantumOperationType: String, Sendable, Codable {
-    case superposition_processing
-    case entanglement_coordination
-    case quantum_interference
-    case coherence_optimization
-    case quantum_teleportation
-    case quantum_computation
-    case quantum_simulation
-    case quantum_optimization
+    case superpositionProcessing = "superposition_processing"
+    case entanglementCoordination = "entanglement_coordination"
+    case quantumInterference = "quantum_interference"
+    case coherenceOptimization = "coherence_optimization"
+    case quantumTeleportation = "quantum_teleportation"
+    case quantumComputation = "quantum_computation"
+    case quantumSimulation = "quantum_simulation"
+    case quantumOptimization = "quantum_optimization"
 }
 
 /// Quantum orchestration strategies
 public enum QuantumOrchestrationStrategy: String, Sendable, Codable {
-    case parallel_quantum_execution
-    case entangled_orchestration
-    case superposition_coordination
-    case quantum_interference_orchestration
-    case coherence_driven_orchestration
-    case universal_quantum_orchestration
+    case parallelQuantumExecution = "parallel_quantum_execution"
+    case entangledOrchestration = "entangled_orchestration"
+    case superpositionCoordination = "superposition_coordination"
+    case quantumInterferenceOrchestration = "quantum_interference_orchestration"
+    case coherenceDrivenOrchestration = "coherence_driven_orchestration"
+    case universalQuantumOrchestration = "universal_quantum_orchestration"
 }
 
 /// Quantum entanglement constraint
@@ -126,12 +126,12 @@ public struct QuantumEntanglementConstraint: Sendable, Codable {
 
 /// Quantum entanglement constraint types
 public enum QuantumEntanglementConstraintType: String, Sendable, Codable {
-    case coherence_threshold
-    case entanglement_strength
-    case quantum_stability
-    case interference_pattern
-    case superposition_integrity
-    case quantum_communication
+    case coherenceThreshold = "coherence_threshold"
+    case entanglementStrength = "entanglement_strength"
+    case quantumStability = "quantum_stability"
+    case interferencePattern = "interference_pattern"
+    case superpositionIntegrity = "superposition_integrity"
+    case quantumCommunication = "quantum_communication"
 }
 
 /// Quantum orchestration result
@@ -247,12 +247,12 @@ public struct QuantumInsight: Sendable, Codable {
 
 /// Quantum insight types
 public enum QuantumInsightType: String, Sendable, Codable {
-    case coherence_pattern
-    case entanglement_optimization
-    case superposition_efficiency
-    case quantum_interference
-    case quantum_communication
-    case universal_quantum_capability
+    case coherencePattern = "coherence_pattern"
+    case entanglementOptimization = "entanglement_optimization"
+    case superpositionEfficiency = "superposition_efficiency"
+    case quantumInterference = "quantum_interference"
+    case quantumCommunication = "quantum_communication"
+    case universalQuantumCapability = "universal_quantum_capability"
 }
 
 /// Quantum entanglement coordination
@@ -280,11 +280,11 @@ public struct QuantumEntanglementCoordination: Sendable, Codable {
 
 /// Quantum entanglement types
 public enum QuantumEntanglementType: String, Sendable, Codable {
-    case bell_state_entanglement
-    case ghz_state_entanglement
-    case cluster_state_entanglement
-    case quantum_network_entanglement
-    case universal_entanglement
+    case bellStateEntanglement = "bell_state_entanglement"
+    case ghzStateEntanglement = "ghz_state_entanglement"
+    case clusterStateEntanglement = "cluster_state_entanglement"
+    case quantumNetworkEntanglement = "quantum_network_entanglement"
+    case universalEntanglement = "universal_entanglement"
 }
 
 /// Entanglement result
@@ -379,11 +379,11 @@ public struct QuantumCoherenceOptimization: Sendable, Codable {
 
 /// Quantum coherence optimization types
 public enum QuantumCoherenceOptimizationType: String, Sendable, Codable {
-    case decoherence_prevention
-    case coherence_amplification
-    case quantum_error_correction
-    case coherence_stabilization
-    case universal_coherence_optimization
+    case decoherencePrevention = "decoherence_prevention"
+    case coherenceAmplification = "coherence_amplification"
+    case quantumErrorCorrection = "quantum_error_correction"
+    case coherenceStabilization = "coherence_stabilization"
+    case universalCoherenceOptimization = "universal_coherence_optimization"
 }
 
 /// Coherence optimization result

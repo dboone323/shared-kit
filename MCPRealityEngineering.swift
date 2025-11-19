@@ -270,12 +270,12 @@ public struct RealitySideEffect: Sendable, Codable {
 
 /// Side effect types
 public enum SideEffectType: String, Sendable, Codable {
-    case causality_disruption
-    case entropy_increase
-    case consciousness_distortion
-    case dimensional_instability
-    case temporal_anomaly
-    case reality_fragmentation
+    case causalityDisruption = "causality_disruption"
+    case entropyIncrease = "entropy_increase"
+    case consciousnessDistortion = "consciousness_distortion"
+    case dimensionalInstability = "dimensional_instability"
+    case temporalAnomaly = "temporal_anomaly"
+    case realityFragmentation = "reality_fragmentation"
 }
 
 /// Severity level

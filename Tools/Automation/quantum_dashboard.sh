@@ -121,7 +121,8 @@ print_quantum_metrics() {
 	echo ""
 
 	# Calculate quantum readiness percentage
-	local readiness=$(((quantum_projects * 100) / total_projects))
+	local readiness
+	readiness=$(((quantum_projects * 100) / total_projects))
 	if [[ ${readiness} -eq 100 ]]; then
 		echo -e "   ${GREEN}🎉 100% Quantum Readiness Achieved!${NC}"
 	else

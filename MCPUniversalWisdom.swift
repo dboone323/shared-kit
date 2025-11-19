@@ -346,7 +346,7 @@ public enum WisdomGoalType: String, Sendable, Codable {
     case application
     case integration
     case transcendence
-    case universal_alignment
+    case universalAlignment = "universal_alignment"
 }
 
 /// Wisdom constraint
@@ -369,10 +369,10 @@ public struct WisdomConstraint: Sendable, Codable {
 /// Wisdom constraint types
 public enum WisdomConstraintType: String, Sendable, Codable {
     case consciousness
-    case universal_alignment
-    case wisdom_depth
-    case application_complexity
-    case transcendence_risk
+    case universalAlignment = "universal_alignment"
+    case wisdomDepth = "wisdom_depth"
+    case applicationComplexity = "application_complexity"
+    case transcendenceRisk = "transcendence_risk"
 }
 
 /// Goal priority

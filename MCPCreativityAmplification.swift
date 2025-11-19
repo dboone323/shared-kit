@@ -336,8 +336,8 @@ public enum InnovationGoalType: String, Sendable, Codable {
     case transformation
     case evolution
     case transcendence
-    case universal_impact
-    case consciousness_expansion
+    case universalImpact = "universal_impact"
+    case consciousnessExpansion = "consciousness_expansion"
 }
 
 /// Creative innovation result
@@ -451,7 +451,7 @@ public enum CreativityGoalType: String, Sendable, Codable {
     case innovation
     case transformation
     case transcendence
-    case universal_creativity
+    case universalCreativity = "universal_creativity"
 }
 
 /// Goal priority

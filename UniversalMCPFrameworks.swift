@@ -59,20 +59,20 @@ public struct UniversalMCPOperation: Sendable, Codable {
 
 /// MCP operation types
 public enum MCPOperationType: String, Sendable, Codable {
-    case intelligence_coordination
-    case reality_engineering
-    case quantum_processing
-    case consciousness_integration
-    case ethical_transcendence
-    case wisdom_amplification
-    case creativity_enhancement
-    case empathy_networking
-    case eternity_preservation
-    case harmony_optimization
-    case evolution_acceleration
-    case universal_intelligence
-    case reality_optimization
-    case singularity_enhancement
+    case intelligenceCoordination = "intelligence_coordination"
+    case realityEngineering = "reality_engineering"
+    case quantumProcessing = "quantum_processing"
+    case consciousnessIntegration = "consciousness_integration"
+    case ethicalTranscendence = "ethical_transcendence"
+    case wisdomAmplification = "wisdom_amplification"
+    case creativityEnhancement = "creativity_enhancement"
+    case empathyNetworking = "empathy_networking"
+    case eternityPreservation = "eternity_preservation"
+    case harmonyOptimization = "harmony_optimization"
+    case evolutionAcceleration = "evolution_acceleration"
+    case universalIntelligence = "universal_intelligence"
+    case realityOptimization = "reality_optimization"
+    case singularityEnhancement = "singularity_enhancement"
 }
 
 /// MCP constraint
@@ -212,9 +212,9 @@ public enum CoordinationType: String, Sendable, Codable {
     case sequential
     case hierarchical
     case adaptive
-    case quantum_entangled
+    case quantumEntangled = "quantum_entangled"
     case universal
-    case consciousness_driven
+    case consciousnessDriven = "consciousness_driven"
 }
 
 /// MCP framework result

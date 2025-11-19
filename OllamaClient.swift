@@ -4,7 +4,7 @@ import OSLog
 
 // MARK: - Cloud Fallback Policy (Shared-Kit)
 
-fileprivate struct CloudFallbackPolicy {
+private struct CloudFallbackPolicy {
     let configPath: String
     let quotaTrackerPath: String
     let escalationLogPath: String
@@ -94,7 +94,8 @@ fileprivate struct CloudFallbackPolicy {
             "cloud_provider": provider,
         ]
         if let data = try? JSONSerialization.data(withJSONObject: line),
-           let s = String(data: data, encoding: .utf8) {
+           let s = String(data: data, encoding: .utf8)
+        {
             if FileManager.default.fileExists(atPath: escalationLogPath) == false {
                 FileManager.default.createFile(atPath: escalationLogPath, contents: nil)
             }
@@ -110,17 +111,20 @@ fileprivate struct CloudFallbackPolicy {
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return nil }
         return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
     }
+
     private static func writeJSON(path: String, object: [String: Any]) {
         if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
             try? data.write(to: URL(fileURLWithPath: path))
         }
     }
+
     private static func iso8601Now() -> String {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withInternetDateTime]
         return f.string(from: Date())
     }
 }
+
 /// Enhanced Free AI Client for Ollama with Quantum Performance
 /// Zero-cost AI inference with advanced error handling, caching, and monitoring
 /// Enhanced by AI System v2.1 on 9/12/25
@@ -498,7 +502,7 @@ public class OllamaClient: ObservableObject {
 
     public func isServerRunning() async -> Bool {
         do {
-            let _ = try await performRequest(endpoint: "api/tags", body: [:])
+            _ = try await performRequest(endpoint: "api/tags", body: [:])
             return true
         } catch {
             return false

@@ -16,7 +16,7 @@ import XCTest
 final class MockViewModel: BaseViewModel {
     struct State {
         var isLoading: Bool = false
-        var errorMessage: String? = nil
+        var errorMessage: String?
         var data: [String] = []
     }
 
@@ -28,7 +28,7 @@ final class MockViewModel: BaseViewModel {
 
     @Published var state: State = State()
     @Published var isLoading: Bool = false
-    @Published var errorMessage: String? = nil
+    @Published var errorMessage: String?
 
     func handle(_ action: Action) {
         switch action {

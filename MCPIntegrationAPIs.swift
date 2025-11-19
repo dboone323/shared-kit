@@ -772,7 +772,7 @@ public final class MCPIntegrationManager: Sendable {
     public let securityManager: MCPSecurityManager
 
     public init(
-        baseURL: URL = URL(string: "http://localhost:11434")!,
+        baseURL: URL = URL(string: "http://127.0.0.1:11434")!,
         securityManager: MCPSecurityManager? = nil
     ) {
         self.apiClient = MCPHTTPClient(baseURL: baseURL)

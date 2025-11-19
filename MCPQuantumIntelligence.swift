@@ -141,7 +141,7 @@ public enum QuantumInsightType: String, Sendable, Codable {
     case interference
     case coherence
     case tunneling
-    case quantum_computation
+    case quantumComputation = "quantum_computation"
 }
 
 /// Quantum depth

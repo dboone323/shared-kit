@@ -269,7 +269,7 @@ public final class OllamaHTTPClient {
     private let baseURL: URL
     private let session: URLSession
 
-    public init(baseURL: URL = URL(string: "http://localhost:11434")!) {
+    public init(baseURL: URL = URL(string: "http://127.0.0.1:11434")!) {
         self.baseURL = baseURL
         self.session = URLSession(configuration: .default)
     }

@@ -106,11 +106,11 @@ public struct CausalityConstraint: Sendable, Codable {
 
 /// Causality constraint types
 public enum CausalityConstraintType: String, Sendable, Codable {
-    case temporal_order
-    case cause_effect
-    case butterfly_effect
-    case quantum_coherence
-    case reality_stability
+    case temporalOrder = "temporal_order"
+    case causeEffect = "cause_effect"
+    case butterflyEffect = "butterfly_effect"
+    case quantumCoherence = "quantum_coherence"
+    case realityStability = "reality_stability"
 }
 
 /// Constraint priority

@@ -111,7 +111,7 @@ public enum BoundaryType: String, Sendable, Codable {
     case privacy
     case autonomy
     case consent
-    case harm_prevention
+    case harmPrevention = "harm_prevention"
     case truthfulness
     case fairness
     case transparency
@@ -290,10 +290,10 @@ public struct AwarenessRequirement: Sendable, Codable {
 
 /// Awareness requirement types
 public enum AwarenessRequirementType: String, Sendable, Codable {
-    case self_awareness
-    case situational_awareness
-    case ethical_awareness
-    case universal_awareness
+    case selfAwareness = "self_awareness"
+    case situationalAwareness = "situational_awareness"
+    case ethicalAwareness = "ethical_awareness"
+    case universalAwareness = "universal_awareness"
 }
 
 /// Ethical override
@@ -316,9 +316,9 @@ public struct EthicalOverride: Sendable, Codable {
 /// Ethical override types
 public enum EthicalOverrideType: String, Sendable, Codable {
     case emergency
-    case universal_benefit
-    case consciousness_evolution
-    case harmony_optimization
+    case universalBenefit = "universal_benefit"
+    case consciousnessEvolution = "consciousness_evolution"
+    case harmonyOptimization = "harmony_optimization"
 }
 
 /// Approval level
@@ -397,11 +397,11 @@ public struct EvolutionStep: Sendable, Codable {
 
 /// Evolution step types
 public enum EvolutionStepType: String, Sendable, Codable {
-    case awareness_expansion
-    case empathy_enhancement
-    case ethical_refinement
-    case wisdom_integration
-    case harmony_alignment
+    case awarenessExpansion = "awareness_expansion"
+    case empathyEnhancement = "empathy_enhancement"
+    case ethicalRefinement = "ethical_refinement"
+    case wisdomIntegration = "wisdom_integration"
+    case harmonyAlignment = "harmony_alignment"
     case transcendence
 }
 

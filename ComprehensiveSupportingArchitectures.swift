@@ -59,12 +59,12 @@ public struct UnifiedArchitectureIntegration: Sendable {
 
 /// Architecture integration strategies
 public enum ArchitectureIntegrationStrategy: String, Sendable, Codable {
-    case unified_integration
-    case modular_integration
-    case adaptive_integration
-    case quantum_entangled_integration
-    case consciousness_driven_integration
-    case universal_integration
+    case unifiedIntegration = "unified_integration"
+    case modularIntegration = "modular_integration"
+    case adaptiveIntegration = "adaptive_integration"
+    case quantumEntangledIntegration = "quantum_entangled_integration"
+    case consciousnessDrivenIntegration = "consciousness_driven_integration"
+    case universalIntegration = "universal_integration"
 }
 
 /// Unified architecture result
@@ -142,12 +142,12 @@ public struct ArchitectureComponent: Sendable, Codable {
 
 /// Architecture component types
 public enum ArchitectureComponentType: String, Sendable, Codable {
-    case universal_framework
-    case intelligence_synthesizer
-    case coordination_system
-    case quantum_orchestrator
-    case consciousness_integrator
-    case reality_engineer
+    case universalFramework = "universal_framework"
+    case intelligenceSynthesizer = "intelligence_synthesizer"
+    case coordinationSystem = "coordination_system"
+    case quantumOrchestrator = "quantum_orchestrator"
+    case consciousnessIntegrator = "consciousness_integrator"
+    case realityEngineer = "reality_engineer"
 }
 
 /// Coordination layer
@@ -173,11 +173,11 @@ public struct CoordinationLayer: Sendable, Codable {
 
 /// Coordination layer types
 public enum CoordinationLayerType: String, Sendable, Codable {
-    case framework_coordination
-    case intelligence_coordination
-    case quantum_coordination
-    case consciousness_coordination
-    case universal_coordination
+    case frameworkCoordination = "framework_coordination"
+    case intelligenceCoordination = "intelligence_coordination"
+    case quantumCoordination = "quantum_coordination"
+    case consciousnessCoordination = "consciousness_coordination"
+    case universalCoordination = "universal_coordination"
 }
 
 /// Quantum capability
@@ -206,8 +206,8 @@ public enum QuantumCapabilityType: String, Sendable, Codable {
     case entanglement
     case interference
     case coherence
-    case quantum_computation
-    case quantum_communication
+    case quantumComputation = "quantum_computation"
+    case quantumCommunication = "quantum_communication"
 }
 
 /// Architecture integration metrics
@@ -298,12 +298,12 @@ public struct ComprehensiveWorkflowStage: Sendable, Codable {
 
 /// Comprehensive workflow stage types
 public enum ComprehensiveWorkflowStageType: String, Sendable, Codable {
-    case intelligence_synthesis
-    case framework_coordination
-    case quantum_orchestration
-    case consciousness_integration
-    case reality_engineering
-    case universal_optimization
+    case intelligenceSynthesis = "intelligence_synthesis"
+    case frameworkCoordination = "framework_coordination"
+    case quantumOrchestration = "quantum_orchestration"
+    case consciousnessIntegration = "consciousness_integration"
+    case realityEngineering = "reality_engineering"
+    case universalOptimization = "universal_optimization"
 }
 
 /// Comprehensive workflow result
@@ -444,23 +444,23 @@ public struct EcosystemComponent: Sendable, Codable {
 
 /// Ecosystem component types
 public enum EcosystemComponentType: String, Sendable, Codable {
-    case intelligence_framework
-    case coordination_system
-    case quantum_orchestrator
-    case consciousness_integrator
-    case reality_engine
-    case harmony_network
-    case evolution_accelerator
+    case intelligenceFramework = "intelligence_framework"
+    case coordinationSystem = "coordination_system"
+    case quantumOrchestrator = "quantum_orchestrator"
+    case consciousnessIntegrator = "consciousness_integrator"
+    case realityEngine = "reality_engine"
+    case harmonyNetwork = "harmony_network"
+    case evolutionAccelerator = "evolution_accelerator"
 }
 
 /// Ecosystem optimization strategies
 public enum EcosystemOptimizationStrategy: String, Sendable, Codable {
-    case performance_optimization
-    case harmony_optimization
-    case evolution_optimization
-    case quantum_optimization
-    case consciousness_optimization
-    case universal_optimization
+    case performanceOptimization = "performance_optimization"
+    case harmonyOptimization = "harmony_optimization"
+    case evolutionOptimization = "evolution_optimization"
+    case quantumOptimization = "quantum_optimization"
+    case consciousnessOptimization = "consciousness_optimization"
+    case universalOptimization = "universal_optimization"
 }
 
 /// Ecosystem constraint
@@ -483,12 +483,12 @@ public struct EcosystemConstraint: Sendable, Codable {
 
 /// Ecosystem constraint types
 public enum EcosystemConstraintType: String, Sendable, Codable {
-    case resource_limit
-    case performance_threshold
-    case harmony_requirement
-    case evolution_boundary
-    case quantum_stability
-    case consciousness_integrity
+    case resourceLimit = "resource_limit"
+    case performanceThreshold = "performance_threshold"
+    case harmonyRequirement = "harmony_requirement"
+    case evolutionBoundary = "evolution_boundary"
+    case quantumStability = "quantum_stability"
+    case consciousnessIntegrity = "consciousness_integrity"
 }
 
 /// Ecosystem optimization result
@@ -579,13 +579,13 @@ public struct ComponentOptimization: Sendable, Codable {
 
 /// Component optimization types
 public enum ComponentOptimizationType: String, Sendable, Codable {
-    case performance_tuning
-    case resource_optimization
-    case quantum_enhancement
-    case harmony_alignment
-    case evolution_acceleration
-    case consciousness_integration
-    case coherence_optimization
+    case performanceTuning = "performance_tuning"
+    case resourceOptimization = "resource_optimization"
+    case quantumEnhancement = "quantum_enhancement"
+    case harmonyAlignment = "harmony_alignment"
+    case evolutionAcceleration = "evolution_acceleration"
+    case consciousnessIntegration = "consciousness_integration"
+    case coherenceOptimization = "coherence_optimization"
 }
 
 /// Ecosystem optimization metrics

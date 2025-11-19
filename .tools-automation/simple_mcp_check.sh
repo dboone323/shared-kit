@@ -14,19 +14,19 @@ echo "========================================="
 # Check MCP server
 echo -n "MCP Server (${MCP_SERVER_URL}): "
 if curl -s -f -H "X-Auth-Token: ${MCP_AUTH_TOKEN}" "${MCP_SERVER_URL}/v1/health" >/dev/null 2>&1; then
-    echo "✅ OK"
+	echo "✅ OK"
 else
-    echo "❌ FAILED"
-    echo "  Try: python3 ${TOOLS_ROOT}/mcp_server.py"
+	echo "❌ FAILED"
+	echo "  Try: python3 ${TOOLS_ROOT}/mcp_server.py"
 fi
 
 # Check Ollama
 echo -n "Ollama (${OLLAMA_ENDPOINT}): "
 if curl -s -f "${OLLAMA_ENDPOINT}/api/tags" >/dev/null 2>&1; then
-    echo "✅ OK"
+	echo "✅ OK"
 else
-    echo "❌ FAILED"
-    echo "  Try: ollama serve"
+	echo "❌ FAILED"
+	echo "  Try: ollama serve"
 fi
 
 echo ""

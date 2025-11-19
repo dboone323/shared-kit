@@ -205,8 +205,8 @@ public enum WorkflowOrchestrationStrategy: String, Sendable, Codable {
     case sequential
     case parallel
     case adaptive
-    case quantum_entangled
-    case consciousness_driven
+    case quantumEntangled = "quantum_entangled"
+    case consciousnessDriven = "consciousness_driven"
     case universal
 }
 

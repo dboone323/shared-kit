@@ -20,7 +20,7 @@ public struct OllamaConfig {
     public let preferCloudModels: Bool
 
     public init(
-        baseURL: String = "http://localhost:11434",
+        baseURL: String = "http://127.0.0.1:11434",
         defaultModel: String = "llama2",
         timeout: TimeInterval = 60.0,
         maxRetries: Int = 3,

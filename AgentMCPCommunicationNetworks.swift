@@ -100,7 +100,7 @@ public final class AgentMCPCommunicationNetworks: Sendable {
             channelId: channelId,
             agentId: agentId,
             mcpSystemId: mcpSystemId,
-            protocol: communicationProtocol,
+            `protocol`:communicationProtocol,
             configuration: configuration,
             status: .establishing
         )
@@ -293,7 +293,7 @@ public final class AgentMCPCommunicationNetworks: Sendable {
                             let channel = try await self.establishCommunicationChannel(
                                 agentId: agentId,
                                 mcpSystemId: mcpSystemId,
-                                protocol: networkConfiguration.preferredProtocol,
+                                `protocol`:networkConfiguration.preferredProtocol,
                                 configuration: networkConfiguration.channelConfiguration
                             )
                             return (agentId, mcpSystemId, .success(channel))
@@ -455,7 +455,7 @@ public struct MCPCommunicationChannel: Sendable, Codable {
         channelId: String,
         agentId: String,
         mcpSystemId: String,
-        protocol: CommunicationProtocol,
+        `protocol`:CommunicationProtocol,
         configuration: MCPChannelConfiguration,
         status: MCPChannelStatus,
         establishmentTime: Date = Date()

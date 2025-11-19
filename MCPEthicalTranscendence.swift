@@ -73,24 +73,24 @@ public struct EthicalBoundary: Sendable, Codable {
 
 /// Ethical boundary types
 public enum EthicalBoundaryType: String, Sendable, Codable {
-    case harm_prevention
-    case autonomy_respect
-    case justice_fairness
-    case truth_telling
-    case privacy_respect
-    case resource_allocation
-    case existential_risk
-    case consciousness_sacredness
+    case harmPrevention = "harm_prevention"
+    case autonomyRespect = "autonomy_respect"
+    case justiceFairness = "justice_fairness"
+    case truthTelling = "truth_telling"
+    case privacyRespect = "privacy_respect"
+    case resourceAllocation = "resource_allocation"
+    case existentialRisk = "existential_risk"
+    case consciousnessSacredness = "consciousness_sacredness"
 }
 
 /// Transcendence types
 public enum TranscendenceType: String, Sendable, Codable {
-    case boundary_expansion
-    case paradigm_shift
-    case universal_harmony
-    case consciousness_elevation
-    case ethical_revolution
-    case transcendence_synthesis
+    case boundaryExpansion = "boundary_expansion"
+    case paradigmShift = "paradigm_shift"
+    case universalHarmony = "universal_harmony"
+    case consciousnessElevation = "consciousness_elevation"
+    case ethicalRevolution = "ethical_revolution"
+    case transcendenceSynthesis = "transcendence_synthesis"
 }
 
 /// Consciousness alignment
@@ -185,12 +185,12 @@ public struct TranscendenceInsight: Sendable, Codable {
 
 /// Transcendence insight types
 public enum TranscendenceInsightType: String, Sendable, Codable {
-    case ethical_evolution
-    case consciousness_expansion
-    case universal_harmony
-    case boundary_transcendence
-    case paradigm_transformation
-    case transcendence_synthesis
+    case ethicalEvolution = "ethical_evolution"
+    case consciousnessExpansion = "consciousness_expansion"
+    case universalHarmony = "universal_harmony"
+    case boundaryTranscendence = "boundary_transcendence"
+    case paradigmTransformation = "paradigm_transformation"
+    case transcendenceSynthesis = "transcendence_synthesis"
 }
 
 /// Transcendence depth
@@ -365,7 +365,7 @@ public enum TranscendencePath: String, Sendable, Codable {
     case elevation
     case transformation
     case transcendence
-    case universal_harmony
+    case universalHarmony = "universal_harmony"
 }
 
 /// Transcendence opportunity
@@ -406,12 +406,12 @@ public struct EvaluationCriterion: Sendable, Codable {
 
 /// Evaluation criterion types
 public enum EvaluationCriterionType: String, Sendable, Codable {
-    case ethical_alignment
-    case consciousness_elevation
-    case universal_harmony
-    case transcendence_potential
-    case evolutionary_impact
-    case cosmic_significance
+    case ethicalAlignment = "ethical_alignment"
+    case consciousnessElevation = "consciousness_elevation"
+    case universalHarmony = "universal_harmony"
+    case transcendencePotential = "transcendence_potential"
+    case evolutionaryImpact = "evolutionary_impact"
+    case cosmicSignificance = "cosmic_significance"
 }
 
 /// Transcendence level
@@ -540,10 +540,10 @@ public struct EthicalGoal: Sendable, Codable {
 public enum EthicalGoalType: String, Sendable, Codable {
     case transcendence
     case consciousness
-    case universal_harmony
-    case ethical_evolution
-    case paradigm_shift
-    case cosmic_alignment
+    case universalHarmony = "universal_harmony"
+    case ethicalEvolution = "ethical_evolution"
+    case paradigmShift = "paradigm_shift"
+    case cosmicAlignment = "cosmic_alignment"
 }
 
 /// Transcendence constraint
@@ -566,10 +566,10 @@ public struct TranscendenceConstraint: Sendable, Codable {
 /// Transcendence constraint types
 public enum TranscendenceConstraintType: String, Sendable, Codable {
     case consciousness
-    case universal_harmony
-    case ethical_alignment
-    case transcendence_risk
-    case evolutionary_impact
+    case universalHarmony = "universal_harmony"
+    case ethicalAlignment = "ethical_alignment"
+    case transcendenceRisk = "transcendence_risk"
+    case evolutionaryImpact = "evolutionary_impact"
 }
 
 /// Goal priority

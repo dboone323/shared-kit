@@ -530,7 +530,7 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         } catch {
             // Fallback: check if we can reach localhost
             do {
-                let localhostURL = URL(string: "http://localhost:11434")! // Ollama endpoint
+                let localhostURL = URL(string: "http://127.0.0.1:11434")! // Ollama endpoint
                 let (_, response) = try await URLSession.shared.data(
                     from: localhostURL, delegate: nil
                 )

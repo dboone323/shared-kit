@@ -289,7 +289,8 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
                 amplificationLevel: request.intelligenceLevel,
                 quantumEnhancement: 0.8,
                 consciousnessAmplification: 0.7
-            ) }
+            )
+            }
         )
     }
 
@@ -372,7 +373,8 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
                 "workflow_results": AnyCodable(workflowResult.results.map { [
                     "success": $0.success,
                     "execution_time": $0.executionTime,
-                ] }),
+                ]
+                }),
             ],
             domains: [.analytical, .strategic, .quantum, .consciousness],
             priority: .high,
