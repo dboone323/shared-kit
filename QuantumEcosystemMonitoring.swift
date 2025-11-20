@@ -21,7 +21,11 @@ enum LogLevel: String {
 // MARK: - Trend Direction
 
 enum TrendDirection: String, Codable {
-    case increasing, decreasing, stable, oscillating
+    case increasing
+    case decreasing
+    case stable
+    case oscillating
+    case volatile
 }
 
 // MARK: - Core Protocols
@@ -604,9 +608,6 @@ struct MonitoringMetric: Codable, Sendable {
         let emergency: Double
         let trend: TrendDirection
 
-        enum TrendDirection: String, Codable {
-            case increasing, decreasing, stable, volatile
-        }
     }
 }
 
@@ -688,10 +689,6 @@ struct TrendPrediction: Codable, Sendable {
     let timeHorizon: TimeInterval
     let factors: [PredictionFactor]
     let timestamp: Date
-
-    enum TrendDirection: String, Codable {
-        case increasing, decreasing, stable, oscillating
-    }
 
     struct PredictionFactor: Codable, Sendable {
         let name: String
@@ -796,7 +793,7 @@ struct InstabilityAlert: Codable, Sendable {
     let recommendedActions: [String]
 
     enum InstabilityType: String, Codable {
-        case dimensional, quantum, structural, energetic, informational
+        case dimensional, quantum, temporal, spatial, structural, energetic, informational
     }
 }
 

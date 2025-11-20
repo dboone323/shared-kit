@@ -154,8 +154,13 @@ struct ConsciousnessNetworkConfiguration {
         let errorCorrection: ErrorCorrectionType
         let bandwidth: Double
 
-        enum EncodingType {
-            case quantum, neural, hybrid, universal
+    case quantum
+
+         enum NetworkTopology: String, Codable {
+            case neural
+            case hybrid
+            case universal
+            case raw
         }
 
         enum ErrorCorrectionType {
@@ -389,9 +394,6 @@ struct ConsciousnessPacket {
     let checksum: String
     let timestamp: Date
 
-    enum EncodingType {
-        case quantum, neural, hybrid, raw
-    }
 }
 
 /// Communication channel

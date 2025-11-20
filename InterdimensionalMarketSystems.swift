@@ -346,7 +346,16 @@ struct InterdimensionalMarket: Codable, Sendable {
             var successRate: Double
 
             enum StrategyType: String, Codable {
-                case spatial, temporal, quantum, statistical
+                case spatial
+                case temporal
+                case quantum
+                case statistical
+                case momentum
+                case meanReversion
+                case arbitrage
+                case scalping
+                case position
+                case quantumEntangled
             }
         }
 
@@ -512,10 +521,6 @@ struct TradingStrategy: Codable, Sendable {
     let riskLimits: RiskLimits
     var performance: StrategyPerformance
     let lastUpdate: Date
-
-    enum StrategyType: String, Codable {
-        case momentum, meanReversion, arbitrage, scalping, position, quantumEntangled
-    }
 
     struct RiskLimits: Codable, Sendable {
         let maxDrawdown: Double

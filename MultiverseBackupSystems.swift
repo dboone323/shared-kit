@@ -234,12 +234,26 @@ struct RepairResult {
         let description: String
         let impact: ImpactAssessment
 
-        enum IssueType {
-            case instability, corruption, entropy, quantumNoise, dimensionalRift
+        enum IssueType: String, Codable {
+            case instability
+            case corruption
+            case entropy
+            case quantumNoise
+            case dimensionalRift
+            case missingData
+            case checksumMismatch
+            case structuralDamage
         }
 
-        enum Severity {
-            case low, medium, high, critical
+        enum Severity: String, Codable {
+            case low
+
+            case medium
+
+            case high
+
+            case critical
+
         }
 
         struct IssueLocation {
@@ -444,13 +458,6 @@ struct IntegrityResult {
         let severity: Severity
         let description: String
 
-        enum IssueType {
-            case corruption, missingData, checksumMismatch, structuralDamage
-        }
-
-        enum Severity {
-            case low, medium, high, critical
-        }
     }
 }
 

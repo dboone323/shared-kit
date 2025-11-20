@@ -36,8 +36,21 @@ struct NeuralConsciousnessState {
         let connectivity: [Connection]
         var strength: Double
 
-        enum PatternType {
-            case sensory, motor, cognitive, emotional, memory
+    case sensory
+
+         case motor
+
+         case cognitive
+
+         case emotional
+
+         case memory
+
+         enum AmplificationMode: String, Codable {
+            case hierarchical
+            case distributed
+            case centralized
+            case adaptive
         }
 
         struct Connection {
@@ -169,10 +182,6 @@ struct QuantumConsciousnessState {
         let patternType: PatternType
         let connectivity: [EntanglementLink]
         let coherenceNetwork: CoherenceNetwork
-
-        enum PatternType {
-            case hierarchical, distributed, centralized, adaptive
-        }
 
         struct EntanglementLink {
             let source: UUID

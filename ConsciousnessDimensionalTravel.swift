@@ -531,7 +531,12 @@ struct EmergencyHandling {
     let recoverySteps: [String]
 
     enum ContainmentStatus {
-        case contained, partiallyContained, uncontained
+        case contained
+        case partiallyContained
+        case uncontained
+        case successful
+        case partial
+        case failed
     }
 }
 
@@ -595,9 +600,6 @@ struct ContainmentResult {
     let protocolsActivated: [String]
     let effectiveness: Double
 
-    enum ContainmentStatus {
-        case successful, partial, failed
-    }
 }
 
 // MARK: - Main Engine Implementation

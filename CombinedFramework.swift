@@ -32,12 +32,6 @@ struct ValidationError: Sendable {
 }
 
 /// Validation severity
-enum ValidationSeverity: String, Sendable {
-    case low
-    case warning
-    case high
-    case critical
-}
 
 /// Protocol for reality stabilization network operations
 protocol RealityStabilizationNetworkProtocol {
@@ -1083,12 +1077,6 @@ struct StabilizationRiskAssessment: Sendable {
 }
 
 /// Risk level
-enum RiskLevel: String, Sendable {
-    case low
-    case medium
-    case high
-    case critical
-}
 
 /// Stabilization execution result
 struct StabilizationExecutionResult: Sendable {
@@ -1554,12 +1542,6 @@ struct ValidationError: Sendable {
 }
 
 /// Validation severity
-enum ValidationSeverity: String, Sendable {
-    case low
-    case warning
-    case high
-    case critical
-}
 
 /// Integrity test result
 struct IntegrityTestResult: Sendable {
@@ -1575,12 +1557,6 @@ struct IntegrityTestResult: Sendable {
 }
 
 /// Risk level
-enum RiskLevel: String, Sendable {
-    case low
-    case medium
-    case high
-    case critical
-}
 
 /// Risk assessment
 struct RiskAssessment: Sendable {

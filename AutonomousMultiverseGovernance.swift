@@ -302,8 +302,16 @@ struct PolicyEnforcementResult {
         let result: ActionResult
         let timestamp: Date
 
-        enum ActionType {
-            case monitor, warn, restrict, isolate, terminate
+        enum ActionType: String, Codable {
+            case monitor
+            case warn
+            case restrict
+            case isolate
+            case terminate
+            case decision
+            case policy
+            case enforcement
+            case monitoring
         }
 
         enum ActionResult {
@@ -343,10 +351,6 @@ struct GovernanceAction {
     let stakeholders: [Stakeholder]
     let ethicalConsiderations: [String]
     let riskLevel: RiskLevel
-
-    enum ActionType {
-        case decision, policy, enforcement, monitoring
-    }
 
     enum ActionScope {
         case local, regional, global, multiversal
@@ -602,8 +606,23 @@ struct PolicyUpdateResult {
         let description: String
         let rationale: String
 
-        enum ChangeType {
-            case addition, modification, removal, consolidation
+    case addition
+
+         case modification
+
+         case removal
+
+         enum ChangeType: String, Codable {
+            case consolidation
+
+            case expansion
+
+            case contraction
+
+            case failure
+
+            case recovery
+
         }
     }
 }
@@ -617,9 +636,6 @@ struct EcosystemChange {
     let impact: ImpactAssessment
     let timestamp: Date
 
-    enum ChangeType {
-        case expansion, contraction, modification, failure, recovery
-    }
 }
 
 /// Ethical assessment
