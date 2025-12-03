@@ -13,7 +13,7 @@ public class BasilarMembrane {
 
     public init(numSegments: Int = 100) {
         // Create segments with different resonant frequencies (logarithmic spacing)
-        for i in 0 ..< numSegments {
+        for i in 0..<numSegments {
             let frequency = 20.0 * pow(10.0, Double(i) / Double(numSegments) * 3.0) // 20Hz to 20kHz
             let segment = MembraneSegment(resonantFrequency: frequency, segmentIndex: i)
             segments.append(segment)
@@ -160,9 +160,9 @@ public class AuditoryCortex {
 
     public init(numFrequencyBins: Int = 50, neuronsPerBin: Int = 10) {
         // Create tonotopic map
-        for _ in 0 ..< numFrequencyBins {
+        for _ in 0..<numFrequencyBins {
             var frequencyColumn: [NeuromorphicNeuron] = []
-            for _ in 0 ..< neuronsPerBin {
+            for _ in 0..<neuronsPerBin {
                 let neuron = LIFNeuron(threshold: 0.8, leakRate: 0.95)
                 frequencyColumn.append(neuron)
                 primaryAuditoryCortex.append(neuron)
@@ -171,7 +171,7 @@ public class AuditoryCortex {
         }
 
         // Create higher-order areas
-        for _ in 0 ..< 200 {
+        for _ in 0..<200 {
             beltArea.append(LIFNeuron(threshold: 0.7))
             parabeltArea.append(LIFNeuron(threshold: 0.6))
         }
@@ -265,13 +265,13 @@ public class NeuromorphicSpeechRecognizer {
             "a", "e", "i", "o", "u", "b", "d", "g", "m", "n", "p", "t", "k", "f", "s", "sh", "th",
         ]
         for phoneme in phonemes {
-            phonemeDetectors[phoneme] = (0 ..< 20).map { _ in LIFNeuron(threshold: 0.6) }
+            phonemeDetectors[phoneme] = (0..<20).map { _ in LIFNeuron(threshold: 0.6) }
         }
 
         // Initialize word detectors
         let words = ["hello", "world", "quantum", "neuromorphic", "computing"]
         for word in words {
-            wordDetectors[word] = (0 ..< 30).map { _ in LIFNeuron(threshold: 0.5) }
+            wordDetectors[word] = (0..<30).map { _ in LIFNeuron(threshold: 0.5) }
         }
     }
 
@@ -403,7 +403,7 @@ public class BinauralLocalizationSystem {
         var itdResponses: [Double] = []
         var ildResponses: [Double] = []
 
-        for i in 0 ..< min(leftResponses.count, rightResponses.count) {
+        for i in 0..<min(leftResponses.count, rightResponses.count) {
             let leftEnergy = leftResponses[i].reduce(0, +)
             let rightEnergy = rightResponses[i].reduce(0, +)
 
@@ -413,11 +413,11 @@ public class BinauralLocalizationSystem {
             var maxCorrelation = 0.0
             var bestDelay = 0
 
-            for delay in -maxDelay ... maxDelay {
+            for delay in -maxDelay...maxDelay {
                 var correlation = 0.0
                 let count = min(leftResponses[i].count, rightResponses[i].count - abs(delay))
 
-                for j in 0 ..< count {
+                for j in 0..<count {
                     let leftIdx = j
                     let rightIdx = j + max(0, delay)
                     if rightIdx < rightResponses[i].count {
@@ -491,7 +491,7 @@ public class DirectionSelectiveNeuron {
     public func processBinauralCues(itd: [Double], ild: [Double]) -> Double {
         var response = 0.0
 
-        for i in 0 ..< min(itd.count, ild.count) {
+        for i in 0..<min(itd.count, ild.count) {
             // ITD response: Gaussian tuning around preferred ITD
             let itdDiff = itd[i] - preferredITD
             let itdResponse = exp(-0.5 * pow(itdDiff / 0.2, 2)) // σ = 0.2ms

@@ -501,8 +501,8 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     private func analyzeFieldInteractions(_ fields: [QuantumField]) -> InteractionAnalysis {
         var interactions: [FieldInteraction] = []
 
-        for i in 0 ..< fields.count {
-            for j in (i + 1) ..< fields.count {
+        for i in 0..<fields.count {
+            for j in (i + 1)..<fields.count {
                 let field1 = fields[i]
                 let field2 = fields[j]
 

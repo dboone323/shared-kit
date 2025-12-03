@@ -149,7 +149,8 @@ public class WorkspaceAIEnhancer: ObservableObject {
         \(analysisResults.map { "- \($0.project.name): \($0.project.type)" }.joined(separator: "\n"))
 
         Project details:
-        \(self.analysisResults.map { "\($0.project.name): \($0.architectureAnalysis.prefix(200))" }.joined(separator: "\n\n"))
+        \(self.analysisResults.map { "\($0.project.name): \($0.architectureAnalysis.prefix(200))" }
+            .joined(separator: "\n\n"))
 
         Identify:
         1. Shared component opportunities
@@ -583,7 +584,11 @@ public class WorkspaceAIEnhancer: ObservableObject {
 
     private func saveGeneratedComponent(_ name: String, code: String) async throws {
         let componentsPath = "\(workspacePath)/Shared/Generated"
-        try FileManager.default.createDirectory(atPath: componentsPath, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.createDirectory(
+            atPath: componentsPath,
+            withIntermediateDirectories: true,
+            attributes: nil
+        )
 
         let filePath = "\(componentsPath)/\(name).swift"
         try code.write(to: URL(fileURLWithPath: filePath), atomically: true, encoding: .utf8)
@@ -634,7 +639,8 @@ public class WorkspaceAIEnhancer: ObservableObject {
 
         ## Optimizations
 
-        \(report.optimizations.map { "- \($0.issue)\n  Recommendation: \($0.recommendation)" }.joined(separator: "\n\n"))
+        \(report.optimizations.map { "- \($0.issue)\n  Recommendation: \($0.recommendation)" }
+            .joined(separator: "\n\n"))
         """
 
         try reportContent.write(to: URL(fileURLWithPath: reportPath), atomically: true, encoding: .utf8)

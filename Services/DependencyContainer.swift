@@ -471,7 +471,9 @@ final class DefaultHabitService: HabitServiceProtocol {
         return habit
     }
 
-    func logHabitCompletion(_ habitId: UUID, value _: Double?, mood _: MoodRating?, notes _: String?) async throws -> EnhancedHabitLog {
+    func logHabitCompletion(_ habitId: UUID, value _: Double?, mood _: MoodRating?,
+                            notes _: String?) async throws -> EnhancedHabitLog
+    {
         // Default implementation - placeholder
         print("Logging habit completion for: \(habitId)")
         // This would return a proper EnhancedHabitLog instance in production

@@ -375,7 +375,7 @@ class IntegrationTestSuite: XCTestCase {
     }
 
     private func generateSamplePredictiveData() -> [Double] {
-        Array(0 ..< 100).map { _ in Double.random(in: 0 ... 1) }
+        Array(0..<100).map { _ in Double.random(in: 0...1) }
     }
 
     private func generateTestDataSet() -> TestDataSet {

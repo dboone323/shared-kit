@@ -80,7 +80,8 @@ protocol ConsciousnessRealityInterfaceProtocol {
     /// - Parameter realityLayer: Target reality layer
     /// - Parameter consciousnessEntity: Consciousness entity to interface
     /// - Returns: Interface establishment result
-    func establishRealityInterface(realityLayer: RealityLayer, consciousnessEntity: ConsciousnessEntity) async throws -> RealityInterface
+    func establishRealityInterface(realityLayer: RealityLayer, consciousnessEntity: ConsciousnessEntity) async throws
+        -> RealityInterface
 
     /// Transmit consciousness data to reality layer
     /// - Parameter interfaceId: Interface identifier
@@ -123,7 +124,8 @@ protocol RealityLayerManagementProtocol {
     /// - Parameter realityLayer: Reality layer
     /// - Parameter consciousnessEntity: Consciousness entity
     /// - Returns: Compatibility validation result
-    func validateCompatibility(realityLayer: RealityLayer, consciousnessEntity: ConsciousnessEntity) async throws -> CompatibilityValidation
+    func validateCompatibility(realityLayer: RealityLayer, consciousnessEntity: ConsciousnessEntity) async throws
+        -> CompatibilityValidation
 
     /// Bridge between different reality layers
     /// - Parameter sourceLayer: Source reality layer
@@ -148,7 +150,8 @@ protocol ConsciousnessEntityManagementProtocol {
     /// - Parameter entityId: Entity identifier
     /// - Parameter newState: New entity state
     /// - Returns: Update result
-    func updateConsciousnessEntity(entityId: UUID, newState: ConsciousnessEntity.EntityState) async throws -> EntityUpdate
+    func updateConsciousnessEntity(entityId: UUID, newState: ConsciousnessEntity.EntityState) async throws
+        -> EntityUpdate
 
     /// Get consciousness entity interface capabilities
     /// - Parameter entityId: Entity identifier
@@ -636,7 +639,9 @@ final class ConsciousnessRealityInterfaceEngine: ConsciousnessRealityInterfacePr
         setupMonitoring()
     }
 
-    func establishRealityInterface(realityLayer: RealityLayer, consciousnessEntity: ConsciousnessEntity) async throws -> RealityInterface {
+    func establishRealityInterface(realityLayer: RealityLayer,
+                                   consciousnessEntity: ConsciousnessEntity) async throws -> RealityInterface
+    {
         let interfaceId = UUID()
 
         // Validate compatibility
@@ -809,11 +814,12 @@ final class ConsciousnessRealityInterfaceEngine: ConsciousnessRealityInterfacePr
             }
         }
 
-        adaptationTimer = Timer.scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
-            Task { [weak self] in
-                await self?.performAdaptation()
+        adaptationTimer = Timer
+            .scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
+                Task { [weak self] in
+                    await self?.performAdaptation()
+                }
             }
-        }
 
         monitoringTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
             Task { [weak self] in
@@ -828,10 +834,10 @@ final class ConsciousnessRealityInterfaceEngine: ConsciousnessRealityInterfacePr
                 stabilityId: UUID(),
                 interfaceId: interfaceId,
                 timestamp: Date(),
-                stabilityLevel: interface.stabilityRating + Double.random(in: -0.1 ... 0.1),
-                coherenceLevel: 0.85 + Double.random(in: -0.05 ... 0.05),
-                connectionStrength: interface.connectionStrength + Double.random(in: -0.05 ... 0.05),
-                anomalyCount: Int.random(in: 0 ... 2),
+                stabilityLevel: interface.stabilityRating + Double.random(in: -0.1...0.1),
+                coherenceLevel: 0.85 + Double.random(in: -0.05...0.05),
+                connectionStrength: interface.connectionStrength + Double.random(in: -0.05...0.05),
+                anomalyCount: Int.random(in: 0...2),
                 alerts: []
             )
 
@@ -940,10 +946,13 @@ final class RealityLayerManager: RealityLayerManagementProtocol {
         )
     }
 
-    func validateCompatibility(realityLayer: RealityLayer, consciousnessEntity: ConsciousnessEntity) async throws -> CompatibilityValidation {
+    func validateCompatibility(realityLayer: RealityLayer,
+                               consciousnessEntity: ConsciousnessEntity) async throws -> CompatibilityValidation
+    {
         let validationId = UUID()
 
-        let compatibilityScore = (realityLayer.consciousnessCompatibility + consciousnessEntity.currentState.adaptabilityIndex) / 2.0
+        let compatibilityScore = (realityLayer.consciousnessCompatibility + consciousnessEntity.currentState
+            .adaptabilityIndex) / 2.0
 
         return CompatibilityValidation(
             validationId: validationId,
@@ -989,7 +998,10 @@ final class RealityLayerManager: RealityLayerManagementProtocol {
         return subject.eraseToAnyPublisher()
     }
 
-    private func startRealityMonitoring(_ realityLayer: RealityLayer, _ subject: PassthroughSubject<RealityMonitoring, Never>) async {
+    private func startRealityMonitoring(
+        _ realityLayer: RealityLayer,
+        _ subject: PassthroughSubject<RealityMonitoring, Never>
+    ) async {
         let monitoring = RealityMonitoring(
             monitoringId: UUID(),
             realityLayer: realityLayer,
@@ -1034,7 +1046,9 @@ final class ConsciousnessEntityManager: ConsciousnessEntityManagementProtocol {
         )
     }
 
-    func updateConsciousnessEntity(entityId: UUID, newState: ConsciousnessEntity.EntityState) async throws -> EntityUpdate {
+    func updateConsciousnessEntity(entityId: UUID,
+                                   newState: ConsciousnessEntity.EntityState) async throws -> EntityUpdate
+    {
         guard let currentEntity = registeredEntities[entityId] else {
             throw RealityInterfaceError.entityNotFound
         }
@@ -1275,7 +1289,10 @@ final class ConsciousnessRealityDatabase {
     func getInterfaceMetrics() async throws -> InterfaceMetrics {
         let totalInterfaces = realityInterfaces.count
         let activeInterfaces = realityInterfaces.values.filter { $0.monitoringStatus == .active }.count
-        let averageStability = realityInterfaces.values.map(\.stabilityRating).reduce(0, +) / Double(max(totalInterfaces, 1))
+        let averageStability = realityInterfaces.values.map(\.stabilityRating).reduce(0, +) / Double(max(
+            totalInterfaces,
+            1
+        ))
         let transmissionCount = dataTransmissions.count
 
         return InterfaceMetrics(

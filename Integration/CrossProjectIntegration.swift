@@ -254,7 +254,13 @@ public final class CrossProjectIntegrator: ObservableObject {
         // In a real implementation, this would discover available projects
         // For now, we'll simulate project discovery
 
-        let availableProjects: [ProjectType] = [.habitQuest, .momentumFinance, .plannerApp, .codingReviewer, .avoidObstaclesGame]
+        let availableProjects: [ProjectType] = [
+            .habitQuest,
+            .momentumFinance,
+            .plannerApp,
+            .codingReviewer,
+            .avoidObstaclesGame,
+        ]
 
         for project in availableProjects {
             if await self.isProjectAvailable(project) {
@@ -565,7 +571,9 @@ public final class CrossProjectIntegrator: ObservableObject {
                     project2: .momentumFinance,
                     correlation: correlation,
                     significance: abs(correlation),
-                    description: correlation > 0 ? "Good habits correlate with better financial outcomes" : "Poor habits correlate with financial struggles"
+                    description: correlation > 0
+                        ? "Good habits correlate with better financial outcomes"
+                        : "Poor habits correlate with financial struggles"
                 ))
             }
         }
@@ -579,7 +587,9 @@ public final class CrossProjectIntegrator: ObservableObject {
                     project2: .plannerApp,
                     correlation: correlation,
                     significance: abs(correlation),
-                    description: correlation > 0 ? "Good habits improve productivity" : "Poor habits reduce productivity"
+                    description: correlation > 0
+                        ? "Good habits improve productivity"
+                        : "Poor habits reduce productivity"
                 ))
             }
         }
@@ -593,7 +603,9 @@ public final class CrossProjectIntegrator: ObservableObject {
                     project2: .plannerApp,
                     correlation: correlation,
                     significance: abs(correlation),
-                    description: correlation > 0 ? "Financial stability improves productivity" : "Financial stress reduces productivity"
+                    description: correlation > 0
+                        ? "Financial stability improves productivity"
+                        : "Financial stress reduces productivity"
                 ))
             }
         }
@@ -631,7 +643,11 @@ public final class CrossProjectIntegrator: ObservableObject {
                 affectedProjects: [.habitQuest, .momentumFinance],
                 priority: .medium,
                 estimatedImpact: 75.0,
-                actionItems: ["Track spending habits", "Create saving challenges", "Monitor financial habit correlation"]
+                actionItems: [
+                    "Track spending habits",
+                    "Create saving challenges",
+                    "Monitor financial habit correlation",
+                ]
             ))
         }
 
@@ -761,15 +777,25 @@ public final class CrossProjectIntegrator: ObservableObject {
         // Implementation would suggest habits based on financial patterns
     }
 
-    private func createTasksFromBudgetInsights(budgetId _: UUID, insights _: BudgetInsights, plannerState _: PlannerStateManager) async {
+    private func createTasksFromBudgetInsights(
+        budgetId _: UUID,
+        insights _: BudgetInsights,
+        plannerState _: PlannerStateManager
+    ) async {
         // Implementation would create tasks based on budget overspending or goals
     }
 
-    private func createHabitsFromProductivityInsights(insights _: ProductivityInsights, habitState _: HabitStateManager) async {
+    private func createHabitsFromProductivityInsights(
+        insights _: ProductivityInsights,
+        habitState _: HabitStateManager
+    ) async {
         // Implementation would suggest habits to improve productivity
     }
 
-    private func createTaskFromFinancialRecommendation(_: FinancialRecommendation, plannerState _: PlannerStateManager) async {
+    private func createTaskFromFinancialRecommendation(
+        _: FinancialRecommendation,
+        plannerState _: PlannerStateManager
+    ) async {
         // Implementation would create actionable tasks from financial recommendations
     }
 

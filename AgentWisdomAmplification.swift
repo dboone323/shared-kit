@@ -285,10 +285,16 @@ public final class AgentWisdomAmplification: Sendable {
         let wisdomAmplification = try await processWisdomAmplification(session.request, assessment: wisdomAssessment)
 
         // Phase 3: Insight Enhancement Coordination
-        let insightEnhancement = try await coordinateInsightEnhancement(session.request, amplification: wisdomAmplification)
+        let insightEnhancement = try await coordinateInsightEnhancement(
+            session.request,
+            amplification: wisdomAmplification
+        )
 
         // Phase 4: Wisdom Amplification Network Synthesis
-        let wisdomNetwork = try await synthesizeWisdomAmplificationNetwork(session.request, enhancement: insightEnhancement)
+        let wisdomNetwork = try await synthesizeWisdomAmplificationNetwork(
+            session.request,
+            enhancement: insightEnhancement
+        )
 
         // Phase 5: Quantum Wisdom Orchestration
         let quantumWisdom = try await orchestrateQuantumWisdom(session.request, network: wisdomNetwork)
@@ -321,7 +327,8 @@ public final class AgentWisdomAmplification: Sendable {
         )
     }
 
-    private func assessWisdomAmplification(_ request: WisdomAmplificationRequest) async throws -> WisdomAmplificationAssessment {
+    private func assessWisdomAmplification(_ request: WisdomAmplificationRequest) async throws
+    -> WisdomAmplificationAssessment {
         // Assess wisdom amplification
         let assessmentContext = WisdomAmplificationAssessmentContext(
             agents: request.agents,
@@ -377,7 +384,8 @@ public final class AgentWisdomAmplification: Sendable {
             coordinationTarget: request.wisdomTarget
         )
 
-        let coordinationResult = try await insightEnhancementCoordinator.coordinateInsightEnhancement(coordinationContext)
+        let coordinationResult = try await insightEnhancementCoordinator
+            .coordinateInsightEnhancement(coordinationContext)
 
         return InsightEnhancementCoordination(
             coordinationId: UUID().uuidString,
@@ -401,7 +409,8 @@ public final class AgentWisdomAmplification: Sendable {
             synthesisTarget: request.wisdomTarget
         )
 
-        let synthesisResult = try await wisdomAmplificationNetwork.synthesizeWisdomAmplificationNetwork(synthesisContext)
+        let synthesisResult = try await wisdomAmplificationNetwork
+            .synthesizeWisdomAmplificationNetwork(synthesisContext)
 
         return WisdomAmplificationNetworkSynthesis(
             synthesisId: UUID().uuidString,
@@ -449,7 +458,8 @@ public final class AgentWisdomAmplification: Sendable {
             wisdomTarget: request.wisdomTarget
         )
 
-        let synthesisResult = try await understandingSynthesisSynthesizer.synthesizeUnderstandingSynthesis(synthesisContext)
+        let synthesisResult = try await understandingSynthesisSynthesizer
+            .synthesizeUnderstandingSynthesis(synthesisContext)
 
         return UnderstandingSynthesisSynthesis(
             synthesisId: UUID().uuidString,
@@ -483,7 +493,8 @@ public final class AgentWisdomAmplification: Sendable {
 
         let wisdomLevel = performanceComparison.wisdomLevel
         let insightEnhancement = await measureInsightEnhancement(understandingSynthesisSynthesis.amplifiedAgents)
-        let understandingSynthesis = await measureUnderstandingSynthesis(understandingSynthesisSynthesis.amplifiedAgents)
+        let understandingSynthesis = await measureUnderstandingSynthesis(understandingSynthesisSynthesis
+            .amplifiedAgents)
         let wisdomAmplification = await measureWisdomAmplification(understandingSynthesisSynthesis.amplifiedAgents)
 
         return WisdomAmplificationValidationResult(
@@ -518,7 +529,8 @@ public final class AgentWisdomAmplification: Sendable {
 
     // MARK: - Helper Methods
 
-    private func analyzeAgentsForWisdomAmplification(_ agents: [WisdomAmplificationAgent]) async throws -> WisdomAmplificationAnalysis {
+    private func analyzeAgentsForWisdomAmplification(_ agents: [WisdomAmplificationAgent]) async throws
+    -> WisdomAmplificationAnalysis {
         // Analyze agents for wisdom amplification opportunities
         let wisdomAmplifications = await wisdomAmplificationEngine.analyzeWisdomAmplificationPotential(agents)
         let insightEnhancements = await insightEnhancementCoordinator.analyzeInsightEnhancementPotential(agents)
@@ -545,7 +557,8 @@ public final class AgentWisdomAmplification: Sendable {
         )
     }
 
-    private func generateWisdomAmplificationStrategies(_ analysis: WisdomAmplificationAnalysis) -> [WisdomAmplificationStrategy] {
+    private func generateWisdomAmplificationStrategies(_ analysis: WisdomAmplificationAnalysis)
+    -> [WisdomAmplificationStrategy] {
         // Generate wisdom amplification strategies based on analysis
         var strategies: [WisdomAmplificationStrategy] = []
 
@@ -652,8 +665,10 @@ public final class AgentWisdomAmplification: Sendable {
         _ result: WisdomAmplificationResult
     ) -> Double {
         let wisdomAdvantage = result.wisdomLevel / capabilities.wisdomLevel
-        let insightAdvantage = result.insightEnhancement / capabilities.amplificationRequirements.insightEnhancement.rawValue
-        let synthesisAdvantage = result.understandingSynthesis / capabilities.amplificationRequirements.understandingSynthesis
+        let insightAdvantage = result.insightEnhancement / capabilities.amplificationRequirements.insightEnhancement
+            .rawValue
+        let synthesisAdvantage = result.understandingSynthesis / capabilities.amplificationRequirements
+            .understandingSynthesis
 
         return (wisdomAdvantage + insightAdvantage + synthesisAdvantage) / 3.0
     }
@@ -1118,7 +1133,8 @@ private final class WisdomAmplificationEngine: Sendable {
         // Initialize wisdom amplification engine
     }
 
-    func assessWisdomAmplification(_ context: WisdomAmplificationAssessmentContext) async throws -> WisdomAmplificationAssessmentResult {
+    func assessWisdomAmplification(_ context: WisdomAmplificationAssessmentContext) async throws
+    -> WisdomAmplificationAssessmentResult {
         // Assess wisdom amplification
         WisdomAmplificationAssessmentResult(
             wisdomPotential: 0.88,
@@ -1127,7 +1143,8 @@ private final class WisdomAmplificationEngine: Sendable {
         )
     }
 
-    func processWisdomAmplification(_ context: WisdomAmplificationProcessingContext) async throws -> WisdomAmplificationProcessingResult {
+    func processWisdomAmplification(_ context: WisdomAmplificationProcessingContext) async throws
+    -> WisdomAmplificationProcessingResult {
         // Process wisdom amplification
         WisdomAmplificationProcessingResult(
             wisdomAmplification: 0.93,
@@ -1165,7 +1182,8 @@ private final class WisdomAmplificationEngine: Sendable {
         // Learn from wisdom amplification failures
     }
 
-    func analyzeWisdomAmplificationPotential(_ agents: [WisdomAmplificationAgent]) async -> WisdomAmplificationAnalysis {
+    func analyzeWisdomAmplificationPotential(_ agents: [WisdomAmplificationAgent]) async
+    -> WisdomAmplificationAnalysis {
         WisdomAmplificationAnalysis(
             wisdomPotential: 0.82,
             wisdomLevelPotential: 0.77,
@@ -1181,7 +1199,8 @@ private final class InsightEnhancementCoordinator: Sendable {
         // Initialize insight enhancement coordinator
     }
 
-    func coordinateInsightEnhancement(_ context: InsightEnhancementCoordinationContext) async throws -> InsightEnhancementCoordinationResult {
+    func coordinateInsightEnhancement(_ context: InsightEnhancementCoordinationContext) async throws
+    -> InsightEnhancementCoordinationResult {
         // Coordinate insight enhancement
         InsightEnhancementCoordinationResult(
             insightEnhancement: 0.91,
@@ -1231,7 +1250,8 @@ private final class WisdomAmplificationNetwork: Sendable {
         // Initialize wisdom amplification network
     }
 
-    func synthesizeWisdomAmplificationNetwork(_ context: WisdomAmplificationNetworkSynthesisContext) async throws -> WisdomAmplificationNetworkSynthesisResult {
+    func synthesizeWisdomAmplificationNetwork(_ context: WisdomAmplificationNetworkSynthesisContext) async throws
+    -> WisdomAmplificationNetworkSynthesisResult {
         // Synthesize wisdom amplification network
         WisdomAmplificationNetworkSynthesisResult(
             amplifiedAgents: context.agents,
@@ -1245,7 +1265,8 @@ private final class WisdomAmplificationNetwork: Sendable {
         // Optimize network
     }
 
-    func analyzeUnderstandingSynthesisPotential(_ agents: [WisdomAmplificationAgent]) async -> UnderstandingSynthesisAnalysis {
+    func analyzeUnderstandingSynthesisPotential(_ agents: [WisdomAmplificationAgent]) async
+    -> UnderstandingSynthesisAnalysis {
         UnderstandingSynthesisAnalysis(
             synthesisPotential: 0.67,
             understandingPotential: 0.63,
@@ -1261,7 +1282,8 @@ private final class UnderstandingSynthesisSynthesizer: Sendable {
         // Initialize understanding synthesis synthesizer
     }
 
-    func synthesizeUnderstandingSynthesis(_ context: UnderstandingSynthesisSynthesisContext) async throws -> UnderstandingSynthesisSynthesisResult {
+    func synthesizeUnderstandingSynthesis(_ context: UnderstandingSynthesisSynthesisContext) async throws
+    -> UnderstandingSynthesisSynthesisResult {
         // Synthesize understanding synthesis
         UnderstandingSynthesisSynthesisResult(
             amplifiedAgents: context.agents,
@@ -1282,7 +1304,8 @@ private final class QuantumWisdomOrchestrator: Sendable {
         // Initialize quantum wisdom orchestrator
     }
 
-    func orchestrateQuantumWisdom(_ context: QuantumWisdomOrchestrationContext) async throws -> QuantumWisdomOrchestrationResult {
+    func orchestrateQuantumWisdom(_ context: QuantumWisdomOrchestrationContext) async throws
+    -> QuantumWisdomOrchestrationResult {
         // Orchestrate quantum wisdom
         QuantumWisdomOrchestrationResult(
             quantumWisdomAgents: context.agents,

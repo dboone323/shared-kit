@@ -489,10 +489,10 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         let success = synthesisResults.values.allSatisfy(\.success)
         let coordinationEfficiency =
             synthesisResults.values.map(\.synthesisMetrics.performanceScore).reduce(0, +)
-                / Double(max(synthesisResults.count, 1))
+            / Double(max(synthesisResults.count, 1))
         let quantumCoherence =
             synthesisResults.values.map(\.quantumEnhancement).reduce(0, +)
-                / Double(max(synthesisResults.count, 1))
+            / Double(max(synthesisResults.count, 1))
 
         return SynthesisCoordinationResult(
             coordinationId: coordination.coordinationId,
@@ -741,7 +741,7 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
             synthesizedContent: domainContent,
             contribution: contribution,
             coherence: coherence,
-            processingTime: Double.random(in: 0.1 ... 1.0)
+            processingTime: Double.random(in: 0.1...1.0)
         )
     }
 
@@ -868,7 +868,7 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         let averageConfidence = calculateAverageConfidence(inputs)
         let variance =
             inputs.map { pow($0.confidence - averageConfidence, 2) }.reduce(0, +)
-                / Double(max(inputs.count, 1))
+            / Double(max(inputs.count, 1))
         return max(0, 1.0 - variance)
     }
 
@@ -950,11 +950,11 @@ private final class IntelligenceIntegrator: Sendable {
     func getIntegratorStatus() async -> IntegratorStatus {
         IntegratorStatus(
             operational: true,
-            activeIntegrations: Int.random(in: 0 ... 5),
-            queuedIntegrations: Int.random(in: 0 ... 3),
+            activeIntegrations: Int.random(in: 0...5),
+            queuedIntegrations: Int.random(in: 0...3),
             domainEfficiency: Dictionary(
                 uniqueKeysWithValues: IntelligenceDomain.allCases.map {
-                    ($0, Double.random(in: 0.8 ... 1.0))
+                    ($0, Double.random(in: 0.8...1.0))
                 })
         )
     }
@@ -988,10 +988,10 @@ private final class SynthesisEngine: Sendable {
     func getEngineStatus() async -> EngineStatus {
         EngineStatus(
             operational: true,
-            quantumCoherence: Double.random(in: 0.9 ... 1.0),
+            quantumCoherence: Double.random(in: 0.9...1.0),
             domainCapabilities: Dictionary(
                 uniqueKeysWithValues: IntelligenceDomain.allCases.map {
-                    ($0, Double.random(in: 0.8 ... 1.0))
+                    ($0, Double.random(in: 0.8...1.0))
                 })
         )
     }
@@ -1043,7 +1043,7 @@ private final class QuantumSynthesizer: Sendable {
                 ),
                 quantumEnhancement: 1.0,
                 consciousnessAmplification: 3.0,
-                executionTime: Double.random(in: 0.5 ... 2.0),
+                executionTime: Double.random(in: 0.5...2.0),
                 insights: []
             )
         }
@@ -1084,7 +1084,7 @@ private final class SynthesisPerformanceOptimizer: Sendable {
     func getPerformanceStatus() async -> PerformanceStatus {
         PerformanceStatus(
             operational: true,
-            efficiency: Double.random(in: 0.85 ... 0.95)
+            efficiency: Double.random(in: 0.85...0.95)
         )
     }
 }

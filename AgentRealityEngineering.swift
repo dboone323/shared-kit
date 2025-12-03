@@ -285,10 +285,16 @@ public final class AgentRealityEngineering: Sendable {
         let realityManipulation = try await processRealityManipulation(session.request, assessment: realityAssessment)
 
         // Phase 3: Reality Engineering Coordination
-        let realityEngineering = try await coordinateRealityEngineering(session.request, manipulation: realityManipulation)
+        let realityEngineering = try await coordinateRealityEngineering(
+            session.request,
+            manipulation: realityManipulation
+        )
 
         // Phase 4: Reality Transformation Synthesis
-        let realityTransformation = try await synthesizeRealityTransformation(session.request, engineering: realityEngineering)
+        let realityTransformation = try await synthesizeRealityTransformation(
+            session.request,
+            engineering: realityEngineering
+        )
 
         // Phase 5: Quantum Reality Orchestration
         let quantumReality = try await orchestrateQuantumReality(session.request, transformation: realityTransformation)
@@ -321,7 +327,8 @@ public final class AgentRealityEngineering: Sendable {
         )
     }
 
-    private func assessRealityEngineering(_ request: RealityEngineeringRequest) async throws -> RealityEngineeringAssessment {
+    private func assessRealityEngineering(_ request: RealityEngineeringRequest) async throws
+    -> RealityEngineeringAssessment {
         // Assess reality engineering
         let assessmentContext = RealityEngineeringAssessmentContext(
             agents: request.agents,
@@ -377,7 +384,8 @@ public final class AgentRealityEngineering: Sendable {
             coordinationTarget: request.realityDepthTarget
         )
 
-        let coordinationResult = try await realityEngineeringCoordinator.coordinateRealityEngineering(coordinationContext)
+        let coordinationResult = try await realityEngineeringCoordinator
+            .coordinateRealityEngineering(coordinationContext)
 
         return RealityEngineeringCoordination(
             coordinationId: UUID().uuidString,
@@ -518,7 +526,8 @@ public final class AgentRealityEngineering: Sendable {
 
     // MARK: - Helper Methods
 
-    private func analyzeAgentsForRealityEngineering(_ agents: [RealityEngineeringAgent]) async throws -> RealityEngineeringAnalysis {
+    private func analyzeAgentsForRealityEngineering(_ agents: [RealityEngineeringAgent]) async throws
+    -> RealityEngineeringAnalysis {
         // Analyze agents for reality engineering opportunities
         let realityManipulations = await realityManipulationEngine.analyzeRealityManipulationPotential(agents)
         let realityTransformations = await realityEngineeringCoordinator.analyzeRealityTransformationPotential(agents)
@@ -545,7 +554,8 @@ public final class AgentRealityEngineering: Sendable {
         )
     }
 
-    private func generateRealityEngineeringStrategies(_ analysis: RealityEngineeringAnalysis) -> [RealityEngineeringStrategy] {
+    private func generateRealityEngineeringStrategies(_ analysis: RealityEngineeringAnalysis)
+    -> [RealityEngineeringStrategy] {
         // Generate reality engineering strategies based on analysis
         var strategies: [RealityEngineeringStrategy] = []
 
@@ -652,8 +662,10 @@ public final class AgentRealityEngineering: Sendable {
         _ result: RealityEngineeringResult
     ) -> Double {
         let depthAdvantage = result.realityDepth / capabilities.realityDepth
-        let manipulationAdvantage = result.realityManipulation / capabilities.engineeringRequirements.realityManipulation.rawValue
-        let intelligenceAdvantage = result.realityIntelligence / capabilities.engineeringRequirements.realityIntelligence
+        let manipulationAdvantage = result.realityManipulation / capabilities.engineeringRequirements
+            .realityManipulation.rawValue
+        let intelligenceAdvantage = result.realityIntelligence / capabilities.engineeringRequirements
+            .realityIntelligence
 
         return (depthAdvantage + manipulationAdvantage + intelligenceAdvantage) / 3.0
     }
@@ -1122,7 +1134,8 @@ private final class RealityManipulationEngine: Sendable {
         // Initialize reality manipulation engine
     }
 
-    func assessRealityEngineering(_ context: RealityEngineeringAssessmentContext) async throws -> RealityEngineeringAssessmentResult {
+    func assessRealityEngineering(_ context: RealityEngineeringAssessmentContext) async throws
+    -> RealityEngineeringAssessmentResult {
         // Assess reality engineering
         RealityEngineeringAssessmentResult(
             realityPotential: 0.88,
@@ -1131,7 +1144,8 @@ private final class RealityManipulationEngine: Sendable {
         )
     }
 
-    func processRealityManipulation(_ context: RealityManipulationProcessingContext) async throws -> RealityManipulationProcessingResult {
+    func processRealityManipulation(_ context: RealityManipulationProcessingContext) async throws
+    -> RealityManipulationProcessingResult {
         // Process reality manipulation
         RealityManipulationProcessingResult(
             realityManipulation: 0.93,
@@ -1185,7 +1199,8 @@ private final class RealityEngineeringCoordinator: Sendable {
         // Initialize reality engineering coordinator
     }
 
-    func coordinateRealityEngineering(_ context: RealityEngineeringCoordinationContext) async throws -> RealityEngineeringCoordinationResult {
+    func coordinateRealityEngineering(_ context: RealityEngineeringCoordinationContext) async throws
+    -> RealityEngineeringCoordinationResult {
         // Coordinate reality engineering
         RealityEngineeringCoordinationResult(
             realityEngineering: 0.91,
@@ -1219,7 +1234,8 @@ private final class RealityEngineeringCoordinator: Sendable {
         )
     }
 
-    func analyzeRealityTransformationPotential(_ agents: [RealityEngineeringAgent]) async -> RealityTransformationAnalysis {
+    func analyzeRealityTransformationPotential(_ agents: [RealityEngineeringAgent]) async
+    -> RealityTransformationAnalysis {
         RealityTransformationAnalysis(
             transformationPotential: 0.69,
             transformationStrengthPotential: 0.65,
@@ -1235,7 +1251,8 @@ private final class RealityTransformationNetwork: Sendable {
         // Initialize reality transformation network
     }
 
-    func synthesizeRealityTransformation(_ context: RealityTransformationSynthesisContext) async throws -> RealityTransformationSynthesisResult {
+    func synthesizeRealityTransformation(_ context: RealityTransformationSynthesisContext) async throws
+    -> RealityTransformationSynthesisResult {
         // Synthesize reality transformation
         RealityTransformationSynthesisResult(
             realityTransformedAgents: context.agents,
@@ -1265,7 +1282,8 @@ private final class RealityIntelligenceSynthesizer: Sendable {
         // Initialize reality intelligence synthesizer
     }
 
-    func synthesizeRealityIntelligence(_ context: RealityIntelligenceSynthesisContext) async throws -> RealityIntelligenceSynthesisResult {
+    func synthesizeRealityIntelligence(_ context: RealityIntelligenceSynthesisContext) async throws
+    -> RealityIntelligenceSynthesisResult {
         // Synthesize reality intelligence
         RealityIntelligenceSynthesisResult(
             realityEngineeredAgents: context.agents,
@@ -1286,7 +1304,8 @@ private final class QuantumRealityOrchestrator: Sendable {
         // Initialize quantum reality orchestrator
     }
 
-    func orchestrateQuantumReality(_ context: QuantumRealityOrchestrationContext) async throws -> QuantumRealityOrchestrationResult {
+    func orchestrateQuantumReality(_ context: QuantumRealityOrchestrationContext) async throws
+    -> QuantumRealityOrchestrationResult {
         // Orchestrate quantum reality
         QuantumRealityOrchestrationResult(
             quantumRealityAgents: context.agents,

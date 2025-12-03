@@ -267,7 +267,7 @@ private struct FanShape: Shape {
         let anglePerSegment = 2 * CGFloat.pi / CGFloat(self.segments)
         let visibleSegments = Int(progress * CGFloat(self.segments))
 
-        for i in 0 ..< visibleSegments {
+        for i in 0..<visibleSegments {
             let startAngle = CGFloat(i) * anglePerSegment - CGFloat.pi / 2
             let endAngle = startAngle + anglePerSegment
 
@@ -345,7 +345,8 @@ private struct LiquidShape: Shape {
 
         for x in stride(from: 0, to: rect.width, by: 1) {
             let relativeX = x / rect.width
-            let waveY = sin((relativeX * frequency * CGFloat.pi * 2) + self.waveOffset) * waveHeight * (1 - self.progress)
+            let waveY = sin((relativeX * frequency * CGFloat.pi * 2) + self.waveOffset) * waveHeight *
+                (1 - self.progress)
             let y = rect.height - fillHeight + waveY
 
             if x == 0 {
@@ -418,7 +419,7 @@ private struct RippleShape: Shape {
             max(centerPoint.y, rect.height - centerPoint.y)
         )
 
-        for i in 0 ..< self.rippleCount {
+        for i in 0..<self.rippleCount {
             let rippleProgress = max(0, progress * CGFloat(self.rippleCount) - CGFloat(i))
             let rippleRadius = maxRadius * min(1, rippleProgress)
 
@@ -582,7 +583,11 @@ public class TransitionManager: ObservableObject {
     @Published public var currentTransition: TransitionType = .slide(edge: .trailing)
     @Published public var isAnimating = false
 
-    public func performTransition(_ transition: TransitionType, duration: Double = 0.5, completion: @escaping () -> Void = {}) {
+    public func performTransition(
+        _ transition: TransitionType,
+        duration: Double = 0.5,
+        completion: @escaping () -> Void = {}
+    ) {
         self.isAnimating = true
         self.currentTransition = transition
 
@@ -625,8 +630,15 @@ public extension View {
         }
     }
 
-    func slideTransitionAdvanced(isPresented: Bool, edge: Edge, distance: CGFloat = 300, overshoot: CGFloat = 50) -> some View {
-        modifier(SlideTransitionAdvanced(isPresented: isPresented, edge: edge, distance: distance, overshoot: overshoot))
+    func slideTransitionAdvanced(isPresented: Bool, edge: Edge, distance: CGFloat = 300,
+                                 overshoot: CGFloat = 50) -> some View
+    {
+        modifier(SlideTransitionAdvanced(
+            isPresented: isPresented,
+            edge: edge,
+            distance: distance,
+            overshoot: overshoot
+        ))
     }
 
     func scaleTransitionAdvanced(
@@ -635,7 +647,12 @@ public extension View {
         toScale: CGFloat = 1.0,
         anchor: UnitPoint = .center
     ) -> some View {
-        modifier(ScaleTransitionAdvanced(isPresented: isPresented, fromScale: fromScale, toScale: toScale, anchor: anchor))
+        modifier(ScaleTransitionAdvanced(
+            isPresented: isPresented,
+            fromScale: fromScale,
+            toScale: toScale,
+            anchor: anchor
+        ))
     }
 
     func flipTransition(isPresented: Bool, axis: FlipAxis = .horizontal) -> some View {

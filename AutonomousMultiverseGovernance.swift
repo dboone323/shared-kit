@@ -1021,7 +1021,8 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
         // Determine approval status
         let approvalStatus: EthicalReviewResult.ApprovalStatus =
             assessment.overallScore >= 0.8
-                ? .approved : assessment.overallScore >= 0.6 ? .conditional : .requiresReview
+                ? .approved
+                : assessment.overallScore >= 0.6 ? .conditional : .requiresReview
 
         let result = EthicalReviewResult(
             actionId: action.id,

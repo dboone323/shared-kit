@@ -44,7 +44,7 @@ public final class OllamaSentimentScoringService: SentimentScoring {
         guard let start = jsonLike.firstIndex(of: "{"), let end = jsonLike.lastIndex(of: "}") else {
             return nil
         }
-        let slice = jsonLike[start ... end]
+        let slice = jsonLike[start...end]
         if let data = String(slice).data(using: .utf8),
            let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
            let label = obj["label"] as? String,

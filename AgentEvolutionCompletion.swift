@@ -240,7 +240,8 @@ public final class EvolutionCompletionEngine: Sendable {
         let evolutionResult = await achieveInfiniteEvolution(for: agent)
         let growthResult = await masterTranscendentGrowth(for: agent)
 
-        let combinedCapabilities = adaptationResult.capabilities + evolutionResult.capabilities + growthResult.capabilities
+        let combinedCapabilities = adaptationResult.capabilities + evolutionResult.capabilities + growthResult
+            .capabilities
         let combinedFactors = adaptationResult.factors + evolutionResult.factors + growthResult.factors
 
         let finalLevel = determineEvolutionLevel(from: agent.evolutionMetrics)
@@ -466,7 +467,7 @@ public final class CompleteAdaptationFramework: Sendable {
     ) async -> CompleteAdaptationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.adaptation * 1_500_000_000))
 
-        let actualGain = step.adaptation * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.adaptation * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.adaptation * 0.90
 
         return CompleteAdaptationResultItem(
@@ -586,7 +587,7 @@ public final class InfiniteEvolutionSystem: Sendable {
     ) async -> InfiniteEvolutionResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.evolution * 2_000_000_000))
 
-        let actualGain = step.evolution * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualGain = step.evolution * (0.8 + Double.random(in: 0...0.4))
         let success = actualGain >= step.evolution * 0.85
 
         return InfiniteEvolutionResultItem(
@@ -706,7 +707,7 @@ public final class TranscendentGrowthInterface: Sendable {
     ) async -> TranscendentGrowthResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.growth * 2_500_000_000))
 
-        let actualPower = step.growth * (0.75 + Double.random(in: 0 ... 0.5))
+        let actualPower = step.growth * (0.75 + Double.random(in: 0...0.5))
         let success = actualPower >= step.growth * 0.80
 
         return TranscendentGrowthResultItem(

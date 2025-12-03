@@ -17,30 +17,34 @@ public enum APIError: Error {
 public struct APIClient {
     public static let shared = APIClient()
     private let session = URLSession.shared
-    
-    public func fetch<T: Decodable>(_ type: T.Type, from urlString: String, completion: @escaping (Result<T, APIError>) -> Void) {
+
+    public func fetch<T: Decodable>(
+        _ type: T.Type,
+        from urlString: String,
+        completion: @escaping (Result<T, APIError>) -> Void
+    ) {
         guard let url = URL(string: urlString) else {
             completion(.failure(.invalidURL))
             return
         }
-        
+
         session.dataTask(with: url) { data, response, error in
             if let _ = error {
                 completion(.failure(.requestFailed))
                 return
             }
-            
+
             guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
                 let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
                 completion(.failure(.serverError(statusCode: statusCode)))
                 return
             }
-            
-            guard let data = data else {
+
+            guard let data else {
                 completion(.failure(.decodingFailed))
                 return
             }
-            
+
             do {
                 let decoded = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(decoded))

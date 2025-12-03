@@ -154,10 +154,10 @@ public class QuantumTeleportation: ObservableObject {
         let successfulTeleports = activeTeleports.values.filter(\.success).count
         let averageFidelity =
             activeTeleports.values.map(\.fidelity).reduce(0, +)
-                / Double(max(1, activeTeleports.count))
+            / Double(max(1, activeTeleports.count))
         let averageClassicalBits =
             activeTeleports.values.map { Double($0.classicalBitsTransmitted) }.reduce(0, +)
-                / Double(max(1, activeTeleports.count))
+            / Double(max(1, activeTeleports.count))
 
         let fidelityDistribution = Dictionary(
             grouping: activeTeleports.values, by: { Int($0.fidelity * 10) }
@@ -182,7 +182,7 @@ public class QuantumTeleportation: ObservableObject {
             id: "teleport_pair_\(UUID().uuidString)",
             nodeA: "source_entangled",
             nodeB: "destination_entangled",
-            fidelity: Double.random(in: 0.95 ... 0.99),
+            fidelity: Double.random(in: 0.95...0.99),
             decoherenceRate: 0.0005,
             distance: 0.0
         )
@@ -193,7 +193,7 @@ public class QuantumTeleportation: ObservableObject {
     {
         // Simulate Bell measurement of source qubit and entangled particle
         let measurementBasis = ["00", "01", "10", "11"].randomElement()!
-        let probability = Double.random(in: 0.2 ... 0.3) // Equal probability for Bell states
+        let probability = Double.random(in: 0.2...0.3) // Equal probability for Bell states
 
         return BellMeasurement(
             basis: measurementBasis,
@@ -246,8 +246,8 @@ public class QuantumTeleportation: ObservableObject {
 
     private func applyErrorCorrection(to state: QuantumState) async -> QuantumState {
         // Apply basic quantum error correction (simplified)
-        let correctedAmplitude = min(1.0, state.amplitude + Double.random(in: -0.05 ... 0.05))
-        let correctedPhase = state.phase + Double.random(in: -.pi / 10 ... (.pi / 10))
+        let correctedAmplitude = min(1.0, state.amplitude + Double.random(in: -0.05...0.05))
+        let correctedPhase = state.phase + Double.random(in: -.pi / 10...(.pi / 10))
 
         return QuantumState(
             amplitude: correctedAmplitude,

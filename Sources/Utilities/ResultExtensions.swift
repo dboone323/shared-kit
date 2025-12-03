@@ -11,19 +11,19 @@ public extension Result {
     /// Returns the success value if available, otherwise nil
     var value: Success? {
         switch self {
-        case .success(let value): return value
+        case let .success(value): return value
         case .failure: return nil
         }
     }
-    
+
     /// Returns the error if available, otherwise nil
     var error: Failure? {
         switch self {
         case .success: return nil
-        case .failure(let error): return error
+        case let .failure(error): return error
         }
     }
-    
+
     /// Returns true if the result is a success
     var isSuccess: Bool {
         switch self {
@@ -31,9 +31,9 @@ public extension Result {
         case .failure: return false
         }
     }
-    
+
     /// Returns true if the result is a failure
     var isFailure: Bool {
-        return !isSuccess
+        !isSuccess
     }
 }

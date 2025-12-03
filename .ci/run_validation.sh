@@ -30,7 +30,7 @@ else
 	if [ -f Package.swift ]; then
 		swift test --parallel
 	else
-		proj=$(ls -1 *.xcodeproj 2>/dev/null | head -n1)
+		proj=$(ls -1d *.xcodeproj 2>/dev/null | head -n1)
 		if [ -n "$proj" ]; then
 			scheme=${proj%.xcodeproj}
 			if command -v xcpretty >/dev/null 2>&1; then

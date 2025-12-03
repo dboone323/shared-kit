@@ -146,13 +146,15 @@ protocol IntuitionPatternAnalysisProtocol {
     /// - Parameter intuitionData: Intuition data
     /// - Parameter externalFactors: External factor data
     /// - Returns: Correlation analysis result
-    func correlateWithExternalFactors(intuitionData: ConsciousnessData, externalFactors: [ExternalFactor]) async throws -> CorrelationAnalysis
+    func correlateWithExternalFactors(intuitionData: ConsciousnessData, externalFactors: [ExternalFactor]) async throws
+        -> CorrelationAnalysis
 
     /// Validate intuition accuracy
     /// - Parameter predictions: Predicted outcomes
     /// - Parameter actualOutcomes: Actual outcomes
     /// - Returns: Validation result
-    func validateIntuitionAccuracy(predictions: [Prediction], actualOutcomes: [Outcome]) async throws -> AccuracyValidation
+    func validateIntuitionAccuracy(predictions: [Prediction], actualOutcomes: [Outcome]) async throws
+        -> AccuracyValidation
 }
 
 /// Protocol for predictive modeling
@@ -178,7 +180,8 @@ protocol PredictiveModelingProtocol {
     /// - Parameter model: Model to evaluate
     /// - Parameter testData: Test data for evaluation
     /// - Returns: Performance evaluation result
-    func evaluateModelPerformance(model: PredictiveModel, testData: [ConsciousnessData]) async throws -> PerformanceEvaluation
+    func evaluateModelPerformance(model: PredictiveModel, testData: [ConsciousnessData]) async throws
+        -> PerformanceEvaluation
 }
 
 // MARK: - Data Structures
@@ -689,11 +692,12 @@ final class QuantumIntuitionEnhancementEngine: QuantumIntuitionEnhancementProtoc
             }
         }
 
-        adaptationTimer = Timer.scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
-            Task { [weak self] in
-                await self?.performAdaptation()
+        adaptationTimer = Timer
+            .scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
+                Task { [weak self] in
+                    await self?.performAdaptation()
+                }
             }
-        }
 
         monitoringTimer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { [weak self] _ in
             Task { [weak self] in
@@ -708,10 +712,10 @@ final class QuantumIntuitionEnhancementEngine: QuantumIntuitionEnhancementProtoc
                 monitoringId: UUID(),
                 entityId: amplification.entityId,
                 timestamp: Date(),
-                intuitionLevel: amplification.effectivenessRating + Double.random(in: -0.1 ... 0.1),
-                processingEfficiency: 0.9 + Double.random(in: -0.05 ... 0.05),
-                accuracyRate: 0.85 + Double.random(in: -0.05 ... 0.05),
-                adaptationRate: 0.8 + Double.random(in: -0.05 ... 0.05),
+                intuitionLevel: amplification.effectivenessRating + Double.random(in: -0.1...0.1),
+                processingEfficiency: 0.9 + Double.random(in: -0.05...0.05),
+                accuracyRate: 0.85 + Double.random(in: -0.05...0.05),
+                adaptationRate: 0.8 + Double.random(in: -0.05...0.05),
                 alerts: []
             )
 
@@ -804,9 +808,9 @@ final class QuantumProcessingEngine: QuantumProcessingProtocol {
         let size = entities.count
         var correlationMatrix = [[Double]](repeating: [Double](repeating: 0.0, count: size), count: size)
 
-        for i in 0 ..< size {
-            for j in 0 ..< size {
-                correlationMatrix[i][j] = i == j ? 1.0 : Double.random(in: 0.7 ... 0.9)
+        for i in 0..<size {
+            for j in 0..<size {
+                correlationMatrix[i][j] = i == j ? 1.0 : Double.random(in: 0.7...0.9)
             }
         }
 
@@ -826,7 +830,8 @@ final class QuantumProcessingEngine: QuantumProcessingProtocol {
         let analysisId = UUID()
 
         // Find optimal outcome
-        let optimalOutcome = possibilities.max { $0.probability * $0.impact < $1.probability * $1.impact } ?? possibilities.first!
+        let optimalOutcome = possibilities
+            .max { $0.probability * $0.impact < $1.probability * $1.impact } ?? possibilities.first!
 
         let analysis = SuperpositionAnalysis(
             analysisId: analysisId,
@@ -867,7 +872,7 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
             PatternAnalysis.AnalysisResult(
                 patternId: pattern.patternId,
                 complexity: pattern.data.count > 5 ? 0.8 : 0.4,
-                uniqueness: Double.random(in: 0.6 ... 0.9),
+                uniqueness: Double.random(in: 0.6...0.9),
                 predictiveValue: pattern.significance,
                 significance: pattern.significance,
                 interpretation: "Pattern shows \(pattern.patternType) characteristics with significance \(pattern.significance)"
@@ -911,7 +916,9 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
         return detection
     }
 
-    func correlateWithExternalFactors(intuitionData: ConsciousnessData, externalFactors: [ExternalFactor]) async throws -> CorrelationAnalysis {
+    func correlateWithExternalFactors(intuitionData: ConsciousnessData,
+                                      externalFactors: [ExternalFactor]) async throws -> CorrelationAnalysis
+    {
         let analysisId = UUID()
 
         // Calculate correlations
@@ -919,9 +926,9 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
             CorrelationAnalysis.Correlation(
                 correlationId: UUID(),
                 factorId: factor.factorId,
-                correlationCoefficient: Double.random(in: 0.3 ... 0.8),
-                lagTime: Double.random(in: 0 ... 3600),
-                strength: Double.random(in: 0.4 ... 0.9)
+                correlationCoefficient: Double.random(in: 0.3...0.8),
+                lagTime: Double.random(in: 0...3600),
+                strength: Double.random(in: 0.4...0.9)
             )
         }
 
@@ -937,7 +944,9 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
         return analysis
     }
 
-    func validateIntuitionAccuracy(predictions: [Prediction], actualOutcomes: [Outcome]) async throws -> AccuracyValidation {
+    func validateIntuitionAccuracy(predictions: [Prediction],
+                                   actualOutcomes: [Outcome]) async throws -> AccuracyValidation
+    {
         let validationId = UUID()
 
         // Calculate accuracy metrics
@@ -1048,7 +1057,9 @@ final class PredictiveModelingEngine: PredictiveModelingProtocol {
         return updatedModel
     }
 
-    func evaluateModelPerformance(model: PredictiveModel, testData: [ConsciousnessData]) async throws -> PerformanceEvaluation {
+    func evaluateModelPerformance(model: PredictiveModel,
+                                  testData: [ConsciousnessData]) async throws -> PerformanceEvaluation
+    {
         let evaluationId = UUID()
 
         // Evaluate model performance
@@ -1113,7 +1124,10 @@ final class QuantumIntuitionDatabase {
     func getEnhancementMetrics() async throws -> EnhancementMetrics {
         let totalAmplifications = intuitionAmplifications.count
         let activeAmplifications = intuitionAmplifications.values.filter { $0.effectivenessRating > 0.7 }.count
-        let averageEffectiveness = intuitionAmplifications.values.map(\.effectivenessRating).reduce(0, +) / Double(max(totalAmplifications, 1))
+        let averageEffectiveness = intuitionAmplifications.values.map(\.effectivenessRating).reduce(0, +) / Double(max(
+            totalAmplifications,
+            1
+        ))
         let processingCount = intuitionProcessing.count
 
         return EnhancementMetrics(

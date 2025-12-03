@@ -436,7 +436,7 @@ public actor DeploymentEngine {
         try await Task.sleep(for: .seconds(step.duration / 10)) // Simulate faster execution
 
         // Simulate random failure for testing
-        if Double.random(in: 0 ..< 1) < 0.05 { // 5% failure rate
+        if Double.random(in: 0..<1) < 0.05 { // 5% failure rate
             throw DeploymentError.stepFailed("Simulated failure in \(step.description)")
         }
     }
@@ -444,7 +444,7 @@ public actor DeploymentEngine {
     private func performStepHealthCheck(_ target: DeploymentTarget) async throws -> Bool {
         // Perform health check after deployment step
         try await Task.sleep(for: .seconds(5)) // Simulate health check
-        return Double.random(in: 0 ..< 1) > 0.1 // 90% success rate
+        return Double.random(in: 0..<1) > 0.1 // 90% success rate
     }
 
     private func performPartialRollback(
@@ -698,10 +698,10 @@ public actor AutomatedScalingController {
     private func analyzeCurrentLoad(_ target: DeploymentTarget) async throws -> LoadAnalysis {
         // Analyze current system load
         LoadAnalysis(
-            cpuUtilization: Double.random(in: 0.3 ..< 0.9),
-            memoryUtilization: Double.random(in: 0.4 ..< 0.95),
-            requestRate: Double.random(in: 100 ..< 1000),
-            responseTime: Double.random(in: 50 ..< 500)
+            cpuUtilization: Double.random(in: 0.3..<0.9),
+            memoryUtilization: Double.random(in: 0.4..<0.95),
+            requestRate: Double.random(in: 100..<1000),
+            responseTime: Double.random(in: 50..<500)
         )
     }
 
@@ -859,19 +859,19 @@ public actor DeploymentHealthMonitor {
     private func checkConnectivity(_ target: DeploymentTarget) async throws -> Bool {
         // Check network connectivity
         try await Task.sleep(for: .seconds(1))
-        return Double.random(in: 0 ..< 1) > 0.05 // 95% success rate
+        return Double.random(in: 0..<1) > 0.05 // 95% success rate
     }
 
     private func checkResources(_ target: DeploymentTarget) async throws -> Bool {
         // Check resource availability
         try await Task.sleep(for: .seconds(2))
-        return Double.random(in: 0 ..< 1) > 0.1 // 90% success rate
+        return Double.random(in: 0..<1) > 0.1 // 90% success rate
     }
 
     private func checkDependencies(_ target: DeploymentTarget) async throws -> Bool {
         // Check dependency health
         try await Task.sleep(for: .seconds(1))
-        return Double.random(in: 0 ..< 1) > 0.08 // 92% success rate
+        return Double.random(in: 0..<1) > 0.08 // 92% success rate
     }
 }
 

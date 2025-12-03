@@ -718,7 +718,8 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
     {
         let riskLevel: RiskLevel =
             instability > 0.8
-                ? .critical : instability > 0.6 ? .high : instability > 0.4 ? .medium : .low
+                ? .critical
+                : instability > 0.6 ? .high : instability > 0.4 ? .medium : .low
 
         return RiskAssessment(
             riskLevel: riskLevel,
@@ -838,11 +839,10 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
         var matrix = Array(repeating: Array(repeating: 0.0, count: nodeCount), count: nodeCount)
 
         for connection in connections {
-            if let sourceIndex = networkNodes.firstIndex(where: { $0.id == connection.targetNodeId }
-            ),
-                let targetIndex = networkNodes.firstIndex(where: {
-                    $0.id == connection.targetNodeId
-                })
+            if let sourceIndex = networkNodes.firstIndex(where: { $0.id == connection.targetNodeId }),
+               let targetIndex = networkNodes.firstIndex(where: {
+                   $0.id == connection.targetNodeId
+               })
             {
                 matrix[sourceIndex][targetIndex] = connection.strength
                 matrix[targetIndex][sourceIndex] = connection.strength // Symmetric
@@ -1913,10 +1913,10 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
         let activeBridgesList = Array(activeBridges.values)
         let averageStability =
             activeBridgesList.map(\.stabilityIndex).reduce(0, +)
-                / Double(activeBridgesList.count)
+            / Double(activeBridgesList.count)
         let averageConnectionStrength =
             activeBridgesList.map(\.connectionStrength).reduce(0, +)
-                / Double(activeBridgesList.count)
+            / Double(activeBridgesList.count)
         let totalEnergyFlow = activeBridgesList.map(\.energyFlow).reduce(0, +)
         let totalDataTransfer = activeBridgesList.map(\.dataTransferRate).reduce(0, +)
 
@@ -2080,7 +2080,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
                 id: UUID(),
                 componentType: componentType,
                 position: [
-                    Double.random(in: 0 ... 1), Double.random(in: 0 ... 1), Double.random(in: 0 ... 1),
+                    Double.random(in: 0...1), Double.random(in: 0...1), Double.random(in: 0...1),
                 ],
                 stability: 0.9,
                 energyConsumption: 50.0,

@@ -1,8 +1,8 @@
 #if canImport(XCTest)
     import Combine
     import Foundation
-    @testable import TestingFramework
     import XCTest
+    @testable import TestingFramework
 
     // MARK: - Unit Tests for Core Components
 
@@ -443,7 +443,7 @@
 
             // When
             let memoryMetrics = try PerformanceTester.measureMemoryUsage {
-                for i in 0 ..< 1000 {
+                for i in 0..<1000 {
                     habits.append(TestDataBuilder.createTestHabit(name: "Habit \(i)"))
                 }
             }
@@ -805,7 +805,7 @@
 
         func testConcurrentAmplification() async throws {
             // Given
-            let workflows = (1 ... 5).map {
+            let workflows = (1...5).map {
                 TestDataBuilder.createTestMCPWorkflow(name: "Concurrent\($0)")
             }
 

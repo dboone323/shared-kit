@@ -66,14 +66,16 @@ public protocol AnalyticsServiceProtocol {
 
 public protocol HabitServiceProtocol {
     func createHabit(_ habit: any EnhancedHabitProtocol) async throws -> any EnhancedHabitProtocol
-    func logHabitCompletion(_ habitId: UUID, value: Double?, mood: MoodRating?, notes: String?) async throws -> any EnhancedHabitLogProtocol
+    func logHabitCompletion(_ habitId: UUID, value: Double?, mood: MoodRating?, notes: String?) async throws
+        -> any EnhancedHabitLogProtocol
     func calculateStreak(for habitId: UUID) async throws -> Int
     func getHabitInsights(for habitId: UUID, timeRange: DateInterval) async throws -> HabitInsights
     func checkAchievements(for habitId: UUID) async throws -> [any HabitAchievementProtocol]
 }
 
 public protocol FinancialServiceProtocol {
-    func createTransaction(_ transaction: any EnhancedFinancialTransactionProtocol) async throws -> any EnhancedFinancialTransactionProtocol
+    func createTransaction(_ transaction: any EnhancedFinancialTransactionProtocol) async throws
+        -> any EnhancedFinancialTransactionProtocol
     func calculateNetWorth(for userId: String, asOf: Date?) async throws -> NetWorthSummary
     func generateFinancialRecommendations(for userId: String) async throws -> [FinancialRecommendation]
 }
@@ -196,7 +198,14 @@ public struct OptimizedTaskSchedule {
     public let optimalTimeSlot: Bool
     public let reasoning: String
 
-    public init(taskId: UUID, title: String, scheduledStart: Date, scheduledEnd: Date, optimalTimeSlot: Bool, reasoning: String) {
+    public init(
+        taskId: UUID,
+        title: String,
+        scheduledStart: Date,
+        scheduledEnd: Date,
+        optimalTimeSlot: Bool,
+        reasoning: String
+    ) {
         self.taskId = taskId
         self.title = title
         self.scheduledStart = scheduledStart
@@ -275,7 +284,8 @@ public struct GoalProgress {
         self.progressPercentage = targetValue > 0 ? (currentProgress / targetValue) * 100 : 0
         self.estimatedCompletion = estimatedCompletion
         self.onTrack = self
-            .progressPercentage >= 95 || (estimatedCompletion != nil && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
+            .progressPercentage >= 95 ||
+            (estimatedCompletion != nil && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
     }
 }
 
@@ -371,10 +381,18 @@ public class MockPlannerService: PlannerServiceProtocol {
     }
 
     public func optimizeSchedule(for userId: String, timeRange: DateInterval) async throws -> ScheduleOptimization {
-        ScheduleOptimization(userId: userId, timeRange: timeRange, optimizedTasks: [], efficiency: 0, recommendations: [])
+        ScheduleOptimization(
+            userId: userId,
+            timeRange: timeRange,
+            optimizedTasks: [],
+            efficiency: 0,
+            recommendations: []
+        )
     }
 
-    public func getProductivityInsights(for userId: String, timeRange: DateInterval) async throws -> ProductivityInsights {
+    public func getProductivityInsights(for userId: String,
+                                        timeRange: DateInterval) async throws -> ProductivityInsights
+    {
         ProductivityInsights(
             userId: userId,
             timeRange: timeRange,
@@ -560,12 +578,20 @@ public class GenericStateManager<T: Identifiable>: ObservableObject, StateManage
         self.items = []
         self.error = nil
         self.lastUpdated = nil
-        await self.analyticsService.track(event: "state_manager_reset", properties: ["state_id": self.stateId], userId: nil as String?)
+        await self.analyticsService.track(
+            event: "state_manager_reset",
+            properties: ["state_id": self.stateId],
+            userId: nil as String?
+        )
     }
 
     public func cleanup() async {
         self.cancellables.removeAll()
-        await self.analyticsService.track(event: "state_manager_cleaned_up", properties: ["state_id": self.stateId], userId: nil as String?)
+        await self.analyticsService.track(
+            event: "state_manager_cleaned_up",
+            properties: ["state_id": self.stateId],
+            userId: nil as String?
+        )
     }
 
     public func getStateHealth() async -> StateHealthStatus {
@@ -731,7 +757,11 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
                 payload: ["habit_id": createdHabit.id.uuidString, "name": createdHabit.name]
             ))
 
-            await self.analyticsService.track(event: "habit_created", properties: ["habit_id": createdHabit.id.uuidString], userId: nil)
+            await self.analyticsService.track(
+                event: "habit_created",
+                properties: ["habit_id": createdHabit.id.uuidString],
+                userId: nil
+            )
         } catch {
             self.error = error
             throw error
@@ -751,7 +781,11 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
             payload: ["habit_id": habit.id.uuidString, "name": habit.name]
         ))
 
-        await self.analyticsService.track(event: "habit_updated", properties: ["habit_id": habit.id.uuidString], userId: nil)
+        await self.analyticsService.track(
+            event: "habit_updated",
+            properties: ["habit_id": habit.id.uuidString],
+            userId: nil
+        )
     }
 
     public func deleteHabit(withId habitId: UUID) async throws {
@@ -768,7 +802,11 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
             payload: ["habit_id": habitId.uuidString]
         ))
 
-        await self.analyticsService.track(event: "habit_deleted", properties: ["habit_id": habitId.uuidString], userId: nil)
+        await self.analyticsService.track(
+            event: "habit_deleted",
+            properties: ["habit_id": habitId.uuidString],
+            userId: nil
+        )
     }
 
     public func logHabitCompletion(_ habitId: UUID, value: Double?, mood: MoodRating?, notes: String?) async throws {
@@ -830,7 +868,11 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
         UserDefaults.standard.set(habitIds, forKey: "saved_habit_ids")
         UserDefaults.standard.set(Date(), forKey: "last_state_save_date")
 
-        await self.analyticsService.track(event: "habit_state_saved", properties: ["habit_count": self.habits.count], userId: nil)
+        await self.analyticsService.track(
+            event: "habit_state_saved",
+            properties: ["habit_count": self.habits.count],
+            userId: nil
+        )
     }
 
     public func loadState() async throws {
@@ -915,7 +957,8 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
 
 /// State manager for financial data
 @MainActor
-public final class FinancialStateManager: ObservableObject, StateManagerProtocol, StatePersistable, StateSynchronizable {
+public final class FinancialStateManager: ObservableObject, StateManagerProtocol, StatePersistable,
+StateSynchronizable {
     public let stateId = "financial_state_manager"
 
     // MARK: - Published Properties
@@ -1071,7 +1114,11 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
 
     public func syncState(with projects: [ProjectType]) async throws {
         self.lastSyncDate = Date()
-        await self.analyticsService.track(event: "financial_state_synced", properties: ["project_count": projects.count], userId: nil)
+        await self.analyticsService.track(
+            event: "financial_state_synced",
+            properties: ["project_count": projects.count],
+            userId: nil
+        )
     }
 
     public func handleExternalStateChange(_ change: StateChange) async {
@@ -1262,7 +1309,11 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
 
     public func saveState() async throws {
         UserDefaults.standard.set(Date(), forKey: "planner_last_save_date")
-        await self.analyticsService.track(event: "planner_state_saved", properties: ["task_count": self.tasks.count], userId: nil)
+        await self.analyticsService.track(
+            event: "planner_state_saved",
+            properties: ["task_count": self.tasks.count],
+            userId: nil
+        )
     }
 
     public func loadState() async throws {
@@ -1281,7 +1332,11 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
 
     public func syncState(with projects: [ProjectType]) async throws {
         self.lastSyncDate = Date()
-        await self.analyticsService.track(event: "planner_state_synced", properties: ["project_count": projects.count], userId: nil)
+        await self.analyticsService.track(
+            event: "planner_state_synced",
+            properties: ["project_count": projects.count],
+            userId: nil
+        )
     }
 
     public func handleExternalStateChange(_ change: StateChange) async {
@@ -1386,7 +1441,13 @@ public final class GlobalStateCoordinator: ObservableObject {
         self.isLoading = true
         defer { isLoading = false }
 
-        let allProjects: [ProjectType] = [.habitQuest, .momentumFinance, .plannerApp, .codingReviewer, .avoidObstaclesGame]
+        let allProjects: [ProjectType] = [
+            .habitQuest,
+            .momentumFinance,
+            .plannerApp,
+            .codingReviewer,
+            .avoidObstaclesGame,
+        ]
 
         do {
             // Sync each state manager with all projects

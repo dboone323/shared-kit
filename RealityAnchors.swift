@@ -436,7 +436,7 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
         let totalEnergy = anchors.map(\.energyLevel).reduce(0, +)
         let averageAge =
             anchors.map { Date().timeIntervalSince($0.creationDate) }.reduce(0, +)
-                / Double(anchors.count)
+            / Double(anchors.count)
         return totalEnergy / max(1.0, averageAge)
     }
 

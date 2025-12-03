@@ -381,7 +381,9 @@ public final class UniversalAutomation: ObservableObject {
         ))
     }
 
-    private func executeOptimizationPlan(_ plan: OptimizationPlan, for project: String) async throws -> [OptimizationResult] {
+    private func executeOptimizationPlan(_ plan: OptimizationPlan,
+                                         for project: String) async throws -> [OptimizationResult]
+    {
         var results: [OptimizationResult] = []
 
         for optimization in plan.optimizations {
@@ -504,7 +506,8 @@ public final class UniversalAutomation: ObservableObject {
     }
 
     private func executeArchitectureEvolution(_ task: AutomationTask) async throws -> AutomationResult {
-        let strategy = ArchitectureEvolutionStrategy(rawValue: task.metadata["strategy"] ?? "intelligent") ?? .intelligent
+        let strategy = ArchitectureEvolutionStrategy(rawValue: task.metadata["strategy"] ?? "intelligent") ??
+            .intelligent
         let result = try await workflowOrchestrator.evolveArchitecture(for: task.project, strategy: strategy)
         return .architectureEvolution(result)
     }
@@ -796,7 +799,12 @@ private class QuantumOptimizer {
     }
 
     func synthesizeCode(_ spec: CodeSpecification, context: CodeGenerationContext) async throws -> CodeSynthesisResult {
-        CodeSynthesisResult(generatedCode: "// Generated code", language: context.language, quality: 0.8, executionTime: 1.5)
+        CodeSynthesisResult(
+            generatedCode: "// Generated code",
+            language: context.language,
+            quality: 0.8,
+            executionTime: 1.5
+        )
     }
 
     func optimizeSystemPerformance() async throws {}
@@ -808,7 +816,9 @@ private class QuantumOptimizer {
 
 private class AIDecisionEngine {
     func initialize() async throws {}
-    func generateOptimizationPlan(qualityResult: QualityAssessment, architectureAnalysis: ArchitectureAnalysis) async throws -> OptimizationPlan {
+    func generateOptimizationPlan(qualityResult: QualityAssessment,
+                                  architectureAnalysis: ArchitectureAnalysis) async throws -> OptimizationPlan
+    {
         OptimizationPlan(optimizations: [])
     }
 
@@ -829,7 +839,9 @@ private class WorkflowOrchestrator {
         DeploymentReadiness(ready: true, blockers: [])
     }
 
-    func evolveArchitecture(for project: String, strategy: ArchitectureEvolutionStrategy) async throws -> ArchitectureEvolutionResult {
+    func evolveArchitecture(for project: String,
+                            strategy: ArchitectureEvolutionStrategy) async throws -> ArchitectureEvolutionResult
+    {
         ArchitectureEvolutionResult(changes: [], qualityImprovement: 0.1, maintainabilityScore: 0.8)
     }
 

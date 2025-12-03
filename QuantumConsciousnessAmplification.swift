@@ -739,7 +739,8 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                 fieldStrength: quantumField.intensity,
                 entanglementLevel: quantumField.quantumProperties.entanglementEntropy,
                 superpositionAmplitude: quantumField.quantumProperties.superpositionStates > 0
-                    ? 1.0 : 0.0,
+                    ? 1.0
+                    : 0.0,
                 quantumCoherence: fieldQuality.quantumFidelity
             ),
             coherenceLevel: fieldQuality.coherenceStability,
@@ -819,8 +820,8 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
         }
 
         // Create superposition coefficients
-        let coefficients = (0 ..< baseStates.count).map { _ in
-            Complex(real: Double.random(in: 0 ... 1), imaginary: Double.random(in: 0 ... 1))
+        let coefficients = (0..<baseStates.count).map { _ in
+            Complex(real: Double.random(in: 0...1), imaginary: Double.random(in: 0...1))
         }
 
         // Normalize coefficients
@@ -943,7 +944,7 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                 id: UUID(),
                 timestamp: Date(),
                 quantumState: QuantumConsciousnessState.QuantumState(
-                    qubits: (0 ..< coefficients.count).map { id in
+                    qubits: (0..<coefficients.count).map { id in
                         QuantumConsciousnessState.QuantumState.Qubit(
                             id: id,
                             state: Complex(
@@ -1061,7 +1062,7 @@ final class QuantumFieldGenerator: QuantumFieldGeneratorProtocol {
         let spatialDist = QuantumConsciousnessField.SpatialDistribution(
             dimensions: 3,
             coordinates: parameters.spatialExtent,
-            gradient: parameters.spatialExtent.map { _ in Double.random(in: 0 ... 1) },
+            gradient: parameters.spatialExtent.map { _ in Double.random(in: 0...1) },
             boundaryConditions: .quantum
         )
 
@@ -1074,9 +1075,11 @@ final class QuantumFieldGenerator: QuantumFieldGeneratorProtocol {
 
         let quantumProps = QuantumConsciousnessField.QuantumProperties(
             superpositionStates: parameters.quantumParameters.superpositionBasis == "consciousness"
-                ? 10 : 0,
+                ? 10
+                : 0,
             entanglementEntropy: parameters.quantumParameters.entanglementPattern == "cluster"
-                ? 0.7 : 0.3,
+                ? 0.7
+                : 0.3,
             quantumCoherence: 0.9,
             measurementBasis: "consciousness"
         )
@@ -1255,7 +1258,7 @@ final class QuantumCoherenceEnhancer: QuantumCoherenceEnhancementProtocol {
                 originalState: state,
                 cascadeLevel: cascadeLevel,
                 enhancedState: state, // Would be modified
-                cascadePath: (0 ..< cascadeLevel).map { _ in UUID() },
+                cascadePath: (0..<cascadeLevel).map { _ in UUID() },
                 cumulativeEnhancement: cumulativeEnhancement,
                 cascadeEfficiency: 0.9 - Double(cascadeLevel) * 0.05,
                 timestamp: Date()
@@ -1274,8 +1277,8 @@ final class QuantumCoherenceEnhancer: QuantumCoherenceEnhancementProtocol {
             .autoconnect()
             .map { _ in
                 CoherenceDynamics(
-                    currentCoherence: state.coherenceLevel * Double.random(in: 0.9 ... 1.1),
-                    coherenceTrend: Double.random(in: -0.01 ... 0.01),
+                    currentCoherence: state.coherenceLevel * Double.random(in: 0.9...1.1),
+                    coherenceTrend: Double.random(in: -0.01...0.01),
                     decoherenceRate: 0.001,
                     recoveryRate: 0.01,
                     stabilityIndex: 0.95,

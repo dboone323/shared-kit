@@ -292,7 +292,8 @@ public protocol HabitServiceProtocol: ServiceProtocol {
     func createHabit(_ habit: EnhancedHabit) async throws -> EnhancedHabit
 
     /// Log habit completion
-    func logHabitCompletion(_ habitId: UUID, value: Double?, mood: MoodRating?, notes: String?) async throws -> EnhancedHabitLog
+    func logHabitCompletion(_ habitId: UUID, value: Double?, mood: MoodRating?, notes: String?) async throws
+        -> EnhancedHabitLog
 
     /// Calculate habit streak
     func calculateStreak(for habitId: UUID) async throws -> Int
@@ -752,14 +753,21 @@ public struct GoalProgress {
     public let onTrack: Bool
     public let milestones: [GoalMilestone]
 
-    public init(goalId: UUID, currentProgress: Double, targetValue: Double, estimatedCompletion: Date?, milestones: [GoalMilestone]) {
+    public init(
+        goalId: UUID,
+        currentProgress: Double,
+        targetValue: Double,
+        estimatedCompletion: Date?,
+        milestones: [GoalMilestone]
+    ) {
         self.goalId = goalId
         self.currentProgress = currentProgress
         self.targetValue = targetValue
         self.progressPercentage = targetValue > 0 ? (currentProgress / targetValue) * 100 : 0
         self.estimatedCompletion = estimatedCompletion
         self.onTrack = self
-            .progressPercentage >= 95 || (estimatedCompletion != nil && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
+            .progressPercentage >= 95 ||
+            (estimatedCompletion != nil && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
         self.milestones = milestones
     }
 }
@@ -773,7 +781,13 @@ public struct GoalMilestone {
     public let achievedAt: Date?
     public let description: String?
 
-    public init(title: String, targetValue: Double, achieved: Bool, achievedAt: Date? = nil, description: String? = nil) {
+    public init(
+        title: String,
+        targetValue: Double,
+        achieved: Bool,
+        achievedAt: Date? = nil,
+        description: String? = nil
+    ) {
         self.title = title
         self.targetValue = targetValue
         self.achieved = achieved
@@ -873,7 +887,14 @@ public struct OptimizedTaskSchedule {
     public let optimalTimeSlot: Bool
     public let reasoning: String
 
-    public init(taskId: UUID, title: String, scheduledStart: Date, scheduledEnd: Date, optimalTimeSlot: Bool, reasoning: String) {
+    public init(
+        taskId: UUID,
+        title: String,
+        scheduledStart: Date,
+        scheduledEnd: Date,
+        optimalTimeSlot: Bool,
+        reasoning: String
+    ) {
         self.taskId = taskId
         self.title = title
         self.scheduledStart = scheduledStart
@@ -955,7 +976,13 @@ public struct CrossProjectCorrelation {
     public let significance: Double
     public let description: String
 
-    public init(project1: ProjectType, project2: ProjectType, correlation: Double, significance: Double, description: String) {
+    public init(
+        project1: ProjectType,
+        project2: ProjectType,
+        correlation: Double,
+        significance: Double,
+        description: String
+    ) {
         self.project1 = project1
         self.project2 = project2
         self.correlation = correlation

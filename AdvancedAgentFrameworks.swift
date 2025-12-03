@@ -595,7 +595,14 @@ public struct AgentCoordination: Codable, Sendable {
     public let startTime: Date
     public var endTime: Date?
 
-    public init(id: UUID, agentIds: [UUID], task: String, status: CoordinationStatus, startTime: Date, endTime: Date? = nil) {
+    public init(
+        id: UUID,
+        agentIds: [UUID],
+        task: String,
+        status: CoordinationStatus,
+        startTime: Date,
+        endTime: Date? = nil
+    ) {
         self.id = id
         self.agentIds = agentIds
         self.task = task

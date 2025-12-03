@@ -525,7 +525,8 @@ public final class MCPCreativityAmplificationCoordinator: MCPCreativityAmplifica
     // MARK: - Public Methods
 
     /// Amplify creative processes
-    public func amplifyCreativity(_ amplification: CreativityAmplification) async throws -> CreativityAmplificationResult {
+    public func amplifyCreativity(_ amplification: CreativityAmplification) async throws
+    -> CreativityAmplificationResult {
         let startTime = Date()
 
         // Validate amplification parameters
@@ -535,7 +536,10 @@ public final class MCPCreativityAmplificationCoordinator: MCPCreativityAmplifica
         let inspirationResult = try await inspirationEngine.generateInspiration(amplification)
 
         // Amplify creativity
-        let amplificationResult = try await creativityAmplifier.amplifyCreativity(amplification, inspirationResult: inspirationResult)
+        let amplificationResult = try await creativityAmplifier.amplifyCreativity(
+            amplification,
+            inspirationResult: inspirationResult
+        )
 
         // Synthesize creative outcomes
         let synthesisResult = await creativeSynthesizer.synthesizeCreativity(amplification, result: amplificationResult)
@@ -559,7 +563,8 @@ public final class MCPCreativityAmplificationCoordinator: MCPCreativityAmplifica
     }
 
     /// Generate creative innovations
-    public func generateCreativeInnovation(_ generation: CreativeInnovationGeneration) async throws -> CreativeInnovationResult {
+    public func generateCreativeInnovation(_ generation: CreativeInnovationGeneration) async throws
+    -> CreativeInnovationResult {
         let startTime = Date()
 
         // Validate generation parameters
@@ -630,17 +635,21 @@ public final class MCPCreativityAmplificationCoordinator: MCPCreativityAmplifica
 
     private func validateAmplificationParameters(_ amplification: CreativityAmplification) async throws {
         if amplification.creativityLevel == .minimal && amplification.innovationScope == .universal {
-            throw CreativityAmplificationError.creativityMismatch("Minimal creativity level cannot achieve universal innovation scope")
+            throw CreativityAmplificationError
+                .creativityMismatch("Minimal creativity level cannot achieve universal innovation scope")
         }
     }
 
     private func validateGenerationParameters(_ generation: CreativeInnovationGeneration) async throws {
         if generation.generationCriteria.isEmpty {
-            throw CreativityAmplificationError.noCriteriaSpecified("At least one generation criterion must be specified")
+            throw CreativityAmplificationError
+                .noCriteriaSpecified("At least one generation criterion must be specified")
         }
     }
 
-    private func generateCreativeInsights(_ amplification: CreativityAmplification, result: AmplificationResult) async -> [CreativeInsight] {
+    private func generateCreativeInsights(_ amplification: CreativityAmplification,
+                                          result: AmplificationResult) async -> [CreativeInsight]
+    {
         var insights: [CreativeInsight] = []
 
         if result.amplification > 0.9 {
@@ -666,7 +675,9 @@ public final class MCPCreativityAmplificationCoordinator: MCPCreativityAmplifica
         return insights
     }
 
-    private func generateCreativeOutcomes(_ amplification: CreativityAmplification, result: AmplificationResult) async -> [CreativeOutcome] {
+    private func generateCreativeOutcomes(_ amplification: CreativityAmplification,
+                                          result: AmplificationResult) async -> [CreativeOutcome]
+    {
         var outcomes: [CreativeOutcome] = []
 
         if result.success {
@@ -683,7 +694,9 @@ public final class MCPCreativityAmplificationCoordinator: MCPCreativityAmplifica
         return outcomes
     }
 
-    private func generateCreativityInsights(_ generation: CreativeInnovationGeneration, result: InnovationResult) async -> [CreativeInsight] {
+    private func generateCreativityInsights(_ generation: CreativeInnovationGeneration,
+                                            result: InnovationResult) async -> [CreativeInsight]
+    {
         var insights: [CreativeInsight] = []
 
         if result.novelty > 0.9 {
@@ -705,7 +718,7 @@ private final class InspirationEngine: Sendable {
     func generateInspiration(_ amplification: CreativityAmplification) async throws -> InspirationResult {
         InspirationResult(
             success: true,
-            quality: Double.random(in: 0.8 ... 1.0)
+            quality: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -720,25 +733,29 @@ private final class InspirationEngine: Sendable {
     func getInspirationStatus() async -> InspirationStatus {
         InspirationStatus(
             operational: true,
-            level: Double.random(in: 0.9 ... 1.0)
+            level: Double.random(in: 0.9...1.0)
         )
     }
 }
 
 /// Creativity Amplifier
 private final class CreativityAmplifier: Sendable {
-    func amplifyCreativity(_ amplification: CreativityAmplification, inspirationResult: InspirationResult) async throws -> AmplificationResult {
+    func amplifyCreativity(_ amplification: CreativityAmplification,
+                           inspirationResult: InspirationResult) async throws -> AmplificationResult
+    {
         AmplificationResult(
-            success: Double.random(in: 0.8 ... 1.0) > 0.2,
-            amplification: Double.random(in: 0.7 ... 1.0),
-            innovationPotential: Double.random(in: 0.8 ... 1.0)
+            success: Double.random(in: 0.8...1.0) > 0.2,
+            amplification: Double.random(in: 0.7...1.0),
+            innovationPotential: Double.random(in: 0.8...1.0)
         )
     }
 
-    func amplifyInnovation(_ generation: CreativeInnovationGeneration, result: InnovationResult) async -> AmplificationResult {
+    func amplifyInnovation(_ generation: CreativeInnovationGeneration,
+                           result: InnovationResult) async -> AmplificationResult
+    {
         AmplificationResult(
             success: true,
-            creativityLevel: Double.random(in: 0.8 ... 1.0)
+            creativityLevel: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -753,10 +770,10 @@ private final class CreativityAmplifier: Sendable {
     func getAmplificationStatus() async -> AmplificationStatus {
         AmplificationStatus(
             operational: true,
-            capability: Double.random(in: 0.9 ... 1.0),
-            depth: Double.random(in: 0.9 ... 1.0),
-            activeAmplifications: Int.random(in: 1 ... 20),
-            successRate: Double.random(in: 0.9 ... 0.98)
+            capability: Double.random(in: 0.9...1.0),
+            depth: Double.random(in: 0.9...1.0),
+            activeAmplifications: Int.random(in: 1...20),
+            successRate: Double.random(in: 0.9...0.98)
         )
     }
 }
@@ -765,10 +782,10 @@ private final class CreativityAmplifier: Sendable {
 private final class InnovationGenerator: Sendable {
     func generateInnovation(_ generation: CreativeInnovationGeneration) async throws -> InnovationResult {
         InnovationResult(
-            success: Double.random(in: 0.85 ... 1.0) > 0.15,
-            quality: Double.random(in: 0.8 ... 1.0),
-            novelty: Double.random(in: 0.7 ... 1.0),
-            feasibility: Double.random(in: 0.6 ... 1.0),
+            success: Double.random(in: 0.85...1.0) > 0.15,
+            quality: Double.random(in: 0.8...1.0),
+            novelty: Double.random(in: 0.7...1.0),
+            feasibility: Double.random(in: 0.6...1.0),
             concepts: generateInnovationConcepts(generation)
         )
     }
@@ -784,7 +801,7 @@ private final class InnovationGenerator: Sendable {
     func getGenerationStatus() async -> GenerationStatus {
         GenerationStatus(
             operational: true,
-            potential: Double.random(in: 0.8 ... 1.0)
+            potential: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -849,13 +866,17 @@ private final class InnovationGenerator: Sendable {
 
 /// Creative Synthesizer
 private final class CreativeSynthesizer: Sendable {
-    func synthesizeCreativity(_ amplification: CreativityAmplification, result: AmplificationResult) async -> SynthesisResult {
+    func synthesizeCreativity(_ amplification: CreativityAmplification,
+                              result: AmplificationResult) async -> SynthesisResult
+    {
         SynthesisResult(
             success: true
         )
     }
 
-    func synthesizeInnovation(_ generation: CreativeInnovationGeneration, result: InnovationResult) async -> SynthesisResult {
+    func synthesizeInnovation(_ generation: CreativeInnovationGeneration,
+                              result: InnovationResult) async -> SynthesisResult
+    {
         SynthesisResult(
             success: true
         )
@@ -872,7 +893,7 @@ private final class CreativeSynthesizer: Sendable {
     func getSynthesisStatus() async -> SynthesisStatus {
         SynthesisStatus(
             operational: true,
-            effectiveness: Double.random(in: 0.8 ... 1.0)
+            effectiveness: Double.random(in: 0.8...1.0)
         )
     }
 }
@@ -890,7 +911,7 @@ private final class CreativityOptimizer: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8 ... 1.0)
+            efficiency: Double.random(in: 0.8...1.0)
         )
     }
 }

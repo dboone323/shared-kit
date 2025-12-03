@@ -372,7 +372,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
 
     private func assessSystemHealth() async -> SystemHealth {
         // Simplified health assessment
-        let score = Double.random(in: 0.8 ... 0.95)
+        let score = Double.random(in: 0.8...0.95)
         return SystemHealth(
             overallScore: score,
             subsystemHealth: [:]
@@ -501,9 +501,9 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
     private func runTestPipeline(for project: String) async throws -> PipelineTestMetrics {
         // Run a test pipeline execution to measure performance
         PipelineTestMetrics(
-            buildTime: Double.random(in: 150 ... 200),
-            testTime: Double.random(in: 100 ... 140),
-            deploymentTime: Double.random(in: 30 ... 50)
+            buildTime: Double.random(in: 150...200),
+            testTime: Double.random(in: 100...140),
+            deploymentTime: Double.random(in: 30...50)
         )
     }
 
