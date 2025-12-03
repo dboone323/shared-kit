@@ -490,7 +490,8 @@ public final class IntegratedIntelligenceOrchestrationSystem: Sendable {
     }
 
     private func calculateCoordinationEfficiency(_ frameworkResult: UniversalFrameworkIntegrationResult) -> Double {
-        let contributionEfficiency = Double(frameworkResult.frameworkContributions.count) / 10.0 // Assume 10 max domains
+        let contributionEfficiency = Double(frameworkResult.frameworkContributions.count) /
+            10.0 // Assume 10 max domains
         let timeEfficiency = min(1.0, 60.0 / frameworkResult.executionTime) // Optimal time: 60 seconds
         return (contributionEfficiency + timeEfficiency) / 2.0
     }

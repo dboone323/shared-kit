@@ -241,7 +241,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     private static func entanglementStrength(for pair: EntanglementPair) -> Double {
         let timeSinceCreation = Date().timeIntervalSince(pair.creationTime)
         let decoherenceFactor = exp(-timeSinceCreation / pair.decoherenceTime)
-        let environmentalNoise = Double.random(in: 0 ... 0.1)
+        let environmentalNoise = Double.random(in: 0...0.1)
         return max(0.0, pair.strength * decoherenceFactor - environmentalNoise)
     }
 
@@ -348,10 +348,10 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 
         let successRate =
             Double(propagationResults.filter(\.success).count)
-                / Double(propagationResults.count)
+            / Double(propagationResults.count)
         let averageStrength =
             propagationResults.map(\.finalStrength).reduce(0, +)
-                / Double(propagationResults.count)
+            / Double(propagationResults.count)
 
         return EntanglementPropagationResult(
             networkId: network.networkId,
@@ -368,7 +368,8 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
                             message: "Propagation success rate below optimal", severity: .warning,
                             suggestion: "Check network coherence"
                         ),
-                    ] : [],
+                    ]
+                    : [],
                 errors: [],
                 recommendations: ["Monitor entanglement strength regularly"]
             )
@@ -391,11 +392,11 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
             particleType: particleType,
             quantumState: createInitialQuantumState(for: particleType),
             position: [
-                Double.random(in: -10 ... 10), Double.random(in: -10 ... 10),
-                Double.random(in: -10 ... 10),
+                Double.random(in: -10...10), Double.random(in: -10...10),
+                Double.random(in: -10...10),
             ],
             momentum: [
-                Double.random(in: -5 ... 5), Double.random(in: -5 ... 5), Double.random(in: -5 ... 5),
+                Double.random(in: -5...5), Double.random(in: -5...5), Double.random(in: -5...5),
             ],
             spin: .superposition,
             charge: particleType == .electron ? -1.0 : particleType == .proton ? 1.0 : 0.0,
@@ -432,7 +433,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         // Calculate current entanglement strength based on various factors
         let timeSinceCreation = Date().timeIntervalSince(pair.creationTime)
         let decoherenceFactor = exp(-timeSinceCreation / pair.decoherenceTime)
-        let environmentalNoise = Double.random(in: 0 ... 0.1)
+        let environmentalNoise = Double.random(in: 0...0.1)
 
         return max(0.0, pair.strength * decoherenceFactor - environmentalNoise)
     }
@@ -512,7 +513,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     private func createInitialParticleSet() async throws -> [QuantumParticle] {
         var particles: [QuantumParticle] = []
 
-        for _ in 0 ..< 10 { // Create 10 initial particles
+        for _ in 0..<10 { // Create 10 initial particles
             let particle = try await initializeParticle()
             particles.append(particle)
         }
@@ -524,8 +525,8 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         let count = particles.count
         var matrix = Array(repeating: Array(repeating: 0.0, count: count), count: count)
 
-        for i in 0 ..< count {
-            for j in 0 ..< count {
+        for i in 0..<count {
+            for j in 0..<count {
                 if i != j {
                     let distance = calculateParticleDistance(particles[i], particles[j])
                     matrix[i][j] = 1.0 / (1.0 + distance)
@@ -604,7 +605,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         // Simulate entanglement propagation
         let success = Bool.random()
         let finalStrength = success ? pair.strength : pair.strength * 0.8
-        let energyConsumed = Double.random(in: 10 ... 100)
+        let energyConsumed = Double.random(in: 10...100)
 
         return EntanglementPropagation(
             pairId: pair.pairId,
@@ -612,7 +613,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
             initialStrength: pair.strength,
             finalStrength: finalStrength,
             energyConsumed: energyConsumed,
-            propagationTime: Double.random(in: 0.1 ... 1.0)
+            propagationTime: Double.random(in: 0.1...1.0)
         )
     }
 
@@ -637,9 +638,9 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     private func calculateParticleMass(for type: ParticleType) -> Double {
         switch type {
         case .photon: return 0.0
-        case .electron: return 9.1093837e-31
-        case .proton: return 1.6726219e-27
-        case .neutron: return 1.6749275e-27
+        case .electron: return 9.1_093_837e-31
+        case .proton: return 1.6_726_219e-27
+        case .neutron: return 1.6_749_275e-27
         default: return 1.0e-30 // Default mass
         }
     }
@@ -695,7 +696,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         // Simplified network coherence calculation
         let averageStrength =
             entanglementPairs.values.map(\.strength).reduce(0, +)
-                / Double(max(1, entanglementPairs.count))
+            / Double(max(1, entanglementPairs.count))
         return averageStrength
             * (1.0 - Double(decoherenceEvents.values.flatMap { $0 }.count) * 0.01)
     }
@@ -705,7 +706,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 
         let averageStrength =
             entanglementPairs.values.map(\.strength).reduce(0, +)
-                / Double(max(1, entanglementPairs.count))
+            / Double(max(1, entanglementPairs.count))
 
         if averageStrength < 0.7 {
             recommendations.append(
@@ -868,7 +869,7 @@ enum QuantumEntanglementNetworkFactory {
                 momentum: [0.0, 1.0, 0.0],
                 spin: .up,
                 charge: -1.0,
-                mass: 9.1093837e-31,
+                mass: 9.1_093_837e-31,
                 creationTime: Date(),
                 lastMeasurement: Date(),
                 entangledPairs: []
@@ -899,8 +900,8 @@ func demonstrateQuantumEntanglementNetworks() async {
 
         // Create entanglement pairs
         var pairs: [EntanglementPair] = []
-        for i in 0 ..< min(2, testParticles.count) {
-            for j in (i + 1) ..< min(4, testParticles.count) {
+        for i in 0..<min(2, testParticles.count) {
+            for j in (i + 1)..<min(4, testParticles.count) {
                 let pair = try await engine.createEntanglementPair(
                     testParticles[i], testParticles[j]
                 )

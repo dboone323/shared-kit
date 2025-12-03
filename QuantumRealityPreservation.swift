@@ -8,8 +8,17 @@ protocol QRPProtocol {
     func preserve(snapshot: QRPSnapshot) async throws -> QRPResult
 }
 
-struct QRPSnapshot: Sendable { let id: UUID; let label: String; let createdAt: Date; let data: Data }
-struct QRPResult: Sendable { let snapshotId: UUID; let stored: Bool; let checksum: String }
+struct QRPSnapshot: Sendable { let id: UUID
+    let label: String
+    let createdAt: Date
+    let data: Data
+}
+
+struct QRPResult: Sendable { let snapshotId: UUID
+    let stored: Bool
+    let checksum: String
+}
+
 enum QRPError: Error { case storageFailure }
 
 final class QuantumRealityPreservationEngine: QRPProtocol {
@@ -24,7 +33,12 @@ final class QuantumRealityPreservationEngine: QRPProtocol {
 func demonstrateQuantumRealityPreservation() async {
     let engine = QuantumRealityPreservationEngine()
     do {
-        let res = try await engine.preserve(snapshot: QRPSnapshot(id: UUID(), label: "critical", createdAt: Date(), data: Data([0x0F, 0xF0])))
+        let res = try await engine.preserve(snapshot: QRPSnapshot(
+            id: UUID(),
+            label: "critical",
+            createdAt: Date(),
+            data: Data([0x0F, 0xF0])
+        ))
         print("QRP demo -> stored: \(res.stored), checksum: \(res.checksum)")
     } catch { print("QRP demo error: \(error)") }
 }

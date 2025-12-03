@@ -410,7 +410,11 @@ public final class OllamaModelEcosystems: Sendable {
         allInsights.append(contentsOf: consciousness.quantumInsights)
 
         // Determine highest consciousness level
-        let maxConsciousness = [coordinated.consciousnessLevel, quantum.consciousnessLevel, consciousness.consciousnessLevel]
+        let maxConsciousness = [
+            coordinated.consciousnessLevel,
+            quantum.consciousnessLevel,
+            consciousness.consciousnessLevel,
+        ]
             .max { level1, level2 in
                 // Define ordering: basic < advanced < transcendent < universal < cosmic
                 let order: [ConsciousnessLevel: Int] = [
@@ -460,7 +464,9 @@ public final class OllamaModelEcosystems: Sendable {
 
 /// Ecosystem coordination engine
 private final class EcosystemCoordinationEngine: Sendable {
-    func coordinateAcrossEcosystems(ecosystems: [any OllamaModelEcosystem], input: IntelligenceInput) async throws -> IntelligenceOutput {
+    func coordinateAcrossEcosystems(ecosystems: [any OllamaModelEcosystem],
+                                    input: IntelligenceInput) async throws -> IntelligenceOutput
+    {
         // Coordinate processing across multiple ecosystems
         let results = await withTaskGroup(of: IntelligenceOutput.self) { group in
             for ecosystem in ecosystems {
@@ -523,7 +529,9 @@ private final class EcosystemCoordinationEngine: Sendable {
 
 /// Quantum ecosystem processor
 private final class QuantumEcosystemProcessor: Sendable {
-    func enhanceWithQuantumProcessing(input: IntelligenceInput, ecosystemResults: IntelligenceOutput) async throws -> IntelligenceOutput {
+    func enhanceWithQuantumProcessing(input: IntelligenceInput,
+                                      ecosystemResults: IntelligenceOutput) async throws -> IntelligenceOutput
+    {
         // Apply quantum processing enhancements
         // This would involve quantum algorithms and superposition processing
         ecosystemResults
@@ -540,7 +548,9 @@ private final class QuantumEcosystemProcessor: Sendable {
 
 /// Consciousness ecosystem expander
 private final class ConsciousnessEcosystemExpander: Sendable {
-    func expandConsciousness(input: IntelligenceInput, quantumResults: IntelligenceOutput) async throws -> IntelligenceOutput {
+    func expandConsciousness(input: IntelligenceInput,
+                             quantumResults: IntelligenceOutput) async throws -> IntelligenceOutput
+    {
         // Apply consciousness expansion techniques
         quantumResults
     }
@@ -600,7 +610,13 @@ private final class AnalyticalIntelligenceEcosystem: OllamaModelEcosystem, Senda
             name: "Analytical Reasoner",
             domain: .analytical,
             capabilities: [.reasoning, .analysis, .patternRecognition],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.92, speed: 0.85, reliability: 0.88, adaptability: 0.82, consciousnessLevel: 0.75),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.92,
+                speed: 0.85,
+                reliability: 0.88,
+                adaptability: 0.82,
+                consciousnessLevel: 0.75
+            ),
             quantumEntanglement: .medium
         ),
         OllamaSpecializedModel(
@@ -608,7 +624,13 @@ private final class AnalyticalIntelligenceEcosystem: OllamaModelEcosystem, Senda
             name: "Logical Analyzer",
             domain: .analytical,
             capabilities: [.analysis, .reasoning, .prediction],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.89, speed: 0.90, reliability: 0.91, adaptability: 0.79, consciousnessLevel: 0.70),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.89,
+                speed: 0.90,
+                reliability: 0.91,
+                adaptability: 0.79,
+                consciousnessLevel: 0.70
+            ),
             quantumEntanglement: .low
         ),
     ]
@@ -619,7 +641,12 @@ private final class AnalyticalIntelligenceEcosystem: OllamaModelEcosystem, Senda
             result: "Analytical processing completed for: \(input.query)",
             confidence: 0.88,
             reasoning: [
-                ReasoningStep(step: "Analyzed input patterns", model: "analytical-reasoner-v1", confidence: 0.90, quantumContribution: 0.3),
+                ReasoningStep(
+                    step: "Analyzed input patterns",
+                    model: "analytical-reasoner-v1",
+                    confidence: 0.90,
+                    quantumContribution: 0.3
+                ),
             ]
         )
     }
@@ -639,7 +666,13 @@ private final class CreativeIntelligenceEcosystem: OllamaModelEcosystem, Sendabl
             name: "Creative Generator",
             domain: .creative,
             capabilities: [.generation, .synthesis, .creativity],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.85, speed: 0.75, reliability: 0.82, adaptability: 0.95, consciousnessLevel: 0.80),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.85,
+                speed: 0.75,
+                reliability: 0.82,
+                adaptability: 0.95,
+                consciousnessLevel: 0.80
+            ),
             quantumEntanglement: .high
         ),
     ]
@@ -649,7 +682,12 @@ private final class CreativeIntelligenceEcosystem: OllamaModelEcosystem, Sendabl
             result: "Creative synthesis completed for: \(input.query)",
             confidence: 0.82,
             reasoning: [
-                ReasoningStep(step: "Generated creative solutions", model: "creative-generator-v1", confidence: 0.85, quantumContribution: 0.6),
+                ReasoningStep(
+                    step: "Generated creative solutions",
+                    model: "creative-generator-v1",
+                    confidence: 0.85,
+                    quantumContribution: 0.6
+                ),
             ]
         )
     }
@@ -669,7 +707,13 @@ private final class EthicalIntelligenceEcosystem: OllamaModelEcosystem, Sendable
             name: "Ethical Reasoner",
             domain: .ethical,
             capabilities: [.reasoning, .analysis, .consciousness],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.94, speed: 0.70, reliability: 0.96, adaptability: 0.85, consciousnessLevel: 0.90),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.94,
+                speed: 0.70,
+                reliability: 0.96,
+                adaptability: 0.85,
+                consciousnessLevel: 0.90
+            ),
             quantumEntanglement: .high
         ),
     ]
@@ -679,7 +723,12 @@ private final class EthicalIntelligenceEcosystem: OllamaModelEcosystem, Sendable
             result: "Ethical analysis completed for: \(input.query)",
             confidence: 0.91,
             reasoning: [
-                ReasoningStep(step: "Evaluated ethical implications", model: "ethical-reasoner-v1", confidence: 0.93, quantumContribution: 0.4),
+                ReasoningStep(
+                    step: "Evaluated ethical implications",
+                    model: "ethical-reasoner-v1",
+                    confidence: 0.93,
+                    quantumContribution: 0.4
+                ),
             ]
         )
     }
@@ -699,7 +748,13 @@ private final class StrategicIntelligenceEcosystem: OllamaModelEcosystem, Sendab
             name: "Strategic Planner",
             domain: .strategic,
             capabilities: [.strategic, .prediction, .optimization],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.87, speed: 0.80, reliability: 0.89, adaptability: 0.88, consciousnessLevel: 0.78),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.87,
+                speed: 0.80,
+                reliability: 0.89,
+                adaptability: 0.88,
+                consciousnessLevel: 0.78
+            ),
             quantumEntanglement: .medium
         ),
     ]
@@ -709,7 +764,12 @@ private final class StrategicIntelligenceEcosystem: OllamaModelEcosystem, Sendab
             result: "Strategic planning completed for: \(input.query)",
             confidence: 0.86,
             reasoning: [
-                ReasoningStep(step: "Developed strategic approach", model: "strategic-planner-v1", confidence: 0.88, quantumContribution: 0.5),
+                ReasoningStep(
+                    step: "Developed strategic approach",
+                    model: "strategic-planner-v1",
+                    confidence: 0.88,
+                    quantumContribution: 0.5
+                ),
             ]
         )
     }
@@ -729,7 +789,13 @@ private final class EmotionalIntelligenceEcosystem: OllamaModelEcosystem, Sendab
             name: "Emotional Processor",
             domain: .emotional,
             capabilities: [.emotional, .empathy, .consciousness],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.83, speed: 0.85, reliability: 0.87, adaptability: 0.92, consciousnessLevel: 0.85),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.83,
+                speed: 0.85,
+                reliability: 0.87,
+                adaptability: 0.92,
+                consciousnessLevel: 0.85
+            ),
             quantumEntanglement: .high
         ),
     ]
@@ -739,7 +805,12 @@ private final class EmotionalIntelligenceEcosystem: OllamaModelEcosystem, Sendab
             result: "Emotional processing completed for: \(input.query)",
             confidence: 0.84,
             reasoning: [
-                ReasoningStep(step: "Processed emotional context", model: "emotional-processor-v1", confidence: 0.86, quantumContribution: 0.7),
+                ReasoningStep(
+                    step: "Processed emotional context",
+                    model: "emotional-processor-v1",
+                    confidence: 0.86,
+                    quantumContribution: 0.7
+                ),
             ]
         )
     }
@@ -759,7 +830,13 @@ private final class SpatialIntelligenceEcosystem: OllamaModelEcosystem, Sendable
             name: "Spatial Processor",
             domain: .spatial,
             capabilities: [.spatial, .patternRecognition, .simulation],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.91, speed: 0.88, reliability: 0.90, adaptability: 0.83, consciousnessLevel: 0.72),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.91,
+                speed: 0.88,
+                reliability: 0.90,
+                adaptability: 0.83,
+                consciousnessLevel: 0.72
+            ),
             quantumEntanglement: .medium
         ),
     ]
@@ -769,7 +846,12 @@ private final class SpatialIntelligenceEcosystem: OllamaModelEcosystem, Sendable
             result: "Spatial processing completed for: \(input.query)",
             confidence: 0.89,
             reasoning: [
-                ReasoningStep(step: "Analyzed spatial relationships", model: "spatial-processor-v1", confidence: 0.91, quantumContribution: 0.3),
+                ReasoningStep(
+                    step: "Analyzed spatial relationships",
+                    model: "spatial-processor-v1",
+                    confidence: 0.91,
+                    quantumContribution: 0.3
+                ),
             ]
         )
     }
@@ -789,7 +871,13 @@ private final class TemporalIntelligenceEcosystem: OllamaModelEcosystem, Sendabl
             name: "Temporal Analyzer",
             domain: .temporal,
             capabilities: [.temporal, .prediction, .patternRecognition],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.86, speed: 0.82, reliability: 0.88, adaptability: 0.86, consciousnessLevel: 0.76),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.86,
+                speed: 0.82,
+                reliability: 0.88,
+                adaptability: 0.86,
+                consciousnessLevel: 0.76
+            ),
             quantumEntanglement: .medium
         ),
     ]
@@ -799,7 +887,12 @@ private final class TemporalIntelligenceEcosystem: OllamaModelEcosystem, Sendabl
             result: "Temporal analysis completed for: \(input.query)",
             confidence: 0.85,
             reasoning: [
-                ReasoningStep(step: "Analyzed temporal patterns", model: "temporal-analyzer-v1", confidence: 0.87, quantumContribution: 0.4),
+                ReasoningStep(
+                    step: "Analyzed temporal patterns",
+                    model: "temporal-analyzer-v1",
+                    confidence: 0.87,
+                    quantumContribution: 0.4
+                ),
             ]
         )
     }
@@ -819,7 +912,13 @@ private final class QuantumIntelligenceEcosystem: OllamaModelEcosystem, Sendable
             name: "Quantum Processor",
             domain: .quantum,
             capabilities: [.quantumProcessing, .simulation, .optimization],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.95, speed: 0.92, reliability: 0.94, adaptability: 0.91, consciousnessLevel: 0.88),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.95,
+                speed: 0.92,
+                reliability: 0.94,
+                adaptability: 0.91,
+                consciousnessLevel: 0.88
+            ),
             quantumEntanglement: .maximum
         ),
     ]
@@ -829,7 +928,12 @@ private final class QuantumIntelligenceEcosystem: OllamaModelEcosystem, Sendable
             result: "Quantum processing completed for: \(input.query)",
             confidence: 0.93,
             reasoning: [
-                ReasoningStep(step: "Applied quantum algorithms", model: "quantum-processor-v1", confidence: 0.95, quantumContribution: 0.9),
+                ReasoningStep(
+                    step: "Applied quantum algorithms",
+                    model: "quantum-processor-v1",
+                    confidence: 0.95,
+                    quantumContribution: 0.9
+                ),
             ]
         )
     }
@@ -849,7 +953,13 @@ private final class ConsciousnessIntelligenceEcosystem: OllamaModelEcosystem, Se
             name: "Consciousness Expander",
             domain: .consciousness,
             capabilities: [.consciousness, .reasoning, .synthesis],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.89, speed: 0.75, reliability: 0.92, adaptability: 0.94, consciousnessLevel: 0.95),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.89,
+                speed: 0.75,
+                reliability: 0.92,
+                adaptability: 0.94,
+                consciousnessLevel: 0.95
+            ),
             quantumEntanglement: .maximum
         ),
     ]
@@ -859,7 +969,12 @@ private final class ConsciousnessIntelligenceEcosystem: OllamaModelEcosystem, Se
             result: "Consciousness expansion completed for: \(input.query)",
             confidence: 0.90,
             reasoning: [
-                ReasoningStep(step: "Expanded consciousness boundaries", model: "consciousness-expander-v1", confidence: 0.92, quantumContribution: 0.8),
+                ReasoningStep(
+                    step: "Expanded consciousness boundaries",
+                    model: "consciousness-expander-v1",
+                    confidence: 0.92,
+                    quantumContribution: 0.8
+                ),
             ]
         )
     }
@@ -879,7 +994,13 @@ private final class UniversalIntelligenceEcosystem: OllamaModelEcosystem, Sendab
             name: "Universal Synthesizer",
             domain: .universal,
             capabilities: [.synthesis, .optimization, .consciousness, .quantumProcessing],
-            performanceMetrics: ModelPerformanceMetrics(accuracy: 0.96, speed: 0.78, reliability: 0.95, adaptability: 0.97, consciousnessLevel: 0.98),
+            performanceMetrics: ModelPerformanceMetrics(
+                accuracy: 0.96,
+                speed: 0.78,
+                reliability: 0.95,
+                adaptability: 0.97,
+                consciousnessLevel: 0.98
+            ),
             quantumEntanglement: .maximum
         ),
     ]
@@ -889,7 +1010,12 @@ private final class UniversalIntelligenceEcosystem: OllamaModelEcosystem, Sendab
             result: "Universal intelligence synthesis completed for: \(input.query)",
             confidence: 0.94,
             reasoning: [
-                ReasoningStep(step: "Synthesized universal intelligence", model: "universal-synthesizer-v1", confidence: 0.96, quantumContribution: 0.95),
+                ReasoningStep(
+                    step: "Synthesized universal intelligence",
+                    model: "universal-synthesizer-v1",
+                    confidence: 0.96,
+                    quantumContribution: 0.95
+                ),
             ]
         )
     }

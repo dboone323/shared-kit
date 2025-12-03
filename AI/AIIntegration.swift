@@ -296,7 +296,7 @@ public class NaturalLanguageProcessor: ObservableObject {
         self.tokenizer.string = text
         var wordCount = 0
 
-        self.tokenizer.enumerateTokens(in: text.startIndex ..< text.endIndex) { _, _ in
+        self.tokenizer.enumerateTokens(in: text.startIndex..<text.endIndex) { _, _ in
             wordCount += 1
             return true
         }
@@ -341,7 +341,7 @@ public class NaturalLanguageProcessor: ObservableObject {
         // This would use a trained ML model in production
 
         let scores = categories.map { category in
-            CategoryScore(category: category, score: Double.random(in: 0.1 ... 0.9))
+            CategoryScore(category: category, score: Double.random(in: 0.1...0.9))
         }.sorted { $0.score > $1.score }
 
         return TextCategorizationResult(
@@ -361,7 +361,7 @@ public class NaturalLanguageProcessor: ObservableObject {
         var keywords: [String: Int] = [:]
 
         tagger.enumerateTokens(
-            in: text.startIndex ..< text.endIndex, unit: .word, scheme: .lexicalClass
+            in: text.startIndex..<text.endIndex, unit: .word, scheme: .lexicalClass
         ) { tokenRange, tag in
             if let tag,
                tag == .noun || tag == .adjective || tag == .verb
@@ -624,7 +624,8 @@ public class PredictiveAnalyticsEngine: ObservableObject {
     {
         let completionRate =
             history.isEmpty
-                ? 0.5 : Double(history.count(where: { $0.completed })) / Double(history.count)
+                ? 0.5
+                : Double(history.count(where: { $0.completed })) / Double(history.count)
         let streakLength = self.calculateCurrentStreak(history)
         let timeOfDayConsistency = self.calculateTimeConsistency(history)
         let dayOfWeekPattern = self.analyzeDayOfWeekPattern(history)
@@ -800,7 +801,8 @@ public class PredictiveAnalyticsEngine: ObservableObject {
             PredictionFactor(
                 name: "Historical Performance",
                 impact: features.completionRate > 0.7
-                    ? .positive : features.completionRate < 0.3 ? .negative : .neutral,
+                    ? .positive
+                    : features.completionRate < 0.3 ? .negative : .neutral,
                 weight: 0.4,
                 description:
                 "Based on your past completion rate of \(Int(features.completionRate * 100))%"
@@ -810,7 +812,8 @@ public class PredictiveAnalyticsEngine: ObservableObject {
             PredictionFactor(
                 name: "Current Streak",
                 impact: features.currentStreak > 7
-                    ? .positive : features.currentStreak == 0 ? .negative : .neutral,
+                    ? .positive
+                    : features.currentStreak == 0 ? .negative : .neutral,
                 weight: 0.2,
                 description: "Your current streak is \(features.currentStreak) days"
             ))
@@ -819,7 +822,8 @@ public class PredictiveAnalyticsEngine: ObservableObject {
             PredictionFactor(
                 name: "Time Consistency",
                 impact: features.timeConsistency > 0.7
-                    ? .positive : features.timeConsistency < 0.4 ? .negative : .neutral,
+                    ? .positive
+                    : features.timeConsistency < 0.4 ? .negative : .neutral,
                 weight: 0.15,
                 description: "You perform this habit consistently at similar times"
             ))
@@ -902,7 +906,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
         } else {
             // Default scoring based on amount and time patterns
             for category in categories {
-                categoryScores[category] = Double.random(in: 0.1 ... 0.6)
+                categoryScores[category] = Double.random(in: 0.1...0.6)
             }
         }
 

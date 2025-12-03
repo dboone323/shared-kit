@@ -5,17 +5,17 @@
 // Network reachability monitor
 //
 
-import Network
 import Combine
+import Network
 
 public class NetworkMonitor: ObservableObject {
     public static let shared = NetworkMonitor()
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "NetworkMonitor")
-    
+
     @Published public var isConnected = true
     @Published public var isExpensive = false
-    
+
     public init() {
         monitor.pathUpdateHandler = { [weak self] path in
             DispatchQueue.main.async {

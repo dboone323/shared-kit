@@ -8,8 +8,16 @@ protocol UROProtocol {
     func optimize(goal: UROGoal) async throws -> UROOutcome
 }
 
-struct UROGoal: Sendable { let id: UUID; let objectives: [String: Double]; let constraints: [String: Double] }
-struct UROOutcome: Sendable { let goalId: UUID; let optimizedScore: Double; let iterations: Int; let converged: Bool }
+struct UROGoal: Sendable { let id: UUID
+    let objectives: [String: Double]
+    let constraints: [String: Double]
+}
+
+struct UROOutcome: Sendable { let goalId: UUID
+    let optimizedScore: Double
+    let iterations: Int
+    let converged: Bool
+}
 
 final class UniversalRealityOptimizationEngine: UROProtocol {
     func optimize(goal: UROGoal) async throws -> UROOutcome {
@@ -20,6 +28,10 @@ final class UniversalRealityOptimizationEngine: UROProtocol {
 
 func demonstrateUniversalRealityOptimization() async {
     let engine = UniversalRealityOptimizationEngine()
-    let out = try? await engine.optimize(goal: UROGoal(id: UUID(), objectives: ["benefit": 1.0], constraints: ["energy": 0.1]))
+    let out = try? await engine.optimize(goal: UROGoal(
+        id: UUID(),
+        objectives: ["benefit": 1.0],
+        constraints: ["energy": 0.1]
+    ))
     print("URO demo -> score: \(out?.optimizedScore ?? -1)")
 }

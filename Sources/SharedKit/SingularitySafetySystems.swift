@@ -179,7 +179,8 @@ public final class SingularitySafetyCoordinator: ObservableObject, @unchecked Se
             riskLevel: riskLevel,
             validationResult: validationResult,
             requiredInterventions: canProceed
-                ? [] : generateRequiredInterventions(action, riskLevel)
+                ? []
+                : generateRequiredInterventions(action, riskLevel)
         )
     }
 

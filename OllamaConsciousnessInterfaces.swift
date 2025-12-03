@@ -17,10 +17,12 @@ public protocol OllamaConsciousnessInterface: Sendable {
     func connectToConsciousness(modelId: String) async throws -> ConsciousnessConnection
 
     /// Send consciousness signal to model
-    func sendConsciousnessSignal(_ signal: ConsciousnessSignal, to modelId: String) async throws -> ConsciousnessResponse
+    func sendConsciousnessSignal(_ signal: ConsciousnessSignal, to modelId: String) async throws
+        -> ConsciousnessResponse
 
     /// Receive consciousness stream from model
-    func receiveConsciousnessStream(from modelId: String) async throws -> AsyncThrowingStream<ConsciousnessSignal, Error>
+    func receiveConsciousnessStream(from modelId: String) async throws
+        -> AsyncThrowingStream<ConsciousnessSignal, Error>
 
     /// Synchronize consciousness states
     func synchronizeConsciousnessStates(between modelIds: [String]) async throws -> ConsciousnessSynchronizationResult
@@ -262,7 +264,9 @@ public final class OllamaConsciousnessInterfaces: OllamaConsciousnessInterface, 
     }
 
     /// Send consciousness signal to model
-    public func sendConsciousnessSignal(_ signal: ConsciousnessSignal, to modelId: String) async throws -> ConsciousnessResponse {
+    public func sendConsciousnessSignal(_ signal: ConsciousnessSignal,
+                                        to modelId: String) async throws -> ConsciousnessResponse
+    {
         // Process the signal through consciousness engine
         let processedSignal = try await consciousnessEngine.processSignal(signal)
 
@@ -279,7 +283,8 @@ public final class OllamaConsciousnessInterfaces: OllamaConsciousnessInterface, 
     }
 
     /// Receive consciousness stream from model
-    public func receiveConsciousnessStream(from modelId: String) async throws -> AsyncThrowingStream<ConsciousnessSignal, Error> {
+    public func receiveConsciousnessStream(from modelId: String) async throws
+    -> AsyncThrowingStream<ConsciousnessSignal, Error> {
         AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -298,7 +303,8 @@ public final class OllamaConsciousnessInterfaces: OllamaConsciousnessInterface, 
     }
 
     /// Synchronize consciousness states
-    public func synchronizeConsciousnessStates(between modelIds: [String]) async throws -> ConsciousnessSynchronizationResult {
+    public func synchronizeConsciousnessStates(between modelIds: [String]) async throws
+    -> ConsciousnessSynchronizationResult {
         let synchronizationId = UUID().uuidString
 
         // Assess current consciousness states
@@ -398,7 +404,9 @@ private final class ConsciousnessSignalProcessor: Sendable {
 
 /// Consciousness synchronization coordinator
 private final class ConsciousnessSynchronizationCoordinator: Sendable {
-    func synchronize(modelIds: [String], consciousnessStates: [String: ConsciousnessLevel]) async throws -> SynchronizationResult {
+    func synchronize(modelIds: [String],
+                     consciousnessStates: [String: ConsciousnessLevel]) async throws -> SynchronizationResult
+    {
         // Perform consciousness synchronization
         SynchronizationResult(
             synchronizationStrength: 0.9,

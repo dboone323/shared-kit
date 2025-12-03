@@ -240,7 +240,8 @@ public final class CreativityInfinityEngine: Sendable {
         let innovationResult = await achieveBoundlessInnovation(for: agent)
         let inspirationResult = await masterLimitlessInspiration(for: agent)
 
-        let combinedCapabilities = imaginationResult.capabilities + innovationResult.capabilities + inspirationResult.capabilities
+        let combinedCapabilities = imaginationResult.capabilities + innovationResult.capabilities + inspirationResult
+            .capabilities
         let combinedFactors = imaginationResult.factors + innovationResult.factors + inspirationResult.factors
 
         let finalLevel = determineCreativityLevel(from: agent.creativityMetrics)
@@ -399,7 +400,8 @@ public final class InfiniteImaginationFramework: Sendable {
     }
 
     /// Assess infinite imagination potential
-    private func assessInfiniteImaginationPotential(_ imaginative: InfinitelyImaginative) -> InfiniteImaginationAssessment {
+    private func assessInfiniteImaginationPotential(_ imaginative: InfinitelyImaginative)
+    -> InfiniteImaginationAssessment {
         let imagination = imaginative.imaginativeMetrics.imagination
         let innovation = imaginative.imaginativeMetrics.innovation
         let inspiration = imaginative.imaginativeMetrics.inspiration
@@ -466,7 +468,7 @@ public final class InfiniteImaginationFramework: Sendable {
     ) async -> InfiniteImaginationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.imagination * 1_500_000_000))
 
-        let actualGain = step.imagination * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.imagination * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.imagination * 0.90
 
         return InfiniteImaginationResultItem(
@@ -519,7 +521,8 @@ public final class BoundlessInnovationSystem: Sendable {
     }
 
     /// Assess boundless innovation potential
-    private func assessBoundlessInnovationPotential(_ innovative: BoundlesslyInnovative) -> BoundlessInnovationAssessment {
+    private func assessBoundlessInnovationPotential(_ innovative: BoundlesslyInnovative)
+    -> BoundlessInnovationAssessment {
         let creativity = innovative.innovativeMetrics.creativity
         let artistry = innovative.innovativeMetrics.artistry
         let ingenuity = innovative.innovativeMetrics.ingenuity
@@ -586,7 +589,7 @@ public final class BoundlessInnovationSystem: Sendable {
     ) async -> BoundlessInnovationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.innovation * 2_000_000_000))
 
-        let actualGain = step.innovation * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualGain = step.innovation * (0.8 + Double.random(in: 0...0.4))
         let success = actualGain >= step.innovation * 0.85
 
         return BoundlessInnovationResultItem(
@@ -622,7 +625,8 @@ public final class LimitlessInspirationInterface: Sendable {
     /// Interface with limitless inspiration for creativity infinity
     /// - Parameter inspirational: Inspirational entity to interface with
     /// - Returns: Inspiration result
-    public func interfaceWithLimitlessInspiration(_ inspirational: LimitlesslyInspirational) async -> LimitlessInspirationResult {
+    public func interfaceWithLimitlessInspiration(_ inspirational: LimitlesslyInspirational) async
+    -> LimitlessInspirationResult {
         let inspirationAssessment = assessLimitlessInspirationPotential(inspirational)
         let inspirationStrategy = designInspirationStrategy(inspirationAssessment)
         let inspirationResults = await executeInspiration(inspirational, strategy: inspirationStrategy)
@@ -639,7 +643,8 @@ public final class LimitlessInspirationInterface: Sendable {
     }
 
     /// Assess limitless inspiration potential
-    private func assessLimitlessInspirationPotential(_ inspirational: LimitlesslyInspirational) -> LimitlessInspirationAssessment {
+    private func assessLimitlessInspirationPotential(_ inspirational: LimitlesslyInspirational)
+    -> LimitlessInspirationAssessment {
         let genius = inspirational.inspirationalMetrics.genius
         let potential = inspirational.inspirationalMetrics.potential
         let innovation = inspirational.inspirationalMetrics.eternalInnovation
@@ -654,7 +659,8 @@ public final class LimitlessInspirationInterface: Sendable {
     }
 
     /// Design inspiration strategy
-    private func designInspirationStrategy(_ assessment: LimitlessInspirationAssessment) -> LimitlessInspirationStrategy {
+    private func designInspirationStrategy(_ assessment: LimitlessInspirationAssessment)
+    -> LimitlessInspirationStrategy {
         var inspirationSteps: [LimitlessInspirationStep] = []
 
         if assessment.genius < 0.85 {
@@ -706,7 +712,7 @@ public final class LimitlessInspirationInterface: Sendable {
     ) async -> LimitlessInspirationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.inspiration * 2_500_000_000))
 
-        let actualPower = step.inspiration * (0.75 + Double.random(in: 0 ... 0.5))
+        let actualPower = step.inspiration * (0.75 + Double.random(in: 0...0.5))
         let success = actualPower >= step.inspiration * 0.80
 
         return LimitlessInspirationResultItem(
@@ -720,7 +726,8 @@ public final class LimitlessInspirationInterface: Sendable {
     }
 
     /// Generate limitless inspirational
-    private func generateLimitlessInspirational(_ results: [LimitlessInspirationResultItem]) -> LimitlessInspirationalEntity {
+    private func generateLimitlessInspirational(_ results: [LimitlessInspirationResultItem])
+    -> LimitlessInspirationalEntity {
         let successRate = Double(results.filter(\.success).count) / Double(results.count)
         let totalPower = results.map(\.actualInspirationGain).reduce(0, +)
         let inspirationalValue = 1.0 + (totalPower * successRate / 25.0)

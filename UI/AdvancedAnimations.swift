@@ -201,8 +201,12 @@ public struct SlideTransition: ViewModifier {
         content
             .offset(
                 x: self.edge == .leading || self
-                    .edge == .trailing ? (self.isPresented ? 0 : (self.edge == .leading ? -self.offset : self.offset)) : 0,
-                y: self.edge == .top || self.edge == .bottom ? (self.isPresented ? 0 : (self.edge == .top ? -self.offset : self.offset)) : 0
+                    .edge == .trailing
+                    ? (self.isPresented ? 0 : (self.edge == .leading ? -self.offset : self.offset))
+                    : 0,
+                y: self.edge == .top || self.edge == .bottom
+                    ? (self.isPresented ? 0 : (self.edge == .top ? -self.offset : self.offset))
+                    : 0
             )
             .opacity(self.isPresented ? 1 : 0)
             .animation(AnimationTiming.springSmooth, value: self.isPresented)
@@ -331,7 +335,7 @@ public struct LoadingDots: View {
 
     public var body: some View {
         HStack(spacing: 4) {
-            ForEach(0 ..< 3, id: \.self) { index in
+            ForEach(0..<3, id: \.self) { index in
                 Circle()
                     .fill(Color.primary)
                     .frame(width: 8, height: 8)
@@ -346,7 +350,7 @@ public struct LoadingDots: View {
             }
         }
         .onAppear {
-            for i in 0 ..< self.animationStates.count {
+            for i in 0..<self.animationStates.count {
                 self.animationStates[i] = true
             }
         }
@@ -475,11 +479,11 @@ public struct ParticleSystem: View {
             if self.particles.count < self.particleCount {
                 let newParticle = Particle(
                     position: CGPoint(
-                        x: CGFloat.random(in: 0 ... bounds.width),
+                        x: CGFloat.random(in: 0...bounds.width),
                         y: bounds.height
                     ),
                     velocity: CGPoint(
-                        x: CGFloat.random(in: -50 ... 50),
+                        x: CGFloat.random(in: -50...50),
                         y: CGFloat.random(in: -100 ... -50)
                     )
                 )

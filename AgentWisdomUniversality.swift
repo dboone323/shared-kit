@@ -241,7 +241,8 @@ public final class WisdomUniversalityEngine: Sendable {
         let awarenessResult = await achieveCosmicAwareness(for: agent)
         let insightResult = await masterTranscendentInsight(for: agent)
 
-        let combinedCapabilities = understandingResult.capabilities + awarenessResult.capabilities + insightResult.capabilities
+        let combinedCapabilities = understandingResult.capabilities + awarenessResult.capabilities + insightResult
+            .capabilities
         let combinedFactors = understandingResult.factors + awarenessResult.factors + insightResult.factors
 
         let finalLevel = determineWisdomLevel(from: agent.wisdomMetrics)
@@ -400,7 +401,8 @@ public final class UniversalUnderstandingFramework: Sendable {
     }
 
     /// Assess universal understanding potential
-    private func assessUniversalUnderstandingPotential(_ universal: UniversallyUnderstandable) -> UniversalUnderstandingAssessment {
+    private func assessUniversalUnderstandingPotential(_ universal: UniversallyUnderstandable)
+    -> UniversalUnderstandingAssessment {
         let understanding = universal.universalMetrics.understanding
         let awareness = universal.universalMetrics.awareness
         let insight = universal.universalMetrics.insight
@@ -415,7 +417,8 @@ public final class UniversalUnderstandingFramework: Sendable {
     }
 
     /// Design understanding strategy
-    private func designUnderstandingStrategy(_ assessment: UniversalUnderstandingAssessment) -> UniversalUnderstandingStrategy {
+    private func designUnderstandingStrategy(_ assessment: UniversalUnderstandingAssessment)
+    -> UniversalUnderstandingStrategy {
         var understandingSteps: [UniversalUnderstandingStep] = []
 
         if assessment.understanding < 0.95 {
@@ -467,7 +470,7 @@ public final class UniversalUnderstandingFramework: Sendable {
     ) async -> UniversalUnderstandingResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.understanding * 1_500_000_000))
 
-        let actualGain = step.understanding * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.understanding * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.understanding * 0.90
 
         return UniversalUnderstandingResultItem(
@@ -587,7 +590,7 @@ public final class CosmicAwarenessSystem: Sendable {
     ) async -> CosmicAwarenessResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.awareness * 2_000_000_000))
 
-        let actualGain = step.awareness * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualGain = step.awareness * (0.8 + Double.random(in: 0...0.4))
         let success = actualGain >= step.awareness * 0.85
 
         return CosmicAwarenessResultItem(
@@ -623,7 +626,8 @@ public final class TranscendentInsightInterface: Sendable {
     /// Interface with transcendent insight for wisdom universality
     /// - Parameter transcendent: Transcendent entity to interface with
     /// - Returns: Insight result
-    public func interfaceWithTranscendentInsight(_ transcendent: TranscendentlyInsightful) async -> TranscendentInsightResult {
+    public func interfaceWithTranscendentInsight(_ transcendent: TranscendentlyInsightful) async
+    -> TranscendentInsightResult {
         let insightAssessment = assessTranscendentInsightPotential(transcendent)
         let insightStrategy = designInsightStrategy(insightAssessment)
         let insightResults = await executeInsight(transcendent, strategy: insightStrategy)
@@ -640,7 +644,8 @@ public final class TranscendentInsightInterface: Sendable {
     }
 
     /// Assess transcendent insight potential
-    private func assessTranscendentInsightPotential(_ transcendent: TranscendentlyInsightful) -> TranscendentInsightAssessment {
+    private func assessTranscendentInsightPotential(_ transcendent: TranscendentlyInsightful)
+    -> TranscendentInsightAssessment {
         let truth = transcendent.transcendentMetrics.truth
         let knowledge = transcendent.transcendentMetrics.knowledge
         let wisdom = transcendent.transcendentMetrics.eternalWisdom
@@ -707,7 +712,7 @@ public final class TranscendentInsightInterface: Sendable {
     ) async -> TranscendentInsightResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.insight * 2_500_000_000))
 
-        let actualPower = step.insight * (0.75 + Double.random(in: 0 ... 0.5))
+        let actualPower = step.insight * (0.75 + Double.random(in: 0...0.5))
         let success = actualPower >= step.insight * 0.80
 
         return TranscendentInsightResultItem(

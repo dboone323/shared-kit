@@ -387,7 +387,10 @@ public struct InteractiveProgressBar: View {
                 // Progress fill
                 RoundedRectangle(cornerRadius: self.height / 2)
                     .fill(self.foregroundColor)
-                    .frame(width: geometry.size.width * CGFloat(self.isDragging ? self.dragProgress : self.progress), height: self.height)
+                    .frame(
+                        width: geometry.size.width * CGFloat(self.isDragging ? self.dragProgress : self.progress),
+                        height: self.height
+                    )
                     .animation(self.isDragging ? nil : AnimationTiming.easeOut, value: self.progress)
 
                 if self.isInteractive {
@@ -495,7 +498,7 @@ public struct InteractiveSlider: View {
 
     public init(
         value: Binding<Double>,
-        in range: ClosedRange<Double> = 0 ... 1,
+        in range: ClosedRange<Double> = 0...1,
         step: Double = 0.01,
         trackHeight: CGFloat = 6,
         thumbSize: CGFloat = 24,
@@ -546,7 +549,8 @@ public struct InteractiveSlider: View {
                             .onChanged { gesture in
                                 let newOffset = max(0, min(trackWidth, gesture.location.x - self.thumbSize / 2))
                                 let newProgress = Double(newOffset / trackWidth)
-                                let newValue = self.range.lowerBound + (self.range.upperBound - self.range.lowerBound) * newProgress
+                                let newValue = self.range
+                                    .lowerBound + (self.range.upperBound - self.range.lowerBound) * newProgress
 
                                 self.dragValue = (newValue / self.step).rounded() * self.step
                                 self.dragValue = max(self.range.lowerBound, min(self.range.upperBound, self.dragValue))
@@ -615,7 +619,9 @@ public struct InteractiveToggle: View {
                     .frame(width: self.size.height - 4, height: self.size.height - 4)
                     .shadow(color: Color.black.opacity(0.2), radius: 2, x: 0, y: 1)
                     .scaleEffect(self.isAnimating ? 1.1 : 1.0)
-                    .offset(x: self.isOn ? (self.size.width - self.size.height) / 2 : -(self.size.width - self.size.height) / 2)
+                    .offset(x: self.isOn
+                        ? (self.size.width - self.size.height) / 2
+                        : -(self.size.width - self.size.height) / 2)
             }
         }
         .buttonStyle(PlainButtonStyle())

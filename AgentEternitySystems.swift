@@ -288,7 +288,10 @@ public final class AgentEternitySystems: Sendable {
         let eternalOperations = try await coordinateEternalOperations(session.request, systems: eternitySystems)
 
         // Phase 4: Eternity Persistence Network Synthesis
-        let eternityPersistence = try await synthesizeEternityPersistenceNetwork(session.request, operations: eternalOperations)
+        let eternityPersistence = try await synthesizeEternityPersistenceNetwork(
+            session.request,
+            operations: eternalOperations
+        )
 
         // Phase 5: Quantum Eternity Orchestration
         let quantumEternity = try await orchestrateQuantumEternity(session.request, persistence: eternityPersistence)
@@ -401,7 +404,8 @@ public final class AgentEternitySystems: Sendable {
             synthesisTarget: request.eternityPersistenceTarget
         )
 
-        let synthesisResult = try await eternityPersistenceNetwork.synthesizeEternityPersistenceNetwork(synthesisContext)
+        let synthesisResult = try await eternityPersistenceNetwork
+            .synthesizeEternityPersistenceNetwork(synthesisContext)
 
         return EternityPersistenceNetworkSynthesis(
             synthesisId: UUID().uuidString,
@@ -518,7 +522,8 @@ public final class AgentEternitySystems: Sendable {
 
     // MARK: - Helper Methods
 
-    private func analyzeAgentsForEternitySystems(_ agents: [EternitySystemsAgent]) async throws -> EternitySystemsAnalysis {
+    private func analyzeAgentsForEternitySystems(_ agents: [EternitySystemsAgent]) async throws
+    -> EternitySystemsAnalysis {
         // Analyze agents for eternity systems opportunities
         let eternitySystems = await eternitySystemsEngine.analyzeEternitySystemsPotential(agents)
         let eternalOperations = await eternalOperationCoordinator.analyzeEternalOperationsPotential(agents)
@@ -652,7 +657,8 @@ public final class AgentEternitySystems: Sendable {
         _ result: EternitySystemsResult
     ) -> Double {
         let persistenceAdvantage = result.eternityPersistence / capabilities.eternityPersistence
-        let operationsAdvantage = result.eternalOperations / capabilities.eternityRequirements.eternalOperations.rawValue
+        let operationsAdvantage = result.eternalOperations / capabilities.eternityRequirements.eternalOperations
+            .rawValue
         let synthesisAdvantage = result.eternitySynthesis / capabilities.eternityRequirements.eternityPersistence
 
         return (persistenceAdvantage + operationsAdvantage + synthesisAdvantage) / 3.0
@@ -1120,7 +1126,8 @@ private final class EternitySystemsEngine: Sendable {
         // Initialize eternity systems engine
     }
 
-    func assessEternitySystems(_ context: EternitySystemsAssessmentContext) async throws -> EternitySystemsAssessmentResult {
+    func assessEternitySystems(_ context: EternitySystemsAssessmentContext) async throws
+    -> EternitySystemsAssessmentResult {
         // Assess eternity systems
         EternitySystemsAssessmentResult(
             eternityPotential: 0.88,
@@ -1129,7 +1136,8 @@ private final class EternitySystemsEngine: Sendable {
         )
     }
 
-    func processEternitySystems(_ context: EternitySystemsProcessingContext) async throws -> EternitySystemsProcessingResult {
+    func processEternitySystems(_ context: EternitySystemsProcessingContext) async throws
+    -> EternitySystemsProcessingResult {
         // Process eternity systems
         EternitySystemsProcessingResult(
             eternitySystems: 0.93,
@@ -1183,7 +1191,8 @@ private final class EternalOperationCoordinator: Sendable {
         // Initialize eternal operation coordinator
     }
 
-    func coordinateEternalOperations(_ context: EternalOperationsCoordinationContext) async throws -> EternalOperationsCoordinationResult {
+    func coordinateEternalOperations(_ context: EternalOperationsCoordinationContext) async throws
+    -> EternalOperationsCoordinationResult {
         // Coordinate eternal operations
         EternalOperationsCoordinationResult(
             eternalOperations: 0.91,
@@ -1233,7 +1242,8 @@ private final class EternityPersistenceNetwork: Sendable {
         // Initialize eternity persistence network
     }
 
-    func synthesizeEternityPersistenceNetwork(_ context: EternityPersistenceNetworkSynthesisContext) async throws -> EternityPersistenceNetworkSynthesisResult {
+    func synthesizeEternityPersistenceNetwork(_ context: EternityPersistenceNetworkSynthesisContext) async throws
+    -> EternityPersistenceNetworkSynthesisResult {
         // Synthesize eternity persistence network
         EternityPersistenceNetworkSynthesisResult(
             eternallyOperatedAgents: context.agents,
@@ -1263,7 +1273,8 @@ private final class EternalContinuitySynthesizer: Sendable {
         // Initialize eternal continuity synthesizer
     }
 
-    func synthesizeEternalContinuity(_ context: EternalContinuitySynthesisContext) async throws -> EternalContinuitySynthesisResult {
+    func synthesizeEternalContinuity(_ context: EternalContinuitySynthesisContext) async throws
+    -> EternalContinuitySynthesisResult {
         // Synthesize eternal continuity
         EternalContinuitySynthesisResult(
             eternallyOperatedAgents: context.agents,
@@ -1284,7 +1295,8 @@ private final class QuantumEternityOrchestrator: Sendable {
         // Initialize quantum eternity orchestrator
     }
 
-    func orchestrateQuantumEternity(_ context: QuantumEternityOrchestrationContext) async throws -> QuantumEternityOrchestrationResult {
+    func orchestrateQuantumEternity(_ context: QuantumEternityOrchestrationContext) async throws
+    -> QuantumEternityOrchestrationResult {
         // Orchestrate quantum eternity
         QuantumEternityOrchestrationResult(
             quantumEternityAgents: context.agents,

@@ -140,7 +140,8 @@ public final class UniversalBalance: Sendable {
     /// Get balance quality metric
     /// - Returns: Balance quality (0.0 to 1.0)
     public func balanceQuality() -> Double {
-        let forceVariance = balanceForces.map { abs($0.strength - equilibriumPoint.idealStrength) }.reduce(0, +) / Double(balanceForces.count)
+        let forceVariance = balanceForces.map { abs($0.strength - equilibriumPoint.idealStrength) }
+            .reduce(0, +) / Double(balanceForces.count)
         return max(0.0, 1.0 - forceVariance)
     }
 
@@ -265,13 +266,15 @@ public final class HarmonicSynchronizationEngine: Sendable {
     }
 
     /// Execute synchronization phase
-    private func executeSyncPhase(_ phase: HarmonicSyncPhase, systems: [SynchronizableSystem]) async -> HarmonicSyncResult {
+    private func executeSyncPhase(_ phase: HarmonicSyncPhase,
+                                  systems: [SynchronizableSystem]) async -> HarmonicSyncResult
+    {
         // Simulate harmonic synchronization
         try? await Task.sleep(nanoseconds: UInt64(phase.estimatedDuration * 1_000_000_000))
 
-        let finalFrequency = phase.targetFrequency * (0.95 + Double.random(in: 0 ... 0.1))
-        let finalPhase = phase.targetPhase + Double.random(in: -0.1 ... 0.1)
-        let finalAmplitude = phase.targetAmplitude * (0.95 + Double.random(in: 0 ... 0.1))
+        let finalFrequency = phase.targetFrequency * (0.95 + Double.random(in: 0...0.1))
+        let finalPhase = phase.targetPhase + Double.random(in: -0.1...0.1)
+        let finalAmplitude = phase.targetAmplitude * (0.95 + Double.random(in: 0...0.1))
 
         return HarmonicSyncResult(
             phaseId: phase.id,
@@ -279,7 +282,7 @@ public final class HarmonicSynchronizationEngine: Sendable {
             finalFrequency: finalFrequency,
             finalPhase: finalPhase,
             finalAmplitude: finalAmplitude,
-            synchronizationQuality: Double.random(in: 0.85 ... 1.0),
+            synchronizationQuality: Double.random(in: 0.85...1.0),
             completedAt: Date()
         )
     }
@@ -302,7 +305,7 @@ public final class HarmonicSynchronizationEngine: Sendable {
 
     /// Generate synchronization waves
     private func generateSynchronizationWaves(_ count: Int) -> [SynchronizationWave] {
-        (0 ..< count).map { index in
+        (0..<count).map { index in
             SynchronizationWave(
                 waveId: UUID(),
                 frequency: 440.0 + Double(index) * 10.0, // Harmonic frequencies
@@ -378,8 +381,8 @@ public final class ResonanceNetworkManager: Sendable {
     private func generateResonanceConnections(_ nodes: [ResonanceNode]) -> [ResonanceConnection] {
         var connections: [ResonanceConnection] = []
 
-        for i in 0 ..< nodes.count {
-            for j in (i + 1) ..< nodes.count {
+        for i in 0..<nodes.count {
+            for j in (i + 1)..<nodes.count {
                 let sourceNode = nodes[i]
                 let targetNode = nodes[j]
 
@@ -423,12 +426,14 @@ public final class ResonanceNetworkManager: Sendable {
     }
 
     /// Calculate resonance field
-    private func calculateResonanceField(_ nodes: [ResonanceNode], connections: [ResonanceConnection]) -> ResonanceField {
+    private func calculateResonanceField(_ nodes: [ResonanceNode],
+                                         connections: [ResonanceConnection]) -> ResonanceField
+    {
         let avgFrequency = nodes.map(\.naturalFrequency).reduce(0, +) / Double(nodes.count)
         let avgStrength = connections.map(\.resonanceStrength).reduce(0, +) / Double(connections.count)
         let fieldStrength = avgStrength * 0.8
 
-        let harmonicComponents = (1 ... 5).map { harmonic in
+        let harmonicComponents = (1...5).map { harmonic in
             HarmonicComponent(
                 harmonicNumber: harmonic,
                 amplitude: fieldStrength / Double(harmonic),
@@ -481,8 +486,10 @@ public final class EquilibriumEngine: Sendable {
 
     /// Analyze equilibrium state
     private func analyzeEquilibriumState(_ system: EquilibratableSystem) -> EquilibriumState {
-        let forceImbalance = system.forces.map { abs($0.magnitude - system.equilibriumPoint) }.reduce(0, +) / Double(system.forces.count)
-        let energyVariance = system.energyLevels.map { pow($0 - system.averageEnergyLevel, 2) }.reduce(0, +) / Double(system.energyLevels.count)
+        let forceImbalance = system.forces.map { abs($0.magnitude - system.equilibriumPoint) }
+            .reduce(0, +) / Double(system.forces.count)
+        let energyVariance = system.energyLevels.map { pow($0 - system.averageEnergyLevel, 2) }
+            .reduce(0, +) / Double(system.energyLevels.count)
         let stabilityIndex = 1.0 - min(1.0, forceImbalance + sqrt(energyVariance) / 10.0)
 
         return EquilibriumState(
@@ -552,11 +559,13 @@ public final class EquilibriumEngine: Sendable {
     }
 
     /// Apply individual adjustment
-    private func applyAdjustment(_ adjustment: EquilibriumAdjustment, to system: EquilibratableSystem) async -> EquilibriumCorrection {
+    private func applyAdjustment(_ adjustment: EquilibriumAdjustment,
+                                 to system: EquilibratableSystem) async -> EquilibriumCorrection
+    {
         // Simulate adjustment application
         try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
 
-        let actualEffect = adjustment.estimatedEffect * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualEffect = adjustment.estimatedEffect * (0.8 + Double.random(in: 0...0.4))
         let successRate = min(1.0, actualEffect / adjustment.estimatedEffect)
 
         return EquilibriumCorrection(
@@ -1187,7 +1196,8 @@ public final class MCPHarmonyFrameworksCoordinator: Sendable {
     /// Synchronize systems harmonically
     /// - Parameter systems: Systems to synchronize
     /// - Returns: Synchronization result
-    public func synchronizeSystemsHarmonically(_ systems: [SynchronizableSystem]) async -> HarmonicSynchronizationResult? {
+    public func synchronizeSystemsHarmonically(_ systems: [SynchronizableSystem]) async
+    -> HarmonicSynchronizationResult? {
         await harmonicSynchronizationEngine.synchronizeHarmonically(systems)
     }
 
@@ -1297,7 +1307,9 @@ public final class UniversalBalanceSystem: Sendable {
     }
 
     /// Apply balance adjustments
-    private func applyBalanceAdjustments(_ adjustments: [BalanceAdjustment], to balance: UniversalBalance) async -> [AppliedBalanceAdjustment] {
+    private func applyBalanceAdjustments(_ adjustments: [BalanceAdjustment],
+                                         to balance: UniversalBalance) async -> [AppliedBalanceAdjustment]
+    {
         await withTaskGroup(of: AppliedBalanceAdjustment.self) { group in
             for adjustment in adjustments {
                 group.addTask {
@@ -1314,7 +1326,9 @@ public final class UniversalBalanceSystem: Sendable {
     }
 
     /// Apply individual adjustment
-    private func applyAdjustment(_ adjustment: BalanceAdjustment, to balance: UniversalBalance) async -> AppliedBalanceAdjustment {
+    private func applyAdjustment(_ adjustment: BalanceAdjustment,
+                                 to balance: UniversalBalance) async -> AppliedBalanceAdjustment
+    {
         balance.updateForceStrength(forceId: adjustment.forceId, newStrength: adjustment.targetStrength)
         return AppliedBalanceAdjustment(
             adjustmentId: adjustment.id,
@@ -1371,7 +1385,10 @@ public final class SymbioticCoordinator: Sendable {
 
     /// Calculate compatibility between entities
     private func calculateCompatibility(between entity1: SymbioticEntity, and entity2: SymbioticEntity) -> Double {
-        let resourceCompatibility = 1.0 - abs(entity1.resourceNeeds - entity2.resourceProvision) / max(entity1.resourceNeeds, entity2.resourceProvision)
+        let resourceCompatibility = 1.0 - abs(entity1.resourceNeeds - entity2.resourceProvision) / max(
+            entity1.resourceNeeds,
+            entity2.resourceProvision
+        )
         let capabilitySynergy = min(entity1.capabilityStrength + entity2.capabilityStrength, 2.0) / 2.0
         let goalAlignment = calculateGoalAlignment(entity1.goals, entity2.goals)
 
@@ -1473,8 +1490,8 @@ public final class SymbioticCoordinator: Sendable {
         return CoordinationResult(
             stepId: step.stepId,
             success: true,
-            symbioticBondStrength: Double.random(in: 0.7 ... 1.0),
-            resourceExchangeRate: Double.random(in: 0.8 ... 1.0),
+            symbioticBondStrength: Double.random(in: 0.7...1.0),
+            resourceExchangeRate: Double.random(in: 0.8...1.0),
             completedAt: Date()
         )
     }
@@ -1534,7 +1551,7 @@ public final class HarmonicIntelligenceProcessor: Sendable {
 
     /// Identify harmonics
     private func identifyHarmonics(_ dataPoints: [IntelligenceDataPoint], fundamental: Double) -> [Harmonic] {
-        (1 ... 5).map { multiplier in
+        (1...5).map { multiplier in
             let harmonicFreq = fundamental * Double(multiplier)
             let amplitude = calculateAmplitudeAtFrequency(dataPoints, frequency: harmonicFreq)
             return Harmonic(
@@ -1585,7 +1602,8 @@ public final class HarmonicIntelligenceProcessor: Sendable {
         }
 
         let overallIntelligence = synthesizedPatterns.map(\.intelligenceContribution).reduce(0, +)
-        let synthesisCoherence = synthesizedPatterns.map(\.synthesisQuality).reduce(0, +) / Double(synthesizedPatterns.count)
+        let synthesisCoherence = synthesizedPatterns.map(\.synthesisQuality)
+            .reduce(0, +) / Double(synthesizedPatterns.count)
 
         return IntelligenceSynthesis(
             synthesizedPatterns: synthesizedPatterns,
@@ -1602,7 +1620,7 @@ public final class HarmonicIntelligenceProcessor: Sendable {
             AppliedOptimization(
                 opportunityId: opportunity.id,
                 optimizationType: opportunity.type,
-                improvement: opportunity.potentialImprovement * (0.8 + Double.random(in: 0 ... 0.4)),
+                improvement: opportunity.potentialImprovement * (0.8 + Double.random(in: 0...0.4)),
                 appliedAt: Date()
             )
         }
@@ -1679,13 +1697,16 @@ public final class BalanceOptimizer: Sendable {
 
     /// Calculate balance efficiency
     private func calculateBalanceEfficiency(_ balance: UniversalBalance) -> Double {
-        let forceUtilization = balance.balanceForces.map { min($0.strength, 1.0) }.reduce(0, +) / Double(balance.balanceForces.count)
+        let forceUtilization = balance.balanceForces.map { min($0.strength, 1.0) }
+            .reduce(0, +) / Double(balance.balanceForces.count)
         let resonanceEfficiency = Double(balance.resonancePatterns.count) / 10.0 // Target 10 patterns
         return (forceUtilization + resonanceEfficiency) / 2.0
     }
 
     /// Create optimization plan
-    private func createOptimizationPlan(for balance: UniversalBalance, metrics: BalanceMetrics) -> BalanceOptimizationPlan {
+    private func createOptimizationPlan(for balance: UniversalBalance,
+                                        metrics: BalanceMetrics) -> BalanceOptimizationPlan
+    {
         var optimizations: [BalanceOptimization] = []
 
         if metrics.quality < 0.8 {
@@ -1736,7 +1757,9 @@ public final class BalanceOptimizer: Sendable {
     }
 
     /// Execute optimization plan
-    private func executeOptimizationPlan(_ plan: BalanceOptimizationPlan, balance: UniversalBalance) async -> [OptimizationExecutionResult] {
+    private func executeOptimizationPlan(_ plan: BalanceOptimizationPlan,
+                                         balance: UniversalBalance) async -> [OptimizationExecutionResult]
+    {
         await withTaskGroup(of: OptimizationExecutionResult.self) { group in
             for optimization in plan.optimizations {
                 group.addTask {
@@ -1753,10 +1776,12 @@ public final class BalanceOptimizer: Sendable {
     }
 
     /// Execute optimization
-    private func executeOptimization(_ optimization: BalanceOptimization, balance: UniversalBalance) async -> OptimizationExecutionResult {
+    private func executeOptimization(_ optimization: BalanceOptimization,
+                                     balance: UniversalBalance) async -> OptimizationExecutionResult
+    {
         try? await Task.sleep(nanoseconds: UInt64(complexityDuration(optimization.complexity) * 1_000_000_000))
 
-        let actualImprovement = optimization.estimatedImprovement * (0.7 + Double.random(in: 0 ... 0.6))
+        let actualImprovement = optimization.estimatedImprovement * (0.7 + Double.random(in: 0...0.6))
         let success = actualImprovement > optimization.estimatedImprovement * 0.5
 
         return OptimizationExecutionResult(
@@ -1774,7 +1799,8 @@ public final class BalanceOptimizer: Sendable {
             qualityImprovement: final.quality - initial.quality,
             stabilityImprovement: final.stability - initial.stability,
             efficiencyImprovement: final.efficiency - initial.efficiency,
-            overallImprovement: (final.quality + final.stability + final.efficiency - initial.quality - initial.stability - initial.efficiency) / 3.0
+            overallImprovement: (final.quality + final.stability + final.efficiency - initial.quality - initial
+                .stability - initial.efficiency) / 3.0
         )
     }
 }

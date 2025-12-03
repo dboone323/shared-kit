@@ -223,4 +223,5 @@ public extension KeychainHelper {
         return true
     }
 } </ content>
-<parameter name = "filePath" >/ Users / danielstevens / Desktop / Quantum - workspace / Shared / Security / KeychainHelper.swift
+<parameter name = "filePath" >/ Users / danielstevens / Desktop / Quantum - workspace / Shared / Security /
+    KeychainHelper.swift

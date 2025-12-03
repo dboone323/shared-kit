@@ -270,7 +270,8 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
             successfulExecutions: successfulExecutions.count,
             failedExecutions: executions.filter { $0.state == .failed }.count,
             averageExecutionTime: successfulExecutions.isEmpty
-                ? 0 : totalTime / Double(successfulExecutions.count),
+                ? 0
+                : totalTime / Double(successfulExecutions.count),
             successRate: Double(successfulExecutions.count) / Double(executions.count),
             lastExecutionTime: executions.last?.startTime
         )
@@ -1063,7 +1064,7 @@ public struct ParallelizationStrategy: WorkflowOptimizationStrategy {
         var optimizedSteps = workflow.steps
 
         // Convert eligible sequential steps to parallel
-        for i in 0 ..< optimizedSteps.count {
+        for i in 0..<optimizedSteps.count {
             if optimizedSteps[i].executionMode == .sequential
                 && optimizedSteps[i].dependencies.count <= 1
             {

@@ -143,7 +143,7 @@ public final class OllamaClient: LLMClient {
         req.httpBody = try JSONEncoder().encode(payload)
 
         let (data, resp) = try await session.data(for: req)
-        guard let http = resp as? HTTPURLResponse, (200 ..< 300).contains(http.statusCode) else {
+        guard let http = resp as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             let code = (resp as? HTTPURLResponse)?.statusCode ?? -1
             // Record failure for circuit breaker (default medium priority)
             policy.recordFailure(priority: "medium")
@@ -190,7 +190,7 @@ public final class OllamaClient: LLMClient {
         req.httpBody = try JSONEncoder().encode(payload)
 
         let (data, resp) = try await session.data(for: req)
-        guard let http = resp as? HTTPURLResponse, (200 ..< 300).contains(http.statusCode) else {
+        guard let http = resp as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             let code = (resp as? HTTPURLResponse)?.statusCode ?? -1
             policy.recordFailure(priority: "medium")
             throw OllamaClientError.httpError(code)

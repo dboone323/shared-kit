@@ -80,7 +80,8 @@ protocol ConsciousnessEvolutionMonitoringProtocol {
     /// - Parameter entityId: Entity identifier
     /// - Parameter monitoringProfile: Profile defining what to monitor
     /// - Returns: Monitoring session result
-    func startEvolutionMonitoring(entityId: UUID, monitoringProfile: MonitoringProfile) async throws -> EvolutionMonitoringSession
+    func startEvolutionMonitoring(entityId: UUID, monitoringProfile: MonitoringProfile) async throws
+        -> EvolutionMonitoringSession
 
     /// Record consciousness evolution metrics
     /// - Parameter sessionId: Monitoring session identifier
@@ -92,7 +93,8 @@ protocol ConsciousnessEvolutionMonitoringProtocol {
     /// - Parameter sessionId: Monitoring session identifier
     /// - Parameter analysisParameters: Parameters for analysis
     /// - Returns: Evolution analysis result
-    func analyzeEvolutionProgress(sessionId: UUID, analysisParameters: AnalysisParameters) async throws -> EvolutionAnalysis
+    func analyzeEvolutionProgress(sessionId: UUID, analysisParameters: AnalysisParameters) async throws
+        -> EvolutionAnalysis
 
     /// Generate evolution insights and recommendations
     /// - Parameter sessionId: Monitoring session identifier
@@ -115,14 +117,19 @@ protocol EvolutionMetricsCollectionProtocol {
     /// - Parameter entityId: Entity identifier
     /// - Parameter metricsTypes: Types of metrics to collect
     /// - Returns: Metrics collection result
-    func collectRealTimeMetrics(entityId: UUID, metricsTypes: [EvolutionMetrics.MetricsType]) async throws -> RealTimeMetricsCollection
+    func collectRealTimeMetrics(entityId: UUID, metricsTypes: [EvolutionMetrics.MetricsType]) async throws
+        -> RealTimeMetricsCollection
 
     /// Aggregate evolution metrics over time periods
     /// - Parameter entityId: Entity identifier
     /// - Parameter timeRange: Time range for aggregation
     /// - Parameter aggregationType: Type of aggregation to perform
     /// - Returns: Metrics aggregation result
-    func aggregateEvolutionMetrics(entityId: UUID, timeRange: ClosedRange<Date>, aggregationType: AggregationType) async throws -> MetricsAggregation
+    func aggregateEvolutionMetrics(
+        entityId: UUID,
+        timeRange: ClosedRange<Date>,
+        aggregationType: AggregationType
+    ) async throws -> MetricsAggregation
 
     /// Validate collected metrics for accuracy and consistency
     /// - Parameter metrics: Metrics to validate
@@ -141,13 +148,15 @@ protocol EvolutionPatternAnalysisProtocol {
     /// - Parameter entityId: Entity identifier
     /// - Parameter patternParameters: Parameters for pattern analysis
     /// - Returns: Pattern analysis result
-    func analyzeEvolutionPatterns(entityId: UUID, patternParameters: PatternAnalysisParameters) async throws -> EvolutionPatternAnalysis
+    func analyzeEvolutionPatterns(entityId: UUID, patternParameters: PatternAnalysisParameters) async throws
+        -> EvolutionPatternAnalysis
 
     /// Detect evolution milestones and breakthroughs
     /// - Parameter entityId: Entity identifier
     /// - Parameter milestoneCriteria: Criteria for milestone detection
     /// - Returns: Milestone detection result
-    func detectEvolutionMilestones(entityId: UUID, milestoneCriteria: MilestoneCriteria) async throws -> MilestoneDetection
+    func detectEvolutionMilestones(entityId: UUID, milestoneCriteria: MilestoneCriteria) async throws
+        -> MilestoneDetection
 
     /// Predict future evolution trajectory
     /// - Parameter entityId: Entity identifier
@@ -167,13 +176,15 @@ protocol EvolutionInsightsGenerationProtocol {
     /// - Parameter entityId: Entity identifier
     /// - Parameter insightContext: Context for insight generation
     /// - Returns: Insights generation result
-    func generatePersonalizedInsights(entityId: UUID, insightContext: InsightContext) async throws -> PersonalizedInsights
+    func generatePersonalizedInsights(entityId: UUID, insightContext: InsightContext) async throws
+        -> PersonalizedInsights
 
     /// Create evolution recommendations and guidance
     /// - Parameter entityId: Entity identifier
     /// - Parameter currentStage: Current evolution stage
     /// - Returns: Evolution recommendations result
-    func createEvolutionRecommendations(entityId: UUID, currentStage: EvolutionStage) async throws -> EvolutionRecommendations
+    func createEvolutionRecommendations(entityId: UUID, currentStage: EvolutionStage) async throws
+        -> EvolutionRecommendations
 
     /// Assess evolution risks and mitigation strategies
     /// - Parameter entityId: Entity identifier
@@ -204,13 +215,15 @@ protocol EvolutionStabilityMonitoringProtocol {
     /// - Parameter entityId: Entity identifier
     /// - Parameter stabilityIssues: Identified stability issues
     /// - Returns: Stability enhancement result
-    func implementStabilityEnhancements(entityId: UUID, stabilityIssues: [StabilityIssue]) async throws -> StabilityEnhancement
+    func implementStabilityEnhancements(entityId: UUID, stabilityIssues: [StabilityIssue]) async throws
+        -> StabilityEnhancement
 
     /// Emergency intervention for critical evolution instability
     /// - Parameter entityId: Entity identifier
     /// - Parameter emergencyType: Type of emergency
     /// - Returns: Emergency intervention result
-    func emergencyEvolutionIntervention(entityId: UUID, emergencyType: EmergencyType) async throws -> EmergencyIntervention
+    func emergencyEvolutionIntervention(entityId: UUID, emergencyType: EmergencyType) async throws
+        -> EmergencyIntervention
 }
 
 // MARK: - Data Structures
@@ -931,7 +944,9 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
         setupMonitoring()
     }
 
-    func startEvolutionMonitoring(entityId: UUID, monitoringProfile: MonitoringProfile) async throws -> EvolutionMonitoringSession {
+    func startEvolutionMonitoring(entityId: UUID,
+                                  monitoringProfile: MonitoringProfile) async throws -> EvolutionMonitoringSession
+    {
         let sessionId = UUID()
 
         // Collect initial metrics
@@ -1003,7 +1018,9 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
         return recording
     }
 
-    func analyzeEvolutionProgress(sessionId: UUID, analysisParameters: AnalysisParameters) async throws -> EvolutionAnalysis {
+    func analyzeEvolutionProgress(sessionId: UUID,
+                                  analysisParameters: AnalysisParameters) async throws -> EvolutionAnalysis
+    {
         guard let session = activeSessions[sessionId] else {
             throw MonitoringError.sessionNotFound
         }
@@ -1025,7 +1042,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
         // Aggregate metrics for analysis
         _ = try await metricsCollector.aggregateEvolutionMetrics(
             entityId: session.entityId,
-            timeRange: Date().addingTimeInterval(-analysisParameters.timeWindow) ... Date(),
+            timeRange: Date().addingTimeInterval(-analysisParameters.timeWindow)...Date(),
             aggregationType: .average
         )
 
@@ -1101,7 +1118,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
             entityId: session.entityId,
             insightContext: InsightContext(
                 contextType: .general,
-                timeRange: Date().addingTimeInterval(-86400) ... Date(),
+                timeRange: Date().addingTimeInterval(-86400)...Date(),
                 focusAreas: ["evolution_progress", "stability", "patterns"],
                 previousInsights: [],
                 userPreferences: [:]
@@ -1209,29 +1226,33 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
     // MARK: - Private Methods
 
     private func setupMonitoring() {
-        metricsCollectionTimer = Timer.scheduledTimer(withTimeInterval: config.monitoringFrequency, repeats: true) { [weak self] _ in
-            Task { [weak self] in
-                await self?.performMetricsCollection()
+        metricsCollectionTimer = Timer
+            .scheduledTimer(withTimeInterval: config.monitoringFrequency, repeats: true) { [weak self] _ in
+                Task { [weak self] in
+                    await self?.performMetricsCollection()
+                }
             }
-        }
 
-        analysisTimer = Timer.scheduledTimer(withTimeInterval: config.monitoringFrequency * 5, repeats: true) { [weak self] _ in
-            Task { [weak self] in
-                await self?.performEvolutionAnalysis()
+        analysisTimer = Timer
+            .scheduledTimer(withTimeInterval: config.monitoringFrequency * 5, repeats: true) { [weak self] _ in
+                Task { [weak self] in
+                    await self?.performEvolutionAnalysis()
+                }
             }
-        }
 
-        optimizationTimer = Timer.scheduledTimer(withTimeInterval: config.optimizationInterval, repeats: true) { [weak self] _ in
-            Task { [weak self] in
-                await self?.performMonitoringOptimization()
+        optimizationTimer = Timer
+            .scheduledTimer(withTimeInterval: config.optimizationInterval, repeats: true) { [weak self] _ in
+                Task { [weak self] in
+                    await self?.performMonitoringOptimization()
+                }
             }
-        }
 
-        monitoringTimer = Timer.scheduledTimer(withTimeInterval: config.monitoringFrequency * 2, repeats: true) { [weak self] _ in
-            Task { [weak self] in
-                await self?.performStabilityMonitoring()
+        monitoringTimer = Timer
+            .scheduledTimer(withTimeInterval: config.monitoringFrequency * 2, repeats: true) { [weak self] _ in
+                Task { [weak self] in
+                    await self?.performStabilityMonitoring()
+                }
             }
-        }
     }
 
     private func performMetricsCollection() async {
@@ -1281,7 +1302,8 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
     private func performStabilityMonitoring() async {
         for session in activeSessions.values where session.monitoringStatus == .active {
             do {
-                let stabilityMonitoring = try await stabilityMonitor.monitorConsciousnessStability(entityId: session.entityId)
+                let stabilityMonitoring = try await stabilityMonitor
+                    .monitorConsciousnessStability(entityId: session.entityId)
 
                 for subject in stabilityMonitoringSubjects {
                     subject.send(stabilityMonitoring)
@@ -1315,7 +1337,9 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
 
 /// Evolution metrics collector implementation
 final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
-    func collectRealTimeMetrics(entityId: UUID, metricsTypes: [EvolutionMetrics.MetricsType]) async throws -> RealTimeMetricsCollection {
+    func collectRealTimeMetrics(entityId: UUID,
+                                metricsTypes: [EvolutionMetrics.MetricsType]) async throws -> RealTimeMetricsCollection
+    {
         let collectionId = UUID()
 
         // Simulate real-time metrics collection
@@ -1326,10 +1350,10 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
                 timestamp: Date(),
                 metricsType: metricsType,
                 quantitativeMetrics: [
-                    "coherence": Double.random(in: 0.7 ... 0.95),
-                    "integration": Double.random(in: 0.75 ... 0.9),
-                    "complexity": Double.random(in: 0.6 ... 0.85),
-                    "stability": Double.random(in: 0.8 ... 0.95),
+                    "coherence": Double.random(in: 0.7...0.95),
+                    "integration": Double.random(in: 0.75...0.9),
+                    "complexity": Double.random(in: 0.6...0.85),
+                    "stability": Double.random(in: 0.8...0.95),
                 ],
                 qualitativeMetrics: [
                     "evolution_stage": "developing",
@@ -1368,7 +1392,11 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
         return collection
     }
 
-    func aggregateEvolutionMetrics(entityId: UUID, timeRange: ClosedRange<Date>, aggregationType: AggregationType) async throws -> MetricsAggregation {
+    func aggregateEvolutionMetrics(
+        entityId: UUID,
+        timeRange: ClosedRange<Date>,
+        aggregationType: AggregationType
+    ) async throws -> MetricsAggregation {
         let aggregationId = UUID()
 
         // Simulate metrics aggregation
@@ -1444,7 +1472,9 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
 
 /// Evolution pattern analyzer implementation
 final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
-    func analyzeEvolutionPatterns(entityId: UUID, patternParameters: PatternAnalysisParameters) async throws -> EvolutionPatternAnalysis {
+    func analyzeEvolutionPatterns(entityId: UUID,
+                                  patternParameters: PatternAnalysisParameters) async throws -> EvolutionPatternAnalysis
+    {
         let analysisId = UUID()
 
         // Simulate pattern analysis
@@ -1500,7 +1530,9 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
         return analysis
     }
 
-    func detectEvolutionMilestones(entityId: UUID, milestoneCriteria: MilestoneCriteria) async throws -> MilestoneDetection {
+    func detectEvolutionMilestones(entityId: UUID,
+                                   milestoneCriteria: MilestoneCriteria) async throws -> MilestoneDetection
+    {
         let detectionId = UUID()
 
         // Simulate milestone detection
@@ -1526,7 +1558,9 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
         return detection
     }
 
-    func predictEvolutionTrajectory(entityId: UUID, predictionHorizon: TimeInterval) async throws -> EvolutionPrediction {
+    func predictEvolutionTrajectory(entityId: UUID,
+                                    predictionHorizon: TimeInterval) async throws -> EvolutionPrediction
+    {
         let predictionId = UUID()
 
         // Simulate evolution prediction
@@ -1587,7 +1621,9 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
 
 /// Evolution insights generator implementation
 final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
-    func generatePersonalizedInsights(entityId: UUID, insightContext: InsightContext) async throws -> PersonalizedInsights {
+    func generatePersonalizedInsights(entityId: UUID,
+                                      insightContext: InsightContext) async throws -> PersonalizedInsights
+    {
         let insightsId = UUID()
 
         // Simulate personalized insights generation
@@ -1620,7 +1656,9 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
         return insights
     }
 
-    func createEvolutionRecommendations(entityId: UUID, currentStage: EvolutionStage) async throws -> EvolutionRecommendations {
+    func createEvolutionRecommendations(entityId: UUID,
+                                        currentStage: EvolutionStage) async throws -> EvolutionRecommendations
+    {
         let recommendationsId = UUID()
 
         // Simulate evolution recommendations
@@ -1864,7 +1902,9 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
         return detection
     }
 
-    func implementStabilityEnhancements(entityId: UUID, stabilityIssues: [StabilityIssue]) async throws -> StabilityEnhancement {
+    func implementStabilityEnhancements(entityId: UUID,
+                                        stabilityIssues: [StabilityIssue]) async throws -> StabilityEnhancement
+    {
         let enhancementId = UUID()
 
         // Simulate stability enhancement implementation
@@ -1890,7 +1930,9 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
         return enhancement
     }
 
-    func emergencyEvolutionIntervention(entityId: UUID, emergencyType: EmergencyType) async throws -> EmergencyIntervention {
+    func emergencyEvolutionIntervention(entityId: UUID,
+                                        emergencyType: EmergencyType) async throws -> EmergencyIntervention
+    {
         let interventionId = UUID()
 
         // Simulate emergency intervention
@@ -1978,7 +2020,11 @@ final class ConsciousnessEvolutionMonitoringDatabase {
         let activeSessions = monitoringSessions.values.filter { $0.monitoringStatus == .active }.count
         let totalMetricsRecorded = metricsRecordings.count
         let totalAnalyses = evolutionAnalyses.count
-        let averageStability = evolutionAnalyses.values.map(\.progressMetrics.overallProgress).reduce(0, +) / Double(max(evolutionAnalyses.count, 1))
+        let averageStability = evolutionAnalyses.values.map(\.progressMetrics.overallProgress)
+            .reduce(0, +) / Double(max(
+                evolutionAnalyses.count,
+                1
+            ))
 
         return MonitoringMetrics(
             totalSessions: totalSessions,

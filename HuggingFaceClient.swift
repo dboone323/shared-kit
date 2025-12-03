@@ -394,7 +394,8 @@ public class HuggingFaceClient {
 
 // MARK: - AI Service Protocol Implementations
 
-extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AICodeGenerationService, AICachingService, AIPerformanceMonitoring {
+extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AICodeGenerationService, AICachingService,
+AIPerformanceMonitoring {
     // MARK: - AITextGenerationService Implementation
 
     public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
@@ -408,7 +409,9 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
     // MARK: - AICodeAnalysisService Implementation
 
-    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws -> CodeAnalysisResult {
+    public func analyzeCode(code: String, language: String,
+                            analysisType: AnalysisType) async throws -> CodeAnalysisResult
+    {
         let analysis = try await analyzeCode(code: code, language: language, task: analysisType.rawValue)
 
         let issues = extractIssues(from: analysis)
@@ -454,7 +457,9 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
     // MARK: - AICodeGenerationService Implementation
 
-    public func generateCode(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+    public func generateCode(description: String, language: String,
+                             context: String?) async throws -> CodeGenerationResult
+    {
         let fullPrompt = """
         Generate \(language) code based on this request: \(description)
         \(context != nil ? "Context: \(context!)" : "")
@@ -476,7 +481,13 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
         )
     }
 
-    public func generateFunction(name: String, parameters: [String: String], returnType: String, language: String, description: String?) async throws -> String {
+    public func generateFunction(
+        name: String,
+        parameters: [String: String],
+        returnType: String,
+        language: String,
+        description: String?
+    ) async throws -> String {
         let paramString = parameters.map { "\($0.key): \($0.value)" }.joined(separator: ", ")
         let prompt = """
         Generate a \(language) function named '\(name)' with parameters (\(paramString)) returning \(returnType).
@@ -492,7 +503,13 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
         )
     }
 
-    public func generateClass(name: String, properties: [String: String], methods: [String], language: String, description: String?) async throws -> String {
+    public func generateClass(
+        name: String,
+        properties: [String: String],
+        methods: [String],
+        language: String,
+        description: String?
+    ) async throws -> String {
         let propString = properties.map { "  \($0.key): \($0.value)" }.joined(separator: "\n")
         let methodString = methods.joined(separator: ", ")
         let prompt = """
@@ -558,7 +575,12 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
     // MARK: - AIPerformanceMonitoring Implementation
 
-    public func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?) async {
+    public func recordOperation(
+        operation: String,
+        duration: TimeInterval,
+        success: Bool,
+        metadata: [String: Any]?
+    ) async {
         let errorType = metadata?["error"] as? String
         metrics.recordRequest(startTime: Date().addingTimeInterval(-duration), success: success, errorType: errorType)
     }
@@ -667,7 +689,7 @@ private actor RetryManager {
 
     private func calculateDelay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
-        let jitter = Double.random(in: 0 ... 0.1) * exponentialDelay
+        let jitter = Double.random(in: 0...0.1) * exponentialDelay
         return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
     }
 }

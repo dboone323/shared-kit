@@ -194,13 +194,13 @@ public actor QuantumPerformanceOptimization {
         // In a real implementation, this would gather actual system metrics
         // For now, return simulated metrics
         SystemPerformanceMetrics(
-            cpuUsage: Double.random(in: 0.1 ..< 0.9),
-            memoryUsage: Double.random(in: 0.2 ..< 0.95),
-            diskIO: Double.random(in: 0.0 ..< 100.0),
-            networkIO: Double.random(in: 0.0 ..< 1000.0),
-            responseTime: Double.random(in: 10 ..< 500),
-            throughput: Double.random(in: 50 ..< 200),
-            errorRate: Double.random(in: 0.0 ..< 0.05),
+            cpuUsage: Double.random(in: 0.1..<0.9),
+            memoryUsage: Double.random(in: 0.2..<0.95),
+            diskIO: Double.random(in: 0.0..<100.0),
+            networkIO: Double.random(in: 0.0..<1000.0),
+            responseTime: Double.random(in: 10..<500),
+            throughput: Double.random(in: 50..<200),
+            errorRate: Double.random(in: 0.0..<0.05),
             timestamp: Date()
         )
     }
@@ -496,16 +496,16 @@ public actor QuantumOptimizationEngine {
         switch opportunity.type {
         case .cpu:
             // Simulate CPU optimization
-            return opportunity.potentialGain * Double.random(in: 0.8 ..< 1.2)
+            return opportunity.potentialGain * Double.random(in: 0.8..<1.2)
         case .memory:
             // Simulate memory optimization
-            return opportunity.potentialGain * Double.random(in: 0.7 ..< 1.1)
+            return opportunity.potentialGain * Double.random(in: 0.7..<1.1)
         case .io:
             // Simulate I/O optimization
-            return opportunity.potentialGain * Double.random(in: 0.85 ..< 1.15)
+            return opportunity.potentialGain * Double.random(in: 0.85..<1.15)
         case .network:
             // Simulate network optimization
-            return opportunity.potentialGain * Double.random(in: 0.9 ..< 1.1)
+            return opportunity.potentialGain * Double.random(in: 0.9..<1.1)
         }
     }
 }
@@ -617,22 +617,22 @@ public actor IntelligentResourceManager {
 
     private func getCPUUsage() async throws -> Double {
         // Get actual CPU usage
-        Double.random(in: 0.1 ..< 0.9)
+        Double.random(in: 0.1..<0.9)
     }
 
     private func getMemoryUsage() async throws -> Double {
         // Get actual memory usage
-        Double.random(in: 0.2 ..< 0.95)
+        Double.random(in: 0.2..<0.95)
     }
 
     private func getDiskUsage() async throws -> Double {
         // Get actual disk usage
-        Double.random(in: 0.3 ..< 0.98)
+        Double.random(in: 0.3..<0.98)
     }
 
     private func getNetworkUsage() async throws -> Double {
         // Get actual network usage
-        Double.random(in: 0.1 ..< 0.8)
+        Double.random(in: 0.1..<0.8)
     }
 
     private func executeResourceRecommendation(_ recommendation: ResourceRecommendation)
@@ -713,7 +713,7 @@ public actor PerformancePredictor {
             recentOptimizations.isEmpty
                 ? 0.0
                 : recentOptimizations.map(\.actualGain).reduce(0, +)
-                / Double(recentOptimizations.count)
+                    / Double(recentOptimizations.count)
 
         return max(0.0, min(1.0, current.cpuUsage * (1.0 - avgGain)))
     }

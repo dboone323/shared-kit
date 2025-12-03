@@ -548,7 +548,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         return min(baseEfficiency + parallelizationBonus + optimizationBonus, 1.0)
     }
 
-    private func generateAutomationImplementationPlan(_ components: AutomationStrategyComponents) -> AutomationImplementationPlan {
+    private func generateAutomationImplementationPlan(_ components: AutomationStrategyComponents)
+    -> AutomationImplementationPlan {
         AutomationImplementationPlan(
             phases: [
                 ImplementationPhase(phase: "Setup", duration: 300, dependencies: []),
@@ -561,7 +562,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         )
     }
 
-    private func generateAutomationValidationCriteria(_ components: AutomationStrategyComponents) -> AutomationValidationCriteria {
+    private func generateAutomationValidationCriteria(_ components: AutomationStrategyComponents)
+    -> AutomationValidationCriteria {
         AutomationValidationCriteria(
             efficiencyThreshold: 0.75,
             successRateThreshold: 0.9,
@@ -711,7 +713,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         return min(improvement + (optimizationsApplied * 0.1), 1.0)
     }
 
-    private func generatePerformanceMetrics(_ optimizationResult: AutomationOptimizationResult) -> AutomationPerformanceMetrics {
+    private func generatePerformanceMetrics(_ optimizationResult: AutomationOptimizationResult)
+    -> AutomationPerformanceMetrics {
         AutomationPerformanceMetrics(
             executionTime: optimizationResult.optimizedResult.totalExecutionTime,
             resourceUtilization: optimizationResult.optimizedResult.resourceUtilization,
@@ -794,7 +797,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         TimeInterval(steps.count * 30) // 30 seconds per step estimate
     }
 
-    private func executionManager.executeAutomatedWorkflow(_ context: MCPExecutionContext) async throws -> AutomatedExecutionResult {
+    private func executionManager
+    .executeAutomatedWorkflow(_ context: MCPExecutionContext) async throws -> AutomatedExecutionResult {
         // Execute automated workflow
         AutomatedExecutionResult(
             stepResults: [],
@@ -813,7 +817,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         result
     }
 
-    private func automationEngine.identifyOptimizationOpportunities(_ result: MCPExecutionResult) async -> [OptimizationOpportunity] {
+    private func automationEngine
+    .identifyOptimizationOpportunities(_ result: MCPExecutionResult) async -> [OptimizationOpportunity] {
         // Identify optimization opportunities
         []
     }

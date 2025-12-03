@@ -173,7 +173,8 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
     public func getOptimizationAnalytics(timeRange: DateInterval) async -> AgentWorkflowOptimizationAnalytics {
         let agentAnalytics = await agentOptimizationEngine.getAgentAnalytics(timeRange: timeRange)
         let workflowAnalytics = await workflowPerformanceOptimizer.getWorkflowAnalytics(timeRange: timeRange)
-        let intelligenceAnalytics = await intelligenceUtilizationMaximizer.getIntelligenceAnalytics(timeRange: timeRange)
+        let intelligenceAnalytics = await intelligenceUtilizationMaximizer
+            .getIntelligenceAnalytics(timeRange: timeRange)
 
         return AgentWorkflowOptimizationAnalytics(
             timeRange: timeRange,
@@ -372,7 +373,8 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
             optimizationLevel: request.optimizationLevel
         )
 
-        let optimizationResult = try await intelligenceUtilizationMaximizer.maximizeUtilization(intelligenceOptimizationContext)
+        let optimizationResult = try await intelligenceUtilizationMaximizer
+            .maximizeUtilization(intelligenceOptimizationContext)
 
         return IntelligenceOptimizationResult(
             intelligenceUtilization: optimizationResult.intelligenceUtilization,
@@ -528,7 +530,8 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
         // Analyze workflow for optimization opportunities
         let agentOptimizations = await agentOptimizationEngine.analyzeAgentOptimizationPotential(workflow)
         let workflowOptimizations = await workflowPerformanceOptimizer.analyzeWorkflowOptimizationPotential(workflow)
-        let intelligenceOptimizations = await intelligenceUtilizationMaximizer.analyzeIntelligenceOptimizationPotential(workflow)
+        let intelligenceOptimizations = await intelligenceUtilizationMaximizer
+            .analyzeIntelligenceOptimizationPotential(workflow)
         let coordinationOptimizations = await coordinationOptimizer.analyzeCoordinationOptimizationPotential(workflow)
 
         return WorkflowOptimizationAnalysis(
@@ -612,8 +615,10 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
         _ intelligenceOpts: IntelligenceOptimizationResult,
         _ coordinationOpts: CoordinationOptimizationResult
     ) -> Double {
-        let agentScore = agentOpts.capabilityImprovements.values.reduce(0, +) / Double(agentOpts.capabilityImprovements.count)
-        let workflowScore = workflowOpts.performanceImprovements.values.reduce(0, +) / Double(workflowOpts.performanceImprovements.count)
+        let agentScore = agentOpts.capabilityImprovements.values
+            .reduce(0, +) / Double(agentOpts.capabilityImprovements.count)
+        let workflowScore = workflowOpts.performanceImprovements.values
+            .reduce(0, +) / Double(workflowOpts.performanceImprovements.count)
         let intelligenceScore = intelligenceOpts.intelligenceUtilization
         let coordinationScore = 0.85 // Placeholder
 
@@ -666,7 +671,8 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
         workflowOptimizations.optimizedWorkflow
     }
 
-    private func generateCoordinationRequirements(_ request: AgentWorkflowOptimizationRequest) -> CoordinationRequirements {
+    private func generateCoordinationRequirements(_ request: AgentWorkflowOptimizationRequest)
+    -> CoordinationRequirements {
         CoordinationRequirements(
             communicationFrequency: .high,
             synchronizationLevel: .tight,
@@ -704,7 +710,10 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
     private func generateIntelligentOptimizationInsights(_ result: AgentWorkflowOptimizationResult) -> [String] {
         var insights: [String] = []
 
-        insights.append("Intelligent optimization completed with \(result.intelligenceUtilization * 100)% intelligence utilization")
+        insights
+            .append(
+                "Intelligent optimization completed with \(result.intelligenceUtilization * 100)% intelligence utilization"
+            )
         insights.append("Performance improved by \(result.performanceImprovement * 100)%")
         insights.append("Optimization efficiency: \(result.optimizationEfficiency * 100)%")
 
@@ -1302,7 +1311,8 @@ private final class IntelligenceUtilizationMaximizer: Sendable {
         // Initialize intelligence utilization maximizer
     }
 
-    func maximizeUtilization(_ context: IntelligenceOptimizationContext) async throws -> IntelligenceOptimizationResult {
+    func maximizeUtilization(_ context: IntelligenceOptimizationContext) async throws
+    -> IntelligenceOptimizationResult {
         // Maximize intelligence utilization
         IntelligenceOptimizationResult(
             intelligenceUtilization: 0.85,
@@ -1377,7 +1387,8 @@ private final class AgentWorkflowCoordinationOptimizer: Sendable {
         // Initialize coordination optimizer
     }
 
-    func optimizeCoordination(_ context: CoordinationOptimizationContext) async throws -> CoordinationOptimizationResult {
+    func optimizeCoordination(_ context: CoordinationOptimizationContext) async throws
+    -> CoordinationOptimizationResult {
         // Optimize agent-workflow coordination
         CoordinationOptimizationResult(
             coordinationStrategy: CoordinationStrategy(

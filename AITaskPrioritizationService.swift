@@ -300,7 +300,8 @@ public class AITaskPrioritizationService {
                 focusTime / 60
             ),
             icon: productivityScore > 0.7
-                ? "star.fill" : productivityScore > 0.4 ? "star.leadinghalf.filled" : "star",
+                ? "star.fill"
+                : productivityScore > 0.4 ? "star.leadinghalf.filled" : "star",
             priority: .high,
             category: .performance,
             actionable: productivityScore < 0.6
@@ -317,7 +318,8 @@ public class AITaskPrioritizationService {
                 title: "Weekly Trend",
                 description: "Your completion rate this week is \(trend) compared to today",
                 icon: weekCompletionRate > completionRate
-                    ? "arrow.up.circle.fill" : "arrow.down.circle.fill",
+                    ? "arrow.up.circle.fill"
+                    : "arrow.down.circle.fill",
                 priority: .medium,
                 category: .trends,
                 actionable: false

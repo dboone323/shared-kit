@@ -81,7 +81,11 @@ protocol UniversalConsciousnessCommunicationProtocol {
     /// - Parameter targetEntity: Target consciousness entity
     /// - Parameter channelType: Type of communication channel
     /// - Returns: Communication channel establishment result
-    func establishCommunicationChannel(sourceEntity: UUID, targetEntity: UUID, channelType: CommunicationChannelType) async throws -> CommunicationChannel
+    func establishCommunicationChannel(
+        sourceEntity: UUID,
+        targetEntity: UUID,
+        channelType: CommunicationChannelType
+    ) async throws -> CommunicationChannel
 
     /// Send consciousness message across realities
     /// - Parameter channelId: Communication channel identifier
@@ -116,7 +120,8 @@ protocol InterdimensionalCommunicationProtocol {
     /// - Parameter sourceDimension: Source dimension coordinates
     /// - Parameter targetDimension: Target dimension coordinates
     /// - Returns: Interdimensional link result
-    func establishInterdimensionalLink(sourceDimension: [Double], targetDimension: [Double]) async throws -> InterdimensionalLink
+    func establishInterdimensionalLink(sourceDimension: [Double], targetDimension: [Double]) async throws
+        -> InterdimensionalLink
 
     /// Transmit data across dimensional boundaries
     /// - Parameter linkId: Interdimensional link identifier
@@ -160,7 +165,8 @@ protocol ConsciousnessNetworkingProtocol {
     /// - Parameter targetEntity: Target entity
     /// - Parameter data: Data to route
     /// - Returns: Routing result
-    func routeConsciousnessData(networkId: UUID, sourceEntity: UUID, targetEntity: UUID, data: ConsciousnessData) async throws -> DataRouting
+    func routeConsciousnessData(networkId: UUID, sourceEntity: UUID, targetEntity: UUID,
+                                data: ConsciousnessData) async throws -> DataRouting
 
     /// Monitor network performance
     /// - Parameter networkId: Network identifier
@@ -537,11 +543,18 @@ final class UniversalConsciousnessCommunicationEngine: UniversalConsciousnessCom
         setupMonitoring()
     }
 
-    func establishCommunicationChannel(sourceEntity: UUID, targetEntity: UUID, channelType: CommunicationChannelType) async throws -> CommunicationChannel {
+    func establishCommunicationChannel(
+        sourceEntity: UUID,
+        targetEntity: UUID,
+        channelType: CommunicationChannelType
+    ) async throws -> CommunicationChannel {
         let channelId = UUID()
 
         // Establish secure channel first
-        _ = try await communicationSecurity.establishSecureChannel(channelId: channelId, securityLevel: config.securityLevel)
+        _ = try await communicationSecurity.establishSecureChannel(
+            channelId: channelId,
+            securityLevel: config.securityLevel
+        )
 
         // Create communication channel
         let channel = CommunicationChannel(
@@ -678,11 +691,12 @@ final class UniversalConsciousnessCommunicationEngine: UniversalConsciousnessCom
             }
         }
 
-        adaptationTimer = Timer.scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
-            Task { [weak self] in
-                await self?.performProtocolAdaptation()
+        adaptationTimer = Timer
+            .scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
+                Task { [weak self] in
+                    await self?.performProtocolAdaptation()
+                }
             }
-        }
 
         monitoringTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
             Task { [weak self] in
@@ -746,7 +760,9 @@ final class UniversalConsciousnessCommunicationEngine: UniversalConsciousnessCom
 final class InterdimensionalCommunicationEngine: InterdimensionalCommunicationProtocol {
     private var activeLinks: [UUID: InterdimensionalLink] = [:]
 
-    func establishInterdimensionalLink(sourceDimension: [Double], targetDimension: [Double]) async throws -> InterdimensionalLink {
+    func establishInterdimensionalLink(sourceDimension: [Double],
+                                       targetDimension: [Double]) async throws -> InterdimensionalLink
+    {
         let linkId = UUID()
 
         let link = InterdimensionalLink(
@@ -891,7 +907,9 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
         return broadcast
     }
 
-    func routeConsciousnessData(networkId: UUID, sourceEntity: UUID, targetEntity: UUID, data: ConsciousnessData) async throws -> DataRouting {
+    func routeConsciousnessData(networkId: UUID, sourceEntity: UUID, targetEntity: UUID,
+                                data: ConsciousnessData) async throws -> DataRouting
+    {
         guard activeNetworks[networkId] != nil else {
             throw CommunicationError.networkNotFound
         }
@@ -924,7 +942,10 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
         return subject.eraseToAnyPublisher()
     }
 
-    private func startNetworkMonitoring(_ networkId: UUID, _ subject: PassthroughSubject<NetworkMonitoring, Never>) async {
+    private func startNetworkMonitoring(
+        _ networkId: UUID,
+        _ subject: PassthroughSubject<NetworkMonitoring, Never>
+    ) async {
         guard let _ = activeNetworks[networkId],
               let participants = networkParticipants[networkId] else { return }
 
@@ -989,7 +1010,9 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
         return encrypted
     }
 
-    func decryptConsciousnessData(encryptedData: EncryptedData, decryptionKey: String) async throws -> ConsciousnessData {
+    func decryptConsciousnessData(encryptedData: EncryptedData,
+                                  decryptionKey: String) async throws -> ConsciousnessData
+    {
         // Simplified decryption (would use actual decryption in real implementation)
         let decryptedData = ConsciousnessData(
             dataId: encryptedData.originalDataId,
@@ -1098,9 +1121,13 @@ final class UniversalConsciousnessDatabase {
 
     func getCommunicationMetrics() async throws -> CommunicationMetrics {
         let totalChannels = communicationChannels.count
-        let activeChannels = communicationChannels.values.filter { Date().timeIntervalSince($0.establishmentTimestamp) < 3600 }.count
+        let activeChannels = communicationChannels.values
+            .filter { Date().timeIntervalSince($0.establishmentTimestamp) < 3600 }.count
         let totalMessages = messageTransmissions.count
-        let averageLatency = messageTransmissions.values.map(\.transmissionTime).reduce(0, +) / Double(max(messageTransmissions.count, 1))
+        let averageLatency = messageTransmissions.values.map(\.transmissionTime).reduce(0, +) / Double(max(
+            messageTransmissions.count,
+            1
+        ))
 
         return CommunicationMetrics(
             totalChannels: totalChannels,

@@ -518,7 +518,8 @@ public final class AgentHarmonyNetworks: Sendable {
 
     // MARK: - Helper Methods
 
-    private func analyzeAgentsForHarmonyNetworks(_ agents: [HarmonyNetworksAgent]) async throws -> HarmonyNetworksAnalysis {
+    private func analyzeAgentsForHarmonyNetworks(_ agents: [HarmonyNetworksAgent]) async throws
+    -> HarmonyNetworksAnalysis {
         // Analyze agents for harmony networks opportunities
         let harmonyNetworks = await harmonyNetworksEngine.analyzeHarmonyNetworksPotential(agents)
         let universalHarmonies = await universalHarmonyCoordinator.analyzeUniversalHarmonyPotential(agents)
@@ -1117,7 +1118,8 @@ private final class HarmonyNetworksEngine: Sendable {
         // Initialize harmony networks engine
     }
 
-    func assessHarmonyNetworks(_ context: HarmonyNetworksAssessmentContext) async throws -> HarmonyNetworksAssessmentResult {
+    func assessHarmonyNetworks(_ context: HarmonyNetworksAssessmentContext) async throws
+    -> HarmonyNetworksAssessmentResult {
         // Assess harmony networks
         HarmonyNetworksAssessmentResult(
             harmonyPotential: 0.88,
@@ -1126,7 +1128,8 @@ private final class HarmonyNetworksEngine: Sendable {
         )
     }
 
-    func processHarmonyNetworks(_ context: HarmonyNetworksProcessingContext) async throws -> HarmonyNetworksProcessingResult {
+    func processHarmonyNetworks(_ context: HarmonyNetworksProcessingContext) async throws
+    -> HarmonyNetworksProcessingResult {
         // Process harmony networks
         HarmonyNetworksProcessingResult(
             harmonyNetworks: 0.93,
@@ -1180,7 +1183,8 @@ private final class UniversalHarmonyCoordinator: Sendable {
         // Initialize universal harmony coordinator
     }
 
-    func coordinateUniversalHarmony(_ context: UniversalHarmonyCoordinationContext) async throws -> UniversalHarmonyCoordinationResult {
+    func coordinateUniversalHarmony(_ context: UniversalHarmonyCoordinationContext) async throws
+    -> UniversalHarmonyCoordinationResult {
         // Coordinate universal harmony
         UniversalHarmonyCoordinationResult(
             universalHarmony: 0.91,
@@ -1230,7 +1234,8 @@ private final class HarmonyNetworksSynthesizer: Sendable {
         // Initialize harmony networks synthesizer
     }
 
-    func synthesizeHarmonyNetworks(_ context: HarmonyNetworksSynthesisContext) async throws -> HarmonyNetworksSynthesisResult {
+    func synthesizeHarmonyNetworks(_ context: HarmonyNetworksSynthesisContext) async throws
+    -> HarmonyNetworksSynthesisResult {
         // Synthesize harmony networks
         HarmonyNetworksSynthesisResult(
             harmonizedAgents: context.agents,
@@ -1260,7 +1265,8 @@ private final class UniversalHarmonySynthesizer: Sendable {
         // Initialize universal harmony synthesizer
     }
 
-    func synthesizeUniversalHarmony(_ context: UniversalHarmonySynthesisContext) async throws -> UniversalHarmonySynthesisResult {
+    func synthesizeUniversalHarmony(_ context: UniversalHarmonySynthesisContext) async throws
+    -> UniversalHarmonySynthesisResult {
         // Synthesize universal harmony
         UniversalHarmonySynthesisResult(
             harmonizedAgents: context.agents,
@@ -1281,7 +1287,8 @@ private final class QuantumHarmonyOrchestrator: Sendable {
         // Initialize quantum harmony orchestrator
     }
 
-    func orchestrateQuantumHarmony(_ context: QuantumHarmonyOrchestrationContext) async throws -> QuantumHarmonyOrchestrationResult {
+    func orchestrateQuantumHarmony(_ context: QuantumHarmonyOrchestrationContext) async throws
+    -> QuantumHarmonyOrchestrationResult {
         // Orchestrate quantum harmony
         QuantumHarmonyOrchestrationResult(
             quantumHarmonyAgents: context.agents,

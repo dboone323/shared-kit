@@ -276,7 +276,8 @@ public enum InputValidator {
         let usernamePredicate = NSPredicate(format: "SELF MATCHES %@", usernameRegex)
 
         guard usernamePredicate.evaluate(with: username) else {
-            throw ValidationError.invalidFormat(description: "Username can only contain letters, numbers, underscores, and dashes")
+            throw ValidationError
+                .invalidFormat(description: "Username can only contain letters, numbers, underscores, and dashes")
         }
     }
 

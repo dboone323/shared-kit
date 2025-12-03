@@ -326,8 +326,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         let today = Date()
 
         // Check if already completed today
-        if let existingLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) }
-        ) {
+        if let existingLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) }) {
             existingLog.isCompleted = true
             existingLog.actualDurationMinutes = duration.map { Int($0 / 60) }
             existingLog.notes = notes
@@ -390,7 +389,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         let durationMinutes = duration / 60
         self.averageCompletionTime =
             (self.averageCompletionTime * Double(self.totalCompletions - 1) + durationMinutes)
-                / Double(self.totalCompletions)
+            / Double(self.totalCompletions)
     }
 
     private func checkAchievements() {
@@ -662,7 +661,7 @@ public enum HabitDifficulty: String, CaseIterable, Codable {
         }
     }
 
-    nonisolated public var xpMultiplier: Int {
+    public nonisolated var xpMultiplier: Int {
         switch self {
         case .trivial: 1
         case .easy: 2

@@ -501,7 +501,7 @@ public final class IntelligentResourceManager: ObservableObject {
         // In a real implementation, you'd use more sophisticated CPU monitoring
         let baseUsage = 0.2 // Base CPU usage
         let uptimeFactor = min(0.4, processInfo.systemUptime / 3600.0) // Factor based on uptime (max 40% over 1 hour)
-        let randomFactor = Double.random(in: -0.1 ... 0.1) // Small random variation
+        let randomFactor = Double.random(in: -0.1...0.1) // Small random variation
         let systemUsage = min(1.0, max(0.0, baseUsage + uptimeFactor + randomFactor))
 
         let usedCores = systemUsage * availableCores
@@ -524,8 +524,9 @@ public final class IntelligentResourceManager: ObservableObject {
         // Estimate used memory based on system uptime and process count
         // In a real implementation, you'd use more sophisticated memory monitoring
         let baseUsage = 0.3 // Base memory usage
-        let uptimeFactor = min(0.3, processInfo.systemUptime / 86400.0) // Factor based on uptime (max 30% over 24 hours)
-        let randomFactor = Double.random(in: -0.1 ... 0.1) // Small random variation
+        let uptimeFactor = min(0.3,
+                               processInfo.systemUptime / 86400.0) // Factor based on uptime (max 30% over 24 hours)
+        let randomFactor = Double.random(in: -0.1...0.1) // Small random variation
         let usedMemory = totalMemory * (baseUsage + uptimeFactor + randomFactor)
 
         let clampedUsedMemory = max(0, min(totalMemory, usedMemory))
@@ -584,7 +585,7 @@ public final class IntelligentResourceManager: ObservableObject {
         // Estimate network usage based on system activity
         let baseUsage = 10.0 // Base network usage in Mbps
         let uptimeFactor = min(100.0, processInfo.systemUptime / 60.0) // Factor based on uptime (increases over time)
-        let randomFactor = Double.random(in: -5.0 ... 5.0) // Random variation
+        let randomFactor = Double.random(in: -5.0...5.0) // Random variation
         let currentUsage = min(maxBandwidth, max(0, baseUsage + uptimeFactor + randomFactor))
 
         return ResourceMetrics(
@@ -606,7 +607,7 @@ public final class IntelligentResourceManager: ObservableObject {
         // In a real implementation, you'd query GPU-specific APIs
         let baseUsage = 0.0 // GPUs typically idle when not in use
         let loadFactor = min(1.0, processInfo.systemUptime / 7200.0) // Factor based on uptime (max 1 GPU over 2 hours)
-        let randomFactor = Double.random(in: -0.2 ... 0.2) // Small random variation
+        let randomFactor = Double.random(in: -0.2...0.2) // Small random variation
         let currentUsage = min(maxGPUs, max(0, baseUsage + loadFactor + randomFactor))
 
         return ResourceMetrics(
@@ -627,8 +628,10 @@ public final class IntelligentResourceManager: ObservableObject {
         // Estimate quantum processor usage based on complex computational patterns
         // In a real implementation, you'd interface with quantum hardware APIs
         let baseUsage = 5.0 // Base quantum operations
-        let complexityFactor = min(50.0, processInfo.systemUptime / 1800.0) // Factor based on uptime (quantum workloads increase over time)
-        let randomFactor = Double.random(in: -10.0 ... 10.0) // Random variation for quantum uncertainty
+        let complexityFactor = min(50.0,
+                                   processInfo.systemUptime / 1800.0) // Factor based on uptime (quantum workloads
+        // increase over time)
+        let randomFactor = Double.random(in: -10.0...10.0) // Random variation for quantum uncertainty
         let currentUsage = min(maxQubits, max(0, baseUsage + complexityFactor + randomFactor))
 
         return ResourceMetrics(
@@ -650,7 +653,7 @@ public final class IntelligentResourceManager: ObservableObject {
         let baseInstances = 2.0 // Base cloud instances for essential services
         let allocationFactor = Double(currentAllocations.count) * 0.5 // Factor based on current allocations
         let loadFactor = min(10.0, processInfo.systemUptime / 3600.0) // Factor based on uptime
-        let randomFactor = Double.random(in: -1.0 ... 1.0) // Random variation
+        let randomFactor = Double.random(in: -1.0...1.0) // Random variation
         let currentUsage = min(
             maxInstances, max(0, baseInstances + allocationFactor + loadFactor + randomFactor)
         )
@@ -673,8 +676,9 @@ public final class IntelligentResourceManager: ObservableObject {
         // Estimate database connections based on allocations and system activity
         let baseConnections = 10.0 // Base connections for system operations
         let allocationFactor = Double(currentAllocations.count) * 2.0 // Factor based on current allocations
-        let activityFactor = min(50.0, processInfo.systemUptime / 600.0) // Factor based on uptime (increases over 10 minutes)
-        let randomFactor = Double.random(in: -5.0 ... 5.0) // Random variation
+        let activityFactor = min(50.0,
+                                 processInfo.systemUptime / 600.0) // Factor based on uptime (increases over 10 minutes)
+        let randomFactor = Double.random(in: -5.0...5.0) // Random variation
         let currentUsage = min(
             maxConnections,
             max(0, baseConnections + allocationFactor + activityFactor + randomFactor)
@@ -698,8 +702,9 @@ public final class IntelligentResourceManager: ObservableObject {
         // Estimate API usage based on allocations and system activity
         let baseRequests = 100.0 // Base API requests per minute
         let allocationFactor = Double(currentAllocations.count) * 50.0 // Factor based on current allocations
-        let activityFactor = min(500.0, processInfo.systemUptime / 120.0) // Factor based on uptime (increases over 2 minutes)
-        let randomFactor = Double.random(in: -50.0 ... 50.0) // Random variation
+        let activityFactor = min(500.0,
+                                 processInfo.systemUptime / 120.0) // Factor based on uptime (increases over 2 minutes)
+        let randomFactor = Double.random(in: -50.0...50.0) // Random variation
         let currentUsage = min(
             maxRequestsPerMinute,
             max(0, baseRequests + allocationFactor + activityFactor + randomFactor)
@@ -867,10 +872,10 @@ public final class IntelligentResourceManager: ObservableObject {
 
         // Calculate trend
         let n = Double(recentUsage.count)
-        let sumX = (0 ..< recentUsage.count).reduce(0.0) { $0 + Double($1) }
+        let sumX = (0..<recentUsage.count).reduce(0.0) { $0 + Double($1) }
         let sumY = recentUsage.reduce(0, +)
-        let sumXY = zip(0 ..< recentUsage.count, recentUsage).reduce(0.0) { $0 + Double($1.0) * $1.1 }
-        let sumXX = (0 ..< recentUsage.count).reduce(0.0) { $0 + Double($1 * $1) }
+        let sumXY = zip(0..<recentUsage.count, recentUsage).reduce(0.0) { $0 + Double($1.0) * $1.1 }
+        let sumXX = (0..<recentUsage.count).reduce(0.0) { $0 + Double($1 * $1) }
 
         let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
         let intercept = (sumY - slope * sumX) / n
@@ -913,11 +918,11 @@ public final class IntelligentResourceManager: ObservableObject {
         let totalCost = resourceMetrics.values.compactMap(\.costPerUnit).reduce(0, +)
         let averagePerformance =
             resourceMetrics.values.map(\.performanceScore).reduce(0, +)
-                / Double(resourceMetrics.count)
+            / Double(resourceMetrics.count)
 
         let optimizationScore =
             (performanceOptimizationWeight * averagePerformance)
-                - (costOptimizationWeight * min(totalCost / 100.0, 1.0))
+            - (costOptimizationWeight * min(totalCost / 100.0, 1.0))
 
         await MainActor.run {
             self.optimizationScore = optimizationScore

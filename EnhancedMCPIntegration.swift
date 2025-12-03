@@ -45,7 +45,8 @@ public protocol EnhancedMCPTool: MCPTool {
 }
 
 /// Protocol for MCP workflow management
-@preconcurrency public protocol MCPWorkflowManager: Sendable {
+@preconcurrency
+public protocol MCPWorkflowManager: Sendable {
     func createWorkflow(name: String, steps: [MCPWorkflowStep]) async -> MCPWorkflow
     func executeWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult
     func optimizeWorkflow(_ workflow: MCPWorkflow) async -> MCPWorkflow

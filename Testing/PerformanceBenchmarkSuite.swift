@@ -633,7 +633,11 @@ class PerformanceBenchmarkSuite {
             transitionTimes: [],
             aiInferenceTimes: [],
             animationTimes: [],
-            score: calculateCrossPlatformScore(platformOptimizations, sharedComponentPerformance, uiAdaptationPerformance)
+            score: calculateCrossPlatformScore(
+                platformOptimizations,
+                sharedComponentPerformance,
+                uiAdaptationPerformance
+            )
         )
 
         let frameRateResults = FrameRateBenchmarkResults(
@@ -804,14 +808,30 @@ class PerformanceBenchmarkSuite {
         \(results.map(\.summary).joined(separator: "\n\n"))
 
         🎯 Performance Summary:
-        - Memory Management: \(String(format: "%.1f", results.map(\.memoryResults.score).reduce(0, +) / Double(results.count)))/100
-        - CPU Optimization: \(String(format: "%.1f", results.map(\.cpuResults.score).reduce(0, +) / Double(results.count)))/100
-        - Animation Performance: \(String(format: "%.1f", results.map(\.frameRateResults.score).reduce(0, +) / Double(results.count)))/100
-        - Battery Efficiency: \(String(format: "%.1f", results.map(\.batteryResults.score).reduce(0, +) / Double(results.count)))/100
+        - Memory Management: \(String(
+            format: "%.1f",
+            results.map(\.memoryResults.score).reduce(0, +) / Double(results.count)
+        ))/100
+        - CPU Optimization: \(String(
+            format: "%.1f",
+            results.map(\.cpuResults.score).reduce(0, +) / Double(results.count)
+        ))/100
+        - Animation Performance: \(String(
+            format: "%.1f",
+            results.map(\.frameRateResults.score).reduce(0, +) / Double(results.count)
+        ))/100
+        - Battery Efficiency: \(String(
+            format: "%.1f",
+            results.map(\.batteryResults.score).reduce(0, +) / Double(results.count)
+        ))/100
 
-        🚀 Status: \(overallScore >= 80.0 ? "EXCELLENT PERFORMANCE" : overallScore >= 70.0 ? "GOOD PERFORMANCE" : overallScore >= 60.0 ?
-            "ACCEPTABLE PERFORMANCE" : "NEEDS IMPROVEMENT"
-        )
+        🚀 Status: \(overallScore >= 80.0
+            ? "EXCELLENT PERFORMANCE"
+            : overallScore >= 70.0
+                ? "GOOD PERFORMANCE"
+                : overallScore >= 60.0
+                    ? "ACCEPTABLE PERFORMANCE"
+                    : "NEEDS IMPROVEMENT")
         """
 
         self.logger.info("\(report)")
@@ -873,7 +893,7 @@ class PerformanceBenchmarkSuite {
     private func simulateMultiThreadedOperations() async {
         // Simulate multi-threaded operations
         await withTaskGroup(of: Void.self) { group in
-            for _ in 0 ..< 4 {
+            for _ in 0..<4 {
                 group.addTask {
                     try? await Task.sleep(nanoseconds: 1_000_000_000) // 1s
                 }
@@ -939,7 +959,7 @@ class PerformanceBenchmarkSuite {
 
     private func simulateConcurrentOperations() async {
         await withTaskGroup(of: Void.self) { group in
-            for _ in 0 ..< 8 {
+            for _ in 0..<8 {
                 group.addTask {
                     try? await Task.sleep(nanoseconds: 2_000_000_000) // 2s
                 }
@@ -1002,20 +1022,23 @@ class PerformanceBenchmarkSuite {
         let endTime = Date()
 
         // Simulate memory usage recording during operation
-        for i in 0 ..< 10 {
+        for i in 0..<10 {
             let timestamp = startTime.addingTimeInterval(Double(i) * (endTime.timeIntervalSince(startTime) / 10))
             let usage = Int64(60 + i * 5) * 1024 * 1024 // Simulate increasing memory usage
             metrics.append((usage: usage, timestamp: timestamp))
         }
     }
 
-    private func measureCPUUsage(during operation: () async -> Void, recordingTo metrics: inout [(usage: Double, timestamp: Date)]) async {
+    private func measureCPUUsage(
+        during operation: () async -> Void,
+        recordingTo metrics: inout [(usage: Double, timestamp: Date)]
+    ) async {
         let startTime = Date()
         await operation()
         let endTime = Date()
 
         // Simulate CPU usage recording during operation
-        for i in 0 ..< 10 {
+        for i in 0..<10 {
             let timestamp = startTime.addingTimeInterval(Double(i) * (endTime.timeIntervalSince(startTime) / 10))
             let usage = 20.0 + Double(i) * 3.0 // Simulate varying CPU usage
             metrics.append((usage: usage, timestamp: timestamp))
@@ -1024,7 +1047,8 @@ class PerformanceBenchmarkSuite {
 
     // MARK: - Score Calculation Methods
 
-    private func calculateMemoryScore(_ memory: (current: Int64, peak: Int64, average: Int64, leaked: Int64)) -> Double {
+    private func calculateMemoryScore(_ memory: (current: Int64, peak: Int64, average: Int64, leaked: Int64))
+    -> Double {
         let peakScore = max(0, 100 - (Double(memory.peak) / Double(BenchmarkStandards.maxMemoryUsageApp)) * 100)
         let averageScore = max(0, 100 - (Double(memory.average) / Double(BenchmarkStandards.maxMemoryUsageApp)) * 80)
         let leakPenalty = memory.leaked > 0 ? 20.0 : 0.0
@@ -1056,7 +1080,11 @@ class PerformanceBenchmarkSuite {
         return min(100, (averageFrameRate / BenchmarkStandards.targetFrameRate) * 100)
     }
 
-    private func calculateCrossPlatformScore(_ platformOptimizations: Double, _ sharedComponent: Double, _ uiAdaptation: Double) -> Double {
+    private func calculateCrossPlatformScore(
+        _ platformOptimizations: Double,
+        _ sharedComponent: Double,
+        _ uiAdaptation: Double
+    ) -> Double {
         (platformOptimizations + sharedComponent + uiAdaptation) / 3
     }
 

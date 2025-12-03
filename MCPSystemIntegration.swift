@@ -23,7 +23,8 @@ public protocol MCPSystemIntegration {
 }
 
 /// Protocol for MCP system component
-@preconcurrency public protocol MCPSystemComponent: AnyObject, Sendable {
+@preconcurrency
+public protocol MCPSystemComponent: AnyObject, Sendable {
     var id: String { get }
     var name: String { get }
     var type: MCPComponentType { get }

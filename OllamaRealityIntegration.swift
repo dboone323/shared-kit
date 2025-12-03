@@ -417,7 +417,9 @@ public final class OllamaRealityIntegrationCoordinator: ObservableObject, Sendab
         try await ethicalGuardian.performEthicalMaintenance()
     }
 
-    private func detectAnomalies(quantumState: QuantumState, consciousnessState: ConsciousnessState) -> [RealityAnomaly] {
+    private func detectAnomalies(quantumState: QuantumState,
+                                 consciousnessState: ConsciousnessState) -> [RealityAnomaly]
+    {
         var anomalies: [RealityAnomaly] = []
 
         // Quantum anomalies
@@ -469,7 +471,8 @@ public final class QuantumRealityProcessor: Sendable {
         isInitialized = true
     }
 
-    public func processQuantumManipulation(_ request: RealityManipulationRequest) async throws -> QuantumManipulationResult {
+    public func processQuantumManipulation(_ request: RealityManipulationRequest) async throws
+    -> QuantumManipulationResult {
         guard isInitialized else { throw RealityIntegrationError.notInitialized }
 
         return try await quantumField.manipulate(request)
@@ -515,7 +518,8 @@ public final class ConsciousnessRealityBridge: Sendable {
         isConnected = true
     }
 
-    public func integrateConsciousness(_ request: RealityManipulationRequest) async throws -> ConsciousnessManipulationResult {
+    public func integrateConsciousness(_ request: RealityManipulationRequest) async throws
+    -> ConsciousnessManipulationResult {
         guard isConnected else { throw RealityIntegrationError.notConnected }
 
         return try await consciousnessField.manipulate(request)
@@ -1039,7 +1043,7 @@ private struct RealityControlsView: View {
 
             VStack(alignment: .leading) {
                 Text("Intensity: \(Int(intensity * 100))%")
-                Slider(value: $intensity, in: 0.01 ... 0.5)
+                Slider(value: $intensity, in: 0.01...0.5)
             }
 
             Button(action: performManipulation) {

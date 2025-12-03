@@ -558,7 +558,8 @@ struct StabilizationResult: Sendable {
 
 /// Main reality matrix engineering engine
 @MainActor
-final class RealityMatrixEngineeringEngine: RealityMatrixEngineeringProtocol, RealityMatrixManipulationProtocol, MatrixStabilityProtocol {
+final class RealityMatrixEngineeringEngine: RealityMatrixEngineeringProtocol, RealityMatrixManipulationProtocol,
+MatrixStabilityProtocol {
 
     typealias MatrixType = RealityMatrix
     typealias EngineeringResult = RealityMatrixEngineeringResult
@@ -773,8 +774,9 @@ final class MatrixAnalyzer {
 
     private func assessStability(_ matrix: RealityMatrix) async -> StabilityAssessment {
         let overallStability = matrix.stabilityIndex
-        let stabilityTrend: StabilityTrend = overallStability > 0.9 ? .stable :
-            overallStability > 0.7 ? .improving : .critical
+        let stabilityTrend: StabilityTrend = overallStability > 0.9
+            ? .stable
+            : overallStability > 0.7 ? .improving : .critical
 
         let criticalRegions = matrix.dimensions.filter { $0.stability < 0.8 }.map {
             MatrixRegion(
@@ -879,7 +881,9 @@ final class MatrixAnalyzer {
 
 /// Matrix manipulator
 final class MatrixManipulator {
-    func applyModification(_ modification: RealityMatrixModification, toMatrix matrix: RealityMatrix) async throws -> RealityMatrixEngineeringResult {
+    func applyModification(_ modification: RealityMatrixModification,
+                           toMatrix matrix: RealityMatrix) async throws -> RealityMatrixEngineeringResult
+    {
         var workingMatrix = matrix
 
         // Apply the modification based on type
@@ -915,32 +919,49 @@ final class MatrixManipulator {
         )
     }
 
-    private func applyParameterModification(_ modification: RealityMatrixModification, to matrix: inout RealityMatrix) async throws {
+    private func applyParameterModification(
+        _ modification: RealityMatrixModification,
+        to matrix: inout RealityMatrix
+    ) async throws {
         // Implement parameter modification logic
         matrix.parameters.fundamentalConstants["modified"] = 1.0
     }
 
-    private func applyStructureModification(_ modification: RealityMatrixModification, to matrix: inout RealityMatrix) async throws {
+    private func applyStructureModification(
+        _ modification: RealityMatrixModification,
+        to matrix: inout RealityMatrix
+    ) async throws {
         // Implement structure modification logic
         matrix.stabilityIndex += 0.05
     }
 
-    private func applyDimensionalModification(_ modification: RealityMatrixModification, to matrix: inout RealityMatrix) async throws {
+    private func applyDimensionalModification(
+        _ modification: RealityMatrixModification,
+        to matrix: inout RealityMatrix
+    ) async throws {
         // Implement dimensional modification logic
         // Add new dimension if needed
     }
 
-    private func applyConsciousnessModification(_ modification: RealityMatrixModification, to matrix: inout RealityMatrix) async throws {
+    private func applyConsciousnessModification(
+        _ modification: RealityMatrixModification,
+        to matrix: inout RealityMatrix
+    ) async throws {
         // Implement consciousness modification logic
         matrix.parameters.consciousnessParameters.awarenessLevels += 1
     }
 
-    private func applyQuantumModification(_ modification: RealityMatrixModification, to matrix: inout RealityMatrix) async throws {
+    private func applyQuantumModification(
+        _ modification: RealityMatrixModification,
+        to matrix: inout RealityMatrix
+    ) async throws {
         // Implement quantum modification logic
         matrix.coherenceLevel += 0.02
     }
 
-    func manipulateParameters(_ parameters: RealityParameters, inMatrix matrix: RealityMatrix) async throws -> ManipulationResult {
+    func manipulateParameters(_ parameters: RealityParameters,
+                              inMatrix matrix: RealityMatrix) async throws -> ManipulationResult
+    {
         var workingMatrix = matrix
         // Apply parameter changes
         workingMatrix.parameters = parameters
@@ -966,7 +987,9 @@ final class MatrixManipulator {
         )
     }
 
-    func applyTransformation(_ transformation: MatrixTransformation, toMatrix matrix: RealityMatrix) async throws -> TransformationResult {
+    func applyTransformation(_ transformation: MatrixTransformation,
+                             toMatrix matrix: RealityMatrix) async throws -> TransformationResult
+    {
         // Apply matrix transformation
         // This is a simplified implementation
 
@@ -987,7 +1010,9 @@ final class MatrixManipulator {
         )
     }
 
-    func synchronizeChanges(_ changes: MatrixChanges, inMatrix matrix: RealityMatrix) async throws -> SynchronizationResult {
+    func synchronizeChanges(_ changes: MatrixChanges,
+                            inMatrix matrix: RealityMatrix) async throws -> SynchronizationResult
+    {
         // Synchronize changes across dimensions
         let synchronizedTargets = changes.synchronizationTargets.count
         let failedTargets = 0
@@ -1269,7 +1294,7 @@ enum RealityMatrixEngineeringFactory {
         let parameters = RealityParameters(
             fundamentalConstants: [
                 "speed_of_light": 299_792_458.0,
-                "planck_constant": 6.62607015e-34,
+                "planck_constant": 6.62_607_015e-34,
                 "gravitational_constant": 6.67430e-11,
             ],
             physicalLaws: [

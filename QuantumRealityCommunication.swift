@@ -11,9 +11,21 @@ protocol QRCProtocol {
     func close(_ channel: Channel) async
 }
 
-struct QRCChannel: Sendable { let id: UUID; var reliability: Double; var bandwidth: Double }
-struct QRCMessage: Sendable { let id: UUID; let payload: Data; let tags: [String]; let createdAt: Date }
-struct QRCResult: Sendable { let messageId: UUID; let delivered: Bool; let latency: TimeInterval }
+struct QRCChannel: Sendable { let id: UUID
+    var reliability: Double
+    var bandwidth: Double
+}
+
+struct QRCMessage: Sendable { let id: UUID
+    let payload: Data
+    let tags: [String]
+    let createdAt: Date
+}
+
+struct QRCResult: Sendable { let messageId: UUID
+    let delivered: Bool
+    let latency: TimeInterval
+}
 
 enum QRCError: Error { case channelClosed }
 
@@ -30,7 +42,7 @@ final class QuantumRealityCommunicationEngine: QRCProtocol {
     func send(_ message: QRCMessage, on channel: QRCChannel) async throws -> QRCResult {
         guard channels[channel.id] != nil else { throw QRCError.channelClosed }
         let delivered = Bool.random()
-        return QRCResult(messageId: message.id, delivered: delivered, latency: Double.random(in: 0.001 ... 0.02))
+        return QRCResult(messageId: message.id, delivered: delivered, latency: Double.random(in: 0.001...0.02))
     }
 
     func close(_ channel: QRCChannel) async { channels.removeValue(forKey: channel.id) }
@@ -38,7 +50,12 @@ final class QuantumRealityCommunicationEngine: QRCProtocol {
 
 enum QRCFactory {
     static func engine() -> QuantumRealityCommunicationEngine { QuantumRealityCommunicationEngine() }
-    static func message() -> QRCMessage { QRCMessage(id: UUID(), payload: Data([0xAA]), tags: ["sync"], createdAt: Date()) }
+    static func message() -> QRCMessage { QRCMessage(
+        id: UUID(),
+        payload: Data([0xAA]),
+        tags: ["sync"],
+        createdAt: Date()
+    ) }
 }
 
 func demonstrateQuantumRealityCommunication() async {

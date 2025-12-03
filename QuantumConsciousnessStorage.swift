@@ -840,9 +840,9 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
         let coherence = QuantumCoherence(
             coherenceId: UUID(),
             timestamp: Date(),
-            coherenceLevel: 0.85 + Double.random(in: -0.1 ... 0.1),
-            stabilityIndex: 0.9 + Double.random(in: -0.05 ... 0.05),
-            decoherenceRate: 0.02 + Double.random(in: -0.01 ... 0.01),
+            coherenceLevel: 0.85 + Double.random(in: -0.1...0.1),
+            stabilityIndex: 0.9 + Double.random(in: -0.05...0.05),
+            decoherenceRate: 0.02 + Double.random(in: -0.01...0.01),
             activeStorageUnits: storedData.count,
             alerts: []
         )
@@ -928,9 +928,9 @@ final class QuantumStateManager: QuantumStateManagementProtocol {
         // Create entanglement matrix
         let size = qubits.count
         var entanglementMatrix = [[Complex]]()
-        for i in 0 ..< size {
+        for i in 0..<size {
             var row = [Complex]()
-            for j in 0 ..< size {
+            for j in 0..<size {
                 if i == j {
                     row.append(Complex(real: 1.0, imaginary: 0.0))
                 } else {
@@ -987,9 +987,9 @@ final class QuantumStateManager: QuantumStateManagementProtocol {
         // Create correlation matrix
         let size = states.count
         var correlationMatrix = [[Double]]()
-        for i in 0 ..< size {
+        for i in 0..<size {
             var row = [Double]()
-            for j in 0 ..< size {
+            for j in 0..<size {
                 row.append(i == j ? 1.0 : 0.3)
             }
             correlationMatrix.append(row)
@@ -1346,7 +1346,7 @@ final class QuantumStorageSecurityManager: QuantumStorageSecurityProtocol {
         let keyId = UUID()
 
         // Generate quantum key bits
-        let keyBits = (0 ..< keyLength).map { _ in Int.random(in: 0 ... 1) }
+        let keyBits = (0..<keyLength).map { _ in Int.random(in: 0...1) }
 
         return QuantumKey(
             keyId: keyId,
@@ -1444,7 +1444,7 @@ final class QuantumConsciousnessDatabase {
             .count
         let averageCoherence =
             consciousnessStorage.values.map(\.coherenceLevel).reduce(0, +)
-                / Double(max(totalStorage, 1))
+            / Double(max(totalStorage, 1))
 
         return StorageMetrics(
             totalUnits: totalStorage,

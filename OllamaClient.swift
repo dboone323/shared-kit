@@ -231,14 +231,30 @@ public class OllamaClient: ObservableObject {
             if self.isCloudModel(targetModel) {
                 // Gate cloud by policy; default priority medium (shared-kit)
                 let priority = "medium"
-                if policy.enabled == false || (policy.allowed(priority: priority) && policy.checkQuota(priority: priority) && policy.checkCircuit(priority: priority)) {
+                if policy
+                    .enabled == false ||
+                    (policy.allowed(priority: priority) && policy.checkQuota(priority: priority) && policy
+                        .checkCircuit(priority: priority))
+                {
                     // Cloud disabled in config by default; log and fall back to local
-                    policy.logEscalation(task: "sharedKit.generate", priority: priority, reason: "cloud_disabled_or_logged_only", modelAttempted: targetModel, provider: "ollama_cloud")
+                    policy.logEscalation(
+                        task: "sharedKit.generate",
+                        priority: priority,
+                        reason: "cloud_disabled_or_logged_only",
+                        modelAttempted: targetModel,
+                        provider: "ollama_cloud"
+                    )
                     try await self.ensureModelAvailable(preferredModel ?? self.config.defaultModel)
                     return preferredModel ?? self.config.defaultModel
                 } else {
                     // Not allowed by policy; log and use local
-                    policy.logEscalation(task: "sharedKit.generate", priority: priority, reason: "policy_blocked", modelAttempted: targetModel, provider: "ollama_cloud")
+                    policy.logEscalation(
+                        task: "sharedKit.generate",
+                        priority: priority,
+                        reason: "policy_blocked",
+                        modelAttempted: targetModel,
+                        provider: "ollama_cloud"
+                    )
                     try await self.ensureModelAvailable(preferredModel ?? self.config.defaultModel)
                     return preferredModel ?? self.config.defaultModel
                 }
@@ -247,7 +263,13 @@ public class OllamaClient: ObservableObject {
             // Find best cloud alternative -> gate via policy and then prefer local
             if self.getCloudModels().contains(targetModel + "-cloud") {
                 let priority = "medium"
-                policy.logEscalation(task: "sharedKit.generate", priority: priority, reason: "cloud_candidate_logged_only", modelAttempted: targetModel + "-cloud", provider: "ollama_cloud")
+                policy.logEscalation(
+                    task: "sharedKit.generate",
+                    priority: priority,
+                    reason: "cloud_candidate_logged_only",
+                    modelAttempted: targetModel + "-cloud",
+                    provider: "ollama_cloud"
+                )
                 try await self.ensureModelAvailable(targetModel)
                 return targetModel
             }
@@ -390,7 +412,7 @@ public class OllamaClient: ObservableObject {
     {
         var lastError: Error?
 
-        for attempt in 0 ..< self.config.maxRetries {
+        for attempt in 0..<self.config.maxRetries {
             do {
                 return try await self.performRequest(endpoint: endpoint, body: body)
             } catch {

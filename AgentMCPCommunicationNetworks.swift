@@ -313,7 +313,10 @@ public final class AgentMCPCommunicationNetworks: Sendable {
                     if let communicationError = error as? MCPCommunicationError {
                         failures.append(communicationError)
                     } else {
-                        failures.append(.networkEstablishmentFailed("\(agentId)-\(mcpSystemId)", error.localizedDescription))
+                        failures.append(.networkEstablishmentFailed(
+                            "\(agentId)-\(mcpSystemId)",
+                            error.localizedDescription
+                        ))
                     }
                 }
             }
@@ -421,7 +424,9 @@ public final class AgentMCPCommunicationNetworks: Sendable {
         }
     }
 
-    private func validateMessage(_ message: MCPCommunicationMessage, for channel: MCPCommunicationChannel) async throws {
+    private func validateMessage(_ message: MCPCommunicationMessage,
+                                 for channel: MCPCommunicationChannel) async throws
+    {
         // Validate message size
         let messageSize = try await messageRouter.calculateMessageSize(message)
         guard messageSize <= channel.configuration.maxMessageSize else {
@@ -759,7 +764,7 @@ private final class MCPMessageRouter: Sendable {
         priority: MCPMessagePriority
     ) async throws -> MCPMessageDeliveryResult {
         // Implement message routing logic
-        let deliveryTime = Double.random(in: 0.001 ... 0.1) // Simulated delivery time
+        let deliveryTime = Double.random(in: 0.001...0.1) // Simulated delivery time
         return MCPMessageDeliveryResult(
             messageId: message.messageId,
             success: true,

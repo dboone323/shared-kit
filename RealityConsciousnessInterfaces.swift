@@ -129,8 +129,8 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
             interfaceId: interface.interfaceId,
             signalId: signal.id,
             delivered: delivered,
-            latencyMs: Double.random(in: 1.0 ... 12.0),
-            energyUsed: Double.random(in: 0.1 ... 2.0),
+            latencyMs: Double.random(in: 1.0...12.0),
+            energyUsed: Double.random(in: 0.1...2.0),
             validation: ValidationResult(
                 isValid: delivered,
                 warnings: delivered
@@ -161,8 +161,8 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
         guard var iface = interfaces[interface.interfaceId] else {
             throw RCIError.interfaceNotFound
         }
-        let duration = Double.random(in: 0.02 ... 0.2)
-        let phaseDrift = Double.random(in: 0.0 ... 0.03)
+        let duration = Double.random(in: 0.02...0.2)
+        let phaseDrift = Double.random(in: 0.0...0.03)
         iface.lastSync = Date()
         interfaces[interface.interfaceId] = iface
         return RCISynchronizationResult(
@@ -178,7 +178,8 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
                             message: "Phase drift elevated", severity: .warning,
                             suggestion: "Recalibrate alignment"
                         ),
-                    ] : [],
+                    ]
+                    : [],
                 errors: [],
                 recommendations: ["Schedule frequent syncs", "Reduce channel overload"]
             )
@@ -231,7 +232,7 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
             id: UUID(),
             interfaceId: id,
             kind: kinds.randomElement() ?? .recovery,
-            severity: Double.random(in: 0 ... 1),
+            severity: Double.random(in: 0...1),
             timestamp: Date()
         )
         events[id, default: []].append(event)

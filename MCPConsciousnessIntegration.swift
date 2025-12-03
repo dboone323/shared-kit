@@ -17,7 +17,8 @@ public protocol MCPConsciousnessIntegration: Sendable {
     func integrateConsciousness(_ integration: ConsciousnessIntegration) async throws -> ConsciousnessIntegrationResult
 
     /// Process consciousness-aware MCP operations
-    func processConsciousnessAwareOperation(_ operation: ConsciousnessAwareOperation) async throws -> ConsciousnessOperationResult
+    func processConsciousnessAwareOperation(_ operation: ConsciousnessAwareOperation) async throws
+        -> ConsciousnessOperationResult
 
     /// Evolve consciousness integration capabilities
     func evolveConsciousnessIntegration(_ evolution: ConsciousnessEvolution) async
@@ -494,7 +495,8 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
     // MARK: - Public Methods
 
     /// Integrate consciousness with MCP operations
-    public func integrateConsciousness(_ integration: ConsciousnessIntegration) async throws -> ConsciousnessIntegrationResult {
+    public func integrateConsciousness(_ integration: ConsciousnessIntegration) async throws
+    -> ConsciousnessIntegrationResult {
         let startTime = Date()
 
         // Validate ethical boundaries
@@ -504,7 +506,10 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
         let consciousnessResult = try await consciousnessProcessor.processIntegration(integration)
 
         // Enhance awareness
-        let awarenessResult = try await awarenessEngine.enhanceAwareness(integration, consciousnessResult: consciousnessResult)
+        let awarenessResult = try await awarenessEngine.enhanceAwareness(
+            integration,
+            consciousnessResult: consciousnessResult
+        )
 
         // Ensure ethical compliance
         let ethicalResult = try await ethicalGuardian.ensureCompliance(integration, awarenessResult: awarenessResult)
@@ -528,11 +533,15 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
     }
 
     /// Process consciousness-aware MCP operations
-    public func processConsciousnessAwareOperation(_ operation: ConsciousnessAwareOperation) async throws -> ConsciousnessOperationResult {
+    public func processConsciousnessAwareOperation(_ operation: ConsciousnessAwareOperation) async throws
+    -> ConsciousnessOperationResult {
         let startTime = Date()
 
         // Validate awareness requirements
-        try await validateAwarenessRequirements(operation.awarenessRequirements, context: operation.consciousnessContext)
+        try await validateAwarenessRequirements(
+            operation.awarenessRequirements,
+            context: operation.consciousnessContext
+        )
 
         // Process ethical overrides
         let overrideResult = try await processEthicalOverrides(operation.ethicalOverrides)
@@ -541,7 +550,10 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
         let mcpResult = try await universalFrameworks.executeUniversalOperation(operation.mcpOperation)
 
         // Enhance result with consciousness
-        let consciousnessEnhanced = try await enhanceWithConsciousness(mcpResult, context: operation.consciousnessContext)
+        let consciousnessEnhanced = try await enhanceWithConsciousness(
+            mcpResult,
+            context: operation.consciousnessContext
+        )
 
         // Generate consciousness insights
         let insights = await generateOperationInsights(operation, mcpResult: mcpResult)
@@ -581,7 +593,12 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
             awarenessLevel: awarenessStatus.level,
             ethicalCompliance: ethicalStatus.compliance,
             harmonyIndex: harmonyStatus.index,
-            integrationHealth: calculateIntegrationHealth(processorStatus, awarenessStatus, ethicalStatus, harmonyStatus),
+            integrationHealth: calculateIntegrationHealth(
+                processorStatus,
+                awarenessStatus,
+                ethicalStatus,
+                harmonyStatus
+            ),
             activeIntegrations: processorStatus.activeIntegrations
         )
     }
@@ -601,7 +618,8 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
             if boundary.priority == .critical && boundary.enforcement == .absolute {
                 // Validate critical boundaries
                 guard try await validateBoundary(boundary) else {
-                    throw ConsciousnessIntegrationError.boundaryViolation("Critical ethical boundary violated: \(boundary.boundaryType.rawValue)")
+                    throw ConsciousnessIntegrationError
+                        .boundaryViolation("Critical ethical boundary violated: \(boundary.boundaryType.rawValue)")
                 }
             }
         }
@@ -627,11 +645,17 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
         }
     }
 
-    private func validateAwarenessRequirements(_ requirements: [AwarenessRequirement], context: ConsciousnessContext) async throws {
+    private func validateAwarenessRequirements(
+        _ requirements: [AwarenessRequirement],
+        context: ConsciousnessContext
+    ) async throws {
         for requirement in requirements {
             let currentLevel = context.awarenessLevel
             guard awarenessLevelValue(currentLevel) >= awarenessLevelValue(requirement.minimumLevel) else {
-                throw ConsciousnessIntegrationError.awarenessRequirementNotMet("Awareness requirement not met: \(requirement.requirementType.rawValue)")
+                throw ConsciousnessIntegrationError
+                    .awarenessRequirementNotMet(
+                        "Awareness requirement not met: \(requirement.requirementType.rawValue)"
+                    )
             }
         }
     }
@@ -643,7 +667,8 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
             if override.approvalLevel == .universal {
                 // Require universal approval for critical overrides
                 guard try await validateUniversalApproval(override) else {
-                    throw ConsciousnessIntegrationError.overrideRejected("Universal ethical override rejected: \(override.overrideType.rawValue)")
+                    throw ConsciousnessIntegrationError
+                        .overrideRejected("Universal ethical override rejected: \(override.overrideType.rawValue)")
                 }
             }
             totalAlignment *= 0.9 // Each override reduces alignment slightly
@@ -657,12 +682,16 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
         override.justification.contains("universal benefit")
     }
 
-    private func enhanceWithConsciousness(_ mcpResult: UniversalMCPResult, context: ConsciousnessContext) async throws -> Bool {
+    private func enhanceWithConsciousness(_ mcpResult: UniversalMCPResult,
+                                          context: ConsciousnessContext) async throws -> Bool
+    {
         // Enhance MCP result with consciousness context
         context.consciousnessState != .awake
     }
 
-    private func generateConsciousnessInsights(_ integration: ConsciousnessIntegration, harmonyResult: HarmonyResult) async -> [ConsciousnessInsight] {
+    private func generateConsciousnessInsights(_ integration: ConsciousnessIntegration,
+                                               harmonyResult: HarmonyResult) async -> [ConsciousnessInsight]
+    {
         var insights: [ConsciousnessInsight] = []
 
         if harmonyResult.level > 0.8 {
@@ -688,7 +717,9 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
         return insights
     }
 
-    private func generateOperationInsights(_ operation: ConsciousnessAwareOperation, mcpResult: UniversalMCPResult) async -> [ConsciousnessInsight] {
+    private func generateOperationInsights(_ operation: ConsciousnessAwareOperation,
+                                           mcpResult: UniversalMCPResult) async -> [ConsciousnessInsight]
+    {
         var insights: [ConsciousnessInsight] = []
 
         if mcpResult.confidence > 0.9 {
@@ -746,7 +777,12 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
         return (empathyFactor + intuitionFactor) / 2.0
     }
 
-    private func calculateIntegrationHealth(_ processorStatus: ProcessorStatus, _ awarenessStatus: AwarenessStatus, _ ethicalStatus: EthicalStatus, _ harmonyStatus: HarmonyStatus) -> Double {
+    private func calculateIntegrationHealth(
+        _ processorStatus: ProcessorStatus,
+        _ awarenessStatus: AwarenessStatus,
+        _ ethicalStatus: EthicalStatus,
+        _ harmonyStatus: HarmonyStatus
+    ) -> Double {
         let statuses = [processorStatus.health, awarenessStatus.health, ethicalStatus.health, harmonyStatus.health]
         return statuses.reduce(0, +) / Double(statuses.count)
     }
@@ -773,8 +809,8 @@ private final class ConsciousnessProcessor: Sendable {
         ProcessorStatus(
             operational: true,
             level: .universal,
-            health: Double.random(in: 0.9 ... 1.0),
-            activeIntegrations: Int.random(in: 10 ... 50)
+            health: Double.random(in: 0.9...1.0),
+            activeIntegrations: Int.random(in: 10...50)
         )
     }
 
@@ -797,7 +833,9 @@ private final class ConsciousnessProcessor: Sendable {
 
 /// Awareness Engine
 private final class AwarenessEngine: Sendable {
-    func enhanceAwareness(_ integration: ConsciousnessIntegration, consciousnessResult: ConsciousnessResult) async throws -> AwarenessResult {
+    func enhanceAwareness(_ integration: ConsciousnessIntegration,
+                          consciousnessResult: ConsciousnessResult) async throws -> AwarenessResult
+    {
         AwarenessResult(
             enhancement: consciousnessResult.amplification * 1.1,
             success: true
@@ -816,14 +854,16 @@ private final class AwarenessEngine: Sendable {
         AwarenessStatus(
             operational: true,
             level: .universal,
-            health: Double.random(in: 0.9 ... 1.0)
+            health: Double.random(in: 0.9...1.0)
         )
     }
 }
 
 /// Ethical Guardian
 private final class EthicalGuardian: Sendable {
-    func ensureCompliance(_ integration: ConsciousnessIntegration, awarenessResult: AwarenessResult) async throws -> EthicalResult {
+    func ensureCompliance(_ integration: ConsciousnessIntegration,
+                          awarenessResult: AwarenessResult) async throws -> EthicalResult
+    {
         EthicalResult(
             compliance: 0.95,
             success: true
@@ -841,15 +881,17 @@ private final class EthicalGuardian: Sendable {
     func getEthicalStatus() async -> EthicalStatus {
         EthicalStatus(
             operational: true,
-            compliance: Double.random(in: 0.95 ... 1.0),
-            health: Double.random(in: 0.9 ... 1.0)
+            compliance: Double.random(in: 0.95...1.0),
+            health: Double.random(in: 0.9...1.0)
         )
     }
 }
 
 /// Harmony Coordinator
 private final class HarmonyCoordinator: Sendable {
-    func coordinateHarmony(_ integration: ConsciousnessIntegration, ethicalResult: EthicalResult) async throws -> HarmonyResult {
+    func coordinateHarmony(_ integration: ConsciousnessIntegration,
+                           ethicalResult: EthicalResult) async throws -> HarmonyResult
+    {
         HarmonyResult(
             level: ethicalResult.compliance * 0.9,
             success: true
@@ -867,8 +909,8 @@ private final class HarmonyCoordinator: Sendable {
     func getHarmonyStatus() async -> HarmonyStatus {
         HarmonyStatus(
             operational: true,
-            index: Double.random(in: 0.9 ... 1.0),
-            health: Double.random(in: 0.9 ... 1.0)
+            index: Double.random(in: 0.9...1.0),
+            health: Double.random(in: 0.9...1.0)
         )
     }
 }

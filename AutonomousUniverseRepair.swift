@@ -614,9 +614,10 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
             overallHealth: health.overallScore > 0.8
                 ? .excellent
                 : health.overallScore > 0.6
-                ? .good
-                : health.overallScore > 0.4
-                ? .fair : health.overallScore > 0.2 ? .poor : .critical,
+                    ? .good
+                    : health.overallScore > 0.4
+                        ? .fair
+                        : health.overallScore > 0.2 ? .poor : .critical,
             issues: issues.map { issue in
                 DiagnosticReport.IdentifiedIssue(
                     id: UUID(),
@@ -654,7 +655,8 @@ final class AutonomousUniverseRepairEngine: @preconcurrency AutonomousUniverseRe
             riskAssessment: stability.stabilityIndex < 0.3
                 ? .critical
                 : stability.stabilityIndex < 0.5
-                ? .high : stability.stabilityIndex < 0.7 ? .medium : .low
+                    ? .high
+                    : stability.stabilityIndex < 0.7 ? .medium : .low
         )
     }
 
@@ -813,7 +815,8 @@ final class BasicUniverseDiagnosticSystem: UniverseDiagnosticProtocol {
         return StabilityAnalysis(
             stabilityIndex: stabilityIndex,
             trend: stabilityIndex > 0.7
-                ? .improving : stabilityIndex > 0.5 ? .stable : .deteriorating,
+                ? .improving
+                : stabilityIndex > 0.5 ? .stable : .deteriorating,
             predictions: [],
             confidence: 0.85
         )
@@ -862,7 +865,7 @@ final class BasicUniverseRestorationSystem: UniverseRestorationProtocol {
         // Generate basic template based on type
         let baseParameters = QuantumUniverse.UniverseParameters(
             dimensionality: type == .interdimensional ? 4 : 3,
-            constants: ["speedOfLight": 299_792_458, "planckConstant": 6.62607015e-34],
+            constants: ["speedOfLight": 299_792_458, "planckConstant": 6.62_607_015e-34],
             quantumStates: [],
             entanglementNetworks: []
         )

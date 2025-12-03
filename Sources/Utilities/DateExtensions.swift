@@ -14,19 +14,19 @@ public extension Date {
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return formatter.string(from: self)
     }
-    
+
     /// Returns a user-friendly string (e.g., "Today", "Yesterday", "Nov 29")
     var relativeString: String {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .full
         return formatter.localizedString(for: self, relativeTo: Date())
     }
-    
+
     /// Returns the start of the day
     var startOfDay: Date {
-        return Calendar.current.startOfDay(for: self)
+        Calendar.current.startOfDay(for: self)
     }
-    
+
     /// Returns the end of the day
     var endOfDay: Date {
         var components = DateComponents()

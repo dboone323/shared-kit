@@ -11,11 +11,16 @@ public enum TestHelpers {
         return true
     }
 
-    /// Load a JSON fixture bundled with tests. Provide a bundle explicitly; defaults to main when not running in SPM tests.
+    /// Load a JSON fixture bundled with tests. Provide a bundle explicitly; defaults to main when not running in SPM
+    /// tests.
     public static func loadJSONFixture(name: String, bundle: Bundle? = nil) throws -> Data {
         let resolvedBundle = bundle ?? Bundle(for: BundleMarker.self) ?? .main
         guard let url = resolvedBundle.url(forResource: name, withExtension: "json") else {
-            throw NSError(domain: "SharedTestSupport", code: 404, userInfo: [NSLocalizedDescriptionKey: "Missing fixture: \(name).json"])
+            throw NSError(
+                domain: "SharedTestSupport",
+                code: 404,
+                userInfo: [NSLocalizedDescriptionKey: "Missing fixture: \(name).json"]
+            )
         }
         return try Data(contentsOf: url)
     }

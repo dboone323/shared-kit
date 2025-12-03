@@ -86,8 +86,12 @@ public struct AdvancedAnimations {
             content
                 .opacity(self.isVisible ? 1 : 0)
                 .offset(
-                    x: self.isVisible ? 0 : (self.direction == .left ? -self.distance : self.direction == .right ? self.distance : 0),
-                    y: self.isVisible ? 0 : (self.direction == .up ? -self.distance : self.direction == .down ? self.distance : 0)
+                    x: self.isVisible
+                        ? 0
+                        : (self.direction == .left ? -self.distance : self.direction == .right ? self.distance : 0),
+                    y: self.isVisible
+                        ? 0
+                        : (self.direction == .up ? -self.distance : self.direction == .down ? self.distance : 0)
                 )
                 .animation(smoothEaseInOut, value: self.isVisible)
         }
@@ -121,7 +125,10 @@ public struct AdvancedAnimations {
         public func body(content: Content) -> some View {
             content
                 .scaleEffect(self.isAnimating ? self.maxScale : self.minScale)
-                .animation(Animation.easeInOut(duration: self.duration).repeatForever(autoreverses: true), value: self.isAnimating)
+                .animation(
+                    Animation.easeInOut(duration: self.duration).repeatForever(autoreverses: true),
+                    value: self.isAnimating
+                )
                 .onAppear {
                     self.isAnimating = true
                 }
@@ -231,17 +238,17 @@ public struct AdvancedAnimations {
         }
 
         private func generateParticles() {
-            self.particles = (0 ..< self.particleCount).map { _ in
+            self.particles = (0..<self.particleCount).map { _ in
                 Particle(
                     id: UUID(),
                     position: CGPoint(x: 200, y: 200),
                     velocity: CGPoint(
-                        x: Double.random(in: -50 ... 50),
-                        y: Double.random(in: -50 ... 50)
+                        x: Double.random(in: -50...50),
+                        y: Double.random(in: -50...50)
                     ),
-                    size: Double.random(in: 4 ... 12),
+                    size: Double.random(in: 4...12),
                     color: self.colors.randomElement() ?? .blue,
-                    opacity: Double.random(in: 0.5 ... 1.0)
+                    opacity: Double.random(in: 0.5...1.0)
                 )
             }
         }
@@ -263,12 +270,12 @@ public struct AdvancedAnimations {
                         id: UUID(),
                         position: CGPoint(x: 200, y: 200),
                         velocity: CGPoint(
-                            x: Double.random(in: -50 ... 50),
-                            y: Double.random(in: -50 ... 50)
+                            x: Double.random(in: -50...50),
+                            y: Double.random(in: -50...50)
                         ),
-                        size: Double.random(in: 4 ... 12),
+                        size: Double.random(in: 4...12),
                         color: self.colors.randomElement() ?? .blue,
-                        opacity: Double.random(in: 0.5 ... 1.0)
+                        opacity: Double.random(in: 0.5...1.0)
                     )
                 }
             }

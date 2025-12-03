@@ -140,19 +140,20 @@ class SecurityAuditingSuite: XCTestCase {
                 self.logger.info("✅ Biometric authentication available: \(biometricType.rawValue)")
 
                 // Test biometric authentication simulation
-                self.authenticationService.authenticateWithBiometrics(reason: "Security test authentication") { authResult in
-                    switch authResult {
-                    case let .success(authenticated):
-                        XCTAssertTrue(authenticated, "Biometric authentication failed")
-                        self.logger.info("✅ Biometric authentication successful")
+                self.authenticationService
+                    .authenticateWithBiometrics(reason: "Security test authentication") { authResult in
+                        switch authResult {
+                        case let .success(authenticated):
+                            XCTAssertTrue(authenticated, "Biometric authentication failed")
+                            self.logger.info("✅ Biometric authentication successful")
 
-                    case let .failure(error):
-                        // In test environment, biometric might not be available
-                        self.logger.info("ℹ️ Biometric authentication failed (expected in test): \(error)")
+                        case let .failure(error):
+                            // In test environment, biometric might not be available
+                            self.logger.info("ℹ️ Biometric authentication failed (expected in test): \(error)")
+                        }
+
+                        expectation.fulfill()
                     }
-
-                    expectation.fulfill()
-                }
 
             case let .failure(error):
                 // Biometric might not be available in test environment
@@ -455,7 +456,9 @@ class SecurityAuditingSuite: XCTestCase {
 
         return SecurityTestResult(
             isSecure: isSecure,
-            description: isSecure ? "Transport layer security properly configured" : "Insufficient transport layer protection"
+            description: isSecure
+                ? "Transport layer security properly configured"
+                : "Insufficient transport layer protection"
         )
     }
 

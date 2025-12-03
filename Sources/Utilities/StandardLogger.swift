@@ -18,11 +18,17 @@ public enum LogLevel: String {
 public struct StandardLogger {
     public static let shared = StandardLogger()
     private let logger = Logger(subsystem: "com.tools-automation", category: "General")
-    
-    public func log(_ message: String, level: LogLevel = .info, file: String = #file, function: String = #function, line: Int = #line) {
+
+    public func log(
+        _ message: String,
+        level: LogLevel = .info,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
         let fileName = (file as NSString).lastPathComponent
         let logMessage = "\(level.rawValue) [\(fileName):\(line)] \(function) -> \(message)"
-        
+
         switch level {
         case .debug:
             logger.debug("\(logMessage)")
@@ -33,9 +39,9 @@ public struct StandardLogger {
         case .error:
             logger.error("\(logMessage)")
         }
-        
+
         #if DEBUG
-        print(logMessage)
+            print(logMessage)
         #endif
     }
 }

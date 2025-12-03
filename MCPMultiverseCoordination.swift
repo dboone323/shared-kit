@@ -429,7 +429,8 @@ public final class MCPMultiverseCoordinationCoordinator: MCPMultiverseCoordinati
     // MARK: - Public Methods
 
     /// Coordinate multiverse operations
-    public func coordinateMultiverse(_ coordination: MultiverseCoordination) async throws -> MultiverseCoordinationResult {
+    public func coordinateMultiverse(_ coordination: MultiverseCoordination) async throws
+    -> MultiverseCoordinationResult {
         let startTime = Date()
 
         // Validate coordination parameters
@@ -439,10 +440,16 @@ public final class MCPMultiverseCoordinationCoordinator: MCPMultiverseCoordinati
         let universeAccess = try await universeManager.accessUniverses(coordination.targetUniverses)
 
         // Execute coordination
-        let coordinationResult = try await synchronizationEngine.executeCoordination(coordination, universeAccess: universeAccess)
+        let coordinationResult = try await synchronizationEngine.executeCoordination(
+            coordination,
+            universeAccess: universeAccess
+        )
 
         // Process entanglement
-        let entanglementResult = await entanglementCoordinator.processEntanglement(coordination, result: coordinationResult)
+        let entanglementResult = await entanglementCoordinator.processEntanglement(
+            coordination,
+            result: coordinationResult
+        )
 
         // Preserve causality
         let causalityResult = await causalityGuardian.preserveCausality(coordination, result: coordinationResult)
@@ -463,7 +470,8 @@ public final class MCPMultiverseCoordinationCoordinator: MCPMultiverseCoordinati
     }
 
     /// Synchronize universe states
-    public func synchronizeUniverses(_ synchronization: UniverseSynchronization) async throws -> UniverseSynchronizationResult {
+    public func synchronizeUniverses(_ synchronization: UniverseSynchronization) async throws
+    -> UniverseSynchronizationResult {
         let startTime = Date()
 
         // Validate synchronization parameters
@@ -474,13 +482,23 @@ public final class MCPMultiverseCoordinationCoordinator: MCPMultiverseCoordinati
         let targetAccess = try await universeManager.accessUniverses(synchronization.targetUniverses)
 
         // Execute synchronization
-        let synchronizationResult = try await synchronizationEngine.executeSynchronization(synchronization, sourceAccess: sourceAccess, targetAccess: targetAccess)
+        let synchronizationResult = try await synchronizationEngine.executeSynchronization(
+            synchronization,
+            sourceAccess: sourceAccess,
+            targetAccess: targetAccess
+        )
 
         // Transfer entanglement
-        let entanglementResult = await entanglementCoordinator.transferEntanglement(synchronization, result: synchronizationResult)
+        let entanglementResult = await entanglementCoordinator.transferEntanglement(
+            synchronization,
+            result: synchronizationResult
+        )
 
         // Preserve causality
-        let causalityResult = await causalityGuardian.preserveSynchronizationCausality(synchronization, result: synchronizationResult)
+        let causalityResult = await causalityGuardian.preserveSynchronizationCausality(
+            synchronization,
+            result: synchronizationResult
+        )
 
         // Generate synchronization insights
         let insights = await generateSynchronizationInsights(synchronization, result: synchronizationResult)
@@ -540,7 +558,8 @@ public final class MCPMultiverseCoordinationCoordinator: MCPMultiverseCoordinati
         }
 
         if coordination.synchronizationLevel == .perfect && coordination.entanglementScope == .multiversal {
-            throw MultiverseCoordinationError.complexityTooHigh("Perfect synchronization with multiversal entanglement is too complex")
+            throw MultiverseCoordinationError
+                .complexityTooHigh("Perfect synchronization with multiversal entanglement is too complex")
         }
     }
 
@@ -550,11 +569,15 @@ public final class MCPMultiverseCoordinationCoordinator: MCPMultiverseCoordinati
         }
 
         if synchronization.causalityPreservation == .absolute && synchronization.entanglementTransfer == .enhanced {
-            throw MultiverseCoordinationError.constraintConflict("Absolute causality preservation conflicts with enhanced entanglement transfer")
+            throw MultiverseCoordinationError
+                .constraintConflict("Absolute causality preservation conflicts with enhanced entanglement transfer")
         }
     }
 
-    private func generateMultiverseInsights(_ coordination: MultiverseCoordination, coordinationResult: CoordinationResult) async -> [MultiverseInsight] {
+    private func generateMultiverseInsights(
+        _ coordination: MultiverseCoordination,
+        coordinationResult: CoordinationResult
+    ) async -> [MultiverseInsight] {
         var insights: [MultiverseInsight] = []
 
         if coordinationResult.synchronizationLevel > 0.9 {
@@ -580,7 +603,10 @@ public final class MCPMultiverseCoordinationCoordinator: MCPMultiverseCoordinati
         return insights
     }
 
-    private func generateSynchronizationInsights(_ synchronization: UniverseSynchronization, result: SynchronizationResult) async -> [MultiverseInsight] {
+    private func generateSynchronizationInsights(
+        _ synchronization: UniverseSynchronization,
+        result: SynchronizationResult
+    ) async -> [MultiverseInsight] {
         var insights: [MultiverseInsight] = []
 
         if result.quality > 0.95 {
@@ -620,24 +646,30 @@ private final class UniverseManager: Sendable {
     func getUniverseStatus() async -> UniverseStatus {
         UniverseStatus(
             operational: true,
-            accessibleUniverses: Int.random(in: 100 ... 10000)
+            accessibleUniverses: Int.random(in: 100...10000)
         )
     }
 }
 
 /// Synchronization Engine
 private final class SynchronizationEngine: Sendable {
-    func executeCoordination(_ coordination: MultiverseCoordination, universeAccess: UniverseAccess) async throws -> CoordinationResult {
+    func executeCoordination(_ coordination: MultiverseCoordination,
+                             universeAccess: UniverseAccess) async throws -> CoordinationResult
+    {
         CoordinationResult(
-            success: Double.random(in: 0.8 ... 1.0) > 0.2,
-            synchronizationLevel: Double.random(in: 0.7 ... 1.0)
+            success: Double.random(in: 0.8...1.0) > 0.2,
+            synchronizationLevel: Double.random(in: 0.7...1.0)
         )
     }
 
-    func executeSynchronization(_ synchronization: UniverseSynchronization, sourceAccess: UniverseAccess, targetAccess: UniverseAccess) async throws -> SynchronizationResult {
+    func executeSynchronization(
+        _ synchronization: UniverseSynchronization,
+        sourceAccess: UniverseAccess,
+        targetAccess: UniverseAccess
+    ) async throws -> SynchronizationResult {
         SynchronizationResult(
-            success: Double.random(in: 0.85 ... 1.0) > 0.15,
-            quality: Double.random(in: 0.8 ... 1.0)
+            success: Double.random(in: 0.85...1.0) > 0.15,
+            quality: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -652,26 +684,30 @@ private final class SynchronizationEngine: Sendable {
     func getSynchronizationStatus() async -> SynchronizationStatus {
         SynchronizationStatus(
             operational: true,
-            level: Double.random(in: 0.9 ... 1.0),
-            activeCoordinations: Int.random(in: 1 ... 50),
-            successRate: Double.random(in: 0.9 ... 0.98)
+            level: Double.random(in: 0.9...1.0),
+            activeCoordinations: Int.random(in: 1...50),
+            successRate: Double.random(in: 0.9...0.98)
         )
     }
 }
 
 /// Entanglement Coordinator
 private final class EntanglementCoordinator: Sendable {
-    func processEntanglement(_ coordination: MultiverseCoordination, result: CoordinationResult) async -> EntanglementResult {
+    func processEntanglement(_ coordination: MultiverseCoordination,
+                             result: CoordinationResult) async -> EntanglementResult
+    {
         EntanglementResult(
             success: true,
-            entanglementStrength: Double.random(in: 0.8 ... 1.0)
+            entanglementStrength: Double.random(in: 0.8...1.0)
         )
     }
 
-    func transferEntanglement(_ synchronization: UniverseSynchronization, result: SynchronizationResult) async -> EntanglementResult {
+    func transferEntanglement(_ synchronization: UniverseSynchronization,
+                              result: SynchronizationResult) async -> EntanglementResult
+    {
         EntanglementResult(
             success: true,
-            transferred: Double.random(in: 0.7 ... 1.0)
+            transferred: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -686,24 +722,28 @@ private final class EntanglementCoordinator: Sendable {
     func getEntanglementStatus() async -> EntanglementStatus {
         EntanglementStatus(
             operational: true,
-            strength: Double.random(in: 0.9 ... 1.0)
+            strength: Double.random(in: 0.9...1.0)
         )
     }
 }
 
 /// Causality Guardian
 private final class CausalityGuardian: Sendable {
-    func preserveCausality(_ coordination: MultiverseCoordination, result: CoordinationResult) async -> CausalityResult {
+    func preserveCausality(_ coordination: MultiverseCoordination,
+                           result: CoordinationResult) async -> CausalityResult
+    {
         CausalityResult(
             success: true,
-            causalityIntegrity: Double.random(in: 0.85 ... 1.0)
+            causalityIntegrity: Double.random(in: 0.85...1.0)
         )
     }
 
-    func preserveSynchronizationCausality(_ synchronization: UniverseSynchronization, result: SynchronizationResult) async -> CausalityResult {
+    func preserveSynchronizationCausality(_ synchronization: UniverseSynchronization,
+                                          result: SynchronizationResult) async -> CausalityResult
+    {
         CausalityResult(
             success: true,
-            integrity: Double.random(in: 0.9 ... 1.0)
+            integrity: Double.random(in: 0.9...1.0)
         )
     }
 
@@ -718,7 +758,7 @@ private final class CausalityGuardian: Sendable {
     func getCausalityStatus() async -> CausalityStatus {
         CausalityStatus(
             operational: true,
-            integrity: Double.random(in: 0.95 ... 1.0)
+            integrity: Double.random(in: 0.95...1.0)
         )
     }
 }
@@ -736,7 +776,7 @@ private final class MultiverseOptimizer: Sendable {
     func getOptimizerStatus() async -> OptimizerStatus {
         OptimizerStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8 ... 1.0)
+            efficiency: Double.random(in: 0.8...1.0)
         )
     }
 }

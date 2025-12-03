@@ -22,7 +22,8 @@ public protocol OllamaModelManager {
 /// Protocol for Ollama inference operations
 public protocol OllamaInferenceEngine {
     func generateText(prompt: String, model: String, options: InferenceOptions?) async throws -> OllamaResponse
-    func generateStreaming(prompt: String, model: String, options: InferenceOptions?) -> AsyncThrowingStream<OllamaResponse, Error>
+    func generateStreaming(prompt: String, model: String, options: InferenceOptions?)
+        -> AsyncThrowingStream<OllamaResponse, Error>
     func embedText(_ text: String, model: String) async throws -> [Double]
     func createModel(name: String, modelfile: String) async throws
 }
@@ -44,7 +45,9 @@ public struct OllamaModel: Codable, Sendable {
     public let details: OllamaModelDetails?
     public let modifiedAt: Date?
 
-    public init(name: String, size: Int64, digest: String, details: OllamaModelDetails? = nil, modifiedAt: Date? = nil) {
+    public init(name: String, size: Int64, digest: String, details: OllamaModelDetails? = nil,
+                modifiedAt: Date? = nil)
+    {
         self.name = name
         self.size = size
         self.digest = digest
@@ -61,7 +64,13 @@ public struct OllamaModelDetails: Codable, Sendable {
     public let parameterSize: String
     public let quantizationLevel: String
 
-    public init(format: String, family: String, families: [String]? = nil, parameterSize: String, quantizationLevel: String) {
+    public init(
+        format: String,
+        family: String,
+        families: [String]? = nil,
+        parameterSize: String,
+        quantizationLevel: String
+    ) {
         self.format = format
         self.family = family
         self.families = families
@@ -78,7 +87,13 @@ public struct OllamaModelInfo: Codable, Sendable {
     public let template: String?
     public let details: OllamaModelDetails?
 
-    public init(license: String? = nil, modelfile: String? = nil, parameters: String? = nil, template: String? = nil, details: OllamaModelDetails? = nil) {
+    public init(
+        license: String? = nil,
+        modelfile: String? = nil,
+        parameters: String? = nil,
+        template: String? = nil,
+        details: OllamaModelDetails? = nil
+    ) {
         self.license = license
         self.modelfile = modelfile
         self.parameters = parameters
@@ -287,7 +302,7 @@ public final class OllamaHTTPClient {
         let (data, response) = try await session.data(for: urlRequest)
 
         guard let httpResponse = response as? HTTPURLResponse,
-              (200 ... 299).contains(httpResponse.statusCode)
+              (200...299).contains(httpResponse.statusCode)
         else {
             throw OllamaError.invalidResponse
         }
@@ -311,7 +326,7 @@ public final class OllamaHTTPClient {
                     let (bytes, response) = try await session.bytes(for: urlRequest)
 
                     guard let httpResponse = response as? HTTPURLResponse,
-                          (200 ... 299).contains(httpResponse.statusCode)
+                          (200...299).contains(httpResponse.statusCode)
                     else {
                         throw OllamaError.invalidResponse
                     }
@@ -421,7 +436,9 @@ public final class OllamaInference: OllamaInferenceEngine {
         self.client = client
     }
 
-    public func generateText(prompt: String, model: String, options: InferenceOptions? = nil) async throws -> OllamaResponse {
+    public func generateText(prompt: String, model: String,
+                             options: InferenceOptions? = nil) async throws -> OllamaResponse
+    {
         let requestBody: [String: Any] = [
             "model": model,
             "prompt": prompt,
@@ -433,7 +450,9 @@ public final class OllamaInference: OllamaInferenceEngine {
         return try await client.sendRequest(request)
     }
 
-    public func generateStreaming(prompt: String, model: String, options: InferenceOptions? = nil) -> AsyncThrowingStream<OllamaResponse, Error> {
+    public func generateStreaming(prompt: String, model: String,
+                                  options: InferenceOptions? = nil) -> AsyncThrowingStream<OllamaResponse, Error>
+    {
         let requestBody: [String: Any] = [
             "model": model,
             "prompt": prompt,

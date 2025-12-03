@@ -213,7 +213,8 @@ public struct SwipeGestureArea<Content: View>: View {
                     if direction != self.swipeDirection {
                         self.swipeDirection = direction
                         withAnimation(AnimationTiming.quick) {
-                            self.showDirectionHint = abs(value.translation.x) > self.threshold / 2 || abs(value.translation.y) > self
+                            self.showDirectionHint = abs(value.translation.x) > self
+                                .threshold / 2 || abs(value.translation.y) > self
                                 .threshold / 2
                         }
                     }
@@ -297,7 +298,11 @@ public struct PinchToZoomModifier: ViewModifier {
     let maxScale: CGFloat
     let onScaleChange: (CGFloat) -> Void
 
-    public init(minScale: CGFloat = 0.5, maxScale: CGFloat = 3.0, onScaleChange: @escaping (CGFloat) -> Void = { _ in }) {
+    public init(
+        minScale: CGFloat = 0.5,
+        maxScale: CGFloat = 3.0,
+        onScaleChange: @escaping (CGFloat) -> Void = { _ in }
+    ) {
         self.minScale = minScale
         self.maxScale = maxScale
         self.onScaleChange = onScaleChange

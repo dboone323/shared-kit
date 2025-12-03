@@ -724,7 +724,8 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
     {
         let riskLevel: RiskLevel =
             instability > 0.8
-                ? .critical : instability > 0.6 ? .high : instability > 0.4 ? .medium : .low
+                ? .critical
+                : instability > 0.6 ? .high : instability > 0.4 ? .medium : .low
 
         return RiskAssessment(
             riskLevel: riskLevel,
@@ -844,11 +845,10 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
         var matrix = Array(repeating: Array(repeating: 0.0, count: nodeCount), count: nodeCount)
 
         for connection in connections {
-            if let sourceIndex = networkNodes.firstIndex(where: { $0.id == connection.targetNodeId }
-            ),
-                let targetIndex = networkNodes.firstIndex(where: {
-                    $0.id == connection.targetNodeId
-                })
+            if let sourceIndex = networkNodes.firstIndex(where: { $0.id == connection.targetNodeId }),
+               let targetIndex = networkNodes.firstIndex(where: {
+                   $0.id == connection.targetNodeId
+               })
             {
                 matrix[sourceIndex][targetIndex] = connection.strength
                 matrix[targetIndex][sourceIndex] = connection.strength // Symmetric

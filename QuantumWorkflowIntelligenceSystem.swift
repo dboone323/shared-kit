@@ -283,10 +283,16 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
         let intelligenceProcessing = try await processQuantumIntelligence(session.request, quantumState: quantumState)
 
         // Phase 3: Quantum Coherence Management
-        let coherenceManagement = try await manageQuantumCoherence(session.request, intelligenceProcessing: intelligenceProcessing)
+        let coherenceManagement = try await manageQuantumCoherence(
+            session.request,
+            intelligenceProcessing: intelligenceProcessing
+        )
 
         // Phase 4: Quantum State Optimization
-        let stateOptimization = try await optimizeQuantumState(session.request, coherenceManagement: coherenceManagement)
+        let stateOptimization = try await optimizeQuantumState(
+            session.request,
+            coherenceManagement: coherenceManagement
+        )
 
         // Phase 5: Quantum Intelligence Synthesis
         let intelligenceSynthesis = try await synthesizeQuantumIntelligence(
@@ -490,7 +496,8 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
 
     // MARK: - Helper Methods
 
-    private func analyzeWorkflowForQuantumEnhancement(_ workflow: MCPWorkflow) async throws -> QuantumEnhancementAnalysis {
+    private func analyzeWorkflowForQuantumEnhancement(_ workflow: MCPWorkflow) async throws
+    -> QuantumEnhancementAnalysis {
         // Analyze workflow for quantum enhancement opportunities
         let quantumEnhancements = await quantumIntelligenceEngine.analyzeQuantumEnhancementPotential(workflow)
         let intelligenceImprovements = await quantumWorkflowProcessor.analyzeIntelligenceImprovementPotential(workflow)
@@ -517,7 +524,8 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
         )
     }
 
-    private func generateQuantumEnhancementStrategies(_ analysis: QuantumEnhancementAnalysis) -> [QuantumEnhancementStrategy] {
+    private func generateQuantumEnhancementStrategies(_ analysis: QuantumEnhancementAnalysis)
+    -> [QuantumEnhancementStrategy] {
         // Generate quantum enhancement strategies based on analysis
         var strategies: [QuantumEnhancementStrategy] = []
 
@@ -1010,7 +1018,8 @@ private final class QuantumIntelligenceEngine: Sendable {
         // Initialize quantum intelligence engine
     }
 
-    func processIntelligence(_ context: QuantumIntelligenceProcessingContext) async throws -> QuantumIntelligenceProcessingResult {
+    func processIntelligence(_ context: QuantumIntelligenceProcessingContext) async throws
+    -> QuantumIntelligenceProcessingResult {
         // Process quantum intelligence
         QuantumIntelligenceProcessingResult(
             intelligenceEnhancement: 0.85,
@@ -1156,7 +1165,8 @@ private final class QuantumCoherenceManager: Sendable {
         // Initialize quantum coherence manager
     }
 
-    func manageCoherence(_ context: QuantumCoherenceManagementContext) async throws -> QuantumCoherenceManagementResult {
+    func manageCoherence(_ context: QuantumCoherenceManagementContext) async throws
+    -> QuantumCoherenceManagementResult {
         // Manage quantum coherence
         QuantumCoherenceManagementResult(
             coherenceLevel: 0.87,
@@ -1207,7 +1217,8 @@ private final class QuantumIntelligenceSynthesizer: Sendable {
         // Initialize quantum intelligence synthesizer
     }
 
-    func synthesizeIntelligence(_ context: QuantumIntelligenceSynthesisContext) async throws -> QuantumIntelligenceSynthesisResult {
+    func synthesizeIntelligence(_ context: QuantumIntelligenceSynthesisContext) async throws
+    -> QuantumIntelligenceSynthesisResult {
         // Synthesize quantum intelligence
         QuantumIntelligenceSynthesisResult(
             quantumEnhancedWorkflow: context.workflow, // Would be enhanced

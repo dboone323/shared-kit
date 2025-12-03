@@ -17,22 +17,22 @@ public class MotorCortex {
 
     public init() {
         // Initialize motor cortex areas
-        for _ in 0 ..< 500 {
+        for _ in 0..<500 {
             primaryMotorCortex.append(MotorNeuron())
         }
 
-        for _ in 0 ..< 300 {
+        for _ in 0..<300 {
             premotorCortex.append(MotorNeuron())
         }
 
-        for _ in 0 ..< 200 {
+        for _ in 0..<200 {
             supplementaryMotorArea.append(MotorNeuron())
         }
 
         // Create motor homunculus (sensory/motor body map)
         let bodyParts = ["hand", "arm", "face", "leg", "torso", "head"]
         for part in bodyParts {
-            motorHomunculus[part] = (0 ..< 50).map { _ in MotorNeuron() }
+            motorHomunculus[part] = (0..<50).map { _ in MotorNeuron() }
         }
     }
 
@@ -176,9 +176,9 @@ public class MotorNeuron: NeuromorphicNeuron {
     public func executeMotorCommand(_ command: MotorCommand) -> (SIMD3<Double>, SIMD3<Double>) {
         // Apply command with some noise and variability
         let noise = SIMD3<Double>(
-            Double.random(in: -0.1 ... 0.1),
-            Double.random(in: -0.1 ... 0.1),
-            Double.random(in: -0.1 ... 0.1)
+            Double.random(in: -0.1...0.1),
+            Double.random(in: -0.1...0.1),
+            Double.random(in: -0.1...0.1)
         )
 
         let actualForce = command.force + noise
@@ -208,7 +208,11 @@ public struct VisualData {
     public var velocity: SIMD3<Double>
     public var objects: [VisualObject]
 
-    public init(position: SIMD3<Double> = SIMD3(0, 0, 0), velocity: SIMD3<Double> = SIMD3(0, 0, 0), objects: [VisualObject] = []) {
+    public init(
+        position: SIMD3<Double> = SIMD3(0, 0, 0),
+        velocity: SIMD3<Double> = SIMD3(0, 0, 0),
+        objects: [VisualObject] = []
+    ) {
         self.position = position
         self.velocity = velocity
         self.objects = objects
@@ -478,7 +482,9 @@ public class BehaviorSystem {
     }
 
     /// Generate motor goals from active behaviors
-    public func generateMotorGoals(_ behaviorState: BehaviorState, _ sensoryData: IntegratedSensoryData) -> [MotorGoal] {
+    public func generateMotorGoals(_ behaviorState: BehaviorState,
+                                   _ sensoryData: IntegratedSensoryData) -> [MotorGoal]
+    {
         var goals: [MotorGoal] = []
 
         // Sort behaviors by priority (highest first)
@@ -587,8 +593,8 @@ public class ExplorationBehavior: Behavior {
 
     override public func generateGoal(_ sensoryData: IntegratedSensoryData) -> MotorGoal? {
         // Random exploration movement
-        let randomX = Double.random(in: -2.0 ... 2.0)
-        let randomY = Double.random(in: -2.0 ... 2.0)
+        let randomX = Double.random(in: -2.0...2.0)
+        let randomY = Double.random(in: -2.0...2.0)
 
         return MotorGoal(
             targetPosition: SIMD3(randomX, randomY, 0.0),
@@ -642,7 +648,7 @@ public struct RobotState {
     public var lastUpdateTime: TimeInterval = 0.0
 
     public init() {
-        jointStates = (0 ..< 10).map { _ in JointState() }
+        jointStates = (0..<10).map { _ in JointState() }
     }
 
     public mutating func update(with actions: [MotorCommand], at time: TimeInterval) {
@@ -665,7 +671,8 @@ public struct RobotState {
         orientation += totalTorque * dt * 0.05 // Moment of inertia
 
         // Update energy (simplified) - much smaller energy consumption
-        let forceMagnitude = sqrt(totalForce.x * totalForce.x + totalForce.y * totalForce.y + totalForce.z * totalForce.z)
+        let forceMagnitude = sqrt(totalForce.x * totalForce.x + totalForce.y * totalForce.y + totalForce.z * totalForce
+            .z)
         let energyUsed = forceMagnitude * dt * 0.001 // Much smaller energy drain
         energyLevel = max(0.0, energyLevel - energyUsed)
 

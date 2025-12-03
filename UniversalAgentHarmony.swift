@@ -238,7 +238,8 @@ public final class HarmonyAchievementEngine: Sendable {
         let balanceResult = await achieveBalanceHarmonization(for: agent)
         let resonanceResult = await generateResonanceField(for: agent)
 
-        let combinedCapabilities = synchronizationResult.capabilities + balanceResult.capabilities + resonanceResult.capabilities
+        let combinedCapabilities = synchronizationResult.capabilities + balanceResult.capabilities + resonanceResult
+            .capabilities
         let combinedFactors = synchronizationResult.factors + balanceResult.factors + resonanceResult.factors
 
         let finalLevel = determineSynchronizationLevel(from: agent.harmonyMetrics)
@@ -370,7 +371,8 @@ public final class SynchronizationOptimizationSystem: Sendable {
     /// Optimize synchronization for harmony
     /// - Parameter synchronization: Synchronization to optimize
     /// - Returns: Optimization result
-    public func optimizeSynchronization(_ synchronization: OptimizableSynchronization) async -> SynchronizationOptimizationResult {
+    public func optimizeSynchronization(_ synchronization: OptimizableSynchronization) async
+    -> SynchronizationOptimizationResult {
         let optimizationStrategy = designOptimizationStrategy(for: synchronization)
         let optimizationResults = await executeOptimization(synchronization, strategy: optimizationStrategy)
         let synchronizationOptimizer = generateSynchronizationOptimizer(optimizationResults)
@@ -385,7 +387,8 @@ public final class SynchronizationOptimizationSystem: Sendable {
     }
 
     /// Design optimization strategy
-    private func designOptimizationStrategy(for synchronization: OptimizableSynchronization) -> SynchronizationOptimizationStrategy {
+    private func designOptimizationStrategy(for synchronization: OptimizableSynchronization)
+    -> SynchronizationOptimizationStrategy {
         var optimizationSteps: [SynchronizationOptimizationStep] = []
 
         if synchronization.synchronizationMetrics.synchronizationIndex < 200 {
@@ -437,7 +440,7 @@ public final class SynchronizationOptimizationSystem: Sendable {
     ) async -> SynchronizationOptimizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.intensity * 1_000_000_000))
 
-        let actualGain = step.intensity * (0.9 + Double.random(in: 0 ... 0.2))
+        let actualGain = step.intensity * (0.9 + Double.random(in: 0...0.2))
         let success = actualGain >= step.intensity * 0.95
 
         return SynchronizationOptimizationResultItem(
@@ -451,7 +454,8 @@ public final class SynchronizationOptimizationSystem: Sendable {
     }
 
     /// Generate synchronization optimizer
-    private func generateSynchronizationOptimizer(_ results: [SynchronizationOptimizationResultItem]) -> SynchronizationOptimizer {
+    private func generateSynchronizationOptimizer(_ results: [SynchronizationOptimizationResultItem])
+    -> SynchronizationOptimizer {
         let successRate = Double(results.filter(\.success).count) / Double(results.count)
         let totalGain = results.map(\.actualSynchronizationGain).reduce(0, +)
         let optimizerValue = 1.0 + (totalGain * successRate / 10.0)
@@ -505,7 +509,8 @@ public final class BalanceHarmonizationInterface: Sendable {
     }
 
     /// Design harmonization strategy
-    private func designHarmonizationStrategy(_ assessment: BalanceHarmonizationAssessment) -> BalanceHarmonizationStrategy {
+    private func designHarmonizationStrategy(_ assessment: BalanceHarmonizationAssessment)
+    -> BalanceHarmonizationStrategy {
         var harmonizationSteps: [BalanceHarmonizationStep] = []
 
         if assessment.balanceCoefficient < 0.95 {
@@ -557,7 +562,7 @@ public final class BalanceHarmonizationInterface: Sendable {
     ) async -> BalanceHarmonizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.depth * 1_500_000_000))
 
-        let actualGain = step.depth * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.depth * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.depth * 0.90
 
         return BalanceHarmonizationResultItem(
@@ -677,7 +682,7 @@ public final class ResonanceFieldGenerator: Sendable {
     ) async -> ResonanceFieldResult {
         try? await Task.sleep(nanoseconds: UInt64(step.power * 2_000_000_000))
 
-        let actualPower = step.power * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualPower = step.power * (0.8 + Double.random(in: 0...0.4))
         let success = actualPower >= step.power * 0.85
 
         return ResonanceFieldResult(

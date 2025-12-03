@@ -31,7 +31,7 @@ public class QuantumNeuralInterface {
     private func setupBasicNetwork() {
         // Add basic input and output neurons if not present
         if neuralNetwork.inputLayer.isEmpty {
-            for _ in 0 ..< 5 {
+            for _ in 0..<5 {
                 let inputNeuron = NeuromorphicNeuron()
                 neuralNetwork.inputLayer.append(inputNeuron)
                 neuralNetwork.addNeuron(inputNeuron)
@@ -39,7 +39,7 @@ public class QuantumNeuralInterface {
         }
 
         if neuralNetwork.outputLayer.isEmpty {
-            for _ in 0 ..< 3 {
+            for _ in 0..<3 {
                 let outputNeuron = NeuromorphicNeuron()
                 neuralNetwork.outputLayer.append(outputNeuron)
                 neuralNetwork.addNeuron(outputNeuron)
@@ -49,7 +49,7 @@ public class QuantumNeuralInterface {
         // Create basic connections
         for inputNeuron in neuralNetwork.inputLayer {
             for outputNeuron in neuralNetwork.outputLayer {
-                neuralNetwork.connect(from: inputNeuron, to: outputNeuron, weight: Double.random(in: 0.1 ... 0.5))
+                neuralNetwork.connect(from: inputNeuron, to: outputNeuron, weight: Double.random(in: 0.1...0.5))
             }
         }
     }
@@ -344,7 +344,12 @@ public class QuantumNeuron: NeuromorphicNeuron {
         let hamiltonian = [[0.0, spike.weight], [spike.weight, 0.0]] // Simple coupling
 
         // Apply quantum time evolution (simplified)
-        let evolvedState = quantumProcessor.processQuantum([hamiltonian[0][0], hamiltonian[0][1], hamiltonian[1][0], hamiltonian[1][1]])
+        let evolvedState = quantumProcessor.processQuantum([
+            hamiltonian[0][0],
+            hamiltonian[0][1],
+            hamiltonian[1][0],
+            hamiltonian[1][1],
+        ])
 
         quantumStates[0] = evolvedState[0]
         quantumStates[1] = evolvedState[1]
@@ -403,8 +408,8 @@ public class QuantumKMeans {
         self.quantumProcessor = quantumProcessor
 
         // Initialize centroids randomly
-        centroids = (0 ..< numClusters).map { _ in
-            (0 ..< dataDimension).map { _ in Double.random(in: -1.0 ... 1.0) }
+        centroids = (0..<numClusters).map { _ in
+            (0..<dataDimension).map { _ in Double.random(in: -1.0...1.0) }
         }
     }
 
@@ -413,7 +418,7 @@ public class QuantumKMeans {
         var assignments = [Int](repeating: 0, count: data.count)
         var inertia = 0.0
 
-        for iteration in 0 ..< maxIterations {
+        for iteration in 0..<maxIterations {
             var newCentroids = centroids.map { [Double](repeating: 0.0, count: $0.count) }
             var counts = [Int](repeating: 0, count: centroids.count)
 
@@ -424,15 +429,15 @@ public class QuantumKMeans {
                 counts[assignment] += 1
 
                 // Accumulate sum for centroid update
-                for j in 0 ..< point.count {
+                for j in 0..<point.count {
                     newCentroids[assignment][j] += point[j]
                 }
             }
 
             // Update centroids
-            for i in 0 ..< centroids.count {
+            for i in 0..<centroids.count {
                 if counts[i] > 0 {
-                    for j in 0 ..< centroids[i].count {
+                    for j in 0..<centroids[i].count {
                         centroids[i][j] = newCentroids[i][j] / Double(counts[i])
                     }
                 }
@@ -502,7 +507,7 @@ public class QuantumPCA {
         }
 
         // Mock eigenvalues
-        let eigenvalues = (0 ..< numComponentsToUse).map { _ in Double.random(in: 0.5 ... 1.0) }
+        let eigenvalues = (0..<numComponentsToUse).map { _ in Double.random(in: 0.5...1.0) }
 
         return (reducedData, eigenvalues)
     }

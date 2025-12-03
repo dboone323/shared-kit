@@ -1,32 +1,32 @@
 import SwiftUI
 
 /// Shared color palette for consistent theming across all projects
-public struct ColorPalette {
+public enum ColorPalette {
     // MARK: - Primary Colors
-    
+
     /// Primary shade variations
     public static let primary50 = Color(hex: "E3F2FD")
     public static let primary100 = Color(hex: "BBDEFB")
     public static let primary500 = Color(hex: "2196F3")
     public static let primary700 = Color(hex: "1976D2")
     public static let primary900 = Color(hex: "0D47A1")
-    
+
     // MARK: - Semantic Colors
-    
+
     /// Success state color (green)
     public static let success = Color(hex: "4CAF50")
-    
+
     /// Warning state color (orange)
     public static let warning = Color(hex: "FF9800")
-    
+
     /// Error state color (red)
     public static let error = Color(hex: "F44336")
-    
+
     /// Informational color (blue)
     public static let info = Color(hex: "2196F3")
-    
+
     // MARK: - Neutral Colors
-    
+
     /// Lightest gray for backgrounds
     public static let gray50 = Color(hex: "FAFAFA")
     public static let gray100 = Color(hex: "F5F5F5")
@@ -61,7 +61,7 @@ extension Color {
             .sRGB,
             red: Double(r) / 255,
             green: Double(g) / 255,
-            blue:  Double(b) / 255,
+            blue: Double(b) / 255,
             opacity: Double(a) / 255
         )
     }

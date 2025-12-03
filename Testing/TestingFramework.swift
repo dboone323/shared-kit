@@ -309,7 +309,7 @@ import SwiftUI
             var executionTimes: [TimeInterval] = []
             var errors: [Error] = []
 
-            for _ in 0 ..< iterations {
+            for _ in 0..<iterations {
                 let startTime = CFAbsoluteTimeGetCurrent()
 
                 do {
@@ -474,7 +474,7 @@ import SwiftUI
             in scrollView: XCUIElement,
             maxScrolls: Int = 10
         ) {
-            for _ in 0 ..< maxScrolls {
+            for _ in 0..<maxScrolls {
                 if element.exists, element.isHittable {
                     return
                 }
@@ -740,7 +740,15 @@ import SwiftUI
         public let createdAt: Date
         public let updatedAt: Date
 
-        public init(id: UUID, name: String, description: String?, frequency: HabitFrequency, streak: Int, createdAt: Date, updatedAt: Date) {
+        public init(
+            id: UUID,
+            name: String,
+            description: String?,
+            frequency: HabitFrequency,
+            streak: Int,
+            createdAt: Date,
+            updatedAt: Date
+        ) {
             self.id = id
             self.name = name
             self.description = description
@@ -763,7 +771,14 @@ import SwiftUI
         public let createdAt: Date
         public let updatedAt: Date
 
-        public init(id: UUID, name: String, balance: Double, accountType: AccountType, createdAt: Date, updatedAt: Date) {
+        public init(
+            id: UUID,
+            name: String,
+            balance: Double,
+            accountType: AccountType,
+            createdAt: Date,
+            updatedAt: Date
+        ) {
             self.id = id
             self.name = name
             self.balance = balance

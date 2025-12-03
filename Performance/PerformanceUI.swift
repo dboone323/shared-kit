@@ -230,13 +230,13 @@ private struct MetricTabButton: View {
             .padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(isSelected ? Color.accentColor :
-                        #if canImport(UIKit)
+                    .fill(isSelected
+                        ? Color.accentColor
+                        : #if canImport(UIKit)
                             Color(UIColor.systemGray6)
                         #else
                             Color.gray.opacity(0.1)
-                        #endif
-                    )
+                        #endif)
             )
             .foregroundColor(isSelected ? .white : .primary)
         }
