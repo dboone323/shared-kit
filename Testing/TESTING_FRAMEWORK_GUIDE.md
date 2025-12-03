@@ -1160,7 +1160,7 @@ set -e
 echo "🚀 Starting Quantum Workspace Test Pipeline"
 
 # Configuration
-WORKSPACE_ROOT="/Users/danielstevens/Desktop/Quantum-workspace"
+WORKSPACE_ROOT="/Users/danielstevens/Desktop/github-projects/tools-automation"
 PROJECTS=("HabitQuest" "MomentumFinance" "PlannerApp" "CodingReviewer" "AvoidObstaclesGame")
 TEST_RESULTS_DIR="$WORKSPACE_ROOT/test-results"
 COVERAGE_DIR="$WORKSPACE_ROOT/coverage-reports"

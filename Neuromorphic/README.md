@@ -143,4 +143,4 @@ This demonstrates:
 ---
 
 **Phase 7B Status**: ✅ **Complete** - Neuromorphic computing foundations established with full brain-inspired architecture, learning mechanisms, vision systems, and quantum integration capabilities.</content>
-<parameter name="filePath">/Users/danielstevens/Desktop/Quantum-workspace/Shared/Neuromorphic/README.md
+<parameter name="filePath">/Users/danielstevens/Desktop/github-projects/tools-automation/Shared/Neuromorphic/README.md
