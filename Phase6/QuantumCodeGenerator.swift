@@ -536,21 +536,28 @@ public final class QuantumCodeGenerator: ObservableObject {
     }
 
     private func generateAISynthesizedCode(_ request: CodeGenerationRequest) async throws -> String {
-        // AI-powered code synthesis (placeholder for actual AI integration)
-        var code = "// AI Synthesized Code for \(request.language)\n\n"
-
-        for requirement in request.requirements {
-            code += """
-            // \(requirement)
-            func \(requirement.replacingOccurrences(of: " ", with: ""))() {
-                // AI-generated implementation
-                print("Implementing \(requirement)")
-            }
-
-            """
+        // Real implementation: Call MCP Server AI
+        guard let url = URL(string: "http://localhost:5005/api/ai/generate_code") else {
+             throw URLError(.badURL)
         }
-
-        return code
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let prompt = "Generate \(request.language) code for: \(request.requirements.joined(separator: ", "))"
+        let body: [String: Any] = ["prompt": prompt]
+        
+        urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
+        
+        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let code = json["code"] as? String {
+            return code
+        }
+        
+        return "// Error: Could not generate code from AI service"
     }
 
     private func generateQuantumInspiredCode(_ request: CodeGenerationRequest) async throws
