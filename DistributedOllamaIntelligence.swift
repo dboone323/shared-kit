@@ -184,7 +184,7 @@ public struct DistributionStatus: Sendable, Codable {
 }
 
 /// Main Distributed Ollama Intelligence coordinator
-@available(macOS 12.0, *)
+
 public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordinator, Sendable {
 
     // MARK: - Properties

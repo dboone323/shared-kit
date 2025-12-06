@@ -14,7 +14,7 @@ import Foundation
 // MARK: - Quantum Agent Network Protocols
 
 /// Protocol for quantum agent networks
-@available(macOS 13.0, *)
+
 public protocol QuantumAgentNetworkable: Sendable {
     /// Network identifier
     var networkId: UUID { get }
@@ -39,7 +39,7 @@ public protocol QuantumAgentNetworkable: Sendable {
 }
 
 /// Protocol for quantum network coordinators
-@available(macOS 13.0, *)
+
 public protocol QuantumNetworkCoordinator: Sendable {
     /// Coordinate quantum state synchronization
     func coordinateSynchronization(network: QuantumAgentNetwork) async throws
@@ -57,7 +57,7 @@ public protocol QuantumNetworkCoordinator: Sendable {
 // MARK: - Quantum Agent Network
 
 /// Distributed quantum agent network for superintelligence coordination
-@available(macOS 13.0, *)
+
 public final class QuantumAgentNetwork: Sendable {
 
     // MARK: - Properties
@@ -350,7 +350,7 @@ public final class QuantumAgentNetwork: Sendable {
 // MARK: - Supporting Types
 
 /// Quantum network state
-@available(macOS 13.0, *)
+
 public enum QuantumNetworkState: Sendable, Codable {
     case initializing
     case active
@@ -359,7 +359,7 @@ public enum QuantumNetworkState: Sendable, Codable {
 }
 
 /// Quantum computation task
-@available(macOS 13.0, *)
+
 public struct QuantumComputationTask: Sendable, Codable {
     public let id: UUID
     public let parentTaskId: UUID?
@@ -369,7 +369,7 @@ public struct QuantumComputationTask: Sendable, Codable {
 }
 
 /// Types of quantum computation
-@available(macOS 13.0, *)
+
 public enum QuantumComputationType: String, Sendable, Codable {
     case optimization = "Optimization"
     case simulation = "Simulation"
@@ -379,7 +379,7 @@ public enum QuantumComputationType: String, Sendable, Codable {
 }
 
 /// Distributed computation result
-@available(macOS 13.0, *)
+
 public struct DistributedComputationResult: Sendable, Codable {
     public let taskId: UUID
     public let distributionResult: ComputationDistributionResult
@@ -389,7 +389,7 @@ public struct DistributedComputationResult: Sendable, Codable {
 }
 
 /// Computation distribution result
-@available(macOS 13.0, *)
+
 public struct ComputationDistributionResult: Sendable, Codable {
     public let originalTaskId: UUID
     public let distributedTasks: [UUID: QuantumComputationTask]
@@ -397,7 +397,7 @@ public struct ComputationDistributionResult: Sendable, Codable {
 }
 
 /// Computation synchronization result
-@available(macOS 13.0, *)
+
 public struct ComputationSynchronizationResult: Sendable, Codable {
     public let taskId: UUID
     public let synchronizedResults: [UUID: QuantumComputationResult]
@@ -405,7 +405,7 @@ public struct ComputationSynchronizationResult: Sendable, Codable {
 }
 
 /// Quantum state synchronization result
-@available(macOS 13.0, *)
+
 public struct QuantumStateSynchronizationResult: Sendable, Codable {
     public let synchronizedStates: [UUID: QuantumState]
     public let coherenceLevels: [UUID: Double]
@@ -413,7 +413,7 @@ public struct QuantumStateSynchronizationResult: Sendable, Codable {
 }
 
 /// Quantum network status
-@available(macOS 13.0, *)
+
 public struct QuantumNetworkStatus: Sendable, Codable {
     public let networkId: UUID
     public let state: QuantumNetworkState
@@ -424,7 +424,7 @@ public struct QuantumNetworkStatus: Sendable, Codable {
 }
 
 /// Network optimization result
-@available(macOS 13.0, *)
+
 public struct NetworkOptimizationResult: Sendable, Codable {
     public let optimizationPerformed: Bool
     public let performanceImprovement: Double
@@ -432,7 +432,7 @@ public struct NetworkOptimizationResult: Sendable, Codable {
 }
 
 /// Quantum network log entry
-@available(macOS 13.0, *)
+
 public struct QuantumNetworkLogEntry: Sendable, Codable {
     public let networkId: UUID
     public let eventType: QuantumNetworkEventType
@@ -442,7 +442,7 @@ public struct QuantumNetworkLogEntry: Sendable, Codable {
 }
 
 /// Types of quantum network events
-@available(macOS 13.0, *)
+
 public enum QuantumNetworkEventType: String, Sendable, Codable {
     case agentAdded = "Agent Added"
     case agentRemoved = "Agent Removed"
@@ -455,7 +455,7 @@ public enum QuantumNetworkEventType: String, Sendable, Codable {
 // MARK: - Error Types
 
 /// Errors that can occur in quantum agent networks
-@available(macOS 13.0, *)
+
 public enum QuantumNetworkError: Error, Sendable {
     case agentNotFound
     case agentAlreadyInNetwork
@@ -470,9 +470,9 @@ public enum QuantumNetworkError: Error, Sendable {
 
 // MARK: - Type Aliases
 
-@available(macOS 13.0, *)
+
 public typealias QuantumState = QuantumProcessingEngine.QuantumState
-@available(macOS 13.0, *)
+
 public typealias QuantumComputationResult = QuantumProcessingEngine.QuantumComputationResult
-@available(macOS 13.0, *)
+
 public typealias QuantumEntanglement = QuantumEntanglementManager.QuantumEntanglement

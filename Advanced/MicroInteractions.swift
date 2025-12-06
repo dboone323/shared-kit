@@ -7,7 +7,7 @@ import SwiftUI
 
 /// Micro-interactions for Enhanced User Feedback
 /// Provides subtle animations and feedback for user actions
-@available(iOS 15.0, macOS 12.0, *)
+
 public struct MicroInteractions {
     // MARK: - Haptic Feedback
 

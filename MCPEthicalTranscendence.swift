@@ -615,7 +615,7 @@ public struct EthicalTranscendenceStatus: Sendable, Codable {
 }
 
 /// Main MCP Ethical Transcendence coordinator
-@available(macOS 12.0, *)
+
 public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, Sendable {
 
     // MARK: - Properties

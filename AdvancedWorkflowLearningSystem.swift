@@ -12,7 +12,7 @@ import Foundation
 // MARK: - Advanced Workflow Learning System
 
 /// Core system for advanced workflow learning with predictive capabilities
-@available(macOS 14.0, *)
+
 public final class AdvancedWorkflowLearningSystem: Sendable {
 
     // MARK: - Properties

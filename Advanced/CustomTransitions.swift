@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Custom Transition Effects for Advanced UI Navigation
 /// Provides sophisticated transition animations between views
-@available(iOS 15.0, macOS 12.0, *)
+
 public struct CustomTransitions {
     // MARK: - Slide Transitions
 

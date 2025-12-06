@@ -12,7 +12,7 @@ import SwiftUI
 
 /// Advanced Animation System for Quantum Workspace
 /// Provides sophisticated SwiftUI animations with performance optimization
-@available(iOS 15.0, macOS 12.0, *)
+
 public struct AdvancedAnimations {
     // MARK: - Animation Timing Functions
 
