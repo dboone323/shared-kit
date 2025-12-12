@@ -17,10 +17,6 @@ let package = Package(
             name: "SharedTestSupport",
             targets: ["SharedTestSupport"]
         ),
-        .executable(
-            name: "QuantumCLI",
-            targets: ["QuantumCLI"]
-        ),
     ],
     targets: [
         .target(
@@ -31,11 +27,6 @@ let package = Package(
             name: "SharedTestSupport",
             dependencies: ["SharedKit"],
             path: "Sources/SharedTestSupport"
-        ),
-        .executableTarget(
-            name: "QuantumCLI",
-            dependencies: ["SharedKit"],
-            path: "Sources/QuantumCLI"
         ),
         .testTarget(
             name: "SharedKitTests",
