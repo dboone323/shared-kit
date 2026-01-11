@@ -139,7 +139,7 @@ private struct CloudFallbackPolicy {
 public class OllamaClient: ObservableObject {
     private let config: OllamaConfig
     private let session: URLSession
-    private let logger: Logger
+
     private let cache: OllamaCache
     private let metrics: OllamaMetrics
     private var lastRequestTime: Date = .distantPast
@@ -161,8 +161,7 @@ public class OllamaClient: ObservableObject {
         configuration.httpMaximumConnectionsPerHost = 4
         self.session = URLSession(configuration: configuration)
 
-        // Enhanced logging
-        self.logger = Logger(subsystem: "OllamaClient", category: "AI")
+
 
         // Cache and metrics
         self.cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)
@@ -184,23 +183,23 @@ public class OllamaClient: ObservableObject {
                 let models = try await listModels()
                 self.availableModels = models
                 self.serverStatus = await self.getServerStatus()
-                self.logger.info("Connected to Ollama server with \(models.count) models")
+                Logger.logInfo("Connected to Ollama server with \(models.count) models")
             }
         } catch {
-            self.logger.error("Failed to initialize connection: \(error.localizedDescription)")
+            Logger.logError(error, context: "Failed to initialize connection")
         }
     }
 
     private func ensureModelAvailable(_ model: String) async throws {
         if !self.availableModels.contains(model), self.config.enableAutoModelDownload {
-            self.logger.info("Auto-downloading model: \(model)")
+            Logger.logInfo("Auto-downloading model: \(model)")
             try await self.pullModel(model)
             self.availableModels = try await self.listModels()
         } else if !self.availableModels.contains(model) {
             // Try fallback models
             for fallback in self.config.fallbackModels {
                 if self.availableModels.contains(fallback) {
-                    self.logger.info("Using fallback model: \(fallback) instead of \(model)")
+                    Logger.logInfo("Using fallback model: \(fallback) instead of \(model)")
                     return
                 }
             }
@@ -314,7 +313,7 @@ public class OllamaClient: ObservableObject {
             "stream": false,
         ]
 
-        self.logger.info("Generating with model: \(requestModel), prompt length: \(prompt.count)")
+        Logger.logInfo("Generating with model: \(requestModel), prompt length: \(prompt.count)")
 
         do {
             let response = try await performRequestWithRetry(
@@ -578,7 +577,7 @@ public class OllamaClient: ObservableObject {
 
 // MARK: - Enhanced Cache System
 
-private class OllamaCache {
+private class OllamaCache: @unchecked Sendable {
     private var cache: [String: CacheEntry] = [:]
     private let enabled: Bool
     private let expiryTime: TimeInterval

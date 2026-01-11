@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Core Ollama Configuration & Types
 
-public struct OllamaConfig {
+public struct OllamaConfig: Sendable {
     public let baseURL: String
     public let defaultModel: String
     public let timeout: TimeInterval
@@ -109,7 +109,7 @@ public struct OllamaConfig {
     )
 }
 
-public struct OllamaMessage: Codable {
+public struct OllamaMessage: Codable, Sendable {
     public let role: String
     public let content: String
 
@@ -119,7 +119,7 @@ public struct OllamaMessage: Codable {
     }
 }
 
-public struct OllamaGenerateResponse: Codable {
+public struct OllamaGenerateResponse: Codable, Sendable {
     public let model: String
     public let created_at: String
     public let response: String
@@ -133,13 +133,13 @@ public struct OllamaGenerateResponse: Codable {
     public let eval_duration: Int?
 }
 
-public struct OllamaServerStatus {
+public struct OllamaServerStatus: Sendable {
     public let running: Bool
     public let modelCount: Int
     public let models: [String]
 }
 
-public enum OllamaError: LocalizedError {
+public enum OllamaError: LocalizedError, Sendable {
     case invalidURL
     case invalidResponse
     case invalidResponseFormat
@@ -155,8 +155,12 @@ public enum OllamaError: LocalizedError {
     case authenticationFailed
     case serverOverloaded
 
+    case invalidConfiguration(String)
+
     public var errorDescription: String? {
         switch self {
+        case let .invalidConfiguration(details):
+            "Invalid configuration: \(details)"
         case .invalidURL:
             "Invalid Ollama server URL"
         case .invalidResponse:
@@ -207,157 +211,5 @@ public enum OllamaError: LocalizedError {
 }
 
 // MARK: - Integration Result Models
+// Other integration models like ServiceHealth, CodeComplexity, etc. are defined in AIServiceProtocols.swift
 
-public struct ServiceHealth {
-    public let ollamaRunning: Bool
-    public let modelsAvailable: Bool
-    public let modelCount: Int
-    public let recommendedActions: [String]
-}
-
-public enum CodeComplexity {
-    case simple
-    case standard
-    case advanced
-
-    public var temperature: Double {
-        switch self {
-        case .simple: 0.1
-        case .standard: 0.3
-        case .advanced: 0.5
-        }
-    }
-
-    public var maxTokens: Int {
-        switch self {
-        case .simple: 1000
-        case .standard: 2000
-        case .advanced: 4000
-        }
-    }
-}
-
-public enum AnalysisType {
-    case bugs
-    case performance
-    case security
-    case comprehensive
-}
-
-public struct CodeGenerationResult {
-    public let code: String
-    public let analysis: String
-    public let language: String
-    public let complexity: CodeComplexity
-}
-
-public struct CodeAnalysisResult {
-    public let analysis: String
-    public let issues: [CodeIssue]
-    public let suggestions: [String]
-    public let language: String
-    public let analysisType: AnalysisType
-}
-
-public struct CodeIssue {
-    public let description: String
-    public let severity: IssueSeverity
-}
-
-public enum IssueSeverity {
-    case low
-    case medium
-    case high
-    case critical
-}
-
-public struct DocumentationResult {
-    public let documentation: String
-    public let language: String
-    public let includesExamples: Bool
-}
-
-public struct TestGenerationResult {
-    public let testCode: String
-    public let language: String
-    public let testFramework: String
-    public let coverage: Double
-}
-
-public struct AutomationTask {
-    public let id: String
-    public let type: TaskType
-    public let description: String
-    public let language: String?
-    public let code: String?
-
-    public init(
-        id: String,
-        type: TaskType,
-        description: String,
-        language: String? = nil,
-        code: String? = nil
-    ) {
-        self.id = id
-        self.type = type
-        self.description = description
-        self.language = language
-        self.code = code
-    }
-
-    public enum TaskType {
-        case codeGeneration
-        case codeAnalysis
-        case documentation
-        case testing
-    }
-}
-
-public struct TaskResult {
-    public let task: AutomationTask
-    public let success: Bool
-    public let error: Error?
-    public let codeGenerationResult: CodeGenerationResult?
-    public let analysisResult: CodeAnalysisResult?
-    public let documentationResult: DocumentationResult?
-    public let testResult: TestGenerationResult?
-
-    public init(
-        task: AutomationTask,
-        success: Bool,
-        error: Error? = nil,
-        codeGenerationResult: CodeGenerationResult? = nil,
-        analysisResult: CodeAnalysisResult? = nil,
-        documentationResult: DocumentationResult? = nil,
-        testResult: TestGenerationResult? = nil
-    ) {
-        self.task = task
-        self.success = success
-        self.error = error
-        self.codeGenerationResult = codeGenerationResult
-        self.analysisResult = analysisResult
-        self.documentationResult = documentationResult
-        self.testResult = testResult
-    }
-}
-
-public enum IntegrationError: Error {
-    case missingRequiredData(String)
-    case serviceUnavailable
-    case invalidConfiguration
-}
-
-// MARK: - Health Monitoring Models
-
-public struct HealthStats {
-    public let ollamaUptime: Double
-    public let huggingFaceUptime: Double
-    public let lastOllamaCheck: Date?
-    public let lastHuggingFaceCheck: Date?
-}
-
-public struct CurrentHealth {
-    public let ollamaHealthy: Bool
-    public let huggingFaceHealthy: Bool
-    public let anyServiceAvailable: Bool
-}
