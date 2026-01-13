@@ -1,0 +1,105 @@
+//
+// Localizable.strings
+// Base localization for all iOS projects.
+//
+// Step 39: Localization support (English base).
+//
+
+/* Common Actions */
+"action.save" = "Save";
+"action.cancel" = "Cancel";
+"action.delete" = "Delete";
+"action.edit" = "Edit";
+"action.add" = "Add";
+"action.done" = "Done";
+"action.close" = "Close";
+"action.retry" = "Retry";
+"action.continue" = "Continue";
+
+/* Common Labels */
+"label.loading" = "Loading...";
+"label.error" = "Error";
+"label.success" = "Success";
+"label.empty" = "No items";
+"label.today" = "Today";
+"label.tomorrow" = "Tomorrow";
+"label.yesterday" = "Yesterday";
+
+/* Priority */
+"priority.high" = "High";
+"priority.medium" = "Medium";
+"priority.low" = "Low";
+
+/* Status */
+"status.completed" = "Completed";
+"status.pending" = "Pending";
+"status.inProgress" = "In Progress";
+"status.overdue" = "Overdue";
+
+/* Settings */
+"settings.title" = "Settings";
+"settings.appearance" = "Appearance";
+"settings.notifications" = "Notifications";
+"settings.privacy" = "Privacy";
+"settings.about" = "About";
+"settings.darkMode" = "Dark Mode";
+"settings.language" = "Language";
+
+/* Sync */
+"sync.syncing" = "Syncing...";
+"sync.lastSynced" = "Last synced: %@";
+"sync.error" = "Sync failed";
+"sync.success" = "Sync complete";
+
+/* Authentication */
+"auth.login" = "Log In";
+"auth.logout" = "Log Out";
+"auth.biometric" = "Use Face ID / Touch ID";
+"auth.biometric.reason" = "Authenticate to access your data";
+
+/* PlannerApp Specific */
+"planner.tasks" = "Tasks";
+"planner.goals" = "Goals";
+"planner.calendar" = "Calendar";
+"planner.journal" = "Journal";
+"planner.addTask" = "Add Task";
+"planner.addGoal" = "Add Goal";
+"planner.noTasks" = "No tasks. Tap + to add one.";
+"planner.noGoals" = "No goals. Start by adding your first goal.";
+
+/* HabitQuest Specific */
+"habit.habits" = "Habits";
+"habit.addHabit" = "Add Habit";
+"habit.streak" = "%d day streak";
+"habit.completed" = "Completed today";
+"habit.notCompleted" = "Not completed";
+"habit.reminder" = "Reminder";
+"habit.noHabits" = "No habits yet. Add your first habit!";
+
+/* MomentumFinance Specific */
+"finance.dashboard" = "Dashboard";
+"finance.accounts" = "Accounts";
+"finance.transactions" = "Transactions";
+"finance.budget" = "Budget";
+"finance.addTransaction" = "Add Transaction";
+"finance.netWorth" = "Net Worth";
+"finance.expenses" = "Expenses";
+"finance.income" = "Income";
+
+/* AvoidObstaclesGame Specific */
+"game.play" = "Play";
+"game.pause" = "Pause";
+"game.resume" = "Resume";
+"game.restart" = "Restart";
+"game.gameOver" = "Game Over";
+"game.score" = "Score: %d";
+"game.highScore" = "High Score: %d";
+"game.level" = "Level %d";
+"game.newHighScore" = "New High Score!";
+
+/* CodingReviewer Specific */
+"review.analyze" = "Analyze";
+"review.issues" = "Issues";
+"review.noIssues" = "No issues found";
+"review.severity" = "Severity";
+"review.suggestions" = "Suggestions";
