@@ -19,6 +19,7 @@ public final class SecureLogger {
         case performance = "Performance"
         case security = "Security"
         case ui = "UI"
+        case toolExecution = "ToolExecution"  // For agent tool delegation
     }
 
     /// Log levels matching OSLog

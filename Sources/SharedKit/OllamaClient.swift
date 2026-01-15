@@ -567,7 +567,7 @@ public class OllamaClient: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
-        print("🔍 OllamaClient Requesting: \(url.absoluteString)")
+        SecureLogger.debug("OllamaClient requesting: \(url.absoluteString)", category: .network)
 
         let (data, response) = try await session.data(for: request)
 

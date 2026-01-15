@@ -50,7 +50,7 @@ public final class AggregatorAgent: Sendable {
         try await vectorStore.connect()
         let vector = try await embeddingService.embed(fact)
         try await vectorStore.save(content: fact, vector: vector, metadata: metadata)
-        print("🧠 Agent: Learned new fact (\(fact.prefix(50))...)")
+        SecureLogger.info("Agent: Learned new fact (\(fact.prefix(50))...)", category: .ai)
     }
 
     /// Clear conversation history
