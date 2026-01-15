@@ -538,8 +538,8 @@ public class OllamaClient: ObservableObject {
             "stream": false,
         ]
 
-        if let system {
-            requestBody["system"] = system
+        if let systemPrompt = systemPrompt {
+            requestBody["system"] = systemPrompt
         }
 
         if let context {
@@ -548,7 +548,8 @@ public class OllamaClient: ObservableObject {
 
         let response = try await performRequest(endpoint: "api/generate", body: requestBody)
         let data = try JSONSerialization.data(withJSONObject: response)
-        return try JSONDecoder().decode(OllamaGenerateResponse.self, from: data)
+        let decoded = try JSONDecoder().decode(OllamaGenerateResponse.self, from: data)
+        return decoded.response  // Extract the response string
     }
 
     public func chat(

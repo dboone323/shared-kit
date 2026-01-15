@@ -81,31 +81,31 @@ public actor ToolResultCache {
 /// Tool execution parallelizer
 @available(macOS 11.0, iOS 14.0, *)
 public class ToolExecutionCoordinator {
-    /// Execute multiple tools in parallel (for independent operations)
-    public func executeParallel(_ tools: [(name: String, block: () async throws -> String)])
-        async throws -> [String: String]
-    {
-        var results: [String: String] = [:]
-
-        try await withThrowingTaskGroup(of: (String, String).self) { group in
-            for tool in tools {
+    /// Execute multiple tools in parallel
+    public func executeParallel(
+        tools: [@Sendable () async throws -> String]
+    ) async throws -> [String] {
+        try await withThrowingTaskGroup(of: (Int, String).self) { group in
+            for (index, tool) in tools.enumerated() {
                 group.addTask {
-                    let result = try await tool.block()
-                    return (tool.name, result)
+                    let result = try await tool()
+                    return (index, result)
                 }
             }
 
-            for try await (name, result) in group {
-                results[name] = result
+            var results: [(Int, String)] = []
+            for try await (index, result) in group {
+                results.append((index, result))
             }
+
+            // Return in original order
+            return results.sorted(by: { $0.0 < $1.0 }).map { $0.1 }
         }
-
-        return results
     }
-
     /// Execute with timeout
     public func executeWithTimeout(
-        _ block: @escaping () async throws -> String, timeout: TimeInterval = 30
+        seconds: TimeInterval,
+        block: @escaping @Sendable () async throws -> String
     ) async throws -> String {
         try await withThrowingTaskGroup(of: String.self) { group in
             group.addTask {
@@ -113,7 +113,7 @@ public class ToolExecutionCoordinator {
             }
 
             group.addTask {
-                try await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
+                try await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
                 throw TimeoutError()
             }
 
