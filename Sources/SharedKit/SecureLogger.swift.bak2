@@ -31,12 +31,6 @@ public final class SecureLogger {
         case fault
     }
 
-    // MARK: - Logger Instances
-
-    /// Get or create logger for category (creates new logger each time - no mutable state)
-    private static func logger(for category: Category) -> os.Logger {
-        return os.Logger(subsystem: subsystem, category: category.rawValue)
-    }
 
     // MARK: - Public Logging Methods
 
