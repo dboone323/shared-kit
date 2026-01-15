@@ -1,5 +1,5 @@
 import Foundation
-import OSLog
+import os.log
 
 /// Secure logging utility for Shared-Kit
 /// Replaces print() statements with proper logging
@@ -33,14 +33,18 @@ public final class SecureLogger {
 
     // MARK: - Logger Instances
 
-    private static var loggers: [Category: Logger] = [:]
+    private static let lock = NSLock()
+    private static var loggers: [Category: os.Logger] = [:]
 
-    /// Get or create logger for category
-    private static func logger(for category: Category) -> Logger {
+    /// Get or create logger for category (thread-safe)
+    private static func logger(for category: Category) -> os.Logger {
+        lock.lock()
+        defer { lock.unlock() }
+
         if let existing = loggers[category] {
             return existing
         }
-        let logger = Logger(subsystem: subsystem, category: category.rawValue)
+        let logger = os.Logger(subsystem: subsystem, category: category.rawValue)
         loggers[category] = logger
         return logger
     }
