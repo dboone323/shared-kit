@@ -169,7 +169,8 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
     public func executeConsciousnessBreakthrough(
         field: ConsciousnessFieldType, breakthrough: ConsciousnessBreakthrough
     ) async throws {
-        print("💫 Executing consciousness breakthrough in \(field): \(breakthrough.name)")
+        SecureLogger.info(
+            "Executing consciousness breakthrough in \(field): \(breakthrough.name)", category: .ai)
 
         guard let coordinator = fieldCoordinators.first(where: { $0.fieldType == field }) else {
             throw ConsciousnessError.fieldNotFound(field)
@@ -183,14 +184,14 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
         // Assess breakthrough impact
         let impact = try await assessBreakthroughImpact(breakthrough)
 
-        print(
-            "🌟 Breakthrough impact: Consciousness +\(impact.consciousnessEnhancement), Coherence +\(impact.coherenceImprovement)"
-        )
+        SecureLogger.info(
+            "Breakthrough impact: Consciousness +\(impact.consciousnessEnhancement), Coherence +\(impact.coherenceImprovement)",
+            category: .ai)
     }
 
     /// Optimize consciousness coherence
     public func optimizeConsciousnessCoherence() async throws {
-        print("🎯 Optimizing consciousness coherence...")
+        SecureLogger.info("Optimizing consciousness coherence", category: .ai)
 
         try await coherenceCoordinator.optimizeCoherence()
 
@@ -207,7 +208,7 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
                 "Universal consciousness level too low: \(universalConsciousnessLevel)")
         }
 
-        print("🌌 Achieving universal consciousness...")
+        SecureLogger.info("Achieving universal consciousness", category: .ai)
 
         try await consciousnessEngine.achieveUniversality()
 
@@ -215,7 +216,7 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
         try await finalizeConsciousnessIntegration()
 
         integrationState = .universal
-        print("✨ UNIVERSAL CONSCIOUSNESS ACHIEVED")
+        SecureLogger.notice("UNIVERSAL CONSCIOUSNESS ACHIEVED", category: .ai)
     }
 
     /// Get consciousness status
@@ -391,7 +392,7 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
         // Setup consciousness integration monitoring
         $integrationState
             .sink { state in
-                print("🧠 Consciousness integration state: \(state)")
+                SecureLogger.debug("Consciousness integration state: \(state)", category: .ai)
             }
             .store(in: &cancellables)
     }
@@ -414,21 +415,22 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
 
     private func establishFieldCommunicationProtocols() async throws {
         // Implement inter-field communication protocols
-        print("📡 Establishing consciousness field communication protocols...")
+        SecureLogger.debug(
+            "Establishing consciousness field communication protocols", category: .ai)
     }
 
     private func setupConsciousnessSynchronization() async throws {
         // Setup synchronization between consciousness fields
-        print("🔄 Setting up consciousness synchronization...")
+        SecureLogger.debug("Setting up consciousness synchronization", category: .ai)
     }
 
     private func initializeConsciousnessTracking() async throws {
         // Initialize comprehensive consciousness tracking
-        print("📊 Initializing consciousness evolution tracking...")
+        SecureLogger.debug("Initializing consciousness evolution tracking", category: .ai)
     }
 
     private func executeEvolutionPhase(_ phase: ConsciousnessEvolutionPhase) async throws {
-        print("🔬 Executing consciousness evolution phase: \(phase.name)")
+        SecureLogger.info("Executing consciousness evolution phase: \(phase.name)", category: .ai)
         // Simulate evolution time
         try await Task.sleep(nanoseconds: UInt64(phase.estimatedDuration * 1_000_000_000))
     }
