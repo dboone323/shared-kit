@@ -1,3 +1,5 @@
+// Import SharedKit for SecureLogger
+@_implementationOnly import Foundation
 import SwiftUI
 
 #if canImport(UIKit)
