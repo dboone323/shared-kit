@@ -1,66 +1,15 @@
 import Foundation
 
-/// PostgreSQL connection pool for vector store
-@available(macOS 11.0, iOS 14.0, *)
-public actor PostgresConnectionPool {
-    private var availableConnections: [PostgresConnection] = []
-    private var activeConnections: Set<PostgresConnection> = []
-    private let maxConnections: Int
-    private let minConnections: Int
-
-    public init(minConnections: Int = 2, maxConnections: Int = 10) {
-        self.minConnections = minConnections
-        self.maxConnections = maxConnections
-    }
-
-    /// Get connection from pool
-    public func acquire() async throws -> PostgresConnection {
-        // Return available connection if exists
-        if let connection = availableConnections.first {
-            availableConnections.removeFirst()
-            activeConnections.insert(connection)
-            return connection
-        }
-
-        // Create new if under limit
-        if activeConnections.count < maxConnections {
-            let connection = try await PostgresConnection.create()
-            activeConnections.insert(connection)
-            return connection
-        }
-
-        // Wait for connection to become available
-        try await Task.sleep(nanoseconds: 100_000_000)  // 100ms
-        return try await acquire()
-    }
-
-    /// Release connection back to pool
-    public func release(_ connection: PostgresConnection) {
-        activeConnections.remove(connection)
-
-        if availableConnections.count < minConnections {
-            availableConnections.append(connection)
-        } else {
-            Task { await connection.close() }
-        }
-    }
-
-    /// Execute query with automatic connection management
-    public func withConnection<T>(_ block: (PostgresConnection) async throws -> T) async throws -> T
-    {
-        let conn = try await acquire()
-        defer { Task { await self.release(conn) } }
-        return try await block(conn)
-    }
-}
+// Note: PostgresConnectionPool already exists in PostgresConnectionPool.swift
+// This file contains additional vector store utilities only
 
 /// Batch operation support for vector store
 public struct VectorBatchOperation {
     public let contents: [String]
-    public let vectors: [[Float]]
+    public let vectors: [[Double]]
     public let metadata: [[String: String]]
 
-    public init(contents: [String], vectors: [[Float]], metadata: [[String: String]] = []) {
+    public init(contents: [String], vectors: [[Double]], metadata: [[String: String]] = []) {
         self.contents = contents
         self.vectors = vectors
         self.metadata = metadata.isEmpty ? Array(repeating: [:], count: contents.count) : metadata

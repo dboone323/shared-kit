@@ -151,6 +151,12 @@ public class OllamaClient: ObservableObject {
     private var lastRequestTime: Date = .distantPast
     private var policy = CloudFallbackPolicy()
 
+    // Production enhancements
+    private let connectionPool = OllamaConnectionPool.shared
+    private let healthTracker = ModelHealthTracker()
+    private let requestQueue = OllamaRequestQueue()
+    private let retryConfig = RetryConfig(maxRetries: 3, baseDelay: 1.0)
+
     @Published public var isConnected = false
     @Published public var availableModels: [String] = []
     @Published public var currentModel: String = ""

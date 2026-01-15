@@ -34,6 +34,12 @@ public final class AggregatorAgent: Sendable {
     /// Tool execution history for learning
     private var toolHistory: [ToolExecutionResult] = []
 
+    // Production enhancements
+    private let contextManager = ContextWindowManager(maxTokens: 4096)
+    private let toolCache = ToolResultCache()
+    private let coordinator = ToolExecutionCoordinator()
+    private let learningSystem = ToolLearningSystem()
+
     private init() {
         // Use qwen2.5-coder if available (user's preferred), fallback to llama2
         let config = OllamaConfig(
