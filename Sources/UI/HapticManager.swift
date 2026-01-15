@@ -1,9 +1,10 @@
 import SwiftUI
+
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 #endif
 #if canImport(CoreHaptics)
-import CoreHaptics
+    import CoreHaptics
 #endif
 
 /// Haptic feedback manager for game interactions
@@ -13,7 +14,7 @@ public final class HapticManager {
     public static let shared = HapticManager()
 
     #if canImport(CoreHaptics)
-    private var engine: CHHapticEngine?
+        private var engine: CHHapticEngine?
     #endif
 
     private var isHapticsEnabled = true
@@ -26,22 +27,24 @@ public final class HapticManager {
 
     private func setupHapticEngine() {
         #if canImport(CoreHaptics)
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+            guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
 
-        do {
-            engine = try CHHapticEngine()
-            try engine?.start()
+            do {
+                engine = try CHHapticEngine()
+                try engine?.start()
 
-            engine?.resetHandler = { [weak self] in
-                do {
-                    try self?.engine?.start()
-                } catch {
-                    print("Failed to restart haptic engine: \(error)")
+                engine?.resetHandler = { [weak self] in
+                    do {
+                        try self?.engine?.start()
+                    } catch {
+                        SecureLogger.error(
+                            "Failed to restart haptic engine", category: .haptics, error: error)
+                    }
                 }
+            } catch {
+                SecureLogger.error(
+                    "Failed to create haptic engine", category: .haptics, error: error)
             }
-        } catch {
-            print("Failed to create haptic engine: \(error)")
-        }
         #endif
     }
 
@@ -56,8 +59,8 @@ public final class HapticManager {
     public func lightImpact() {
         guard isHapticsEnabled else { return }
         #if canImport(UIKit) && !os(tvOS)
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
         #endif
     }
 
@@ -65,8 +68,8 @@ public final class HapticManager {
     public func mediumImpact() {
         guard isHapticsEnabled else { return }
         #if canImport(UIKit) && !os(tvOS)
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.impactOccurred()
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
         #endif
     }
 
@@ -74,8 +77,8 @@ public final class HapticManager {
     public func heavyImpact() {
         guard isHapticsEnabled else { return }
         #if canImport(UIKit) && !os(tvOS)
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.impactOccurred()
         #endif
     }
 
@@ -83,8 +86,8 @@ public final class HapticManager {
     public func rigidImpact() {
         guard isHapticsEnabled else { return }
         #if canImport(UIKit) && !os(tvOS)
-        let generator = UIImpactFeedbackGenerator(style: .rigid)
-        generator.impactOccurred()
+            let generator = UIImpactFeedbackGenerator(style: .rigid)
+            generator.impactOccurred()
         #endif
     }
 
@@ -92,8 +95,8 @@ public final class HapticManager {
     public func softImpact() {
         guard isHapticsEnabled else { return }
         #if canImport(UIKit) && !os(tvOS)
-        let generator = UIImpactFeedbackGenerator(style: .soft)
-        generator.impactOccurred()
+            let generator = UIImpactFeedbackGenerator(style: .soft)
+            generator.impactOccurred()
         #endif
     }
 
@@ -101,8 +104,8 @@ public final class HapticManager {
     public func success() {
         guard isHapticsEnabled else { return }
         #if canImport(UIKit) && !os(tvOS)
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.success)
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
         #endif
     }
 
@@ -110,8 +113,8 @@ public final class HapticManager {
     public func warning() {
         guard isHapticsEnabled else { return }
         #if canImport(UIKit) && !os(tvOS)
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.warning)
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.warning)
         #endif
     }
 
@@ -119,8 +122,8 @@ public final class HapticManager {
     public func error() {
         guard isHapticsEnabled else { return }
         #if canImport(UIKit) && !os(tvOS)
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.error)
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.error)
         #endif
     }
 
@@ -128,8 +131,8 @@ public final class HapticManager {
     public func selection() {
         guard isHapticsEnabled else { return }
         #if canImport(UIKit) && !os(tvOS)
-        let generator = UISelectionFeedbackGenerator()
-        generator.selectionChanged()
+            let generator = UISelectionFeedbackGenerator()
+            generator.selectionChanged()
         #endif
     }
 
@@ -178,50 +181,50 @@ public final class HapticManager {
     // MARK: - Custom Haptic Patterns
 
     #if canImport(CoreHaptics)
-    /// Play a custom intensity haptic
-    public func customImpact(intensity: Float, sharpness: Float) {
-        guard isHapticsEnabled, let engine = engine else { return }
+        /// Play a custom intensity haptic
+        public func customImpact(intensity: Float, sharpness: Float) {
+            guard isHapticsEnabled, let engine = engine else { return }
 
-        let hapticEvent = CHHapticEvent(
-            eventType: .hapticTransient,
-            parameters: [
-                CHHapticEventParameter(parameterID: .hapticIntensity, value: intensity),
-                CHHapticEventParameter(parameterID: .hapticSharpness, value: sharpness)
-            ],
-            relativeTime: 0
-        )
+            let hapticEvent = CHHapticEvent(
+                eventType: .hapticTransient,
+                parameters: [
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: intensity),
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: sharpness),
+                ],
+                relativeTime: 0
+            )
 
-        do {
-            let pattern = try CHHapticPattern(events: [hapticEvent], parameters: [])
-            let player = try engine.makePlayer(with: pattern)
-            try player.start(atTime: 0)
-        } catch {
-            print("Failed to play custom haptic: \(error)")
+            do {
+                let pattern = try CHHapticPattern(events: [hapticEvent], parameters: [])
+                let player = try engine.makePlayer(with: pattern)
+                try player.start(atTime: 0)
+            } catch {
+                SecureLogger.error("Failed to play custom haptic", category: .haptics, error: error)
+            }
         }
-    }
 
-    /// Rumble effect for continuous feedback
-    public func rumble(duration: TimeInterval, intensity: Float = 0.5) {
-        guard isHapticsEnabled, let engine = engine else { return }
+        /// Rumble effect for continuous feedback
+        public func rumble(duration: TimeInterval, intensity: Float = 0.5) {
+            guard isHapticsEnabled, let engine = engine else { return }
 
-        let hapticEvent = CHHapticEvent(
-            eventType: .hapticContinuous,
-            parameters: [
-                CHHapticEventParameter(parameterID: .hapticIntensity, value: intensity),
-                CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.3)
-            ],
-            relativeTime: 0,
-            duration: duration
-        )
+            let hapticEvent = CHHapticEvent(
+                eventType: .hapticContinuous,
+                parameters: [
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: intensity),
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.3),
+                ],
+                relativeTime: 0,
+                duration: duration
+            )
 
-        do {
-            let pattern = try CHHapticPattern(events: [hapticEvent], parameters: [])
-            let player = try engine.makePlayer(with: pattern)
-            try player.start(atTime: 0)
-        } catch {
-            print("Failed to play rumble: \(error)")
+            do {
+                let pattern = try CHHapticPattern(events: [hapticEvent], parameters: [])
+                let player = try engine.makePlayer(with: pattern)
+                try player.start(atTime: 0)
+            } catch {
+                SecureLogger.error("Failed to play rumble", category: .haptics, error: error)
+            }
         }
-    }
     #endif
 }
 
