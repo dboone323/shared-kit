@@ -25,7 +25,7 @@ class TestUtilities {
         let result = try await operation()
         let duration = Date().timeIntervalSince(startTime)
 
-        SecureLogger.performance(operationName, duration: duration)
+        print(operationName, duration: duration)
         XCTAssertLessThan(duration, timeout, "\(operationName) took too long")
 
         return (result: result, duration: duration)
