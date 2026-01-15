@@ -67,7 +67,7 @@ public actor PostgresVectorStore {
             WITH (lists = 100);
             """, logger: Logging.Logger(label: "init-index"))
 
-        print("✅ VectorStore: Table and index initialized")
+        SecureLogger.info("VectorStore: Table and index initialized", category: .database)
     }
 
     /// Saves a text and its embedding to the database.
@@ -83,7 +83,8 @@ public actor PostgresVectorStore {
             "INSERT INTO embeddings (content, vector) VALUES (\(content), \(vectorString)::vector)",
             logger: Logging.Logger(label: "save-embedding")
         )
-        print("💾 VectorStore: Saved content length \(content.count)")
+        SecureLogger.debug(
+            "VectorStore: Saved content length \(content.count)", category: .database)
     }
 
     /// Searches for similar content using cosine similarity (<=> operator is cosine distance).

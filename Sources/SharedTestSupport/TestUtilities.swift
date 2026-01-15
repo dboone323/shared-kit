@@ -25,7 +25,7 @@ class TestUtilities {
         let result = try await operation()
         let duration = Date().timeIntervalSince(startTime)
 
-        print("⏱️ \(operationName) completed in \(String(format: "%.3f", duration))s")
+        SecureLogger.performance(operationName, duration: duration)
         XCTAssertLessThan(duration, timeout, "\(operationName) took too long")
 
         return (result: result, duration: duration)
@@ -224,7 +224,7 @@ enum MockDataGenerator {
             [
                 "id": UUID().uuidString,
                 "score": Int.random(in: 0...10000),
-                "duration": Double.random(in: 30...600), // seconds
+                "duration": Double.random(in: 30...600),  // seconds
                 "level": Int.random(in: 1...50),
                 "obstaclesAvoided": Int.random(in: 0...100),
                 "powerUpsUsed": Int.random(in: 0...10),

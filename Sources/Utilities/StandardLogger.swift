@@ -41,7 +41,8 @@ public struct StandardLogger {
         }
 
         #if DEBUG
-            print(logMessage)
+            // Use SecureLogger for proper logging
+            SecureLogger.log(logMessage, level: .info, category: .general)
         #endif
     }
 }
