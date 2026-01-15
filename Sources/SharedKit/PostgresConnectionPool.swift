@@ -21,7 +21,7 @@ public actor PostgresConnectionPool {
             host: "127.0.0.1",
             port: 5432,
             username: "sonar",
-            password: "sonar",
+            password: ProcessInfo.processInfo.environment["POSTGRES_PASSWORD"] ?? "",
             database: "sonar",
             tls: .disable
         )
