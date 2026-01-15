@@ -1,0 +1,36 @@
+Building for debugging...
+[0/3] Write swift-version-39B54973F684ADAB.txt
+[1/4] Write sources
+[3/6] Emitting module SharedKit
+[4/6] Compiling SharedKit PostgresVectorStore.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:85:34: warning: 'column' is deprecated: This call is O(n) where n is the number of cells in the row. For random access to cells
+in a row create a PostgresRandomAccessRow from the row first and use its subscript
+methods. (see `makeRandomAccess()`) [#DeprecatedDeclaration]
+ 83 |         var results: [String] = []
+ 84 |         for try await row in rows {
+ 85 |             if let content = row.column("content")?.string {
+    |                                  `- warning: 'column' is deprecated: This call is O(n) where n is the number of cells in the row. For random access to cells
+in a row create a PostgresRandomAccessRow from the row first and use its subscript
+methods. (see `makeRandomAccess()`) [#DeprecatedDeclaration]
+ 86 |                 results.append(content)
+ 87 |             }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[4/7] Write Objects.LinkFileList
+[5/7] Linking RAGVerifier
+[6/7] Applying RAGVerifier
+Build of product 'RAGVerifier' complete! (3.99s)
+🚀 Starting RAG Verification...
+✅ DB Connected
+🧠 Learning fact: The health monitor agent is located at /app/agents/smart_agent_health_monitor.sh
+💾 VectorStore: Saved content length 80
+✅ Fact saved to Postgres Vector DB
+🤖 Aggregator: Received query: 'Run the health monitor check please.'
+🔍 Aggregator: RAG Context found: 2 items
+📋 Aggregator: Plan created: check_health
+🛠️ Aggregator: Delegating to Agent: Health Monitor
+
+🤖 Final Response:
+[31mError: Failed to load project: failed to load compose project: failed to read file "docker-compose.yml": open docker-compose.yml: no such file or directory[0m
+
+✅ Verification Complete

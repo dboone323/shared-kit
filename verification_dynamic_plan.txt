@@ -1,0 +1,44 @@
+Building for debugging...
+[0/3] Write swift-version-39B54973F684ADAB.txt
+[1/4] Write sources
+[3/6] Emitting module SharedKit
+[4/6] Compiling SharedKit AggregatorAgent.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/AggregatorAgent.swift:15:13: error: argument 'timeout' must precede argument 'fallbackModels'
+ 13 |             defaultModel: "qwen2.5-coder:7b",
+ 14 |             fallbackModels: ["llama2", "mistral", "phi3"],
+ 15 |             timeout: 120 // Longer timeout for planning
+    |             `- error: argument 'timeout' must precede argument 'fallbackModels'
+ 16 |         )
+ 17 |         self.llmClient = OllamaClient(config: config)
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/AggregatorAgent.swift:85:23: error: cannot find 'Process' in scope
+ 83 |     private func runDockerAgent(name: String, args: [String] = []) async throws -> String {
+ 84 |         // Bridge to our Go CLI
+ 85 |         let process = Process()
+    |                       `- error: cannot find 'Process' in scope
+ 86 |         let pipe = Pipe()
+ 87 |          
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/AggregatorAgent.swift:86:20: error: cannot find 'Pipe' in scope
+ 84 |         // Bridge to our Go CLI
+ 85 |         let process = Process()
+ 86 |         let pipe = Pipe()
+    |                    `- error: cannot find 'Pipe' in scope
+ 87 |          
+ 88 |         // Assuming docker-manager is in the path or provided relative
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/AggregatorAgent.swift:93:33: error: cannot find 'URL' in scope
+ 91 |         let projectPath = "/Users/danielstevens/github-projects/tools-automation"
+ 92 |         
+ 93 |         process.executableURL = URL(fileURLWithPath: executablePath)
+    |                                 `- error: cannot find 'URL' in scope
+ 94 |         process.currentDirectoryURL = URL(fileURLWithPath: projectPath)
+ 95 |         
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/AggregatorAgent.swift:94:39: error: cannot find 'URL' in scope
+ 92 |         
+ 93 |         process.executableURL = URL(fileURLWithPath: executablePath)
+ 94 |         process.currentDirectoryURL = URL(fileURLWithPath: projectPath)
+    |                                       `- error: cannot find 'URL' in scope
+ 95 |         
+ 96 |         if name == "agent-health" {

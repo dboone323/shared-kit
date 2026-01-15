@@ -170,7 +170,7 @@ class AIServiceTestUtilities {
             operation: @escaping () async throws -> T,
             expectedResult: T,
             timeout: TimeInterval = 5.0,
-            file: StaticString = #file,
+            file: StaticString = #filePath,
             line: UInt = #line
         ) async throws where T: Equatable & Sendable {
             let result = try await waitForAsync(timeout: timeout, operation: operation)
@@ -187,7 +187,7 @@ class AIServiceTestUtilities {
             operation: @escaping () async throws -> some Sendable,
             expectedError: Error,
             timeout: TimeInterval = 5.0,
-            file: StaticString = #file,
+            file: StaticString = #filePath,
             line: UInt = #line
         ) async {
             mockAIService.setError(expectedError, for: method)
@@ -210,7 +210,7 @@ class AIServiceTestUtilities {
             method: String,
             operation: @escaping () async throws -> some Sendable,
             maxDuration: TimeInterval = 2.0,
-            file: StaticString = #file,
+            file: StaticString = #filePath,
             line: UInt = #line
         ) async {
             await assertPerformance(
@@ -294,7 +294,7 @@ extension SharedViewModelTestCase {
         mockService: AIServiceTestUtilities.MockAIService,
         expectedCalls: [String],
         timeout: TimeInterval = 10.0,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         let initialCallCount = mockService.callHistory.count
@@ -325,7 +325,7 @@ extension SharedViewModelTestCase {
         errorMethod: String,
         expectedError: Error,
         timeout: TimeInterval = 10.0,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         mockService.setError(expectedError, for: errorMethod)

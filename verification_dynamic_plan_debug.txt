@@ -1,0 +1,11 @@
+Building for debugging...
+[0/3] Write swift-version-39B54973F684ADAB.txt
+Build of product 'RAGVerifier' complete! (0.36s)
+🚀 Starting RAG Verification...
+✅ DB Connected
+🧠 Learning fact: The health monitor agent is located at /app/agents/smart_agent_health_monitor.sh
+💾 VectorStore: Saved content length 80
+✅ Fact saved to Postgres Vector DB
+🤖 Aggregator: Received query: 'Run the health monitor check please.'
+🔍 Aggregator: RAG Context found: 3 items
+❌ Error: SharedKit.OllamaError.httpError(405)

@@ -17,10 +17,45 @@ let package = Package(
             name: "SharedTestSupport",
             targets: ["SharedTestSupport"]
         ),
+        .executable(
+            name: "RAGVerifier",
+            targets: ["RAGVerifier"]
+        ),
+        .executable(
+            name: "AgentCLI",
+            targets: ["AgentCLI"]
+        ),
+        .executable(
+            name: "AgentDesktop",
+            targets: ["AgentDesktop"]
+        ),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.21.0"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
     ],
     targets: [
+        .executableTarget(
+            name: "AgentDesktop",
+            dependencies: ["SharedKit"],
+            path: "Sources/AgentDesktop"
+        ),
+        .executableTarget(
+            name: "AgentCLI",
+            dependencies: ["SharedKit"],
+            path: "Sources/AgentCLI"
+        ),
+        .executableTarget(
+            name: "RAGVerifier",
+            dependencies: ["SharedKit"],
+            path: "Sources/RAGVerifier"
+        ),
         .target(
             name: "SharedKit",
+            dependencies: [
+                .product(name: "PostgresNIO", package: "postgres-nio"),
+                .product(name: "Logging", package: "swift-log"),
+            ],
             path: "Sources/SharedKit"
         ),
         .target(

@@ -1,0 +1,45 @@
+Building for debugging...
+[0/3] Write swift-version-39B54973F684ADAB.txt
+[1/4] Write sources
+[3/6] Compiling SharedKit AggregatorAgent.swift
+[4/6] Emitting module SharedKit
+[4/7] Write Objects.LinkFileList
+[5/7] Linking RAGVerifier
+[6/7] Applying RAGVerifier
+Build of product 'RAGVerifier' complete! (3.78s)
+🚀 Starting RAG Verification...
+✅ DB Connected
+🧠 Learning fact: The health monitor agent is located at /app/agents/smart_agent_health_monitor.sh
+💾 VectorStore: Saved content length 80
+✅ Fact saved to Postgres Vector DB
+🤖 Aggregator: Received query: 'Run the health monitor check please.'
+🔍 Aggregator: RAG Context found: 2 items
+📋 Aggregator: Plan created: check_health
+🛠️ Aggregator: Delegating to Agent: Health Monitor
+
+🤖 Final Response:
+time="2026-01-13T12:31:51-06:00" level=warning msg="The \"SONAR_DB_USER\" variable is not set. Defaulting to a blank string."
+time="2026-01-13T12:31:51-06:00" level=warning msg="The \"SONAR_DB_PASSWORD\" variable is not set. Defaulting to a blank string."
+[36m🚀 Starting services: agent-health...[0m
+ Network tools-automation_default  Creating
+ Network tools-automation_default  Created
+ Container tools-automation-trivy  Creating
+ Container tools-automation-dozzle  Creating
+ Container tools-automation-test-db  Creating
+ Container 265a79376157_tools-automation-agent-base-1  Stopping
+ Container tools-automation-ollama  Creating
+ Container tools-automation-redis  Creating
+ Container 12b5e6734663_tools-automation-agent-health  Recreate
+ Container tools-automation-agent-health  Stopping
+ Container tools-automation-postgres  Recreate
+ Container tools-automation-prometheus-1  Creating
+ Container tools-automation-agent-health  Creating
+ Container tools-automation-agent-health  Stopped
+ Container tools-automation-agent-health  Removing
+ Container 265a79376157_tools-automation-agent-base-1  Stopped
+ Container 265a79376157_tools-automation-agent-base-1  Removing
+ Container tools-automation-agent-health  Removed
+ Container 265a79376157_tools-automation-agent-base-1  Removed
+[31mError: Failed to start services: Error response from daemon: Conflict. The container name "/tools-automation-trivy" is already in use by container "c53745ee35f69bf158c5201c7a4d2b0581c552b0c34794be11cd840c8194721a". You have to remove (or rename) that container to be able to reuse that name.[0m
+
+✅ Verification Complete

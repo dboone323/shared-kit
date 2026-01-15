@@ -1,0 +1,244 @@
+[0/1] Planning build
+Building for debugging...
+[0/4] Write swift-version-39B54973F684ADAB.txt
+[2/15] Compiling SharedKit EntanglementNetwork.swift
+[3/16] Compiling SharedKit AIServiceProtocols.swift
+[4/16] Compiling SharedKit AccessibilityLabels.swift
+[5/16] Compiling SharedKit QuantumCICDOptimization.swift
+[6/16] Compiling SharedKit CoreMLEmbeddingService.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/CoreMLEmbeddingService.swift:9:23: error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'CoreMLEmbeddingService' may have shared mutable state [#MutableGlobalVariable]
+ 5 | /// A service that generates vector embeddings for text using Apple's On-Device Foundation Models (NaturalLanguage).
+ 6 | @available(macOS 10.15, iOS 13.0, *)
+ 7 | public class CoreMLEmbeddingService {
+   |              `- note: class 'CoreMLEmbeddingService' does not conform to the 'Sendable' protocol
+ 8 |     
+ 9 |     public static let shared = CoreMLEmbeddingService()
+   |                       |- error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'CoreMLEmbeddingService' may have shared mutable state [#MutableGlobalVariable]
+   |                       |- note: add '@MainActor' to make static property 'shared' part of global actor 'MainActor'
+   |                       `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+10 |     
+11 |     private init() {}
+
+[#MutableGlobalVariable]: <https://docs.swift.org/compiler/documentation/diagnostics/mutable-global-variable>
+[7/19] Compiling SharedKit AppLogger.swift
+error: emit-module command failed with exit code 1 (use -v to see invocation)
+[8/19] Compiling SharedKit AnyCodable.swift
+[9/19] Emitting module SharedKit
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/AggregatorAgent.swift:6:23: error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'AggregatorAgent' may have shared mutable state [#MutableGlobalVariable]
+ 3 | /// The central "Brain" agent that coordinates User queries, RAG memory, and Docker tools.
+ 4 | @available(macOS 12.0, *)
+ 5 | public class AggregatorAgent {
+   |              `- note: class 'AggregatorAgent' does not conform to the 'Sendable' protocol
+ 6 |     public static let shared = AggregatorAgent()
+   |                       |- error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'AggregatorAgent' may have shared mutable state [#MutableGlobalVariable]
+   |                       |- note: add '@MainActor' to make static property 'shared' part of global actor 'MainActor'
+   |                       `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+ 7 |     
+ 8 |     private let embeddingService = CoreMLEmbeddingService.shared
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/CoreMLEmbeddingService.swift:9:23: error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'CoreMLEmbeddingService' may have shared mutable state [#MutableGlobalVariable]
+ 5 | /// A service that generates vector embeddings for text using Apple's On-Device Foundation Models (NaturalLanguage).
+ 6 | @available(macOS 10.15, iOS 13.0, *)
+ 7 | public class CoreMLEmbeddingService {
+   |              `- note: class 'CoreMLEmbeddingService' does not conform to the 'Sendable' protocol
+ 8 |     
+ 9 |     public static let shared = CoreMLEmbeddingService()
+   |                       |- error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'CoreMLEmbeddingService' may have shared mutable state [#MutableGlobalVariable]
+   |                       |- note: add '@MainActor' to make static property 'shared' part of global actor 'MainActor'
+   |                       `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+10 |     
+11 |     private init() {}
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:10:23: error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'PostgresVectorStore' may have shared mutable state [#MutableGlobalVariable]
+  6 | /// A storage engine for vector embeddings using Postgres + pgvector.
+  7 | @available(macOS 12.0, *)
+  8 | public class PostgresVectorStore {
+    |              `- note: class 'PostgresVectorStore' does not conform to the 'Sendable' protocol
+  9 |     
+ 10 |     public static let shared = PostgresVectorStore()
+    |                       |- error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'PostgresVectorStore' may have shared mutable state [#MutableGlobalVariable]
+    |                       |- note: add '@MainActor' to make static property 'shared' part of global actor 'MainActor'
+    |                       `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+ 11 |     
+ 12 |     private var connection: PostgresConnection?
+
+[#MutableGlobalVariable]: <https://docs.swift.org/compiler/documentation/diagnostics/mutable-global-variable>
+[10/19] Compiling SharedKit EternalConsciousnessIntegrationFramework.swift
+[11/19] Compiling SharedKit PostgresVectorStore.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:10:23: error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'PostgresVectorStore' may have shared mutable state [#MutableGlobalVariable]
+  6 | /// A storage engine for vector embeddings using Postgres + pgvector.
+  7 | @available(macOS 12.0, *)
+  8 | public class PostgresVectorStore {
+    |              `- note: class 'PostgresVectorStore' does not conform to the 'Sendable' protocol
+  9 |     
+ 10 |     public static let shared = PostgresVectorStore()
+    |                       |- error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'PostgresVectorStore' may have shared mutable state [#MutableGlobalVariable]
+    |                       |- note: add '@MainActor' to make static property 'shared' part of global actor 'MainActor'
+    |                       `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+ 11 |     
+ 12 |     private var connection: PostgresConnection?
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:27:17: error: argument 'database' must precede argument 'password'
+ 25 |                 username: "sonar", // Reusing sonar user/db for RAG as per plan
+ 26 |                 password: "sonar",
+ 27 |                 database: "sonar"
+    |                 `- error: argument 'database' must precede argument 'password'
+ 28 |             ),
+ 29 |             tls: .disable
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:32:22: error: 'Logger' cannot be constructed because it has no accessible initializers
+ 30 |         )
+ 31 |         
+ 32 |         let logger = Logger(label: "PostgresVectorStore")
+    |                      `- error: 'Logger' cannot be constructed because it has no accessible initializers
+ 33 |         
+ 34 |         // Establish connection
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:64:30: error: cannot convert value of type 'String' to expected argument type 'PostgresQuery'
+ 62 |         );
+ 63 |         """
+ 64 |         try await conn.query(query, logger: Logger(label: "init-table"))
+    |                              `- error: cannot convert value of type 'String' to expected argument type 'PostgresQuery'
+ 65 |     }
+ 66 |     
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:64:45: error: 'Logger' cannot be constructed because it has no accessible initializers
+ 62 |         );
+ 63 |         """
+ 64 |         try await conn.query(query, logger: Logger(label: "init-table"))
+    |                                             `- error: 'Logger' cannot be constructed because it has no accessible initializers
+ 65 |     }
+ 66 |     
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:81:13: error: argument 'logger' must precede unnamed argument #2
+ 79 |                 PostgresData(string: vectorString)
+ 80 |             ],
+ 81 |             logger: Logger(label: "save-embedding")
+    |             `- error: argument 'logger' must precede unnamed argument #2
+ 82 |         )
+ 83 |         print("💾 VectorStore: Saved content length \(content.count)")
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:81:21: error: 'Logger' cannot be constructed because it has no accessible initializers
+ 79 |                 PostgresData(string: vectorString)
+ 80 |             ],
+ 81 |             logger: Logger(label: "save-embedding")
+    |                     `- error: 'Logger' cannot be constructed because it has no accessible initializers
+ 82 |         )
+ 83 |         print("💾 VectorStore: Saved content length \(content.count)")
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:99:14: error: argument 'logger' must precede unnamed argument #2
+ 97 |                 PostgresData(int: limit)
+ 98 |              ],
+ 99 |              logger: Logger(label: "search-embedding")
+    |              `- error: argument 'logger' must precede unnamed argument #2
+100 |         )
+101 |         
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/PostgresVectorStore.swift:99:22: error: 'Logger' cannot be constructed because it has no accessible initializers
+ 97 |                 PostgresData(int: limit)
+ 98 |              ],
+ 99 |              logger: Logger(label: "search-embedding")
+    |                      `- error: 'Logger' cannot be constructed because it has no accessible initializers
+100 |         )
+101 |         
+
+[#MutableGlobalVariable]: <https://docs.swift.org/compiler/documentation/diagnostics/mutable-global-variable>
+[12/19] Compiling SharedKit AggregatorAgent.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/AggregatorAgent.swift:6:23: error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'AggregatorAgent' may have shared mutable state [#MutableGlobalVariable]
+ 3 | /// The central "Brain" agent that coordinates User queries, RAG memory, and Docker tools.
+ 4 | @available(macOS 12.0, *)
+ 5 | public class AggregatorAgent {
+   |              `- note: class 'AggregatorAgent' does not conform to the 'Sendable' protocol
+ 6 |     public static let shared = AggregatorAgent()
+   |                       |- error: static property 'shared' is not concurrency-safe because non-'Sendable' type 'AggregatorAgent' may have shared mutable state [#MutableGlobalVariable]
+   |                       |- note: add '@MainActor' to make static property 'shared' part of global actor 'MainActor'
+   |                       `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+ 7 |     
+ 8 |     private let embeddingService = CoreMLEmbeddingService.shared
+
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/AggregatorAgent.swift:61:13: warning: initialization of variable 'arguments' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+59 |         process.executableURL = URL(fileURLWithPath: executablePath)
+60 |         
+61 |         var arguments = ["ai-fix"] // Mapping "ai-fix" agent concept to CLI command
+   |             `- warning: initialization of variable 'arguments' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+62 |         if name == "agent-health" {
+63 |             // "start agents" triggers the health monitor container logic in our setup
+
+[#MutableGlobalVariable]: <https://docs.swift.org/compiler/documentation/diagnostics/mutable-global-variable>
+[13/29] Compiling SharedKit GlobalQuantumCommunicationNetwork.swift
+[14/29] Compiling SharedKit QuantumInternet.swift
+[15/32] Compiling SharedKit UniversalIntelligenceEmergence.swift
+[16/33] Compiling SharedKit UniversalConsciousnessIntegrationFramework.swift
+[17/34] Compiling SharedKit QuantumEternitySystems.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/QuantumEternitySystems.swift:334:25: warning: no 'async' operations occur within 'await' expression
+332 |                 try? await Task.sleep(nanoseconds: 30_000_000_000) // 30 seconds
+333 |                 // Update state for next iteration
+334 |                 state = await self.getCurrentEternityState()
+    |                         `- warning: no 'async' operations occur within 'await' expression
+335 |             }
+336 |         }
+[18/35] Compiling SharedKit OllamaTypes.swift
+[19/35] Compiling SharedKit PostSingularityFrameworks.swift
+[20/36] Compiling SharedKit SharedArchitecture.swift
+[21/36] Compiling SharedKit QuantumInternetProtocols.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/QuantumInternetProtocols.swift:62:13: warning: initialization of immutable value 'errorCorrectionResult' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 60 | 
+ 61 |         // Initialize error correction
+ 62 |         let errorCorrectionResult = await errorCorrection.initializeErrorCorrection(for: sessionId)
+    |             `- warning: initialization of immutable value 'errorCorrectionResult' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 63 | 
+ 64 |         let session = ProtocolSession(
+[22/36] Compiling SharedKit QuantumInternetTypes.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/QuantumInternetProtocols.swift:62:13: warning: initialization of immutable value 'errorCorrectionResult' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 60 | 
+ 61 |         // Initialize error correction
+ 62 |         let errorCorrectionResult = await errorCorrection.initializeErrorCorrection(for: sessionId)
+    |             `- warning: initialization of immutable value 'errorCorrectionResult' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 63 | 
+ 64 |         let session = ProtocolSession(
+[23/36] Compiling SharedKit SingularityMonitoringSystemsFramework.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/SingularityMonitoringSystemsFramework.swift:338:25: warning: no 'async' operations occur within 'await' expression
+336 |                 try? await Task.sleep(nanoseconds: 15_000_000_000) // 15 seconds
+337 |                 // Update state for next iteration
+338 |                 state = await self.getCurrentMonitoringState()
+    |                         `- warning: no 'async' operations occur within 'await' expression
+339 |             }
+340 |         }
+[24/36] Compiling SharedKit HybridNetworkIntegration.swift
+[25/36] Compiling SharedKit OllamaClient.swift
+[26/36] Compiling SharedKit QuantumKeyDistribution.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/QuantumNetworkRouting.swift:223:13: warning: variable 'paths' was never used; consider replacing with '_' or removing it [#no-usage]
+221 |     {
+222 |         // Simplified path finding using Dijkstra-like algorithm
+223 |         var paths: [RoutingPath] = []
+    |             `- warning: variable 'paths' was never used; consider replacing with '_' or removing it [#no-usage]
+224 | 
+225 |         // Generate sample paths (in real implementation, use graph algorithms)
+[27/36] Compiling SharedKit QuantumNetworkRouting.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/QuantumNetworkRouting.swift:223:13: warning: variable 'paths' was never used; consider replacing with '_' or removing it [#no-usage]
+221 |     {
+222 |         // Simplified path finding using Dijkstra-like algorithm
+223 |         var paths: [RoutingPath] = []
+    |             `- warning: variable 'paths' was never used; consider replacing with '_' or removing it [#no-usage]
+224 | 
+225 |         // Generate sample paths (in real implementation, use graph algorithms)
+[28/36] Compiling SharedKit TechnologicalSingularityCoordination.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/TechnologicalSingularityCoordination.swift:258:25: warning: no 'async' operations occur within 'await' expression
+256 |                 try? await Task.sleep(nanoseconds: 10_000_000_000) // 10 seconds
+257 |                 // Update state for next iteration
+258 |                 state = await self.getCurrentConvergenceState()
+    |                         `- warning: no 'async' operations occur within 'await' expression
+259 |             }
+260 |         }
+[29/36] Compiling SharedKit SingularitySafetySystems.swift
+[30/36] Compiling SharedKit UniversalSingularityAchievementFramework.swift
+[31/36] Compiling SharedKit UniversalOptimizationNetworks.swift
+/Users/danielstevens/github-projects/tools-automation/shared-kit/Sources/SharedKit/UniversalOptimizationNetworks.swift:334:25: warning: no 'async' operations occur within 'await' expression
+332 |                 try? await Task.sleep(nanoseconds: 20_000_000_000) // 20 seconds
+333 |                 // Update state for next iteration
+334 |                 state = await self.getCurrentOptimizationState()
+    |                         `- warning: no 'async' operations occur within 'await' expression
+335 |             }
+336 |         }
+[32/36] Compiling SharedKit QuantumRepeater.swift
+[33/36] Compiling SharedKit QuantumTeleportation.swift

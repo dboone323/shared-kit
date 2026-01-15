@@ -1,0 +1,19 @@
+Building for debugging...
+[0/3] Write swift-version-39B54973F684ADAB.txt
+[1/4] Write sources
+[3/6] Emitting module SharedKit
+[4/6] Compiling SharedKit AggregatorAgent.swift
+[5/8] Emitting module RAGVerifier
+[6/8] Compiling RAGVerifier main.swift
+[6/9] Write Objects.LinkFileList
+[7/9] Linking RAGVerifier
+[8/9] Applying RAGVerifier
+Build of product 'RAGVerifier' complete! (4.33s)
+🚀 Starting RAG Verification...
+✅ DB Connected
+🧠 Learning fact: The health monitor agent is located at /app/agents/smart_agent_health_monitor.sh
+💾 VectorStore: Saved content length 80
+✅ Fact saved to Postgres Vector DB
+🤖 Aggregator: Received query: 'Run the health monitor check please.'
+🔍 Aggregator: RAG Context found: 3 items
+❌ Error: SharedKit.OllamaError.httpError(405)

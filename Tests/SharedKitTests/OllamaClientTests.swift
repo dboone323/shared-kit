@@ -9,47 +9,18 @@ import XCTest
 final class OllamaClientTests: XCTestCase {
     
     // MARK: - Configuration Tests
+    // Note: OllamaConfig uses OllamaConfig struct, not OllamaClientConfig
     
-    func testDefaultEndpoint() {
-        let config = OllamaClientConfig()
-        XCTAssertEqual(config.baseURL.absoluteString, "http://localhost:11434")
+    func testDefaultConfig() {
+        let config = OllamaConfig.default
+        XCTAssertEqual(config.baseURL, "http://127.0.0.1:11434")
+        XCTAssertFalse(config.defaultModel.isEmpty)
     }
     
-    func testCustomEndpoint() {
-        let config = OllamaClientConfig(baseURL: URL(string: "http://custom:8080")!)
-        XCTAssertEqual(config.baseURL.absoluteString, "http://custom:8080")
-    }
-    
-    func testDefaultModel() {
-        let config = OllamaClientConfig()
-        XCTAssertFalse(config.model.isEmpty)
-    }
-    
-    // MARK: - Request Building Tests
-    
-    func testGenerateRequestJSON() throws {
-        let request = OllamaGenerateRequest(
-            model: "llama2",
-            prompt: "Hello",
-            stream: false
-        )
-        let data = try JSONEncoder().encode(request)
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        
-        XCTAssertEqual(json?["model"] as? String, "llama2")
-        XCTAssertEqual(json?["prompt"] as? String, "Hello")
-        XCTAssertEqual(json?["stream"] as? Bool, false)
-    }
-    
-    func testChatRequestJSON() throws {
-        let message = OllamaChatMessage(role: "user", content: "Hello")
-        let request = OllamaChatRequest(
-            model: "llama2",
-            messages: [message],
-            stream: false
-        )
-        let data = try JSONEncoder().encode(request)
-        XCTAssertNotNil(data)
+    func testCodeGenerationConfig() {
+        let config = OllamaConfig.codeGeneration
+        XCTAssertEqual(config.defaultModel, "codellama")
+        XCTAssertEqual(config.temperature, 0.2)
     }
     
     // MARK: - Response Parsing Tests
@@ -58,6 +29,7 @@ final class OllamaClientTests: XCTestCase {
         let json = """
         {
             "model": "llama2",
+            "created_at": "2024-01-01T00:00:00Z",
             "response": "Hello there!",
             "done": true
         }
@@ -69,17 +41,18 @@ final class OllamaClientTests: XCTestCase {
         XCTAssertTrue(response.done)
     }
     
-    // MARK: - Error Handling Tests
-    
-    func testNetworkErrorHandling() {
-        XCTAssertTrue(true, "Network error handling placeholder")
+    func testOllamaMessageCreation() {
+        let message = OllamaMessage(role: "user", content: "Hello")
+        XCTAssertEqual(message.role, "user")
+        XCTAssertEqual(message.content, "Hello")
     }
     
-    func testTimeoutHandling() {
-        XCTAssertTrue(true, "Timeout handling placeholder")
-    }
+    // MARK: - Error Tests
     
-    func testInvalidResponseHandling() {
-        XCTAssertTrue(true, "Invalid response handling placeholder")
+    func testOllamaErrorDescriptions() {
+        XCTAssertNotNil(OllamaError.serverNotRunning.errorDescription)
+        XCTAssertNotNil(OllamaError.modelNotAvailable("test").errorDescription)
+        XCTAssertNotNil(OllamaError.networkTimeout.errorDescription)
     }
 }
+

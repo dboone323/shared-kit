@@ -191,6 +191,10 @@ public class OllamaClient: ObservableObject {
     }
 
     private func ensureModelAvailable(_ model: String) async throws {
+        // Refresh model list if potentially stale (not yet initialized)
+        if self.availableModels.isEmpty {
+            self.availableModels = try await self.listModels()
+        }
         if !self.availableModels.contains(model), self.config.enableAutoModelDownload {
             Logger.logInfo("Auto-downloading model: \(model)")
             try await self.pullModel(model)
@@ -496,7 +500,7 @@ public class OllamaClient: ObservableObject {
     // MARK: - Model Management
 
     public func listModels() async throws -> [String] {
-        let response = try await performRequest(endpoint: "api/tags", body: [:])
+        let response = try await performGetRequest(endpoint: "api/tags")
         let models = response["models"] as? [[String: Any]] ?? []
         return models.compactMap { $0["name"] as? String }
     }
@@ -523,7 +527,7 @@ public class OllamaClient: ObservableObject {
 
     public func isServerRunning() async -> Bool {
         do {
-            _ = try await performRequest(endpoint: "api/tags", body: [:])
+            _ = try await performGetRequest(endpoint: "api/tags")
             return true
         } catch {
             return false
@@ -532,7 +536,7 @@ public class OllamaClient: ObservableObject {
 
     public func getServerStatus() async -> OllamaServerStatus {
         do {
-            let response = try await performRequest(endpoint: "api/tags", body: [:])
+            let response = try await performGetRequest(endpoint: "api/tags")
             let models = response["models"] as? [[String: Any]] ?? []
             return OllamaServerStatus(
                 running: true, modelCount: models.count,
@@ -556,6 +560,8 @@ public class OllamaClient: ObservableObject {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        print("🔍 OllamaClient Requesting: \(url.absoluteString)")
 
         let (data, response) = try await session.data(for: request)
 
@@ -571,6 +577,32 @@ public class OllamaClient: ObservableObject {
             throw OllamaError.invalidResponseFormat
         }
 
+        return json
+    }
+    
+    private func performGetRequest(endpoint: String) async throws -> [String: Any] {
+        let urlString = "\(config.baseURL)/\(endpoint)"
+        guard let url = URL(string: urlString), url.scheme?.hasPrefix("http") == true else {
+            throw OllamaError.invalidConfiguration("Invalid URL: \(urlString)")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw OllamaError.invalidResponse
+        }
+        
+        guard httpResponse.statusCode == 200 else {
+            throw OllamaError.httpError(httpResponse.statusCode)
+        }
+        
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw OllamaError.invalidResponseFormat
+        }
+        
         return json
     }
 }
