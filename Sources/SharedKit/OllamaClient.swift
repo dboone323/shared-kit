@@ -452,16 +452,82 @@ public class OllamaClient: ObservableObject {
 
     // MARK: - Core Generation Methods
 
-    public func generateAdvanced(
+    public func generate(
         model: String,
         prompt: String,
-        system: String? = nil,
+        systemPrompt: String? = nil,
+        temperature: Double = 0.7,
+        stream: Bool = false
+    ) async throws -> String {
+        // Use health tracker to select best model
+        let selectedModel = await chooseHealthyModel(preferred: model)
+
+        // Retry with exponential backoff
+        var lastError: Error?
+        for attempt in 0..<retryConfig.maxRetries {
+            do {
+                let result = try await executeGenerate(
+                    model: selectedModel,
+                    prompt: prompt,
+                    systemPrompt: systemPrompt,
+                    temperature: temperature,
+                    stream: stream
+                )
+
+                // Record success
+                await healthTracker.recordSuccess(for: selectedModel)
+                return result
+
+            } catch {
+                lastError = error
+                await healthTracker.recordFailure(for: selectedModel)
+
+                if attempt < retryConfig.maxRetries - 1 {
+                    let delay = retryConfig.delay(for: attempt)
+                    SecureLogger.info(
+                        "Retry attempt \(attempt + 1) after \(delay)s",
+                        category: .ai
+                    )
+                    try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                }
+            }
+        }
+
+        throw lastError
+            ?? OllamaError.unknownError("Failed after \(retryConfig.maxRetries) retries")
+    }
+
+    /// Choose healthy model with fallback
+    private func chooseHealthyModel(preferred: String) async -> String {
+        if await healthTracker.isHealthy(preferred) {
+            return preferred
+        }
+
+        // Try fallback models
+        let allModels = [preferred] + config.fallbackModels
+        if let healthy = await healthTracker.healthiestModel(from: allModels) {
+            SecureLogger.info(
+                "Switching from \(preferred) to healthier model \(healthy)",
+                category: .ai
+            )
+            return healthy
+        }
+
+        return preferred  // Use preferred even if unhealthy
+    }
+
+    /// Execute generation (original logic)
+    private func executeGenerate(
+        model: String,
+        prompt: String,
+        systemPrompt: String? = nil,
         temperature: Double = 0.7,
         topP: Double = 0.9,
         topK: Int = 40,
         maxTokens: Int = 500,
-        context: [Int]? = nil
-    ) async throws -> OllamaGenerateResponse {
+        context: [Int]? = nil,
+        stream: Bool = false
+    ) async throws -> String {
         var requestBody: [String: Any] = [
             "model": model,
             "prompt": prompt,
