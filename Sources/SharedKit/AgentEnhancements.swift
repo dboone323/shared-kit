@@ -155,4 +155,80 @@ public actor ToolLearningSystem {
     }
 }
 
+// MARK: - Step 35: Smart Batch Processing
+
+public struct BatchTask<T: Sendable>: Sendable {
+    public let id: String
+    public let priority: Int  // 0-10, 10 is highest
+    public let operation: @Sendable () async throws -> T
+    public let created: Date = Date()
+}
+
+@available(macOS 12.0, iOS 15.0, *)
+public actor SmartBatchProcessor<T: Sendable> {
+    private var queue: [BatchTask<T>] = []
+    private var isProcessing = false
+    private let maxBatchSize: Int
+    private let batchWindow: TimeInterval  // Max wait time (N ms)
+
+    public init(maxBatchSize: Int = 5, batchWindow: TimeInterval = 0.05) {
+        self.maxBatchSize = maxBatchSize
+        self.batchWindow = batchWindow
+    }
+
+    /// Submit task for processing
+    public func submit(_ task: BatchTask<T>) {
+        queue.append(task)
+        // Sort by priority descending, then creation time
+        queue.sort {
+            if $0.priority == $1.priority {
+                return $0.created < $1.created
+            }
+            return $0.priority > $1.priority
+        }
+
+        processQueueIfNeeded()
+    }
+
+    private func processQueueIfNeeded() {
+        guard !isProcessing, !queue.isEmpty else { return }
+
+        Task {
+            isProcessing = true
+
+            // Dynamic Batching: Wait small window to gather more tasks if queue is small
+            if queue.count < maxBatchSize {
+                try? await Task.sleep(nanoseconds: UInt64(batchWindow * 1_000_000_000))
+            }
+
+            await processBatch()
+            isProcessing = false
+
+            // Continue if more items
+            if !queue.isEmpty {
+                processQueueIfNeeded()
+            }
+        }
+    }
+
+    private func processBatch() async {
+        // Take up to maxBatchSize
+        let count = min(queue.count, maxBatchSize)
+        let batch = Array(queue.prefix(count))
+        queue.removeFirst(count)
+
+        // Execute in parallel
+        await withTaskGroup(of: Void.self) { group in
+            for task in batch {
+                group.addTask {
+                    // Execute operation
+                    // In a real implementation, we'd need a way to return results to the caller
+                    // e.g., via continuations or callbacks stored in the BatchTask
+                    _ = try? await task.operation()
+                }
+            }
+        }
+    }
+}
+
 struct TimeoutError: Error {}
