@@ -9,12 +9,13 @@ public final class SecureLogger {
     /// Subsystem identifier for logging
     private static let subsystem = "com.yourapp.shared-kit"
 
-    /// Logger categories
+    /// Log categories for organization
     public enum Category: String {
         case general = "General"
         case network = "Network"
         case database = "Database"
         case haptics = "Haptics"
+        case system = "System"  // Added for file system operations
         case ai = "AI"
         case performance = "Performance"
         case security = "Security"
