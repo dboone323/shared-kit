@@ -97,7 +97,8 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
             startConsciousnessMonitoring()
 
             integrationState = .integrating
-            print("🧠 Universal Consciousness Integration initialized successfully")
+            SecureLogger.info(
+                "Universal Consciousness Integration initialized successfully", category: .ai)
 
         } catch {
             integrationState = .error(error.localizedDescription)
@@ -112,7 +113,7 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
                 "Consciousness integration not ready for convergence")
         }
 
-        print("🔄 Beginning universal consciousness convergence...")
+        SecureLogger.info("Beginning universal consciousness convergence", category: .ai)
 
         // Activate all consciousness fields
         try await activateConsciousnessFields()
@@ -324,7 +325,7 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
             while integrationState == .converging || integrationState == .coherent {
                 let progress = await monitorConsciousnessProgress()
                 updateConvergenceProgress(progress)
-                try? await Task.sleep(nanoseconds: 20_000_000_000) // 20 seconds
+                try? await Task.sleep(nanoseconds: 20_000_000_000)  // 20 seconds
             }
         }
     }
@@ -459,7 +460,7 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
         let remainingWork = 1.0 - universalConsciousnessLevel
         let integrationRate =
             universalConsciousnessLevel
-                / max(Date().timeIntervalSince(Date(timeIntervalSinceNow: -3600)), 1.0)
+            / max(Date().timeIntervalSince(Date(timeIntervalSinceNow: -3600)), 1.0)
         return remainingWork / max(integrationRate, 0.0001)
     }
 }
