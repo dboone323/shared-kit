@@ -57,50 +57,40 @@ final class AgentEnhancementsTests: XCTestCase {
     func testParallelExecution() async throws {
         let coordinator = ToolExecutionCoordinator()
 
-        let tools: [(String, () async throws -> String)] = [
-            (
-                "tool1",
-                {
-                    try await Task.sleep(nanoseconds: 100_000_000)
-                    return "result1"
-                }
-            ),
-            (
-                "tool2",
-                {
-                    try await Task.sleep(nanoseconds: 100_000_000)
-                    return "result2"
-                }
-            ),
-            (
-                "tool3",
-                {
-                    try await Task.sleep(nanoseconds: 100_000_000)
-                    return "result3"
-                }
-            ),
+        let tools: [@Sendable () async throws -> String] = [
+            {
+                try await Task.sleep(nanoseconds: 100_000_000)
+                return "result1"
+            },
+            {
+                try await Task.sleep(nanoseconds: 100_000_000)
+                return "result2"
+            },
+            {
+                try await Task.sleep(nanoseconds: 100_000_000)
+                return "result3"
+            },
         ]
 
         let startTime = Date()
-        let results = try await coordinator.executeParallel(tools)
+        let results = try await coordinator.executeParallel(tools: tools)
         let duration = Date().timeIntervalSince(startTime)
 
         // Should execute in parallel (< 0.5s for 3x 0.1s tasks)
         XCTAssertLessThan(duration, 0.5, "Should execute in parallel")
         XCTAssertEqual(results.count, 3)
-        XCTAssertEqual(results["tool1"], "result1")
-        XCTAssertEqual(results["tool2"], "result2")
-        XCTAssertEqual(results["tool3"], "result3")
+        XCTAssertEqual(results[0], "result1")
+        XCTAssertEqual(results[1], "result2")
+        XCTAssertEqual(results[2], "result3")
     }
 
     func testExecuteWithTimeout() async throws {
         let coordinator = ToolExecutionCoordinator()
 
         // Task that completes quickly
-        let result = try await coordinator.executeWithTimeout(
-            {
-                return "success"
-            }, timeout: 1.0)
+        let result = try await coordinator.executeWithTimeout(seconds: 1.0) {
+            return "success"
+        }
 
         XCTAssertEqual(result, "success")
     }
@@ -110,11 +100,10 @@ final class AgentEnhancementsTests: XCTestCase {
 
         do {
             // Task that takes too long
-            _ = try await coordinator.executeWithTimeout(
-                {
-                    try await Task.sleep(nanoseconds: 2_000_000_000)  // 2 seconds
-                    return "should not reach"
-                }, timeout: 0.5)
+            _ = try await coordinator.executeWithTimeout(seconds: 0.5) {
+                try await Task.sleep(nanoseconds: 2_000_000_000)  // 2 seconds
+                return "should not reach"
+            }
 
             XCTFail("Should have thrown timeout error")
         } catch {

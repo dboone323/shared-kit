@@ -1,6 +1,22 @@
-import Combine
 import Foundation
-import OSLog
+
+#if canImport(OSLog)
+    import OSLog
+#endif
+
+#if canImport(Combine)
+    import Combine
+#else
+    import Foundation
+    public protocol ObservableObject: AnyObject {}
+
+    @propertyWrapper
+    public struct Published<Value> {
+        public var wrappedValue: Value
+        public init(wrappedValue: Value) { self.wrappedValue = wrappedValue }
+        public var projectedValue: Published<Value> { self }
+    }
+#endif
 
 // MARK: - Cloud Fallback Policy (Shared-Kit)
 
@@ -162,16 +178,20 @@ public class OllamaClient: ObservableObject {
     @Published public var currentModel: String = ""
     @Published public var serverStatus: OllamaServerStatus?
 
-    public init(config: OllamaConfig = .default) {
+    public init(config: OllamaConfig = .default, session: URLSession? = nil) {
         self.config = config
 
         // Enhanced URLSession configuration
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = config.timeout
-        configuration.timeoutIntervalForResource = config.timeout * 2
-        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-        configuration.httpMaximumConnectionsPerHost = 4
-        self.session = URLSession(configuration: configuration)
+        if let session = session {
+            self.session = session
+        } else {
+            let configuration = URLSessionConfiguration.default
+            configuration.timeoutIntervalForRequest = config.timeout
+            configuration.timeoutIntervalForResource = config.timeout * 2
+            configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+            configuration.httpMaximumConnectionsPerHost = 4
+            self.session = URLSession(configuration: configuration)
+        }
 
         // Cache and metrics
         self.cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)
@@ -483,22 +503,18 @@ public class OllamaClient: ObservableObject {
                 await healthTracker.recordFailure(for: selectedModel)
 
                 if attempt < retryConfig.maxRetries - 1 {
-                    let delay = retryConfig.delay(for: attempt)
-                    SecureLogger.info(
-                        "Retry attempt \(attempt + 1) after \(delay)s",
-                        category: .ai
-                    )
-                    try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                    let delay = pow(2.0, Double(attempt)) * retryConfig.baseDelay
+                    try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                 }
             }
         }
 
-        throw lastError
-            ?? OllamaError.unknownError("Failed after \(retryConfig.maxRetries) retries")
+        throw lastError ?? OllamaError.serverError("Failed after \(retryConfig.maxRetries) retries")
     }
 
     /// Choose healthy model with fallback
     private func chooseHealthyModel(preferred: String) async -> String {
+        // Check if preferred model is healthy
         if await healthTracker.isHealthy(preferred) {
             return preferred
         }
@@ -549,7 +565,7 @@ public class OllamaClient: ObservableObject {
         let response = try await performRequest(endpoint: "api/generate", body: requestBody)
         let data = try JSONSerialization.data(withJSONObject: response)
         let decoded = try JSONDecoder().decode(OllamaGenerateResponse.self, from: data)
-        return decoded.response  // Extract the response string
+        return decoded.response
     }
 
     public func chat(
@@ -572,7 +588,7 @@ public class OllamaClient: ObservableObject {
             throw OllamaError.invalidResponseFormat
         }
 
-        return content.trimmingCharacters(in: .whitespacesAndNewlines)
+        return content.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
 
     // MARK: - Model Management
@@ -608,7 +624,7 @@ public class OllamaClient: ObservableObject {
             _ = try await performGetRequest(endpoint: "api/tags")
             return true
         } catch {
-            return false
+            return await healthTracker.isHealthy("unknown")
         }
     }
 
@@ -625,14 +641,12 @@ public class OllamaClient: ObservableObject {
         }
     }
 
-    // MARK: - Private Methods
+    // MARK: - Private Request Methods
 
     private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any]
     {
-        // Validate URL construction for security
-        let urlString = "\(config.baseURL)/\(endpoint)"
-        guard let url = URL(string: urlString), url.scheme?.hasPrefix("http") == true else {
-            throw OllamaError.invalidConfiguration("Invalid URL: \(urlString)")
+        guard let url = URL(string: "\(config.baseURL)/\(endpoint)") else {
+            throw OllamaError.invalidURL
         }
 
         var request = URLRequest(url: url)
@@ -645,11 +659,11 @@ public class OllamaClient: ObservableObject {
         let (data, response) = try await session.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw OllamaError.invalidResponse
+            throw OllamaError.connectionFailed
         }
 
         guard httpResponse.statusCode == 200 else {
-            throw OllamaError.httpError(httpResponse.statusCode)
+            throw OllamaError.serverError("Status code: \(httpResponse.statusCode)")
         }
 
         guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {

@@ -4,11 +4,13 @@ import XCTest
 
 /// Integration tests for AggregatorAgent with production enhancements
 @available(macOS 12.0, *)
+@MainActor
 final class AggregatorAgentIntegrationTests: XCTestCase {
 
     var agent: AggregatorAgent!
 
-    override func setUp() async throws {
+    override func setUp() {
+        super.setUp()
         agent = AggregatorAgent.shared
     }
 

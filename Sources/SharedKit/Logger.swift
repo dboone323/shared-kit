@@ -9,7 +9,36 @@
 //
 
 import Foundation
-import OSLog
+
+#if canImport(OSLog)
+    import OSLog
+#else
+    // Shim for Linux
+    public struct OSLog: Sendable {
+        let subsystem: String
+        let category: String
+        public init(subsystem: String, category: String) {
+            self.subsystem = subsystem
+            self.category = category
+        }
+    }
+
+    public enum OSLogType {
+        case `default`, info, debug, error, fault
+    }
+
+    func os_log(_ message: String, log: OSLog, type: OSLogType, _ args: CVarArg...) {
+        let timestamp = DateFormatter.localizedString(
+            from: Date(), dateStyle: .none, timeStyle: .medium)
+        print("[\(timestamp)] [\(log.category)] \(message)")
+    }
+
+    func os_log(_ message: StaticString, log: OSLog, type: OSLogType, _ args: CVarArg...) {
+        let timestamp = DateFormatter.localizedString(
+            from: Date(), dateStyle: .none, timeStyle: .medium)
+        print("[\(timestamp)] [\(log.category)] \(message)")
+    }
+#endif
 
 /// Centralized logging system for Quantum Workspace applications
 /// Provides structured logging across different categories and severity levels
@@ -45,9 +74,9 @@ public enum Logger {
 
 // MARK: - Core Logging Methods
 
-public extension Logger {
+extension Logger {
     /// Log error messages with context
-    static func logError(
+    public static func logError(
         _ error: Error,
         context: String = "",
         file: String = #file,
@@ -61,7 +90,7 @@ public extension Logger {
     }
 
     /// Log debug information
-    static func logDebug(
+    public static func logDebug(
         _ message: String,
         category: OSLog = defaultLog,
         file: String = #file,
@@ -75,21 +104,21 @@ public extension Logger {
     }
 
     /// Log informational messages
-    static func logInfo(_ message: String, category: OSLog = defaultLog) {
+    public static func logInfo(_ message: String, category: OSLog = defaultLog) {
         os_log("%@", log: category, type: .info, message)
     }
 
     /// Log warning messages
-    static func logWarning(_ message: String, category: OSLog = defaultLog) {
+    public static func logWarning(_ message: String, category: OSLog = defaultLog) {
         os_log("%@", log: category, type: .default, message)
     }
 }
 
 // MARK: - Business Logic Logging
 
-public extension Logger {
+extension Logger {
     /// Log business-related events and decisions
-    static func logBusiness(
+    public static func logBusiness(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
@@ -97,7 +126,7 @@ public extension Logger {
     }
 
     /// Log UI-related events
-    static func logUI(
+    public static func logUI(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
@@ -105,7 +134,7 @@ public extension Logger {
     }
 
     /// Log data operations
-    static func logData(
+    public static func logData(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
@@ -113,7 +142,7 @@ public extension Logger {
     }
 
     /// Log network operations
-    static func logNetwork(
+    public static func logNetwork(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
@@ -123,9 +152,11 @@ public extension Logger {
 
 // MARK: - Performance Measurement
 
-public extension Logger {
+extension Logger {
     /// Measure and log execution time of a code block
-    static func measurePerformance<T>(_ operation: String, block: () throws -> T) rethrows -> T {
+    public static func measurePerformance<T>(_ operation: String, block: () throws -> T) rethrows
+        -> T
+    {
         let startTime = CFAbsoluteTimeGetCurrent()
         let result = try block()
         let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
@@ -139,16 +170,16 @@ public extension Logger {
     }
 
     /// Start a performance measurement session
-    static func startPerformanceMeasurement(_ operation: String) -> PerformanceMeasurement {
+    public static func startPerformanceMeasurement(_ operation: String) -> PerformanceMeasurement {
         PerformanceMeasurement(operation: operation, startTime: CFAbsoluteTimeGetCurrent())
     }
 }
 
 // MARK: - Context-Aware Logging
 
-public extension Logger {
+extension Logger {
     /// Log with additional context information
-    static func logWithContext(
+    public static func logWithContext(
         _ message: String, context: [String: Any], category: OSLog = defaultLog,
         type: OSLogType = .info
     ) {
@@ -158,7 +189,7 @@ public extension Logger {
     }
 
     /// Log analytics events
-    static func logAnalytics(_ event: String, parameters: [String: Any] = [:]) {
+    public static func logAnalytics(_ event: String, parameters: [String: Any] = [:]) {
         let paramString = parameters.isEmpty ? "" : " | Parameters: \(parameters)"
         os_log("[ANALYTICS] %@%@", log: self.defaultLog, type: .info, event, paramString)
     }
@@ -166,9 +197,9 @@ public extension Logger {
 
 // MARK: - File Logging Support
 
-public extension Logger {
+extension Logger {
     /// Write log to file for debugging purposes
-    static func writeToFile(_ message: String, fileName: String = "quantum_workspace.log") {
+    public static func writeToFile(_ message: String, fileName: String = "quantum_workspace.log") {
         #if DEBUG
             guard
                 let documentsPath = FileManager.default.urls(
@@ -213,8 +244,8 @@ public struct PerformanceMeasurement {
 
 // MARK: - Extensions
 
-private extension DateFormatter {
-    static let logFormatter: DateFormatter = {
+extension DateFormatter {
+    fileprivate static let logFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         return formatter

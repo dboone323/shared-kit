@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 : "${OLLAMA_CLOUD_URL:=}"
 if [[ -n "${OLLAMA_CLOUD_URL}" ]]; then

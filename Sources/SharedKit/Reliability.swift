@@ -16,12 +16,14 @@ public actor Reliability {
     public init() {}
 
     /// Check if request is allowed (Rate Limiting)
-    public func allowRequest(tokens: Int = 1) -> Bool {
-        return rateLimiter.allow(tokens: tokens)
+    public func allowRequest(tokens: Int = 1) async -> Bool {
+        return await rateLimiter.allow(tokens: tokens)
     }
 
     /// Execute with Circuit Breaker protection
-    public func executeProtected<T>(service: String, operation: @Sendable () async throws -> T)
+    public func executeProtected<T: Sendable>(
+        service: String, operation: @Sendable () async throws -> T
+    )
         async throws -> T
     {
         return try await circuitBreaker.execute(service: service, operation: operation)
@@ -29,13 +31,15 @@ public actor Reliability {
 
     /// Deduplicate identical requests
     public func executeDeduplicated<T: Sendable>(
-        id: String, operation: @Sendable () async throws -> T
+        id: String, operation: @escaping @Sendable () async throws -> T
     ) async throws -> T {
         return try await deduplicator.execute(id: id, operation: operation)
     }
 
     /// Execute with Smart Retry
-    public func executeWithRetry<T>(operation: @Sendable () async throws -> T) async throws -> T {
+    public func executeWithRetry<T: Sendable>(operation: @Sendable () async throws -> T)
+        async throws -> T
+    {
         return try await retryHandler.execute(operation: operation)
     }
 }
@@ -79,7 +83,7 @@ actor TokenBucketRateLimiter {
 
 @available(macOS 12.0, iOS 15.0, *)
 actor CircuitBreakerManager {
-    enum State {
+    enum State: Equatable {
         case closed  // Normal operation
         case open(until: Date)  // Failed, blocking requests
         case halfOpen  // Testing recovery
@@ -177,8 +181,13 @@ actor RequestDeduplicator {
 
         let task = Task {
             defer {
+                // remove is an actor method, but since we are in a detached Task, we treat it as async call to actor.
+                // However, if the warning says "no async operations", it implies context is already actor? No, Task inherits priority but not actor context unless specified.
+                // It might be because we are inside the actor? No, Task escapes.
+                // Let's rely on Task to handle it, just call it.
                 Task { await self.remove(id: id) }
             }
+            // Ensure operation result is Sendable to pass out of actor
             return try await operation()
         }
 

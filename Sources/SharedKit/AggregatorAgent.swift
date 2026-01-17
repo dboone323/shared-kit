@@ -76,11 +76,11 @@ public final class AggregatorAgent: Sendable {
         let queryVector = try await embeddingService.embed(query)
         let context = try await vectorStore.search(queryVector: queryVector, limit: 3)
         SecureLogger.info("Aggregator: RAG Context found: \(context.count) items", category: .ai)
-        let contextString = context.joined(separator: "\n- ")
+        let contextString = context.map { $0.content }.joined(separator: "\n- ")
 
         // 2. Plan: Decompose query using LLM
         let plan = try await performPlanning(query: query, context: contextString)
-        let cleanPlan = plan.trimmingCharacters(in: .whitespacesAndNewlines)
+        let cleanPlan = plan.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         SecureLogger.info("Aggregator: Plan created: \(cleanPlan)", category: .ai)
 
         // 3. Act: Execute Tools based on plan with retry logic
@@ -206,6 +206,7 @@ public final class AggregatorAgent: Sendable {
             """
 
         return try await llmClient.generate(
+            model: nil,
             prompt: "\(systemPrompt)\n\nUser Question: \(query)",
             temperature: 0.1,
             maxTokens: 30

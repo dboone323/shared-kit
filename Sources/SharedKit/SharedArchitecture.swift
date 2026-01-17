@@ -1,5 +1,8 @@
 import Foundation
-import SwiftUI
+
+#if canImport(SwiftUI)
+    import SwiftUI
+#endif
 
 // MARK: - View Model Error Types
 
@@ -21,7 +24,7 @@ public enum ViewModelError: Error, Equatable {
             return "Data error occurred"
         case .unknownError:
             return "Unknown error occurred"
-        case let .customError(message):
+        case .customError(let message):
             return message
         }
     }
@@ -33,14 +36,14 @@ public enum OperationResult<T> {
     case failure(ViewModelError)
 
     public var value: T? {
-        if case let .success(value) = self {
+        if case .success(let value) = self {
             return value
         }
         return nil
     }
 
     public var error: ViewModelError? {
-        if case let .failure(error) = self {
+        if case .failure(let error) = self {
             return error
         }
         return nil
@@ -301,19 +304,21 @@ extension Double {
 
 // MARK: - Color Extensions
 
-extension Color {
-    static let primaryAccent = Color.blue
-    static let secondaryAccent = Color.gray
-    static let successColor = Color.green
-    static let warningColor = Color.orange
-    static let errorColor = Color.red
+#if canImport(SwiftUI)
+    extension Color {
+        static let primaryAccent = Color.blue
+        static let secondaryAccent = Color.gray
+        static let successColor = Color.green
+        static let warningColor = Color.orange
+        static let errorColor = Color.red
 
-    // Platform-agnostic background colors
-    static let backgroundPrimary = Color(red: 1.0, green: 1.0, blue: 1.0)
-    static let backgroundSecondary = Color(red: 0.95, green: 0.95, blue: 0.97)
-    static let textPrimary = Color(red: 0.0, green: 0.0, blue: 0.0)
-    static let textSecondary = Color(red: 0.42, green: 0.42, blue: 0.42)
-}
+        // Platform-agnostic background colors
+        static let backgroundPrimary = Color(red: 1.0, green: 1.0, blue: 1.0)
+        static let backgroundSecondary = Color(red: 0.95, green: 0.95, blue: 0.97)
+        static let textPrimary = Color(red: 0.0, green: 0.0, blue: 0.0)
+        static let textSecondary = Color(red: 0.42, green: 0.42, blue: 0.42)
+    }
+#endif
 
 // MARK: - Array Extensions
 
@@ -345,113 +350,117 @@ extension String {
     }
 
     /// Converts a color string to SwiftUI Color with fallback
-    var toColor: Color {
-        switch self.lowercased() {
-        case "red": return .red
-        case "orange": return .orange
-        case "yellow": return .yellow
-        case "green": return .green
-        case "blue": return .blue
-        case "purple": return .purple
-        case "pink": return .pink
-        case "teal": return .teal
-        case "gray", "grey": return .gray
-        case "black": return .black
-        case "white": return .white
-        case "primary": return .primary
-        case "secondary": return .secondary
-        case "accent": return .accentColor
-        default: return .blue // Default fallback color
+    #if canImport(SwiftUI)
+        var toColor: Color {
+            switch self.lowercased() {
+            case "red": return .red
+            case "orange": return .orange
+            case "yellow": return .yellow
+            case "green": return .green
+            case "blue": return .blue
+            case "purple": return .purple
+            case "pink": return .pink
+            case "teal": return .teal
+            case "gray", "grey": return .gray
+            case "black": return .black
+            case "white": return .white
+            case "primary": return .primary
+            case "secondary": return .secondary
+            case "accent": return .accentColor
+            default: return .blue  // Default fallback color
+            }
         }
-    }
+    #endif
 }
 
 // MARK: - Color Extensions
 
-extension Color {
-    /// Initialize a Color from a hex string
-    /// - Parameter hex: Hex color string (with or without # prefix)
-    /// - Returns: Color instance from hex value
-    ///
-    /// Supports:
-    /// - RGB (12-bit): "FFF"
-    /// - RGB (24-bit): "FFFFFF"
-    /// - ARGB (32-bit): "FFFFFFFF"
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
+#if canImport(SwiftUI)
+    extension Color {
+        /// Initialize a Color from a hex string
+        /// - Parameter hex: Hex color string (with or without # prefix)
+        /// - Returns: Color instance from hex value
+        ///
+        /// Supports:
+        /// - RGB (12-bit): "FFF"
+        /// - RGB (24-bit): "FFFFFF"
+        /// - ARGB (32-bit): "FFFFFFFF"
+        init(hex: String) {
+            let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+            var int: UInt64 = 0
 
-        Scanner(string: hex).scanHexInt64(&int)
+            Scanner(string: hex).scanHexInt64(&int)
 
-        let a: UInt64
-        let r: UInt64
-        let g: UInt64
-        let b: UInt64
-        switch hex.count {
-        case 3: // RGB (12-bit)
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (a, r, g, b) = (255, 0, 0, 0)
+            let a: UInt64
+            let r: UInt64
+            let g: UInt64
+            let b: UInt64
+            switch hex.count {
+            case 3:  // RGB (12-bit)
+                (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+            case 6:  // RGB (24-bit)
+                (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+            case 8:  // ARGB (32-bit)
+                (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+            default:
+                (a, r, g, b) = (255, 0, 0, 0)
+            }
+
+            self.init(
+                .sRGB,
+                red: Double(r) / 255,
+                green: Double(g) / 255,
+                blue: Double(b) / 255,
+                opacity: Double(a) / 255
+            )
         }
 
-        self.init(
-            .sRGB,
-            red: Double(r) / 255,
-            green: Double(g) / 255,
-            blue: Double(b) / 255,
-            opacity: Double(a) / 255
-        )
-    }
+        // Create gradient colors for modern effects
+        static func gradient(from startColor: Color, to endColor: Color) -> LinearGradient {
+            LinearGradient(
+                gradient: Gradient(colors: [startColor, endColor]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
 
-    // Create gradient colors for modern effects
-    static func gradient(from startColor: Color, to endColor: Color) -> LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [startColor, endColor]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-
-    // Glass morphism effect
-    var glassMorphism: some View {
-        opacity(0.7)
-            .background(.ultraThinMaterial)
-    }
-}
-
-// MARK: - View Extensions
-
-extension View {
-    /// Platform-specific optimizations for iOS
-    @ViewBuilder
-    public func platformOptimizations() -> some View {
-        #if os(iOS)
-            self.tint(.blue)
-        #elseif os(macOS)
-            self.preferredColorScheme(.light)
-                .tint(.indigo)
-        #else
-            self
-        #endif
-    }
-
-    /// Apply glass morphism effect
-    func glassMorphismEffect() -> some View {
-        self.opacity(0.7)
-            .background(.ultraThinMaterial)
-    }
-
-    /// Conditional modifier application
-    @ViewBuilder
-    func `if`(_ condition: Bool, transform: (Self) -> some View) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
+        // Glass morphism effect
+        var glassMorphism: some View {
+            opacity(0.7)
+                .background(.ultraThinMaterial)
         }
     }
-}
+
+    // MARK: - View Extensions
+
+    extension View {
+        /// Platform-specific optimizations for iOS
+        @ViewBuilder
+        public func platformOptimizations() -> some View {
+            #if os(iOS)
+                self.tint(.blue)
+            #elseif os(macOS)
+                self.preferredColorScheme(.light)
+                    .tint(.indigo)
+            #else
+                self
+            #endif
+        }
+
+        /// Apply glass morphism effect
+        func glassMorphismEffect() -> some View {
+            self.opacity(0.7)
+                .background(.ultraThinMaterial)
+        }
+
+        /// Conditional modifier application
+        @ViewBuilder
+        func `if`(_ condition: Bool, transform: (Self) -> some View) -> some View {
+            if condition {
+                transform(self)
+            } else {
+                self
+            }
+        }
+    }
+#endif

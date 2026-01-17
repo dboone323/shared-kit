@@ -1,5 +1,20 @@
 import Foundation
-import os.log
+
+#if canImport(os)
+    import os.log
+    private typealias PlatformLogger = os.Logger
+#else
+    import Foundation
+    private struct PlatformLogger {
+        let category: String
+        init(subsystem: String, category: String) { self.category = category }
+        func debug(_ msg: String) { print("[\(category)] [DEBUG] \(msg)") }
+        func info(_ msg: String) { print("[\(category)] [INFO] \(msg)") }
+        func notice(_ msg: String) { print("[\(category)] [NOTICE] \(msg)") }
+        func error(_ msg: String) { print("[\(category)] [ERROR] \(msg)") }
+        func fault(_ msg: String) { print("[\(category)] [FAULT] \(msg)") }
+    }
+#endif
 
 /// Secure logging utility for Shared-Kit
 /// Replaces print() statements with proper logging
@@ -35,8 +50,8 @@ public final class SecureLogger {
     // MARK: - Logger Instances
 
     /// Get or create logger for category (creates new logger each time - no mutable state)
-    private static func logger(for category: Category) -> os.Logger {
-        return os.Logger(subsystem: subsystem, category: category.rawValue)
+    private static func logger(for category: Category) -> PlatformLogger {
+        return PlatformLogger(subsystem: subsystem, category: category.rawValue)
     }
 
     // MARK: - Public Logging Methods

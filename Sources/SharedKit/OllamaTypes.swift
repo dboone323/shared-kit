@@ -94,7 +94,9 @@ public struct OllamaConfig: Sendable {
         defaultModel: "deepseek-v3.1:671b-cloud",
         temperature: 0.3,
         maxTokens: 16384,
-        fallbackModels: ["deepseek-v3.1:671b-cloud", "gpt-oss:120b-cloud", "qwen3-coder:480b-cloud"],
+        fallbackModels: [
+            "deepseek-v3.1:671b-cloud", "gpt-oss:120b-cloud", "qwen3-coder:480b-cloud",
+        ],
         enableCloudModels: true,
         preferCloudModels: true
     )
@@ -144,9 +146,16 @@ public enum OllamaError: LocalizedError, Sendable {
     case invalidResponse
     case invalidResponseFormat
     case httpError(Int)
+    case apiError(String)
+    case connectionFailed
+    case modelNotFound(String)
+    case serverError(String)
+    case unknownError(String)
+    case modelNotAvailable(String)
+
+    // Legacy/Migration aliases if needed, or re-add them if they differ semantically
     case modelPullFailed
     case serverNotRunning
-    case modelNotAvailable(String)
     case networkTimeout
     case rateLimitExceeded
     case cacheError
@@ -159,57 +168,66 @@ public enum OllamaError: LocalizedError, Sendable {
 
     public var errorDescription: String? {
         switch self {
-        case let .invalidConfiguration(details):
-            "Invalid configuration: \(details)"
+        case .invalidConfiguration(let details):
+            return "Invalid configuration: \(details)"
         case .invalidURL:
-            "Invalid Ollama server URL"
+            return "Invalid Ollama server URL"
         case .invalidResponse:
-            "Invalid response from Ollama server"
-        case let .httpError(code):
-            "HTTP error: \(code)"
+            return "Invalid response from Ollama server"
+        case .httpError(let code):
+            return "HTTP error: \(code)"
         case .invalidResponseFormat:
-            "Invalid response format from Ollama"
+            return "Invalid response format from Ollama"
         case .modelPullFailed:
-            "Failed to pull model from Ollama"
+            return "Failed to pull model from Ollama"
         case .serverNotRunning:
-            "Ollama server is not running"
-        case let .modelNotAvailable(model):
-            "Model '\(model)' is not available"
+            return "Ollama server is not running"
+        case .modelNotAvailable(let model):
+            return "Model '\(model)' is not available"
         case .networkTimeout:
-            "Network request timed out"
+            return "Network request timed out"
         case .rateLimitExceeded:
-            "Rate limit exceeded"
+            return "Rate limit exceeded"
         case .cacheError:
-            "Cache operation failed"
-        case let .modelLoadFailed(model):
-            "Failed to load model: \(model)"
+            return "Cache operation failed"
+        case .modelLoadFailed(let model):
+            return "Failed to load model: \(model)"
         case .contextWindowExceeded:
-            "Input exceeds model's context window"
+            return "Input exceeds model's context window"
         case .authenticationFailed:
-            "Authentication failed"
+            return "Authentication failed"
         case .serverOverloaded:
-            "Server is overloaded"
+            return "Server is overloaded"
+        case .apiError(let msg):
+            return "API Error: \(msg)"
+        case .connectionFailed:
+            return "Failed to connect to Ollama server"
+        case .modelNotFound(let model):
+            return "Model not found: \(model)"
+        case .serverError(let msg):
+            return "Server error: \(msg)"
+        case .unknownError(let msg):
+            return "Unknown error: \(msg)"
         }
     }
 
     public var recoveryStrategy: String {
         switch self {
         case .serverNotRunning:
-            "Start the Ollama server using 'ollama serve'"
+            return "Start the Ollama server using 'ollama serve'"
         case .modelNotAvailable:
-            "Install the model using 'ollama pull [model-name]'"
+            return "Install the model using 'ollama pull [model-name]'"
         case .networkTimeout:
-            "Check the network connection and consider increasing timeout"
+            return "Check the network connection and consider increasing timeout"
         case .rateLimitExceeded:
-            "Wait before retrying to respect rate limits"
+            return "Wait before retrying to respect rate limits"
         case .contextWindowExceeded:
-            "Reduce input length or split into smaller chunks"
+            return "Reduce input length or split into smaller chunks"
         default:
-            "Check Ollama server status and configuration"
+            return "Check Ollama server status and configuration"
         }
     }
 }
 
 // MARK: - Integration Result Models
 // Other integration models like ServiceHealth, CodeComplexity, etc. are defined in AIServiceProtocols.swift
-

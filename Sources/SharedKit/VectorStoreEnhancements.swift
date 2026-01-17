@@ -112,7 +112,8 @@ public actor HybridSearchEngine {
         -> [HybridSearchResult]
     {
         // 1. Vector Search
-        let vectorResults = try await vectorStore.search(vector: vector, limit: limit)
+        // PostgresVectorStore.search now returns [SearchResult]
+        let vectorResults = try await vectorStore.search(queryVector: vector, limit: limit)
 
         // 2. Keyword Search (Simulated for this context)
         // In production, this would use Postgres Full Text Search (tsvector)
@@ -125,7 +126,7 @@ public actor HybridSearchEngine {
             let keywordScore = calculateKeywordScore(query, content: result.content)
 
             // Normalize scores (0-1) - assuming vector score is cosine similarity (0-1)
-            let vectorScore = Float(result.similarity ?? 0.7)
+            let vectorScore = Float(result.similarity)
 
             // Weighted combination: 70% vector, 30% keyword
             let combined = (vectorScore * 0.7) + (Float(keywordScore) * 0.3)

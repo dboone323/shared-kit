@@ -3,7 +3,8 @@ import XCTest
 @testable import SharedKit
 
 /// Integration tests for OllamaClient with production enhancements
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 12.0, *)
+@MainActor
 final class OllamaClientIntegrationTests: XCTestCase {
 
     var client: OllamaClient!

@@ -25,7 +25,7 @@ class TestUtilities {
         let result = try await operation()
         let duration = Date().timeIntervalSince(startTime)
 
-        print(operationName, duration: duration)
+        print("\(operationName) finished in \(duration) seconds")
         XCTAssertLessThan(duration, timeout, "\(operationName) took too long")
 
         return (result: result, duration: duration)
