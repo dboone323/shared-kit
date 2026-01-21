@@ -4,7 +4,7 @@ import Foundation
 @available(macOS 11.0, iOS 14.0, *)
 public class ContextWindowManager {
     private let maxTokens: Int
-    private let tokensPerMessage: Int = 100  // Rough estimate
+    private let tokensPerMessage: Int = 100 // Rough estimate
 
     public init(maxTokens: Int = 4096) {
         self.maxTokens = maxTokens
@@ -37,7 +37,7 @@ public class ContextWindowManager {
 
     private func estimateTokens(_ text: String) -> Int {
         // Rough estimate: 4 characters per token
-        return max(text.count / 4, 1)
+        max(text.count / 4, 1)
     }
 }
 
@@ -45,7 +45,7 @@ public class ContextWindowManager {
 @available(macOS 11.0, iOS 14.0, *)
 public actor ToolResultCache {
     private var cache: [String: (result: String, timestamp: Date)] = [:]
-    private let ttl: TimeInterval = 300  // 5 minutes
+    private let ttl: TimeInterval = 300 // 5 minutes
 
     public init() {}
 
@@ -99,9 +99,10 @@ public class ToolExecutionCoordinator {
             }
 
             // Return in original order
-            return results.sorted(by: { $0.0 < $1.0 }).map { $0.1 }
+            return results.sorted(by: { $0.0 < $1.0 }).map(\.1)
         }
     }
+
     /// Execute with timeout
     public func executeWithTimeout(
         seconds: TimeInterval,
@@ -144,7 +145,7 @@ public actor ToolLearningSystem {
     /// Get success rate for tool
     public func successRate(for tool: String) -> Double {
         guard let stats = successRates[tool], stats.total > 0 else {
-            return 0.5  // Default for unknown tools
+            return 0.5 // Default for unknown tools
         }
         return Double(stats.success) / Double(stats.total)
     }
@@ -159,9 +160,9 @@ public actor ToolLearningSystem {
 
 public struct BatchTask<T: Sendable>: Sendable {
     public let id: String
-    public let priority: Int  // 0-10, 10 is highest
+    public let priority: Int // 0-10, 10 is highest
     public let operation: @Sendable () async throws -> T
-    public let created: Date = Date()
+    public let created: Date = .init()
 }
 
 @available(macOS 12.0, iOS 15.0, *)
@@ -169,7 +170,7 @@ public actor SmartBatchProcessor<T: Sendable> {
     private var queue: [BatchTask<T>] = []
     private var isProcessing = false
     private let maxBatchSize: Int
-    private let batchWindow: TimeInterval  // Max wait time (N ms)
+    private let batchWindow: TimeInterval // Max wait time (N ms)
 
     public init(maxBatchSize: Int = 5, batchWindow: TimeInterval = 0.05) {
         self.maxBatchSize = maxBatchSize

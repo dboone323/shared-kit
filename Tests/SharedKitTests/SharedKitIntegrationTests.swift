@@ -3,7 +3,6 @@ import XCTest
 @testable import SharedKit
 
 final class SharedKitIntegrationTests: XCTestCase {
-
     @MainActor
     func testEncryptedNetworkTransmission() async throws {
         // 1. Setup Security
@@ -40,7 +39,7 @@ final class SharedKitIntegrationTests: XCTestCase {
         }
 
         let client = OllamaClient(
-            config: OllamaConfig(baseURL: "http://localhost:11434"), session: session)
+            config: OllamaConfig(baseURL: OllamaConfig.defaultEndpoint), session: session)
 
         // 3. Encrypt Request Payload
         let prompt = "My Secret Prompt"

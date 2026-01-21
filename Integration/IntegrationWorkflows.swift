@@ -56,7 +56,6 @@ public final class IntegrationWorkflowManager: ObservableObject {
                 ],
                 userId: nil
             )
-
         } catch {
             let errorResult = WorkflowResult(
                 workflowId: workflow.id,

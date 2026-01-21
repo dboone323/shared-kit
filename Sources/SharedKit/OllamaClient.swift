@@ -8,6 +8,7 @@ import Foundation
     import Combine
 #else
     import Foundation
+
     public protocol ObservableObject: AnyObject {}
 
     @propertyWrapper
@@ -78,8 +79,8 @@ private struct CloudFallbackPolicy {
     func checkCircuit(priority: String) -> Bool {
         guard enabled else { return true }
         guard let tracker = Self.readJSON(path: quotaTrackerPath),
-            let cb = tracker["circuit_breaker"] as? [String: Any],
-            let pcb = cb[priority] as? [String: Any]
+              let cb = tracker["circuit_breaker"] as? [String: Any],
+              let pcb = cb[priority] as? [String: Any]
         else { return true }
         let state = (pcb["state"] as? String) ?? "closed"
         if state == "open" {
@@ -91,8 +92,8 @@ private struct CloudFallbackPolicy {
     func checkQuota(priority: String) -> Bool {
         guard enabled else { return true }
         guard let tracker = Self.readJSON(path: quotaTrackerPath),
-            let quotas = tracker["quotas"] as? [String: Any],
-            let pq = quotas[priority] as? [String: Any]
+              let quotas = tracker["quotas"] as? [String: Any],
+              let pq = quotas[priority] as? [String: Any]
         else { return false }
         let dailyUsed = (pq["daily_used"] as? Int) ?? 0
         let hourlyUsed = (pq["hourly_used"] as? Int) ?? 0
@@ -115,7 +116,7 @@ private struct CloudFallbackPolicy {
             "cloud_provider": provider,
         ]
         if let data = try? JSONSerialization.data(withJSONObject: line),
-            let s = String(data: data, encoding: .utf8)
+           let s = String(data: data, encoding: .utf8)
         {
             if FileManager.default.fileExists(atPath: escalationLogPath) == false {
                 FileManager.default.createFile(atPath: escalationLogPath, contents: nil)
@@ -134,8 +135,7 @@ private struct CloudFallbackPolicy {
     }
 
     private static func writeJSON(path: String, object: [String: Any]) {
-        if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted])
-        {
+        if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
             try? data.write(to: URL(fileURLWithPath: path))
         }
     }
@@ -182,7 +182,7 @@ public class OllamaClient: ObservableObject {
         self.config = config
 
         // Enhanced URLSession configuration
-        if let session = session {
+        if let session {
             self.session = session
         } else {
             let configuration = URLSessionConfiguration.default
@@ -259,7 +259,7 @@ public class OllamaClient: ObservableObject {
 
         // If cloud models are enabled and preferred, try cloud models first
         if self.config.enableCloudModels,
-            self.config.preferCloudModels || self.isCloudModel(targetModel)
+           self.config.preferCloudModels || self.isCloudModel(targetModel)
         {
             if self.isCloudModel(targetModel) {
                 // Gate cloud by policy; default priority medium (shared-kit)
@@ -268,7 +268,7 @@ public class OllamaClient: ObservableObject {
                     .enabled == false
                     || (policy.allowed(priority: priority) && policy.checkQuota(priority: priority)
                         && policy
-                            .checkCircuit(priority: priority))
+                        .checkCircuit(priority: priority))
                 {
                     // Cloud disabled in config by default; log and fall back to local
                     policy.logEscalation(
@@ -371,7 +371,6 @@ public class OllamaClient: ObservableObject {
             )
 
             return result
-
         } catch {
             self.metrics.recordError(error: error)
             throw error
@@ -422,7 +421,7 @@ public class OllamaClient: ObservableObject {
         let response = try await performRequestWithRetry(endpoint: "api/chat", body: requestBody)
 
         guard let message = response["message"] as? [String: Any],
-            let content = message["content"] as? String
+              let content = message["content"] as? String
         else {
             throw OllamaError.invalidResponseFormat
         }
@@ -446,13 +445,13 @@ public class OllamaClient: ObservableObject {
     {
         var lastError: Error?
 
-        for attempt in 0..<self.config.maxRetries {
+        for attempt in 0 ..< self.config.maxRetries {
             do {
                 return try await self.performRequest(endpoint: endpoint, body: body)
             } catch {
                 lastError = error
                 if attempt < self.config.maxRetries - 1 {
-                    let delay = pow(2.0, Double(attempt))  // Exponential backoff
+                    let delay = pow(2.0, Double(attempt)) // Exponential backoff
                     try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                 }
             }
@@ -484,7 +483,7 @@ public class OllamaClient: ObservableObject {
 
         // Retry with exponential backoff
         var lastError: Error?
-        for attempt in 0..<retryConfig.maxRetries {
+        for attempt in 0 ..< retryConfig.maxRetries {
             do {
                 let result = try await executeGenerate(
                     model: selectedModel,
@@ -497,7 +496,6 @@ public class OllamaClient: ObservableObject {
                 // Record success
                 await healthTracker.recordSuccess(for: selectedModel)
                 return result
-
             } catch {
                 lastError = error
                 await healthTracker.recordFailure(for: selectedModel)
@@ -529,7 +527,7 @@ public class OllamaClient: ObservableObject {
             return healthy
         }
 
-        return preferred  // Use preferred even if unhealthy
+        return preferred // Use preferred even if unhealthy
     }
 
     /// Execute generation (original logic)
@@ -554,7 +552,7 @@ public class OllamaClient: ObservableObject {
             "stream": false,
         ]
 
-        if let systemPrompt = systemPrompt {
+        if let systemPrompt {
             requestBody["system"] = systemPrompt
         }
 
@@ -583,7 +581,7 @@ public class OllamaClient: ObservableObject {
         let response = try await performRequest(endpoint: "api/chat", body: requestBody)
 
         guard let message = response["message"] as? [String: Any],
-            let content = message["content"] as? String
+              let content = message["content"] as? String
         else {
             throw OllamaError.invalidResponseFormat
         }
@@ -643,8 +641,7 @@ public class OllamaClient: ObservableObject {
 
     // MARK: - Private Request Methods
 
-    private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any]
-    {
+    private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any] {
         guard let url = URL(string: "\(config.baseURL)/\(endpoint)") else {
             throw OllamaError.invalidURL
         }
@@ -796,17 +793,17 @@ private class OllamaMetrics {
 
 // MARK: - Convenience Extensions
 
-extension OllamaClient {
-    public func generateCode(
+public extension OllamaClient {
+    func generateCode(
         language: String,
         task: String,
         context: String? = nil
     ) async throws -> String {
         let userPrompt = """
-            Language: \(language)
-            Task: \(task)
-            \(context != nil ? "Context: \(context!)" : "")
-            """
+        Language: \(language)
+        Task: \(task)
+        \(context != nil ? "Context: \(context!)" : "")
+        """
 
         return try await self.generate(
             model: "codellama",
@@ -816,20 +813,20 @@ extension OllamaClient {
         )
     }
 
-    public func analyzeCode(
+    func analyzeCode(
         code: String,
         language: String
     ) async throws -> String {
         let prompt = """
-            Analyze this \(language) code for:
-            1. Potential bugs or issues
-            2. Performance improvements
-            3. Best practices compliance
-            4. Security concerns
+        Analyze this \(language) code for:
+        1. Potential bugs or issues
+        2. Performance improvements
+        3. Best practices compliance
+        4. Security concerns
 
-            Code:
-            \(code)
-            """
+        Code:
+        \(code)
+        """
 
         return try await self.generate(
             model: "llama2",
@@ -839,20 +836,20 @@ extension OllamaClient {
         )
     }
 
-    public func generateDocumentation(
+    func generateDocumentation(
         code: String,
         language: String
     ) async throws -> String {
         let prompt = """
-            Generate comprehensive documentation for this \(language) code including:
-            - Function/class purpose
-            - Parameters and return values
-            - Usage examples
-            - Important notes
+        Generate comprehensive documentation for this \(language) code including:
+        - Function/class purpose
+        - Parameters and return values
+        - Usage examples
+        - Important notes
 
-            Code:
-            \(code)
-            """
+        Code:
+        \(code)
+        """
 
         return try await self.generate(
             model: "llama2",

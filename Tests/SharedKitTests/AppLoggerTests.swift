@@ -3,11 +3,10 @@
 // SharedKitTests
 //
 
-import XCTest
 @testable import SharedKit
+import XCTest
 
 final class AppLoggerTests: XCTestCase {
-    
     // MARK: - Shared Instance Tests
     
     func testSharedInstance() {

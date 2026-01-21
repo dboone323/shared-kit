@@ -1,9 +1,8 @@
-import XCTest
 @testable import SharedKit
+import XCTest
 
 @available(macOS 12.0, *)
 final class CircuitBreakerTests: XCTestCase {
-    
     func testCircuitBreakerInitiallyClosed() async {
         let breaker = CircuitBreaker()
         let state = await breaker.getCurrentState()

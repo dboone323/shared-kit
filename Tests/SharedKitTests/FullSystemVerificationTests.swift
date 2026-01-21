@@ -4,7 +4,6 @@ import XCTest
 
 @available(macOS 12.0, iOS 15.0, *)
 final class FullSystemVerificationTests: XCTestCase {
-
     // MARK: - Phase 4: Intelligence Verification
 
     func testIntelligenceModule() async {
@@ -128,7 +127,7 @@ final class FullSystemVerificationTests: XCTestCase {
         }
 
         // 4. Encryption
-        let secret = "Top Secret".data(using: .utf8)!
+        let secret = Data("Top Secret".utf8)
         let encrypted = try await security.encrypt(secret)
         XCTAssertNotEqual(encrypted, secret)
 

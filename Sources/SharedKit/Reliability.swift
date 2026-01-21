@@ -8,7 +8,7 @@ public actor Reliability {
     public static let shared = Reliability()
 
     // Feature components
-    private let rateLimiter = TokenBucketRateLimiter(capacity: 50, refillRate: 10)  // 50 tokens, 10/sec
+    private let rateLimiter = TokenBucketRateLimiter(capacity: 50, refillRate: 10) // 50 tokens, 10/sec
     private let circuitBreaker = CircuitBreakerManager()
     private let deduplicator = RequestDeduplicator()
     private let retryHandler = SmartRetryHandler()
@@ -17,7 +17,7 @@ public actor Reliability {
 
     /// Check if request is allowed (Rate Limiting)
     public func allowRequest(tokens: Int = 1) async -> Bool {
-        return await rateLimiter.allow(tokens: tokens)
+        await rateLimiter.allow(tokens: tokens)
     }
 
     /// Execute with Circuit Breaker protection
@@ -26,21 +26,21 @@ public actor Reliability {
     )
         async throws -> T
     {
-        return try await circuitBreaker.execute(service: service, operation: operation)
+        try await circuitBreaker.execute(service: service, operation: operation)
     }
 
     /// Deduplicate identical requests
     public func executeDeduplicated<T: Sendable>(
         id: String, operation: @escaping @Sendable () async throws -> T
     ) async throws -> T {
-        return try await deduplicator.execute(id: id, operation: operation)
+        try await deduplicator.execute(id: id, operation: operation)
     }
 
     /// Execute with Smart Retry
     public func executeWithRetry<T: Sendable>(operation: @Sendable () async throws -> T)
         async throws -> T
     {
-        return try await retryHandler.execute(operation: operation)
+        try await retryHandler.execute(operation: operation)
     }
 }
 
@@ -49,7 +49,7 @@ public actor Reliability {
 @available(macOS 12.0, iOS 15.0, *)
 actor TokenBucketRateLimiter {
     private let capacity: Double
-    private let refillRate: Double  // tokens per second
+    private let refillRate: Double // tokens per second
     private var tokens: Double
     private var lastRefill: Date
 
@@ -84,9 +84,9 @@ actor TokenBucketRateLimiter {
 @available(macOS 12.0, iOS 15.0, *)
 actor CircuitBreakerManager {
     enum State: Equatable {
-        case closed  // Normal operation
-        case open(until: Date)  // Failed, blocking requests
-        case halfOpen  // Testing recovery
+        case closed // Normal operation
+        case open(until: Date) // Failed, blocking requests
+        case halfOpen // Testing recovery
     }
 
     private struct CircuitState {
@@ -97,7 +97,7 @@ actor CircuitBreakerManager {
 
     private var circuits: [String: CircuitState] = [:]
     private let failureThreshold = 5
-    private let resetTimeout: TimeInterval = 60  // 1 minute
+    private let resetTimeout: TimeInterval = 60 // 1 minute
     private let halfOpenSuccessThreshold = 3
 
     func execute<T>(service: String, operation: () async throws -> T) async throws -> T {
@@ -119,7 +119,7 @@ actor CircuitBreakerManager {
         switch circuit.state {
         case .closed:
             return
-        case .open(let until):
+        case let .open(until):
             if Date() > until {
                 circuits[service]?.state = .halfOpen
                 circuits[service]?.successCount = 0
@@ -127,7 +127,7 @@ actor CircuitBreakerManager {
             }
             throw CircuitError.circuitOpen(service: service)
         case .halfOpen:
-            return  // Allow basic throughput
+            return // Allow basic throughput
         }
     }
 
@@ -152,7 +152,7 @@ actor CircuitBreakerManager {
             circuits[service] ?? CircuitState(state: .closed, failures: 0, successCount: 0)
 
         circuit.failures += 1
-        if circuit.failures >= failureThreshold || (circuit.state == .halfOpen) {  // modified to fix warning
+        if circuit.failures >= failureThreshold || (circuit.state == .halfOpen) { // modified to fix warning
             // In half-open, single failure re-opens
             circuit.state = .open(until: Date().addingTimeInterval(resetTimeout))
         }
@@ -169,7 +169,7 @@ enum CircuitError: Error {
 
 @available(macOS 12.0, iOS 15.0, *)
 actor RequestDeduplicator {
-    private var activeTaskWrappers: [String: Any] = [:]  // Stores Task<Sendable, Error>
+    private var activeTaskWrappers: [String: Any] = [:] // Stores Task<Sendable, Error>
 
     func execute<T: Sendable>(id: String, operation: @Sendable @escaping () async throws -> T)
         async throws -> T
@@ -241,6 +241,6 @@ actor SmartRetryHandler {
             return [.timedOut, .cannotFindHost, .cannotConnectToHost, .networkConnectionLost]
                 .contains(err.code)
         }
-        return true  // Default conservative retry
+        return true // Default conservative retry
     }
 }

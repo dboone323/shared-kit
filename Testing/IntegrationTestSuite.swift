@@ -371,11 +371,11 @@ class IntegrationTestSuite: XCTestCase {
     }
 
     private func createInvalidImage() -> Data {
-        "Invalid image data".data(using: .utf8) ?? Data()
+        Data("Invalid image data".utf8)
     }
 
     private func generateSamplePredictiveData() -> [Double] {
-        Array(0..<100).map { _ in Double.random(in: 0...1) }
+        Array(0 ..< 100).map { _ in Double.random(in: 0 ... 1) }
     }
 
     private func generateTestDataSet() -> TestDataSet {

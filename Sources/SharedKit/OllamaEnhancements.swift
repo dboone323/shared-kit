@@ -66,7 +66,7 @@ public struct RetryConfig {
     public func delay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt))
         let cappedDelay = min(exponentialDelay, maxDelay)
-        let jitter = cappedDelay * jitterFactor * Double.random(in: -1...1)
+        let jitter = cappedDelay * jitterFactor * Double.random(in: -1 ... 1)
         return max(0, cappedDelay + jitter)
     }
 }
@@ -120,7 +120,7 @@ public class ModelHealthTracker {
     private var healthScores: [String: Double] = [:]
     private var lastChecked: [String: Date] = [:]
     private let healthThreshold = 0.5
-    private let checkInterval: TimeInterval = 300  // 5 minutes
+    private let checkInterval: TimeInterval = 300 // 5 minutes
 
     public init() {}
 
@@ -136,12 +136,12 @@ public class ModelHealthTracker {
 
     /// Check if model is healthy
     public func isHealthy(_ model: String) -> Bool {
-        return (healthScores[model] ?? 1.0) >= healthThreshold
+        (healthScores[model] ?? 1.0) >= healthThreshold
     }
 
     /// Get health score
     public func score(for model: String) -> Double {
-        return healthScores[model] ?? 1.0
+        healthScores[model] ?? 1.0
     }
 
     /// Get healthiest model from list

@@ -958,7 +958,8 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
 /// State manager for financial data
 @MainActor
 public final class FinancialStateManager: ObservableObject, StateManagerProtocol, StatePersistable,
-StateSynchronizable {
+    StateSynchronizable
+{
     public let stateId = "financial_state_manager"
 
     // MARK: - Published Properties
@@ -1473,7 +1474,6 @@ public final class GlobalStateCoordinator: ObservableObject {
                 "change_count": allChanges.count,
                 "projects_synced": allProjects.count,
             ], userId: nil)
-
         } catch {
             self.globalError = error
             throw error

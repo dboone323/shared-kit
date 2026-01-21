@@ -297,7 +297,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
             if totalSessionsWithRating > 0 {
                 self.averageUserSatisfaction =
                     (self.averageUserSatisfaction * (totalSessionsWithRating - 1) + satisfaction)
-                    / totalSessionsWithRating
+                        / totalSessionsWithRating
             } else {
                 self.averageUserSatisfaction = satisfaction
             }
@@ -319,7 +319,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
         let pointsToAdd = targetAccessPoints - self.totalAccessPoints
         guard pointsToAdd > 0 else { return }
 
-        for i in 0..<pointsToAdd {
+        for i in 0 ..< pointsToAdd {
             let location = "Global Access Point \(self.totalAccessPoints + i + 1)"
             let type = AccessPointType.allCases.randomElement() ?? .publicTerminal
             self.addAccessPoint(location: location, type: type)

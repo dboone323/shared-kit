@@ -4,7 +4,6 @@ import XCTest
 
 @available(macOS 12.0, iOS 15.0, *)
 final class ReliabilityTests: XCTestCase {
-
     // MARK: - Rate Limiting
 
     func testTokenBucketRateLimiter() async {

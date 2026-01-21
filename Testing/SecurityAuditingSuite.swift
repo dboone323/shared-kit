@@ -53,7 +53,7 @@ class SecurityAuditingSuite: XCTestCase {
     func testDataEncryption() {
         self.logger.info("🔐 Testing Data Encryption")
 
-        let testData = "Sensitive user data for encryption testing".data(using: .utf8)!
+        let testData = Data("Sensitive user data for encryption testing".utf8)
         let testKey = SymmetricKey(size: .bits256)
 
         // Test encryption
@@ -69,7 +69,6 @@ class SecurityAuditingSuite: XCTestCase {
             XCTAssertEqual(decryptedData, testData, "Decryption failed")
 
             self.logger.info("✅ Data encryption/decryption successful")
-
         } catch {
             XCTFail("Encryption test failed: \(error)")
         }
@@ -91,7 +90,7 @@ class SecurityAuditingSuite: XCTestCase {
         self.logger.info("🗝️ Testing Keychain Security")
 
         let testKey = "test_security_key"
-        let testValue = "sensitive_test_value".data(using: .utf8)!
+        let testValue = Data("sensitive_test_value".utf8)
 
         // Test storing in keychain
         do {
@@ -104,7 +103,7 @@ class SecurityAuditingSuite: XCTestCase {
             self.logger.info("✅ Successfully retrieved data from keychain")
 
             // Test updating keychain value
-            let updatedValue = "updated_sensitive_value".data(using: .utf8)!
+            let updatedValue = Data("updated_sensitive_value".utf8)
             try self.securityManager.updateKeychain(key: testKey, data: updatedValue)
 
             let retrievedUpdatedValue = try securityManager.retrieveFromKeychain(key: testKey)
@@ -122,7 +121,6 @@ class SecurityAuditingSuite: XCTestCase {
                 // Expected to fail after deletion
                 self.logger.info("✅ Successfully deleted keychain data")
             }
-
         } catch {
             XCTFail("Keychain security test failed: \(error)")
         }
@@ -716,7 +714,7 @@ class SecurityManager {
 
     func retrieveFromKeychain(key _: String) throws -> Data {
         // Mock implementation
-        "test_value".data(using: .utf8)!
+        Data("test_value".utf8)
     }
 
     func updateKeychain(key _: String, data _: Data) throws {
@@ -844,7 +842,7 @@ class NetworkSecurityService {
         // Mock implementation
         DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
             let response = SecureResponse(
-                data: "encrypted_response_data".data(using: .utf8)!,
+                data: Data("encrypted_response_data".utf8),
                 signature: "mock_signature",
                 isEncrypted: true,
                 timestamp: Date()

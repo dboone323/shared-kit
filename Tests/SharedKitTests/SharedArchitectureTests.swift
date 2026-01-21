@@ -46,7 +46,6 @@ final class MockViewModel: BaseViewModel {
 
 @MainActor
 final class SharedArchitectureTests: XCTestCase {
-
     var viewModel: MockViewModel!
     var cancellables: Set<AnyCancellable>!
 

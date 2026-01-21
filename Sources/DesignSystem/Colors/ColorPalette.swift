@@ -168,20 +168,19 @@ extension Color {
     ///   - dark: Color for dark mode
     init(light: Color, dark: Color) {
         #if canImport(UIKit)
-        self.init(uiColor: UIColor { traitCollection in
-            traitCollection.userInterfaceStyle == .dark
-                ? UIColor(dark)
-                : UIColor(light)
-        })
+            self.init(uiColor: UIColor { traitCollection in
+                traitCollection.userInterfaceStyle == .dark
+                    ? UIColor(dark)
+                    : UIColor(light)
+            })
         #elseif canImport(AppKit)
-        self.init(nsColor: NSColor(name: nil) { appearance in
-            appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-                ? NSColor(dark)
-                : NSColor(light)
-        })
+            self.init(nsColor: NSColor(name: nil) { appearance in
+                appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+                    ? NSColor(dark)
+                    : NSColor(light)
+            })
         #else
-        self = light
+            self = light
         #endif
     }
 }
-

@@ -24,7 +24,7 @@ public enum ViewModelError: Error, Equatable {
             return "Data error occurred"
         case .unknownError:
             return "Unknown error occurred"
-        case .customError(let message):
+        case let .customError(message):
             return message
         }
     }
@@ -36,14 +36,14 @@ public enum OperationResult<T> {
     case failure(ViewModelError)
 
     public var value: T? {
-        if case .success(let value) = self {
+        if case let .success(value) = self {
             return value
         }
         return nil
     }
 
     public var error: ViewModelError? {
-        if case .failure(let error) = self {
+        if case let .failure(error) = self {
             return error
         }
         return nil
@@ -329,7 +329,7 @@ extension Array {
 
     func chunked(into size: Int) -> [[Element]] {
         stride(from: 0, to: count, by: size).map {
-            Array(self[$0..<Swift.min($0 + size, count)])
+            Array(self[$0 ..< Swift.min($0 + size, count)])
         }
     }
 }
@@ -367,7 +367,7 @@ extension String {
             case "primary": return .primary
             case "secondary": return .secondary
             case "accent": return .accentColor
-            default: return .blue  // Default fallback color
+            default: return .blue // Default fallback color
             }
         }
     #endif
@@ -396,11 +396,11 @@ extension String {
             let g: UInt64
             let b: UInt64
             switch hex.count {
-            case 3:  // RGB (12-bit)
+            case 3: // RGB (12-bit)
                 (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-            case 6:  // RGB (24-bit)
+            case 6: // RGB (24-bit)
                 (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-            case 8:  // ARGB (32-bit)
+            case 8: // ARGB (32-bit)
                 (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
             default:
                 (a, r, g, b) = (255, 0, 0, 0)

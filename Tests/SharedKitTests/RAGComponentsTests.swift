@@ -1,9 +1,8 @@
-import XCTest
 @testable import SharedKit
+import XCTest
 
 @available(macOS 12.0, *)
 final class CoreMLEmbeddingServiceTests: XCTestCase {
-    
     var embeddingService: CoreMLEmbeddingService!
     
     override func setUp() async throws {
@@ -81,7 +80,6 @@ final class CoreMLEmbeddingServiceTests: XCTestCase {
 // MARK: - Conversation Message Tests
 
 final class ConversationMessageTests: XCTestCase {
-    
     func testConversationMessageCreation() {
         let message = ConversationMessage(role: "user", content: "Hello")
         
@@ -105,7 +103,6 @@ final class ConversationMessageTests: XCTestCase {
 @available(macOS 12.0, *)
 @MainActor
 final class AggregatorAgentTests: XCTestCase {
-    
     func testAgentSingletonExists() {
         let agent1 = AggregatorAgent.shared
         let agent2 = AggregatorAgent.shared

@@ -2,9 +2,11 @@ import Foundation
 
 #if canImport(os)
     import os.log
+
     private typealias PlatformLogger = os.Logger
 #else
     import Foundation
+
     private struct PlatformLogger {
         let category: String
         init(subsystem: String, category: String) { self.category = category }
@@ -20,7 +22,6 @@ import Foundation
 /// Replaces print() statements with proper logging
 @available(macOS 11.0, iOS 14.0, *)
 public final class SecureLogger {
-
     /// Subsystem identifier for logging
     private static let subsystem = "com.yourapp.shared-kit"
 
@@ -30,12 +31,12 @@ public final class SecureLogger {
         case network = "Network"
         case database = "Database"
         case haptics = "Haptics"
-        case system = "System"  // Added for file system operations
+        case system = "System" // Added for file system operations
         case ai = "AI"
         case performance = "Performance"
         case security = "Security"
         case ui = "UI"
-        case toolExecution = "ToolExecution"  // For agent tool delegation
+        case toolExecution = "ToolExecution" // For agent tool delegation
     }
 
     /// Log levels matching OSLog
@@ -51,7 +52,7 @@ public final class SecureLogger {
 
     /// Get or create logger for category (creates new logger each time - no mutable state)
     private static func logger(for category: Category) -> PlatformLogger {
-        return PlatformLogger(subsystem: subsystem, category: category.rawValue)
+        PlatformLogger(subsystem: subsystem, category: category.rawValue)
     }
 
     // MARK: - Public Logging Methods
@@ -81,7 +82,7 @@ public final class SecureLogger {
         line: Int = #line
     ) {
         var fullMessage = message
-        if let error = error {
+        if let error {
             fullMessage += " - Error: \(error.localizedDescription)"
         }
         logger(for: category).error("\(fullMessage) [\(fileBasename(file)):\(line)]")
@@ -138,14 +139,14 @@ public final class SecureLogger {
 
     /// Extract filename from full path
     private static func fileBasename(_ filePath: String) -> String {
-        return (filePath as NSString).lastPathComponent
+        (filePath as NSString).lastPathComponent
     }
 
     /// Redact sensitive data from URLs
     private static func redactURL(_ url: String) -> String {
         // Remove query parameters that might contain tokens
         if let urlObj = URL(string: url),
-            let components = URLComponents(url: urlObj, resolvingAgainstBaseURL: false)
+           let components = URLComponents(url: urlObj, resolvingAgainstBaseURL: false)
         {
             var clean = components
             if clean.queryItems != nil {
@@ -172,7 +173,8 @@ public final class SecureLogger {
             if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
                 let range = NSRange(text.startIndex..., in: text)
                 redacted = regex.stringByReplacingMatches(
-                    in: redacted, range: range, withTemplate: replacement)
+                    in: redacted, range: range, withTemplate: replacement
+                )
             }
         }
 
@@ -183,9 +185,9 @@ public final class SecureLogger {
 // MARK: - Convenience Extensions
 
 @available(macOS 11.0, iOS 14.0, *)
-extension SecureLogger {
+public extension SecureLogger {
     /// Log with custom level
-    public static func log(
+    static func log(
         _ message: String, level: Level, category: Category = .general, error: Error? = nil
     ) {
         switch level {
@@ -201,11 +203,11 @@ extension SecureLogger {
 // MARK: - Migration Helper
 
 @available(macOS 11.0, iOS 14.0, *)
-extension SecureLogger {
+public extension SecureLogger {
     /// Temporary compatibility method for gradual migration from print()
     /// Mark as deprecated to encourage proper usage
     @available(*, deprecated, message: "Use SecureLogger.debug/info/error instead")
-    public static func legacy(_ message: String) {
+    static func legacy(_ message: String) {
         #if DEBUG
             print("[LEGACY] \(message)")
         #endif

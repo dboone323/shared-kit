@@ -3,11 +3,10 @@
 // SharedKitTests
 //
 
-import XCTest
 @testable import SharedKit
+import XCTest
 
 final class LoggerTests: XCTestCase {
-    
     func testLoggerSharedInstance() {
         // Logger is a static utility class, not a singleton
         Logger.logInfo("Test message")

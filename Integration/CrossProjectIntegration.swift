@@ -69,7 +69,6 @@ public final class CrossProjectIntegrator: ObservableObject {
                 properties: ["connected_projects": self.connectedProjects.count],
                 userId: nil
             )
-
         } catch {
             self.integrationHealth = .error(error)
             throw error
@@ -175,7 +174,6 @@ public final class CrossProjectIntegrator: ObservableObject {
                 ],
                 userId: userId
             )
-
         } catch {
             self.integrationHealth = .error(error)
             throw error

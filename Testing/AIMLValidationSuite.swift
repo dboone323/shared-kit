@@ -356,11 +356,11 @@ class AIMLValidationSuite: XCTestCase {
         // Performance monitoring
         self.performanceMonitor.startAILoadTesting()
 
-        for iteration in 0..<iterations {
+        for iteration in 0 ..< iterations {
             DispatchQueue.global().async {
                 let group = DispatchGroup()
 
-                for request in 0..<concurrentRequests {
+                for request in 0 ..< concurrentRequests {
                     group.enter()
                     let startTime = CFAbsoluteTimeGetCurrent()
 
@@ -584,7 +584,7 @@ class AIMLValidationSuite: XCTestCase {
         self.testPredictionData = [
             TestPredictionDataSet(
                 name: "financial_trends",
-                inputData: Array(1...30).map { Double($0) + Double.random(in: -2...2) },
+                inputData: Array(1 ... 30).map { Double($0) + Double.random(in: -2 ... 2) },
                 expectedPredictions: [32.0, 33.5, 35.0, 36.2, 37.8],
                 tolerance: 3.0
             ),
@@ -596,7 +596,7 @@ class AIMLValidationSuite: XCTestCase {
             ),
             TestPredictionDataSet(
                 name: "performance_metrics",
-                inputData: Array(1...20).map { Double($0) * 5.0 + Double.random(in: -5...5) },
+                inputData: Array(1 ... 20).map { Double($0) * 5.0 + Double.random(in: -5 ... 5) },
                 expectedPredictions: [105.0, 110.0, 115.0, 120.0, 125.0],
                 tolerance: 10.0
             ),
@@ -695,7 +695,7 @@ class AIMLValidationSuite: XCTestCase {
         let minCount = min(predictedValues.count, expectedValues.count)
 
         var correctPredictions = 0
-        for i in 0..<minCount {
+        for i in 0 ..< minCount {
             if abs(predictedValues[i] - expectedValues[i]) <= tolerance {
                 correctPredictions += 1
             }
@@ -815,7 +815,7 @@ class AIMLValidationSuite: XCTestCase {
         let minCount = min(predictedValues.count, expected.count)
 
         var correctPredictions = 0
-        for i in 0..<minCount {
+        for i in 0 ..< minCount {
             if abs(predictedValues[i] - expected[i]) <= tolerance {
                 correctPredictions += 1
             }
@@ -903,11 +903,11 @@ struct PredictionValidationResult {
 extension AIIntegration {
     func processImageWithCoreML(_: Data, completion: @escaping (Result<CoreMLPrediction, Error>) -> Void) {
         // Simulate Core ML processing
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 0.5...1.5)) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 0.5 ... 1.5)) {
             let prediction = CoreMLPrediction(
                 label: "test_object",
-                confidence: Double.random(in: 0.7...0.95),
-                inferenceTime: Double.random(in: 0.5...1.2)
+                confidence: Double.random(in: 0.7 ... 0.95),
+                inferenceTime: Double.random(in: 0.5 ... 1.2)
             )
             completion(.success(prediction))
         }
@@ -915,13 +915,13 @@ extension AIIntegration {
 
     func processImageWithVision(_: Data, completion: @escaping (Result<VisionAnalysis, Error>) -> Void) {
         // Simulate Vision processing
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 0.3...1.0)) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 0.3 ... 1.0)) {
             let analysis = VisionAnalysis(
                 detectedObjects: [
                     DetectedObject(name: "object1", confidence: 0.85, boundingBox: CGRect.zero),
                     DetectedObject(name: "object2", confidence: 0.78, boundingBox: CGRect.zero),
                 ],
-                processingTime: Double.random(in: 0.3...1.0)
+                processingTime: Double.random(in: 0.3 ... 1.0)
             )
             completion(.success(analysis))
         }
@@ -929,7 +929,7 @@ extension AIIntegration {
 
     func processTextWithNLP(_: String, completion: @escaping (Result<NLPAnalysis, Error>) -> Void) {
         // Simulate NLP processing
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 0.2...0.8)) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 0.2 ... 0.8)) {
             let analysis = NLPAnalysis(
                 sentiment: .positive,
                 entities: [
@@ -937,7 +937,7 @@ extension AIIntegration {
                     NamedEntity(text: "entity2", type: "PERSON", range: NSRange(location: 8, length: 7)),
                 ],
                 language: "en",
-                processingTime: Double.random(in: 0.2...0.8)
+                processingTime: Double.random(in: 0.2 ... 0.8)
             )
             completion(.success(analysis))
         }
@@ -945,12 +945,12 @@ extension AIIntegration {
 
     func generatePredictionsML(from _: [Double], completion: @escaping (Result<[MLPrediction], Error>) -> Void) {
         // Simulate ML prediction generation
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...2.5)) {
-            let predictions = (0..<5).map { _ in
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0 ... 2.5)) {
+            let predictions = (0 ..< 5).map { _ in
                 MLPrediction(
-                    value: Double.random(in: 10...100),
-                    confidence: Double.random(in: 0.6...0.9),
-                    processingTime: Double.random(in: 0.8...2.0)
+                    value: Double.random(in: 10 ... 100),
+                    confidence: Double.random(in: 0.6 ... 0.9),
+                    processingTime: Double.random(in: 0.8 ... 2.0)
                 )
             }
             completion(.success(predictions))
@@ -966,9 +966,9 @@ extension PerformanceMonitor {
     func stopAILoadTesting() -> AILoadTestMetrics {
         // Stop monitoring and return metrics
         AILoadTestMetrics(
-            maxMemoryUsage: Int64.random(in: 150...250) * 1024 * 1024,
-            maxCPUUsage: Double.random(in: 60...80),
-            averageResponseTime: Double.random(in: 0.8...2.0)
+            maxMemoryUsage: Int64.random(in: 150 ... 250) * 1024 * 1024,
+            maxCPUUsage: Double.random(in: 60 ... 80),
+            averageResponseTime: Double.random(in: 0.8 ... 2.0)
         )
     }
 }

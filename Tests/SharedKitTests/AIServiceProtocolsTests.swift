@@ -3,11 +3,10 @@
 // SharedKitTests
 //
 
-import XCTest
 @testable import SharedKit
+import XCTest
 
 final class AIServiceProtocolsTests: XCTestCase {
-    
     // MARK: - ServiceHealth Tests
     
     func testServiceHealthDefaultInit() {

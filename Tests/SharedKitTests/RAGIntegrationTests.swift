@@ -5,7 +5,6 @@ import XCTest
 @available(macOS 12.0, *)
 @MainActor
 final class RAGIntegrationTests: XCTestCase {
-
     var agent: AggregatorAgent!
     var vectorStore: PostgresVectorStore!
     var embeddingService: CoreMLEmbeddingService!

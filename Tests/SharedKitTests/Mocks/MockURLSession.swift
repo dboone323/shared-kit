@@ -2,7 +2,7 @@ import Foundation
 
 @available(macOS 12.0, iOS 15.0, *)
 public class MockURLSession: URLSession, @unchecked Sendable {
-    public override init() {}
+    override public init() {}
 
     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
     // because it's non-open in Swift/ObjC in some contexts or hard to subclass correctly.
@@ -31,15 +31,15 @@ public class MockURLProtocol: URLProtocol {
         }
     }
 
-    public override class func canInit(with request: URLRequest) -> Bool {
+    override public class func canInit(with request: URLRequest) -> Bool {
         return true
     }
 
-    public override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+    override public class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
 
-    public override func startLoading() {
+    override public func startLoading() {
         guard let handler = MockURLProtocol.requestHandler else {
             // Default failure if no handler
             client?.urlProtocol(self, didFailWithError: URLError(.badURL))
@@ -56,5 +56,5 @@ public class MockURLProtocol: URLProtocol {
         }
     }
 
-    public override func stopLoading() {}
+    override public func stopLoading() {}
 }

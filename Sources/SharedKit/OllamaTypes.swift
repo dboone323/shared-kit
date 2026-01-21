@@ -19,8 +19,13 @@ public struct OllamaConfig: Sendable {
     public let cloudEndpoint: String
     public let preferCloudModels: Bool
 
+    /// Default Ollama endpoint - reads from OLLAMA_ENDPOINT env var, falls back to localhost
+    public static var defaultEndpoint: String {
+        ProcessInfo.processInfo.environment["OLLAMA_ENDPOINT"] ?? "http://localhost:11434"
+    }
+
     public init(
-        baseURL: String = "http://127.0.0.1:11434",
+        baseURL: String = OllamaConfig.defaultEndpoint,
         defaultModel: String = "llama2",
         timeout: TimeInterval = 60.0,
         maxRetries: Int = 3,
@@ -168,13 +173,13 @@ public enum OllamaError: LocalizedError, Sendable {
 
     public var errorDescription: String? {
         switch self {
-        case .invalidConfiguration(let details):
+        case let .invalidConfiguration(details):
             return "Invalid configuration: \(details)"
         case .invalidURL:
             return "Invalid Ollama server URL"
         case .invalidResponse:
             return "Invalid response from Ollama server"
-        case .httpError(let code):
+        case let .httpError(code):
             return "HTTP error: \(code)"
         case .invalidResponseFormat:
             return "Invalid response format from Ollama"
@@ -182,7 +187,7 @@ public enum OllamaError: LocalizedError, Sendable {
             return "Failed to pull model from Ollama"
         case .serverNotRunning:
             return "Ollama server is not running"
-        case .modelNotAvailable(let model):
+        case let .modelNotAvailable(model):
             return "Model '\(model)' is not available"
         case .networkTimeout:
             return "Network request timed out"
@@ -190,7 +195,7 @@ public enum OllamaError: LocalizedError, Sendable {
             return "Rate limit exceeded"
         case .cacheError:
             return "Cache operation failed"
-        case .modelLoadFailed(let model):
+        case let .modelLoadFailed(model):
             return "Failed to load model: \(model)"
         case .contextWindowExceeded:
             return "Input exceeds model's context window"
@@ -198,15 +203,15 @@ public enum OllamaError: LocalizedError, Sendable {
             return "Authentication failed"
         case .serverOverloaded:
             return "Server is overloaded"
-        case .apiError(let msg):
+        case let .apiError(msg):
             return "API Error: \(msg)"
         case .connectionFailed:
             return "Failed to connect to Ollama server"
-        case .modelNotFound(let model):
+        case let .modelNotFound(model):
             return "Model not found: \(model)"
-        case .serverError(let msg):
+        case let .serverError(msg):
             return "Server error: \(msg)"
-        case .unknownError(let msg):
+        case let .unknownError(msg):
             return "Unknown error: \(msg)"
         }
     }
@@ -230,4 +235,5 @@ public enum OllamaError: LocalizedError, Sendable {
 }
 
 // MARK: - Integration Result Models
+
 // Other integration models like ServiceHealth, CodeComplexity, etc. are defined in AIServiceProtocols.swift

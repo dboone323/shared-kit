@@ -8,7 +8,6 @@ import Swift
 /// A storage engine for vector embeddings using Postgres + pgvector.
 @available(macOS 12.0, *)
 public actor PostgresVectorStore {
-
     public static let shared = PostgresVectorStore()
 
     private var connection: PostgresConnection?
@@ -90,7 +89,7 @@ public actor PostgresVectorStore {
         for try await row in rows {
             let randomAccess = row.makeRandomAccess()
             if let content = randomAccess[data: "content"].string,
-                let similarity = randomAccess[data: "similarity"].double
+               let similarity = randomAccess[data: "similarity"].double
             {
                 results.append(SearchResult(content: content, similarity: similarity))
             }

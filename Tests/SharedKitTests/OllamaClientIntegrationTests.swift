@@ -6,7 +6,6 @@ import XCTest
 @available(macOS 12.0, *)
 @MainActor
 final class OllamaClientIntegrationTests: XCTestCase {
-
     var client: OllamaClient!
 
     override func setUp() async throws {

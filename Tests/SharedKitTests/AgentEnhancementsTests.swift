@@ -4,7 +4,6 @@ import XCTest
 
 @available(macOS 11.0, iOS 14.0, *)
 final class AgentEnhancementsTests: XCTestCase {
-
     // MARK: - ContextWindowManager Tests
 
     func testContextWindowOptimization() {

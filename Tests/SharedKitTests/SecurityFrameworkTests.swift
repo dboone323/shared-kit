@@ -4,7 +4,6 @@ import XCTest
 
 @available(macOS 12.0, iOS 15.0, *)
 final class SecurityFrameworkTests: XCTestCase {
-
     // MARK: - Input Validation
 
     func testEmailValidation() async throws {
@@ -66,7 +65,7 @@ final class SecurityFrameworkTests: XCTestCase {
 
     func testEncryptionCycle() async throws {
         let framework = SecurityFramework()
-        let secret = "My Secret Data".data(using: .utf8)!
+        let secret = Data("My Secret Data".utf8)
 
         let encrypted = try await framework.encrypt(secret)
         XCTAssertNotEqual(secret, encrypted)

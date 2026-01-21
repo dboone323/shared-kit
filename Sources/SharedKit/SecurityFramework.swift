@@ -20,8 +20,8 @@ public actor SecurityFramework {
     public init() {}
 
     /// Step 42: Get secure headers
-    public nonisolated func getSecureHeaders() -> [String: String] {
-        return [
+    nonisolated public func getSecureHeaders() -> [String: String] {
+        [
             "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
             "Content-Security-Policy": "default-src 'self'",
             "X-Content-Type-Options": "nosniff",
@@ -39,7 +39,7 @@ public actor SecurityFramework {
 
     /// Step 43: Sanitize input (SQL/Context aware)
     public func sanitize(_ input: String) async -> String {
-        return await inputValidator.sanitize(input)
+        await inputValidator.sanitize(input)
     }
 
     /// Step 44-45: Check permission
@@ -49,12 +49,12 @@ public actor SecurityFramework {
 
     /// Step 46: Encrypt data (At Rest)
     public func encrypt(_ data: Data) async throws -> Data {
-        return try await cryptoManager.encrypt(data)
+        try await cryptoManager.encrypt(data)
     }
 
     /// Step 46: Decrypt data
     public func decrypt(_ data: Data) async throws -> Data {
-        return try await cryptoManager.decrypt(data)
+        try await cryptoManager.decrypt(data)
     }
 }
 
@@ -103,8 +103,8 @@ actor InputValidator {
 
     func sanitize(_ input: String) -> String {
         // Basic sanitization: remove null bytes and control characters
-        return input.replacingOccurrences(of: "\0", with: "")
-            .replacingOccurrences(of: "'", with: "''")  // Basic SQL escape (use prepared statements effectively instead)
+        input.replacingOccurrences(of: "\0", with: "")
+            .replacingOccurrences(of: "'", with: "''") // Basic SQL escape (use prepared statements effectively instead)
     }
 }
 
@@ -143,7 +143,7 @@ actor AccessControl {
         // RBAC Matrix
         switch user.role {
         case .admin:
-            return  // Allowed everything
+            return // Allowed everything
 
         case .user:
             switch action {

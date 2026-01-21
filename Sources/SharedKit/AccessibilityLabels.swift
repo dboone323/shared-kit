@@ -69,7 +69,6 @@
 // MARK: - Common Accessibility Labels
 
 enum AccessibilityLabels {
-
     // Navigation
     static let backButton = "Go back"
     static let closeButton = "Close"
@@ -144,8 +143,7 @@ enum AccessibilityLabels {
 
 // MARK: - VoiceOver Announcements
 
-struct AccessibilityAnnouncer {
-
+enum AccessibilityAnnouncer {
     /// Announces a message to VoiceOver users.
     static func announce(_ message: String) {
         #if os(iOS)

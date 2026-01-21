@@ -1,12 +1,12 @@
-import SwiftUI
 import SharedKit
+import SwiftUI
 
 @available(macOS 14.0, *)
 struct AgentMonitoringView: View {
-    @State private var systemMetrics: SystemMetrics = SystemMetrics()
+    @State private var systemMetrics: SystemMetrics = .init()
     @State private var toolStats: [ToolStat] = []
     @State private var recentActivity: [ActivityLog] = []
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Header
@@ -24,9 +24,9 @@ struct AgentMonitoringView: View {
             }
             .padding()
             .background(.ultraThinMaterial)
-            
+
             Divider()
-            
+
             ScrollView {
                 VStack(spacing: 20) {
                     // System Health
@@ -52,7 +52,7 @@ struct AgentMonitoringView: View {
                             )
                         }
                     }
-                    
+
                     // Tool Usage Stats
                     GroupBox("Tool Usage (Last 24h)") {
                         if toolStats.isEmpty {
@@ -80,7 +80,7 @@ struct AgentMonitoringView: View {
                             }
                         }
                     }
-                    
+
                     // Recent Activity
                     GroupBox("Recent Activity") {
                         if recentActivity.isEmpty {
@@ -116,7 +116,7 @@ struct AgentMonitoringView: View {
             await refreshMetrics()
         }
     }
-    
+
     private func refreshMetrics() async {
         // Simulate fetching metrics
         // In production, query actual system state
@@ -125,18 +125,18 @@ struct AgentMonitoringView: View {
             llmStatus: "Ready",
             embeddingsCount: 42
         )
-        
+
         toolStats = [
             ToolStat(toolName: "status", callCount: 15, successRate: 1.0),
             ToolStat(toolName: "logs", callCount: 8, successRate: 0.95),
-            ToolStat(toolName: "deploy", callCount: 3, successRate: 0.67)
+            ToolStat(toolName: "deploy", callCount: 3, successRate: 0.67),
         ]
-        
+
         recentActivity = [
             ActivityLog(level: .info, message: "Processed query: Check system status"),
             ActivityLog(level: .success, message: "Tool execution: status completed"),
             ActivityLog(level: .warning, message: "Retry attempt 2/3 for logs command"),
-            ActivityLog(level: .info, message: "Learned new fact about API endpoint")
+            ActivityLog(level: .info, message: "Learned new fact about API endpoint"),
         ]
     }
 }
@@ -146,7 +146,7 @@ struct MetricRow: View {
     let label: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         HStack {
             Image(systemName: icon)
@@ -179,10 +179,10 @@ struct ActivityLog: Identifiable {
     let timestamp = Date()
     let level: Level
     let message: String
-    
+
     enum Level {
         case info, success, warning, error
-        
+
         var color: Color {
             switch self {
             case .info: return .blue

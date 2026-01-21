@@ -3,11 +3,10 @@ import Foundation
 /// Circuit breaker pattern for resilient service calls
 @available(macOS 12.0, *)
 public actor CircuitBreaker {
-
     public enum State: Sendable {
-        case closed  // Normal operation
-        case open  // Too many failures, reject calls
-        case halfOpen  // Testing if service recovered
+        case closed // Normal operation
+        case open // Too many failures, reject calls
+        case halfOpen // Testing if service recovered
     }
 
     private var state: State = .closed
@@ -103,7 +102,7 @@ public actor CircuitBreaker {
     }
 
     public func getCurrentState() -> State {
-        return state
+        state
     }
 }
 

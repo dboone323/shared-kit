@@ -132,7 +132,6 @@ public class IzhikevichNeuron: NeuromorphicNeuron {
 
 /// Feedforward Spiking Neural Network
 public class FeedforwardSNN: NeuromorphicNetwork {
-
     public func createNetwork(layerSizes: [Int], neuronType: NeuronType = .lif) {
         layers = []
 
@@ -140,7 +139,7 @@ public class FeedforwardSNN: NeuromorphicNetwork {
         for (layerIndex, size) in layerSizes.enumerated() {
             var layer: [NeuromorphicNeuron] = []
 
-            for _ in 0..<size {
+            for _ in 0 ..< size {
                 let neuron: NeuromorphicNeuron
                 switch neuronType {
                 case .lif:
@@ -168,7 +167,7 @@ public class FeedforwardSNN: NeuromorphicNetwork {
         }
 
         // Create connections between layers
-        for i in 0..<(layers.count - 1) {
+        for i in 0 ..< (layers.count - 1) {
             connectLayers(from: layers[i], to: layers[i + 1])
         }
     }
@@ -178,8 +177,8 @@ public class FeedforwardSNN: NeuromorphicNetwork {
     ) {
         for sourceNeuron in sourceLayer {
             for targetNeuron in targetLayer {
-                let weight = Double.random(in: 0.1...0.9)
-                let delay = Double.random(in: 0.001...0.005)
+                let weight = Double.random(in: 0.1 ... 0.9)
+                let delay = Double.random(in: 0.001 ... 0.005)
                 connect(from: sourceNeuron, to: targetNeuron, weight: weight, delay: delay)
             }
         }
@@ -206,11 +205,11 @@ public class RecurrentSNN: NeuromorphicNetwork {
 
         // Add recurrent connections within layers
         for layer in layers {
-            for i in 0..<layer.count {
-                for j in 0..<layer.count {
-                    if i != j && Double.random(in: 0...1) < recurrentProbability {
-                        let weight = Double.random(in: -0.5...0.5) // Can be inhibitory
-                        let delay = Double.random(in: 0.001...0.01)
+            for i in 0 ..< layer.count {
+                for j in 0 ..< layer.count {
+                    if i != j && Double.random(in: 0 ... 1) < recurrentProbability {
+                        let weight = Double.random(in: -0.5 ... 0.5) // Can be inhibitory
+                        let delay = Double.random(in: 0.001 ... 0.01)
                         let synapse = connect(
                             from: layer[i], to: layer[j], weight: weight, delay: delay
                         )
@@ -258,9 +257,9 @@ public class ConvolutionalSNN: NeuromorphicNetwork {
     ) {
         var kernels: [[NeuromorphicNeuron]] = []
 
-        for _ in 0..<numKernels {
+        for _ in 0 ..< numKernels {
             var kernel: [NeuromorphicNeuron] = []
-            for _ in 0..<(kernelSize.width * kernelSize.height) {
+            for _ in 0 ..< (kernelSize.width * kernelSize.height) {
                 let neuron = LIFNeuron()
                 addNeuron(neuron)
                 kernel.append(neuron)
@@ -286,15 +285,15 @@ public class ConvolutionalSNN: NeuromorphicNetwork {
         let (kernelWidth, kernelHeight) = convLayer.kernelSize
         let stride = convLayer.stride
 
-        for kernelIndex in 0..<convLayer.kernels.count {
+        for kernelIndex in 0 ..< convLayer.kernels.count {
             let kernel = convLayer.kernels[kernelIndex]
 
-            for y in stride..<inputHeight where (y - kernelHeight + 1) % stride == 0 {
-                for x in stride..<inputWidth where (x - kernelWidth + 1) % stride == 0 {
+            for y in stride ..< inputHeight where (y - kernelHeight + 1) % stride == 0 {
+                for x in stride ..< inputWidth where (x - kernelWidth + 1) % stride == 0 {
                     // Connect receptive field to kernel neurons
                     var kernelNeuronIndex = 0
-                    for ky in 0..<kernelHeight {
-                        for kx in 0..<kernelWidth {
+                    for ky in 0 ..< kernelHeight {
+                        for kx in 0 ..< kernelWidth {
                             let inputX = x + kx - kernelWidth + 1
                             let inputY = y + ky - kernelHeight + 1
 
@@ -303,7 +302,7 @@ public class ConvolutionalSNN: NeuromorphicNetwork {
                             {
                                 let inputIndex = inputY * inputWidth + inputX
                                 if inputIndex < input.count {
-                                    let weight = Double.random(in: 0.1...0.9)
+                                    let weight = Double.random(in: 0.1 ... 0.9)
                                     connect(
                                         from: input[inputIndex],
                                         to: kernel[kernelNeuronIndex],

@@ -1,12 +1,11 @@
 #if canImport(CoreML) && canImport(NaturalLanguage)
+    import CoreML
     import Foundation
     import NaturalLanguage
-    import CoreML
 
     /// A service that generates vector embeddings for text using Apple's On-Device Foundation Models (NaturalLanguage).
     @available(macOS 10.15, iOS 13.0, *)
     public final class CoreMLEmbeddingService: Sendable {
-
         public static let shared = CoreMLEmbeddingService()
 
         private init() {}
@@ -15,7 +14,7 @@
         /// - Parameter text: The input string to embed.
         /// - Returns: An array of Doubles representing the vector embedding.
         public func embed(_ text: String) async throws -> [Double] {
-            return try await withCheckedThrowingContinuation { continuation in
+            try await withCheckedThrowingContinuation { continuation in
                 // Use the NLEmbedding for sentence embedding (available since macOS 10.15/iOS 13)
                 // Note: In newer OS versions (macOS 14+), this uses the improved Transformer-based models automatically.
                 guard let embedding = NLEmbedding.sentenceEmbedding(for: .english) else {

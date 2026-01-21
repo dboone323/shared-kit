@@ -40,12 +40,14 @@ public final class HapticManager {
                         try self?.engine?.start()
                     } catch {
                         SecureLogger.error(
-                            "Failed to restart haptic engine", category: .haptics, error: error)
+                            "Failed to restart haptic engine", category: .haptics, error: error
+                        )
                     }
                 }
             } catch {
                 SecureLogger.error(
-                    "Failed to create haptic engine", category: .haptics, error: error)
+                    "Failed to create haptic engine", category: .haptics, error: error
+                )
             }
         #endif
     }
@@ -185,7 +187,7 @@ public final class HapticManager {
     #if canImport(CoreHaptics)
         /// Play a custom intensity haptic
         public func customImpact(intensity: Float, sharpness: Float) {
-            guard isHapticsEnabled, let engine = engine else { return }
+            guard isHapticsEnabled, let engine else { return }
 
             let hapticEvent = CHHapticEvent(
                 eventType: .hapticTransient,
@@ -207,7 +209,7 @@ public final class HapticManager {
 
         /// Rumble effect for continuous feedback
         public func rumble(duration: TimeInterval, intensity: Float = 0.5) {
-            guard isHapticsEnabled, let engine = engine else { return }
+            guard isHapticsEnabled, let engine else { return }
 
             let hapticEvent = CHHapticEvent(
                 eventType: .hapticContinuous,
@@ -256,9 +258,9 @@ public struct HapticModifier: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     /// Add haptic feedback on tap
-    public func hapticFeedback(_ type: HapticModifier.HapticType) -> some View {
+    func hapticFeedback(_ type: HapticModifier.HapticType) -> some View {
         modifier(HapticModifier(type: type))
     }
 }

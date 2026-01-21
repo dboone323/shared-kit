@@ -4,7 +4,6 @@ import XCTest
 
 @available(macOS 11.0, iOS 14.0, *)
 final class OllamaEnhancementsTests: XCTestCase {
-
     // MARK: - RetryConfig Tests
 
     func testRetryConfigBasicDelay() {

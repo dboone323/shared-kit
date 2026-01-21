@@ -3,11 +3,10 @@
 // SharedKitTests
 //
 
-import XCTest
 @testable import SharedKit
+import XCTest
 
 final class AccessibilityLabelsTests: XCTestCase {
-    
     // MARK: - Navigation Labels
     
     func testBackButtonLabel() {

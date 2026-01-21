@@ -17,12 +17,12 @@ public actor Intelligence {
     public func recommendTools(for task: String, availableTools: [ToolDescription]) async
         -> [String]
     {
-        return await toolRecommender.rank(tools: availableTools, for: task)
+        await toolRecommender.rank(tools: availableTools, for: task)
     }
 
     /// Check if a model is predicted to likely fail soon
     public func predictHealth(for modelId: String) async -> HealthPrediction {
-        return await healthPredictor.predict(modelId)
+        await healthPredictor.predict(modelId)
     }
 
     /// Cache semantic result
@@ -32,7 +32,7 @@ public actor Intelligence {
 
     /// Retrieve semantic result
     public func retrieveCachedResult(for query: String, embeddings: [Float]) async -> String? {
-        return await semanticCache.get(for: query, vector: embeddings)
+        await semanticCache.get(for: query, vector: embeddings)
     }
 }
 
@@ -41,7 +41,7 @@ public actor Intelligence {
 public struct ToolDescription: Sendable, Hashable {
     public let name: String
     public let description: String
-    public let vector: [Float]?  // Pre-computed embedding
+    public let vector: [Float]? // Pre-computed embedding
 
     public init(name: String, description: String, vector: [Float]? = nil) {
         self.name = name
@@ -52,7 +52,7 @@ public struct ToolDescription: Sendable, Hashable {
 
 @available(macOS 12.0, iOS 15.0, *)
 actor ToolRecommender {
-    private var historicalSuccess: [String: Double] = [:]  // Simple exponential moving average of success
+    private var historicalSuccess: [String: Double] = [:] // Simple exponential moving average of success
 
     /// Rank tools by hybrid score (Vector Similarity + Success Rate)
     func rank(tools: [ToolDescription], for task: String) -> [String] {
@@ -60,9 +60,9 @@ actor ToolRecommender {
         // For this implementation, we assume we rely more on basic text matching overlap
         // plus historical success rates if actual vectors aren't provided.
 
-        return tools.sorted { t1, t2 in
+        tools.sorted { t1, t2 in
             score(t1, task: task) > score(t2, task: task)
-        }.map { $0.name }
+        }.map(\.name)
     }
 
     private func score(_ tool: ToolDescription, task: String) -> Double {
@@ -114,7 +114,7 @@ actor HealthPredictor {
     }
 
     private var latencyHistory: [String: [LatencySample]] = [:]
-    private let windowSize: TimeInterval = 300  // 5 minutes
+    private let windowSize: TimeInterval = 300 // 5 minutes
 
     func recordLatency(model: String, duration: TimeInterval) {
         let sample = LatencySample(timestamp: Date(), duration: duration)
@@ -128,21 +128,22 @@ actor HealthPredictor {
     func predict(_ model: String) -> HealthPrediction {
         guard let history = latencyHistory[model], !history.isEmpty else {
             return HealthPrediction(
-                status: .healthy, probabilityOfFailure: 0.0, estimatedLatency: 0.5)
+                status: .healthy, probabilityOfFailure: 0.0, estimatedLatency: 0.5
+            )
         }
 
         // Calculate P95 Latency
-        let sortedDurations = history.map { $0.duration }.sorted()
+        let sortedDurations = history.map(\.duration).sorted()
         let index = Int(Double(sortedDurations.count) * 0.95)
         let p95 = sortedDurations[index]
 
         // Trend Analysis: Is latency increasing?
         let recent = history.suffix(10)
-        let avgRecent = recent.map { $0.duration }.reduce(0, +) / Double(recent.count)
+        let avgRecent = recent.map(\.duration).reduce(0, +) / Double(recent.count)
         let avgTotal = sortedDurations.reduce(0, +) / Double(sortedDurations.count)
 
         var status: HealthStatus = .healthy
-        var prob: Double = 0.1
+        var prob = 0.1
 
         if p95 > 5.0 || avgRecent > avgTotal * 1.5 {
             status = .degraded
@@ -180,7 +181,7 @@ actor SemanticCache {
 
     private var cache: [String: CacheEntry] = [:]
     private let maxEntries = 1000
-    private let similarityThreshold: Float = 0.9  // For semantic match
+    private let similarityThreshold: Float = 0.9 // For semantic match
 
     func set(_ result: String, for query: String, vector: [Float], ttl: TimeInterval = 300) {
         if cache.count >= maxEntries {
@@ -202,7 +203,7 @@ actor SemanticCache {
             cache[query] = CacheEntry(
                 result: entry.result,
                 vector: entry.vector,
-                lastAccessed: Date(),  // Update access time for LRU
+                lastAccessed: Date(), // Update access time for LRU
                 expiry: entry.expiry
             )
             return entry.result
@@ -236,7 +237,7 @@ actor SemanticCache {
         var dot: Float = 0
         var mag1: Float = 0
         var mag2: Float = 0
-        for i in 0..<v1.count {
+        for i in 0 ..< v1.count {
             dot += v1[i] * v2[i]
             mag1 += v1[i] * v1[i]
             mag2 += v2[i] * v2[i]

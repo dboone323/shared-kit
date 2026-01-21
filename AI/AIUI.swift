@@ -1035,8 +1035,8 @@ private struct HabitPredictionView: View {
             Button("Generate Prediction") {
                 // Simulate prediction generation
                 prediction = HabitPrediction(
-                    successProbability: Double.random(in: 0.3...0.9),
-                    confidence: Double.random(in: 0.6...0.95),
+                    successProbability: Double.random(in: 0.3 ... 0.9),
+                    confidence: Double.random(in: 0.6 ... 0.95),
                     factors: [],
                     recommendations: ["Stay consistent", "Track progress daily"],
                     timestamp: Date()
@@ -1083,7 +1083,7 @@ private struct ExpensePredictionView: View {
                 // Simulate prediction generation
                 prediction = ExpensePrediction(
                     predictedCategory: "Food",
-                    confidence: Double.random(in: 0.6...0.95),
+                    confidence: Double.random(in: 0.6 ... 0.95),
                     alternativeCategories: ["Food": 0.8, "Entertainment": 0.2],
                     reasoning: "Based on merchant patterns",
                     timestamp: Date()

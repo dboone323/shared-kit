@@ -6,7 +6,6 @@ import XCTest
 @available(macOS 12.0, *)
 @MainActor
 final class AggregatorAgentIntegrationTests: XCTestCase {
-
     var agent: AggregatorAgent!
 
     override func setUp() {

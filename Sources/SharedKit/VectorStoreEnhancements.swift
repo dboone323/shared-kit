@@ -21,7 +21,7 @@ public struct VectorBatchOperation {
         let chunkSize = 100
         for i in stride(from: 0, to: contents.count, by: chunkSize) {
             let end = min(i + chunkSize, contents.count)
-            let chunk = Array(i..<end)
+            let chunk = Array(i ..< end)
 
             for idx in chunk {
                 try await store.save(
@@ -96,12 +96,12 @@ public actor VectorStoreMetrics {
 public struct HybridSearchResult {
     public let content: String
     public let score: Float
-    public let source: String  // "vector" or "keyword"
+    public let source: String // "vector" or "keyword"
 }
 
 @available(macOS 12.0, iOS 15.0, *)
 public actor HybridSearchEngine {
-    private let vectorStore: PostgresVectorStore  // Assumption: Accessible
+    private let vectorStore: PostgresVectorStore // Assumption: Accessible
 
     public init(vectorStore: PostgresVectorStore) {
         self.vectorStore = vectorStore
@@ -147,7 +147,7 @@ public actor HybridSearchEngine {
         let queryTerms = Set(query.lowercased().split(separator: " "))
         let contentTerms = Set(content.lowercased().split(separator: " "))
         let intersection = queryTerms.intersection(contentTerms).count
-        return Double(intersection) / Double(queryTerms.count)  // Simple recall score
+        return Double(intersection) / Double(queryTerms.count) // Simple recall score
     }
 }
 

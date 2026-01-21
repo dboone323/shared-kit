@@ -3,11 +3,10 @@
 // SharedKitTests
 //
 
-import XCTest
 @testable import SharedKit
+import XCTest
 
 final class AnyCodableTests: XCTestCase {
-    
     // MARK: - Encoding Tests
     
     func testEncodeString() throws {
@@ -74,7 +73,7 @@ final class AnyCodableTests: XCTestCase {
     
     func testNestedDictionary() throws {
         // Simple test that works with Sendable constraints
-        let json = "{\"key\":\"value\"}".data(using: .utf8)!
+        let json = Data("{\"key\":\"value\"}".utf8)
         let decoded = try JSONDecoder().decode(AnyCodable.self, from: json)
         XCTAssertNotNil(decoded)
     }

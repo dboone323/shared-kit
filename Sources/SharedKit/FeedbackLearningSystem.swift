@@ -3,7 +3,6 @@ import Foundation
 /// Feedback tracking for agent responses to enable learning
 @available(macOS 12.0, *)
 public actor FeedbackLearningSystem {
-
     public static let shared = FeedbackLearningSystem()
 
     private var feedbackHistory: [ResponseFeedback] = []
@@ -18,8 +17,8 @@ public actor FeedbackLearningSystem {
         public let toolUsed: String?
 
         public enum Rating: String, Codable, Sendable {
-            case helpful  // Thumbs up
-            case unhelpful  // Thumbs down
+            case helpful // Thumbs up
+            case unhelpful // Thumbs down
             case neutral
         }
 

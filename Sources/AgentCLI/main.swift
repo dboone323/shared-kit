@@ -11,31 +11,31 @@ struct AgentCLI {
         ║              🤖 Agent Intelligence CLI v1.0                  ║
         ║    Powered by RAG + Local LLM (qwen2.5-coder) + Docker       ║
         ╚═══════════════════════════════════════════════════════════════╝
-        
+
         Try commands like:
          • "Check the system status"
          • "Show me the logs"
          • "What's running?"
          • "Fix any issues"
          • "Start the core services"
-        
+
         Type 'exit' or 'quit' to leave.
         """)
-        
+
         let agent = AggregatorAgent.shared
-        
+
         while true {
             print("\n💬 You: ", terminator: "")
             guard let input = readLine(), !input.isEmpty else {
                 continue
             }
-            
+
             let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
             if trimmed == "exit" || trimmed == "quit" || trimmed == "q" {
                 print("\n👋 Goodbye!")
                 break
             }
-            
+
             do {
                 print("\n⏳ Processing...\n")
                 let response = try await agent.process(query: input)
