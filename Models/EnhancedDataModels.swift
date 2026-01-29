@@ -6,7 +6,9 @@
 //
 
 import Foundation
-import SwiftData
+#if canImport(SwiftData)
+@_exported import SwiftData
+#endif
 
 // MARK: - Enhanced Core Data Protocols
 
