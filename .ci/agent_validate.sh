@@ -17,6 +17,7 @@ set -euo pipefail
 
 AGENT_NAME="agent_validate.sh"
 LOG_FILE="${LOG_FILE:-$DIR/${AGENT_NAME}.log}"
+# shellcheck disable=SC2034
 PID=$$
 
 if type update_agent_status >/dev/null 2>&1; then
@@ -48,9 +49,12 @@ fi
 # Original agent script continues below
 #!/usr/bin/env bash
 set -euo pipefail
+# shellcheck disable=SC2034
 export CR_USE_AI=1
+# shellcheck disable=SC2034
 export CR_USE_OLLAMA=1
 : "${OLLAMA_CLOUD_URL:=}"
+# shellcheck disable=SC2034
 export OLLAMA_ENDPOINT="${OLLAMA_CLOUD_URL:-http://127.0.0.1:11434}"
 
 "$(dirname "$0")/run_validation.sh"

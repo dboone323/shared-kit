@@ -11,13 +11,17 @@ if [[ -f "${TOOLS_ROOT}/.env" ]]; then
 fi
 
 # Submodule-specific environment variables
+# shellcheck disable=SC2034
 export PROJECT_NAME="shared-kit"
 SUBMODULE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export SUBMODULE_ROOT
 
 # MCP configuration
+# shellcheck disable=SC2034
 export MCP_SERVER_URL="${MCP_SERVER_URL:-http://127.0.0.1:5005}"
+# shellcheck disable=SC2034
 export MCP_API_VERSION="${MCP_API_VERSION:-v1}"
 
 # Ollama configuration
+# shellcheck disable=SC2034
 export OLLAMA_ENDPOINT="${OLLAMA_ENDPOINT:-http://127.0.0.1:11434}"

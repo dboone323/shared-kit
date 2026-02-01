@@ -4,8 +4,11 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 cd "$REPO_ROOT" || exit
 
 : "${OLLAMA_CLOUD_URL:=}"
+# shellcheck disable=SC2034
 export OLLAMA_ENDPOINT="${OLLAMA_CLOUD_URL:-http://127.0.0.1:11434}"
+# shellcheck disable=SC2034
 export CR_USE_AI=1
+# shellcheck disable=SC2034
 export CR_USE_OLLAMA=1
 
 if [[ -z "${OLLAMA_CLOUD_URL}" ]]; then

@@ -22,6 +22,13 @@
                     return
                 }
 
+                if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    // Return zero vector for empty input to prevent failure
+                    let dimension = embedding.dimension
+                    continuation.resume(returning: Array(repeating: 0.0, count: dimension))
+                    return
+                }
+
                 if let vector = embedding.vector(for: text) {
                     continuation.resume(returning: vector)
                 } else {

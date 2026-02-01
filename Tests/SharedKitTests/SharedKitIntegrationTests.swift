@@ -25,7 +25,9 @@ final class SharedKitIntegrationTests: XCTestCase {
         let responseJSON = """
             {
                 "response": "\(encryptedResponse.base64EncodedString())",
-                "done": true
+                "done": true,
+                "model": "secure-model",
+                "created_at": "2025-01-01T00:00:00Z"
             }
             """
 
