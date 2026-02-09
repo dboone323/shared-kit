@@ -80,17 +80,21 @@ public protocol AICachingService {
     ///   - key: Cache key
     ///   - response: Response to cache
     ///   - metadata: Additional metadata
+    @MainActor
     func cacheResponse(key: String, response: String, metadata: [String: Any]?) async
 
     /// Retrieve cached response
     /// - Parameter key: Cache key
     /// - Returns: Cached response if available
+    @MainActor
     func getCachedResponse(key: String) async -> String?
 
     /// Clear cache
+    @MainActor
     func clearCache() async
 
     /// Get cache statistics
+    @MainActor
     func getCacheStats() async -> CacheStats
 }
 
@@ -102,14 +106,17 @@ public protocol AIPerformanceMonitoring {
     ///   - duration: Operation duration
     ///   - success: Whether operation succeeded
     ///   - metadata: Additional metadata
+    @MainActor
     func recordOperation(
         operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?
     ) async
 
     /// Get performance metrics
+    @MainActor
     func getPerformanceMetrics() async -> PerformanceMetrics
 
     /// Reset performance metrics
+    @MainActor
     func resetMetrics() async
 }
 
@@ -509,27 +516,27 @@ public struct RateLimit: Codable, Sendable {
 
 // MARK: - Default Implementations
 
-public extension AITextGenerationService {
-    func isAvailable() async -> Bool {
+extension AITextGenerationService {
+    public func isAvailable() async -> Bool {
         let health = await getHealthStatus()
         return health.isRunning
     }
 }
 
-public extension AICodeAnalysisService {
-    func generateDocumentation(code: String, language: String) async throws -> String {
+extension AICodeAnalysisService {
+    public func generateDocumentation(code: String, language: String) async throws -> String {
         // Default implementation - should be overridden
         throw AIError.serviceNotImplemented("Documentation generation not implemented")
     }
 
-    func generateTests(code: String, language: String) async throws -> String {
+    public func generateTests(code: String, language: String) async throws -> String {
         // Default implementation - should be overridden
         throw AIError.serviceNotImplemented("Test generation not implemented")
     }
 }
 
-public extension AICodeGenerationService {
-    func generateCodeWithFallback(description: String, language: String, context: String?)
+extension AICodeGenerationService {
+    public func generateCodeWithFallback(description: String, language: String, context: String?)
         async throws -> CodeGenerationResult
     {
         // Default implementation - just call regular generateCode
@@ -550,19 +557,19 @@ public enum AIError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case let .serviceNotImplemented(service):
+        case .serviceNotImplemented(let service):
             "AI service not implemented: \(service)"
-        case let .serviceUnavailable(service):
+        case .serviceUnavailable(let service):
             "AI service unavailable: \(service)"
-        case let .invalidConfiguration(details):
+        case .invalidConfiguration(let details):
             "Invalid AI service configuration: \(details)"
-        case let .operationFailed(details):
+        case .operationFailed(let details):
             "AI operation failed: \(details)"
         case .rateLimitExceeded:
             "AI service rate limit exceeded"
         case .authenticationFailed:
             "AI service authentication failed"
-        case let .networkError(details):
+        case .networkError(let details):
             "AI service network error: \(details)"
         }
     }

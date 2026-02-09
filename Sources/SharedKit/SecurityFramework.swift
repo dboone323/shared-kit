@@ -65,6 +65,8 @@ public enum InputType: Sendable {
     case url
     case identifier
     case text
+    case habitName
+    case habitDescription
 }
 
 enum ValidationError: Error {
@@ -98,13 +100,19 @@ actor InputValidator {
             if input.contains("<script") || input.contains("javascript:") {
                 throw ValidationError.unsafeContent
             }
+        case .habitName:
+            let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.isEmpty { throw ValidationError.invalidFormat("Habit name cannot be empty") }
+            if trimmed.count > 50 { throw ValidationError.tooLong }
+        case .habitDescription:
+            if input.count > 200 { throw ValidationError.tooLong }
         }
     }
 
     func sanitize(_ input: String) -> String {
         // Basic sanitization: remove null bytes and control characters
         input.replacingOccurrences(of: "\0", with: "")
-            .replacingOccurrences(of: "'", with: "''") // Basic SQL escape (use prepared statements effectively instead)
+            .replacingOccurrences(of: "'", with: "''")  // Basic SQL escape (use prepared statements effectively instead)
     }
 }
 
@@ -143,7 +151,7 @@ actor AccessControl {
         // RBAC Matrix
         switch user.role {
         case .admin:
-            return // Allowed everything
+            return  // Allowed everything
 
         case .user:
             switch action {
@@ -162,17 +170,35 @@ actor AccessControl {
 
 // MARK: - Step 46-47: Encryption
 
-actor CryptoManager {
-    // In production, fetch this from Keychain or Environment
-    // This is a stub key for demonstration (DO NOT USE IN PROD)
-    private let key = SymmetricKey(size: .bits256)
+public actor CryptoManager {
+    public static let shared = CryptoManager()
 
-    func encrypt(_ data: Data) throws -> Data {
+    private let keychain = KeychainManager.shared
+    private let serviceName = "com.habitquest.encryption"
+    private let accountName = "primaryKey"
+
+    private func getKey() async throws -> SymmetricKey {
+        do {
+            let keyData = try await keychain.retrieveData(
+                service: serviceName, account: accountName)
+            return SymmetricKey(data: keyData)
+        } catch {
+            // Generate new key if not found
+            let newKey = SymmetricKey(size: .bits256)
+            let keyData = newKey.withUnsafeBytes { Data($0) }
+            try await keychain.save(keyData, service: serviceName, account: accountName)
+            return newKey
+        }
+    }
+
+    func encrypt(_ data: Data) async throws -> Data {
+        let key = try await getKey()
         let sealedBox = try AES.GCM.seal(data, using: key)
         return sealedBox.combined!
     }
 
-    func decrypt(_ data: Data) throws -> Data {
+    func decrypt(_ data: Data) async throws -> Data {
+        let key = try await getKey()
         let sealedBox = try AES.GCM.SealedBox(combined: data)
         return try AES.GCM.open(sealedBox, using: key)
     }

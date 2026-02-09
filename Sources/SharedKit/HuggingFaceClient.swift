@@ -23,19 +23,19 @@ public enum HuggingFaceError: LocalizedError {
         switch self {
         case .invalidURL:
             "Invalid Hugging Face API URL"
-        case let .networkError(message):
+        case .networkError(let message):
             "Network error: \(message)"
-        case let .apiError(message):
+        case .apiError(let message):
             "API error: \(message)"
         case .rateLimited:
             "Rate limit exceeded. Please wait before making more requests."
         case .modelLoading:
             "Model is loading. This may take a few minutes for first use."
-        case let .parsingError(message):
+        case .parsingError(let message):
             "Response parsing error: \(message)"
         case .authenticationError:
             "Authentication failed. Please check your API token."
-        case let .modelNotSupported(model):
+        case .modelNotSupported(let model):
             "Model '\(model)' is not supported or available on free tier"
         case .quotaExceeded:
             "API quota exceeded. Please upgrade your plan or try again later."
@@ -62,21 +62,20 @@ public enum HuggingFaceError: LocalizedError {
     }
 }
 
-// import SharedKit // Will be available when integrated into package
-
 /// Enhanced Hugging Face API Client with Quantum Performance
 /// Provides access to Hugging Face's free inference API with advanced features
 /// Enhanced by AI System v2.1 on 9/12/25
 
-public class HuggingFaceClient {
+@MainActor
+public class HuggingFaceClient: ObservableObject {
     public static let shared = HuggingFaceClient()
 
     private let baseURL = "https://api-inference.huggingface.co"
     private let session: URLSession
     private let cache = ResponseCache()
     private let metrics = PerformanceMetricsTracker()
-    private let circuitBreaker = CircuitBreaker()
-    private let retryManager = RetryManager()
+    private let circuitBreaker = HFCircuitBreaker()
+    private let retryManager = HFRetryManager()
 
     private init() {
         let config = URLSessionConfiguration.default
@@ -99,12 +98,14 @@ public class HuggingFaceClient {
         temperature: Double = 0.7
     ) async throws -> String {
         let startTime = Date()
-        let cacheKey = self.cache.cacheKey(for: prompt, model: model, maxTokens: maxTokens, temperature: temperature)
+        let cacheKey = self.cache.cacheKey(
+            for: prompt, model: model, maxTokens: maxTokens, temperature: temperature)
 
         // Check circuit breaker
-        guard await circuitBreaker.canExecute(operation: "generate") else {
+        guard circuitBreaker.canExecute(operation: "generate") else {
             metrics.recordRequest(startTime: startTime, success: false, errorType: "circuitBreaker")
-            throw HuggingFaceError.apiError("Circuit breaker open - service temporarily unavailable")
+            throw HuggingFaceError.apiError(
+                "Circuit breaker open - service temporarily unavailable")
         }
 
         // Check cache first
@@ -145,14 +146,14 @@ public class HuggingFaceClient {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         // Add authorization header if token is available
-        if let token = getToken() {
+        if let token = await SecretsManager.shared.getHuggingFaceToken() {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
 
         let payload: [String: Any] = [
             "inputs": prompt,
             "parameters": [
-                "max_length": min(maxTokens, 100), // Free tier limit
+                "max_length": min(maxTokens, 100),  // Free tier limit
                 "temperature": temperature,
                 "do_sample": true,
                 "return_full_text": false,
@@ -177,15 +178,35 @@ public class HuggingFaceClient {
         case 404:
             throw HuggingFaceError.apiError("Model not found or not available on free tier")
         case 429:
-            await circuitBreaker.recordFailure(operation: "generate")
+            circuitBreaker.recordFailure(operation: "generate")
             throw HuggingFaceError.rateLimited
         case 503:
-            await circuitBreaker.recordFailure(operation: "generate")
+            circuitBreaker.recordFailure(operation: "generate")
             throw HuggingFaceError.modelLoading
         default:
             let errorMessage = try? parseErrorResponse(data)
-            throw HuggingFaceError.apiError("HTTP \(httpResponse.statusCode): \(errorMessage ?? "Unknown error")")
+            throw HuggingFaceError.apiError(
+                "HTTP \(httpResponse.statusCode): \(errorMessage ?? "Unknown error")")
         }
+    }
+
+    private func parseSuccessResponse(_ data: Data) throws -> String {
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]],
+            let firstResponse = json.first,
+            let generatedText = firstResponse["generated_text"] as? String
+        else {
+            throw HuggingFaceError.parsingError("Invalid response format")
+        }
+        return generatedText.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func parseErrorResponse(_ data: Data) throws -> String {
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let error = json["error"] as? String
+        else {
+            return "Unknown API error"
+        }
+        return error
     }
 
     /// Analyze code using a code-specific model
@@ -200,21 +221,21 @@ public class HuggingFaceClient {
         task: String = "analyze"
     ) async throws -> String {
         let prompt = """
-        Analyze this \(language) code and provide insights:
+            Analyze this \(language) code and provide insights:
 
-        ```\(language)
-        \(code)
-        ```
+            ```\(language)
+            \(code)
+            ```
 
-        Task: \(task)
-        Please provide a clear, concise analysis focusing on:
-        - Code quality and structure
-        - Potential improvements
-        - Best practices
-        - Any issues or concerns
+            Task: \(task)
+            Please provide a clear, concise analysis focusing on:
+            - Code quality and structure
+            - Potential improvements
+            - Best practices
+            - Any issues or concerns
 
-        Keep the response under 200 words.
-        """
+            Keep the response under 200 words.
+            """
 
         return try await self.generate(
             prompt: prompt,
@@ -234,20 +255,20 @@ public class HuggingFaceClient {
         language: String
     ) async throws -> String {
         let prompt = """
-        Generate clear, concise documentation for this \(language) code:
+            Generate clear, concise documentation for this \(language) code:
 
-        ```\(language)
-        \(code)
-        ```
+            ```\(language)
+            \(code)
+            ```
 
-        Include:
-        - Brief description of what the code does
-        - Key functions/methods and their purposes
-        - Important parameters or return values
-        - Any notable patterns or design decisions
+            Include:
+            - Brief description of what the code does
+            - Key functions/methods and their purposes
+            - Important parameters or return values
+            - Any notable patterns or design decisions
 
-        Format as clean markdown documentation.
-        """
+            Format as clean markdown documentation.
+            """
 
         return try await self.generate(
             prompt: prompt,
@@ -294,20 +315,20 @@ public class HuggingFaceClient {
                     }
 
                     // Don't retry for model not found
-                    if case let .apiError(message) = error, message.contains("not found") {
+                    if case .apiError(let message) = error, message.contains("not found") {
                         break
                     }
 
                     // Exponential backoff for rate limits and model loading
                     if case .rateLimited = error {
-                        let delay = pow(2.0, Double(retryCount)) * 1.0 // 1, 2, 4 seconds
+                        let delay = pow(2.0, Double(retryCount)) * 1.0  // 1, 2, 4 seconds
                         try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                         retryCount += 1
                         continue
                     }
 
                     if case .modelLoading = error {
-                        let delay = pow(2.0, Double(retryCount)) * 2.0 // 2, 4, 8 seconds
+                        let delay = pow(2.0, Double(retryCount)) * 2.0  // 2, 4, 8 seconds
                         try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                         retryCount += 1
                         continue
@@ -322,8 +343,11 @@ public class HuggingFaceClient {
             }
         }
 
-        throw lastError ?? HuggingFaceError
-            .apiError("All available models are currently unavailable. Free inference API may be experiencing issues.")
+        throw lastError
+            ?? HuggingFaceError
+            .apiError(
+                "All available models are currently unavailable. Free inference API may be experiencing issues."
+            )
     }
 
     /// Task types for intelligent model selection
@@ -351,9 +375,8 @@ public class HuggingFaceClient {
         }
     }
 
-    /// Get performance metrics
-    /// - Returns: Current performance statistics
-    public func getPerformanceMetrics() -> PerformanceMetrics {
+    /// Get internal performance metrics
+    private func internalMetrics() -> PerformanceMetrics {
         let metrics = self.metrics.getMetrics()
         return PerformanceMetrics(
             totalOperations: metrics.totalRequests,
@@ -383,21 +406,26 @@ public class HuggingFaceClient {
         return ServiceHealth(
             serviceName: "HuggingFace",
             isRunning: isHealthy,
-            modelsAvailable: true, // Assume models are available if service is healthy
+            modelsAvailable: true,  // Assume models are available if service is healthy
             responseTime: metrics.averageResponseTime,
             errorRate: 1.0 - metrics.successRate,
             lastChecked: Date(),
-            recommendations: isHealthy ? [] : ["Check network connectivity", "Verify API key if configured"]
+            recommendations: isHealthy
+                ? [] : ["Check network connectivity", "Verify API key if configured"]
         )
     }
 }
 
 // MARK: - AI Service Protocol Implementations
 
-extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AICodeGenerationService, AICachingService, AIPerformanceMonitoring {
+extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService,
+    AICodeGenerationService, AICachingService, AIPerformanceMonitoring
+{
     // MARK: - AITextGenerationService Implementation
 
-    public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws -> String {
+    public func generateText(prompt: String, maxTokens: Int, temperature: Double) async throws
+        -> String
+    {
         try await generate(
             prompt: prompt,
             model: "gpt2",
@@ -408,8 +436,11 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
     // MARK: - AICodeAnalysisService Implementation
 
-    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws -> CodeAnalysisResult {
-        let analysis = try await analyzeCode(code: code, language: language, task: analysisType.rawValue)
+    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws
+        -> CodeAnalysisResult
+    {
+        let analysis = try await analyzeCode(
+            code: code, language: language, task: analysisType.rawValue)
 
         let issues = extractIssues(from: analysis)
         let suggestions = extractSuggestions(from: analysis)
@@ -428,13 +459,13 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
         var issues: [CodeIssue] = []
 
         for line in lines {
-            if line.lowercased().contains("error") ||
-                line.lowercased().contains("bug") ||
-                line.lowercased().contains("issue") ||
-                line.lowercased().contains("problem") ||
-                line.lowercased().contains("warning")
+            if line.lowercased().contains("error") || line.lowercased().contains("bug")
+                || line.lowercased().contains("issue") || line.lowercased().contains("problem")
+                || line.lowercased().contains("warning")
             {
-                issues.append(CodeIssue(description: line.trimmingCharacters(in: .whitespaces), severity: .medium))
+                issues.append(
+                    CodeIssue(
+                        description: line.trimmingCharacters(in: .whitespaces), severity: .medium))
             }
         }
 
@@ -444,22 +475,22 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
     private func extractSuggestions(from analysis: String) -> [String] {
         let lines = analysis.components(separatedBy: "\n")
         return lines.filter { line in
-            line.lowercased().contains("suggest") ||
-                line.lowercased().contains("recommend") ||
-                line.lowercased().contains("improve") ||
-                line.lowercased().contains("consider") ||
-                line.lowercased().contains("should")
+            line.lowercased().contains("suggest") || line.lowercased().contains("recommend")
+                || line.lowercased().contains("improve") || line.lowercased().contains("consider")
+                || line.lowercased().contains("should")
         }.map { $0.trimmingCharacters(in: .whitespaces) }
     }
 
     // MARK: - AICodeGenerationService Implementation
 
-    public func generateCode(description: String, language: String, context: String?) async throws -> CodeGenerationResult {
+    public func generateCode(description: String, language: String, context: String?) async throws
+        -> CodeGenerationResult
+    {
         let fullPrompt = """
-        Generate \(language) code based on this request: \(description)
-        \(context != nil ? "Context: \(context!)" : "")
-        Provide only the code without explanation or markdown formatting.
-        """
+            Generate \(language) code based on this request: \(description)
+            \(context != nil ? "Context: \(context!)" : "")
+            Provide only the code without explanation or markdown formatting.
+            """
 
         let code = try await generateWithFallback(
             prompt: fullPrompt,
@@ -476,13 +507,16 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
         )
     }
 
-    public func generateFunction(name: String, parameters: [String: String], returnType: String, language: String, description: String?) async throws -> String {
+    public func generateFunction(
+        name: String, parameters: [String: String], returnType: String, language: String,
+        description: String?
+    ) async throws -> String {
         let paramString = parameters.map { "\($0.key): \($0.value)" }.joined(separator: ", ")
         let prompt = """
-        Generate a \(language) function named '\(name)' with parameters (\(paramString)) returning \(returnType).
-        \(description != nil ? "Description: \(description!)" : "")
-        Provide only the function code without explanation.
-        """
+            Generate a \(language) function named '\(name)' with parameters (\(paramString)) returning \(returnType).
+            \(description != nil ? "Description: \(description!)" : "")
+            Provide only the function code without explanation.
+            """
 
         return try await generateWithFallback(
             prompt: prompt,
@@ -492,17 +526,20 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
         )
     }
 
-    public func generateClass(name: String, properties: [String: String], methods: [String], language: String, description: String?) async throws -> String {
+    public func generateClass(
+        name: String, properties: [String: String], methods: [String], language: String,
+        description: String?
+    ) async throws -> String {
         let propString = properties.map { "  \($0.key): \($0.value)" }.joined(separator: "\n")
         let methodString = methods.joined(separator: ", ")
         let prompt = """
-        Generate a \(language) class named '\(name)' with these properties:
-        \(propString)
+            Generate a \(language) class named '\(name)' with these properties:
+            \(propString)
 
-        And these methods: \(methodString)
-        \(description != nil ? "Description: \(description!)" : "")
-        Provide only the class code without explanation.
-        """
+            And these methods: \(methodString)
+            \(description != nil ? "Description: \(description!)" : "")
+            Provide only the class code without explanation.
+            """
 
         return try await generateWithFallback(
             prompt: prompt,
@@ -512,14 +549,16 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
         )
     }
 
-    public func refactorCode(code: String, language: String, improvement: String) async throws -> String {
+    public func refactorCode(code: String, language: String, improvement: String) async throws
+        -> String
+    {
         let prompt = """
-        Refactor this \(language) code to \(improvement):
+            Refactor this \(language) code to \(improvement):
 
-        \(code)
+            \(code)
 
-        Provide only the refactored code without explanation.
-        """
+            Provide only the refactored code without explanation.
+            """
 
         return try await generateWithFallback(
             prompt: prompt,
@@ -532,8 +571,6 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
     // MARK: - AICachingService Implementation
 
     public func cacheResponse(key: String, response: String, metadata: [String: Any]?) async {
-        // Convert metadata to string for storage
-        let metadataString = metadata?.description ?? ""
         cache.set(key, response: response, prompt: key, model: "huggingface")
     }
 
@@ -548,7 +585,7 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
     public func getCacheStats() async -> CacheStats {
         // Simplified cache stats - could be enhanced
         CacheStats(
-            totalEntries: 0, // Not tracked in current implementation
+            totalEntries: 0,  // Not tracked in current implementation
             hitRate: 0.0,
             averageResponseTime: 0.0,
             cacheSize: 0,
@@ -558,20 +595,23 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 
     // MARK: - AIPerformanceMonitoring Implementation
 
-    public func recordOperation(operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?) async {
+    public func recordOperation(
+        operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?
+    ) async {
         let errorType = metadata?["error"] as? String
-        metrics.recordRequest(startTime: Date().addingTimeInterval(-duration), success: success, errorType: errorType)
+        metrics.recordRequest(
+            startTime: Date().addingTimeInterval(-duration), success: success, errorType: errorType)
     }
 
     public func getPerformanceMetrics() async -> PerformanceMetrics {
-        let metricsData = getPerformanceMetrics()
+        let metricsData = internalMetrics()
         return PerformanceMetrics(
             totalOperations: metricsData.totalOperations,
             successRate: metricsData.successRate,
             averageResponseTime: metricsData.averageResponseTime,
             errorBreakdown: metricsData.errorBreakdown,
-            peakConcurrentOperations: 1, // Simplified
-            uptime: 0.0 // Not tracked
+            peakConcurrentOperations: 1,  // Simplified
+            uptime: 0.0  // Not tracked
         )
     }
 
@@ -583,15 +623,16 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService, AIC
 // MARK: - Supporting Classes
 
 /// Circuit breaker for fault tolerance
-private actor CircuitBreaker {
+@MainActor
+private class HFCircuitBreaker {
     private var failureCounts: [String: Int] = [:]
     private var lastFailureTimes: [String: Date] = [:]
     private let failureThreshold = 5
-    private let recoveryTimeout: TimeInterval = 60.0 // 1 minute
+    private let recoveryTimeout: TimeInterval = 60.0  // 1 minute
 
     func canExecute(operation: String) -> Bool {
         guard let failureCount = failureCounts[operation],
-              let lastFailure = lastFailureTimes[operation]
+            let lastFailure = lastFailureTimes[operation]
         else {
             return true
         }
@@ -616,7 +657,8 @@ private actor CircuitBreaker {
 }
 
 /// Intelligent retry manager with exponential backoff
-private actor RetryManager {
+@MainActor
+private class HFRetryManager {
     private let maxRetries = 3
     private let baseDelay: TimeInterval = 1.0
 
@@ -631,7 +673,7 @@ private actor RetryManager {
             do {
                 let result = try await block()
                 // Record success for circuit breaker
-                await CircuitBreaker().recordSuccess(operation: operation)
+                HFCircuitBreaker().recordSuccess(operation: operation)
                 return result
             } catch {
                 lastError = error
@@ -667,17 +709,17 @@ private actor RetryManager {
 
     private func calculateDelay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
-        let jitter = Double.random(in: 0 ... 0.1) * exponentialDelay
-        return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
+        let jitter = Double.random(in: 0...0.1) * exponentialDelay
+        return min(exponentialDelay + jitter, 30.0)  // Cap at 30 seconds
     }
 }
 
 /// Response caching for improved performance
 private class ResponseCache {
     private var cache: [String: CachedResponse] = [:]
-    private var accessOrder: [String] = [] // For LRU eviction
+    private var accessOrder: [String] = []  // For LRU eviction
     private let maxCacheSize = 100
-    private let cacheExpiration: TimeInterval = 3600 // 1 hour
+    private let cacheExpiration: TimeInterval = 3600  // 1 hour
     private var hitCount = 0
     private var missCount = 0
 
@@ -736,7 +778,7 @@ private class ResponseCache {
             model: model,
             accessCount: 0
         )
-        self.accessOrder.append(key) // Most recently used
+        self.accessOrder.append(key)  // Most recently used
     }
 
     private func evictLRU() {
@@ -749,7 +791,9 @@ private class ResponseCache {
 
     private func cleanup() {
         let now = Date()
-        self.cache = self.cache.filter { now.timeIntervalSince($0.value.timestamp) <= self.cacheExpiration }
+        self.cache = self.cache.filter {
+            now.timeIntervalSince($0.value.timestamp) <= self.cacheExpiration
+        }
         // Update access order to remove expired keys
         self.accessOrder = self.accessOrder.filter { self.cache[$0] != nil }
     }
@@ -761,7 +805,8 @@ private class ResponseCache {
         self.missCount = 0
     }
 
-    func cacheKey(for prompt: String, model: String, maxTokens: Int, temperature: Double) -> String {
+    func cacheKey(for prompt: String, model: String, maxTokens: Int, temperature: Double) -> String
+    {
         let components = [prompt, model, String(maxTokens), String(temperature)]
         return components.joined(separator: "|").hashValue.description
     }
@@ -809,8 +854,10 @@ private class PerformanceMetricsTracker {
     }
 
     func getMetrics() -> Metrics {
-        let successRate = self.requestCount > 0 ? Double(self.successCount) / Double(self.requestCount) : 0
-        let avgResponseTime = self.requestCount > 0 ? self.totalResponseTime / Double(self.requestCount) : 0
+        let successRate =
+            self.requestCount > 0 ? Double(self.successCount) / Double(self.requestCount) : 0
+        let avgResponseTime =
+            self.requestCount > 0 ? self.totalResponseTime / Double(self.requestCount) : 0
 
         return Metrics(
             totalRequests: self.requestCount,
