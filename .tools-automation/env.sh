@@ -7,6 +7,7 @@ TOOLS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 # Source root environment if available
 if [[ -f "${TOOLS_ROOT}/.env" ]]; then
+# shellcheck disable=SC1091
 	source "${TOOLS_ROOT}/.env"
 fi
 

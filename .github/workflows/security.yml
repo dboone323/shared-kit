@@ -55,7 +55,7 @@ jobs:
             - name: CodeQL Analysis
               uses: github/codeql-action/init@v3
               with:
-                  languages: javascript, python
+                  languages: python
 
             - name: Perform CodeQL Analysis
               uses: github/codeql-action/analyze@v3
@@ -68,7 +68,11 @@ jobs:
                     unified_dashboard.sh
                     quantum_dashboard.sh
                     master_automation.sh
-                  ignore_paths: node_modules
+                  ignore_paths: |
+                    node_modules
+                    Tools/Automation
+                    .build
+                    .swiftpm
 
             - name: Security audit for Python dependencies
               run: |

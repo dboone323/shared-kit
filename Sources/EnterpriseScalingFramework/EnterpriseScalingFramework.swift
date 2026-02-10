@@ -17,7 +17,7 @@ import Network
 // MARK: - Core Enterprise Engine
 
 @available(iOS 17.0, macOS 14.0, *)
-public final class EnterpriseEngine {
+public final class EnterpriseEngine: Sendable {
     public static let shared = EnterpriseEngine()
 
     private let tenantManager: TenantManager
@@ -83,7 +83,7 @@ public final class EnterpriseEngine {
 // MARK: - Tenant Management
 
 @available(iOS 17.0, macOS 14.0, *)
-private final class TenantManager {
+private final class TenantManager: @unchecked Sendable {
     private var currentTenantId: String?
     private var tenantConfigurations: [String: TenantConfiguration] = [:]
     private let tenantQueue = DispatchQueue(label: "com.tools-automation.enterprise.tenant")
@@ -163,7 +163,7 @@ private final class TenantManager {
 // MARK: - Resource Management
 
 @available(iOS 17.0, macOS 14.0, *)
-private final class ResourceManager {
+private final class ResourceManager: @unchecked Sendable {
     private var resourceAllocations: [String: ResourceAllocation] = [:]
     private let resourceQueue = DispatchQueue(label: "com.tools-automation.enterprise.resource")
 
@@ -227,7 +227,7 @@ private final class ResourceManager {
 // MARK: - Compliance Management
 
 @available(iOS 17.0, macOS 14.0, *)
-private final class ComplianceManager {
+private final class ComplianceManager: @unchecked Sendable {
     private var complianceStatuses: [String: ComplianceStatus] = [:]
     private let complianceQueue = DispatchQueue(label: "com.tools-automation.enterprise.compliance")
 
@@ -311,7 +311,7 @@ private final class ComplianceManager {
 // MARK: - Scaling Management
 
 @available(iOS 17.0, macOS 14.0, *)
-private final class ScalingManager {
+private final class ScalingManager: @unchecked Sendable {
     private var scalingConfigurations: [String: ScalingConfiguration] = [:]
     private let scalingQueue = DispatchQueue(label: "com.tools-automation.enterprise.scaling")
 
@@ -358,7 +358,7 @@ private final class ScalingManager {
 
 // MARK: - Data Models
 
-public struct Tenant {
+public struct Tenant: Sendable {
     public let id: String
     public let name: String
     public let settings: TenantSettingsData
@@ -374,13 +374,13 @@ public struct Tenant {
     }
 }
 
-public struct TenantSettingsData {
+public struct TenantSettingsData: Sendable {
     public let industry: Industry
     public let tier: ServiceTier
     public let region: String
-    public let customSettings: [String: Any]
+    public let customSettings: [String: String]
 
-    public init(industry: Industry, tier: ServiceTier, region: String, customSettings: [String: Any] = [:]) {
+    public init(industry: Industry, tier: ServiceTier, region: String, customSettings: [String: String] = [:]) {
         self.industry = industry
         self.tier = tier
         self.region = region
@@ -388,15 +388,15 @@ public struct TenantSettingsData {
     }
 }
 
-public enum Industry {
+public enum Industry: Sendable {
     case technology, healthcare, finance, education, retail, other
 }
 
-public enum ServiceTier {
+public enum ServiceTier: Sendable {
     case basic, professional, enterprise
 }
 
-public struct TenantLimits {
+public struct TenantLimits: Sendable {
     public let storageLimit: Int64 // bytes
     public let userLimit: Int
     public let apiLimit: Int // requests per hour
@@ -408,7 +408,7 @@ public struct TenantLimits {
     }
 }
 
-public struct TenantConfiguration {
+public struct TenantConfiguration: Sendable {
     public let tenantId: String
     public let name: String
     public let settings: TenantSettingsData
@@ -418,7 +418,7 @@ public struct TenantConfiguration {
     public let updatedAt: Date
 }
 
-public struct ResourceAllocation {
+public struct ResourceAllocation: Sendable {
     public let tenantId: String
     public let storageLimit: Int64
     public let userLimit: Int
@@ -434,7 +434,7 @@ public struct ResourceUsage {
     public let lastUpdated: Date
 }
 
-public struct ComplianceStatus {
+public struct ComplianceStatus: Sendable {
     public let tenantId: String
     public let gdprCompliant: Bool
     public let hipaaCompliant: Bool
@@ -468,7 +468,7 @@ public enum ViolationSeverity {
     case low, medium, high, critical
 }
 
-public struct ScalingConfiguration {
+public struct ScalingConfiguration: Sendable {
     public let tenantId: String
     public let minInstances: Int
     public let maxInstances: Int
