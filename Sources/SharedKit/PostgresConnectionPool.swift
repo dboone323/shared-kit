@@ -49,7 +49,7 @@ public actor PostgresConnectionPool {
 
         // Wait for a connection to become available (simple implementation)
         // In production, use a semaphore or condition variable
-        try await Task.sleep(nanoseconds: 100_000_000) // 100ms
+        try await Task.sleep(nanoseconds: 100_000_000)  // 100ms
         return try await getConnection()
     }
 
@@ -61,7 +61,9 @@ public actor PostgresConnectionPool {
     }
 
     /// Execute a query using pooled connection
-    public func withConnection<T>(_ body: (PostgresConnection) async throws -> T) async throws -> T {
+    public func withConnection<T: Sendable>(
+        _ body: @Sendable (PostgresConnection) async throws -> T
+    ) async throws -> T {
         let conn = try await getConnection()
         defer {
             Task {

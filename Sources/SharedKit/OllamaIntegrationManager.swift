@@ -370,7 +370,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             - Include proper error handling
             - Add meaningful comments
             - Follow naming conventions
-            """,
+            """
         ]
 
         if let context {
@@ -391,15 +391,15 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
     private func analyzeGeneratedCode(_ code: String, _ language: String) async throws -> String {
         let prompt = """
-        Analyze this generated \(language) code for quality and correctness:
+            Analyze this generated \(language) code for quality and correctness:
 
-        \(code)
+            \(code)
 
-        Provide a brief assessment covering:
-        1. Code correctness
-        2. Best practices compliance
-        3. Potential improvements
-        """
+            Provide a brief assessment covering:
+            1. Code correctness
+            2. Best practices compliance
+            3. Potential improvements
+            """
 
         return try await self.client.generate(model: "codellama", prompt: prompt, temperature: 0.2)
     }
@@ -439,44 +439,44 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         switch type {
         case .bugs:
             return """
-            \(basePrompt)
-            Focus on identifying potential bugs, logic errors, and runtime issues.
+                \(basePrompt)
+                Focus on identifying potential bugs, logic errors, and runtime issues.
 
-            Code:
-            \(code)
+                Code:
+                \(code)
 
-            List specific issues with line numbers and severity levels.
-            """
+                List specific issues with line numbers and severity levels.
+                """
         case .performance:
             return """
-            \(basePrompt)
-            Focus on performance optimization opportunities.
+                \(basePrompt)
+                Focus on performance optimization opportunities.
 
-            Code:
-            \(code)
+                Code:
+                \(code)
 
-            Identify bottlenecks, inefficient algorithms, and optimization suggestions.
-            """
+                Identify bottlenecks, inefficient algorithms, and optimization suggestions.
+                """
         case .security:
             return """
-            \(basePrompt)
-            Focus on security vulnerabilities and best practices.
+                \(basePrompt)
+                Focus on security vulnerabilities and best practices.
 
-            Code:
-            \(code)
+                Code:
+                \(code)
 
-            Identify security risks and provide mitigation recommendations.
-            """
+                Identify security risks and provide mitigation recommendations.
+                """
         case .comprehensive:
             return """
-            \(basePrompt)
-            Provide comprehensive analysis covering bugs, performance, security, and best practices.
+                \(basePrompt)
+                Provide comprehensive analysis covering bugs, performance, security, and best practices.
 
-            Code:
-            \(code)
+                Code:
+                \(code)
 
-            Structure your response with clear sections for each analysis category.
-            """
+                Structure your response with clear sections for each analysis category.
+                """
         }
     }
 
@@ -515,20 +515,20 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         includeExamples: Bool = true
     ) async throws -> DocumentationResult {
         let prompt = """
-        Generate comprehensive documentation for this \(language) code:
+            Generate comprehensive documentation for this \(language) code:
 
-        Code:
-        \(code)
+            Code:
+            \(code)
 
-        Include:
-        1. Overview and purpose
-        2. Function/method descriptions with parameters and return values
-        3. Usage examples
-        4. Important notes and considerations
-        \(includeExamples ? "5. Code examples showing common use cases" : "")
+            Include:
+            1. Overview and purpose
+            2. Function/method descriptions with parameters and return values
+            3. Usage examples
+            4. Important notes and considerations
+            \(includeExamples ? "5. Code examples showing common use cases" : "")
 
-        Format as clean, readable documentation with proper markdown formatting.
-        """
+            Format as clean, readable documentation with proper markdown formatting.
+            """
 
         let documentation = try await client.generate(
             model: "llama2",
@@ -552,21 +552,21 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         testFramework: String = "XCTest"
     ) async throws -> TestGenerationResult {
         let prompt = """
-        Generate comprehensive \(testFramework) unit tests for this \(language) code:
+            Generate comprehensive \(testFramework) unit tests for this \(language) code:
 
-        Code to test:
-        \(code)
+            Code to test:
+            \(code)
 
-        Requirements:
-        1. Test all public methods and functions
-        2. Include edge cases and error conditions
-        3. Test both success and failure scenarios
-        4. Use descriptive test method names
-        5. Include setup and teardown methods where appropriate
-        6. Add comments explaining what each test validates
+            Requirements:
+            1. Test all public methods and functions
+            2. Include edge cases and error conditions
+            3. Test both success and failure scenarios
+            4. Use descriptive test method names
+            5. Include setup and teardown methods where appropriate
+            6. Add comments explaining what each test validates
 
-        Generate the complete test file with proper structure and imports.
-        """
+            Generate the complete test file with proper structure and imports.
+            """
 
         let testCode = try await client.generate(
             model: "codellama",
@@ -884,11 +884,11 @@ private actor RetryManager {
     private let maxRetries = 3
     private let baseDelay: TimeInterval = 1.0
     private let circuitBreakerThreshold = 5
-    private let circuitBreakerTimeout: TimeInterval = 60.0 // 1 minute
+    private let circuitBreakerTimeout: TimeInterval = 60.0  // 1 minute
 
-    func retry<T>(
+    func retry<T: Sendable>(
         operation: String = "unknown",
-        _ block: @escaping () async throws -> T
+        _ block: @escaping @Sendable () async throws -> T
     ) async throws -> T {
         let circuitBreakerKey = operation
 
@@ -946,12 +946,12 @@ private actor RetryManager {
     private func calculateDelay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
         let jitter = Double.random(in: 0...0.1) * exponentialDelay
-        return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
+        return min(exponentialDelay + jitter, 30.0)  // Cap at 30 seconds
     }
 
     private func isCircuitBreakerOpen(for key: String) -> Bool {
         guard let failureCount = failureCounts[key],
-              let lastFailure = lastFailureTimes[key]
+            let lastFailure = lastFailureTimes[key]
         else {
             return false
         }
@@ -980,9 +980,9 @@ private actor RetryManager {
 /// Enhanced AI response caching with TTL and metadata support
 private actor AIResponseCache {
     private var cache: [String: CachedResponse] = [:]
-    private var accessOrder: [String] = [] // For LRU eviction
+    private var accessOrder: [String] = []  // For LRU eviction
     private let maxCacheSize = 200
-    private let defaultExpiration: TimeInterval = 1800 // 30 minutes
+    private let defaultExpiration: TimeInterval = 1800  // 30 minutes
     private var accessCounts: [String: Int] = [:]
     private var hitCount = 0
     private var missCount = 0
@@ -993,7 +993,7 @@ private actor AIResponseCache {
         let timestamp: Date
         let expirationDate: Date
         let accessCount: Int
-        let size: Int // Response size in bytes
+        let size: Int  // Response size in bytes
     }
 
     func generateKey(
@@ -1040,7 +1040,7 @@ private actor AIResponseCache {
         }
 
         cache[key] = cachedResponse
-        accessOrder.append(key) // Most recently used
+        accessOrder.append(key)  // Most recently used
         accessCounts[key, default: 0] += 1
     }
 
@@ -1167,7 +1167,7 @@ private actor AIOperationMonitor {
             records.filter { !$0.success }.count
         }
 
-        let peakConcurrent = 1 // Simplified - would need more sophisticated tracking
+        let peakConcurrent = 1  // Simplified - would need more sophisticated tracking
 
         return PerformanceMetrics(
             totalOperations: totalOperations,
