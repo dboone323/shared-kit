@@ -27,7 +27,7 @@ public struct AnyCodable: Codable, Sendable {
             self.value = .array(arrayValue.map { AnyCodable($0) })
         } else if let dictValue = value as? [String: any Sendable] {
             self.value = .dictionary(dictValue.mapValues { AnyCodable($0) })
-        } else if value as? NSNull != nil {
+        } else if value is NSNull {
             self.value = .null
         } else {
             // For non-Sendable values, store as string representation
