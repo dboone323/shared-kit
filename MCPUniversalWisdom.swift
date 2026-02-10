@@ -487,7 +487,10 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
         let applicationResult = try await wisdomApplicator.applyWisdom(application)
 
         // Transform consciousness
-        let consciousnessResult = await consciousnessInterface.transformConsciousness(application, result: applicationResult)
+        let consciousnessResult = await consciousnessInterface.transformConsciousness(
+            application,
+            result: applicationResult
+        )
 
         // Generate universal impact
         let universalResult = await universalConnector.generateImpact(application, result: applicationResult)
@@ -550,25 +553,33 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
 
     private func validateWisdomAccessParameters(_ wisdom: UniversalWisdomAccess) async throws {
         if wisdom.consciousnessLevel == .minimal && wisdom.wisdomDepth == .universal {
-            throw UniversalWisdomError.consciousnessMismatch("Minimal consciousness cannot access universal wisdom depth")
+            throw UniversalWisdomError
+                .consciousnessMismatch("Minimal consciousness cannot access universal wisdom depth")
         }
 
         if wisdom.universalAlignment == .minimal && wisdom.accessType == .universal {
-            throw UniversalWisdomError.alignmentMismatch("Minimal universal alignment cannot support universal access type")
+            throw UniversalWisdomError
+                .alignmentMismatch("Minimal universal alignment cannot support universal access type")
         }
     }
 
     private func validateWisdomApplicationParameters(_ application: WisdomApplication) async throws {
         if application.wisdomPrinciples.isEmpty {
-            throw UniversalWisdomError.noPrinciplesSpecified("At least one wisdom principle must be specified for application")
+            throw UniversalWisdomError
+                .noPrinciplesSpecified("At least one wisdom principle must be specified for application")
         }
 
         if application.consciousnessAlignment == .minimal && application.universalIntegration == .transcendent {
-            throw UniversalWisdomError.integrationMismatch("Minimal consciousness alignment cannot achieve transcendent universal integration")
+            throw UniversalWisdomError
+                .integrationMismatch(
+                    "Minimal consciousness alignment cannot achieve transcendent universal integration"
+                )
         }
     }
 
-    private func generateWisdomInsights(_ wisdom: UniversalWisdomAccess, wisdomResult: WisdomResult) async -> [WisdomInsight] {
+    private func generateWisdomInsights(_ wisdom: UniversalWisdomAccess,
+                                        wisdomResult: WisdomResult) async -> [WisdomInsight]
+    {
         var insights: [WisdomInsight] = []
 
         if wisdomResult.depth > 0.9 {
@@ -594,7 +605,9 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
         return insights
     }
 
-    private func generateApplicationInsights(_ application: WisdomApplication, result: ApplicationResult) async -> [WisdomInsight] {
+    private func generateApplicationInsights(_ application: WisdomApplication,
+                                             result: ApplicationResult) async -> [WisdomInsight]
+    {
         var insights: [WisdomInsight] = []
 
         if result.effectiveness > 0.9 {
@@ -610,7 +623,9 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
         return insights
     }
 
-    private func generateWisdomOutcomes(_ application: WisdomApplication, result: ApplicationResult) async -> [WisdomOutcome] {
+    private func generateWisdomOutcomes(_ application: WisdomApplication,
+                                        result: ApplicationResult) async -> [WisdomOutcome]
+    {
         var outcomes: [WisdomOutcome] = []
 
         if result.success {
@@ -630,11 +645,13 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
 
 /// Wisdom Repository
 private final class WisdomRepository: Sendable {
-    func accessWisdom(_ wisdom: UniversalWisdomAccess, consciousnessResult: ConsciousnessResult) async throws -> WisdomResult {
+    func accessWisdom(_ wisdom: UniversalWisdomAccess,
+                      consciousnessResult: ConsciousnessResult) async throws -> WisdomResult
+    {
         WisdomResult(
-            success: Double.random(in: 0.85 ... 1.0) > 0.15,
+            success: Double.random(in: 0.85...1.0) > 0.15,
             principles: generateWisdomPrinciples(wisdom),
-            depth: Double.random(in: 0.8 ... 1.0)
+            depth: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -649,10 +666,10 @@ private final class WisdomRepository: Sendable {
     func getRepositoryStatus() async -> RepositoryStatus {
         RepositoryStatus(
             operational: true,
-            capability: Double.random(in: 0.9 ... 1.0),
-            depth: Double.random(in: 0.9 ... 1.0),
-            activeAccesses: Int.random(in: 1 ... 20),
-            successRate: Double.random(in: 0.9 ... 0.98)
+            capability: Double.random(in: 0.9...1.0),
+            depth: Double.random(in: 0.9...1.0),
+            activeAccesses: Int.random(in: 1...20),
+            successRate: Double.random(in: 0.9...0.98)
         )
     }
 
@@ -720,14 +737,16 @@ private final class ConsciousnessInterface: Sendable {
     func establishConnection(_ level: ConsciousnessLevel) async throws -> ConsciousnessResult {
         ConsciousnessResult(
             success: true,
-            elevation: Double.random(in: 0.8 ... 1.0)
+            elevation: Double.random(in: 0.8...1.0)
         )
     }
 
-    func transformConsciousness(_ application: WisdomApplication, result: ApplicationResult) async -> ConsciousnessResult {
+    func transformConsciousness(_ application: WisdomApplication,
+                                result: ApplicationResult) async -> ConsciousnessResult
+    {
         ConsciousnessResult(
             success: true,
-            transformation: Double.random(in: 0.7 ... 1.0)
+            transformation: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -742,7 +761,7 @@ private final class ConsciousnessInterface: Sendable {
     func getInterfaceStatus() async -> InterfaceStatus {
         InterfaceStatus(
             operational: true,
-            level: Double.random(in: 0.9 ... 1.0)
+            level: Double.random(in: 0.9...1.0)
         )
     }
 }
@@ -752,14 +771,14 @@ private final class UniversalConnector: Sendable {
     func connectUniversal(_ wisdom: UniversalWisdomAccess, wisdomResult: WisdomResult) async -> UniversalResult {
         UniversalResult(
             success: true,
-            understanding: Double.random(in: 0.8 ... 1.0)
+            understanding: Double.random(in: 0.8...1.0)
         )
     }
 
     func generateImpact(_ application: WisdomApplication, result: ApplicationResult) async -> UniversalResult {
         UniversalResult(
             success: true,
-            impact: Double.random(in: 0.7 ... 1.0)
+            impact: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -774,7 +793,7 @@ private final class UniversalConnector: Sendable {
     func getConnectionStatus() async -> ConnectionStatus {
         ConnectionStatus(
             operational: true,
-            alignment: Double.random(in: 0.95 ... 1.0)
+            alignment: Double.random(in: 0.95...1.0)
         )
     }
 }
@@ -783,8 +802,8 @@ private final class UniversalConnector: Sendable {
 private final class WisdomApplicator: Sendable {
     func applyWisdom(_ application: WisdomApplication) async throws -> ApplicationResult {
         ApplicationResult(
-            success: Double.random(in: 0.8 ... 1.0) > 0.2,
-            effectiveness: Double.random(in: 0.7 ... 1.0)
+            success: Double.random(in: 0.8...1.0) > 0.2,
+            effectiveness: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -799,7 +818,7 @@ private final class WisdomApplicator: Sendable {
     func getApplicationStatus() async -> ApplicationStatus {
         ApplicationStatus(
             operational: true,
-            effectiveness: Double.random(in: 0.8 ... 1.0)
+            effectiveness: Double.random(in: 0.8...1.0)
         )
     }
 }
@@ -817,7 +836,7 @@ private final class WisdomOptimizer: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8 ... 1.0)
+            efficiency: Double.random(in: 0.8...1.0)
         )
     }
 }

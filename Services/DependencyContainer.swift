@@ -8,7 +8,7 @@
 
 import Foundation
 #if canImport(SwiftData)
-@_exported import SwiftData
+    @_exported import SwiftData
 #endif
 
 // MARK: - Dependency Injection Container

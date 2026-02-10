@@ -43,11 +43,12 @@ public actor KeychainManager {
             ]
 
             let attributesToUpdate: [String: Any] = [
-                kSecValueData as String: data
+                kSecValueData as String: data,
             ]
 
             let updateStatus = SecItemUpdate(
-                updateQuery as CFDictionary, attributesToUpdate as CFDictionary)
+                updateQuery as CFDictionary, attributesToUpdate as CFDictionary
+            )
             if updateStatus != errSecSuccess {
                 throw KeychainError.unexpectedStatus(updateStatus)
             }

@@ -72,7 +72,8 @@ public actor PostgresVectorStore {
 
         let vectorString = "[" + queryVector.map { String($0) }.joined(separator: ",") + "]"
 
-        // Use manual string construction for vector since PostgresNIO might not support vector binding natively yet in this version
+        // Use manual string construction for vector since PostgresNIO might not support vector binding natively yet in
+        // this version
         // 1 - (embedding <=> $1) as similarity
         // Note: <=> is cosine distance. Similarity = 1 - distance.
         let rows = try await conn.query(
@@ -111,8 +112,10 @@ public actor PostgresVectorStore {
         let metadataData = try JSONSerialization.data(withJSONObject: metadata, options: [])
         let metadataString = String(data: metadataData, encoding: .utf8) ?? "{}"
 
-        // Use manual string construction for vector since PostgresNIO might not support vector binding natively yet in this version
-        // We use string interpolation carefully here. In a real app, use bind parameters if the driver supports `Wait` for vector.
+        // Use manual string construction for vector since PostgresNIO might not support vector binding natively yet in
+        // this version
+        // We use string interpolation carefully here. In a real app, use bind parameters if the driver supports `Wait`
+        // for vector.
         try await conn.query(
             """
             INSERT INTO embeddings (content, embedding, metadata)

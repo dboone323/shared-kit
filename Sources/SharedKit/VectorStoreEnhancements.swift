@@ -21,7 +21,7 @@ public struct VectorBatchOperation {
         let chunkSize = 100
         for i in stride(from: 0, to: contents.count, by: chunkSize) {
             let end = min(i + chunkSize, contents.count)
-            let chunk = Array(i ..< end)
+            let chunk = Array(i..<end)
 
             for idx in chunk {
                 try await store.save(

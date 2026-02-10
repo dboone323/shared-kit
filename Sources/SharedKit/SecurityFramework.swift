@@ -20,7 +20,7 @@ public actor SecurityFramework {
     public init() {}
 
     /// Step 42: Get secure headers
-    nonisolated public func getSecureHeaders() -> [String: String] {
+    public nonisolated func getSecureHeaders() -> [String: String] {
         [
             "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
             "Content-Security-Policy": "default-src 'self'",
@@ -112,7 +112,7 @@ actor InputValidator {
     func sanitize(_ input: String) -> String {
         // Basic sanitization: remove null bytes and control characters
         input.replacingOccurrences(of: "\0", with: "")
-            .replacingOccurrences(of: "'", with: "''")  // Basic SQL escape (use prepared statements effectively instead)
+            .replacingOccurrences(of: "'", with: "''") // Basic SQL escape (use prepared statements effectively instead)
     }
 }
 
@@ -151,7 +151,7 @@ actor AccessControl {
         // RBAC Matrix
         switch user.role {
         case .admin:
-            return  // Allowed everything
+            return // Allowed everything
 
         case .user:
             switch action {
@@ -180,7 +180,8 @@ public actor CryptoManager {
     private func getKey() async throws -> SymmetricKey {
         do {
             let keyData = try await keychain.retrieveData(
-                service: serviceName, account: accountName)
+                service: serviceName, account: accountName
+            )
             return SymmetricKey(data: keyData)
         } catch {
             // Generate new key if not found

@@ -9,7 +9,14 @@ public struct ToolExecutionResult: Sendable {
     public let warnings: [String]
     public let suggestions: [String]
 
-    public init(toolName: String, success: Bool, output: String, metrics: [String: String] = [:], warnings: [String] = [], suggestions: [String] = []) {
+    public init(
+        toolName: String,
+        success: Bool,
+        output: String,
+        metrics: [String: String] = [:],
+        warnings: [String] = [],
+        suggestions: [String] = []
+    ) {
         self.toolName = toolName
         self.success = success
         self.output = output

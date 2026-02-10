@@ -25,7 +25,8 @@ protocol DimensionalEngineeringProtocol {
     func createDimensionalConstruct(_ specification: DimensionalSpecification) async throws -> EngineeringResult
 
     /// Manipulate existing dimensions
-    func manipulateDimension(_ dimension: DimensionType, with operation: DimensionalOperation) async throws -> ManipulationResult
+    func manipulateDimension(_ dimension: DimensionType, with operation: DimensionalOperation) async throws
+        -> ManipulationResult
 
     /// Stabilize dimensional constructs
     func stabilizeDimensionalConstruct(_ construct: DimensionalConstruct) async throws -> StabilizationResult
@@ -212,7 +213,8 @@ struct DimensionalState: Sendable {
 
 /// Main dimensional engineering engine
 @MainActor
-final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, DimensionalManipulationProtocol, DimensionalStabilityProtocol {
+final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, DimensionalManipulationProtocol,
+DimensionalStabilityProtocol {
     typealias DimensionType = Dimension
     typealias EngineeringResult = DimensionalEngineeringResult
 
@@ -247,7 +249,8 @@ final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, Dimens
         )
     }
 
-    func createDimensionalConstruct(_ specification: DimensionalSpecification) async throws -> DimensionalEngineeringResult {
+    func createDimensionalConstruct(_ specification: DimensionalSpecification) async throws
+    -> DimensionalEngineeringResult {
         let validation = try await validateSpecification(specification)
         guard validation.isValid else {
             throw DimensionalError.validationFailed(validation.errors)
@@ -268,7 +271,9 @@ final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, Dimens
         )
     }
 
-    func manipulateDimension(_ dimension: Dimension, with operation: DimensionalOperation) async throws -> ManipulationResult {
+    func manipulateDimension(_ dimension: Dimension,
+                             with operation: DimensionalOperation) async throws -> ManipulationResult
+    {
         let validation = try await validateOperation(operation)
         guard validation.isValid else {
             throw DimensionalError.operationFailed(validation.errors)
@@ -454,7 +459,9 @@ final class DimensionManager {
         )
     }
 
-    func performOperation(_ operation: DimensionalOperation, on dimension: Dimension, in state: DimensionalState) async throws -> ManipulationResult {
+    func performOperation(_ operation: DimensionalOperation, on dimension: Dimension,
+                          in state: DimensionalState) async throws -> ManipulationResult
+    {
         var newState = state
         var targetDimension = dimension
 
@@ -503,7 +510,9 @@ final class DimensionManager {
         )
     }
 
-    func modifyProperties(_ properties: DimensionalProperties, in state: DimensionalState) async throws -> ModificationResult {
+    func modifyProperties(_ properties: DimensionalProperties,
+                          in state: DimensionalState) async throws -> ModificationResult
+    {
         // Modify dimensional properties across the state
         var newState = state
         // Apply property modifications
@@ -549,7 +558,9 @@ final class DimensionManager {
         )
     }
 
-    func collapseStructure(_ structure: DimensionalStructure, in state: DimensionalState) async throws -> CollapseResult {
+    func collapseStructure(_ structure: DimensionalStructure,
+                           in state: DimensionalState) async throws -> CollapseResult
+    {
         // Collapse dimensional structure
         var newState = state
         // Remove structure from state
@@ -574,7 +585,9 @@ final class DimensionManager {
         )
     }
 
-    private func applyModification(_ operation: DimensionalOperation, to dimension: Dimension) async throws -> Dimension {
+    private func applyModification(_ operation: DimensionalOperation,
+                                   to dimension: Dimension) async throws -> Dimension
+    {
         var modifiedDimension = dimension
 
         // Apply modifications based on parameters
@@ -622,7 +635,9 @@ final class ConstructBuilder {
         )
     }
 
-    func buildConstruct(_ specification: DimensionalSpecification, in state: DimensionalState) async throws -> DimensionalConstruct {
+    func buildConstruct(_ specification: DimensionalSpecification,
+                        in state: DimensionalState) async throws -> DimensionalConstruct
+    {
         let construct = DimensionalConstruct(
             id: UUID(),
             name: specification.name,
@@ -644,8 +659,9 @@ final class ConstructBuilder {
 final class StabilityController {
     func analyzeStability(_ state: DimensionalState) async -> StabilityAnalysis {
         let overallStability = state.stabilityIndex
-        let stabilityTrend: StabilityTrend = overallStability > 0.9 ? .stable :
-            overallStability > 0.7 ? .improving : .critical
+        let stabilityTrend: StabilityTrend = overallStability > 0.9
+            ? .stable
+            : overallStability > 0.7 ? .improving : .critical
 
         let criticalDimensions = state.dimensions.filter { $0.stability < 0.8 }
         let criticalConstructs = state.constructs.filter { $0.stability < 0.8 }
@@ -683,7 +699,9 @@ final class StabilityController {
         )
     }
 
-    func stabilizeConstruct(_ construct: DimensionalConstruct, in state: DimensionalState) async throws -> StabilizationResult {
+    func stabilizeConstruct(_ construct: DimensionalConstruct,
+                            in state: DimensionalState) async throws -> StabilizationResult
+    {
         var stabilizedConstruct = construct
         stabilizedConstruct.stability += 0.1
 
@@ -714,8 +732,8 @@ final class StabilityController {
         let fluctuations = state.dimensions.map { dimension in
             DimensionalFluctuation(
                 dimensionId: dimension.id,
-                fluctuationMagnitude: Double.random(in: 0.01 ... 0.1),
-                fluctuationFrequency: Double.random(in: 0.1 ... 1.0),
+                fluctuationMagnitude: Double.random(in: 0.01...0.1),
+                fluctuationFrequency: Double.random(in: 0.1...1.0),
                 stability: dimension.stability,
                 timestamp: Date()
             )

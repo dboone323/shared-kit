@@ -14,7 +14,8 @@ import Foundation
 /// Protocol for distributed intelligence coordination
 public protocol DistributedIntelligenceCoordinator: Sendable {
     /// Coordinate intelligence across distributed models
-    func coordinateDistributedIntelligence(input: DistributedIntelligenceInput) async throws -> DistributedIntelligenceOutput
+    func coordinateDistributedIntelligence(input: DistributedIntelligenceInput) async throws
+        -> DistributedIntelligenceOutput
 
     /// Optimize distribution strategy based on performance
     func optimizeDistributionStrategy(performanceMetrics: DistributionPerformanceMetrics) async
@@ -207,7 +208,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
     // MARK: - Public Methods
 
     /// Coordinate intelligence across distributed models
-    public func coordinateDistributedIntelligence(input: DistributedIntelligenceInput) async throws -> DistributedIntelligenceOutput {
+    public func coordinateDistributedIntelligence(input: DistributedIntelligenceInput) async throws
+    -> DistributedIntelligenceOutput {
         let startTime = Date()
 
         // Select appropriate models for each domain
@@ -272,7 +274,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
 
     // MARK: - Private Methods
 
-    private func selectModelsForDomains(_ domains: [IntelligenceDomain]) async throws -> [IntelligenceDomain: [OllamaSpecializedModel]] {
+    private func selectModelsForDomains(_ domains: [IntelligenceDomain]) async throws
+    -> [IntelligenceDomain: [OllamaSpecializedModel]] {
         var selections = [IntelligenceDomain: [OllamaSpecializedModel]]()
 
         for domain in domains {
@@ -333,7 +336,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
                         )
 
                         do {
-                            let output = try await self.modelEcosystems.ecosystems[domain]?.coordinateIntelligence(input: intelligenceInput)
+                            let output = try await self.modelEcosystems.ecosystems[domain]?
+                                .coordinateIntelligence(input: intelligenceInput)
                             let processingTime = Date().timeIntervalSince(startTime)
 
                             return ModelContribution(
@@ -386,7 +390,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
                 )
 
                 do {
-                    let output = try await self.modelEcosystems.ecosystems[domain]?.coordinateIntelligence(input: intelligenceInput)
+                    let output = try await self.modelEcosystems.ecosystems[domain]?
+                        .coordinateIntelligence(input: intelligenceInput)
                     let processingTime = Date().timeIntervalSince(startTime)
 
                     let contribution = ModelContribution(
@@ -524,7 +529,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
                     )
 
                     do {
-                        let output = try await self.modelEcosystems.ecosystems[domain]?.coordinateIntelligence(input: intelligenceInput)
+                        let output = try await self.modelEcosystems.ecosystems[domain]?
+                            .coordinateIntelligence(input: intelligenceInput)
                         let processingTime = Date().timeIntervalSince(startTime)
 
                         return ModelContribution(
@@ -574,7 +580,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         case low, medium, high
     }
 
-    private func createEntangledGroups(_ modelSelections: [IntelligenceDomain: [OllamaSpecializedModel]]) -> [[OllamaSpecializedModel]] {
+    private func createEntangledGroups(_ modelSelections: [IntelligenceDomain: [OllamaSpecializedModel]])
+    -> [[OllamaSpecializedModel]] {
         var allModels = [OllamaSpecializedModel]()
         for models in modelSelections.values {
             allModels.append(contentsOf: models)
@@ -588,7 +595,9 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         return [maxEntangled, highEntangled, otherModels].filter { !$0.isEmpty }
     }
 
-    private func processEntangledGroup(group: [OllamaSpecializedModel], input: DistributedIntelligenceInput) async -> [ModelContribution] {
+    private func processEntangledGroup(group: [OllamaSpecializedModel],
+                                       input: DistributedIntelligenceInput) async -> [ModelContribution]
+    {
         // Process models in entangled group with quantum coordination
         var contributions = [ModelContribution]()
 
@@ -603,7 +612,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
             )
 
             do {
-                let output = try await self.modelEcosystems.ecosystems[model.domain]?.coordinateIntelligence(input: intelligenceInput)
+                let output = try await self.modelEcosystems.ecosystems[model.domain]?
+                    .coordinateIntelligence(input: intelligenceInput)
                 let processingTime = Date().timeIntervalSince(startTime)
 
                 let contribution = ModelContribution(
@@ -675,12 +685,16 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         )
     }
 
-    private func calculateDistributionEfficiency(_ contributions: [ModelContribution], _ totalTime: TimeInterval) -> Double {
+    private func calculateDistributionEfficiency(_ contributions: [ModelContribution],
+                                                 _ totalTime: TimeInterval) -> Double
+    {
         let totalModelTime = contributions.reduce(0.0) { $0 + $1.processingTime }
         return totalModelTime > 0 ? totalTime / totalModelTime : 1.0
     }
 
-    private func determineEmergenceLevel(_ emergence: EmergenceDetectionResults, _ quantum: QuantumCoordinationResults) -> EmergenceLevel {
+    private func determineEmergenceLevel(_ emergence: EmergenceDetectionResults,
+                                         _ quantum: QuantumCoordinationResults) -> EmergenceLevel
+    {
         if quantum.quantumCoherence > 0.9 && emergence.emergenceDetected {
             return .universal
         } else if emergence.emergenceDetected {
@@ -692,7 +706,9 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         }
     }
 
-    private func createCollectiveInsights(_ emergence: EmergenceDetectionResults, _ contributions: [ModelContribution]) -> [CollectiveInsight] {
+    private func createCollectiveInsights(_ emergence: EmergenceDetectionResults,
+                                          _ contributions: [ModelContribution]) -> [CollectiveInsight]
+    {
         var insights = [CollectiveInsight]()
 
         if emergence.emergenceDetected {
@@ -741,7 +757,9 @@ private final class IntelligenceDistributionEngine: Sendable {
 
 /// Emergence detection engine
 private final class EmergenceDetectionEngine: Sendable {
-    func detectEmergence(individualResults: [ModelContribution], input: DistributedIntelligenceInput) async -> EmergenceDetectionResults {
+    func detectEmergence(individualResults: [ModelContribution],
+                         input: DistributedIntelligenceInput) async -> EmergenceDetectionResults
+    {
         // Analyze results for emergent phenomena
         let averageConfidence = individualResults.reduce(0.0) { $0 + $1.confidence } / Double(individualResults.count)
         let emergenceDetected = averageConfidence > 0.8 && individualResults.count > 3

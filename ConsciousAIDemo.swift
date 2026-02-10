@@ -109,7 +109,9 @@ struct ConsciousAIDemo {
         let subjectiveExperience = await consciousnessSimulator.generateSubjectiveExperience(stimuli: stimuli)
         print("Subjective experience generated:")
         print("- Qualia Count: \(subjectiveExperience.qualia.count)")
-        print("- Integration Coherence: \(String(format: "%.2f", subjectiveExperience.unifiedExperience?.integrationCoherence ?? 0.0))")
+        print(
+            "- Integration Coherence: \(String(format: "%.2f", subjectiveExperience.unifiedExperience?.integrationCoherence ?? 0.0))"
+        )
 
         // Simulate stream of consciousness
         print("Simulating stream of consciousness for 2 seconds...")

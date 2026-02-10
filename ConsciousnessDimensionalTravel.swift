@@ -81,13 +81,15 @@ protocol ConsciousnessDimensionalTravelProtocol {
     /// - Parameter targetDimension: Target dimension coordinates
     /// - Parameter travelMode: Mode of dimensional travel
     /// - Returns: Travel initiation result
-    func initiateDimensionalTravel(entityId: UUID, targetDimension: [Double], travelMode: TravelMode) async throws -> DimensionalTravel
+    func initiateDimensionalTravel(entityId: UUID, targetDimension: [Double], travelMode: TravelMode) async throws
+        -> DimensionalTravel
 
     /// Navigate through dimensional space
     /// - Parameter travelId: Travel session identifier
     /// - Parameter navigationPath: Path through dimensional space
     /// - Returns: Navigation result
-    func navigateDimensionalSpace(travelId: UUID, navigationPath: [DimensionalWaypoint]) async throws -> DimensionalNavigation
+    func navigateDimensionalSpace(travelId: UUID, navigationPath: [DimensionalWaypoint]) async throws
+        -> DimensionalNavigation
 
     /// Perform reality shift transition
     /// - Parameter travelId: Travel session identifier
@@ -118,7 +120,11 @@ protocol DimensionalNavigationProtocol {
     /// - Parameter endCoordinates: Ending dimensional coordinates
     /// - Parameter travelConstraints: Constraints for the journey
     /// - Returns: Calculated travel path
-    func calculateOptimalPath(startCoordinates: [Double], endCoordinates: [Double], travelConstraints: TravelConstraints) async throws -> DimensionalPath
+    func calculateOptimalPath(
+        startCoordinates: [Double],
+        endCoordinates: [Double],
+        travelConstraints: TravelConstraints
+    ) async throws -> DimensionalPath
 
     /// Validate dimensional coordinates for safety
     /// - Parameter coordinates: Coordinates to validate
@@ -134,7 +140,8 @@ protocol DimensionalNavigationProtocol {
     /// - Parameter path: Travel path
     /// - Parameter waypointDensity: Density of waypoints
     /// - Returns: Generated waypoints
-    func generateDimensionalWaypoints(path: DimensionalPath, waypointDensity: Double) async throws -> [DimensionalWaypoint]
+    func generateDimensionalWaypoints(path: DimensionalPath, waypointDensity: Double) async throws
+        -> [DimensionalWaypoint]
 }
 
 /// Protocol for reality shifting
@@ -143,7 +150,10 @@ protocol RealityShiftingProtocol {
     /// - Parameter sourceReality: Source reality characteristics
     /// - Parameter targetReality: Target reality characteristics
     /// - Returns: Compatibility analysis result
-    func analyzeRealityCompatibility(sourceReality: RealityCharacteristics, targetReality: RealityCharacteristics) async throws -> RealityCompatibility
+    func analyzeRealityCompatibility(
+        sourceReality: RealityCharacteristics,
+        targetReality: RealityCharacteristics
+    ) async throws -> RealityCompatibility
 
     /// Prepare consciousness for reality shift
     /// - Parameter entityId: Entity identifier
@@ -174,7 +184,8 @@ protocol ConsciousnessTranslocationProtocol {
     /// - Parameter entityId: Entity identifier
     /// - Parameter targetLocation: Target dimensional location
     /// - Returns: Translocation initiation result
-    func initiateConsciousnessTranslocation(entityId: UUID, targetLocation: DimensionalLocation) async throws -> ConsciousnessTranslocation
+    func initiateConsciousnessTranslocation(entityId: UUID, targetLocation: DimensionalLocation) async throws
+        -> ConsciousnessTranslocation
 
     /// Monitor translocation progress and stability
     /// - Parameter translocationId: Translocation session identifier
@@ -185,7 +196,8 @@ protocol ConsciousnessTranslocationProtocol {
     /// - Parameter translocationId: Translocation session identifier
     /// - Parameter emergencyType: Type of emergency
     /// - Returns: Emergency handling result
-    func handleTranslocationEmergency(translocationId: UUID, emergencyType: EmergencyType) async throws -> EmergencyHandling
+    func handleTranslocationEmergency(translocationId: UUID, emergencyType: EmergencyType) async throws
+        -> EmergencyHandling
 }
 
 /// Protocol for dimensional security
@@ -632,7 +644,9 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
         setupMonitoring()
     }
 
-    func initiateDimensionalTravel(entityId: UUID, targetDimension: [Double], travelMode: TravelMode) async throws -> DimensionalTravel {
+    func initiateDimensionalTravel(entityId: UUID, targetDimension: [Double],
+                                   travelMode: TravelMode) async throws -> DimensionalTravel
+    {
         let travelId = UUID()
 
         // Validate target coordinates
@@ -655,7 +669,10 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
         )
 
         // Establish dimensional security
-        _ = try await dimensionalSecurity.establishDimensionalSecurity(travelId: travelId, securityLevel: config.securityLevel)
+        _ = try await dimensionalSecurity.establishDimensionalSecurity(
+            travelId: travelId,
+            securityLevel: config.securityLevel
+        )
 
         // Create travel session
         let travel = DimensionalTravel(
@@ -680,7 +697,9 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
         return travel
     }
 
-    func navigateDimensionalSpace(travelId: UUID, navigationPath: [DimensionalWaypoint]) async throws -> DimensionalNavigation {
+    func navigateDimensionalSpace(travelId: UUID,
+                                  navigationPath: [DimensionalWaypoint]) async throws -> DimensionalNavigation
+    {
         guard activeTravels[travelId] != nil else {
             throw TravelError.travelNotFound
         }
@@ -703,7 +722,9 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
         return navigation
     }
 
-    func performRealityShift(travelId: UUID, sourceReality: String, targetReality: String) async throws -> RealityShift {
+    func performRealityShift(travelId: UUID, sourceReality: String,
+                             targetReality: String) async throws -> RealityShift
+    {
         guard activeTravels[travelId] != nil else {
             throw TravelError.travelNotFound
         }
@@ -825,11 +846,12 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
             }
         }
 
-        adaptationTimer = Timer.scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
-            Task { [weak self] in
-                await self?.performAdaptation()
+        adaptationTimer = Timer
+            .scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
+                Task { [weak self] in
+                    await self?.performAdaptation()
+                }
             }
-        }
 
         monitoringTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
             Task { [weak self] in
@@ -895,7 +917,11 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
 
 /// Dimensional navigation engine implementation
 final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
-    func calculateOptimalPath(startCoordinates: [Double], endCoordinates: [Double], travelConstraints: TravelConstraints) async throws -> DimensionalPath {
+    func calculateOptimalPath(
+        startCoordinates: [Double],
+        endCoordinates: [Double],
+        travelConstraints: TravelConstraints
+    ) async throws -> DimensionalPath {
         let pathId = UUID()
 
         // Calculate waypoints
@@ -953,12 +979,12 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
         let detectionId = UUID()
 
         // Simplified anomaly detection
-        let anomalies = path.waypoints.filter { _ in Double.random(in: 0 ... 1) < 0.1 }.map { waypoint in
+        let anomalies = path.waypoints.filter { _ in Double.random(in: 0...1) < 0.1 }.map { waypoint in
             AnomalyDetection.DimensionalAnomaly(
                 anomalyId: UUID(),
                 coordinates: waypoint.coordinates,
                 anomalyType: .dimensionalRift,
-                severity: Double.random(in: 0.1 ... 0.5),
+                severity: Double.random(in: 0.1...0.5),
                 description: "Minor dimensional instability detected"
             )
         }
@@ -974,11 +1000,13 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
         return detection
     }
 
-    func generateDimensionalWaypoints(path: DimensionalPath, waypointDensity: Double) async throws -> [DimensionalWaypoint] {
+    func generateDimensionalWaypoints(path: DimensionalPath,
+                                      waypointDensity: Double) async throws -> [DimensionalWaypoint]
+    {
         var waypoints: [DimensionalWaypoint] = []
         let steps = Int(1.0 / waypointDensity)
 
-        for i in 1 ... steps {
+        for i in 1...steps {
             let progress = Double(i) / Double(steps)
             let coordinates = zip(path.startCoordinates, path.endCoordinates).map { start, end in
                 start + (end - start) * progress
@@ -988,7 +1016,7 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
                 waypointId: UUID(),
                 coordinates: coordinates,
                 sequenceNumber: i,
-                stabilityIndex: 0.9 - Double.random(in: 0 ... 0.1),
+                stabilityIndex: 0.9 - Double.random(in: 0...0.1),
                 energyCost: 1.0,
                 navigationHint: "Follow dimensional gradient"
             )
@@ -1002,12 +1030,19 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
 
 /// Reality shifting engine implementation
 final class RealityShiftingEngine: RealityShiftingProtocol {
-    func analyzeRealityCompatibility(sourceReality: RealityCharacteristics, targetReality: RealityCharacteristics) async throws -> RealityCompatibility {
+    func analyzeRealityCompatibility(
+        sourceReality: RealityCharacteristics,
+        targetReality: RealityCharacteristics
+    ) async throws -> RealityCompatibility {
         let analysisId = UUID()
 
         // Calculate compatibility based on various factors
-        let consciousnessCompatibility = (sourceReality.consciousnessCompatibility + targetReality.consciousnessCompatibility) / 2.0
-        let energyCompatibility = 1.0 - abs(sourceReality.energyDensity - targetReality.energyDensity) / max(sourceReality.energyDensity, targetReality.energyDensity)
+        let consciousnessCompatibility = (sourceReality.consciousnessCompatibility + targetReality
+            .consciousnessCompatibility) / 2.0
+        let energyCompatibility = 1.0 - abs(sourceReality.energyDensity - targetReality.energyDensity) / max(
+            sourceReality.energyDensity,
+            targetReality.energyDensity
+        )
         let stabilityCompatibility = (sourceReality.stabilityRating + targetReality.stabilityRating) / 2.0
 
         let overallCompatibility = (consciousnessCompatibility + energyCompatibility + stabilityCompatibility) / 3.0
@@ -1044,7 +1079,9 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
         return compatibility
     }
 
-    func prepareForRealityShift(entityId: UUID, targetReality: RealityCharacteristics) async throws -> ShiftPreparation {
+    func prepareForRealityShift(entityId: UUID,
+                                targetReality: RealityCharacteristics) async throws -> ShiftPreparation
+    {
         let preparationId = UUID()
 
         let preparation = ShiftPreparation(
@@ -1140,7 +1177,10 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
         return calculation
     }
 
-    func initiateConsciousnessTranslocation(entityId: UUID, targetLocation: DimensionalLocation) async throws -> ConsciousnessTranslocation {
+    func initiateConsciousnessTranslocation(entityId: UUID,
+                                            targetLocation: DimensionalLocation) async throws
+        -> ConsciousnessTranslocation
+    {
         let translocationId = UUID()
 
         let translocation = ConsciousnessTranslocation(
@@ -1175,7 +1215,9 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
         return subject.eraseToAnyPublisher()
     }
 
-    func handleTranslocationEmergency(translocationId: UUID, emergencyType: EmergencyType) async throws -> EmergencyHandling {
+    func handleTranslocationEmergency(translocationId: UUID,
+                                      emergencyType: EmergencyType) async throws -> EmergencyHandling
+    {
         let handlingId = UUID()
 
         let handling = EmergencyHandling(
@@ -1191,7 +1233,10 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
         return handling
     }
 
-    private func startTranslocationMonitoring(_ translocationId: UUID, _ subject: PassthroughSubject<TranslocationMonitoring, Never>) async {
+    private func startTranslocationMonitoring(
+        _ translocationId: UUID,
+        _ subject: PassthroughSubject<TranslocationMonitoring, Never>
+    ) async {
         let monitoring = TranslocationMonitoring(
             monitoringId: UUID(),
             translocationId: translocationId,
@@ -1209,7 +1254,9 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
 
 /// Dimensional security engine implementation
 final class DimensionalSecurityEngine: DimensionalSecurityProtocol {
-    func establishDimensionalSecurity(travelId: UUID, securityLevel: SecurityLevel) async throws -> DimensionalSecurity {
+    func establishDimensionalSecurity(travelId: UUID,
+                                      securityLevel: SecurityLevel) async throws -> DimensionalSecurity
+    {
         let securityId = UUID()
 
         let security = DimensionalSecurity(
@@ -1323,9 +1370,13 @@ final class ConsciousnessDimensionalTravelDatabase {
 
     func getTravelMetrics() async throws -> TravelMetrics {
         let totalTravels = dimensionalTravels.count
-        let activeTravels = dimensionalTravels.values.filter { Date().timeIntervalSince($0.initiationTimestamp) < 3600 }.count
+        let activeTravels = dimensionalTravels.values.filter { Date().timeIntervalSince($0.initiationTimestamp) < 3600 }
+            .count
         let totalShifts = realityShifts.count
-        let averageStability = consciousnessStabilizations.values.map(\.stabilityLevel).reduce(0, +) / Double(max(consciousnessStabilizations.count, 1))
+        let averageStability = consciousnessStabilizations.values.map(\.stabilityLevel).reduce(0, +) / Double(max(
+            consciousnessStabilizations.count,
+            1
+        ))
 
         return TravelMetrics(
             totalTravels: totalTravels,

@@ -65,17 +65,17 @@ class CompatibilityManager {
     func testPerformanceOnDevice(_ capability: DeviceCapability,
                                  completion: @escaping (PerformanceTestResult) -> Void)
     {
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 2.0 ... 4.0)) {
-            let baseScore = Double.random(in: 65 ... 90)
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 2.0...4.0)) {
+            let baseScore = Double.random(in: 65...90)
             let capabilityMultiplier = self.getCapabilityMultiplier(capability)
             let finalScore = min(100, baseScore * capabilityMultiplier)
 
             let result = PerformanceTestResult(
                 deviceCapability: capability,
                 performanceScore: finalScore,
-                memoryUsage: Double.random(in: 50 ... Double(capability.ram) * 0.25),
-                cpuUsage: Double.random(in: 20 ... 60),
-                batteryDrain: Double.random(in: 3 ... 8),
+                memoryUsage: Double.random(in: 50...Double(capability.ram) * 0.25),
+                cpuUsage: Double.random(in: 20...60),
+                batteryDrain: Double.random(in: 3...8),
                 thermalState: "Normal"
             )
             completion(result)
@@ -95,11 +95,11 @@ class CompatibilityManager {
 
 class AccessibilityValidator {
     func runAccessibilityTest(_ testName: String, completion: @escaping (AccessibilityTestResult) -> Void) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0 ... 2.5)) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...2.5)) {
             let result = AccessibilityTestResult(
                 testName: testName,
                 passed: true,
-                complianceScore: Double.random(in: 88 ... 98),
+                complianceScore: Double.random(in: 88...98),
                 issues: [],
                 recommendations: []
             )
@@ -110,14 +110,14 @@ class AccessibilityValidator {
 
 class UITestRunner {
     func testUserFlow(_ userFlow: UserFlow, completion: @escaping (UXTestResult) -> Void) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 2.0 ... 5.0)) {
-            let actualDuration = userFlow.expectedDuration * Double.random(in: 0.8 ... 1.2)
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 2.0...5.0)) {
+            let actualDuration = userFlow.expectedDuration * Double.random(in: 0.8...1.2)
             let result = UXTestResult(
                 flowName: userFlow.name,
                 completed: true,
                 actualDuration: actualDuration,
                 expectedDuration: userFlow.expectedDuration,
-                usabilityScore: Double.random(in: 82 ... 96),
+                usabilityScore: Double.random(in: 82...96),
                 failureReason: nil,
                 completedSteps: userFlow.steps.count,
                 totalSteps: userFlow.steps.count
@@ -129,11 +129,11 @@ class UITestRunner {
 
 class LocalizationTester {
     func testLanguageSupport(_ languageCode: String, completion: @escaping (LocalizationTestResult) -> Void) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0 ... 2.0)) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...2.0)) {
             let result = LocalizationTestResult(
                 languageCode: languageCode,
                 isFullyLocalized: Bool.random(),
-                completeness: Double.random(in: 85 ... 100),
+                completeness: Double.random(in: 85...100),
                 missingTranslations: Bool.random() ? [] : ["settings.title", "error.network"],
                 layoutAdaptsCorrectly: true,
                 textDirection: languageCode == "ar" || languageCode == "he" ? .rightToLeft : .leftToRight
@@ -408,12 +408,12 @@ class DeviceCompatibilityUATSuite {
                                          completion: @escaping (DeviceCompatibilityResult) -> Void)
     {
         // Simulate device compatibility testing
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0 ... 3.0)) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...3.0)) {
             let result = DeviceCompatibilityResult(
                 deviceName: device.name,
                 platform: device.platform,
                 isCompatible: true,
-                performanceScore: Double.random(in: 70 ... 95),
+                performanceScore: Double.random(in: 70...95),
                 issues: [],
                 testedFeatures: [
                     "UI Rendering",

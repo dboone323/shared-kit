@@ -182,7 +182,8 @@ actor RequestDeduplicator {
         let task = Task {
             defer {
                 // remove is an actor method, but since we are in a detached Task, we treat it as async call to actor.
-                // However, if the warning says "no async operations", it implies context is already actor? No, Task inherits priority but not actor context unless specified.
+                // However, if the warning says "no async operations", it implies context is already actor? No, Task
+                // inherits priority but not actor context unless specified.
                 // It might be because we are inside the actor? No, Task escapes.
                 // Let's rely on Task to handle it, just call it.
                 Task { await self.remove(id: id) }

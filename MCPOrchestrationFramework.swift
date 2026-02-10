@@ -12,7 +12,8 @@ import Foundation
 // MARK: - MCP Orchestration Framework
 
 /// Protocol for MCP workflow orchestrator
-@preconcurrency public protocol MCPWorkflowOrchestrator: Sendable {
+@preconcurrency
+public protocol MCPWorkflowOrchestrator: Sendable {
     func orchestrateWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowResult
     func validateWorkflow(_ workflow: MCPWorkflow) async throws -> MCPWorkflowValidationResult
     func getWorkflowStatus(_ workflowId: String) async -> MCPWorkflowStatus?
@@ -31,7 +32,8 @@ public protocol MCPWorkflowScheduler {
 }
 
 /// Protocol for MCP workflow monitor
-@preconcurrency public protocol MCPWorkflowMonitor {
+@preconcurrency
+public protocol MCPWorkflowMonitor {
     func monitorWorkflow(
         _ workflowId: UUID, progressHandler: @escaping @Sendable (MCPWorkflowProgress) -> Void
     ) -> MCPWorkflowSubscription
@@ -652,7 +654,8 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                             ? NSError(
                                 domain: "MCPWorkflow", code: -1,
                                 userInfo: [NSLocalizedDescriptionKey: toolResult.error!]
-                            ) : nil,
+                            )
+                            : nil,
                         startTime: context.startTime,
                         endTime: Date(),
                         retryCount: 0
@@ -1138,7 +1141,7 @@ public final class BasicMCPWorkflowMonitor: MCPWorkflowMonitor, @unchecked Senda
                     completedExecutions.isEmpty
                         ? 0
                         : completedExecutions.reduce(0) { $0 + ($1.totalExecutionTime ?? 0) }
-                        / Double(completedExecutions.count)
+                            / Double(completedExecutions.count)
 
                 // Calculate most executed workflows
                 let workflowCounts = Dictionary(grouping: relevantExecutions) { $0.workflowId }

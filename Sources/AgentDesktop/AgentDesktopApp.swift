@@ -145,7 +145,9 @@ struct ContentView: View {
                                 Text("Try these:")
                                     .font(.caption)
                                     .foregroundStyle(.tertiary)
-                                ForEach(["Check system status", "Show logs", "What's running?"], id: \.self) { example in
+                                ForEach(["Check system status", "Show logs", "What's running?"],
+                                        id: \.self)
+                                { example in
                                     Button(action: {
                                         viewModel.inputText = example
                                         Task { await viewModel.sendMessage() }

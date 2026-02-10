@@ -114,7 +114,7 @@ public actor PredictiveEcosystem {
 
         let overallHealth =
             (systemStatuses.values.map(\.healthScore).reduce(0, +)
-                    / Double(systemStatuses.count) + predictionAccuracy + optimizationImpact) / 3.0
+                / Double(systemStatuses.count) + predictionAccuracy + optimizationImpact) / 3.0
 
         return EcosystemHealth(
             overallScore: overallHealth,
@@ -334,7 +334,8 @@ public actor PredictiveEcosystem {
             confidence: 0.9,
             data: ["accuracy": .double(accuracy), "predictions": .int(activePredictions)],
             recommendation: accuracy > 0.8
-                ? "Prediction system performing well" : "Consider retraining prediction models"
+                ? "Prediction system performing well"
+                : "Consider retraining prediction models"
         )
     }
 
@@ -766,7 +767,7 @@ public actor EcosystemMonitor {
         for (systemId, _) in systemStatuses {
             systemStatuses[systemId] = SystemStatus(
                 systemId: systemId,
-                healthScore: Double.random(in: 0.7 ... 1.0), // Simulated
+                healthScore: Double.random(in: 0.7...1.0), // Simulated
                 status: .healthy,
                 lastChecked: Date()
             )

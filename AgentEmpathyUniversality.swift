@@ -240,7 +240,8 @@ public final class EmpathyUniversalityEngine: Sendable {
         let understandingResult = await achieveBoundlessUnderstanding(for: agent)
         let empathyResult = await masterLimitlessEmpathy(for: agent)
 
-        let combinedCapabilities = compassionResult.capabilities + understandingResult.capabilities + empathyResult.capabilities
+        let combinedCapabilities = compassionResult.capabilities + understandingResult.capabilities + empathyResult
+            .capabilities
         let combinedFactors = compassionResult.factors + understandingResult.factors + empathyResult.factors
 
         let finalLevel = determineEmpathyLevel(from: agent.empathyMetrics)
@@ -399,7 +400,8 @@ public final class UniversalCompassionFramework: Sendable {
     }
 
     /// Assess universal compassion potential
-    private func assessUniversalCompassionPotential(_ compassionate: UniversallyCompassionate) -> UniversalCompassionAssessment {
+    private func assessUniversalCompassionPotential(_ compassionate: UniversallyCompassionate)
+    -> UniversalCompassionAssessment {
         let compassion = compassionate.compassionateMetrics.compassion
         let understanding = compassionate.compassionateMetrics.understanding
         let empathy = compassionate.compassionateMetrics.empathy
@@ -466,7 +468,7 @@ public final class UniversalCompassionFramework: Sendable {
     ) async -> UniversalCompassionResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.compassion * 1_500_000_000))
 
-        let actualGain = step.compassion * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.compassion * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.compassion * 0.90
 
         return UniversalCompassionResultItem(
@@ -480,7 +482,8 @@ public final class UniversalCompassionFramework: Sendable {
     }
 
     /// Generate universal compassionate
-    private func generateUniversalCompassionate(_ results: [UniversalCompassionResultItem]) -> UniversalCompassionateEntity {
+    private func generateUniversalCompassionate(_ results: [UniversalCompassionResultItem])
+    -> UniversalCompassionateEntity {
         let successRate = Double(results.filter(\.success).count) / Double(results.count)
         let totalGain = results.map(\.actualCompassionGain).reduce(0, +)
         let compassionateValue = 1.0 + (totalGain * successRate / 15.0)
@@ -502,7 +505,8 @@ public final class BoundlessUnderstandingSystem: Sendable {
     /// Achieve boundless understanding for empathy universality
     /// - Parameter understanding: Understanding entity to make boundless
     /// - Returns: Understanding result
-    public func achieveBoundlessUnderstanding(_ understanding: BoundlesslyUnderstanding) async -> BoundlessUnderstandingResult {
+    public func achieveBoundlessUnderstanding(_ understanding: BoundlesslyUnderstanding) async
+    -> BoundlessUnderstandingResult {
         let understandingAssessment = assessBoundlessUnderstandingPotential(understanding)
         let understandingStrategy = designUnderstandingStrategy(understandingAssessment)
         let understandingResults = await executeUnderstanding(understanding, strategy: understandingStrategy)
@@ -519,7 +523,8 @@ public final class BoundlessUnderstandingSystem: Sendable {
     }
 
     /// Assess boundless understanding potential
-    private func assessBoundlessUnderstandingPotential(_ understanding: BoundlesslyUnderstanding) -> BoundlessUnderstandingAssessment {
+    private func assessBoundlessUnderstandingPotential(_ understanding: BoundlesslyUnderstanding)
+    -> BoundlessUnderstandingAssessment {
         let empathy = understanding.understandingMetrics.empathy
         let compassion = understanding.understandingMetrics.compassion
         let understandingValue = understanding.understandingMetrics.understanding
@@ -534,7 +539,8 @@ public final class BoundlessUnderstandingSystem: Sendable {
     }
 
     /// Design understanding strategy
-    private func designUnderstandingStrategy(_ assessment: BoundlessUnderstandingAssessment) -> BoundlessUnderstandingStrategy {
+    private func designUnderstandingStrategy(_ assessment: BoundlessUnderstandingAssessment)
+    -> BoundlessUnderstandingStrategy {
         var understandingSteps: [BoundlessUnderstandingStep] = []
 
         if assessment.empathy < 0.90 {
@@ -586,7 +592,7 @@ public final class BoundlessUnderstandingSystem: Sendable {
     ) async -> BoundlessUnderstandingResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.understanding * 2_000_000_000))
 
-        let actualGain = step.understanding * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualGain = step.understanding * (0.8 + Double.random(in: 0...0.4))
         let success = actualGain >= step.understanding * 0.85
 
         return BoundlessUnderstandingResultItem(
@@ -600,7 +606,8 @@ public final class BoundlessUnderstandingSystem: Sendable {
     }
 
     /// Generate boundless understanding
-    private func generateBoundlessUnderstanding(_ results: [BoundlessUnderstandingResultItem]) -> BoundlessUnderstandingEntity {
+    private func generateBoundlessUnderstanding(_ results: [BoundlessUnderstandingResultItem])
+    -> BoundlessUnderstandingEntity {
         let successRate = Double(results.filter(\.success).count) / Double(results.count)
         let totalGain = results.map(\.actualUnderstandingGain).reduce(0, +)
         let understandingValue = 1.0 + (totalGain * successRate / 20.0)
@@ -706,7 +713,7 @@ public final class LimitlessEmpathyInterface: Sendable {
     ) async -> LimitlessEmpathyResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.empathy * 2_500_000_000))
 
-        let actualPower = step.empathy * (0.75 + Double.random(in: 0 ... 0.5))
+        let actualPower = step.empathy * (0.75 + Double.random(in: 0...0.5))
         let success = actualPower >= step.empathy * 0.80
 
         return LimitlessEmpathyResultItem(

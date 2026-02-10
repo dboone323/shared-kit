@@ -1126,7 +1126,7 @@ final class QuantumLearningSystem: QuantumLearningSystemsProtocol {
         let patternId = UUID()
 
         // Generate quantum states for learning
-        let quantumStates = (0 ..< 10).map { _ in
+        let quantumStates = (0..<10).map { _ in
             QuantumState(
                 id: UUID(), amplitude: Complex(real: 1.0, imaginary: 0.0), phase: 0.0,
                 probability: 0.1
@@ -1136,9 +1136,9 @@ final class QuantumLearningSystem: QuantumLearningSystemsProtocol {
         // Create superposition patterns
         let superpositionPatterns = [
             QuantumLearningPatterns.SuperpositionPattern(
-                states: (0 ..< 5).map { _ in LearningState(id: UUID(), data: [], timestamp: Date()) },
-                amplitudes: (0 ..< 5).map { _ in Complex(real: 0.5, imaginary: 0.0) },
-                interferencePattern: (0 ..< 10).map { _ in Double.random(in: 0 ... 1) }
+                states: (0..<5).map { _ in LearningState(id: UUID(), data: [], timestamp: Date()) },
+                amplitudes: (0..<5).map { _ in Complex(real: 0.5, imaginary: 0.0) },
+                interferencePattern: (0..<10).map { _ in Double.random(in: 0...1) }
             ),
         ]
 
@@ -1175,7 +1175,7 @@ final class QuantumLearningSystem: QuantumLearningSystemsProtocol {
         )
 
         let interferenceEffects = patterns.enumerated().flatMap { index1, pattern1 in
-            patterns[(index1 + 1) ..< patterns.count].map { pattern2 in
+            patterns[(index1 + 1)..<patterns.count].map { pattern2 in
                 SuperpositionLearning.InterferenceEffect(
                     pattern1: pattern1.id,
                     pattern2: pattern2.id,

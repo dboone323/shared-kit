@@ -653,7 +653,10 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
         let consciousnessResult = try await consciousnessElevator.assessAlignment(transcendence.consciousnessAlignment)
 
         // Execute ethical transcendence
-        let transcendenceResult = try await transcendenceEngine.executeTranscendence(transcendence, consciousnessResult: consciousnessResult)
+        let transcendenceResult = try await transcendenceEngine.executeTranscendence(
+            transcendence,
+            consciousnessResult: consciousnessResult
+        )
 
         // Harmonize with universal ethics
         let harmonyResult = await universalHarmonizer.harmonizeEthics(transcendence, result: transcendenceResult)
@@ -674,20 +677,31 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
     }
 
     /// Evaluate transcendent ethics
-    public func evaluateTranscendentEthics(_ evaluation: TranscendentEthicsEvaluation) async throws -> TranscendentEthicsResult {
+    public func evaluateTranscendentEthics(_ evaluation: TranscendentEthicsEvaluation) async throws
+    -> TranscendentEthicsResult {
         let startTime = Date()
 
         // Validate evaluation parameters
         try await validateEvaluationParameters(evaluation)
 
         // Evaluate ethical scenario
-        let scenarioResult = try await ethicsEvaluator.evaluateScenario(evaluation.ethicalScenario, evaluation: evaluation)
+        let scenarioResult = try await ethicsEvaluator.evaluateScenario(
+            evaluation.ethicalScenario,
+            evaluation: evaluation
+        )
 
         // Assess transcendence level
-        let transcendenceResult = await transcendenceEngine.assessTranscendence(evaluation, scenarioResult: scenarioResult)
+        let transcendenceResult = await transcendenceEngine.assessTranscendence(
+            evaluation,
+            scenarioResult: scenarioResult
+        )
 
         // Generate recommendations
-        let recommendations = await generateTranscendenceRecommendations(evaluation, scenarioResult: scenarioResult, transcendenceResult: transcendenceResult)
+        let recommendations = await generateTranscendenceRecommendations(
+            evaluation,
+            scenarioResult: scenarioResult,
+            transcendenceResult: transcendenceResult
+        )
 
         return await TranscendentEthicsResult(
             evaluationId: evaluation.evaluationId,
@@ -738,11 +752,13 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
 
     private func validateTranscendenceParameters(_ transcendence: EthicalTranscendence) async throws {
         if transcendence.ethicalBoundaries.isEmpty {
-            throw EthicalTranscendenceError.noBoundariesSpecified("At least one ethical boundary must be specified for transcendence")
+            throw EthicalTranscendenceError
+                .noBoundariesSpecified("At least one ethical boundary must be specified for transcendence")
         }
 
         if transcendence.consciousnessAlignment == .minimal && transcendence.universalHarmony == .perfect {
-            throw EthicalTranscendenceError.alignmentMismatch("Minimal consciousness alignment cannot achieve perfect universal harmony")
+            throw EthicalTranscendenceError
+                .alignmentMismatch("Minimal consciousness alignment cannot achieve perfect universal harmony")
         }
     }
 
@@ -752,7 +768,10 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
         }
     }
 
-    private func generateTranscendenceInsights(_ transcendence: EthicalTranscendence, transcendenceResult: TranscendenceResult) async -> [TranscendenceInsight] {
+    private func generateTranscendenceInsights(
+        _ transcendence: EthicalTranscendence,
+        transcendenceResult: TranscendenceResult
+    ) async -> [TranscendenceInsight] {
         var insights: [TranscendenceInsight] = []
 
         if transcendenceResult.advancement > 0.9 {
@@ -778,7 +797,11 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
         return insights
     }
 
-    private func generateTranscendenceRecommendations(_ evaluation: TranscendentEthicsEvaluation, scenarioResult: ScenarioResult, transcendenceResult: TranscendenceResult) async -> [TranscendenceRecommendation] {
+    private func generateTranscendenceRecommendations(
+        _ evaluation: TranscendentEthicsEvaluation,
+        scenarioResult: ScenarioResult,
+        transcendenceResult: TranscendenceResult
+    ) async -> [TranscendenceRecommendation] {
         var recommendations: [TranscendenceRecommendation] = []
 
         if transcendenceResult.transcendence > 0.8 {
@@ -794,7 +817,9 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
         return recommendations
     }
 
-    private func generateEvaluationInsights(_ evaluation: TranscendentEthicsEvaluation, result: ScenarioResult) async -> [TranscendenceInsight] {
+    private func generateEvaluationInsights(_ evaluation: TranscendentEthicsEvaluation,
+                                            result: ScenarioResult) async -> [TranscendenceInsight]
+    {
         var insights: [TranscendenceInsight] = []
 
         if result.consciousnessElevation > 0.9 {
@@ -813,18 +838,22 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
 
 /// Transcendence Engine
 private final class TranscendenceEngine: Sendable {
-    func executeTranscendence(_ transcendence: EthicalTranscendence, consciousnessResult: ConsciousnessResult) async throws -> TranscendenceResult {
+    func executeTranscendence(_ transcendence: EthicalTranscendence,
+                              consciousnessResult: ConsciousnessResult) async throws -> TranscendenceResult
+    {
         TranscendenceResult(
-            success: Double.random(in: 0.8 ... 1.0) > 0.2,
-            advancement: Double.random(in: 0.7 ... 1.0)
+            success: Double.random(in: 0.8...1.0) > 0.2,
+            advancement: Double.random(in: 0.7...1.0)
         )
     }
 
-    func assessTranscendence(_ evaluation: TranscendentEthicsEvaluation, scenarioResult: ScenarioResult) async -> TranscendenceResult {
+    func assessTranscendence(_ evaluation: TranscendentEthicsEvaluation,
+                             scenarioResult: ScenarioResult) async -> TranscendenceResult
+    {
         TranscendenceResult(
             success: true,
-            evaluation: Double.random(in: 0.8 ... 1.0),
-            transcendence: Double.random(in: 0.7 ... 1.0)
+            evaluation: Double.random(in: 0.8...1.0),
+            transcendence: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -839,21 +868,23 @@ private final class TranscendenceEngine: Sendable {
     func getTranscendenceStatus() async -> TranscendenceStatus {
         TranscendenceStatus(
             operational: true,
-            capability: Double.random(in: 0.9 ... 1.0),
-            advancement: Double.random(in: 0.8 ... 1.0),
-            activeTranscendences: Int.random(in: 1 ... 10),
-            successRate: Double.random(in: 0.9 ... 0.98)
+            capability: Double.random(in: 0.9...1.0),
+            advancement: Double.random(in: 0.8...1.0),
+            activeTranscendences: Int.random(in: 1...10),
+            successRate: Double.random(in: 0.9...0.98)
         )
     }
 }
 
 /// Ethics Evaluator
 private final class EthicsEvaluator: Sendable {
-    func evaluateScenario(_ scenario: EthicalScenario, evaluation: TranscendentEthicsEvaluation) async throws -> ScenarioResult {
+    func evaluateScenario(_ scenario: EthicalScenario,
+                          evaluation: TranscendentEthicsEvaluation) async throws -> ScenarioResult
+    {
         ScenarioResult(
             success: true,
-            consciousnessElevation: Double.random(in: 0.8 ... 1.0),
-            universalHarmony: Double.random(in: 0.7 ... 1.0)
+            consciousnessElevation: Double.random(in: 0.8...1.0),
+            universalHarmony: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -867,7 +898,7 @@ private final class ConsciousnessElevator: Sendable {
     func assessAlignment(_ alignment: ConsciousnessAlignment) async throws -> ConsciousnessResult {
         ConsciousnessResult(
             success: true,
-            elevation: Double.random(in: 0.8 ... 1.0)
+            elevation: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -882,7 +913,7 @@ private final class ConsciousnessElevator: Sendable {
     func getElevationStatus() async -> ElevationStatus {
         ElevationStatus(
             operational: true,
-            level: Double.random(in: 0.9 ... 1.0)
+            level: Double.random(in: 0.9...1.0)
         )
     }
 }
@@ -892,7 +923,7 @@ private final class UniversalHarmonizer: Sendable {
     func harmonizeEthics(_ transcendence: EthicalTranscendence, result: TranscendenceResult) async -> HarmonyResult {
         HarmonyResult(
             success: true,
-            harmony: Double.random(in: 0.8 ... 1.0)
+            harmony: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -907,7 +938,7 @@ private final class UniversalHarmonizer: Sendable {
     func getHarmonyStatus() async -> HarmonyStatus {
         HarmonyStatus(
             operational: true,
-            harmony: Double.random(in: 0.95 ... 1.0)
+            harmony: Double.random(in: 0.95...1.0)
         )
     }
 }
@@ -925,7 +956,7 @@ private final class EthicalOptimizer: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8 ... 1.0)
+            efficiency: Double.random(in: 0.8...1.0)
         )
     }
 }

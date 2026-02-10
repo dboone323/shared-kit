@@ -87,13 +87,15 @@ protocol QuantumWisdomNetworksProtocol {
     /// - Parameter networkId: Network identifier
     /// - Parameter synthesisCriteria: Criteria for wisdom synthesis
     /// - Returns: Wisdom synthesis result
-    func synthesizeCollectiveWisdom(networkId: UUID, synthesisCriteria: SynthesisCriteria) async throws -> WisdomSynthesis
+    func synthesizeCollectiveWisdom(networkId: UUID, synthesisCriteria: SynthesisCriteria) async throws
+        -> WisdomSynthesis
 
     /// Evolve consciousness through wisdom networks
     /// - Parameter entityId: Entity identifier
     /// - Parameter evolutionPath: Path for consciousness evolution
     /// - Returns: Consciousness evolution result
-    func evolveConsciousnessThroughWisdom(entityId: UUID, evolutionPath: EvolutionPath) async throws -> ConsciousnessEvolution
+    func evolveConsciousnessThroughWisdom(entityId: UUID, evolutionPath: EvolutionPath) async throws
+        -> ConsciousnessEvolution
 
     /// Monitor wisdom network activity
     /// - Returns: Publisher of network monitoring updates
@@ -139,13 +141,15 @@ protocol CollectiveWisdomSynthesisProtocol {
     /// - Parameter networkId: Network identifier
     /// - Parameter analysisParameters: Parameters for pattern analysis
     /// - Returns: Pattern analysis result
-    func analyzeWisdomPatterns(networkId: UUID, analysisParameters: PatternAnalysisParameters) async throws -> PatternAnalysis
+    func analyzeWisdomPatterns(networkId: UUID, analysisParameters: PatternAnalysisParameters) async throws
+        -> PatternAnalysis
 
     /// Synthesize wisdom from multiple knowledge sources
     /// - Parameter knowledgeSources: Sources of wisdom knowledge
     /// - Parameter synthesisMethod: Method for synthesis
     /// - Returns: Wisdom synthesis result
-    func synthesizeWisdomFromSources(knowledgeSources: [WisdomKnowledge], synthesisMethod: SynthesisMethod) async throws -> WisdomSynthesis
+    func synthesizeWisdomFromSources(knowledgeSources: [WisdomKnowledge],
+                                     synthesisMethod: SynthesisMethod) async throws -> WisdomSynthesis
 
     /// Generate evolutionary insights from collective wisdom
     /// - Parameter synthesisId: Synthesis identifier
@@ -726,7 +730,10 @@ struct EvolutionMonitoring {
             let networkId = UUID()
 
             // Establish network security
-            _ = try await networkSecurity.establishWisdomSecurity(networkId: networkId, securityLevel: config.securityLevel)
+            _ = try await networkSecurity.establishWisdomSecurity(
+                networkId: networkId,
+                securityLevel: config.securityLevel
+            )
 
             // Create wisdom network
             let network = WisdomNetwork(
@@ -754,7 +761,10 @@ struct EvolutionMonitoring {
             let sharingId = UUID()
 
             // Authenticate access
-            let authentication = try await networkSecurity.authenticateWisdomAccess(knowledgeId: knowledge.knowledgeId, entityId: knowledge.entityId)
+            let authentication = try await networkSecurity.authenticateWisdomAccess(
+                knowledgeId: knowledge.knowledgeId,
+                entityId: knowledge.entityId
+            )
             guard authentication.accessGranted else {
                 throw NetworkError.accessDenied
             }
@@ -782,7 +792,9 @@ struct EvolutionMonitoring {
             return sharing
         }
 
-        func synthesizeCollectiveWisdom(networkId: UUID, synthesisCriteria: SynthesisCriteria) async throws -> WisdomSynthesis {
+        func synthesizeCollectiveWisdom(networkId: UUID,
+                                        synthesisCriteria: SynthesisCriteria) async throws -> WisdomSynthesis
+        {
             guard activeNetworks[networkId] != nil else {
                 throw NetworkError.networkNotFound
             }
@@ -793,7 +805,7 @@ struct EvolutionMonitoring {
                 wisdomLevels: synthesisCriteria.wisdomLevels,
                 entityIds: nil,
                 timeRange: synthesisCriteria.timeRange,
-                significanceRange: synthesisCriteria.significanceThreshold ... 1.0,
+                significanceRange: synthesisCriteria.significanceThreshold...1.0,
                 keywords: nil,
                 validationStatuses: [.validated]
             )
@@ -811,7 +823,9 @@ struct EvolutionMonitoring {
             return synthesis
         }
 
-        func evolveConsciousnessThroughWisdom(entityId: UUID, evolutionPath: EvolutionPath) async throws -> ConsciousnessEvolution {
+        func evolveConsciousnessThroughWisdom(entityId: UUID,
+                                              evolutionPath: EvolutionPath) async throws -> ConsciousnessEvolution
+        {
             let evolutionId = UUID()
 
             // Assess current consciousness
@@ -882,23 +896,26 @@ struct EvolutionMonitoring {
         // MARK: - Private Methods
 
         private func setupMonitoring() {
-            synthesisTimer = Timer.scheduledTimer(withTimeInterval: config.synthesisFrequency, repeats: true) { [weak self] _ in
-                Task { [weak self] in
-                    await self?.performWisdomSynthesis()
+            synthesisTimer = Timer
+                .scheduledTimer(withTimeInterval: config.synthesisFrequency, repeats: true) { [weak self] _ in
+                    Task { [weak self] in
+                        await self?.performWisdomSynthesis()
+                    }
                 }
-            }
 
-            optimizationTimer = Timer.scheduledTimer(withTimeInterval: config.monitoringInterval * 2, repeats: true) { [weak self] _ in
-                Task { [weak self] in
-                    await self?.performNetworkOptimization()
+            optimizationTimer = Timer
+                .scheduledTimer(withTimeInterval: config.monitoringInterval * 2, repeats: true) { [weak self] _ in
+                    Task { [weak self] in
+                        await self?.performNetworkOptimization()
+                    }
                 }
-            }
 
-            monitoringTimer = Timer.scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
-                Task { [weak self] in
-                    await self?.performNetworkMonitoring()
+            monitoringTimer = Timer
+                .scheduledTimer(withTimeInterval: config.monitoringInterval, repeats: true) { [weak self] _ in
+                    Task { [weak self] in
+                        await self?.performNetworkMonitoring()
+                    }
                 }
-            }
         }
 
         private func performWisdomSynthesis() async {
@@ -907,7 +924,7 @@ struct EvolutionMonitoring {
                     let criteria = SynthesisCriteria(
                         knowledgeTypes: [.insight, .experience, .pattern],
                         wisdomLevels: [.adept, .master, .sage],
-                        timeRange: Date().addingTimeInterval(-3600) ... Date(),
+                        timeRange: Date().addingTimeInterval(-3600)...Date(),
                         significanceThreshold: 0.7,
                         synthesisDepth: 3,
                         includeDisputed: false
@@ -1107,7 +1124,9 @@ struct EvolutionMonitoring {
 
     /// Collective wisdom synthesizer implementation
     final class CollectiveWisdomSynthesizer: CollectiveWisdomSynthesisProtocol {
-        func analyzeWisdomPatterns(networkId: UUID, analysisParameters: PatternAnalysisParameters) async throws -> PatternAnalysis {
+        func analyzeWisdomPatterns(networkId: UUID,
+                                   analysisParameters: PatternAnalysisParameters) async throws -> PatternAnalysis
+        {
             let analysisId = UUID()
 
             // Simulated pattern analysis
@@ -1145,7 +1164,9 @@ struct EvolutionMonitoring {
             return analysis
         }
 
-        func synthesizeWisdomFromSources(knowledgeSources: [WisdomKnowledge], synthesisMethod: SynthesisMethod) async throws -> WisdomSynthesis {
+        func synthesizeWisdomFromSources(knowledgeSources: [WisdomKnowledge],
+                                         synthesisMethod: SynthesisMethod) async throws -> WisdomSynthesis
+        {
             let synthesisId = UUID()
 
             // Create synthesized knowledge
@@ -1361,7 +1382,10 @@ struct EvolutionMonitoring {
             return stabilization
         }
 
-        private func startEvolutionMonitoring(_ evolutionId: UUID, _ subject: PassthroughSubject<EvolutionMonitoring, Never>) async {
+        private func startEvolutionMonitoring(
+            _ evolutionId: UUID,
+            _ subject: PassthroughSubject<EvolutionMonitoring, Never>
+        ) async {
             let monitoring = EvolutionMonitoring(
                 monitoringId: UUID(),
                 evolutionId: evolutionId,
@@ -1500,10 +1524,15 @@ struct EvolutionMonitoring {
 
         func getNetworkMetrics() async throws -> NetworkMetrics {
             let totalNetworks = wisdomNetworks.count
-            let activeNetworks = wisdomNetworks.values.filter { Date().timeIntervalSince($0.connectionTimestamp) < 3600 }.count
+            let activeNetworks = wisdomNetworks.values
+                .filter { Date().timeIntervalSince($0.connectionTimestamp) < 3600 }.count
             let totalKnowledgeShared = knowledgeSharings.count
             let totalSyntheses = wisdomSyntheses.count
-            let averageEvolutionProgress = consciousnessEvolutions.values.map(\.currentProgress).reduce(0, +) / Double(max(consciousnessEvolutions.count, 1))
+            let averageEvolutionProgress = consciousnessEvolutions.values.map(\.currentProgress)
+                .reduce(0, +) / Double(max(
+                    consciousnessEvolutions.count,
+                    1
+                ))
 
             return NetworkMetrics(
                 totalNetworks: totalNetworks,

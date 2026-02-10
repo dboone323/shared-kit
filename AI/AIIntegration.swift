@@ -296,7 +296,7 @@ public class NaturalLanguageProcessor: ObservableObject {
         self.tokenizer.string = text
         var wordCount = 0
 
-        self.tokenizer.enumerateTokens(in: text.startIndex ..< text.endIndex) { _, _ in
+        self.tokenizer.enumerateTokens(in: text.startIndex..<text.endIndex) { _, _ in
             wordCount += 1
             return true
         }
@@ -341,7 +341,7 @@ public class NaturalLanguageProcessor: ObservableObject {
         // This would use a trained ML model in production
 
         let scores = categories.map { category in
-            CategoryScore(category: category, score: Double.random(in: 0.1 ... 0.9))
+            CategoryScore(category: category, score: Double.random(in: 0.1...0.9))
         }.sorted { $0.score > $1.score }
 
         return TextCategorizationResult(
@@ -361,7 +361,7 @@ public class NaturalLanguageProcessor: ObservableObject {
         var keywords: [String: Int] = [:]
 
         tagger.enumerateTokens(
-            in: text.startIndex ..< text.endIndex, unit: .word, scheme: .lexicalClass
+            in: text.startIndex..<text.endIndex, unit: .word, scheme: .lexicalClass
         ) { tokenRange, tag in
             if let tag,
                tag == .noun || tag == .adjective || tag == .verb
@@ -906,7 +906,7 @@ public class PredictiveAnalyticsEngine: ObservableObject {
         } else {
             // Default scoring based on amount and time patterns
             for category in categories {
-                categoryScores[category] = Double.random(in: 0.1 ... 0.6)
+                categoryScores[category] = Double.random(in: 0.1...0.6)
             }
         }
 

@@ -245,9 +245,9 @@ public class HTMNetwork: NeuromorphicNetwork {
 
     /// Create HTM-style columnar architecture
     public func createColumns(numColumns: Int, neuronsPerColumn: Int) {
-        for _ in 0 ..< numColumns {
+        for _ in 0..<numColumns {
             var column: [NeuromorphicNeuron] = []
-            for _ in 0 ..< neuronsPerColumn {
+            for _ in 0..<neuronsPerColumn {
                 let neuron = NeuromorphicNeuron(threshold: 0.8, learningRate: 0.02)
                 addNeuron(neuron)
                 column.append(neuron)
@@ -257,8 +257,8 @@ public class HTMNetwork: NeuromorphicNetwork {
 
         // Create horizontal connections within columns
         for column in columns {
-            for i in 0 ..< column.count {
-                for j in (i + 1) ..< column.count {
+            for i in 0..<column.count {
+                for j in (i + 1)..<column.count {
                     connect(from: column[i], to: column[j], weight: 0.3)
                     connect(from: column[j], to: column[i], weight: 0.3)
                 }
@@ -266,9 +266,9 @@ public class HTMNetwork: NeuromorphicNetwork {
         }
 
         // Create sparse vertical connections between columns
-        for i in 0 ..< columns.count {
-            for j in (i + 1) ..< columns.count {
-                if Double.random(in: 0 ... 1) < 0.1 { // 10% connectivity
+        for i in 0..<columns.count {
+            for j in (i + 1)..<columns.count {
+                if Double.random(in: 0...1) < 0.1 { // 10% connectivity
                     let sourceNeuron = columns[i].randomElement()!
                     let targetNeuron = columns[j].randomElement()!
                     connect(from: sourceNeuron, to: targetNeuron, weight: 0.1)
@@ -287,10 +287,10 @@ public class LSMNetwork: NeuromorphicNetwork {
     /// Create liquid state machine reservoir
     public func createReservoir(numNeurons: Int, connectivity: Double = 0.1) {
         // Create reservoir neurons
-        for _ in 0 ..< numNeurons {
+        for _ in 0..<numNeurons {
             let neuron = NeuromorphicNeuron(
-                threshold: Double.random(in: 0.5 ... 1.5),
-                refractoryPeriod: Double.random(in: 0.001 ... 0.01),
+                threshold: Double.random(in: 0.5...1.5),
+                refractoryPeriod: Double.random(in: 0.001...0.01),
                 learningRate: 0.01
             )
             addNeuron(neuron)
@@ -298,11 +298,11 @@ public class LSMNetwork: NeuromorphicNetwork {
         }
 
         // Create random connections within reservoir
-        for i in 0 ..< reservoir.count {
-            for j in 0 ..< reservoir.count {
-                if i != j && Double.random(in: 0 ... 1) < connectivity {
-                    let weight = Double.random(in: 0.1 ... 0.9)
-                    let delay = Double.random(in: 0.001 ... 0.005)
+        for i in 0..<reservoir.count {
+            for j in 0..<reservoir.count {
+                if i != j && Double.random(in: 0...1) < connectivity {
+                    let weight = Double.random(in: 0.1...0.9)
+                    let delay = Double.random(in: 0.001...0.005)
                     connect(from: reservoir[i], to: reservoir[j], weight: weight, delay: delay)
                 }
             }
@@ -311,7 +311,7 @@ public class LSMNetwork: NeuromorphicNetwork {
 
     /// Connect input to reservoir
     public func connectInput(inputSize: Int) {
-        for i in 0 ..< inputSize {
+        for i in 0..<inputSize {
             let randomNeuron = reservoir.randomElement()!
             inputConnections.append((inputIndex: i, neuron: randomNeuron))
         }
@@ -319,7 +319,7 @@ public class LSMNetwork: NeuromorphicNetwork {
 
     /// Connect reservoir to output
     public func connectOutput(outputSize: Int) {
-        for i in 0 ..< outputSize {
+        for i in 0..<outputSize {
             let randomNeuron = reservoir.randomElement()!
             outputConnections.append((neuron: randomNeuron, outputIndex: i))
         }

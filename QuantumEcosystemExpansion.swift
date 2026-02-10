@@ -1109,7 +1109,8 @@ struct IntegrationResult {
                     compatibilityScore: reality.compatibility,
                     riskAssessment: RealityAssessment.RiskAssessment(
                         overallRisk: reality.riskLevel == .low
-                            ? 0.2 : reality.riskLevel == .medium ? 0.5 : 0.8,
+                            ? 0.2
+                            : reality.riskLevel == .medium ? 0.5 : 0.8,
                         riskFactors: [],
                         mitigationStrategies: ["Standard compatibility protocols"]
                     ),
@@ -1202,7 +1203,7 @@ struct IntegrationResult {
             func planEcosystemGrowth(_ ecosystem: QuantumEcosystem, to growthTargets: GrowthTargets)
                 async throws -> GrowthPlan
             {
-                let phases = (0 ..< 5).map { phase in
+                let phases = (0..<5).map { phase in
                     GrowthPlan.GrowthPhase(
                         phase: phase,
                         name: "Phase \(phase + 1)",

@@ -7,7 +7,7 @@
 
 import Foundation
 #if canImport(SwiftData)
-@_exported import SwiftData
+    @_exported import SwiftData
 #endif
 
 // MARK: - Enhanced Core Data Protocols
@@ -391,7 +391,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         let durationMinutes = duration / 60
         self.averageCompletionTime =
             (self.averageCompletionTime * Double(self.totalCompletions - 1) + durationMinutes)
-                / Double(self.totalCompletions)
+            / Double(self.totalCompletions)
     }
 
     private func checkAchievements() {
@@ -663,7 +663,7 @@ public enum HabitDifficulty: String, CaseIterable, Codable {
         }
     }
 
-    nonisolated public var xpMultiplier: Int {
+    public nonisolated var xpMultiplier: Int {
         switch self {
         case .trivial: 1
         case .easy: 2

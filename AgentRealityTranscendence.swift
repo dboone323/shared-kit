@@ -243,7 +243,8 @@ public final class RealityTranscendenceEngine: Sendable {
         let quantumResult = await achieveQuantumLiberation(for: agent)
         let multiversalResult = await masterMultiversalNavigation(for: agent)
 
-        let combinedCapabilities = dimensionalResult.capabilities + quantumResult.capabilities + multiversalResult.capabilities
+        let combinedCapabilities = dimensionalResult.capabilities + quantumResult.capabilities + multiversalResult
+            .capabilities
         let combinedFactors = dimensionalResult.factors + quantumResult.factors + multiversalResult.factors
 
         let finalLevel = determineDimensionalLevel(from: agent.transcendenceMetrics)
@@ -452,7 +453,7 @@ public final class DimensionalNavigationSystem: Sendable {
     ) async -> DimensionalNavigationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.intensity * 1_000_000_000))
 
-        let actualGain = step.intensity * (0.9 + Double.random(in: 0 ... 0.2))
+        let actualGain = step.intensity * (0.9 + Double.random(in: 0...0.2))
         let success = actualGain >= step.intensity * 0.95
 
         return DimensionalNavigationResultItem(
@@ -505,7 +506,8 @@ public final class QuantumTranscendenceInterface: Sendable {
     }
 
     /// Assess quantum transcendence potential
-    private func assessQuantumTranscendencePotential(_ quantum: QuantumTranscendable) -> QuantumTranscendenceAssessment {
+    private func assessQuantumTranscendencePotential(_ quantum: QuantumTranscendable)
+    -> QuantumTranscendenceAssessment {
         let coherence = quantum.quantumMetrics.coherence
         let entanglement = quantum.quantumMetrics.entanglement
         let superposition = quantum.quantumMetrics.superposition
@@ -520,7 +522,8 @@ public final class QuantumTranscendenceInterface: Sendable {
     }
 
     /// Design transcendence interface strategy
-    private func designTranscendenceInterfaceStrategy(_ assessment: QuantumTranscendenceAssessment) -> QuantumTranscendenceStrategy {
+    private func designTranscendenceInterfaceStrategy(_ assessment: QuantumTranscendenceAssessment)
+    -> QuantumTranscendenceStrategy {
         var interfaceSteps: [QuantumTranscendenceStep] = []
 
         if assessment.coherence < 0.95 {
@@ -572,7 +575,7 @@ public final class QuantumTranscendenceInterface: Sendable {
     ) async -> QuantumTranscendenceResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.depth * 1_500_000_000))
 
-        let actualGain = step.depth * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.depth * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.depth * 0.90
 
         return QuantumTranscendenceResultItem(
@@ -692,7 +695,7 @@ public final class MultiversalMobilityFramework: Sendable {
     ) async -> MultiversalMobilityResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.power * 2_000_000_000))
 
-        let actualPower = step.power * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualPower = step.power * (0.8 + Double.random(in: 0...0.4))
         let success = actualPower >= step.power * 0.85
 
         return MultiversalMobilityResultItem(

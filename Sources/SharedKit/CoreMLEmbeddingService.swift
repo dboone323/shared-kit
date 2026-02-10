@@ -16,7 +16,8 @@
         public func embed(_ text: String) async throws -> [Double] {
             try await withCheckedThrowingContinuation { continuation in
                 // Use the NLEmbedding for sentence embedding (available since macOS 10.15/iOS 13)
-                // Note: In newer OS versions (macOS 14+), this uses the improved Transformer-based models automatically.
+                // Note: In newer OS versions (macOS 14+), this uses the improved Transformer-based models
+                // automatically.
                 guard let embedding = NLEmbedding.sentenceEmbedding(for: .english) else {
                     continuation.resume(throwing: EmbeddingError.modelUnavailable)
                     return

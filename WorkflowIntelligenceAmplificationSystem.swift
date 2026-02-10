@@ -208,7 +208,7 @@ actor IntelligenceAmplificationEngine {
         let branchCount = min(configuration.maxDecisionBranches, workflow.steps.count)
 
         // Generate decision branches with different optimization strategies
-        for i in 0 ..< branchCount {
+        for i in 0..<branchCount {
             let strategy = DecisionStrategy.allCases[i % DecisionStrategy.allCases.count]
             let decision = await generateDecisionForStrategy(
                 workflow: workflow,
@@ -306,9 +306,9 @@ actor IntelligenceAmplificationEngine {
         let knowledgeNodes = extractKnowledgeNodes(from: workflow)
 
         // Create entanglement links between related knowledge
-        for i in 0 ..< knowledgeNodes.count {
+        for i in 0..<knowledgeNodes.count {
             for j
-                in (i + 1) ..< min(i + configuration.knowledgeExplorationDepth, knowledgeNodes.count)
+                in (i + 1)..<min(i + configuration.knowledgeExplorationDepth, knowledgeNodes.count)
             {
                 let source = knowledgeNodes[i]
                 let target = knowledgeNodes[j]
@@ -424,7 +424,7 @@ actor IntelligenceAmplificationEngine {
         var learningProgress = 0.0
         var insights: [String] = []
 
-        for cycle in 0 ..< learningCycles {
+        for cycle in 0..<learningCycles {
             let cycleProgress = Double(cycle) / Double(learningCycles)
 
             // Simulate quantum measurement collapse - learning converges

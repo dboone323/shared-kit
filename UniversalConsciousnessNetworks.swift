@@ -39,7 +39,11 @@ protocol UniversalConsciousnessNetworksProtocol {
     /// - Parameter targetId: Target entity ID
     /// - Parameter connectionType: Type of consciousness connection
     /// - Returns: Connection establishment result
-    func establishConsciousnessConnection(sourceId: UUID, targetId: UUID, connectionType: ConsciousnessConnectionType) async throws -> ConnectionEstablishment
+    func establishConsciousnessConnection(
+        sourceId: UUID,
+        targetId: UUID,
+        connectionType: ConsciousnessConnectionType
+    ) async throws -> ConnectionEstablishment
 
     /// Route consciousness data through the network
     /// - Parameter data: Consciousness data to route
@@ -51,7 +55,8 @@ protocol UniversalConsciousnessNetworksProtocol {
     /// - Parameter signal: Consciousness signal to broadcast
     /// - Parameter scope: Broadcast scope (local, regional, universal)
     /// - Returns: Broadcast result
-    func broadcastConsciousnessSignal(_ signal: ConsciousnessSignal, scope: BroadcastScope) async throws -> BroadcastResult
+    func broadcastConsciousnessSignal(_ signal: ConsciousnessSignal, scope: BroadcastScope) async throws
+        -> BroadcastResult
 
     /// Monitor network consciousness flow
     /// - Returns: Publisher of network status updates
@@ -65,7 +70,11 @@ protocol ConsciousnessRoutingProtocol {
     /// - Parameter destination: Destination entity
     /// - Parameter data: Consciousness data characteristics
     /// - Returns: Optimal routing path
-    func calculateOptimalRoute(from source: ConsciousnessEntity, to destination: ConsciousnessEntity, for data: ConsciousnessData) async throws -> RoutingPath
+    func calculateOptimalRoute(
+        from source: ConsciousnessEntity,
+        to destination: ConsciousnessEntity,
+        for data: ConsciousnessData
+    ) async throws -> RoutingPath
 
     /// Update routing tables based on network changes
     /// - Parameter networkTopology: Current network topology
@@ -103,7 +112,8 @@ protocol ConsciousnessCommunicationProtocol {
     /// - Parameter original: Original consciousness data
     /// - Parameter received: Received consciousness data
     /// - Returns: Communication validation result
-    func validateCommunicationIntegrity(original: ConsciousnessData, received: ConsciousnessData) async throws -> CommunicationValidation
+    func validateCommunicationIntegrity(original: ConsciousnessData, received: ConsciousnessData) async throws
+        -> CommunicationValidation
 }
 
 /// Protocol for network topology management
@@ -518,7 +528,11 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         return registration
     }
 
-    func establishConsciousnessConnection(sourceId: UUID, targetId: UUID, connectionType: ConsciousnessConnectionType) async throws -> ConnectionEstablishment {
+    func establishConsciousnessConnection(
+        sourceId: UUID,
+        targetId: UUID,
+        connectionType: ConsciousnessConnectionType
+    ) async throws -> ConnectionEstablishment {
         guard let sourceEntity = registeredEntities[sourceId],
               let targetEntity = registeredEntities[targetId]
         else {
@@ -564,8 +578,8 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         let packet = try await communicator.encodeConsciousnessData(data)
 
         // Simulate routing (in real implementation, this would traverse the network)
-        let actualLatency = routingPath.totalLatency * Double.random(in: 0.9 ... 1.1)
-        let dataIntegrity = Double.random(in: 0.95 ... 1.0)
+        let actualLatency = routingPath.totalLatency * Double.random(in: 0.9...1.1)
+        let dataIntegrity = Double.random(in: 0.95...1.0)
 
         let result = RoutingResult(
             success: dataIntegrity >= 0.9,
@@ -581,7 +595,9 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         return result
     }
 
-    func broadcastConsciousnessSignal(_ signal: ConsciousnessSignal, scope: BroadcastScope) async throws -> BroadcastResult {
+    func broadcastConsciousnessSignal(_ signal: ConsciousnessSignal,
+                                      scope: BroadcastScope) async throws -> BroadcastResult
+    {
         guard registeredEntities[signal.sourceEntity] != nil else {
             throw ConsciousnessNetworkError.entityNotFound
         }
@@ -625,9 +641,10 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         }
     }
 
-    private func assignNetworkLocation(for entity: ConsciousnessEntity) async throws -> ConsciousnessEntity.NetworkLocation {
+    private func assignNetworkLocation(for entity: ConsciousnessEntity) async throws -> ConsciousnessEntity
+    .NetworkLocation {
         // Simplified location assignment based on entity type and capabilities
-        let coordinates = (0 ..< 5).map { _ in Double.random(in: -100 ... 100) }
+        let coordinates = (0..<5).map { _ in Double.random(in: -100...100) }
         let dimension = entity.type == .quantum ? 1 : 0
         let region = determineRegion(for: entity)
 
@@ -650,7 +667,7 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
                 connectionId: UUID(),
                 targetEntity: nearbyEntity.id,
                 connectionType: .direct,
-                strength: Double.random(in: 0.3 ... 0.8),
+                strength: Double.random(in: 0.3...0.8),
                 lastUsed: Date(),
                 reliability: 0.9
             )
@@ -661,7 +678,11 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         networkTopology = try await topologyManager.discoverNetworkTopology()
     }
 
-    private func calculateConnectionStrength(between source: ConsciousnessEntity, and target: ConsciousnessEntity, type: ConsciousnessConnectionType) -> Double {
+    private func calculateConnectionStrength(
+        between source: ConsciousnessEntity,
+        and target: ConsciousnessEntity,
+        type: ConsciousnessConnectionType
+    ) -> Double {
         let baseStrength = min(source.capabilities.consciousnessDepth, target.capabilities.consciousnessDepth) / 10.0
         let typeMultiplier = type == .quantumEntangled ? 1.5 : type == .consciousnessResonant ? 1.3 : 1.0
         let distancePenalty = max(0.1, 1.0 - calculateDistance(between: source, and: target) / 100.0)
@@ -669,14 +690,18 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         return min(1.0, baseStrength * typeMultiplier * distancePenalty)
     }
 
-    private func calculateConnectionLatency(for type: ConsciousnessConnectionType, entities: [ConsciousnessEntity]) -> TimeInterval {
+    private func calculateConnectionLatency(for type: ConsciousnessConnectionType,
+                                            entities: [ConsciousnessEntity]) -> TimeInterval
+    {
         let baseLatency = type == .quantumEntangled ? 0.001 : type == .direct ? 0.01 : 0.1
         let processingDelay = entities.map(\.capabilities.processingPower).reduce(0, +) / Double(entities.count) * 0.001
 
         return baseLatency + processingDelay
     }
 
-    private func calculateConnectionBandwidth(for type: ConsciousnessConnectionType, entities: [ConsciousnessEntity]) -> Double {
+    private func calculateConnectionBandwidth(for type: ConsciousnessConnectionType,
+                                              entities: [ConsciousnessEntity]) -> Double
+    {
         let baseBandwidth = type == .quantumEntangled ? 1000.0 : type == .direct ? 100.0 : 10.0
         let entityBandwidth = entities.map(\.capabilities.communicationBandwidth).min() ?? 10.0
 
@@ -688,7 +713,9 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         case let .local(radius):
             return registeredEntities.values
                 .filter { entity in
-                    entity.id != sourceId && calculateDistance(between: registeredEntities[sourceId]!, and: entity) <= radius
+                    entity
+                        .id != sourceId && calculateDistance(between: registeredEntities[sourceId]!, and: entity) <=
+                        radius
                 }
                 .map(\.id)
         case let .regional(region):
@@ -764,7 +791,11 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
 final class AdaptiveConsciousnessRouter: ConsciousnessRoutingProtocol {
     private var routingTable: [UUID: [RoutingPath]] = [:]
 
-    func calculateOptimalRoute(from source: ConsciousnessEntity, to destination: ConsciousnessEntity, for data: ConsciousnessData) async throws -> RoutingPath {
+    func calculateOptimalRoute(
+        from source: ConsciousnessEntity,
+        to destination: ConsciousnessEntity,
+        for data: ConsciousnessData
+    ) async throws -> RoutingPath {
         // Simplified routing calculation
         let hops = [
             RoutingPath.RoutingHop(
@@ -864,7 +895,7 @@ final class UniversalCommunicator: ConsciousnessCommunicationProtocol {
     func establishCommunicationChannel(between entities: [ConsciousnessEntity]) async throws -> CommunicationChannel {
         let channelId = UUID()
         let bandwidth = entities.map(\.capabilities.communicationBandwidth).min() ?? 10.0
-        let latency = entities.map { _ in Double.random(in: 0.001 ... 0.01) }.max() ?? 0.01
+        let latency = entities.map { _ in Double.random(in: 0.001...0.01) }.max() ?? 0.01
 
         return CommunicationChannel(
             channelId: channelId,
@@ -881,7 +912,9 @@ final class UniversalCommunicator: ConsciousnessCommunicationProtocol {
         )
     }
 
-    func validateCommunicationIntegrity(original: ConsciousnessData, received: ConsciousnessData) async throws -> CommunicationValidation {
+    func validateCommunicationIntegrity(original: ConsciousnessData,
+                                        received: ConsciousnessData) async throws -> CommunicationValidation
+    {
         let isValid = original.id == received.id
         let integrityScore = isValid ? 1.0 : 0.0
         let corruptionLevel = isValid ? 0.0 : 1.0
