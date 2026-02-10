@@ -9,10 +9,10 @@
 //  for comprehensive observability across all applications.
 //
 
-import Foundation
-import SwiftData
 import Combine
+import Foundation
 import Network
+import SwiftData
 
 // MARK: - Core Monitoring Engine
 
@@ -40,7 +40,7 @@ public final class MonitoringEngine {
 
     /// Start a new trace
     public func startTrace(name: String, attributes: [String: String] = [:]) -> TraceSpan {
-        return tracer.startTrace(name: name, attributes: attributes)
+        tracer.startTrace(name: name, attributes: attributes)
     }
 
     /// Record a metric
@@ -60,7 +60,7 @@ public final class MonitoringEngine {
 
     /// Get monitoring dashboard data
     public func getDashboardData(timeRange: DateInterval) async -> MonitoringDashboard {
-        return await MonitoringDashboard.create(
+        await MonitoringDashboard.create(
             metrics: metricsCollector.getMetrics(in: timeRange),
             traces: tracer.getTraces(in: timeRange),
             logs: logAggregator.getLogs(in: timeRange),
@@ -112,11 +112,11 @@ public final class MonitoringEngine {
 
     private func collectHealthMetrics() async -> [HealthMetric] {
         // Collect system health metrics
-        return [
+        [
             HealthMetric(name: "MemoryUsage", value: 0.7, threshold: 0.9, unit: "percentage"),
             HealthMetric(name: "CPUUsage", value: 0.6, threshold: 0.8, unit: "percentage"),
             HealthMetric(name: "NetworkLatency", value: 50, threshold: 200, unit: "ms"),
-            HealthMetric(name: "ErrorRate", value: 0.02, threshold: 0.05, unit: "percentage")
+            HealthMetric(name: "ErrorRate", value: 0.02, threshold: 0.05, unit: "percentage"),
         ]
     }
 }
@@ -128,7 +128,7 @@ private final class DistributedTracer {
     private var activeSpans: [String: TraceSpan] = [:]
     private var completedTraces: [Trace] = []
     private let traceQueue = DispatchQueue(label: "com.tools-automation.monitoring.tracer")
-    private var settings: TracingSettings = TracingSettings()
+    private var settings: TracingSettings = .init()
 
     func configure(_ settings: TracingSettings) {
         self.settings = settings
@@ -182,7 +182,7 @@ private final class DistributedTracer {
     }
 
     func getTraces(in timeRange: DateInterval) -> [Trace] {
-        return traceQueue.sync {
+        traceQueue.sync {
             self.completedTraces.filter { trace in
                 timeRange.contains(trace.startTime)
             }
@@ -190,7 +190,7 @@ private final class DistributedTracer {
     }
 
     func getActiveSpans() -> [TraceSpan] {
-        return traceQueue.sync {
+        traceQueue.sync {
             Array(self.activeSpans.values)
         }
     }
@@ -202,7 +202,7 @@ private final class DistributedTracer {
 private final class MetricsCollector {
     private var metrics: [Metric] = []
     private let metricsQueue = DispatchQueue(label: "com.tools-automation.monitoring.metrics")
-    private var settings: MetricsSettings = MetricsSettings()
+    private var settings: MetricsSettings = .init()
 
     func configure(_ settings: MetricsSettings) {
         self.settings = settings
@@ -223,7 +223,7 @@ private final class MetricsCollector {
     }
 
     func getMetrics(in timeRange: DateInterval) -> [Metric] {
-        return metricsQueue.sync {
+        metricsQueue.sync {
             self.metrics.filter { timeRange.contains($0.timestamp) }
         }
     }
@@ -235,7 +235,7 @@ private final class MetricsCollector {
             return MetricAggregation(type: type, count: 0, average: 0, min: 0, max: 0, p95: 0, p99: 0)
         }
 
-        let values = relevantMetrics.map { $0.value }
+        let values = relevantMetrics.map(\.value)
         let sortedValues = values.sorted()
 
         return MetricAggregation(
@@ -256,7 +256,7 @@ private final class MetricsCollector {
 private final class LogAggregator {
     private var logEvents: [LogEvent] = []
     private let logQueue = DispatchQueue(label: "com.tools-automation.monitoring.logs")
-    private var settings: LoggingSettings = LoggingSettings()
+    private var settings: LoggingSettings = .init()
 
     func configure(_ settings: LoggingSettings) {
         self.settings = settings
@@ -277,15 +277,15 @@ private final class LogAggregator {
     }
 
     func getLogs(in timeRange: DateInterval) -> [LogEvent] {
-        return logQueue.sync {
+        logQueue.sync {
             self.logEvents.filter { timeRange.contains($0.timestamp) }
         }
     }
 
     func searchLogs(query: String, timeRange: DateInterval) -> [LogEvent] {
-        return getLogs(in: timeRange).filter { event in
+        getLogs(in: timeRange).filter { event in
             event.message.localizedCaseInsensitiveContains(query) ||
-            event.metadata.values.contains(where: { "\($0)".localizedCaseInsensitiveContains(query) })
+                event.metadata.values.contains(where: { "\($0)".localizedCaseInsensitiveContains(query) })
         }
     }
 }
@@ -296,7 +296,7 @@ private final class LogAggregator {
 private final class AlertManager {
     private var activeAlerts: [Alert] = []
     private let alertQueue = DispatchQueue(label: "com.tools-automation.monitoring.alerts")
-    private var settings: AlertSettings = AlertSettings()
+    private var settings: AlertSettings = .init()
 
     func configure(_ settings: AlertSettings) {
         self.settings = settings
@@ -329,13 +329,13 @@ private final class AlertManager {
     }
 
     func getActiveAlerts() -> [Alert] {
-        return alertQueue.sync {
+        alertQueue.sync {
             self.activeAlerts
         }
     }
 
     func getAlerts(severity: AlertSeverity, timeRange: DateInterval) -> [Alert] {
-        return alertQueue.sync {
+        alertQueue.sync {
             self.activeAlerts.filter { alert in
                 alert.severity == severity && timeRange.contains(alert.timestamp)
             }
@@ -355,7 +355,14 @@ public struct TraceSpan {
     public let attributes: [String: String]
     public let parentId: String?
 
-    public init(id: String, traceId: String, name: String, startTime: Date, attributes: [String: String] = [:], parentId: String? = nil) {
+    public init(
+        id: String,
+        traceId: String,
+        name: String,
+        startTime: Date,
+        attributes: [String: String] = [:],
+        parentId: String? = nil
+    ) {
         self.id = id
         self.traceId = traceId
         self.name = name
@@ -387,7 +394,14 @@ public struct Metric {
     public let tags: [String: String]
     public let timestamp: Date
 
-    public init(name: String, type: MetricType, value: Double, unit: String = "", tags: [String: String] = [:], timestamp: Date = Date()) {
+    public init(
+        name: String,
+        type: MetricType,
+        value: Double,
+        unit: String = "",
+        tags: [String: String] = [:],
+        timestamp: Date = Date()
+    ) {
         self.name = name
         self.type = type
         self.value = value
@@ -418,7 +432,13 @@ public struct LogEvent {
     public let metadata: [String: Any]
     public let timestamp: Date
 
-    public init(level: LogLevel, message: String, source: String, metadata: [String: Any] = [:], timestamp: Date = Date()) {
+    public init(
+        level: LogLevel,
+        message: String,
+        source: String,
+        metadata: [String: Any] = [:],
+        timestamp: Date = Date()
+    ) {
         self.level = level
         self.message = message
         self.source = source
@@ -440,7 +460,15 @@ public struct Alert {
     public let source: String
     public let timestamp: Date
 
-    public init(id: String, type: AlertType, severity: AlertSeverity, title: String, description: String, source: String, timestamp: Date = Date()) {
+    public init(
+        id: String,
+        type: AlertType,
+        severity: AlertSeverity,
+        title: String,
+        description: String,
+        source: String,
+        timestamp: Date = Date()
+    ) {
         self.id = id
         self.type = type
         self.severity = severity
@@ -473,14 +501,19 @@ public struct MonitoringDashboard {
     public let alerts: [Alert]
     public let generatedAt: Date
 
-    public static func create(metrics: [Metric], traces: [Trace], logs: [LogEvent], alerts: [Alert]) -> MonitoringDashboard {
+    public static func create(metrics: [Metric], traces: [Trace], logs: [LogEvent],
+                              alerts: [Alert]) -> MonitoringDashboard
+    {
         // Aggregate metrics by type
         let timeRange = DateInterval(start: Date().addingTimeInterval(-3600), end: Date()) // Last hour
         var aggregations: [MetricAggregation] = []
 
         for type in [MetricType.counter, .gauge, .histogram, .summary] {
-            let aggregation = MonitoringEngine.shared.metricsCollector.getAggregatedMetrics(type: type, timeRange: timeRange)
-            if aggregation.count > 0 {
+            let aggregation = MonitoringEngine.shared.metricsCollector.getAggregatedMetrics(
+                type: type,
+                timeRange: timeRange
+            )
+            if !aggregation.isEmpty {
                 aggregations.append(aggregation)
             }
         }
@@ -506,7 +539,8 @@ public struct MonitoringSettings {
     public init(tracing: TracingSettings = TracingSettings(),
                 metrics: MetricsSettings = MetricsSettings(),
                 logging: LoggingSettings = LoggingSettings(),
-                alerts: AlertSettings = AlertSettings()) {
+                alerts: AlertSettings = AlertSettings())
+    {
         self.tracing = tracing
         self.metrics = metrics
         self.logging = logging
@@ -523,7 +557,8 @@ public struct TracingSettings {
     public init(enabled: Bool = true,
                 sampleRate: Double = 1.0,
                 maxSpansPerTrace: Int = 100,
-                retentionPeriod: TimeInterval = 604800) { // 7 days
+                retentionPeriod: TimeInterval = 604_800)
+    { // 7 days
         self.enabled = enabled
         self.sampleRate = sampleRate
         self.maxSpansPerTrace = maxSpansPerTrace
@@ -539,8 +574,9 @@ public struct MetricsSettings {
 
     public init(enabled: Bool = true,
                 collectionInterval: TimeInterval = 60,
-                retentionPeriod: TimeInterval = 2592000, // 30 days
-                maxMetricsPerCollection: Int = 1000) {
+                retentionPeriod: TimeInterval = 2_592_000, // 30 days
+                maxMetricsPerCollection: Int = 1000)
+    {
         self.enabled = enabled
         self.collectionInterval = collectionInterval
         self.retentionPeriod = retentionPeriod
@@ -556,8 +592,9 @@ public struct LoggingSettings {
 
     public init(enabled: Bool = true,
                 level: LogLevel = .info,
-                retentionPeriod: TimeInterval = 2592000, // 30 days
-                maxLogsPerHour: Int = 10000) {
+                retentionPeriod: TimeInterval = 2_592_000, // 30 days
+                maxLogsPerHour: Int = 10000)
+    {
         self.enabled = enabled
         self.level = level
         self.retentionPeriod = retentionPeriod
@@ -572,9 +609,10 @@ public struct AlertSettings {
     public let notificationChannels: [String]
 
     public init(enabled: Bool = true,
-                alertRetentionPeriod: TimeInterval = 604800, // 7 days
+                alertRetentionPeriod: TimeInterval = 604_800, // 7 days
                 maxAlertsPerHour: Int = 100,
-                notificationChannels: [String] = ["console"]) {
+                notificationChannels: [String] = ["console"])
+    {
         self.enabled = enabled
         self.alertRetentionPeriod = alertRetentionPeriod
         self.maxAlertsPerHour = maxAlertsPerHour
@@ -587,7 +625,7 @@ public struct AlertSettings {
 extension MonitoringEngine {
     var metricsCollector: MetricsCollector {
         // Access to private property for internal use
-        return self.metricsCollector
+        self.metricsCollector
     }
 }
 

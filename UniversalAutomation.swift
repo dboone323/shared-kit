@@ -499,7 +499,7 @@ public final class UniversalAutomation: ObservableObject {
         // This would integrate with file system monitoring, git hooks, CI/CD webhooks, etc.
     }
 
-    // Placeholder implementations for other task types
+    /// Placeholder implementations for other task types
     private func executeCICDOptimization(_ task: AutomationTask) async throws -> AutomationResult {
         let result = try await quantumOptimizer.optimizeCIDCPipeline(for: task.project)
         return .optimization(result)

@@ -1609,7 +1609,7 @@ final class UniversalConsciousnessHarmonyDatabase {
 
     func getHarmonyMetrics() async throws -> HarmonyMetrics {
         let totalFields = harmonyFields.count
-        let activeFields = harmonyFields.values.filter { $0.fieldStability > 0.7 }.count
+        let activeFields = harmonyFields.values.count(where: { $0.fieldStability > 0.7 })
         let totalHarmonies = dimensionalHarmonies.count
         let averageHarmony = dimensionalHarmonies.values.map(\.dimensionalBalance).reduce(0, +) / Double(max(
             dimensionalHarmonies.count,

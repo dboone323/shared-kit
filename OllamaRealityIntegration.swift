@@ -942,19 +942,19 @@ private struct ConnectionStatusView: View {
 
     private var statusColor: Color {
         switch status {
-        case .connected: return .green
-        case .connecting: return .yellow
-        case .disconnected: return .red
-        case .error: return .red
+        case .connected: .green
+        case .connecting: .yellow
+        case .disconnected: .red
+        case .error: .red
         }
     }
 
     private var statusText: String {
         switch status {
-        case .connected: return "Connected to Reality"
-        case .connecting: return "Connecting..."
-        case .disconnected: return "Disconnected"
-        case let .error(message): return "Error: \(message)"
+        case .connected: "Connected to Reality"
+        case .connecting: "Connecting..."
+        case .disconnected: "Disconnected"
+        case let .error(message): "Error: \(message)"
         }
     }
 }

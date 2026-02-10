@@ -8,7 +8,7 @@
 
 import Foundation
 
-// Supporting types
+/// Supporting types
 public enum MoodRating: Int, CaseIterable {
     case veryPoor = 1
     case poor, fair, good, excellent

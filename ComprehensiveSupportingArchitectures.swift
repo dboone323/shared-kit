@@ -865,7 +865,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
                 successCriteriaMet[criterion.criterionId] = met
             }
 
-            let overallSuccess = successCriteriaMet.values.allSatisfy { $0 }
+            let overallSuccess = successCriteriaMet.values.allSatisfy(\.self)
             let overallPerformance =
                 stageResults.values.map(\.performance).reduce(0, +) / Double(stageResults.count)
             let overallQuantumAchievement =
@@ -1002,7 +1002,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
     ) -> [ComponentOptimization] {
         switch strategy {
         case .performance_optimization:
-            return [
+            [
                 ComponentOptimization(
                     optimizationType: .performance_tuning,
                     description:
@@ -1019,7 +1019,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
             ]
 
         case .quantum_optimization:
-            return [
+            [
                 ComponentOptimization(
                     optimizationType: .quantum_enhancement,
                     description: "Enhanced quantum capabilities",
@@ -1035,7 +1035,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
             ]
 
         case .harmony_optimization:
-            return [
+            [
                 ComponentOptimization(
                     optimizationType: .harmony_alignment,
                     description: "Aligned component with universal harmony",
@@ -1045,7 +1045,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
             ]
 
         case .evolution_optimization:
-            return [
+            [
                 ComponentOptimization(
                     optimizationType: .evolution_acceleration,
                     description: "Accelerated evolutionary development",
@@ -1055,7 +1055,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
             ]
 
         case .consciousness_optimization:
-            return [
+            [
                 ComponentOptimization(
                     optimizationType: .consciousness_integration,
                     description: "Enhanced consciousness integration",
@@ -1065,7 +1065,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
             ]
 
         case .universal_optimization:
-            return [
+            [
                 ComponentOptimization(
                     optimizationType: .performance_tuning,
                     description: "Universal performance tuning",

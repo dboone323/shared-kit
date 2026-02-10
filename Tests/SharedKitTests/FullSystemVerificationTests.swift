@@ -17,10 +17,12 @@ final class FullSystemVerificationTests: XCTestCase {
         ]
 
         let recommendations = await intelligence.recommendTools(
-            for: "Find the capital of France", availableTools: tools)
+            for: "Find the capital of France", availableTools: tools
+        )
         XCTAssertFalse(recommendations.isEmpty, "Should return recommendations")
         XCTAssertEqual(
-            recommendations.first, "search", "Should recommend search for information retrieval")
+            recommendations.first, "search", "Should recommend search for information retrieval"
+        )
 
         // 2. Predictive Health
         let prediction = await intelligence.predictHealth(for: "llama2")
@@ -60,7 +62,7 @@ final class FullSystemVerificationTests: XCTestCase {
         // Normal operation should pass
         do {
             let result = try await reliability.executeProtected(service: "test-service") {
-                return "success"
+                "success"
             }
             XCTAssertEqual(result, "success")
         } catch {
@@ -70,12 +72,12 @@ final class FullSystemVerificationTests: XCTestCase {
         // 3. Request Deduplication
         // We'll launch two identical requests simultaneously
         async let r1 = reliability.executeDeduplicated(id: "req-1") {
-            try await Task.sleep(nanoseconds: 100_000_000)  // 0.1s
+            try await Task.sleep(nanoseconds: 100_000_000) // 0.1s
             return "deduped"
         }
         async let r2 = reliability.executeDeduplicated(id: "req-1") {
             // This body shouldn't verify execution count easily here, but result should match
-            return "deduped"
+            "deduped"
         }
 
         let (res1, res2) = try! await (r1, r2)
@@ -86,7 +88,7 @@ final class FullSystemVerificationTests: XCTestCase {
         // Simulate a transient error then success?
         // For now verify it works with success
         let retryRes = try? await reliability.executeWithRetry {
-            return "retried"
+            "retried"
         }
         XCTAssertEqual(retryRes, "retried")
 
@@ -117,7 +119,7 @@ final class FullSystemVerificationTests: XCTestCase {
         let admin = UserContext(id: "1", role: .admin)
         let user = UserContext(id: "2", role: .user)
 
-        try await security.checkPermission(user: admin, action: .delete)  // Admin can delete
+        try await security.checkPermission(user: admin, action: .delete) // Admin can delete
 
         do {
             try await security.checkPermission(user: user, action: .delete)

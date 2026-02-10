@@ -1348,12 +1348,12 @@ final class BasicResourceManagementEngine: ResourceManagementEngine {
         -> ResourcePool
     {
         switch type {
-        case .energy: return city.resources.energy
-        case .water: return city.resources.water
-        case .food: return city.resources.food
-        case .materials: return city.resources.materials
-        case .digital: return city.resources.digital
-        case .human: return city.resources.human
+        case .energy: city.resources.energy
+        case .water: city.resources.water
+        case .food: city.resources.food
+        case .materials: city.resources.materials
+        case .digital: city.resources.digital
+        case .human: city.resources.human
         }
     }
 }

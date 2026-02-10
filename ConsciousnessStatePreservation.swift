@@ -642,11 +642,11 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
     private func determineMemoryType(for level: PreservationLevel) -> QuantumMemoryType {
         switch level {
         case .temporary:
-            return .atomicEnsemble
+            .atomicEnsemble
         case .longTerm:
-            return .superconducting
+            .superconducting
         case .indefinite:
-            return .topological
+            .topological
         }
     }
 
@@ -669,11 +669,11 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
     private func calculateEstimatedLifespan(for level: PreservationLevel) -> TimeInterval {
         switch level {
         case let .temporary(duration):
-            return duration
+            duration
         case let .longTerm(retention):
-            return retention
+            retention
         case .indefinite:
-            return 3_153_600_000 // 100 years
+            3_153_600_000 // 100 years
         }
     }
 

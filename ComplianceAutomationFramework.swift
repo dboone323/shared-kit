@@ -9,10 +9,10 @@
 //  for enterprise standards including GDPR, HIPAA, SOC2, and PCI DSS.
 //
 
-import Foundation
-import SwiftData
 import Combine
 import CryptoKit
+import Foundation
+import SwiftData
 
 // MARK: - Core Compliance Engine
 
@@ -44,7 +44,7 @@ public final class ComplianceEngine {
 
     /// Check compliance status for all standards
     public func getComplianceStatus() async -> ComplianceStatusReport {
-        return await ComplianceStatusReport.create(
+        await ComplianceStatusReport.create(
             gdpr: gdprManager.getStatus(),
             hipaa: hipaaManager.getStatus(),
             soc2: soc2Manager.getStatus(),
@@ -68,7 +68,7 @@ public final class ComplianceEngine {
 
     /// Handle data subject request (GDPR)
     public func handleDataSubjectRequest(_ request: DataSubjectRequest) async throws -> DataSubjectResponse {
-        return try await gdprManager.handleDataSubjectRequest(request)
+        try await gdprManager.handleDataSubjectRequest(request)
     }
 
     /// Log audit event
@@ -78,7 +78,7 @@ public final class ComplianceEngine {
 
     /// Classify data sensitivity
     public func classifyData(_ data: String) async -> DataClassification {
-        return await dataClassifier.classify(data)
+        await dataClassifier.classify(data)
     }
 
     /// Configure compliance settings
@@ -131,10 +131,10 @@ public final class ComplianceEngine {
         var violations: [ComplianceViolation] = []
 
         // Collect violations from all compliance managers
-        violations.append(contentsOf: await gdprManager.checkViolations())
-        violations.append(contentsOf: await hipaaManager.checkViolations())
-        violations.append(contentsOf: await soc2Manager.checkViolations())
-        violations.append(contentsOf: await pciManager.checkViolations())
+        await violations.append(contentsOf: gdprManager.checkViolations())
+        await violations.append(contentsOf: hipaaManager.checkViolations())
+        await violations.append(contentsOf: soc2Manager.checkViolations())
+        await violations.append(contentsOf: pciManager.checkViolations())
 
         return violations
     }
@@ -163,7 +163,7 @@ public final class ComplianceEngine {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class GDPRManager {
-    private var settings: GDPRSettings = GDPRSettings()
+    private var settings: GDPRSettings = .init()
     private var dataSubjectRequests: [DataSubjectRequest] = []
 
     func configure(_ settings: GDPRSettings) {
@@ -171,7 +171,7 @@ private final class GDPRManager {
     }
 
     func getStatus() -> ComplianceStatus {
-        return ComplianceStatus(
+        ComplianceStatus(
             standard: .gdpr,
             compliant: true, // Would check actual compliance
             lastAuditDate: Date(),
@@ -231,14 +231,14 @@ private final class GDPRManager {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class HIPAAmanager {
-    private var settings: HIPAAsettings = HIPAAsettings()
+    private var settings: HIPAAsettings = .init()
 
     func configure(_ settings: HIPAAsettings) {
         self.settings = settings
     }
 
     func getStatus() -> ComplianceStatus {
-        return ComplianceStatus(
+        ComplianceStatus(
             standard: .hipaa,
             compliant: settings.enabled ? true : false, // Only compliant if HIPAA is enabled
             lastAuditDate: Date(),
@@ -281,14 +281,14 @@ private final class HIPAAmanager {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class SOC2Manager {
-    private var settings: SOC2Settings = SOC2Settings()
+    private var settings: SOC2Settings = .init()
 
     func configure(_ settings: SOC2Settings) {
         self.settings = settings
     }
 
     func getStatus() -> ComplianceStatus {
-        return ComplianceStatus(
+        ComplianceStatus(
             standard: .soc2,
             compliant: settings.enabled ? true : false,
             lastAuditDate: Date(),
@@ -332,14 +332,14 @@ private final class SOC2Manager {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class PCIManager {
-    private var settings: PCISettings = PCISettings()
+    private var settings: PCISettings = .init()
 
     func configure(_ settings: PCISettings) {
         self.settings = settings
     }
 
     func getStatus() -> ComplianceStatus {
-        return ComplianceStatus(
+        ComplianceStatus(
             standard: .pci,
             compliant: settings.enabled ? true : false,
             lastAuditDate: Date(),
@@ -386,7 +386,7 @@ private final class PCIManager {
 private final class AuditLogger {
     private var auditEvents: [AuditEvent] = []
     private let auditQueue = DispatchQueue(label: "com.tools-automation.compliance.audit")
-    private var settings: AuditSettings = AuditSettings()
+    private var settings: AuditSettings = .init()
 
     func configure(_ settings: AuditSettings) {
         self.settings = settings
@@ -410,10 +410,10 @@ private final class AuditLogger {
     }
 
     func getAuditTrail(for userId: String? = nil, timeRange: DateInterval) -> [AuditEvent] {
-        return auditQueue.sync {
+        auditQueue.sync {
             var events = self.auditEvents.filter { timeRange.contains($0.timestamp) }
 
-            if let userId = userId {
+            if let userId {
                 events = events.filter { $0.userId == userId }
             }
 
@@ -466,7 +466,12 @@ public struct ComplianceStatusReport {
     public let standards: [ComplianceStatus]
     public let generatedAt: Date
 
-    public static func create(gdpr: ComplianceStatus, hipaa: ComplianceStatus, soc2: ComplianceStatus, pci: ComplianceStatus) -> ComplianceStatusReport {
+    public static func create(
+        gdpr: ComplianceStatus,
+        hipaa: ComplianceStatus,
+        soc2: ComplianceStatus,
+        pci: ComplianceStatus
+    ) -> ComplianceStatusReport {
         let standards = [gdpr, hipaa, soc2, pci]
         let overallStatus: ComplianceStatus = standards.contains { !$0.compliant } ? .nonCompliant : .compliant
 
@@ -527,28 +532,28 @@ public enum ViolationSeverity {
 
     var recommendationPriority: RecommendationPriority {
         switch self {
-        case .critical: return .urgent
-        case .high: return .high
-        case .medium: return .medium
-        case .low: return .low
+        case .critical: .urgent
+        case .high: .high
+        case .medium: .medium
+        case .low: .low
         }
     }
 
     var estimatedEffort: EffortLevel {
         switch self {
-        case .critical: return .high
-        case .high: return .medium
-        case .medium: return .low
-        case .low: return .low
+        case .critical: .high
+        case .high: .medium
+        case .medium: .low
+        case .low: .low
         }
     }
 
     var daysToRemediate: Int {
         switch self {
-        case .critical: return 7
-        case .high: return 30
-        case .medium: return 90
-        case .low: return 180
+        case .critical: 7
+        case .high: 30
+        case .medium: 90
+        case .low: 180
         }
     }
 }
@@ -634,7 +639,8 @@ public struct ComplianceSettings {
                 hipaa: HIPAAsettings = HIPAAsettings(),
                 soc2: SOC2Settings = SOC2Settings(),
                 pci: PCISettings = PCISettings(),
-                audit: AuditSettings = AuditSettings()) {
+                audit: AuditSettings = AuditSettings())
+    {
         self.gdpr = gdpr
         self.hipaa = hipaa
         self.soc2 = soc2
@@ -652,7 +658,8 @@ public struct GDPRSettings {
     public init(enabled: Bool = true,
                 dataRetentionPeriod: TimeInterval = 2555 * 24 * 60 * 60, // 7 years
                 consentRequired: Bool = true,
-                automatedDeletion: Bool = true) {
+                automatedDeletion: Bool = true)
+    {
         self.enabled = enabled
         self.dataRetentionPeriod = dataRetentionPeriod
         self.consentRequired = consentRequired
@@ -669,7 +676,8 @@ public struct HIPAAsettings {
     public init(enabled: Bool = false,
                 auditLoggingEnabled: Bool = true,
                 encryptionRequired: Bool = true,
-                breachNotificationEnabled: Bool = true) {
+                breachNotificationEnabled: Bool = true)
+    {
         self.enabled = enabled
         self.auditLoggingEnabled = auditLoggingEnabled
         self.encryptionRequired = encryptionRequired
@@ -686,7 +694,8 @@ public struct SOC2Settings {
     public init(enabled: Bool = false,
                 monitoringEnabled: Bool = true,
                 accessControlsEnabled: Bool = true,
-                incidentResponseEnabled: Bool = true) {
+                incidentResponseEnabled: Bool = true)
+    {
         self.enabled = enabled
         self.monitoringEnabled = monitoringEnabled
         self.accessControlsEnabled = accessControlsEnabled
@@ -703,7 +712,8 @@ public struct PCISettings {
     public init(enabled: Bool = false,
                 encryptionEnabled: Bool = true,
                 tokenizationEnabled: Bool = true,
-                networkSegmentationEnabled: Bool = true) {
+                networkSegmentationEnabled: Bool = true)
+    {
         self.enabled = enabled
         self.encryptionEnabled = encryptionEnabled
         self.tokenizationEnabled = tokenizationEnabled
@@ -720,7 +730,8 @@ public struct AuditSettings {
     public init(enabled: Bool = true,
                 retentionPeriod: TimeInterval = 2555 * 24 * 60 * 60, // 7 years
                 logLevel: AuditLogLevel = .detailed,
-                secureStorage: Bool = true) {
+                secureStorage: Bool = true)
+    {
         self.enabled = enabled
         self.retentionPeriod = retentionPeriod
         self.logLevel = logLevel
@@ -742,8 +753,8 @@ extension String {
         let ssnPattern = "\\b\\d{3}-\\d{2}-\\d{4}\\b"
 
         return self.range(of: emailPattern, options: .regularExpression) != nil ||
-               self.range(of: phonePattern, options: .regularExpression) != nil ||
-               self.range(of: ssnPattern, options: .regularExpression) != nil
+            self.range(of: phonePattern, options: .regularExpression) != nil ||
+            self.range(of: ssnPattern, options: .regularExpression) != nil
     }
 
     func containsHealthInformation() -> Bool {

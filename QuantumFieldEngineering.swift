@@ -640,11 +640,11 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     {
         // Determine interaction type based on field types
         if type1 == type2 {
-            return .resonant
+            .resonant
         } else if type1 == .electromagnetic && type2 == .gravitational {
-            return .electromagneticGravitational
+            .electromagneticGravitational
         } else {
-            return .generic
+            .generic
         }
     }
 
@@ -671,7 +671,7 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
     private func findDominantInteractions(_ interactions: [FieldInteraction]) -> [FieldInteraction] {
         // Find dominant interactions
         interactions.sorted { $0.interactionStrength > $1.interactionStrength }
-            .prefix(5).map { $0 }
+            .prefix(5).map(\.self)
     }
 
     private func calculateInteractionStability(_ interactions: [FieldInteraction]) -> Double {
@@ -1722,19 +1722,19 @@ enum FieldError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .manipulationFailed(errors):
-            return "Field manipulation failed with \(errors.count) errors"
+            "Field manipulation failed with \(errors.count) errors"
         case let .transformationFailed(reason):
-            return "Field transformation failed: \(reason)"
+            "Field transformation failed: \(reason)"
         case let .interferenceControlFailed(reason):
-            return "Interference control failed: \(reason)"
+            "Interference control failed: \(reason)"
         case let .resonanceTuningFailed(reason):
-            return "Resonance tuning failed: \(reason)"
+            "Resonance tuning failed: \(reason)"
         case let .boundaryEngineeringFailed(reason):
-            return "Boundary engineering failed: \(reason)"
+            "Boundary engineering failed: \(reason)"
         case let .energyOptimizationFailed(reason):
-            return "Energy optimization failed: \(reason)"
+            "Energy optimization failed: \(reason)"
         case let .coherenceEnhancementFailed(reason):
-            return "Coherence enhancement failed: \(reason)"
+            "Coherence enhancement failed: \(reason)"
         }
     }
 }

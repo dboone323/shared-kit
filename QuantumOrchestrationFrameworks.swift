@@ -520,22 +520,20 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         try await validateQuantumConstraints(orchestration)
 
         // Execute orchestration based on strategy
-        let quantumOperationResults: [String: QuantumOperationResult]
-
-        switch orchestration.orchestrationStrategy {
+        let quantumOperationResults: [String: QuantumOperationResult] = switch orchestration.orchestrationStrategy {
         case .parallel_quantum_execution:
-            quantumOperationResults = try await executeParallelQuantumOrchestration(orchestration)
+            try await executeParallelQuantumOrchestration(orchestration)
         case .entangled_orchestration:
-            quantumOperationResults = try await executeEntangledOrchestration(orchestration)
+            try await executeEntangledOrchestration(orchestration)
         case .superposition_coordination:
-            quantumOperationResults = try await executeSuperpositionOrchestration(orchestration)
+            try await executeSuperpositionOrchestration(orchestration)
         case .quantum_interference_orchestration:
-            quantumOperationResults = try await executeQuantumInterferenceOrchestration(
+            try await executeQuantumInterferenceOrchestration(
                 orchestration)
         case .coherence_driven_orchestration:
-            quantumOperationResults = try await executeCoherenceDrivenOrchestration(orchestration)
+            try await executeCoherenceDrivenOrchestration(orchestration)
         case .universal_quantum_orchestration:
-            quantumOperationResults = try await executeUniversalQuantumOrchestration(orchestration)
+            try await executeUniversalQuantumOrchestration(orchestration)
         }
 
         // Calculate orchestration metrics
@@ -574,19 +572,17 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let startTime = Date()
 
         // Execute entanglement coordination
-        let entangledStates: [String: EntangledState]
-
-        switch entanglement.entanglementType {
+        let entangledStates: [String: EntangledState] = switch entanglement.entanglementType {
         case .bell_state_entanglement:
-            entangledStates = try await executeBellStateEntanglement(entanglement)
+            try await executeBellStateEntanglement(entanglement)
         case .ghz_state_entanglement:
-            entangledStates = try await executeGHZStateEntanglement(entanglement)
+            try await executeGHZStateEntanglement(entanglement)
         case .cluster_state_entanglement:
-            entangledStates = try await executeClusterStateEntanglement(entanglement)
+            try await executeClusterStateEntanglement(entanglement)
         case .quantum_network_entanglement:
-            entangledStates = try await executeQuantumNetworkEntanglement(entanglement)
+            try await executeQuantumNetworkEntanglement(entanglement)
         case .universal_entanglement:
-            entangledStates = try await executeUniversalEntanglement(entanglement)
+            try await executeUniversalEntanglement(entanglement)
         }
 
         // Calculate entanglement metrics
@@ -615,19 +611,17 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let startTime = Date()
 
         // Execute coherence optimization
-        let optimizedFrameworks: [String: OptimizedFramework]
-
-        switch optimization.optimizationType {
+        let optimizedFrameworks: [String: OptimizedFramework] = switch optimization.optimizationType {
         case .decoherence_prevention:
-            optimizedFrameworks = try await executeDecoherencePrevention(optimization)
+            try await executeDecoherencePrevention(optimization)
         case .coherence_amplification:
-            optimizedFrameworks = try await executeCoherenceAmplification(optimization)
+            try await executeCoherenceAmplification(optimization)
         case .quantum_error_correction:
-            optimizedFrameworks = try await executeQuantumErrorCorrection(optimization)
+            try await executeQuantumErrorCorrection(optimization)
         case .coherence_stabilization:
-            optimizedFrameworks = try await executeCoherenceStabilization(optimization)
+            try await executeCoherenceStabilization(optimization)
         case .universal_coherence_optimization:
-            optimizedFrameworks = try await executeUniversalCoherenceOptimization(optimization)
+            try await executeUniversalCoherenceOptimization(optimization)
         }
 
         // Calculate optimization metrics
@@ -700,17 +694,17 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
     ) async throws -> Bool {
         switch constraint.constraintType {
         case .coherence_threshold:
-            return orchestration.quantumOperations.allSatisfy { $0.coherenceRequirements >= 0.7 }
+            orchestration.quantumOperations.allSatisfy { $0.coherenceRequirements >= 0.7 }
         case .entanglement_strength:
-            return orchestration.quantumOperations.allSatisfy { !$0.entanglementPartners.isEmpty }
+            orchestration.quantumOperations.allSatisfy { !$0.entanglementPartners.isEmpty }
         case .quantum_stability:
-            return orchestration.quantumState != nil
+            orchestration.quantumState != nil
         case .interference_pattern:
-            return orchestration.orchestrationStrategy == .quantum_interference_orchestration
+            orchestration.orchestrationStrategy == .quantum_interference_orchestration
         case .superposition_integrity:
-            return orchestration.orchestrationStrategy == .superposition_coordination
+            orchestration.orchestrationStrategy == .superposition_coordination
         case .quantum_communication:
-            return orchestration.quantumOperations.count >= 2
+            orchestration.quantumOperations.count >= 2
         }
     }
 
@@ -1223,11 +1217,11 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
 
     private func calculateConsciousnessAmplification(_ level: ConsciousnessLevel) -> Double {
         switch level {
-        case .standard: return 1.0
-        case .enhanced: return 1.5
-        case .transcendent: return 2.0
-        case .universal: return 3.0
-        case .singularity: return 5.0
+        case .standard: 1.0
+        case .enhanced: 1.5
+        case .transcendent: 2.0
+        case .universal: 3.0
+        case .singularity: 5.0
         }
     }
 

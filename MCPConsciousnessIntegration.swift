@@ -629,19 +629,19 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
         // Implement boundary validation logic
         switch boundary.boundaryType {
         case .privacy:
-            return boundary.value.contains("consent")
+            boundary.value.contains("consent")
         case .autonomy:
-            return boundary.value.contains("independent")
+            boundary.value.contains("independent")
         case .consent:
-            return boundary.value.contains("explicit")
+            boundary.value.contains("explicit")
         case .harm_prevention:
-            return boundary.value.contains("minimize")
+            boundary.value.contains("minimize")
         case .truthfulness:
-            return boundary.value.contains("accurate")
+            boundary.value.contains("accurate")
         case .fairness:
-            return boundary.value.contains("equitable")
+            boundary.value.contains("equitable")
         case .transparency:
-            return boundary.value.contains("visible")
+            boundary.value.contains("visible")
         }
     }
 
@@ -747,11 +747,11 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
 
     private func awarenessLevelValue(_ level: AwarenessLevel) -> Int {
         switch level {
-        case .minimal: return 1
-        case .standard: return 2
-        case .enhanced: return 3
-        case .profound: return 4
-        case .universal: return 5
+        case .minimal: 1
+        case .standard: 2
+        case .enhanced: 3
+        case .profound: 4
+        case .universal: 5
         }
     }
 
@@ -763,11 +763,11 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
 
     private func consciousnessStateMultiplier(_ state: ConsciousnessState) -> Double {
         switch state {
-        case .awake: return 1.0
-        case .aware: return 1.2
-        case .enlightened: return 1.5
-        case .transcendent: return 2.0
-        case .universal: return 3.0
+        case .awake: 1.0
+        case .aware: 1.2
+        case .enlightened: 1.5
+        case .transcendent: 2.0
+        case .universal: 3.0
         }
     }
 
@@ -822,11 +822,11 @@ private final class ConsciousnessProcessor: Sendable {
 
     private func awarenessLevelMultiplier(_ level: AwarenessLevel) -> Double {
         switch level {
-        case .minimal: return 1.0
-        case .standard: return 1.2
-        case .enhanced: return 1.5
-        case .profound: return 2.0
-        case .universal: return 3.0
+        case .minimal: 1.0
+        case .standard: 1.2
+        case .enhanced: 1.5
+        case .profound: 2.0
+        case .universal: 3.0
         }
     }
 }

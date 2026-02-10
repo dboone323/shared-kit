@@ -9,10 +9,10 @@
 //  for scalable deployment across organizations and user groups.
 //
 
-import Foundation
-import SwiftData
 import Combine
+import Foundation
 import Network
+import SwiftData
 
 // MARK: - Core Enterprise Engine
 
@@ -43,7 +43,7 @@ public final class EnterpriseEngine: Sendable {
 
     /// Get current tenant context
     public func getCurrentTenant() async -> Tenant? {
-        return await tenantManager.getCurrentTenant()
+        await tenantManager.getCurrentTenant()
     }
 
     /// Switch tenant context
@@ -53,17 +53,17 @@ public final class EnterpriseEngine: Sendable {
 
     /// Get tenant-specific configuration
     public func getTenantConfiguration(for tenantId: String) async throws -> TenantConfiguration {
-        return try await tenantManager.getConfiguration(for: tenantId)
+        try await tenantManager.getConfiguration(for: tenantId)
     }
 
     /// Monitor enterprise metrics
     public func getEnterpriseMetrics() async -> EnterpriseMetrics {
-        return await scalingManager.getMetrics()
+        await scalingManager.getMetrics()
     }
 
     /// Check compliance status
     public func getComplianceStatus(for tenantId: String) async -> ComplianceStatus {
-        return await complianceManager.getStatus(for: tenantId)
+        await complianceManager.getStatus(for: tenantId)
     }
 
     /// Scale resources based on demand
@@ -113,10 +113,11 @@ private final class TenantManager: @unchecked Sendable {
     }
 
     func getCurrentTenant() async -> Tenant? {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             tenantQueue.async {
                 guard let tenantId = self.currentTenantId,
-                      let config = self.tenantConfigurations[tenantId] else {
+                      let config = self.tenantConfigurations[tenantId]
+                else {
                     continuation.resume(returning: nil)
                     return
                 }
@@ -134,7 +135,7 @@ private final class TenantManager: @unchecked Sendable {
     }
 
     func switchTenant(to tenantId: String) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             tenantQueue.async {
                 guard self.tenantConfigurations[tenantId] != nil else {
                     continuation.resume(throwing: EnterpriseError.tenantNotFound(tenantId))
@@ -148,7 +149,7 @@ private final class TenantManager: @unchecked Sendable {
     }
 
     func getConfiguration(for tenantId: String) async throws -> TenantConfiguration {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             tenantQueue.async {
                 guard let config = self.tenantConfigurations[tenantId] else {
                     continuation.resume(throwing: EnterpriseError.tenantNotFound(tenantId))
@@ -190,7 +191,7 @@ private final class ResourceManager: @unchecked Sendable {
     }
 
     func checkResourceUsage(for tenantId: String) async -> ResourceUsage {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             resourceQueue.async {
                 let allocation = self.resourceAllocations[tenantId]
                 // In a real implementation, this would check actual usage
@@ -210,7 +211,7 @@ private final class ResourceManager: @unchecked Sendable {
         let usage = await checkResourceUsage(for: tenantId)
         let allocation = resourceAllocations[tenantId]
 
-        if let allocation = allocation {
+        if let allocation {
             if usage.storageUsed > allocation.storageLimit {
                 throw EnterpriseError.resourceLimitExceeded("Storage limit exceeded for tenant \(tenantId)")
             }
@@ -257,7 +258,7 @@ private final class ComplianceManager: @unchecked Sendable {
     }
 
     func getStatus(for tenantId: String) async -> ComplianceStatus {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             complianceQueue.async {
                 let status = self.complianceStatuses[tenantId] ?? ComplianceStatus(
                     tenantId: tenantId,
@@ -339,7 +340,7 @@ private final class ScalingManager: @unchecked Sendable {
     }
 
     func getMetrics() async -> EnterpriseMetrics {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             scalingQueue.async {
                 // Aggregate metrics across all tenants
                 let metrics = EnterpriseMetrics(
@@ -497,7 +498,8 @@ public struct EnterpriseSettings {
     public init(tenant: TenantSettings = TenantSettings(),
                 resource: ResourceSettings = ResourceSettings(),
                 compliance: ComplianceSettings = ComplianceSettings(),
-                scaling: ScalingSettings = ScalingSettings()) {
+                scaling: ScalingSettings = ScalingSettings())
+    {
         self.tenant = tenant
         self.resource = resource
         self.compliance = compliance
@@ -512,7 +514,8 @@ public struct TenantSettings {
 
     public init(allowTenantSwitching: Bool = true,
                 maxTenantsPerUser: Int = 5,
-                tenantIsolationLevel: IsolationLevel = .logical) {
+                tenantIsolationLevel: IsolationLevel = .logical)
+    {
         self.allowTenantSwitching = allowTenantSwitching
         self.maxTenantsPerUser = maxTenantsPerUser
         self.tenantIsolationLevel = tenantIsolationLevel
@@ -530,7 +533,8 @@ public struct ResourceSettings {
 
     public init(autoScalingEnabled: Bool = true,
                 resourceMonitoringInterval: TimeInterval = 300,
-                overagePolicy: OveragePolicy = .throttle) {
+                overagePolicy: OveragePolicy = .throttle)
+    {
         self.autoScalingEnabled = autoScalingEnabled
         self.resourceMonitoringInterval = resourceMonitoringInterval
         self.overagePolicy = overagePolicy
@@ -548,7 +552,8 @@ public struct ComplianceSettings {
 
     public init(auditLogRetention: TimeInterval = 2555 * 24 * 60 * 60, // 7 years
                 complianceCheckInterval: TimeInterval = 86400, // daily
-                autoRemediationEnabled: Bool = false) {
+                autoRemediationEnabled: Bool = false)
+    {
         self.auditLogRetention = auditLogRetention
         self.complianceCheckInterval = complianceCheckInterval
         self.autoRemediationEnabled = autoRemediationEnabled
@@ -564,7 +569,8 @@ public struct ScalingSettings {
     public init(minLoadThreshold: Double = 0.3,
                 maxLoadThreshold: Double = 0.8,
                 scaleUpCooldown: TimeInterval = 300,
-                scaleDownCooldown: TimeInterval = 600) {
+                scaleDownCooldown: TimeInterval = 600)
+    {
         self.minLoadThreshold = minLoadThreshold
         self.maxLoadThreshold = maxLoadThreshold
         self.scaleUpCooldown = scaleUpCooldown

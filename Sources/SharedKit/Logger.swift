@@ -13,7 +13,7 @@ import Foundation
 #if canImport(OSLog)
     import OSLog
 #else
-    // Shim for Linux
+    /// Shim for Linux
     public struct OSLog: Sendable {
         let subsystem: String
         let category: String

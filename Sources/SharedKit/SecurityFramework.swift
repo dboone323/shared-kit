@@ -6,8 +6,8 @@ import Foundation
     import Crypto
 #endif
 
-/// Security Hardening Framework for Shared-Kit
-/// Covers Steps 42-47: Headers, Input Validation, Auth/RBAC, Encryption
+// Security Hardening Framework for Shared-Kit
+// Covers Steps 42-47: Headers, Input Validation, Auth/RBAC, Encryption
 
 @available(macOS 12.0, iOS 15.0, *)
 public actor SecurityFramework {
@@ -20,7 +20,7 @@ public actor SecurityFramework {
     public init() {}
 
     /// Step 42: Get secure headers
-    nonisolated public func getSecureHeaders() -> [String: String] {
+    public nonisolated func getSecureHeaders() -> [String: String] {
         [
             "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
             "Content-Security-Policy": "default-src 'self'",

@@ -1,9 +1,9 @@
 import Foundation
 import OSLog
 
-/// Workspace-Integrated AI Enhancement System
-/// Provides comprehensive Ollama integration across all Quantum workspace projects
-/// Enhanced with cloud models and intelligent automation
+// Workspace-Integrated AI Enhancement System
+// Provides comprehensive Ollama integration across all Quantum workspace projects
+// Enhanced with cloud models and intelligent automation
 
 @MainActor
 public class WorkspaceAIEnhancer: ObservableObject {

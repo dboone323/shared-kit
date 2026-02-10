@@ -1288,7 +1288,7 @@ final class ConsciousnessRealityDatabase {
 
     func getInterfaceMetrics() async throws -> InterfaceMetrics {
         let totalInterfaces = realityInterfaces.count
-        let activeInterfaces = realityInterfaces.values.filter { $0.monitoringStatus == .active }.count
+        let activeInterfaces = realityInterfaces.values.count(where: { $0.monitoringStatus == .active })
         let averageStability = realityInterfaces.values.map(\.stabilityRating).reduce(0, +) / Double(max(
             totalInterfaces,
             1

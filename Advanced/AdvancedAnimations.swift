@@ -10,8 +10,8 @@ import SwiftUI
     import AppKit
 #endif
 
-/// Advanced Animation System for Quantum Workspace
-/// Provides sophisticated SwiftUI animations with performance optimization
+// Advanced Animation System for Quantum Workspace
+// Provides sophisticated SwiftUI animations with performance optimization
 
 public struct AdvancedAnimations {
     // MARK: - Animation Timing Functions

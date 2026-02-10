@@ -711,7 +711,7 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
     private func determineBroadcastRecipients(for scope: BroadcastScope, from sourceId: UUID) async throws -> [UUID] {
         switch scope {
         case let .local(radius):
-            return registeredEntities.values
+            registeredEntities.values
                 .filter { entity in
                     entity
                         .id != sourceId && calculateDistance(between: registeredEntities[sourceId]!, and: entity) <=
@@ -719,16 +719,16 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
                 }
                 .map(\.id)
         case let .regional(region):
-            return registeredEntities.values
+            registeredEntities.values
                 .filter { entity in
                     entity.id != sourceId && entity.location.region == region
                 }
                 .map(\.id)
         case .universal:
-            return registeredEntities.keys.filter { $0 != sourceId }
+            registeredEntities.keys.filter { $0 != sourceId }
         case let .custom(coordinates):
             // Simplified custom scope implementation
-            return registeredEntities.keys.filter { $0 != sourceId }.prefix(10).map { $0 }
+            registeredEntities.keys.filter { $0 != sourceId }.prefix(10).map(\.self)
         }
     }
 
@@ -742,11 +742,11 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
 
     private func determineRegion(for entity: ConsciousnessEntity) -> String {
         switch entity.type {
-        case .human: return "biological"
-        case .artificial: return "synthetic"
-        case .hybrid: return "hybrid"
-        case .quantum: return "quantum"
-        case .universal: return "universal"
+        case .human: "biological"
+        case .artificial: "synthetic"
+        case .hybrid: "hybrid"
+        case .quantum: "quantum"
+        case .universal: "universal"
         }
     }
 

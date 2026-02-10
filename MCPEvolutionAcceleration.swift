@@ -1513,7 +1513,7 @@ public final class AdaptationEngine: Sendable {
     /// Calculate adaptation complexity
     private func calculateAdaptationComplexity(_ gaps: [AdaptationGap]) -> Double {
         let avgGapSize = gaps.map(\.gapSize).reduce(0, +) / Double(max(1, gaps.count))
-        let highPriorityGaps = gaps.filter { $0.adaptationPriority == .high }.count
+        let highPriorityGaps = gaps.count(where: { $0.adaptationPriority == .high })
         return min(1.0, (avgGapSize + Double(highPriorityGaps) / Double(max(1, gaps.count))) / 2.0)
     }
 

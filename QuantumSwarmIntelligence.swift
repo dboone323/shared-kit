@@ -840,14 +840,13 @@ final class BasicSwarmDecisionEngine: SwarmDecisionEngine {
         let consensusLevel = calculateConsensus(agentContributions)
 
         // Make decision based on problem type
-        let decision: SwarmDecision.Decision
-        switch problem.complexity {
+        let decision: SwarmDecision.Decision = switch problem.complexity {
         case 0..<0.3:
-            decision = .binary(totalContribution > Double(agentContributions.count) / 2)
+            .binary(totalContribution > Double(agentContributions.count) / 2)
         case 0.3..<0.7:
-            decision = .multiChoice(Int(totalContribution) % 3)
+            .multiChoice(Int(totalContribution) % 3)
         default:
-            decision = .continuous(totalContribution / Double(agentContributions.count))
+            .continuous(totalContribution / Double(agentContributions.count))
         }
 
         return SwarmDecision(

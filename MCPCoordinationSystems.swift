@@ -502,21 +502,19 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         try await validateCoordinationConstraints(coordination)
 
         // Execute coordination based on strategy
-        let operationResults: [String: UniversalMCPResult]
-
-        switch coordination.coordinationStrategy {
+        let operationResults: [String: UniversalMCPResult] = switch coordination.coordinationStrategy {
         case .parallel_execution:
-            operationResults = try await executeParallelCoordination(coordination)
+            try await executeParallelCoordination(coordination)
         case .sequential_execution:
-            operationResults = try await executeSequentialCoordination(coordination)
+            try await executeSequentialCoordination(coordination)
         case .hierarchical_execution:
-            operationResults = try await executeHierarchicalCoordination(coordination)
+            try await executeHierarchicalCoordination(coordination)
         case .adaptive_execution:
-            operationResults = try await executeAdaptiveCoordination(coordination)
+            try await executeAdaptiveCoordination(coordination)
         case .quantum_entangled_execution:
-            operationResults = try await executeQuantumEntangledCoordination(coordination)
+            try await executeQuantumEntangledCoordination(coordination)
         case .consciousness_driven_execution:
-            operationResults = try await executeConsciousnessDrivenCoordination(coordination)
+            try await executeConsciousnessDrivenCoordination(coordination)
         }
 
         // Calculate coordination metrics
@@ -593,19 +591,17 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let startTime = Date()
 
         // Execute synchronization based on type
-        let frameworkStates: [String: FrameworkState]
-
-        switch synchronization.synchronizationType {
+        let frameworkStates: [String: FrameworkState] = switch synchronization.synchronizationType {
         case .state_synchronization:
-            frameworkStates = try await executeStateSynchronization(synchronization)
+            try await executeStateSynchronization(synchronization)
         case .capability_alignment:
-            frameworkStates = try await executeCapabilityAlignment(synchronization)
+            try await executeCapabilityAlignment(synchronization)
         case .performance_optimization:
-            frameworkStates = try await executePerformanceOptimization(synchronization)
+            try await executePerformanceOptimization(synchronization)
         case .quantum_entanglement:
-            frameworkStates = try await executeQuantumEntanglement(synchronization)
+            try await executeQuantumEntanglement(synchronization)
         case .consciousness_harmonization:
-            frameworkStates = try await executeConsciousnessHarmonization(synchronization)
+            try await executeConsciousnessHarmonization(synchronization)
         }
 
         // Calculate synchronization metrics
@@ -681,19 +677,19 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
     ) async throws -> Bool {
         switch constraint.constraintType {
         case .temporal_dependency:
-            return coordination.coordinationStrategy != .parallel_execution
+            coordination.coordinationStrategy != .parallel_execution
         case .resource_dependency:
-            return coordination.operations.count <= 10
+            coordination.operations.count <= 10
         case .data_dependency:
-            return coordination.operations.allSatisfy { !$0.parameters.isEmpty }
+            coordination.operations.allSatisfy { !$0.parameters.isEmpty }
         case .ethical_alignment:
-            return coordination.consciousnessLevel.rawValue >= "transcendent"
+            coordination.consciousnessLevel.rawValue >= "transcendent"
         case .quantum_coherence:
-            return coordination.quantumState != nil
+            coordination.quantumState != nil
         case .consciousness_integrity:
-            return coordination.consciousnessLevel != .standard
+            coordination.consciousnessLevel != .standard
         case .performance_threshold:
-            return coordination.priority != .low
+            coordination.priority != .low
         }
     }
 
@@ -1062,11 +1058,11 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
 
     private func calculateConsciousnessAmplification(_ level: ConsciousnessLevel) -> Double {
         switch level {
-        case .standard: return 1.0
-        case .enhanced: return 1.5
-        case .transcendent: return 2.0
-        case .universal: return 3.0
-        case .singularity: return 5.0
+        case .standard: 1.0
+        case .enhanced: 1.5
+        case .transcendent: 2.0
+        case .universal: 3.0
+        case .singularity: 5.0
         }
     }
 

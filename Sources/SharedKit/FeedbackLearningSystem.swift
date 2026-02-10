@@ -70,8 +70,8 @@ public actor FeedbackLearningSystem {
 
     /// Get statistics on feedback
     public func getStatistics() -> FeedbackStats {
-        let helpful = feedbackHistory.filter { $0.rating == .helpful }.count
-        let unhelpful = feedbackHistory.filter { $0.rating == .unhelpful }.count
+        let helpful = feedbackHistory.count(where: { $0.rating == .helpful })
+        let unhelpful = feedbackHistory.count(where: { $0.rating == .unhelpful })
         let total = feedbackHistory.count
 
         let successRate = total > 0 ? Double(helpful) / Double(total) : 0.0
@@ -109,7 +109,7 @@ public actor FeedbackLearningSystem {
         }
 
         return queryFeedback.compactMap { query, ratings in
-            let unhelpfulCount = ratings.filter { $0 == .unhelpful }.count
+            let unhelpfulCount = ratings.count(where: { $0 == .unhelpful })
             let total = ratings.count
             if total >= 2 && Double(unhelpfulCount) / Double(total) > 0.5 {
                 return query

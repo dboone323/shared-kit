@@ -266,23 +266,23 @@ enum ScalingAlgorithm {
 
     var efficiency: Double {
         switch self {
-        case .linear: return 0.7
-        case .exponential: return 0.8
-        case .logarithmic: return 0.6
-        case .quantumEntanglement: return 0.95
-        case .fractal: return 0.85
-        case .adaptive: return 0.9
+        case .linear: 0.7
+        case .exponential: 0.8
+        case .logarithmic: 0.6
+        case .quantumEntanglement: 0.95
+        case .fractal: 0.85
+        case .adaptive: 0.9
         }
     }
 
     var complexity: Int {
         switch self {
-        case .linear: return 1
-        case .exponential: return 2
-        case .logarithmic: return 3
-        case .quantumEntanglement: return 4
-        case .fractal: return 5
-        case .adaptive: return 6
+        case .linear: 1
+        case .exponential: 2
+        case .logarithmic: 3
+        case .quantumEntanglement: 4
+        case .fractal: 5
+        case .adaptive: 6
         }
     }
 }
@@ -1021,13 +1021,13 @@ struct IntegrationResult {
 
             private func selectScalingAlgorithm(for scalingFactor: Double) -> ScalingAlgorithm {
                 if scalingFactor > 10.0 {
-                    return .exponential
+                    .exponential
                 } else if scalingFactor > 5.0 {
-                    return .adaptive
+                    .adaptive
                 } else if scalingFactor > 2.0 {
-                    return .quantumEntanglement
+                    .quantumEntanglement
                 } else {
-                    return .linear
+                    .linear
                 }
             }
 
@@ -1313,7 +1313,7 @@ struct IntegrationResult {
 
         // MARK: - Database Layer
 
-        /// Database for storing ecosystem expansion data
+        // Database for storing ecosystem expansion data
     }
 }
 

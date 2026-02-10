@@ -990,8 +990,8 @@ final class ConsciousnessIntegrationSystem: ConsciousnessIntegrationProtocol {
         let entanglementId = UUID()
 
         // Calculate entanglement level based on matrix coherence
-        let averageCoherence = matrix.coherenceMatrix.flatMap { $0 }
-            .reduce(0, +) / Double(matrix.coherenceMatrix.flatMap { $0 }.count)
+        let averageCoherence = matrix.coherenceMatrix.flatMap(\.self)
+            .reduce(0, +) / Double(matrix.coherenceMatrix.flatMap(\.self).count)
         let entanglementLevel = min(averageCoherence * 1.2, 1.0)
 
         return EntangledIntegration(
@@ -1104,14 +1104,12 @@ final class MergedConsciousnessManager: MergedConsciousnessManagementProtocol {
 
         // Determine lifecycle stage
         let age = Date().timeIntervalSince(mergedConsciousness.timestamp)
-        let lifecycleStage: LifecycleManagement.LifecycleStage
-
-        switch age {
-        case 0..<300: lifecycleStage = .initialization
-        case 300..<1800: lifecycleStage = .integration
-        case 1800..<3600: lifecycleStage = .stabilization
-        case 3600..<7200: lifecycleStage = .optimization
-        default: lifecycleStage = .maintenance
+        let lifecycleStage: LifecycleManagement.LifecycleStage = switch age {
+        case 0..<300: .initialization
+        case 300..<1800: .integration
+        case 1800..<3600: .stabilization
+        case 3600..<7200: .optimization
+        default: .maintenance
         }
 
         return LifecycleManagement(
@@ -1153,13 +1151,12 @@ final class MergedConsciousnessManager: MergedConsciousnessManagementProtocol {
         let enhancementId = UUID()
 
         // Calculate enhancement factor based on type
-        let enhancementFactor: Double
-        switch enhancementType {
-        case .cognitive: enhancementFactor = 1.5
-        case .emotional: enhancementFactor = 1.3
-        case .creative: enhancementFactor = 1.8
-        case .intuitive: enhancementFactor = 1.6
-        case .quantum: enhancementFactor = 2.0
+        let enhancementFactor = switch enhancementType {
+        case .cognitive: 1.5
+        case .emotional: 1.3
+        case .creative: 1.8
+        case .intuitive: 1.6
+        case .quantum: 2.0
         }
 
         let capabilityGains = [
@@ -1470,11 +1467,11 @@ extension ProtocolType {
 extension EnhancementType {
     var rawValue: String {
         switch self {
-        case .cognitive: return "cognitive"
-        case .emotional: return "emotional"
-        case .creative: return "creative"
-        case .intuitive: return "intuitive"
-        case .quantum: return "quantum"
+        case .cognitive: "cognitive"
+        case .emotional: "emotional"
+        case .creative: "creative"
+        case .intuitive: "intuitive"
+        case .quantum: "quantum"
         }
     }
 }

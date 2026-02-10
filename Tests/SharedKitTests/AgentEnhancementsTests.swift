@@ -21,7 +21,8 @@ final class AgentEnhancementsTests: XCTestCase {
 
         // Should keep most recent
         XCTAssertEqual(
-            optimized.last?.content.contains("19"), true, "Should keep most recent message")
+            optimized.last?.content.contains("19"), true, "Should keep most recent message"
+        )
     }
 
     func testContextWindowEmptyMessages() {
@@ -88,7 +89,7 @@ final class AgentEnhancementsTests: XCTestCase {
 
         // Task that completes quickly
         let result = try await coordinator.executeWithTimeout(seconds: 1.0) {
-            return "success"
+            "success"
         }
 
         XCTAssertEqual(result, "success")
@@ -100,7 +101,7 @@ final class AgentEnhancementsTests: XCTestCase {
         do {
             // Task that takes too long
             _ = try await coordinator.executeWithTimeout(seconds: 0.5) {
-                try await Task.sleep(nanoseconds: 2_000_000_000)  // 2 seconds
+                try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
                 return "should not reach"
             }
 

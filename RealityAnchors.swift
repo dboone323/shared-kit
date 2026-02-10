@@ -656,7 +656,7 @@ final class IntegrityMonitor: Sendable {
             totalDegradedAnchors: degradations.count,
             averageSeverity: degradations.map(\.severity).reduce(0, +)
                 / Double(max(1, degradations.count)),
-            urgentRepairs: degradations.filter { $0.timeToFailure < 3600 }.count,
+            urgentRepairs: degradations.count(where: { $0.timeToFailure < 3600 }),
             detectionTimestamp: Date()
         )
     }
@@ -974,15 +974,15 @@ enum AnchorError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .validationFailed(errors):
-            return "Validation failed with \(errors.count) errors"
+            "Validation failed with \(errors.count) errors"
         case let .creationFailed(reason):
-            return "Creation failed: \(reason)"
+            "Creation failed: \(reason)"
         case let .reinforcementFailed(errors):
-            return "Reinforcement failed with \(errors.count) errors"
+            "Reinforcement failed with \(errors.count) errors"
         case let .stabilizationFailed(reason):
-            return "Stabilization failed: \(reason)"
+            "Stabilization failed: \(reason)"
         case let .integrityCompromised(reason):
-            return "Integrity compromised: \(reason)"
+            "Integrity compromised: \(reason)"
         }
     }
 }

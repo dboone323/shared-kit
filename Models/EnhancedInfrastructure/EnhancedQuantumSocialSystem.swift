@@ -65,7 +65,7 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
     public var accessEquality: Double
     public var opportunityEquality: Double
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade, inverse: \EnhancedSocialCommunity.socialSystem)
     public var communities: [EnhancedSocialCommunity] = []
 

@@ -9,9 +9,9 @@
 //  for intelligent features across all iOS/macOS applications.
 //
 
-import Foundation
-import CoreML
 import Combine
+import CoreML
+import Foundation
 import SwiftData
 
 // MARK: - Core ML Framework
@@ -34,12 +34,12 @@ public final class MachineLearningEngine {
 
     /// Perform intelligent prediction based on user behavior
     public func predictUserIntent(from context: UserContext) async throws -> UserIntent {
-        return try await predictionEngine.predictIntent(from: context)
+        try await predictionEngine.predictIntent(from: context)
     }
 
     /// Generate personalized recommendations
     public func generateRecommendations(for user: UserProfile) async throws -> [Recommendation] {
-        return try await predictionEngine.generateRecommendations(for: user)
+        try await predictionEngine.generateRecommendations(for: user)
     }
 
     /// Learn from user interactions
@@ -49,7 +49,7 @@ public final class MachineLearningEngine {
 
     /// Get intelligent insights
     public func generateInsights(for user: UserProfile) async throws -> [Insight] {
-        return try await predictionEngine.generateInsights(for: user)
+        try await predictionEngine.generateInsights(for: user)
     }
 }
 
@@ -63,7 +63,14 @@ public struct UserContext {
     public let recentActions: [UserAction]
     public let appContext: AppContext
 
-    public init(userId: String, currentTime: Date = Date(), deviceType: DeviceType, location: LocationContext?, recentActions: [UserAction], appContext: AppContext) {
+    public init(
+        userId: String,
+        currentTime: Date = Date(),
+        deviceType: DeviceType,
+        location: LocationContext?,
+        recentActions: [UserAction],
+        appContext: AppContext
+    ) {
         self.userId = userId
         self.currentTime = currentTime
         self.deviceType = deviceType
@@ -198,7 +205,7 @@ private final class MLModelManager {
     private let modelQueue = DispatchQueue(label: "com.tools-automation.ml.models")
 
     func loadModel(named name: String) throws -> MLModel {
-        return try modelQueue.sync {
+        try modelQueue.sync {
             if let model = models[name] {
                 return model
             }
@@ -237,13 +244,13 @@ private final class PredictionEngine {
 
         // For now, return a simple prediction based on context
         if context.recentActions.contains(where: { $0.type == .search }) {
-            return .learning
+            .learning
         } else if context.appContext.appName.contains("Finance") {
-            return .finance
+            .finance
         } else if context.appContext.appName.contains("Habit") {
-            return .health
+            .health
         } else {
-            return .productivity
+            .productivity
         }
     }
 
@@ -290,7 +297,7 @@ private final class PredictionEngine {
 
         // Analyze engagement patterns
         let totalEngagements = user.engagementHistory.count
-        let successfulEngagements = user.engagementHistory.filter { $0.success }.count
+        let successfulEngagements = user.engagementHistory.filter(\.success).count
         let successRate = Double(successfulEngagements) / Double(totalEngagements)
 
         if successRate < 0.5 {
@@ -310,7 +317,7 @@ private final class PredictionEngine {
                         confidence: 0.7,
                         action: RecommendationAction(type: .view, target: "featureDiscovery", parameters: nil),
                         metadata: nil
-                    )
+                    ),
                 ],
                 timestamp: Date()
             ))
@@ -338,7 +345,7 @@ private final class PredictionEngine {
                         confidence: 0.8,
                         action: RecommendationAction(type: .create, target: "reminders", parameters: nil),
                         metadata: nil
-                    )
+                    ),
                 ],
                 timestamp: Date()
             ))

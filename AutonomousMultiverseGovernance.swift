@@ -1119,7 +1119,7 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
 
     private func publishGovernanceStatus() {
         let status = GovernanceStatus(
-            activeDecisions: activeOperations.values.filter { $0.type == .decision }.count,
+            activeDecisions: activeOperations.values.count(where: { $0.type == .decision }),
             policiesEnforced: 0, // Would track from database
             ethicalReviews: 0, // Would track from database
             complianceRate: 0.95,

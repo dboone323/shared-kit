@@ -65,7 +65,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
     public var resourceOptimization: Double
     public var supplyChainResilience: Double
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade, inverse: \EnhancedEconomicEntity.economicSystem)
     public var economicEntities: [EnhancedEconomicEntity] = []
 
@@ -304,7 +304,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
         self.averageIncome = totalBalance / Double(max(1, self.economicEntities.count))
 
         // Calculate unemployment rate (simplified - based on inactive entities)
-        let inactiveEntities = self.economicEntities.filter { $0.balance <= 0 }.count
+        let inactiveEntities = self.economicEntities.count(where: { $0.balance <= 0 })
         self.unemploymentRate =
             Double(inactiveEntities) / Double(max(1, self.economicEntities.count))
 
@@ -400,7 +400,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
     public func updateSocialEconomicMetrics() {
         // Poverty reduction based on entities above poverty line
         let povertyLine = 1000.0 // Arbitrary poverty line
-        let abovePovertyLine = self.economicEntities.filter { $0.balance >= povertyLine }.count
+        let abovePovertyLine = self.economicEntities.count(where: { $0.balance >= povertyLine })
         self.povertyReduction =
             Double(abovePovertyLine) / Double(max(1, self.economicEntities.count))
 
@@ -413,12 +413,12 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
         // Entrepreneurial success based on enterprise performance
         let enterprises = self.economicEntities.filter { $0.type == .enterprise }
         if !enterprises.isEmpty {
-            let successfulEnterprises = enterprises.filter { $0.balance > $0.initialCapital }.count
+            let successfulEnterprises = enterprises.count(where: { $0.balance > $0.initialCapital })
             self.entrepreneurialSuccess = Double(successfulEnterprises) / Double(enterprises.count)
         }
 
         // Economic mobility (simplified - based on transaction activity)
-        let activeEntities = self.economicEntities.filter { $0.transactionCount > 0 }.count
+        let activeEntities = self.economicEntities.count(where: { $0.transactionCount > 0 })
         self.economicMobility = Double(activeEntities) / Double(max(1, self.economicEntities.count))
 
         self.trackEvent(

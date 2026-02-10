@@ -1,9 +1,9 @@
 import Foundation
 import OSLog
 
-/// Enhanced Hugging Face API Client with Quantum Performance
-/// Provides access to Hugging Face's free inference API with advanced features
-/// Enhanced by AI System v2.1 on 9/12/25
+// Enhanced Hugging Face API Client with Quantum Performance
+// Provides access to Hugging Face's free inference API with advanced features
+// Enhanced by AI System v2.1 on 9/12/25
 
 // MARK: - Enhanced Error Types
 
@@ -62,9 +62,9 @@ public enum HuggingFaceError: LocalizedError {
     }
 }
 
-/// Enhanced Hugging Face API Client with Quantum Performance
-/// Provides access to Hugging Face's free inference API with advanced features
-/// Enhanced by AI System v2.1 on 9/12/25
+// Enhanced Hugging Face API Client with Quantum Performance
+// Provides access to Hugging Face's free inference API with advanced features
+// Enhanced by AI System v2.1 on 9/12/25
 
 @MainActor
 public class HuggingFaceClient: ObservableObject {

@@ -452,20 +452,20 @@ class UniversalComputationViewModel: BaseViewModel {
 
 // MARK: - Template for Remaining View Models
 
-/// Template for implementing the remaining 10 infrastructure view models
-/// Each should follow the same pattern as QuantumGovernanceViewModel and UniversalComputationViewModel
-///
-/// Remaining view models to implement:
-/// - QuantumEducationViewModel
-/// - QuantumHealthcareViewModel
-/// - QuantumEconomicViewModel
-/// - QuantumEnvironmentalViewModel
-/// - QuantumSocialViewModel
-/// - QuantumTransportationViewModel
-/// - QuantumEnergyViewModel
-/// - QuantumSecurityViewModel
-/// - QuantumJusticeViewModel
-/// - QuantumCulturalViewModel
-/// - QuantumDisasterResponseViewModel</content>
+// Template for implementing the remaining 10 infrastructure view models
+// Each should follow the same pattern as QuantumGovernanceViewModel and UniversalComputationViewModel
+//
+// Remaining view models to implement:
+// - QuantumEducationViewModel
+// - QuantumHealthcareViewModel
+// - QuantumEconomicViewModel
+// - QuantumEnvironmentalViewModel
+// - QuantumSocialViewModel
+// - QuantumTransportationViewModel
+// - QuantumEnergyViewModel
+// - QuantumSecurityViewModel
+// - QuantumJusticeViewModel
+// - QuantumCulturalViewModel
+// - QuantumDisasterResponseViewModel</content>
 <parameter name = "filePath" >/ Users / danielstevens / Desktop / Quantum - workspace / Shared /
     Phase8DInfrastructureViewModels.swift

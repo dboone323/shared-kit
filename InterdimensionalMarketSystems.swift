@@ -952,7 +952,7 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
                     $0 + ($1.action == .sell ? $1.quantity * $1.price : 0.0)
                 }
                 let winRate =
-                    Double(decisions.filter { $0.confidence > 0.7 }.count) / Double(decisions.count)
+                    Double(decisions.count(where: { $0.confidence > 0.7 })) / Double(decisions.count)
 
                 let result = TradingResult(
                     strategiesExecuted: strategies.count,
@@ -1485,7 +1485,7 @@ final class BasicDimensionalArbitrage: DimensionalArbitrageProtocol {
         riskLimits: TradingStrategy.RiskLimits
     ) async throws -> ArbitrageResult {
         // Basic arbitrage execution
-        let executions = opportunities.filter { $0.confidence > 0.7 }.count
+        let executions = opportunities.count(where: { $0.confidence > 0.7 })
         let totalProfit = Double(executions) * 100.0
 
         return ArbitrageResult(
@@ -1561,9 +1561,9 @@ final class BasicLiquidityManagementEngine: LiquidityManagementEngine {
     func manageLiquidity(market: InterdimensionalMarket, requirements: [LiquidityRequirement])
         async throws -> LiquidityManagement
     {
-        let requirementsMet = requirements.filter {
+        let requirementsMet = requirements.count(where: {
             $0.requiredDepth < market.liquidityPool.performance.averageDepth
-        }.count
+        })
 
         return LiquidityManagement(
             requirementsMet: requirementsMet,

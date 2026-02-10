@@ -9,11 +9,11 @@
 //  secure key management, and comprehensive security controls.
 //
 
+import Combine
+import CryptoKit
 import Foundation
 import LocalAuthentication
 import Security
-import CryptoKit
-import Combine
 
 // MARK: - Core Security Engine
 
@@ -37,22 +37,22 @@ public final class SecurityEngine {
 
     /// Authenticate user with biometrics
     public func authenticateWithBiometrics(reason: String) async throws -> Bool {
-        return try await biometricManager.authenticate(reason: reason)
+        try await biometricManager.authenticate(reason: reason)
     }
 
     /// Check if biometric authentication is available
     public func isBiometricAvailable() -> BiometricAvailability {
-        return biometricManager.checkAvailability()
+        biometricManager.checkAvailability()
     }
 
     /// Encrypt sensitive data
     public func encrypt(data: Data, for key: String) async throws -> EncryptedData {
-        return try await encryptionManager.encrypt(data: data, keyIdentifier: key)
+        try await encryptionManager.encrypt(data: data, keyIdentifier: key)
     }
 
     /// Decrypt sensitive data
     public func decrypt(encryptedData: EncryptedData, for key: String) async throws -> Data {
-        return try await encryptionManager.decrypt(encryptedData: encryptedData, keyIdentifier: key)
+        try await encryptionManager.decrypt(encryptedData: encryptedData, keyIdentifier: key)
     }
 
     /// Store secure data
@@ -62,17 +62,17 @@ public final class SecurityEngine {
 
     /// Retrieve secure data
     public func retrieveSecure(for key: String) async throws -> Data {
-        return try await keyManager.retrieve(key: key)
+        try await keyManager.retrieve(key: key)
     }
 
     /// Generate secure random data
     public func generateSecureRandom(bytes: Int) -> Data {
-        return encryptionManager.generateRandom(bytes: bytes)
+        encryptionManager.generateRandom(bytes: bytes)
     }
 
     /// Detect security threats
     public func detectThreats() async -> [SecurityThreat] {
-        return await threatDetector.detectThreats()
+        await threatDetector.detectThreats()
     }
 
     /// Configure security settings
@@ -87,7 +87,7 @@ public final class SecurityEngine {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class BiometricManager {
-    private var settings: BiometricSettings = BiometricSettings()
+    private var settings: BiometricSettings = .init()
 
     func configure(_ settings: BiometricSettings) {
         self.settings = settings
@@ -116,7 +116,7 @@ private final class BiometricManager {
     }
 
     func authenticate(reason: String) async throws -> Bool {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             let context = LAContext()
 
             // Configure context based on settings
@@ -126,13 +126,14 @@ private final class BiometricManager {
                 context.localizedFallbackTitle = ""
             }
 
-            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, error in
-                if let error = error {
-                    continuation.resume(throwing: SecurityError.biometricFailed(error.localizedDescription))
-                } else {
-                    continuation.resume(returning: success)
+            context
+                .evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, error in
+                    if let error {
+                        continuation.resume(throwing: SecurityError.biometricFailed(error.localizedDescription))
+                    } else {
+                        continuation.resume(returning: success)
+                    }
                 }
-            }
         }
     }
 }
@@ -153,7 +154,8 @@ public struct BiometricSettings {
 
     public init(allowBiometricFallback: Bool = true,
                 requireBiometricForSensitive: Bool = true,
-                biometricTimeout: TimeInterval = 300) { // 5 minutes
+                biometricTimeout: TimeInterval = 300)
+    { // 5 minutes
         self.allowBiometricFallback = allowBiometricFallback
         self.requireBiometricForSensitive = requireBiometricForSensitive
         self.biometricTimeout = biometricTimeout
@@ -164,7 +166,7 @@ public struct BiometricSettings {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class KeyManager {
-    private var settings: KeyManagementSettings = KeyManagementSettings()
+    private var settings: KeyManagementSettings = .init()
 
     func configure(_ settings: KeyManagementSettings) {
         self.settings = settings
@@ -175,7 +177,7 @@ private final class KeyManager {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
             kSecValueData as String: data,
-            kSecAttrAccessible as String: accessLevel.secAccessibility
+            kSecAttrAccessible as String: accessLevel.secAccessibility,
         ]
 
         let status = SecItemAdd(query as CFDictionary, nil)
@@ -184,11 +186,11 @@ private final class KeyManager {
             // Item exists, update it
             let updateQuery: [String: Any] = [
                 kSecClass as String: kSecClassGenericPassword,
-                kSecAttrAccount as String: key
+                kSecAttrAccount as String: key,
             ]
             let updateAttributes: [String: Any] = [
                 kSecValueData as String: data,
-                kSecAttrAccessible as String: accessLevel.secAccessibility
+                kSecAttrAccessible as String: accessLevel.secAccessibility,
             ]
 
             let updateStatus = SecItemUpdate(updateQuery as CFDictionary, updateAttributes as CFDictionary)
@@ -205,7 +207,7 @@ private final class KeyManager {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
             kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne
+            kSecMatchLimit as String: kSecMatchLimitOne,
         ]
 
         var result: AnyObject?
@@ -221,7 +223,7 @@ private final class KeyManager {
     func delete(key: String) async throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: key
+            kSecAttrAccount as String: key,
         ]
 
         let status = SecItemDelete(query as CFDictionary)
@@ -237,13 +239,13 @@ public enum AccessLevel {
     var secAccessibility: CFString {
         switch self {
         case .whenUnlocked:
-            return kSecAttrAccessibleWhenUnlocked
+            kSecAttrAccessibleWhenUnlocked
         case .afterFirstUnlock:
-            return kSecAttrAccessibleAfterFirstUnlock
+            kSecAttrAccessibleAfterFirstUnlock
         case .whenUnlockedThisDeviceOnly:
-            return kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+            kSecAttrAccessibleWhenUnlockedThisDeviceOnly
         case .afterFirstUnlockThisDeviceOnly:
-            return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+            kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         }
     }
 }
@@ -257,7 +259,8 @@ public struct KeyManagementSettings {
     public init(autoRotateKeys: Bool = true,
                 keyRotationInterval: TimeInterval = 30 * 24 * 60 * 60, // 30 days
                 maxKeyAge: TimeInterval = 365 * 24 * 60 * 60, // 1 year
-                enableBackup: Bool = true) {
+                enableBackup: Bool = true)
+    {
         self.autoRotateKeys = autoRotateKeys
         self.keyRotationInterval = keyRotationInterval
         self.maxKeyAge = maxKeyAge
@@ -309,7 +312,7 @@ private final class EncryptionManager {
     }
 
     private func getOrCreateKey(for identifier: String) async throws -> SymmetricKey {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             keyQueue.async {
                 if let existingKey = self.keys[identifier] {
                     continuation.resume(returning: existingKey)
@@ -342,7 +345,7 @@ public struct EncryptedData {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class ThreatDetector {
-    private var settings: ThreatDetectionSettings = ThreatDetectionSettings()
+    private var settings: ThreatDetectionSettings = .init()
 
     func configure(_ settings: ThreatDetectionSettings) {
         self.settings = settings
@@ -389,34 +392,34 @@ private final class ThreatDetector {
 
     private func detectJailbreak() -> Bool {
         #if targetEnvironment(simulator)
-        return false
+            return false
         #else
-        let fileManager = FileManager.default
+            let fileManager = FileManager.default
 
-        // Check for common jailbreak files
-        let jailbreakPaths = [
-            "/Applications/Cydia.app",
-            "/Library/MobileSubstrate/MobileSubstrate.dylib",
-            "/bin/bash",
-            "/usr/sbin/sshd",
-            "/etc/apt"
-        ]
+            /// Check for common jailbreak files
+            let jailbreakPaths = [
+                "/Applications/Cydia.app",
+                "/Library/MobileSubstrate/MobileSubstrate.dylib",
+                "/bin/bash",
+                "/usr/sbin/sshd",
+                "/etc/apt",
+            ]
 
-        for path in jailbreakPaths {
-            if fileManager.fileExists(atPath: path) {
-                return true
+            for path in jailbreakPaths {
+                if fileManager.fileExists(atPath: path) {
+                    return true
+                }
             }
-        }
 
-        // Check if we can write to system directories
-        let testPath = "/private/test"
-        do {
-            try "test".write(toFile: testPath, atomically: true, encoding: .utf8)
-            try fileManager.removeItem(atPath: testPath)
-            return true // Shouldn't be able to write here
-        } catch {
-            return false // Expected - can't write to system directory
-        }
+            /// Check if we can write to system directories
+            let testPath = "/private/test"
+            do {
+                try "test".write(toFile: testPath, atomically: true, encoding: .utf8)
+                try fileManager.removeItem(atPath: testPath)
+                return true // Shouldn't be able to write here
+            } catch {
+                return false // Expected - can't write to system directory
+            }
         #endif
     }
 
@@ -459,7 +462,8 @@ public struct ThreatDetectionSettings {
                 detectDebugger: Bool = true,
                 monitorNetwork: Bool = true,
                 anomalyDetection: Bool = true,
-                alertThreshold: ThreatSeverity = .medium) {
+                alertThreshold: ThreatSeverity = .medium)
+    {
         self.detectJailbreak = detectJailbreak
         self.detectDebugger = detectDebugger
         self.monitorNetwork = monitorNetwork
@@ -477,7 +481,8 @@ public struct SecuritySettings {
 
     public init(biometric: BiometricSettings = BiometricSettings(),
                 keyManagement: KeyManagementSettings = KeyManagementSettings(),
-                threatDetection: ThreatDetectionSettings = ThreatDetectionSettings()) {
+                threatDetection: ThreatDetectionSettings = ThreatDetectionSettings())
+    {
         self.biometric = biometric
         self.keyManagement = keyManagement
         self.threatDetection = threatDetection

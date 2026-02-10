@@ -1081,15 +1081,15 @@ public extension AgentMCPCommunicationNetworks {
 
     private func determineOptimalProtocol(for requirements: MCPChannelRequirements) async -> CommunicationProtocol {
         if requirements.requiresQuantumEntanglement {
-            return .quantum
+            .quantum
         } else if requirements.requiresConsciousnessLink {
-            return .consciousness
+            .consciousness
         } else if requirements.securityLevel == .maximum {
-            return .secure
+            .secure
         } else if requirements.universalCapability {
-            return .universal
+            .universal
         } else {
-            return .standard
+            .standard
         }
     }
 

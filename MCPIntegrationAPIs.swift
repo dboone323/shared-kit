@@ -733,7 +733,7 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
 
         // Create performance summary
         let totalRequests = relevantMetrics.count
-        let successfulRequests = relevantMetrics.filter { $0.value >= 0 }.count // Simplified success criteria
+        let successfulRequests = relevantMetrics.count(where: { $0.value >= 0 }) // Simplified success criteria
         let failedRequests = totalRequests - successfulRequests
         let responseTimes = relevantMetrics.map(\.value)
         let averageResponseTime =

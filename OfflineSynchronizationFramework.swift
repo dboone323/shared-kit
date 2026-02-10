@@ -9,10 +9,10 @@
 //  for enhanced user experience across all applications.
 //
 
-import Foundation
 import Combine
-import SwiftData
+import Foundation
 import Network
+import SwiftData
 
 // MARK: - Core Synchronization Engine
 
@@ -50,7 +50,7 @@ public final class SynchronizationEngine {
 
     /// Get synchronization status
     public func getStatus() async -> SyncStatus {
-        return await queueManager.getStatus()
+        await queueManager.getStatus()
     }
 
     /// Resolve a synchronization conflict
@@ -60,7 +60,7 @@ public final class SynchronizationEngine {
 
     /// Get pending operations count
     public func getPendingOperationsCount() async -> Int {
-        return await queueManager.getPendingCount()
+        await queueManager.getPendingCount()
     }
 
     /// Configure synchronization settings
@@ -115,7 +115,8 @@ public struct SyncOperation {
                 data: [String: Any],
                 timestamp: Date = Date(),
                 priority: Priority = .normal,
-                requiresNetwork: Bool = true) {
+                requiresNetwork: Bool = true)
+    {
         self.id = id
         self.type = type
         self.entityType = entityType
@@ -179,7 +180,8 @@ public struct SyncSettings {
 
     public init(queue: QueueSettings = QueueSettings(),
                 network: NetworkSettings = NetworkSettings(),
-                storage: StorageSettings = StorageSettings()) {
+                storage: StorageSettings = StorageSettings())
+    {
         self.queue = queue
         self.network = network
         self.storage = storage
@@ -195,7 +197,8 @@ public struct QueueSettings {
     public init(maxRetries: Int = 3,
                 retryDelay: TimeInterval = 60,
                 batchSize: Int = 50,
-                maxQueueSize: Int = 1000) {
+                maxQueueSize: Int = 1000)
+    {
         self.maxRetries = maxRetries
         self.retryDelay = retryDelay
         self.batchSize = batchSize
@@ -212,7 +215,8 @@ public struct NetworkSettings {
     public init(syncOnCellular: Bool = true,
                 syncOnExpensive: Bool = false,
                 backgroundSync: Bool = true,
-                syncInterval: TimeInterval = 300) { // 5 minutes
+                syncInterval: TimeInterval = 300)
+    { // 5 minutes
         self.syncOnCellular = syncOnCellular
         self.syncOnExpensive = syncOnExpensive
         self.backgroundSync = backgroundSync
@@ -229,7 +233,8 @@ public struct StorageSettings {
     public init(maxOfflineDataSize: Int64 = 100 * 1024 * 1024, // 100MB
                 compressionEnabled: Bool = true,
                 encryptionEnabled: Bool = true,
-                cleanupInterval: TimeInterval = 86400) { // 24 hours
+                cleanupInterval: TimeInterval = 86400)
+    { // 24 hours
         self.maxOfflineDataSize = maxOfflineDataSize
         self.compressionEnabled = compressionEnabled
         self.encryptionEnabled = encryptionEnabled
@@ -241,7 +246,7 @@ public struct StorageSettings {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class SyncManager {
-    private var settings: SyncSettings = SyncSettings()
+    private var settings: SyncSettings = .init()
     private var isPaused = false
     private let syncQueue = DispatchQueue(label: "com.tools-automation.sync.manager")
 
@@ -290,7 +295,7 @@ private final class SyncQueueManager {
     private var operationQueue: [SyncOperation] = []
     private var failedOperations: [SyncOperation] = []
     private let queue = DispatchQueue(label: "com.tools-automation.sync.queue")
-    private var settings: QueueSettings = QueueSettings()
+    private var settings: QueueSettings = .init()
 
     func configure(_ settings: QueueSettings) {
         self.settings = settings
@@ -314,7 +319,7 @@ private final class SyncQueueManager {
     }
 
     func getStatus() async -> SyncStatus {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             queue.async {
                 let status = SyncStatus(
                     isOnline: true, // Would check actual network status
@@ -331,7 +336,7 @@ private final class SyncQueueManager {
     }
 
     func getPendingCount() async -> Int {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             queue.async {
                 continuation.resume(returning: self.operationQueue.count)
             }
@@ -339,7 +344,7 @@ private final class SyncQueueManager {
     }
 
     func processNextBatch() async -> [SyncOperation] {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             queue.async {
                 let batchSize = min(self.settings.batchSize, self.operationQueue.count)
                 let batch = Array(self.operationQueue.prefix(batchSize))
@@ -366,7 +371,7 @@ private final class ConflictResolver {
         case .merge:
             // Merge the data
             print("Resolving conflict by merging data")
-        case .custom(let customData):
+        case let .custom(customData):
             // Apply custom resolution
             print("Resolving conflict with custom data: \(customData)")
         }
@@ -393,15 +398,14 @@ private final class NetworkMonitor {
 
     private func startMonitoring() {
         monitor.pathUpdateHandler = { [weak self] path in
-            let status: NetworkStatus
-            if path.status == .satisfied {
+            let status: NetworkStatus = if path.status == .satisfied {
                 if path.isExpensive {
-                    status = .expensive
+                    .expensive
                 } else {
-                    status = .connected
+                    .connected
                 }
             } else {
-                status = .disconnected
+                .disconnected
             }
 
             self?._statusPublisher?.send(status)
@@ -422,7 +426,7 @@ private final class NetworkMonitor {
 public final class SyncObservable: ObservableObject {
     public static let shared = SyncObservable()
 
-    @Published public var status: SyncStatus = SyncStatus(
+    @Published public var status: SyncStatus = .init(
         isOnline: true,
         lastSyncDate: nil,
         pendingOperations: 0,
@@ -454,17 +458,17 @@ extension SynchronizationEngine {
     func getStatusPublisher() -> AnyPublisher<SyncStatus, Never> {
         // This would return a publisher that emits status updates
         // For now, return an empty publisher
-        return Empty().eraseToAnyPublisher()
+        Empty().eraseToAnyPublisher()
     }
 }
 
 extension Priority {
     var rawValue: Int {
         switch self {
-        case .low: return 0
-        case .normal: return 1
-        case .high: return 2
-        case .critical: return 3
+        case .low: 0
+        case .normal: 1
+        case .high: 2
+        case .critical: 3
         }
     }
 }

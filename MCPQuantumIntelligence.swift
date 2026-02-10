@@ -603,19 +603,19 @@ public final class MCPQuantumIntelligenceCoordinator: MCPQuantumIntelligence, Se
 
     private func coherenceValue(_ level: CoherenceLevel) -> Double {
         switch level {
-        case .low: return 0.6
-        case .medium: return 0.8
-        case .high: return 0.9
-        case .perfect: return 1.0
+        case .low: 0.6
+        case .medium: 0.8
+        case .high: 0.9
+        case .perfect: 1.0
         }
     }
 
     private func entanglementValue(_ scope: EntanglementScope) -> Double {
         switch scope {
-        case .local: return 0.7
-        case .regional: return 0.8
-        case .global: return 0.9
-        case .universal: return 1.0
+        case .local: 0.7
+        case .regional: 0.8
+        case .global: 0.9
+        case .universal: 1.0
         }
     }
 }

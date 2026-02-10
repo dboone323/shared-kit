@@ -1,7 +1,7 @@
 import Foundation
 
-/// Machine Learning and Intelligence enhancements for Shared-Kit
-/// Covers Steps 31-33: Tool Selection, Predictive Health, Advanced Caching
+// Machine Learning and Intelligence enhancements for Shared-Kit
+// Covers Steps 31-33: Tool Selection, Predictive Health, Advanced Caching
 
 @available(macOS 12.0, iOS 15.0, *)
 public actor Intelligence {

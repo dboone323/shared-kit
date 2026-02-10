@@ -496,16 +496,16 @@ public actor QuantumOptimizationEngine {
         switch opportunity.type {
         case .cpu:
             // Simulate CPU optimization
-            return opportunity.potentialGain * Double.random(in: 0.8..<1.2)
+            opportunity.potentialGain * Double.random(in: 0.8..<1.2)
         case .memory:
             // Simulate memory optimization
-            return opportunity.potentialGain * Double.random(in: 0.7..<1.1)
+            opportunity.potentialGain * Double.random(in: 0.7..<1.1)
         case .io:
             // Simulate I/O optimization
-            return opportunity.potentialGain * Double.random(in: 0.85..<1.15)
+            opportunity.potentialGain * Double.random(in: 0.85..<1.15)
         case .network:
             // Simulate network optimization
-            return opportunity.potentialGain * Double.random(in: 0.9..<1.1)
+            opportunity.potentialGain * Double.random(in: 0.9..<1.1)
         }
     }
 }

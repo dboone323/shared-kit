@@ -196,7 +196,7 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
             interfaces.values.map(\.alignmentScore).reduce(0, +) / Double(max(1, total))
         let avgCoh =
             interfaces.values.map(\.coherenceLevel).reduce(0, +) / Double(max(1, total))
-        let allEvents = events.values.flatMap { $0 }
+        let allEvents = events.values.flatMap(\.self)
         let recs: [String] = [
             avgAlign < 0.9 ? "Improve alignment via guided calibration" : "Maintain alignment",
             avgCoh < 0.9 ? "Apply coherence reinforcement" : "Maintain coherence",

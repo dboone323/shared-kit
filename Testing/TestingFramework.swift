@@ -150,7 +150,7 @@ import SwiftUI
     // MARK: - Test Data Builders
 
     public class TestDataBuilder {
-        // Habit test data
+        /// Habit test data
         public static func createTestHabit(
             id: UUID = UUID(),
             name: String = "Test Habit",
@@ -169,7 +169,7 @@ import SwiftUI
             )
         }
 
-        // Financial account test data
+        /// Financial account test data
         public static func createTestFinancialAccount(
             id: UUID = UUID(),
             name: String = "Test Account",
@@ -186,7 +186,7 @@ import SwiftUI
             )
         }
 
-        // Task test data
+        /// Task test data
         public static func createTestTask(
             id: UUID = UUID(),
             title: String = "Test Task",
@@ -205,7 +205,7 @@ import SwiftUI
             )
         }
 
-        // User test data
+        /// User test data
         public static func createTestUser(
             id: UUID = UUID(),
             name: String = "Test User",

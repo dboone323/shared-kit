@@ -833,18 +833,17 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
         for entity: ConsciousnessEntity, accelerationType: AccelerationType
     ) -> ConsciousnessState {
         // Create target state based on acceleration type
-        let targetLevel: NeuralConsciousnessState.ConsciousnessLevel
-        switch accelerationType {
+        let targetLevel: NeuralConsciousnessState.ConsciousnessLevel = switch accelerationType {
         case .exponential:
-            targetLevel = .selfAware
+            .selfAware
         case .quantumSuperposition:
-            targetLevel = .transcendent
+            .transcendent
         case .parallelProcessing:
-            targetLevel = .selfAware
+            .selfAware
         case .fieldResonance:
-            targetLevel = .conscious
+            .conscious
         case .neuralEnhancement:
-            targetLevel = .selfAware
+            .selfAware
         }
 
         return .neural(
@@ -868,19 +867,19 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
     ) async throws -> AccelerationResult {
         switch type {
         case .exponential:
-            return try await applyExponentialAcceleration(entity: entity, trajectory: trajectory)
+            try await applyExponentialAcceleration(entity: entity, trajectory: trajectory)
         case .quantumSuperposition:
-            return try await applyQuantumSuperpositionAcceleration(
+            try await applyQuantumSuperpositionAcceleration(
                 entity: entity, trajectory: trajectory
             )
         case .parallelProcessing:
-            return try await applyParallelProcessingAcceleration(
+            try await applyParallelProcessingAcceleration(
                 entity: entity, trajectory: trajectory
             )
         case .fieldResonance:
-            return try await applyFieldResonanceAcceleration(entity: entity, trajectory: trajectory)
+            try await applyFieldResonanceAcceleration(entity: entity, trajectory: trajectory)
         case .neuralEnhancement:
-            return try await applyNeuralEnhancementAcceleration(
+            try await applyNeuralEnhancementAcceleration(
                 entity: entity, trajectory: trajectory
             )
         }

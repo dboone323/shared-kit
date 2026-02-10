@@ -316,11 +316,11 @@ public actor QuantumCompiler {
         // Simplified fidelity calculation based on target
         switch target {
         case .simulator:
-            return 0.999
+            0.999
         case .hardware:
-            return 0.95
+            0.95
         case .hybrid:
-            return 0.98
+            0.98
         }
     }
 }
@@ -531,7 +531,7 @@ public actor QuantumIDE {
     {
         switch language {
         case .qiskit:
-            return """
+            """
             from qiskit import QuantumCircuit, transpile
             from qiskit_aer import AerSimulator
 
@@ -552,7 +552,7 @@ public actor QuantumIDE {
             """
 
         case .cirq:
-            return """
+            """
             import cirq
 
             def \(algorithm.name.lowercased())_circuit():
@@ -572,7 +572,7 @@ public actor QuantumIDE {
             """
 
         case .pennylane:
-            return """
+            """
             import pennylane as qml
 
             @qml.qnode(qml.device('default.qubit', wires=\(algorithm.qubits)))
@@ -618,11 +618,11 @@ public actor QuantumIDE {
     private func getDependencies(for language: QuantumLanguage) -> [String] {
         switch language {
         case .qiskit:
-            return ["qiskit", "qiskit-aer"]
+            ["qiskit", "qiskit-aer"]
         case .cirq:
-            return ["cirq"]
+            ["cirq"]
         case .pennylane:
-            return ["pennylane"]
+            ["pennylane"]
         }
     }
 }
@@ -902,9 +902,9 @@ public enum OptimizationLevel: String, Sendable {
 
     public var reductionFactor: Double {
         switch self {
-        case .basic: return 0.1
-        case .standard: return 0.25
-        case .aggressive: return 0.4
+        case .basic: 0.1
+        case .standard: 0.25
+        case .aggressive: 0.4
         }
     }
 }

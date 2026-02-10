@@ -258,7 +258,7 @@ public struct PerformanceMetrics {
         self.timestamp = timestamp
     }
 
-    // Performance assessment
+    /// Performance assessment
     public var overallPerformanceScore: Double {
         var score = 100.0
 

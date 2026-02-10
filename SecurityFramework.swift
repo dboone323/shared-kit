@@ -351,15 +351,15 @@ public enum ValidationResult {
 
     public var isValid: Bool {
         switch self {
-        case .success: return true
-        case .failure: return false
+        case .success: true
+        case .failure: false
         }
     }
 
     public var error: ValidationError? {
         switch self {
-        case .success: return nil
-        case let .failure(error): return error
+        case .success: nil
+        case let .failure(error): error
         }
     }
 }
@@ -379,23 +379,23 @@ public enum ValidationError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .emptyInput:
-            return "Input cannot be empty"
+            "Input cannot be empty"
         case let .inputTooLong(maxLength):
-            return "Input exceeds maximum length of \(maxLength) characters"
+            "Input exceeds maximum length of \(maxLength) characters"
         case .maliciousContent:
-            return "Input contains potentially malicious content"
+            "Input contains potentially malicious content"
         case .invalidCharacters:
-            return "Input contains invalid characters"
+            "Input contains invalid characters"
         case let .valueTooLow(minimum):
-            return "Value is below minimum allowed value of \(minimum)"
+            "Value is below minimum allowed value of \(minimum)"
         case let .valueTooHigh(maximum):
-            return "Value is above maximum allowed value of \(maximum)"
+            "Value is above maximum allowed value of \(maximum)"
         case .invalidURL:
-            return "Invalid URL format"
+            "Invalid URL format"
         case .invalidURLScheme:
-            return "URL scheme not allowed"
+            "URL scheme not allowed"
         case .internalURLNotAllowed:
-            return "Internal URLs are not allowed in production"
+            "Internal URLs are not allowed in production"
         }
     }
 }
@@ -410,13 +410,13 @@ public enum SecurityError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case let .keychainError(status):
-            return "Keychain operation failed with status: \(status)"
+            "Keychain operation failed with status: \(status)"
         case .randomGenerationFailed:
-            return "Failed to generate secure random data"
+            "Failed to generate secure random data"
         case .encryptionFailed:
-            return "Encryption operation failed"
+            "Encryption operation failed"
         case .decryptionFailed:
-            return "Decryption operation failed"
+            "Decryption operation failed"
         }
     }
 }
@@ -432,26 +432,26 @@ public enum SecurityEvent {
     public var description: String {
         switch self {
         case let .inputValidationFailed(type):
-            return "Input validation failed for type: \(type)"
+            "Input validation failed for type: \(type)"
         case let .keychainOperationFailed(operation):
-            return "Keychain operation failed: \(operation)"
+            "Keychain operation failed: \(operation)"
         case .encryptionOperationFailed:
-            return "Encryption operation failed"
+            "Encryption operation failed"
         case let .vulnerabilityDetected(type):
-            return "Vulnerability detected: \(type.rawValue)"
+            "Vulnerability detected: \(type.rawValue)"
         case let .incidentDetected(type):
-            return "Security incident detected: \(type)"
+            "Security incident detected: \(type)"
         }
     }
 
     public var level: LogLevel {
         switch self {
         case .inputValidationFailed:
-            return .warning
+            .warning
         case .keychainOperationFailed, .encryptionOperationFailed:
-            return .error
+            .error
         case .vulnerabilityDetected, .incidentDetected:
-            return .critical
+            .critical
         }
     }
 }

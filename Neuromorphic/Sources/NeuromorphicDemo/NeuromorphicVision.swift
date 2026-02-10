@@ -443,7 +443,7 @@ public class NeuromorphicVisionSystem {
             features: features,
             processingTime: processingTime,
             spikeCount: retinalSpikes.count + lgnSpikes.count
-                + v1Responses.values.flatMap { $0 }.count
+                + v1Responses.values.flatMap(\.self).count
         )
     }
 
@@ -613,11 +613,11 @@ public class VisualAttentionSystem {
 
     private func getFeatureWeight(_ featureType: String) -> Double {
         switch featureType {
-        case "intensity": return 0.3
-        case "orientation": return 0.4
-        case "color": return 0.2
-        case "motion": return 0.5
-        default: return 0.1
+        case "intensity": 0.3
+        case "orientation": 0.4
+        case "color": 0.2
+        case "motion": 0.5
+        default: 0.1
         }
     }
 
@@ -636,7 +636,7 @@ public class VisualAttentionSystem {
     }
 
     private func normalizeSaliencyMap() {
-        let maxValue = saliencyMap.flatMap { $0 }.max() ?? 1.0
+        let maxValue = saliencyMap.flatMap(\.self).max() ?? 1.0
         if maxValue > 0 {
             for y in 0..<saliencyMap.count {
                 for x in 0..<saliencyMap[y].count {

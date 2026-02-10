@@ -124,9 +124,9 @@ public struct AssistantOutput: Sendable {
 
         var isVisual: Bool {
             switch self {
-            case .visual: return true
-            case let .mixed(contents): return contents.contains { $0.isVisual }
-            default: return false
+            case .visual: true
+            case let .mixed(contents): contents.contains { $0.isVisual }
+            default: false
             }
         }
     }
@@ -148,18 +148,18 @@ public enum AssistantAction: Sendable, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case let .executeCode(code): return "executeCode(\(code.prefix(20))...)"
-        case let .openFile(path): return "openFile(\(path))"
-        case let .runCommand(cmd): return "runCommand(\(cmd))"
-        case let .createFile(path, _): return "createFile(\(path))"
-        case let .searchDocumentation(query): return "searchDocumentation(\(query))"
+        case let .executeCode(code): "executeCode(\(code.prefix(20))...)"
+        case let .openFile(path): "openFile(\(path))"
+        case let .runCommand(cmd): "runCommand(\(cmd))"
+        case let .createFile(path, _): "createFile(\(path))"
+        case let .searchDocumentation(query): "searchDocumentation(\(query))"
         case let .generateCode(desc, lang):
-            return "generateCode(\(lang): \(desc.prefix(20))...)"
-        case .analyzeCode: return "analyzeCode"
-        case let .runTests(path): return "runTests(\(path))"
-        case let .deployApplication(path): return "deployApplication(\(path))"
-        case .showVisualization: return "showVisualization"
-        case .playAudio: return "playAudio"
+            "generateCode(\(lang): \(desc.prefix(20))...)"
+        case .analyzeCode: "analyzeCode"
+        case let .runTests(path): "runTests(\(path))"
+        case let .deployApplication(path): "deployApplication(\(path))"
+        case .showVisualization: "showVisualization"
+        case .playAudio: "playAudio"
         }
     }
 }
@@ -585,13 +585,13 @@ public final class MultiModalAIAssistant: ObservableObject {
         // Determine best output modality based on input and response type
         switch input.modality {
         case .voice:
-            return .speech
+            .speech
         case .vision:
-            return response.content.isVisual ? .visual : .text
+            response.content.isVisual ? .visual : .text
         case .code:
-            return .code
+            .code
         case .text, .gesture, .mixed:
-            return .mixed
+            .mixed
         }
     }
 
@@ -642,15 +642,15 @@ public final class MultiModalAIAssistant: ObservableObject {
         // Generate contextual suggestions based on intent
         switch intent.intent {
         case "code_generation":
-            return ["Add error handling", "Include documentation", "Add unit tests"]
+            ["Add error handling", "Include documentation", "Add unit tests"]
         case "debugging":
-            return ["Check logs", "Add breakpoints", "Review stack trace"]
+            ["Check logs", "Add breakpoints", "Review stack trace"]
         case "testing":
-            return ["Run unit tests", "Check code coverage", "Add integration tests"]
+            ["Run unit tests", "Check code coverage", "Add integration tests"]
         case "deployment":
-            return ["Run pre-deployment checks", "Backup current version", "Monitor deployment"]
+            ["Run pre-deployment checks", "Backup current version", "Monitor deployment"]
         default:
-            return ["Need help?", "Show documentation", "Run diagnostics"]
+            ["Need help?", "Show documentation", "Run diagnostics"]
         }
     }
 

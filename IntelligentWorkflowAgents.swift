@@ -219,8 +219,8 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
             output: result,
             executionTime: executionTime,
             metadata: [
-                "steps_completed": result.stepResults.filter { $0.state == .completed }.count,
-                "steps_failed": result.stepResults.filter { $0.state == .failed }.count,
+                "steps_completed": result.stepResults.count(where: { $0.state == .completed }),
+                "steps_failed": result.stepResults.count(where: { $0.state == .failed }),
             ]
         )
     }
@@ -268,7 +268,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
         return WorkflowPerformanceMetrics(
             totalExecutions: executions.count,
             successfulExecutions: successfulExecutions.count,
-            failedExecutions: executions.filter { $0.state == .failed }.count,
+            failedExecutions: executions.count(where: { $0.state == .failed }),
             averageExecutionTime: successfulExecutions.isEmpty
                 ? 0
                 : totalTime / Double(successfulExecutions.count),
@@ -397,15 +397,15 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
     {
         switch anomaly.type {
         case .performanceDegradation:
-            return .optimizeWorkflow
+            .optimizeWorkflow
         case .resourceExhaustion:
-            return .scaleResources
+            .scaleResources
         case .stepFailure:
-            return .retryWithBackoff
+            .retryWithBackoff
         case .deadlock:
-            return .restructureWorkflow
+            .restructureWorkflow
         case .timeout:
-            return .increaseTimeout
+            .increaseTimeout
         }
     }
 
@@ -416,7 +416,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
         switch strategy {
         case .optimizeWorkflow:
             // Would optimize the workflow
-            return WorkflowAnomalyResolution(
+            WorkflowAnomalyResolution(
                 anomalyId: anomaly.id,
                 strategy: strategy,
                 success: true,
@@ -426,7 +426,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
 
         case .scaleResources:
             // Would scale resources
-            return WorkflowAnomalyResolution(
+            WorkflowAnomalyResolution(
                 anomalyId: anomaly.id,
                 strategy: strategy,
                 success: true,
@@ -436,7 +436,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
 
         case .retryWithBackoff:
             // Would retry with backoff
-            return WorkflowAnomalyResolution(
+            WorkflowAnomalyResolution(
                 anomalyId: anomaly.id,
                 strategy: strategy,
                 success: true,
@@ -446,7 +446,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
 
         case .restructureWorkflow:
             // Would restructure workflow
-            return WorkflowAnomalyResolution(
+            WorkflowAnomalyResolution(
                 anomalyId: anomaly.id,
                 strategy: strategy,
                 success: true,
@@ -456,7 +456,7 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
 
         case .increaseTimeout:
             // Would increase timeout
-            return WorkflowAnomalyResolution(
+            WorkflowAnomalyResolution(
                 anomalyId: anomaly.id,
                 strategy: strategy,
                 success: true,
@@ -654,17 +654,17 @@ public enum WorkflowAgentSpecialization {
     {
         switch specialization {
         case .orchestration:
-            return [.workflowExecution, .stepCoordination, .resourceManagement]
+            [.workflowExecution, .stepCoordination, .resourceManagement]
         case .optimization:
-            return [.performanceAnalysis, .workflowOptimization, .strategyDevelopment]
+            [.performanceAnalysis, .workflowOptimization, .strategyDevelopment]
         case .monitoring:
-            return [.healthMonitoring, .performanceTracking, .anomalyDetection]
+            [.healthMonitoring, .performanceTracking, .anomalyDetection]
         case .coordination:
-            return [.multiWorkflowCoordination, .dependencyManagement, .synchronization]
+            [.multiWorkflowCoordination, .dependencyManagement, .synchronization]
         case .anomalyDetection:
-            return [.patternRecognition, .anomalyDetection, .resolutionPlanning]
+            [.patternRecognition, .anomalyDetection, .resolutionPlanning]
         case .performanceAnalysis:
-            return [.predictiveAnalysis, .bottleneckIdentification, .recommendationGeneration]
+            [.predictiveAnalysis, .bottleneckIdentification, .recommendationGeneration]
         }
     }
 
@@ -673,9 +673,9 @@ public enum WorkflowAgentSpecialization {
     {
         switch specialization {
         case .optimization:
-            return [ParallelizationStrategy(), CachingStrategy(), ConsolidationStrategy()]
+            [ParallelizationStrategy(), CachingStrategy(), ConsolidationStrategy()]
         default:
-            return [BasicOptimizationStrategy()]
+            [BasicOptimizationStrategy()]
         }
     }
 }
@@ -817,19 +817,19 @@ public enum WorkflowAction {
     func toAgentDecision() -> AgentDecision {
         switch self {
         case .executeWorkflow:
-            return .custom("execute_workflow", [:])
+            .custom("execute_workflow", [:])
         case .optimizeWorkflow:
-            return .custom("optimize_workflow", [:])
+            .custom("optimize_workflow", [:])
         case .monitorWorkflows:
-            return .custom("monitor_workflows", [:])
+            .custom("monitor_workflows", [:])
         case .resolveAnomaly:
-            return .custom("resolve_anomaly", [:])
+            .custom("resolve_anomaly", [:])
         case .coordinateWorkflows:
-            return .custom("coordinate_workflows", [:])
+            .custom("coordinate_workflows", [:])
         case .escalateIssue:
-            return .custom("escalate_issue", [:])
+            .custom("escalate_issue", [:])
         case .ignore:
-            return .ignore
+            .ignore
         }
     }
 }

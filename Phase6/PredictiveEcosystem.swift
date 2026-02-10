@@ -341,11 +341,11 @@ public actor PredictiveEcosystem {
 
     private func generatePerformanceRecommendation(_ trend: Double) -> String {
         if trend > 0.1 {
-            return "Performance trending upward - maintain current operations"
+            "Performance trending upward - maintain current operations"
         } else if trend < -0.1 {
-            return "Performance declining - investigate potential issues"
+            "Performance declining - investigate potential issues"
         } else {
-            return "Performance stable - continue monitoring"
+            "Performance stable - continue monitoring"
         }
     }
 
@@ -354,18 +354,18 @@ public actor PredictiveEcosystem {
     {
         switch resourceType {
         case .cpu:
-            return [
+            [
                 "Scale CPU resources", "Optimize CPU-intensive operations",
                 "Implement CPU throttling",
             ]
         case .memory:
-            return [
+            [
                 "Increase memory allocation", "Optimize memory usage", "Implement memory caching",
             ]
         case .storage:
-            return ["Expand storage capacity", "Implement data compression", "Archive old data"]
+            ["Expand storage capacity", "Implement data compression", "Archive old data"]
         case .network:
-            return [
+            [
                 "Upgrade network bandwidth", "Optimize network protocols",
                 "Implement traffic shaping",
             ]
@@ -570,7 +570,7 @@ public actor OptimizationCoordinator {
     }
 
     private func assessRiskLevel(_ bottlenecks: [Bottleneck]) -> RiskLevel {
-        let highRiskCount = bottlenecks.filter { $0.severity == .critical }.count
+        let highRiskCount = bottlenecks.count(where: { $0.severity == .critical })
 
         if highRiskCount > 2 {
             return .high
@@ -608,7 +608,7 @@ public actor OptimizationCoordinator {
         _ patterns: UsagePatterns
     ) -> Double {
         // Calculate potential efficiency improvement
-        let overUtilized = patterns.resourceUsage.filter { $0.value > 0.8 }.count
+        let overUtilized = patterns.resourceUsage.count(where: { $0.value > 0.8 })
         return Double(overUtilized) * 0.1 // 10% gain per over-utilized resource
     }
 
@@ -697,7 +697,7 @@ public actor AnalyticsProcessor {
     /// Analyze performance trend
     public func analyzePerformanceTrend() async throws -> Double {
         // Calculate performance trend across all systems
-        let allMetrics = systemMetrics.values.flatMap { $0 }
+        let allMetrics = systemMetrics.values.flatMap(\.self)
 
         if allMetrics.count < 2 { return 0.0 }
 
@@ -1016,10 +1016,10 @@ public enum BottleneckSeverity: String, Sendable {
 
     public var numericValue: Int {
         switch self {
-        case .low: return 1
-        case .medium: return 2
-        case .high: return 3
-        case .critical: return 4
+        case .low: 1
+        case .medium: 2
+        case .high: 3
+        case .critical: 4
         }
     }
 }

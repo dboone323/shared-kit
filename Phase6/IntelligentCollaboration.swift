@@ -503,10 +503,10 @@ public actor CollaborationAnalyzer {
         for session in sessions {
             // Count missed communications, unclear messages, etc.
             let gapsInSession =
-                session.messages?.filter { message in
+                session.messages?.count(where: { message in
                     // Simplified gap detection
                     message.content.contains("?") && message.responses.isEmpty
-                }.count ?? 0
+                }) ?? 0
 
             totalGaps += gapsInSession
         }
@@ -529,7 +529,7 @@ public actor CollaborationAnalyzer {
     private func calculateProductivityGain(sessions: [CollaborationSession]) async throws -> Double {
         // Calculate productivity improvements from collaboration
         // Simplified calculation
-        let completedSessions = sessions.filter { $0.status == .completed }.count
+        let completedSessions = sessions.count(where: { $0.status == .completed })
         let totalSessions = sessions.count
 
         return totalSessions > 0 ? Double(completedSessions) / Double(totalSessions) : 0.0
@@ -645,15 +645,15 @@ public actor IntelligentMediator {
     ) -> [String] {
         switch strategy {
         case .compromise:
-            return ["Facilitate discussion between parties", "Find mutually acceptable solution"]
+            ["Facilitate discussion between parties", "Find mutually acceptable solution"]
         case .escalation:
-            return ["Involve team lead or manager", "Document the conflict"]
+            ["Involve team lead or manager", "Document the conflict"]
         case .accommodation:
-            return ["One party accommodates the other's needs", "Document the agreement"]
+            ["One party accommodates the other's needs", "Document the agreement"]
         case .avoidance:
-            return ["Postpone discussion to later time", "Allow time for emotions to cool"]
+            ["Postpone discussion to later time", "Allow time for emotions to cool"]
         case .collaboration:
-            return ["Joint problem solving", "Find win-win solution"]
+            ["Joint problem solving", "Find win-win solution"]
         }
     }
 

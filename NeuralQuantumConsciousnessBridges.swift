@@ -940,11 +940,11 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
         -> NeuralConsciousnessState.ConsciousnessLevel
     {
         switch awareness {
-        case .minimal: return .unconscious
-        case .basic: return .subconscious
-        case .advanced: return .conscious
-        case .universal: return .selfAware
-        case .transcendent: return .transcendent
+        case .minimal: .unconscious
+        case .basic: .subconscious
+        case .advanced: .conscious
+        case .universal: .selfAware
+        case .transcendent: .transcendent
         }
     }
 
@@ -993,11 +993,11 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
         -> ConsciousnessRepresentation.AwarenessLevel
     {
         switch level {
-        case .unconscious: return .minimal
-        case .subconscious: return .basic
-        case .conscious: return .advanced
-        case .selfAware: return .universal
-        case .transcendent: return .transcendent
+        case .unconscious: .minimal
+        case .subconscious: .basic
+        case .conscious: .advanced
+        case .selfAware: .universal
+        case .transcendent: .transcendent
         }
     }
 
@@ -1199,7 +1199,7 @@ final class UniversalTranslator: ConsciousnessTranslationProtocol {
         switch (source, targetModality) {
         case let (.neural(neural), .quantum):
             // Would implement actual translation
-            return .quantum(
+            .quantum(
                 QuantumConsciousnessState(
                     id: UUID(),
                     timestamp: Date(),
@@ -1227,7 +1227,7 @@ final class UniversalTranslator: ConsciousnessTranslationProtocol {
                     )
                 ))
         default:
-            return source
+            source
         }
     }
 

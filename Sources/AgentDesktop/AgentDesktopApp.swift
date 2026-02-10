@@ -279,16 +279,16 @@ struct MessageBubble: View {
 
     var backgroundColor: Color {
         switch message.role {
-        case .user: return .purple
-        case .assistant: return Color(.controlBackgroundColor)
-        case .error: return .red.opacity(0.2)
+        case .user: .purple
+        case .assistant: Color(.controlBackgroundColor)
+        case .error: .red.opacity(0.2)
         }
     }
 
     var foregroundColor: Color {
         switch message.role {
-        case .user: return .white
-        case .assistant, .error: return .primary
+        case .user: .white
+        case .assistant, .error: .primary
         }
     }
 }
@@ -482,9 +482,9 @@ struct HealthBadge: View {
         case healthy, warning, error
         var color: Color {
             switch self {
-            case .healthy: return .green
-            case .warning: return .orange
-            case .error: return .red
+            case .healthy: .green
+            case .warning: .orange
+            case .error: .red
             }
         }
     }

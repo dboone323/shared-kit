@@ -29,7 +29,8 @@ final class SecurityFrameworkTests: XCTestCase {
         try await framework.validate(input: "valid_id_123", type: .identifier)
 
         do {
-            try await framework.validate(input: "invalid-id!", type: .identifier)  // - and ! not allowed in regex ^[a-zA-Z0-9_]+$
+            try await framework
+                .validate(input: "invalid-id!", type: .identifier) // - and ! not allowed in regex ^[a-zA-Z0-9_]+$
             XCTFail("Should detect invalid identifier")
         } catch {}
     }
@@ -38,7 +39,7 @@ final class SecurityFrameworkTests: XCTestCase {
         let framework = SecurityFramework()
         let raw = "Hello\0World'"
         let sanitized = await framework.sanitize(raw)
-        XCTAssertEqual(sanitized, "HelloWorld''")  // null removed, quote escaped
+        XCTAssertEqual(sanitized, "HelloWorld''") // null removed, quote escaped
     }
 
     // MARK: - RBAC

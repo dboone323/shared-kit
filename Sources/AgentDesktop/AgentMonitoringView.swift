@@ -185,10 +185,10 @@ struct ActivityLog: Identifiable {
 
         var color: Color {
             switch self {
-            case .info: return .blue
-            case .success: return .green
-            case .warning: return .orange
-            case .error: return .red
+            case .info: .blue
+            case .success: .green
+            case .warning: .orange
+            case .error: .red
             }
         }
     }

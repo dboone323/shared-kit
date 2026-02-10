@@ -13,19 +13,19 @@ import SwiftUI
 
 // MARK: - Required Imports and Type Definitions
 
-// Analytics service protocol (simplified for error handling)
+/// Analytics service protocol (simplified for error handling)
 public protocol AnalyticsServiceProtocol {
     func track(event: String, properties: [String: Any]?, userId: String?) async
 }
 
-// Mock analytics service for compilation
+/// Mock analytics service for compilation
 public class MockAnalyticsService: AnalyticsServiceProtocol {
     public func track(event: String, properties _: [String: Any]?, userId _: String?) async {
         print("📊 Analytics: \(event)")
     }
 }
 
-// Mock dependency injection for error handling
+/// Mock dependency injection for error handling
 @propertyWrapper
 public struct MockInjected<T> {
     public var wrappedValue: T
@@ -298,7 +298,7 @@ public struct ValidationError: AppErrorProtocol, Sendable {
         self.context = contextDict
     }
 
-    // Codable implementation
+    /// Codable implementation
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.errorId = try container.decode(String.self, forKey: .errorId)
@@ -484,7 +484,7 @@ public struct NetworkError: AppErrorProtocol, Sendable {
         }
     }
 
-    // Codable implementation
+    /// Codable implementation
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.errorId = try container.decode(String.self, forKey: .errorId)
@@ -572,7 +572,7 @@ public struct BusinessError: AppErrorProtocol, Sendable {
         self.context = contextDict
     }
 
-    // Codable implementation
+    /// Codable implementation
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.errorId = try container.decode(String.self, forKey: .errorId)

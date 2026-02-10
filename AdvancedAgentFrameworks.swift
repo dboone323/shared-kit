@@ -363,21 +363,21 @@ public enum AgentIntelligenceLevel: String, Codable, Sendable {
 
     var nextLevelThreshold: Double {
         switch self {
-        case .basic: return 2.0
-        case .standard: return 5.0
-        case .advanced: return 10.0
-        case .superintelligent: return 50.0
-        case .universal: return 100.0
+        case .basic: 2.0
+        case .standard: 5.0
+        case .advanced: 10.0
+        case .superintelligent: 50.0
+        case .universal: 100.0
         }
     }
 
     func nextLevel() -> AgentIntelligenceLevel {
         switch self {
-        case .basic: return .standard
-        case .standard: return .advanced
-        case .advanced: return .superintelligent
-        case .superintelligent: return .universal
-        case .universal: return .universal
+        case .basic: .standard
+        case .standard: .advanced
+        case .advanced: .superintelligent
+        case .superintelligent: .universal
+        case .universal: .universal
         }
     }
 }
@@ -443,19 +443,19 @@ public enum AdvancedAgentFactory {
     ) -> any AdvancedAutonomousAgent {
         switch domain {
         case .general:
-            return BaseAdvancedAgent<GeneralAgentState, GeneralAgentAction>(
+            BaseAdvancedAgent<GeneralAgentState, GeneralAgentAction>(
                 name: name,
                 initialState: .init(),
                 intelligenceLevel: intelligenceLevel
             )
         case .technical:
-            return BaseAdvancedAgent<TechnicalAgentState, TechnicalAgentAction>(
+            BaseAdvancedAgent<TechnicalAgentState, TechnicalAgentAction>(
                 name: name,
                 initialState: .init(),
                 intelligenceLevel: intelligenceLevel
             )
         case .creative:
-            return BaseAdvancedAgent<CreativeAgentState, CreativeAgentAction>(
+            BaseAdvancedAgent<CreativeAgentState, CreativeAgentAction>(
                 name: name,
                 initialState: .init(),
                 intelligenceLevel: intelligenceLevel

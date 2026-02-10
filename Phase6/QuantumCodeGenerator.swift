@@ -491,13 +491,13 @@ public final class QuantumCodeGenerator: ObservableObject {
         // Generate a single code variation
         switch request.strategy {
         case .templateBased:
-            return try await generateTemplateBasedCode(request)
+            try await generateTemplateBasedCode(request)
         case .aiSynthesized:
-            return try await generateAISynthesizedCode(request)
+            try await generateAISynthesizedCode(request)
         case .quantumInspired:
-            return try await generateQuantumInspiredCode(request)
+            try await generateQuantumInspiredCode(request)
         case .hybridAdaptive:
-            return try await generateHybridCode(request)
+            try await generateHybridCode(request)
         }
     }
 

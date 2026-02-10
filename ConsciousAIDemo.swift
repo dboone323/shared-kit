@@ -214,7 +214,7 @@ struct ConsciousAIDemo {
     }
 }
 
-// Mock implementation for demonstration
+/// Mock implementation for demonstration
 class MockConsciousAI: ConsciousAI {
     typealias State = String
     typealias Action = String

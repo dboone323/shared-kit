@@ -1,28 +1,77 @@
-# SwiftFormat Configuration for Quantum Workspace
-# https://github.com/nicklockwood/SwiftFormat
+# Unified SwiftFormat Configuration
+# Version: 0.53+
+# Swift: 6.0
+# Updated: February 10, 2026
 
-# File options
---exclude .build,Package.swift,node_modules,.swiftpm,Tools,Tools/Automation,Tools/Automation/agents/backups,**/backups,**/Tests,Projects/QuantumChemistry,Projects/MomentumFinance
+# Swift version
+--swiftversion 6.0
 
-# Format options
+# Indentation and Tabs
 --indent 4
+--tabwidth 4
+--indentcase false
+
+# Line Breaks
 --linebreaks lf
---commas always
+
+# Spacing and Wrapping
+--maxwidth 120
 --wraparguments preserve
 --wrapparameters preserve
 --wrapcollections preserve
 --closingparen balanced
---hexliteralcase uppercase
---exponentcase lowercase
+--wrapternary before-operators
+
+# Commas
+--commas always
+
+# Operators
+--operatorfunc spaced
+
+# Semicolons
+--semicolons never
+
+# Self Reference
+--self insert
+
+# Imports
+--importgrouping testable-bottom
+
+# Numbers Grouping
 --decimalgrouping 3,6
 --binarygrouping 4,8
 --hexgrouping 4,8
 --octalgrouping 4,8
---patternlet hoist
---stripunusedargs closure-only
+--fractiongrouping enabled
+--exponentgrouping enabled
+
+# Hex and Exponent
+--hexliteralcase uppercase
+--exponentcase lowercase
+
+# Else Positioning
 --elseposition same-line
 
-# Enabled rules
+# Braces
+--allman false
+
+# Pattern Let
+--patternlet hoist
+
+# Unused Arguments
+--stripunusedargs closure-only
+
+# Function and Type Attributes
+--funcattributes prev-line
+--typeattributes prev-line
+
+# Whitespace
+--trimwhitespace always
+
+# Organize Types
+--organizetypes actor,class,enum,struct
+
+# Enabled Rules
 --enable isEmpty
 --enable hoistPatternLet
 --enable wrapMultilineStatementBraces
@@ -34,13 +83,17 @@
 --enable void
 --enable trailingCommas
 --enable strongifiedSelf
+--enable docComments
+--enable redundantReturn
+--enable redundantType
+--enable spaceAroundOperators
 
-# Disabled rules
+# Disabled Rules
 --disable andOperator
 --disable blankLinesAtStartOfScope
 --disable blankLinesAtEndOfScope
 --disable redundantSelf
 --disable wrapEnumCases
 
-# Swift version
---swiftversion 5.7
+# Exclusions
+--exclude .build,Package.swift,node_modules,.swiftpm,Tools

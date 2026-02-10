@@ -531,17 +531,17 @@ public final class MCPRealityEngineeringCoordinator: MCPRealityEngineering, Send
     private func validateConstraint(_ constraint: RealityConstraint) async throws -> Bool {
         switch constraint.constraintType {
         case .causality:
-            return constraint.value.contains("preserve")
+            constraint.value.contains("preserve")
         case .entropy:
-            return constraint.value.contains("minimize")
+            constraint.value.contains("minimize")
         case .consciousness:
-            return constraint.value.contains("enhance")
+            constraint.value.contains("enhance")
         case .harmony:
-            return constraint.value.contains("maintain")
+            constraint.value.contains("maintain")
         case .stability:
-            return constraint.value.contains("ensure")
+            constraint.value.contains("ensure")
         case .evolution:
-            return constraint.value.contains("positive")
+            constraint.value.contains("positive")
         }
     }
 
@@ -558,10 +558,10 @@ public final class MCPRealityEngineeringCoordinator: MCPRealityEngineering, Send
 
     private func intensityFromScope(_ scope: EngineeringScope) -> ManipulationIntensity {
         switch scope {
-        case .local: return .low
-        case .regional: return .moderate
-        case .global: return .high
-        case .universal: return .extreme
+        case .local: .low
+        case .regional: .moderate
+        case .global: .high
+        case .universal: .extreme
         }
     }
 
@@ -636,20 +636,20 @@ public final class MCPRealityEngineeringCoordinator: MCPRealityEngineering, Send
 
     private func alignmentValue(_ alignment: ConsciousnessAlignment) -> Double {
         switch alignment {
-        case .minimal: return 0.6
-        case .standard: return 0.8
-        case .enhanced: return 0.9
-        case .transcendent: return 0.95
-        case .universal: return 1.0
+        case .minimal: 0.6
+        case .standard: 0.8
+        case .enhanced: 0.9
+        case .transcendent: 0.95
+        case .universal: 1.0
         }
     }
 
     private func reversibilityValue(_ reversibility: ReversibilityLevel) -> Double {
         switch reversibility {
-        case .none: return 0.0
-        case .partial: return 0.5
-        case .full: return 1.0
-        case .enhanced: return 1.2
+        case .none: 0.0
+        case .partial: 0.5
+        case .full: 1.0
+        case .enhanced: 1.2
         }
     }
 }

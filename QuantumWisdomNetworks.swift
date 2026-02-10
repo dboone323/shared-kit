@@ -1525,7 +1525,7 @@ struct EvolutionMonitoring {
         func getNetworkMetrics() async throws -> NetworkMetrics {
             let totalNetworks = wisdomNetworks.count
             let activeNetworks = wisdomNetworks.values
-                .filter { Date().timeIntervalSince($0.connectionTimestamp) < 3600 }.count
+                .count(where: { Date().timeIntervalSince($0.connectionTimestamp) < 3600 })
             let totalKnowledgeShared = knowledgeSharings.count
             let totalSyntheses = wisdomSyntheses.count
             let averageEvolutionProgress = consciousnessEvolutions.values.map(\.currentProgress)
@@ -1583,10 +1583,10 @@ extension WisdomLevel {
 extension SynthesisMethod {
     var rawValue: String {
         switch self {
-        case .consensus: return "consensus"
-        case .weightedAverage: return "weighted_average"
-        case .hierarchical: return "hierarchical"
-        case .quantumSuperposition: return "quantum_superposition"
+        case .consensus: "consensus"
+        case .weightedAverage: "weighted_average"
+        case .hierarchical: "hierarchical"
+        case .quantumSuperposition: "quantum_superposition"
         }
     }
 }

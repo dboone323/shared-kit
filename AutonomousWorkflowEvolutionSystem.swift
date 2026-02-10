@@ -322,7 +322,7 @@ public final class AutonomousWorkflowEvolutionSystem: ObservableObject {
         }
 
         // Analyze execution modes
-        let parallelSteps = workflow.steps.filter { $0.executionMode == .parallel }.count
+        let parallelSteps = workflow.steps.count(where: { $0.executionMode == .parallel })
         if parallelSteps == 0 && stepCount > 3 {
             recommendations.append(
                 "No parallel execution detected - consider concurrency optimization")
@@ -359,7 +359,7 @@ public final class AutonomousWorkflowEvolutionSystem: ObservableObject {
         let stepCount = Double(workflow.steps.count)
         let dependencyCount = Double(workflow.steps.reduce(0) { $0 + $1.dependencies.count })
         let parallelRatio =
-            Double(workflow.steps.filter { $0.executionMode == .parallel }.count) / stepCount
+            Double(workflow.steps.count(where: { $0.executionMode == .parallel })) / stepCount
 
         // Complexity = steps + dependencies - parallelism bonus
         return stepCount + dependencyCount - (parallelRatio * stepCount * 0.5)
@@ -654,7 +654,7 @@ public extension MCPWorkflow {
     func getOptimizationRecommendations() -> [String] {
         var recommendations: [String] = []
 
-        let parallelSteps = steps.filter { $0.executionMode == .parallel }.count
+        let parallelSteps = steps.count(where: { $0.executionMode == .parallel })
         if parallelSteps == 0 && steps.count > 3 {
             recommendations.append("Enable parallel execution for independent steps")
         }

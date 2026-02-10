@@ -9,12 +9,13 @@ public class MockURLSession: URLSession, @unchecked Sendable {
     // A better approach for Swift testing is using URLProtocol.
 }
 
-// Better Approach: MockURLProtocol
+/// Better Approach: MockURLProtocol
 @available(macOS 12.0, iOS 15.0, *)
 public class MockURLProtocol: URLProtocol {
     private class State: @unchecked Sendable {
         var handler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
     }
+
     private static let state = State()
     private static let lock = NSLock()
 
@@ -32,11 +33,11 @@ public class MockURLProtocol: URLProtocol {
     }
 
     override public class func canInit(with request: URLRequest) -> Bool {
-        return true
+        true
     }
 
     override public class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        return request
+        request
     }
 
     override public func startLoading() {

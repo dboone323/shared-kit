@@ -18,7 +18,8 @@ final class PerformanceTests: XCTestCase {
 
         measure {
             _ = VectorBatchOperation(
-                contents: largeContent, vectors: largeVectors, metadata: largeMetadata)
+                contents: largeContent, vectors: largeVectors, metadata: largeMetadata
+            )
         }
     }
 

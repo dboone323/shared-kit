@@ -17,15 +17,15 @@ public enum ViewModelError: Error, Equatable {
     public var localizedDescription: String {
         switch self {
         case .invalidState:
-            return "Invalid state"
+            "Invalid state"
         case .networkError:
-            return "Network error occurred"
+            "Network error occurred"
         case .dataError:
-            return "Data error occurred"
+            "Data error occurred"
         case .unknownError:
-            return "Unknown error occurred"
+            "Unknown error occurred"
         case let .customError(message):
-            return message
+            message
         }
     }
 }
@@ -349,25 +349,25 @@ extension String {
         prefix(1).capitalized + dropFirst()
     }
 
-    /// Converts a color string to SwiftUI Color with fallback
+    // Converts a color string to SwiftUI Color with fallback
     #if canImport(SwiftUI)
         var toColor: Color {
             switch self.lowercased() {
-            case "red": return .red
-            case "orange": return .orange
-            case "yellow": return .yellow
-            case "green": return .green
-            case "blue": return .blue
-            case "purple": return .purple
-            case "pink": return .pink
-            case "teal": return .teal
-            case "gray", "grey": return .gray
-            case "black": return .black
-            case "white": return .white
-            case "primary": return .primary
-            case "secondary": return .secondary
-            case "accent": return .accentColor
-            default: return .blue // Default fallback color
+            case "red": .red
+            case "orange": .orange
+            case "yellow": .yellow
+            case "green": .green
+            case "blue": .blue
+            case "purple": .purple
+            case "pink": .pink
+            case "teal": .teal
+            case "gray", "grey": .gray
+            case "black": .black
+            case "white": .white
+            case "primary": .primary
+            case "secondary": .secondary
+            case "accent": .accentColor
+            default: .blue // Default fallback color
             }
         }
     #endif
@@ -415,7 +415,7 @@ extension String {
             )
         }
 
-        // Create gradient colors for modern effects
+        /// Create gradient colors for modern effects
         static func gradient(from startColor: Color, to endColor: Color) -> LinearGradient {
             LinearGradient(
                 gradient: Gradient(colors: [startColor, endColor]),
@@ -424,7 +424,7 @@ extension String {
             )
         }
 
-        // Glass morphism effect
+        /// Glass morphism effect
         var glassMorphism: some View {
             opacity(0.7)
                 .background(.ultraThinMaterial)

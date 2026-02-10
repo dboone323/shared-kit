@@ -1183,13 +1183,13 @@ enum RealityMatrixError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .validationFailed(errors):
-            return "Validation failed with \(errors.count) errors"
+            "Validation failed with \(errors.count) errors"
         case let .modificationFailed(reason):
-            return "Modification failed: \(reason)"
+            "Modification failed: \(reason)"
         case let .stabilityCritical(reason):
-            return "Stability critical: \(reason)"
+            "Stability critical: \(reason)"
         case let .synchronizationFailed(reason):
-            return "Synchronization failed: \(reason)"
+            "Synchronization failed: \(reason)"
         }
     }
 }

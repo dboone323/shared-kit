@@ -9,8 +9,8 @@
 //  for data-driven insights across all applications.
 //
 
-import Foundation
 import Combine
+import Foundation
 import SwiftData
 
 // MARK: - Core Analytics Engine
@@ -45,17 +45,17 @@ public final class AnalyticsEngine {
 
     /// Get user analytics insights
     public func getInsights(for userId: String, timeRange: DateInterval) async throws -> AnalyticsInsights {
-        return try await dataProcessor.generateInsights(for: userId, in: timeRange)
+        try await dataProcessor.generateInsights(for: userId, in: timeRange)
     }
 
     /// Get behavior patterns
     public func getBehaviorPatterns(for userId: String) async throws -> [BehaviorPattern] {
-        return try await behaviorAnalyzer.getPatterns(for: userId)
+        try await behaviorAnalyzer.getPatterns(for: userId)
     }
 
     /// Export analytics data (privacy-compliant)
     public func exportData(for userId: String) async throws -> AnalyticsExport {
-        return try await privacyManager.exportData(for: userId)
+        try await privacyManager.exportData(for: userId)
     }
 
     /// Configure analytics settings
@@ -84,7 +84,8 @@ public struct AnalyticsEvent {
                 timestamp: Date = Date(),
                 sessionId: String,
                 deviceInfo: DeviceInfo,
-                context: EventContext? = nil) {
+                context: EventContext? = nil)
+    {
         self.id = id
         self.userId = userId
         self.type = type
@@ -253,7 +254,8 @@ public struct PrivacySettings {
     public init(allowPersonalization: Bool = true,
                 allowThirdPartySharing: Bool = false,
                 dataRetentionDays: Int = 365,
-                requireConsent: Bool = true) {
+                requireConsent: Bool = true)
+    {
         self.allowPersonalization = allowPersonalization
         self.allowThirdPartySharing = allowThirdPartySharing
         self.dataRetentionDays = dataRetentionDays
@@ -272,7 +274,8 @@ public struct TrackingSettings {
                 enableBehaviorAnalysis: Bool = true,
                 enablePerformanceMonitoring: Bool = true,
                 samplingRate: Double = 1.0,
-                batchSize: Int = 50) {
+                batchSize: Int = 50)
+    {
         self.enableEventTracking = enableEventTracking
         self.enableBehaviorAnalysis = enableBehaviorAnalysis
         self.enablePerformanceMonitoring = enablePerformanceMonitoring
@@ -288,7 +291,7 @@ private final class EventTracker {
     private var eventQueue: [AnalyticsEvent] = []
     private let trackingQueue = DispatchQueue(label: "com.tools-automation.analytics.tracking")
     private let batchSize = 50
-    private var settings: TrackingSettings = TrackingSettings()
+    private var settings: TrackingSettings = .init()
 
     func configure(_ settings: TrackingSettings) {
         self.settings = settings
@@ -353,7 +356,7 @@ private final class BehaviorAnalyzer {
     }
 
     func getPatterns(for userId: String) async throws -> [BehaviorPattern] {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             analysisQueue.async {
                 guard let behaviors = self.behaviorHistory[userId] else {
                     continuation.resume(returning: [])
@@ -454,7 +457,7 @@ private final class AnalyticsDataProcessor {
                 confidence: 0.92,
                 description: "Engagement levels remain consistent",
                 timeRange: timeRange
-            )
+            ),
         ]
 
         let recommendations = [
@@ -466,7 +469,7 @@ private final class AnalyticsDataProcessor {
                 impact: .medium,
                 confidence: 0.78,
                 action: RecommendedAction(type: "highlight", target: "features", parameters: ["priority": "high"])
-            )
+            ),
         ]
 
         let anomalies = [
@@ -478,7 +481,7 @@ private final class AnalyticsDataProcessor {
                 detectedAt: Date(),
                 affectedUsers: 3,
                 potentialImpact: "Minor user experience impact"
-            )
+            ),
         ]
 
         return AnalyticsInsights(
@@ -497,7 +500,7 @@ private final class AnalyticsDataProcessor {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class PrivacyManager {
-    private var settings: PrivacySettings = PrivacySettings()
+    private var settings: PrivacySettings = .init()
 
     func updateSettings(_ settings: PrivacySettings) {
         self.settings = settings
@@ -512,8 +515,15 @@ private final class PrivacyManager {
             behaviors: [], // Would populate with actual behaviors
             insights: AnalyticsInsights(
                 userId: userId,
-                timeRange: DateInterval(start: Date().addingTimeInterval(-30*24*60*60), end: Date()),
-                summary: InsightsSummary(totalEvents: 0, uniqueSessions: 0, averageSessionDuration: 0, topEvents: [], engagementScore: 0, retentionRate: 0),
+                timeRange: DateInterval(start: Date().addingTimeInterval(-30 * 24 * 60 * 60), end: Date()),
+                summary: InsightsSummary(
+                    totalEvents: 0,
+                    uniqueSessions: 0,
+                    averageSessionDuration: 0,
+                    topEvents: [],
+                    engagementScore: 0,
+                    retentionRate: 0
+                ),
                 trends: [],
                 recommendations: [],
                 anomalies: [],

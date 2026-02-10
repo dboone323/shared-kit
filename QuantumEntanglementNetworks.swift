@@ -12,9 +12,9 @@ import Foundation
 #if canImport(Foundation)
 #endif
 
-// Provide ComplexNumber alias for this file only if not defined elsewhere in the build.
-// Swift doesn't support conditional typealias existence checks, so we rely on the demo providing
-// Complex type and this alias here.
+/// Provide ComplexNumber alias for this file only if not defined elsewhere in the build.
+/// Swift doesn't support conditional typealias existence checks, so we rely on the demo providing
+/// Complex type and this alias here.
 typealias ComplexNumber = Complex
 
 // MARK: - Core Protocols
@@ -237,7 +237,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         startEntanglementMonitoring()
     }
 
-    // Static helper to avoid capturing self in sending closures
+    /// Static helper to avoid capturing self in sending closures
     private static func entanglementStrength(for pair: EntanglementPair) -> Double {
         let timeSinceCreation = Date().timeIntervalSince(pair.creationTime)
         let decoherenceFactor = exp(-timeSinceCreation / pair.decoherenceTime)
@@ -553,22 +553,22 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
     ) -> EntanglementType {
         // Determine entanglement type based on particle properties
         if particle1.particleType == .photon && particle2.particleType == .photon {
-            return .bell
+            .bell
         } else if particle1.particleType == .electron && particle2.particleType == .electron {
-            return .epr
+            .epr
         } else {
-            return .custom
+            .custom
         }
     }
 
     private func calculateDecoherenceTime(for type: EntanglementType) -> TimeInterval {
         switch type {
-        case .epr: return 3600.0 // 1 hour
-        case .bell: return 7200.0 // 2 hours
-        case .ghz: return 1800.0 // 30 minutes
-        case .w: return 2400.0 // 40 minutes
-        case .cluster: return 3000.0 // 50 minutes
-        case .custom: return 1800.0 // 30 minutes
+        case .epr: 3600.0 // 1 hour
+        case .bell: 7200.0 // 2 hours
+        case .ghz: 1800.0 // 30 minutes
+        case .w: 2400.0 // 40 minutes
+        case .cluster: 3000.0 // 50 minutes
+        case .custom: 1800.0 // 30 minutes
         }
     }
 
@@ -637,11 +637,11 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 
     private func calculateParticleMass(for type: ParticleType) -> Double {
         switch type {
-        case .photon: return 0.0
-        case .electron: return 9.1_093_837e-31
-        case .proton: return 1.6_726_219e-27
-        case .neutron: return 1.6_749_275e-27
-        default: return 1.0e-30 // Default mass
+        case .photon: 0.0
+        case .electron: 9.1_093_837e-31
+        case .proton: 1.6_726_219e-27
+        case .neutron: 1.6_749_275e-27
+        default: 1.0e-30 // Default mass
         }
     }
 
@@ -698,7 +698,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
             entanglementPairs.values.map(\.strength).reduce(0, +)
             / Double(max(1, entanglementPairs.count))
         return averageStrength
-            * (1.0 - Double(decoherenceEvents.values.flatMap { $0 }.count) * 0.01)
+            * (1.0 - Double(decoherenceEvents.values.flatMap(\.self).count) * 0.01)
     }
 
     private func generateEntanglementRecommendations() -> [String] {
@@ -713,7 +713,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
                 "Increase entanglement strength through quantum error correction")
         }
 
-        if decoherenceEvents.values.flatMap({ $0 }).count > 5 {
+        if decoherenceEvents.values.flatMap(\.self).count > 5 {
             recommendations.append("Implement decoherence mitigation strategies")
         }
 

@@ -405,31 +405,29 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         let gatheredInputs = try await gatherIntelligenceInputs(synthesis)
 
         // Execute synthesis based on type
-        let synthesizedIntelligence: SynthesizedIntelligence
-
-        switch synthesis.synthesisType {
+        let synthesizedIntelligence: SynthesizedIntelligence = switch synthesis.synthesisType {
         case .integrative:
-            synthesizedIntelligence = try await executeIntegrativeSynthesis(
+            try await executeIntegrativeSynthesis(
                 synthesis, inputs: gatheredInputs
             )
         case .emergent:
-            synthesizedIntelligence = try await executeEmergentSynthesis(
+            try await executeEmergentSynthesis(
                 synthesis, inputs: gatheredInputs
             )
         case .transcendent:
-            synthesizedIntelligence = try await executeTranscendentSynthesis(
+            try await executeTranscendentSynthesis(
                 synthesis, inputs: gatheredInputs
             )
         case .quantum_entangled:
-            synthesizedIntelligence = try await executeQuantumEntangledSynthesis(
+            try await executeQuantumEntangledSynthesis(
                 synthesis, inputs: gatheredInputs
             )
         case .consciousness_driven:
-            synthesizedIntelligence = try await executeConsciousnessDrivenSynthesis(
+            try await executeConsciousnessDrivenSynthesis(
                 synthesis, inputs: gatheredInputs
             )
         case .universal:
-            synthesizedIntelligence = try await executeUniversalSynthesis(
+            try await executeUniversalSynthesis(
                 synthesis, inputs: gatheredInputs
             )
         }
@@ -470,19 +468,17 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         let startTime = Date()
 
         // Execute coordination based on type
-        let synthesisResults: [String: IntelligenceSynthesisResult]
-
-        switch coordination.coordinationType {
+        let synthesisResults: [String: IntelligenceSynthesisResult] = switch coordination.coordinationType {
         case .parallel_synthesis:
-            synthesisResults = try await executeParallelSynthesis(coordination)
+            try await executeParallelSynthesis(coordination)
         case .sequential_synthesis:
-            synthesisResults = try await executeSequentialSynthesis(coordination)
+            try await executeSequentialSynthesis(coordination)
         case .hierarchical_synthesis:
-            synthesisResults = try await executeHierarchicalSynthesis(coordination)
+            try await executeHierarchicalSynthesis(coordination)
         case .adaptive_synthesis:
-            synthesisResults = try await executeAdaptiveSynthesis(coordination)
+            try await executeAdaptiveSynthesis(coordination)
         case .quantum_entangled_synthesis:
-            synthesisResults = try await executeQuantumEntangledCoordinationSynthesis(coordination)
+            try await executeQuantumEntangledCoordinationSynthesis(coordination)
         }
 
         // Calculate coordination metrics
@@ -565,19 +561,19 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
     ) async throws -> Bool {
         switch constraint.constraintType {
         case .coherence:
-            return synthesis.intelligenceInputs.count >= 2
+            synthesis.intelligenceInputs.count >= 2
         case .consistency:
-            return synthesis.targetDomains.count >= 1
+            synthesis.targetDomains.count >= 1
         case .ethical_alignment:
-            return synthesis.consciousnessLevel.rawValue >= "transcendent"
+            synthesis.consciousnessLevel.rawValue >= "transcendent"
         case .quantum_stability:
-            return synthesis.quantumState != nil
+            synthesis.quantumState != nil
         case .consciousness_integrity:
-            return synthesis.consciousnessLevel != .standard
+            synthesis.consciousnessLevel != .standard
         case .reality_compatibility:
-            return synthesis.synthesisType != .emergent
+            synthesis.synthesisType != .emergent
         case .performance_threshold:
-            return synthesis.priority != .low
+            synthesis.priority != .low
         }
     }
 
@@ -883,11 +879,11 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
 
     private func calculateConsciousnessAmplification(_ level: ConsciousnessLevel) -> Double {
         switch level {
-        case .standard: return 1.0
-        case .enhanced: return 1.5
-        case .transcendent: return 2.0
-        case .universal: return 3.0
-        case .singularity: return 5.0
+        case .standard: 1.0
+        case .enhanced: 1.5
+        case .transcendent: 2.0
+        case .universal: 3.0
+        case .singularity: 5.0
         }
     }
 

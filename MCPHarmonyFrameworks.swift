@@ -1750,9 +1750,9 @@ public final class BalanceOptimizer: Sendable {
     /// Get duration for complexity
     private func complexityDuration(_ complexity: OptimizationComplexity) -> TimeInterval {
         switch complexity {
-        case .low: return 1.0
-        case .medium: return 2.0
-        case .high: return 3.0
+        case .low: 1.0
+        case .medium: 2.0
+        case .high: 3.0
         }
     }
 

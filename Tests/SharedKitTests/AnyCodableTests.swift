@@ -78,6 +78,7 @@ final class AnyCodableTests: XCTestCase {
     }
 
     // MARK: - Nested Tests
+
     // Note: Skipping complex nested tests due to Sendable constraints in Swift 6
 
     func testNestedDictionary() throws {

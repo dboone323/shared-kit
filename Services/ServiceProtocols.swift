@@ -16,7 +16,7 @@ import Foundation
 // Import enhanced models and protocols from our data layer
 // These would typically be imported from separate modules in a production environment
 
-// Re-export core protocols from EnhancedDataModels
+/// Re-export core protocols from EnhancedDataModels
 public protocol Validatable {
     func validate() -> ValidationError?
 }
@@ -31,7 +31,7 @@ public protocol CrossProjectRelatable {
     mutating func removeCrossProjectReference(_ project: String)
 }
 
-// Re-export key enums from enhanced models
+/// Re-export key enums from enhanced models
 public enum MoodRating: Int, CaseIterable {
     case veryPoor = 1, poor, fair, good, excellent
 }
@@ -72,8 +72,8 @@ public struct ValidationError {
     }
 }
 
-// Forward declarations for enhanced model types
-// These would be properly imported in production
+/// Forward declarations for enhanced model types
+/// These would be properly imported in production
 public protocol EnhancedHabitProtocol: Validatable, Trackable, CrossProjectRelatable {
     var id: UUID { get }
     var name: String { get set }

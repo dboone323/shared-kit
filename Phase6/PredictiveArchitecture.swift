@@ -113,7 +113,7 @@ public actor PredictiveArchitecture {
         let accuracy =
             recentPatterns.isEmpty
                 ? 0.0
-                : Double(recentPatterns.filter { $0.confidence > 0.7 }.count)
+                : Double(recentPatterns.count(where: { $0.confidence > 0.7 }))
                     / Double(recentPatterns.count)
 
         // Calculate prediction confidence

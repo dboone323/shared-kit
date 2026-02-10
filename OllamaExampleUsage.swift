@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Example Usage Functions
 
-// Example 1: Basic Code Generation
+/// Example 1: Basic Code Generation
 func exampleCodeGeneration() async {
     print("=== Code Generation Example ===")
 
@@ -42,7 +42,7 @@ func exampleCodeGeneration() async {
     }
 }
 
-// Example 2: Code Analysis
+/// Example 2: Code Analysis
 func exampleCodeAnalysis() async {
     print("\n=== Code Analysis Example ===")
 
@@ -83,7 +83,7 @@ func exampleCodeAnalysis() async {
     }
 }
 
-// Example 3: Documentation Generation
+/// Example 3: Documentation Generation
 func exampleDocumentation() async {
     print("\n=== Documentation Generation Example ===")
 
@@ -122,7 +122,7 @@ func exampleDocumentation() async {
     }
 }
 
-// Example 4: Batch Processing
+/// Example 4: Batch Processing
 func exampleBatchProcessing() async {
     print("\n=== Batch Processing Example ===")
 
@@ -161,7 +161,7 @@ func exampleBatchProcessing() async {
     }
 }
 
-// Example 5: Quick Operations
+/// Example 5: Quick Operations
 func exampleQuickOperations() async {
     print("\n=== Quick Operations Example ===")
 

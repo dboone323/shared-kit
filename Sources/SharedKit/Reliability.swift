@@ -1,7 +1,7 @@
 import Foundation
 
-/// Reliability enhancements for Shared-Kit
-/// Covers Steps 36-40: Rate Limiting, Circuit Breakers, Deduplication, Retry, Connection Optimization
+// Reliability enhancements for Shared-Kit
+// Covers Steps 36-40: Rate Limiting, Circuit Breakers, Deduplication, Retry, Connection Optimization
 
 @available(macOS 12.0, iOS 15.0, *)
 public actor Reliability {

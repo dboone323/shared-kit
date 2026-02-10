@@ -875,7 +875,7 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
         // In a real implementation, this would involve complex quantum operations
         switch consciousness {
         case let .neural(neuralState):
-            return .neural(
+            .neural(
                 NeuralConsciousnessState(
                     id: neuralState.id,
                     timestamp: Date(),
@@ -890,7 +890,7 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                     memoryState: neuralState.memoryState
                 ))
         case let .quantum(quantumState):
-            return .quantum(
+            .quantum(
                 QuantumConsciousnessState(
                     id: quantumState.id,
                     timestamp: Date(),
@@ -901,7 +901,7 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                     quantumMemory: quantumState.quantumMemory
                 ))
         case let .hybrid(neural, quantum):
-            return .hybrid(
+            .hybrid(
                 neural,
                 QuantumConsciousnessState(
                     id: quantum.id,

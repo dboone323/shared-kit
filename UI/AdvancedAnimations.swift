@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - Animation Timing Functions
 
 public enum AnimationTiming {
-    // Predefined easing curves
+    /// Predefined easing curves
     public static let springBouncy = Animation.interpolatingSpring(
         mass: 1.0, stiffness: 100, damping: 10, initialVelocity: 0
     )
@@ -28,7 +28,7 @@ public enum AnimationTiming {
     public static let easeOut = Animation.timingCurve(0.25, 0.46, 0.45, 0.94, duration: 0.3)
     public static let easeIn = Animation.timingCurve(0.55, 0.06, 0.68, 0.19, duration: 0.3)
 
-    // Custom curve for delightful micro-interactions
+    /// Custom curve for delightful micro-interactions
     public static let delight = Animation.timingCurve(0.175, 0.885, 0.32, 1.275, duration: 0.4)
 
     // Performance-optimized curves
@@ -73,7 +73,7 @@ public struct AnimatedValue<T: VectorArithmetic>: DynamicProperty {
 // MARK: - Gesture Animations
 
 public enum GestureAnimations {
-    // Haptic feedback integration
+    /// Haptic feedback integration
     public static func hapticFeedback(style: Int = 1) {
         #if canImport(UIKit)
             let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = switch style {
@@ -86,7 +86,7 @@ public enum GestureAnimations {
         #endif
     }
 
-    // Scale animation for touch interactions
+    /// Scale animation for touch interactions
     public static func scaleOnPress(
         scale: CGFloat = 0.95,
         animation: Animation = AnimationTiming.quick,
@@ -97,7 +97,7 @@ public enum GestureAnimations {
             .animation(animation, value: scale)
     }
 
-    // Bounce animation for buttons
+    /// Bounce animation for buttons
     public static func bounceOnTap(
         scale: CGFloat = 1.1,
         duration: Double = 0.1,

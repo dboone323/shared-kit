@@ -22,7 +22,7 @@ final class ReliabilityTests: XCTestCase {
     }
 
     func testTokenBucketRefill() async throws {
-        let limiter = TokenBucketRateLimiter(capacity: 1, refillRate: 10)  // 10 tokens/sec = 0.1s for 1 token
+        let limiter = TokenBucketRateLimiter(capacity: 1, refillRate: 10) // 10 tokens/sec = 0.1s for 1 token
 
         _ = await limiter.allow(tokens: 1)
         let allowedImmediately = await limiter.allow(tokens: 1)
@@ -68,7 +68,7 @@ final class ReliabilityTests: XCTestCase {
 
     func testSmartRetrySuccess() async throws {
         let handler = SmartRetryHandler()
-        let result = try await handler.execute { return "success" }
+        let result = try await handler.execute { "success" }
         XCTAssertEqual(result, "success")
     }
 
@@ -79,7 +79,7 @@ final class ReliabilityTests: XCTestCase {
         do {
             try await handler.execute {
                 await counter.increment()
-                throw URLError(.timedOut)  // Retryable
+                throw URLError(.timedOut) // Retryable
             }
             XCTFail("Should have thrown after retries")
         } catch {
@@ -102,7 +102,7 @@ final class ReliabilityTests: XCTestCase {
         do {
             try await handler.execute {
                 await counter.increment()
-                throw URLError(.badURL)  // Not in retry list
+                throw URLError(.badURL) // Not in retry list
             }
             XCTFail("Should have thrown immediately")
         } catch {

@@ -59,7 +59,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
     public var projectContext: String
     public var externalReferences: [ExternalReference]
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade, inverse: \EnhancedComputationSession.computationSystem)
     public var computationSessions: [EnhancedComputationSession] = []
 
@@ -69,7 +69,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
     @Relationship(deleteRule: .cascade)
     public var performanceMetrics: [EnhancedInfrastructureMetric] = []
 
-    // Computed Properties
+    /// Computed Properties
     public var utilizationRate: Double {
         Double(activeUsers) / Double(max(1, totalAccessPoints))
     }
@@ -87,7 +87,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
         activeUsers > 0 ? averageComputationPower : 0
     }
 
-    // Initialization
+    /// Initialization
     public init(
         name: String,
         computationDescription: String,
@@ -293,7 +293,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
         // Update user satisfaction
         if let satisfaction = userSatisfaction {
             let totalSessionsWithRating = Double(
-                self.computationSessions.filter { $0.userSatisfaction != nil }.count)
+                self.computationSessions.count(where: { $0.userSatisfaction != nil }))
             if totalSessionsWithRating > 0 {
                 self.averageUserSatisfaction =
                     (self.averageUserSatisfaction * (totalSessionsWithRating - 1) + satisfaction)

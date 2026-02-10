@@ -23,25 +23,27 @@ final class SharedKitIntegrationTests: XCTestCase {
         // we can confirm that we can encrypt payload, send it, receive it (mocked), and decrypt.
 
         let responseJSON = """
-            {
-                "response": "\(encryptedResponse.base64EncodedString())",
-                "done": true,
-                "model": "secure-model",
-                "created_at": "2025-01-01T00:00:00Z"
-            }
-            """
+        {
+            "response": "\(encryptedResponse.base64EncodedString())",
+            "done": true,
+            "model": "secure-model",
+            "created_at": "2025-01-01T00:00:00Z"
+        }
+        """
 
         MockURLProtocol.requestHandler = { request in
             // Verify request contains expected data (conceptually)
-            return (
+            (
                 HTTPURLResponse(
-                    url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+                    url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil
+                )!,
                 responseJSON.data(using: .utf8)!
             )
         }
 
         let client = OllamaClient(
-            config: OllamaConfig(baseURL: OllamaConfig.defaultEndpoint), session: session)
+            config: OllamaConfig(baseURL: OllamaConfig.defaultEndpoint), session: session
+        )
 
         // 3. Encrypt Request Payload
         let prompt = "My Secret Prompt"
@@ -51,7 +53,8 @@ final class SharedKitIntegrationTests: XCTestCase {
         // 4. Send Request (we send base64 of encrypted)
         // We are passing the encrypted string as the prompt to the client
         let result = try await client.generate(
-            model: "secure-model", prompt: encryptedPrompt.base64EncodedString())
+            model: "secure-model", prompt: encryptedPrompt.base64EncodedString()
+        )
 
         // 5. Decrypt Response
         // The mock returned our pre-encrypted 'secretResponse' as the result string

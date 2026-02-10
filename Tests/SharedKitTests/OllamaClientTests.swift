@@ -10,6 +10,7 @@ import XCTest
 @MainActor
 final class OllamaClientTests: XCTestCase {
     // MARK: - Configuration Tests
+
     // Note: OllamaConfig uses OllamaConfig struct, not OllamaClientConfig
 
     func testDefaultConfig() {
@@ -29,13 +30,13 @@ final class OllamaClientTests: XCTestCase {
 
     func testGenerateResponseParsing() throws {
         let jsonString = """
-            {
-                "model": "llama2",
-                "created_at": "2024-01-01T00:00:00Z",
-                "response": "Hello there!",
-                "done": true
-            }
-            """
+        {
+            "model": "llama2",
+            "created_at": "2024-01-01T00:00:00Z",
+            "response": "Hello there!",
+            "done": true
+        }
+        """
         let json = Data(jsonString.utf8)
 
         let response = try JSONDecoder().decode(OllamaGenerateResponse.self, from: json)
@@ -73,16 +74,17 @@ final class OllamaClientTests: XCTestCase {
             }
 
             let responseJSON = """
-                {
-                    "model": "llama2",
-                    "created_at": "2024-01-01T00:00:00Z",
-                    "response": "Mocked response",
-                    "done": true
-                }
-                """
+            {
+                "model": "llama2",
+                "created_at": "2024-01-01T00:00:00Z",
+                "response": "Mocked response",
+                "done": true
+            }
+            """
             let data = responseJSON.data(using: .utf8)!
             let response = HTTPURLResponse(
-                url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+                url: url, statusCode: 200, httpVersion: nil, headerFields: nil
+            )!
             return (response, data)
         }
 
@@ -99,27 +101,29 @@ final class OllamaClientTests: XCTestCase {
 
             if url.path.hasSuffix("/api/tags") {
                 let tagsJSON = """
-                    { "models": [ { "name": "llama2" } ] }
-                    """
+                { "models": [ { "name": "llama2" } ] }
+                """
                 return (
                     HTTPURLResponse(
-                        url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+                        url: url, statusCode: 200, httpVersion: nil, headerFields: nil
+                    )!,
                     tagsJSON.data(using: .utf8)!
                 )
             }
 
             if url.path.hasSuffix("/api/generate") {
                 let responseJSON = """
-                    {
-                        "model": "llama2",
-                        "created_at": "2024-01-01T00:00:00Z",
-                        "response": "Mocked response",
-                        "done": true
-                    }
-                    """
+                {
+                    "model": "llama2",
+                    "created_at": "2024-01-01T00:00:00Z",
+                    "response": "Mocked response",
+                    "done": true
+                }
+                """
                 return (
                     HTTPURLResponse(
-                        url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+                        url: url, statusCode: 200, httpVersion: nil, headerFields: nil
+                    )!,
                     responseJSON.data(using: .utf8)!
                 )
             }

@@ -433,9 +433,9 @@ public final class AutonomousDocumentation: ObservableObject {
             / Double(max(1, totalContent))
         let contentByType = Dictionary(grouping: documentationContent.values) { $0.type.rawValue }
             .mapValues { $0.count }
-        let generationRate = generationHistory.values.flatMap { $0 }.filter {
+        let generationRate = generationHistory.values.flatMap(\.self).count(where: {
             Date().timeIntervalSince($0) < 86400
-        }.count // Last 24 hours
+        }) // Last 24 hours
 
         return [
             "totalContent": totalContent,
@@ -661,15 +661,15 @@ public final class AutonomousDocumentation: ObservableObject {
     {
         switch request.generationStrategy {
         case .templateBased:
-            return try await generateWithTemplate(request)
+            try await generateWithTemplate(request)
         case .aiGenerated:
-            return try await generateWithAI(request)
+            try await generateWithAI(request)
         case .hybrid:
-            return try await generateHybrid(request)
+            try await generateHybrid(request)
         case .quantumInspired:
-            return try await generateQuantumInspired(request)
+            try await generateQuantumInspired(request)
         case .collaborative:
-            return try await generateCollaborative(request)
+            try await generateCollaborative(request)
         }
     }
 
@@ -765,19 +765,19 @@ public final class AutonomousDocumentation: ObservableObject {
     private func generateUsageExample(for request: ContentGenerationRequest) -> String {
         switch request.type {
         case .apiReference:
-            return """
+            """
             // Basic usage example
             let result = exampleFunction(parameter: "value")
             print(result)
             """
         case .tutorial:
-            return """
+            """
             // Tutorial example
             let tutorial = TutorialExample()
             tutorial.run()
             """
         default:
-            return "// Example usage code"
+            "// Example usage code"
         }
     }
 
@@ -911,10 +911,10 @@ public final class AutonomousDocumentation: ObservableObject {
         for content: DocumentationContent, userContext: [String: String]
     ) -> Double {
         let userInterests = inferUserInterests(from: userContext)
-        let interestMatches = userInterests.filter { interest in
+        let interestMatches = userInterests.count(where: { interest in
             content.tags.contains(interest)
                 || content.title.localizedCaseInsensitiveContains(interest)
-        }.count
+        })
 
         let baseRelevance = Double(interestMatches) / Double(max(1, userInterests.count))
         let qualityMultiplier = content.quality.overallScore

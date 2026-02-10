@@ -475,13 +475,13 @@ public final class AdvancedDataAnalysisTool: EnhancedMCPTool {
 
     private func describeData(_ data: Any) -> String {
         if let array = data as? [Any] {
-            return "Array with \(array.count) elements"
+            "Array with \(array.count) elements"
         } else if let dict = data as? [String: Any] {
-            return "Dictionary with \(dict.count) keys: \(dict.keys.joined(separator: ", "))"
+            "Dictionary with \(dict.count) keys: \(dict.keys.joined(separator: ", "))"
         } else if let string = data as? String {
-            return "String data (\(string.count) characters)"
+            "String data (\(string.count) characters)"
         } else {
-            return "Complex data structure of type \(type(of: data))"
+            "Complex data structure of type \(type(of: data))"
         }
     }
 }

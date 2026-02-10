@@ -553,8 +553,7 @@ public actor TaskDispatcher {
     /// Calculate efficiency
     public func calculateEfficiency() async throws -> Double {
         let totalTasks = taskQueue.count
-        let completedTasks = taskQueue.values.filter { getTaskStatus($0.id)?.state == .completed }
-            .count
+        let completedTasks = taskQueue.values.count(where: { getTaskStatus($0.id)?.state == .completed })
 
         return Double(completedTasks) / Double(max(totalTasks, 1))
     }
@@ -681,12 +680,12 @@ public struct AgentCapability: Sendable {
 
     public func canHandle(_ taskType: TaskType) -> Bool {
         switch (type, taskType) {
-        case (.computation, .computation): return true
-        case (.communication, .communication): return true
-        case (.learning, .learning): return true
-        case (.coordination, .coordination): return true
-        case let (.specialized(spec), .specialized(taskSpec)): return spec == taskSpec
-        default: return false
+        case (.computation, .computation): true
+        case (.communication, .communication): true
+        case (.learning, .learning): true
+        case (.coordination, .coordination): true
+        case let (.specialized(spec), .specialized(taskSpec)): spec == taskSpec
+        default: false
         }
     }
 }

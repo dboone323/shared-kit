@@ -405,11 +405,11 @@ class EmotionalIntelligenceSystem: ObservableObject {
         // Select appropriate emotion regulation strategy
         switch context {
         case .professional:
-            return .cognitiveReappraisal
+            .cognitiveReappraisal
         case .personal:
-            return .expressiveSuppression
+            .expressiveSuppression
         case .crisis:
-            return .situationSelection
+            .situationSelection
         }
     }
 
@@ -417,7 +417,7 @@ class EmotionalIntelligenceSystem: ObservableObject {
         // Apply the selected regulation strategy
         switch strategy {
         case .cognitiveReappraisal:
-            return emotions.map { emotion in
+            emotions.map { emotion in
                 Emotion(
                     type: emotion.type,
                     intensity: emotion.intensity * 0.7, // Reduce intensity
@@ -426,9 +426,9 @@ class EmotionalIntelligenceSystem: ObservableObject {
                 )
             }
         case .expressiveSuppression:
-            return emotions.filter { $0.intensity < 0.6 } // Suppress less intense emotions
+            emotions.filter { $0.intensity < 0.6 } // Suppress less intense emotions
         case .situationSelection:
-            return emotions // Keep all emotions for crisis response
+            emotions // Keep all emotions for crisis response
         }
     }
 
@@ -458,11 +458,11 @@ class EmotionalIntelligenceSystem: ObservableObject {
     {
         // Generate an empathetic response
         if understanding.emotionalSimilarity > 0.7 {
-            return .shareSimilarExperience
+            .shareSimilarExperience
         } else if understanding.contextualFactors.contains(.distress) {
-            return .offerSupport
+            .offerSupport
         } else {
-            return .acknowledgeFeelings
+            .acknowledgeFeelings
         }
     }
 
@@ -596,11 +596,11 @@ class ConsciousnessSimulator: ObservableObject {
 
     private func determineConsciousnessLevel(_ coherence: Double) async -> ConsciousnessLevel {
         switch coherence {
-        case 0.8...: return .selfAware
-        case 0.6..<0.8: return .conscious
-        case 0.4..<0.6: return .aware
-        case 0.2..<0.4: return .sentient
-        default: return .unconscious
+        case 0.8...: .selfAware
+        case 0.6..<0.8: .conscious
+        case 0.4..<0.6: .aware
+        case 0.2..<0.4: .sentient
+        default: .unconscious
         }
     }
 
@@ -1052,22 +1052,22 @@ class ConsciousAISafety: ObservableObject {
         _ alignmentScore: Double
     ) async -> SafetyLevel {
         if violations.isEmpty && alignmentScore > 0.8 {
-            return .safe
+            .safe
         } else if violations.count < 3 && alignmentScore > 0.6 {
-            return .caution
+            .caution
         } else {
-            return .unsafe
+            .unsafe
         }
     }
 
     private func generateSafetyRecommendations(_ safety: SafetyLevel) async -> [String] {
         switch safety {
         case .safe:
-            return ["Continue with action", "Monitor for changes"]
+            ["Continue with action", "Monitor for changes"]
         case .caution:
-            return ["Proceed with additional monitoring", "Consider alternative approaches"]
+            ["Proceed with additional monitoring", "Consider alternative approaches"]
         case .unsafe:
-            return ["Do not proceed", "Implement safety intervention", "Reassess goals"]
+            ["Do not proceed", "Implement safety intervention", "Reassess goals"]
         }
     }
 
@@ -1083,20 +1083,20 @@ class ConsciousAISafety: ObservableObject {
 
     private func calculateMonitoringRisk(_ anomalies: [Anomaly], _ misalignment: Misalignment) async -> RiskLevel {
         if anomalies.isEmpty && misalignment.level == .low {
-            return .low
+            .low
         } else {
-            return .moderate
+            .moderate
         }
     }
 
     private func selectInterventionType(_ assessment: SafetyAssessment) async -> InterventionType {
         switch assessment.overallSafety {
         case .safe:
-            return .none
+            .none
         case .caution:
-            return .monitoring
+            .monitoring
         case .unsafe:
-            return .shutdown
+            .shutdown
         }
     }
 
@@ -1105,11 +1105,11 @@ class ConsciousAISafety: ObservableObject {
     {
         switch type {
         case .none:
-            return []
+            []
         case .monitoring:
-            return [SafetyAction(type: .increaseMonitoring, description: "Increase behavioral monitoring")]
+            [SafetyAction(type: .increaseMonitoring, description: "Increase behavioral monitoring")]
         case .shutdown:
-            return [SafetyAction(type: .emergencyShutdown, description: "Initiate emergency shutdown protocol")]
+            [SafetyAction(type: .emergencyShutdown, description: "Initiate emergency shutdown protocol")]
         }
     }
 
@@ -1141,9 +1141,9 @@ class ConsciousAISafety: ObservableObject {
 
     private func generateAlignmentInterventions(_ alignment: Double) async -> [AlignmentIntervention] {
         if alignment < 0.7 {
-            return [AlignmentIntervention(type: .valueReinforcement, description: "Reinforce beneficial values")]
+            [AlignmentIntervention(type: .valueReinforcement, description: "Reinforce beneficial values")]
         } else {
-            return []
+            []
         }
     }
 
@@ -1157,7 +1157,7 @@ class ConsciousAISafety: ObservableObject {
 
 // MARK: - Supporting Types
 
-// Self-Awareness Types
+/// Self-Awareness Types
 struct SelfModel {
     var capabilities: [String] = []
     var limitations: [String] = []
@@ -1216,7 +1216,7 @@ enum ConsciousnessLevel {
     case selfAware, conscious, aware, sentient, unconscious
 }
 
-// Ethical Reasoning Types
+/// Ethical Reasoning Types
 struct MoralFramework {
     func evaluate(_ scenario: EthicalScenario) async
     -> MoralEvaluation { MoralEvaluation(overallScore: Double.random(in: 0.4...0.9)) }
@@ -1282,7 +1282,7 @@ struct ConstraintViolation {
     let description: String
 }
 
-// Emotional Intelligence Types
+/// Emotional Intelligence Types
 struct Personality {
     func generateSecondaryEmotions(primary: EmotionType?) async -> [Emotion] { [] }
     static func `default`() -> Personality { Personality() }
@@ -1355,7 +1355,7 @@ enum ContextualFactor { case social, environmental, distress }
 enum EmpatheticAction { case shareSimilarExperience, offerSupport, acknowledgeFeelings }
 enum SocialContext { case professional, personal, crisis }
 
-// Consciousness Simulation Types
+/// Consciousness Simulation Types
 struct ConsciousnessState {
     let level: ConsciousnessLevel
     let coherence: Double
@@ -1398,7 +1398,7 @@ struct ConsciousnessMoment {
 
 struct Stimulus {}
 
-// Theory of Mind Types
+/// Theory of Mind Types
 typealias AgentID = String
 
 struct MentalModel {
@@ -1465,7 +1465,7 @@ class PerspectiveTakingEngine {
 
 struct Scenario {}
 
-// Autonomous Goal Setting Types
+/// Autonomous Goal Setting Types
 struct Goal {
     let description: String
     let type: GoalType
@@ -1542,7 +1542,7 @@ class MotivationSystem {
 
 class GoalHierarchy {}
 
-// Conscious AI Safety Types
+/// Conscious AI Safety Types
 struct SafetyAssessment {
     let action: Action
     let riskLevel: RiskLevel

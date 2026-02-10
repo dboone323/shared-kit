@@ -43,7 +43,7 @@ class PerformanceBenchmarkSuite {
         static let minFrameRate: Double = 58.0 // 58 FPS minimum
         static let targetFrameRate: Double = 60.0 // 60 FPS target
 
-        // Battery Usage Benchmarks
+        /// Battery Usage Benchmarks
         static let maxBatteryDrainPerHour: Double = 8.0 // 8% per hour
 
         // Network Benchmarks

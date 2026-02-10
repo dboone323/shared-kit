@@ -88,7 +88,7 @@ enum AccessibilityLabels {
     static let error = "Error occurred"
     static let success = "Action completed successfully"
 
-    // Tasks (PlannerApp)
+    /// Tasks (PlannerApp)
     static func taskItem(title: String, isComplete: Bool) -> String {
         isComplete ? "\(title), completed" : "\(title), not completed"
     }
@@ -97,7 +97,7 @@ enum AccessibilityLabels {
         "\(priority) priority"
     }
 
-    // Habits (HabitQuest)
+    /// Habits (HabitQuest)
     static func habitItem(name: String, isComplete: Bool, streak: Int) -> String {
         var description = name
         if isComplete {
@@ -115,7 +115,7 @@ enum AccessibilityLabels {
         count == 1 ? "1 day streak" : "\(count) day streak"
     }
 
-    // Finance (MomentumFinance)
+    /// Finance (MomentumFinance)
     static func transactionAmount(_ amount: Double, currency: String = "USD") -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
@@ -127,7 +127,7 @@ enum AccessibilityLabels {
         "Account balance: \(transactionAmount(balance))"
     }
 
-    // Game (AvoidObstaclesGame)
+    /// Game (AvoidObstaclesGame)
     static func gameScore(_ score: Int) -> String {
         "Score: \(score) points"
     }

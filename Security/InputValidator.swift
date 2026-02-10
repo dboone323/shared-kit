@@ -1,7 +1,7 @@
 import Foundation
 
-/// Comprehensive input validation and sanitization utilities
-/// Provides secure validation for user inputs across all Quantum Workspace projects
+// Comprehensive input validation and sanitization utilities
+// Provides secure validation for user inputs across all Quantum Workspace projects
 
 public enum ValidationError: LocalizedError {
     case emptyInput

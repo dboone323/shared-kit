@@ -294,7 +294,7 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
     private func selectTopModels(from models: [OllamaSpecializedModel], count: Int) -> [OllamaSpecializedModel] {
         models.sorted { $0.performanceMetrics.accuracy > $1.performanceMetrics.accuracy }
             .prefix(count)
-            .map { $0 }
+            .map(\.self)
     }
 
     private func distributeProcessing(
@@ -305,15 +305,15 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
 
         switch strategy {
         case .parallel:
-            return try await processInParallel(input: input, modelSelections: modelSelections)
+            try await processInParallel(input: input, modelSelections: modelSelections)
         case .sequential:
-            return try await processSequentially(input: input, modelSelections: modelSelections)
+            try await processSequentially(input: input, modelSelections: modelSelections)
         case .hierarchical:
-            return try await processHierarchically(input: input, modelSelections: modelSelections)
+            try await processHierarchically(input: input, modelSelections: modelSelections)
         case .adaptive:
-            return try await processAdaptively(input: input, modelSelections: modelSelections)
+            try await processAdaptively(input: input, modelSelections: modelSelections)
         case .quantumEntangled:
-            return try await processQuantumEntangled(input: input, modelSelections: modelSelections)
+            try await processQuantumEntangled(input: input, modelSelections: modelSelections)
         }
     }
 
@@ -696,13 +696,13 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
                                          _ quantum: QuantumCoordinationResults) -> EmergenceLevel
     {
         if quantum.quantumCoherence > 0.9 && emergence.emergenceDetected {
-            return .universal
+            .universal
         } else if emergence.emergenceDetected {
-            return .emergent
+            .emergent
         } else if quantum.quantumCoherence > 0.7 {
-            return .collective
+            .collective
         } else {
-            return .individual
+            .individual
         }
     }
 

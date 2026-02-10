@@ -602,7 +602,7 @@ public struct QuantumGate: Sendable {
         self.controlQubits = controlQubits
     }
 
-    // Convenience initializer for multi-qubit gates
+    /// Convenience initializer for multi-qubit gates
     public static func cnot(control: Int, target: Int) -> QuantumGate {
         QuantumGate(type: .cnot, qubit: control, targetQubit: target)
     }
@@ -710,13 +710,11 @@ public final class ConsciousnessExpansionEngine: Sendable {
     {
         switch level {
         case .basic:
-            return "Basic consciousness: Processing \(prompt.count) characters of input"
+            "Basic consciousness: Processing \(prompt.count) characters of input"
         case .advanced:
-            return
-                "Advanced consciousness: Analyzing semantic patterns and contextual relationships in: \(prompt)"
+            "Advanced consciousness: Analyzing semantic patterns and contextual relationships in: \(prompt)"
         case .universal:
-            return
-                "Universal consciousness: Integrating quantum principles and multiverse perspectives for: \(prompt)"
+            "Universal consciousness: Integrating quantum principles and multiverse perspectives for: \(prompt)"
         }
     }
 
@@ -726,7 +724,7 @@ public final class ConsciousnessExpansionEngine: Sendable {
             "quantum", "consciousness", "universe", "inference", "response", "analysis",
         ]
         return commonWords.filter { word in
-            responses.filter { $0.lowercased().contains(word) }.count > responses.count / 2
+            responses.count(where: { $0.lowercased().contains(word) }) > responses.count / 2
         }
     }
 }
@@ -771,7 +769,7 @@ public final class ConsciousnessInterface: Sendable {
                 "Basic consciousness context: \(wordCount) words, complexity \(String(format: "%.2f", complexity))"
         case .advanced:
             let keywords = ["quantum", "consciousness", "universe", "intelligence", "reasoning"]
-            let keywordMatches = keywords.filter { prompt.lowercased().contains($0) }.count
+            let keywordMatches = keywords.count(where: { prompt.lowercased().contains($0) })
             return
                 "Advanced consciousness: \(wordCount) words, \(keywordMatches) conceptual matches, complexity \(String(format: "%.2f", complexity))"
         case .universal:

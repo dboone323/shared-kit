@@ -112,7 +112,7 @@ public enum CircuitBreakerError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .circuitOpen:
-            return "Circuit breaker is open - service temporarily unavailable"
+            "Circuit breaker is open - service temporarily unavailable"
         }
     }
 }

@@ -51,7 +51,7 @@ final class OllamaEnhancementsTests: XCTestCase {
         // Success should maintain/improve health
         tracker.recordSuccess(for: "test-model")
         XCTAssertTrue(tracker.isHealthy("test-model"))
-        XCTAssertEqual(tracker.score(for: "test-model"), 1.0)  // Already at max
+        XCTAssertEqual(tracker.score(for: "test-model"), 1.0) // Already at max
     }
 
     @MainActor
@@ -104,6 +104,7 @@ final class OllamaEnhancementsTests: XCTestCase {
 
         // Should return different sessions for different models
         XCTAssertFalse(
-            session1 === session2, "Should create separate sessions for different models")
+            session1 === session2, "Should create separate sessions for different models"
+        )
     }
 }

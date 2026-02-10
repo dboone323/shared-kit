@@ -223,7 +223,7 @@ public final class SelfOptimizingCICD: ObservableObject {
     private let costOptimizationWeight: Double = 0.3
     private let performanceOptimizationWeight: Double = 0.7
 
-    // Pipeline configurations
+    /// Pipeline configurations
     private var pipelineConfigs: [String: PipelineConfig] = [:]
 
     // Performance tracking
@@ -490,7 +490,7 @@ public final class SelfOptimizingCICD: ObservableObject {
     /// Get system efficiency metrics
     public func getSystemEfficiency() -> [String: Double] {
         let totalPipelines = pipelineHistory.count
-        let successfulPipelines = pipelineHistory.filter { $0.status == .success }.count
+        let successfulPipelines = pipelineHistory.count(where: { $0.status == .success })
         let successRate =
             totalPipelines > 0 ? Double(successfulPipelines) / Double(totalPipelines) : 0.0
 
@@ -645,7 +645,7 @@ public final class SelfOptimizingCICD: ObservableObject {
         let averageDuration =
             recentMetrics.compactMap(\.duration).reduce(0, +) / Double(recentMetrics.count)
         let failureRate =
-            Double(recentMetrics.filter { $0.status == .failed }.count)
+            Double(recentMetrics.count(where: { $0.status == .failed }))
             / Double(recentMetrics.count)
         let averageCost = recentMetrics.map(\.cost).reduce(0, +) / Double(recentMetrics.count)
 

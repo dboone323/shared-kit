@@ -2017,7 +2017,7 @@ final class ConsciousnessEvolutionMonitoringDatabase {
 
     func getMonitoringMetrics() async throws -> MonitoringMetrics {
         let totalSessions = monitoringSessions.count
-        let activeSessions = monitoringSessions.values.filter { $0.monitoringStatus == .active }.count
+        let activeSessions = monitoringSessions.values.count(where: { $0.monitoringStatus == .active })
         let totalMetricsRecorded = metricsRecordings.count
         let totalAnalyses = evolutionAnalyses.count
         let averageStability = evolutionAnalyses.values.map(\.progressMetrics.overallProgress)
@@ -2073,12 +2073,12 @@ extension MonitoringPriority {
 extension AggregationType {
     var rawValue: String {
         switch self {
-        case .average: return "average"
-        case .sum: return "sum"
-        case .minimum: return "minimum"
-        case .maximum: return "maximum"
-        case .median: return "median"
-        case .percentile: return "percentile"
+        case .average: "average"
+        case .sum: "sum"
+        case .minimum: "minimum"
+        case .maximum: "maximum"
+        case .median: "median"
+        case .percentile: "percentile"
         }
     }
 }

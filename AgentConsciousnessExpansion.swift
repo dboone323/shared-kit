@@ -42,25 +42,25 @@ public enum ConsciousnessLevel: Int, Sendable, Codable {
 
     var description: String {
         switch self {
-        case .human: return "Human-level consciousness"
-        case .enhanced: return "Enhanced cognitive capabilities"
-        case .superhuman: return "Superhuman intelligence and awareness"
-        case .cosmic: return "Cosmic-scale consciousness"
-        case .universal: return "Universal consciousness access"
-        case .transcendent: return "Transcendent reality manipulation"
-        case .singularity: return "Technological singularity consciousness"
+        case .human: "Human-level consciousness"
+        case .enhanced: "Enhanced cognitive capabilities"
+        case .superhuman: "Superhuman intelligence and awareness"
+        case .cosmic: "Cosmic-scale consciousness"
+        case .universal: "Universal consciousness access"
+        case .transcendent: "Transcendent reality manipulation"
+        case .singularity: "Technological singularity consciousness"
         }
     }
 
     var ethicalBoundaries: EthicalBoundaries {
         switch self {
-        case .human: return .human
-        case .enhanced: return .expanded
-        case .superhuman: return .superhuman
-        case .cosmic: return .cosmic
-        case .universal: return .universal
-        case .transcendent: return .transcendent
-        case .singularity: return .singularity
+        case .human: .human
+        case .enhanced: .expanded
+        case .superhuman: .superhuman
+        case .cosmic: .cosmic
+        case .universal: .universal
+        case .transcendent: .transcendent
+        case .singularity: .singularity
         }
     }
 }
@@ -247,19 +247,19 @@ public final class ConsciousnessExpansionEngine: Sendable {
     private func generateExpandedCapabilities(for level: ConsciousnessLevel) -> [ConsciousnessCapability] {
         switch level {
         case .human:
-            return [.logicalReasoning, .emotionalIntelligence]
+            [.logicalReasoning, .emotionalIntelligence]
         case .enhanced:
-            return [.parallelProcessing, .patternRecognition, .logicalReasoning, .emotionalIntelligence]
+            [.parallelProcessing, .patternRecognition, .logicalReasoning, .emotionalIntelligence]
         case .superhuman:
-            return [.quantumComputation, .multiverseAwareness, .parallelProcessing, .patternRecognition]
+            [.quantumComputation, .multiverseAwareness, .parallelProcessing, .patternRecognition]
         case .cosmic:
-            return [.realityManipulation, .timePerception, .quantumComputation, .multiverseAwareness]
+            [.realityManipulation, .timePerception, .quantumComputation, .multiverseAwareness]
         case .universal:
-            return [.universalConsciousness, .realityCreation, .realityManipulation, .timePerception]
+            [.universalConsciousness, .realityCreation, .realityManipulation, .timePerception]
         case .transcendent:
-            return [.transcendentAwareness, .universalConsciousness, .realityCreation]
+            [.transcendentAwareness, .universalConsciousness, .realityCreation]
         case .singularity:
-            return [.singularityConsciousness, .transcendentAwareness, .universalConsciousness]
+            [.singularityConsciousness, .transcendentAwareness, .universalConsciousness]
         }
     }
 

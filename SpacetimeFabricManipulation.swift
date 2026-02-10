@@ -741,7 +741,7 @@ final class IntegrityMonitor {
 
     func assessIntegrity(_ fabric: SpacetimeFabric) async -> IntegrityAssessment {
         let integrityScore = fabric.stability * fabric.coherence
-        let damagePoints = fabric.quantumFluctuations.filter { $0.energy > 10 }.count
+        let damagePoints = fabric.quantumFluctuations.count(where: { $0.energy > 10 })
         let repairNeeds = damagePoints > 0
 
         return IntegrityAssessment(
@@ -1135,15 +1135,15 @@ enum SpacetimeError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .validationFailed(errors):
-            return "Validation failed with \(errors.count) errors"
+            "Validation failed with \(errors.count) errors"
         case let .distortionFailed(errors):
-            return "Distortion failed with \(errors.count) errors"
+            "Distortion failed with \(errors.count) errors"
         case let .manipulationFailed(reason):
-            return "Manipulation failed: \(reason)"
+            "Manipulation failed: \(reason)"
         case let .integrityCompromised(reason):
-            return "Integrity compromised: \(reason)"
+            "Integrity compromised: \(reason)"
         case let .causalityViolation(reason):
-            return "Causality violation: \(reason)"
+            "Causality violation: \(reason)"
         }
     }
 }

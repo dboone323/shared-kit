@@ -672,11 +672,11 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
 
     private func determineOptimalBridgeType(_ compatibility: Double) -> BridgeType {
         if compatibility > 0.9 {
-            return .quantumTunnel
+            .quantumTunnel
         } else if compatibility > 0.8 {
-            return .dimensionalGateway
+            .dimensionalGateway
         } else {
-            return .realityWeave
+            .realityWeave
         }
     }
 

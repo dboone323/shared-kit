@@ -85,20 +85,18 @@ public class HybridNetworkIntegration: ObservableObject {
         for packet in packets {
             let routingDecision = await routeData(packet, from: source, to: destination)
 
-            let transmissionResult: TransmissionResult
-
-            switch routingDecision.networkType {
+            let transmissionResult: TransmissionResult = switch routingDecision.networkType {
             case .classical:
-                transmissionResult = await classicalNetwork.transmitPacket(
+                await classicalNetwork.transmitPacket(
                     packet, via: routingDecision.chosenPath
                 )
             case .quantum:
-                transmissionResult = await quantumNetwork.transmitPacket(
+                await quantumNetwork.transmitPacket(
                     packet, via: routingDecision.chosenPath
                 )
             case .hybrid:
                 // Split transmission across networks
-                transmissionResult = await transmitHybridPacket(
+                await transmitHybridPacket(
                     packet, routingDecision: routingDecision
                 )
             }

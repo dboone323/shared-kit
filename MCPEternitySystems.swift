@@ -454,10 +454,10 @@ public final class TemporalCoordinator: Sendable {
     /// Estimate duration for period
     private func estimateDurationForPeriod(_ period: TemporalPeriod) -> TimeInterval {
         switch period {
-        case .past: return 2.0
-        case .present: return 1.0
-        case .future: return 3.0
-        case .eternal: return 5.0
+        case .past: 2.0
+        case .present: 1.0
+        case .future: 3.0
+        case .eternal: 5.0
         }
     }
 
@@ -991,12 +991,12 @@ public enum TemporalPeriod: Sendable, Codable {
 
     func contains(_ position: TemporalPosition) -> Bool {
         switch (self, position) {
-        case (.past, .past): return true
-        case (.present, .present): return true
-        case (.future, .future): return true
-        case (.eternal, .eternal): return true
-        case (.eternal, _): return true // Eternal contains all
-        default: return false
+        case (.past, .past): true
+        case (.present, .present): true
+        case (.future, .future): true
+        case (.eternal, .eternal): true
+        case (.eternal, _): true // Eternal contains all
+        default: false
         }
     }
 }

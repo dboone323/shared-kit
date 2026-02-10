@@ -49,7 +49,7 @@ public actor PostgresConnectionPool {
 
         // Wait for a connection to become available (simple implementation)
         // In production, use a semaphore or condition variable
-        try await Task.sleep(nanoseconds: 100_000_000)  // 100ms
+        try await Task.sleep(nanoseconds: 100_000_000) // 100ms
         return try await getConnection()
     }
 

@@ -582,7 +582,7 @@ public class HybridIntelligenceSystem {
         let (reduced, _) = quantumPCA.reduceDimensionality(data)
 
         // Combine results
-        return clusters.map { Double($0) } + reduced.flatMap { $0 }
+        return clusters.map { Double($0) } + reduced.flatMap(\.self)
     }
 
     /// Integrate neuromorphic robotics

@@ -326,9 +326,9 @@ public actor QuantumComputingIntegration {
     private func estimateClassicalTime(for problem: OptimizationProblem) -> Double {
         // Estimate classical computation time for comparison
         switch problem.complexity {
-        case .low: return Double.random(in: 0.1..<1.0)
-        case .medium: return Double.random(in: 1..<10)
-        case .high: return Double.random(in: 10..<100)
+        case .low: Double.random(in: 0.1..<1.0)
+        case .medium: Double.random(in: 1..<10)
+        case .high: Double.random(in: 10..<100)
         }
     }
 
@@ -482,12 +482,10 @@ public actor QuantumCircuitBuilder {
     }
 
     private func allocateQubits(for problem: OptimizationProblem) async throws -> [QuantumQubit] {
-        let qubitCount: Int
-
-        switch problem.complexity {
-        case .low: qubitCount = 5
-        case .medium: qubitCount = 10
-        case .high: qubitCount = 20
+        let qubitCount = switch problem.complexity {
+        case .low: 5
+        case .medium: 10
+        case .high: 20
         }
 
         return (0..<qubitCount).map { index in
@@ -708,9 +706,9 @@ public actor QuantumOptimizer {
         // Check if gates are inverses of each other
         switch (gate1.type, gate2.type) {
         case (.x, .x), (.y, .y), (.z, .z), (.h, .h):
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

@@ -20,11 +20,11 @@ public enum IntelligenceAmplificationLevel: String, Codable, Sendable {
 
     var intelligenceMultiplier: Double {
         switch self {
-        case .basic: return 1.0
-        case .advanced: return 1.5
-        case .expert: return 2.0
-        case .genius: return 3.0
-        case .transcendent: return 5.0
+        case .basic: 1.0
+        case .advanced: 1.5
+        case .expert: 2.0
+        case .genius: 3.0
+        case .transcendent: 5.0
         }
     }
 }
@@ -237,7 +237,7 @@ actor IntelligenceAmplificationEngine {
         context: WorkflowIntelligenceContext
     ) async -> WeightedDecision {
         let stepCount = Double(workflow.steps.count)
-        let parallelSteps = Double(workflow.steps.filter { $0.executionMode == .parallel }.count)
+        let parallelSteps = Double(workflow.steps.count(where: { $0.executionMode == .parallel }))
 
         var probability = 1.0 / Double(configuration.maxDecisionBranches)
         var expectedOutcome = 0.5
@@ -261,9 +261,9 @@ actor IntelligenceAmplificationEngine {
         case .maximizeReliability:
             // Favor error handling and validation
             let validationSteps = Double(
-                workflow.steps.filter {
+                workflow.steps.count(where: {
                     $0.toolId.contains("validation") || $0.toolId.contains("error")
-                }.count)
+                }))
             let reliabilityScore = validationSteps / max(stepCount, 1.0)
             expectedOutcome = 0.6 + reliabilityScore * 0.3
             confidence = 0.8 + reliabilityScore * 0.15
@@ -545,11 +545,11 @@ enum DecisionStrategy: CaseIterable, CustomStringConvertible {
 
     var description: String {
         switch self {
-        case .maximizeSpeed: return "Maximize execution speed through parallelization"
-        case .minimizeResources: return "Minimize resource consumption"
-        case .maximizeReliability: return "Maximize reliability and error handling"
-        case .balancedApproach: return "Balanced optimization across metrics"
-        case .adaptiveOptimization: return "Adaptive optimization based on learning"
+        case .maximizeSpeed: "Maximize execution speed through parallelization"
+        case .minimizeResources: "Minimize resource consumption"
+        case .maximizeReliability: "Maximize reliability and error handling"
+        case .balancedApproach: "Balanced optimization across metrics"
+        case .adaptiveOptimization: "Adaptive optimization based on learning"
         }
     }
 }

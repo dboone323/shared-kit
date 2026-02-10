@@ -95,18 +95,18 @@ public struct UncheckedSendableBox<T>: @unchecked Sendable {
 
 // MARK: - Collection Extensions for Actor Isolation
 
-extension Collection {
+public extension Collection {
     /// Thread-safe isEmpty check that works across actor boundaries
     /// Note: In most cases, standard isEmpty should work fine
     /// This is provided for consistency in actor-isolated contexts
     @Sendable
-    public var sendableIsEmpty: Bool {
+    var sendableIsEmpty: Bool {
         isEmpty
     }
 
     /// Thread-safe count check
     @Sendable
-    public var sendableCount: Int {
+    var sendableCount: Int {
         count
     }
 }
@@ -151,6 +151,7 @@ public enum TaskUtilities {
 }
 
 #if canImport(SwiftUI)
+
     // MARK: - SwiftUI Helpers
 
     /// Common color utilities for Swift 6.0 migration
@@ -170,11 +171,11 @@ public enum TaskUtilities {
     }
 
     /// Extension for common @MainActor view modifiers
-    extension View {
+    public extension View {
         /// Apply @MainActor animation safely
         @MainActor
-        public func mainActorAnimation<V: Equatable>(
-            _ value: V
+        func mainActorAnimation(
+            _ value: some Equatable
         ) -> some View {
             animation(.default, value: value)
         }
@@ -192,14 +193,14 @@ public enum Swift6Error: SendableError {
 
     public var localizedDescription: String {
         switch self {
-        case .actorIsolationViolation(let message):
-            return "Actor isolation violation: \(message)"
-        case .invalidState(let message):
-            return "Invalid state: \(message)"
+        case let .actorIsolationViolation(message):
+            "Actor isolation violation: \(message)"
+        case let .invalidState(message):
+            "Invalid state: \(message)"
         case .operationCancelled:
-            return "Operation was cancelled"
-        case .notImplemented(let message):
-            return "Not implemented: \(message)"
+            "Operation was cancelled"
+        case let .notImplemented(message):
+            "Not implemented: \(message)"
         }
     }
 }

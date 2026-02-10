@@ -143,7 +143,7 @@ class LocalizationTester {
     }
 }
 
-// Additional supporting types
+/// Additional supporting types
 struct AccessibilityTestResult {
     let testName: String
     let passed: Bool

@@ -467,8 +467,8 @@ public final class UnifiedAgentWorkflowOrchestrator {
                 workflowId: context.workflowId,
                 executionId: context.executionId,
                 totalSteps: context.workflow.steps.count,
-                completedSteps: result.stepResults.filter { $0.state == .completed }.count,
-                failedSteps: result.stepResults.filter { $0.state == .failed }.count
+                completedSteps: result.stepResults.count(where: { $0.state == .completed }),
+                failedSteps: result.stepResults.count(where: { $0.state == .failed })
             )
             context.updateWorkflowProgress(progress)
 

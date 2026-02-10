@@ -85,7 +85,7 @@ public struct OllamaConfig: Sendable {
         requestThrottleDelay: 0.05
     )
 
-    // Cloud presets
+    /// Cloud presets
     public static let cloudCoder = OllamaConfig(
         defaultModel: "qwen3-coder:480b-cloud",
         temperature: 0.2,
@@ -174,62 +174,62 @@ public enum OllamaError: LocalizedError, Sendable {
     public var errorDescription: String? {
         switch self {
         case let .invalidConfiguration(details):
-            return "Invalid configuration: \(details)"
+            "Invalid configuration: \(details)"
         case .invalidURL:
-            return "Invalid Ollama server URL"
+            "Invalid Ollama server URL"
         case .invalidResponse:
-            return "Invalid response from Ollama server"
+            "Invalid response from Ollama server"
         case let .httpError(code):
-            return "HTTP error: \(code)"
+            "HTTP error: \(code)"
         case .invalidResponseFormat:
-            return "Invalid response format from Ollama"
+            "Invalid response format from Ollama"
         case .modelPullFailed:
-            return "Failed to pull model from Ollama"
+            "Failed to pull model from Ollama"
         case .serverNotRunning:
-            return "Ollama server is not running"
+            "Ollama server is not running"
         case let .modelNotAvailable(model):
-            return "Model '\(model)' is not available"
+            "Model '\(model)' is not available"
         case .networkTimeout:
-            return "Network request timed out"
+            "Network request timed out"
         case .rateLimitExceeded:
-            return "Rate limit exceeded"
+            "Rate limit exceeded"
         case .cacheError:
-            return "Cache operation failed"
+            "Cache operation failed"
         case let .modelLoadFailed(model):
-            return "Failed to load model: \(model)"
+            "Failed to load model: \(model)"
         case .contextWindowExceeded:
-            return "Input exceeds model's context window"
+            "Input exceeds model's context window"
         case .authenticationFailed:
-            return "Authentication failed"
+            "Authentication failed"
         case .serverOverloaded:
-            return "Server is overloaded"
+            "Server is overloaded"
         case let .apiError(msg):
-            return "API Error: \(msg)"
+            "API Error: \(msg)"
         case .connectionFailed:
-            return "Failed to connect to Ollama server"
+            "Failed to connect to Ollama server"
         case let .modelNotFound(model):
-            return "Model not found: \(model)"
+            "Model not found: \(model)"
         case let .serverError(msg):
-            return "Server error: \(msg)"
+            "Server error: \(msg)"
         case let .unknownError(msg):
-            return "Unknown error: \(msg)"
+            "Unknown error: \(msg)"
         }
     }
 
     public var recoveryStrategy: String {
         switch self {
         case .serverNotRunning:
-            return "Start the Ollama server using 'ollama serve'"
+            "Start the Ollama server using 'ollama serve'"
         case .modelNotAvailable:
-            return "Install the model using 'ollama pull [model-name]'"
+            "Install the model using 'ollama pull [model-name]'"
         case .networkTimeout:
-            return "Check the network connection and consider increasing timeout"
+            "Check the network connection and consider increasing timeout"
         case .rateLimitExceeded:
-            return "Wait before retrying to respect rate limits"
+            "Wait before retrying to respect rate limits"
         case .contextWindowExceeded:
-            return "Reduce input length or split into smaller chunks"
+            "Reduce input length or split into smaller chunks"
         default:
-            return "Check Ollama server status and configuration"
+            "Check Ollama server status and configuration"
         }
     }
 }

@@ -63,7 +63,7 @@ final class OllamaClientIntegrationTests: XCTestCase {
         let delay2 = retryConfig.delay(for: 2)
 
         // Each delay should be roughly double the previous (with jitter)
-        XCTAssertGreaterThan(delay1, delay0 * 0.8)  // Account for jitter
+        XCTAssertGreaterThan(delay1, delay0 * 0.8) // Account for jitter
         XCTAssertGreaterThan(delay2, delay1 * 0.8)
     }
 

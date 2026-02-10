@@ -80,7 +80,7 @@ public struct OllamaConfig {
         requestThrottleDelay: 0.05
     )
 
-    // Cloud presets
+    /// Cloud presets
     public static let cloudCoder = OllamaConfig(
         defaultModel: "qwen3-coder:480b-cloud",
         temperature: 0.2,

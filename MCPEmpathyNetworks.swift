@@ -576,8 +576,8 @@ public final class EmotionalIntelligenceProcessor: Sendable {
 
         // Insight: Trigger patterns
         if !triggers.isEmpty {
-            let positiveTriggers = triggers.filter { $0.strengthChange > 0.1 }.count
-            let negativeTriggers = triggers.filter { $0.strengthChange < -0.1 }.count
+            let positiveTriggers = triggers.count(where: { $0.strengthChange > 0.1 })
+            let negativeTriggers = triggers.count(where: { $0.strengthChange < -0.1 })
 
             insights.append(EmotionalInsight(
                 type: .triggerPatterns,
@@ -704,16 +704,15 @@ public final class SocialCoordinator: Sendable {
         // Calculate impact based on response type and network state
         let baseImpact = response.intensity
 
-        let emotionalAlignment: Double
-        switch (response.type, network.emotionalState) {
+        let emotionalAlignment = switch (response.type, network.emotionalState) {
         case (.positive, .joy), (.supportive, .sadness), (.calming, .anger),
              (.reassuring, .fear), (.acknowledging, .surprise), (.understanding, .disgust),
              (.collaborative, .trust), (.encouraging, .anticipation):
-            emotionalAlignment = 1.0
+            1.0
         case (.neutral, .neutral):
-            emotionalAlignment = 0.8
+            0.8
         default:
-            emotionalAlignment = 0.4
+            0.4
         }
 
         let overallImpact = baseImpact * emotionalAlignment
@@ -729,28 +728,28 @@ public final class SocialCoordinator: Sendable {
     private func generateSuggestedActions(for responseType: SocialResponseType, intensity: Double) -> [String] {
         switch responseType {
         case .positive:
-            return intensity > 0.7
+            intensity > 0.7
                 ? ["Share positive experiences", "Express enthusiasm", "Celebrate achievements"]
                 : [
                     "Offer encouragement",
                     "Show appreciation",
                 ]
         case .supportive:
-            return ["Listen actively", "Offer comfort", "Provide assistance"]
+            ["Listen actively", "Offer comfort", "Provide assistance"]
         case .calming:
-            return ["Use soothing language", "Suggest de-escalation techniques", "Offer space if needed"]
+            ["Use soothing language", "Suggest de-escalation techniques", "Offer space if needed"]
         case .reassuring:
-            return ["Provide reassurance", "Share coping strategies", "Offer support"]
+            ["Provide reassurance", "Share coping strategies", "Offer support"]
         case .acknowledging:
-            return ["Acknowledge feelings", "Validate experiences", "Show understanding"]
+            ["Acknowledge feelings", "Validate experiences", "Show understanding"]
         case .understanding:
-            return ["Express understanding", "Avoid judgment", "Offer perspective"]
+            ["Express understanding", "Avoid judgment", "Offer perspective"]
         case .collaborative:
-            return ["Propose joint solutions", "Share responsibilities", "Build together"]
+            ["Propose joint solutions", "Share responsibilities", "Build together"]
         case .encouraging:
-            return ["Motivate positively", "Highlight strengths", "Encourage progress"]
+            ["Motivate positively", "Highlight strengths", "Encourage progress"]
         case .neutral:
-            return ["Maintain balance", "Observe situation", "Respond appropriately"]
+            ["Maintain balance", "Observe situation", "Respond appropriately"]
         }
     }
 
@@ -1495,7 +1494,7 @@ public final class CompassionFramework: Sendable {
     private func getFrameworkPrinciples(for framework: CompassionFrameworkType) -> [CompassionPrinciple] {
         switch framework {
         case .buddhist:
-            return [
+            [
                 CompassionPrinciple(
                     name: "Loving-kindness",
                     description: "Cultivate love and kindness toward all beings"
@@ -1505,14 +1504,14 @@ public final class CompassionFramework: Sendable {
                 CompassionPrinciple(name: "Equanimity", description: "Maintain balance and peace"),
             ]
         case .christian:
-            return [
+            [
                 CompassionPrinciple(name: "Love thy neighbor", description: "Love and care for others as yourself"),
                 CompassionPrinciple(name: "Forgiveness", description: "Forgive others their trespasses"),
                 CompassionPrinciple(name: "Mercy", description: "Show mercy and compassion"),
                 CompassionPrinciple(name: "Service", description: "Serve others selflessly"),
             ]
         case .secular:
-            return [
+            [
                 CompassionPrinciple(name: "Empathy", description: "Understand others' feelings"),
                 CompassionPrinciple(name: "Altruism", description: "Act for others' benefit"),
                 CompassionPrinciple(name: "Justice", description: "Promote fairness and equality"),
@@ -1526,15 +1525,15 @@ public final class CompassionFramework: Sendable {
         // Simplified applicability calculation based on network's emotional state
         switch network.emotionalState {
         case .joy, .trust:
-            return 0.9 // High applicability for positive frameworks
+            0.9 // High applicability for positive frameworks
         case .sadness, .fear:
-            return 0.8 // Good applicability for supportive frameworks
+            0.8 // Good applicability for supportive frameworks
         case .anger:
-            return 0.6 // Moderate applicability for calming frameworks
+            0.6 // Moderate applicability for calming frameworks
         case .neutral:
-            return 0.7 // Good general applicability
+            0.7 // Good general applicability
         default:
-            return 0.5 // Moderate applicability
+            0.5 // Moderate applicability
         }
     }
 
@@ -1557,13 +1556,13 @@ public final class CompassionFramework: Sendable {
         // Simplified alignment calculation
         switch principle.name {
         case "Loving-kindness", "Love thy neighbor":
-            return network.emotionalState == .joy || network.emotionalState == .trust ? 0.9 : 0.6
+            network.emotionalState == .joy || network.emotionalState == .trust ? 0.9 : 0.6
         case "Compassion", "Mercy":
-            return network.emotionalState == .sadness || network.emotionalState == .fear ? 0.9 : 0.7
+            network.emotionalState == .sadness || network.emotionalState == .fear ? 0.9 : 0.7
         case "Forgiveness", "Equanimity":
-            return network.emotionalState == .anger ? 0.8 : 0.6
+            network.emotionalState == .anger ? 0.8 : 0.6
         default:
-            return 0.7
+            0.7
         }
     }
 }
@@ -1618,9 +1617,9 @@ public final class EmpathyLearner: Sendable {
         guard !connection.emotionalHistory.isEmpty else { return 0.0 }
 
         // Success based on maintaining or improving empathy strength
-        let improvements = connection.emotionalHistory.enumerated().dropFirst().filter { index, dataPoint in
+        let improvements = connection.emotionalHistory.enumerated().dropFirst().count(where: { index, dataPoint in
             dataPoint.empathyStrength >= connection.emotionalHistory[index - 1].empathyStrength
-        }.count
+        })
 
         return Double(improvements) / Double(connection.emotionalHistory.count - 1)
     }
@@ -1630,15 +1629,15 @@ public final class EmpathyLearner: Sendable {
                                       successRate: Double) -> InteractionPatternType
     {
         if successRate > 0.8 && trend.stable {
-            return .highlySuccessful
+            .highlySuccessful
         } else if successRate > 0.6 {
-            return .successful
+            .successful
         } else if trend.trend == .increasing {
-            return .improving
+            .improving
         } else if trend.trend == .decreasing {
-            return .declining
+            .declining
         } else {
-            return .neutral
+            .neutral
         }
     }
 
@@ -1673,7 +1672,7 @@ public final class EmpathyLearner: Sendable {
                 : "Explore new empathy strategies"
         ))
 
-        let improvingPatterns = patterns.filter { $0.patternType == .improving }.count
+        let improvingPatterns = patterns.count(where: { $0.patternType == .improving })
         if improvingPatterns > 0 {
             insights.append(EmpathyInsight(
                 type: .improvementTrends,

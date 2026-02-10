@@ -710,7 +710,7 @@ final class UniversalConsciousnessCommunicationEngine: UniversalConsciousnessCom
             monitoringId: UUID(),
             timestamp: Date(),
             activeChannels: activeChannels.count,
-            totalMessages: messageQueues.values.flatMap { $0 }.count,
+            totalMessages: messageQueues.values.flatMap(\.self).count,
             averageLatency: 0.1,
             networkHealth: 0.95,
             securityIncidents: 0,
@@ -1122,7 +1122,7 @@ final class UniversalConsciousnessDatabase {
     func getCommunicationMetrics() async throws -> CommunicationMetrics {
         let totalChannels = communicationChannels.count
         let activeChannels = communicationChannels.values
-            .filter { Date().timeIntervalSince($0.establishmentTimestamp) < 3600 }.count
+            .count(where: { Date().timeIntervalSince($0.establishmentTimestamp) < 3600 })
         let totalMessages = messageTransmissions.count
         let averageLatency = messageTransmissions.values.map(\.transmissionTime).reduce(0, +) / Double(max(
             messageTransmissions.count,

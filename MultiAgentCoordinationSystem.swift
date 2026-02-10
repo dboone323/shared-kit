@@ -817,7 +817,7 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
 
         var agentUtilization: [UUID: Double] = [:]
         for agentId in session.participatingAgents {
-            let assignedTasks = session.subtaskAssignments.values.filter { $0 == agentId }.count
+            let assignedTasks = session.subtaskAssignments.values.count(where: { $0 == agentId })
             agentUtilization[agentId] = Double(assignedTasks) / Double(session.task.subtasks.count)
         }
 

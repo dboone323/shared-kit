@@ -65,7 +65,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
     public var pediatricCareQuality: Double
     public var globalHealthSecurity: Double
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade, inverse: \EnhancedPatientRecord.healthcareSystem)
     public var patientRecords: [EnhancedPatientRecord] = []
 
@@ -475,22 +475,22 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
             min(1.0, Double(self.totalFacilities) / 10000.0) * self.globalCoverage
 
         // Mental health support based on specialized facilities and AI capabilities
-        let mentalHealthFacilities = self.medicalFacilities.filter {
+        let mentalHealthFacilities = self.medicalFacilities.count(where: {
             $0.specializations.contains("Mental Health")
-        }.count
+        })
         self.mentalHealthSupport =
             Double(mentalHealthFacilities) / Double(max(1, self.totalFacilities))
 
         // Elderly care quality based on geriatric specializations
-        let elderlyFacilities = self.medicalFacilities.filter {
+        let elderlyFacilities = self.medicalFacilities.count(where: {
             $0.specializations.contains("Geriatric")
-        }.count
+        })
         self.elderlyCareQuality = Double(elderlyFacilities) / Double(max(1, self.totalFacilities))
 
         // Pediatric care quality based on pediatric specializations
-        let pediatricFacilities = self.medicalFacilities.filter {
+        let pediatricFacilities = self.medicalFacilities.count(where: {
             $0.specializations.contains("Pediatric")
-        }.count
+        })
         self.pediatricCareQuality =
             Double(pediatricFacilities) / Double(max(1, self.totalFacilities))
 

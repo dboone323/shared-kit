@@ -26,7 +26,7 @@ final class MockViewModel: BaseViewModel {
         case setError(String)
     }
 
-    @Published var state: State = State()
+    @Published var state: State = .init()
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
 
@@ -36,7 +36,7 @@ final class MockViewModel: BaseViewModel {
             state.data = ["Item 1", "Item 2", "Item 3"]
         case .clearData:
             state.data = []
-        case .setError(let message):
+        case let .setError(message):
             state.errorMessage = message
         }
     }
@@ -113,7 +113,7 @@ final class SharedArchitectureTests: XCTestCase {
 
     func testValidateState() {
         let isValid = viewModel.validateState()
-        XCTAssertTrue(isValid)  // Default implementation returns true
+        XCTAssertTrue(isValid) // Default implementation returns true
     }
 
     // MARK: - Published Property Tests
@@ -125,7 +125,7 @@ final class SharedArchitectureTests: XCTestCase {
         viewModel.$state
             .sink { _ in
                 receivedValues += 1
-                if receivedValues >= 2 {  // Initial + one change
+                if receivedValues >= 2 { // Initial + one change
                     expectation.fulfill()
                 }
             }
@@ -163,7 +163,7 @@ final class SharedArchitectureTests: XCTestCase {
         let result: OperationResult<String> = .success("Test data")
 
         switch result {
-        case .success(let value):
+        case let .success(value):
             XCTAssertEqual(value, "Test data")
         case .failure:
             XCTFail("Expected success, got failure")
@@ -177,7 +177,7 @@ final class SharedArchitectureTests: XCTestCase {
         switch result {
         case .success:
             XCTFail("Expected failure, got success")
-        case .failure(let err):
+        case let .failure(err):
             XCTAssertNotNil(err)
         }
     }

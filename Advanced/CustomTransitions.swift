@@ -1,8 +1,8 @@
 import Foundation
 import SwiftUI
 
-/// Custom Transition Effects for Advanced UI Navigation
-/// Provides sophisticated transition animations between views
+// Custom Transition Effects for Advanced UI Navigation
+// Provides sophisticated transition animations between views
 
 public struct CustomTransitions {
     // MARK: - Slide Transitions

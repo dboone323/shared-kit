@@ -9,10 +9,10 @@
 //  and scaling capabilities for high-performance applications.
 //
 
-import Foundation
-import SwiftData
 import Combine
 import CoreFoundation
+import Foundation
+import SwiftData
 
 // MARK: - Core Performance Engine
 
@@ -45,7 +45,7 @@ public final class PerformanceEngine {
 
     /// Get performance metrics
     public func getPerformanceMetrics() async -> PerformanceMetrics {
-        return await profiler.getMetrics()
+        await profiler.getMetrics()
     }
 
     /// Scale resources based on demand
@@ -60,7 +60,7 @@ public final class PerformanceEngine {
 
     /// Retrieve cached data
     public func retrieveCached(key: String) async -> Any? {
-        return await cacheManager.retrieve(key: key)
+        await cacheManager.retrieve(key: key)
     }
 
     /// Profile code execution
@@ -118,7 +118,7 @@ public final class PerformanceEngine {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class PerformanceOptimizer {
-    private var settings: OptimizationSettings = OptimizationSettings()
+    private var settings: OptimizationSettings = .init()
 
     func configure(_ settings: OptimizationSettings) {
         self.settings = settings
@@ -200,8 +200,8 @@ private final class PerformanceOptimizer {
 
 @available(iOS 17.0, macOS 14.0, *)
 private final class AutoScaler {
-    private var settings: ScalingSettings = ScalingSettings()
-    private var currentScale: ScaleProfile = ScaleProfile(scaleFactor: 1.0, resourceAllocation: 1.0)
+    private var settings: ScalingSettings = .init()
+    private var currentScale: ScaleProfile = .init(scaleFactor: 1.0, resourceAllocation: 1.0)
 
     func configure(_ settings: ScalingSettings) {
         self.settings = settings
@@ -269,7 +269,7 @@ private final class PerformanceProfiler {
     private var executionTimes: [String: [TimeInterval]] = [:]
     private var metricsHistory: [PerformanceMetrics] = []
     private let profilerQueue = DispatchQueue(label: "com.tools-automation.performance.profiler")
-    private var settings: ProfilingSettings = ProfilingSettings()
+    private var settings: ProfilingSettings = .init()
 
     func configure(_ settings: ProfilingSettings) {
         self.settings = settings
@@ -295,7 +295,7 @@ private final class PerformanceProfiler {
     }
 
     func getMetrics() async -> PerformanceMetrics {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             profilerQueue.async {
                 // Collect current system metrics
                 let metrics = PerformanceMetrics(
@@ -324,44 +324,44 @@ private final class PerformanceProfiler {
 
     private func getCPUUsage() -> Double {
         // In a real implementation, this would use system APIs
-        return Double.random(in: 0.1...0.8)
+        Double.random(in: 0.1...0.8)
     }
 
     private func getMemoryUsage() -> Double {
         // In a real implementation, this would use system APIs
-        return Double.random(in: 0.2...0.9)
+        Double.random(in: 0.2...0.9)
     }
 
     private func getDiskUsage() -> Double {
         // In a real implementation, this would use system APIs
-        return Double.random(in: 0.1...0.7)
+        Double.random(in: 0.1...0.7)
     }
 
     private func getNetworkUsage() -> Double {
         // In a real implementation, this would use system APIs
-        return Double.random(in: 0.05...0.5)
+        Double.random(in: 0.05...0.5)
     }
 
     private func getAverageResponseTime() -> TimeInterval {
         // Calculate from execution times
-        let allTimes = executionTimes.values.flatMap { $0 }
+        let allTimes = executionTimes.values.flatMap(\.self)
         return allTimes.isEmpty ? 0 : allTimes.reduce(0, +) / Double(allTimes.count)
     }
 
     private func getThroughput() -> Double {
         // Calculate operations per second
-        let totalOperations = executionTimes.values.flatMap { $0 }.count
+        let totalOperations = executionTimes.values.flatMap(\.self).count
         return Double(totalOperations) / 60.0 // Per minute
     }
 
     private func getErrorRate() -> Double {
         // In a real implementation, this would track errors
-        return Double.random(in: 0.001...0.05)
+        Double.random(in: 0.001...0.05)
     }
 
     private func getActiveConnections() -> Int {
         // In a real implementation, this would track connections
-        return Int.random(in: 10...100)
+        Int.random(in: 10...100)
     }
 
     func getOperationMetrics(operation: String) -> OperationMetrics {
@@ -391,7 +391,7 @@ private final class PerformanceProfiler {
 private final class IntelligentCacheManager {
     private var cache: [String: CacheItem] = [:]
     private let cacheQueue = DispatchQueue(label: "com.tools-automation.performance.cache")
-    private var settings: CachingSettings = CachingSettings()
+    private var settings: CachingSettings = .init()
 
     func configure(_ settings: CachingSettings) {
         self.settings = settings
@@ -419,7 +419,7 @@ private final class IntelligentCacheManager {
     }
 
     func retrieve(key: String) async -> Any? {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             cacheQueue.async {
                 if var item = self.cache[key] {
                     item.lastAccessed = Date()
@@ -525,7 +525,8 @@ public struct PerformanceSettings {
     public init(optimization: OptimizationSettings = OptimizationSettings(),
                 scaling: ScalingSettings = ScalingSettings(),
                 profiling: ProfilingSettings = ProfilingSettings(),
-                caching: CachingSettings = CachingSettings()) {
+                caching: CachingSettings = CachingSettings())
+    {
         self.optimization = optimization
         self.scaling = scaling
         self.profiling = profiling
@@ -544,7 +545,8 @@ public struct OptimizationSettings {
                 cpuOptimizationEnabled: Bool = true,
                 ioOptimizationEnabled: Bool = true,
                 networkOptimizationEnabled: Bool = true,
-                optimizationInterval: TimeInterval = 300) { // 5 minutes
+                optimizationInterval: TimeInterval = 300)
+    { // 5 minutes
         self.memoryOptimizationEnabled = memoryOptimizationEnabled
         self.cpuOptimizationEnabled = cpuOptimizationEnabled
         self.ioOptimizationEnabled = ioOptimizationEnabled
@@ -572,7 +574,8 @@ public struct ScalingSettings {
                 targetMemoryUsage: Double = 0.8,
                 targetRequestRate: Double = 500,
                 scaleSensitivity: Double = 0.1,
-                resourceSensitivity: Double = 0.1) {
+                resourceSensitivity: Double = 0.1)
+    {
         self.cpuScaleUpThreshold = cpuScaleUpThreshold
         self.cpuScaleDownThreshold = cpuScaleDownThreshold
         self.memoryScaleUpThreshold = memoryScaleUpThreshold
@@ -594,7 +597,8 @@ public struct ProfilingSettings {
     public init(enabled: Bool = true,
                 maxSamples: Int = 1000,
                 historySize: Int = 100,
-                samplingRate: Double = 1.0) {
+                samplingRate: Double = 1.0)
+    {
         self.enabled = enabled
         self.maxSamples = maxSamples
         self.historySize = historySize
@@ -611,7 +615,8 @@ public struct CachingSettings {
     public init(enabled: Bool = true,
                 maxItems: Int = 1000,
                 maxAge: TimeInterval = 3600, // 1 hour
-                compressionEnabled: Bool = true) {
+                compressionEnabled: Bool = true)
+    {
         self.enabled = enabled
         self.maxItems = maxItems
         self.maxAge = maxAge

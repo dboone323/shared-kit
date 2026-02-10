@@ -199,25 +199,25 @@ public final class MCPEnhancedAgent: AutonomousAgent, MCPToolIntegrable, Sendabl
         // Validate result structure and content
         switch tool.category {
         case .textProcessing:
-            return result.data is String || result.data is [String]
+            result.data is String || result.data is [String]
         case .dataAnalysis:
-            return result.data is [String: Any] || result.data is [[String: Any]]
+            result.data is [String: Any] || result.data is [[String: Any]]
         case .fileOperations:
-            return result.success // File operations are validated by success flag
+            result.success // File operations are validated by success flag
         case .networkOperations:
-            return result.data is [String: Any]
+            result.data is [String: Any]
         case .systemOperations:
-            return result.success
+            result.success
         case .aiProcessing:
-            return result.data is String || result.data is [String: Any]
+            result.data is String || result.data is [String: Any]
         case .workflowOrchestration:
-            return result.data is [String: Any]
+            result.data is [String: Any]
         case .securityOperations:
-            return result.success
+            result.success
         case .monitoring:
-            return result.data is [String: Any]
+            result.data is [String: Any]
         case .optimization:
-            return result.data is [String: Any]
+            result.data is [String: Any]
         }
     }
 
@@ -463,15 +463,15 @@ public final class MCPEnhancedAgentFactory {
     private func getCapabilitiesForDomain(_ domain: AgentDomain) -> [AgentCapability] {
         switch domain {
         case .development:
-            return [.codeAnalysis, .testing, .documentation]
+            [.codeAnalysis, .testing, .documentation]
         case .data:
-            return [.dataProcessing, .analytics, .visualization]
+            [.dataProcessing, .analytics, .visualization]
         case .automation:
-            return [.workflowOrchestration, .taskAutomation, .monitoring]
+            [.workflowOrchestration, .taskAutomation, .monitoring]
         case .security:
-            return [.securityAnalysis, .threatDetection, .compliance]
+            [.securityAnalysis, .threatDetection, .compliance]
         case .ai:
-            return [.aiProcessing, .modelTraining, .inference]
+            [.aiProcessing, .modelTraining, .inference]
         }
     }
 }

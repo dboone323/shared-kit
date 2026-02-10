@@ -1370,8 +1370,9 @@ final class ConsciousnessDimensionalTravelDatabase {
 
     func getTravelMetrics() async throws -> TravelMetrics {
         let totalTravels = dimensionalTravels.count
-        let activeTravels = dimensionalTravels.values.filter { Date().timeIntervalSince($0.initiationTimestamp) < 3600 }
-            .count
+        let activeTravels = dimensionalTravels.values
+            .count(where: { Date().timeIntervalSince($0.initiationTimestamp) < 3600 })
+
         let totalShifts = realityShifts.count
         let averageStability = consciousnessStabilizations.values.map(\.stabilityLevel).reduce(0, +) / Double(max(
             consciousnessStabilizations.count,

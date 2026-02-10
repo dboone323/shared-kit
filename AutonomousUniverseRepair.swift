@@ -327,14 +327,14 @@ enum RepairAlgorithm {
 
     var complexity: Int {
         switch self {
-        case .quantumStabilization: return 1
-        case .entropyReduction: return 2
-        case .coherenceRestoration: return 3
-        case .dimensionalRepair: return 4
-        case .timelineCorrection: return 5
-        case .entanglementReconstruction: return 6
-        case .noiseCancellation: return 7
-        case .integrityRestoration: return 8
+        case .quantumStabilization: 1
+        case .entropyReduction: 2
+        case .coherenceRestoration: 3
+        case .dimensionalRepair: 4
+        case .timelineCorrection: 5
+        case .entanglementReconstruction: 6
+        case .noiseCancellation: 7
+        case .integrityRestoration: 8
         }
     }
 

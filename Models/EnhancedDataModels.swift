@@ -141,7 +141,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     public var projectContext: String
     public var externalReferences: [ExternalReference]
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade, inverse: \EnhancedHabitLog.habit)
     public var logs: [EnhancedHabitLog] = []
 
@@ -151,7 +151,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     @Relationship(deleteRule: .cascade)
     public var milestones: [HabitMilestone] = []
 
-    // Computed Properties
+    /// Computed Properties
     public var isCompletedToday: Bool {
         guard
             let todaysLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) })
@@ -193,7 +193,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         self.milestones.filter { !$0.isAchieved }.sorted { $0.targetValue < $1.targetValue }.first
     }
 
-    // Initialization
+    /// Initialization
     public init(
         name: String,
         habitDescription: String,
@@ -456,7 +456,7 @@ public final class EnhancedHabitLog {
     public var weather: String?
     public var energyLevel: Int? // 1-10 scale
 
-    // Relationship
+    /// Relationship
     public var habit: EnhancedHabit?
 
     public init(
@@ -571,7 +571,7 @@ public enum MoodRating: String, CaseIterable, Codable {
     }
 }
 
-// Re-export existing enums with enhancements
+/// Re-export existing enums with enhancements
 public enum HabitFrequency: String, CaseIterable, Codable {
     case daily
     case weekly
@@ -663,7 +663,7 @@ public enum HabitDifficulty: String, CaseIterable, Codable {
         }
     }
 
-    nonisolated public var xpMultiplier: Int {
+    public nonisolated var xpMultiplier: Int {
         switch self {
         case .trivial: 1
         case .easy: 2

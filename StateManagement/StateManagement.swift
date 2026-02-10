@@ -33,7 +33,7 @@ public enum ProjectType: String, CaseIterable {
     }
 }
 
-// Re-export types from service protocols for state management
+/// Re-export types from service protocols for state management
 public protocol EnhancedHabitProtocol {
     var id: UUID { get }
     var name: String { get set }
@@ -59,7 +59,7 @@ public protocol EnhancedTaskProtocol {
     var title: String { get set }
 }
 
-// Service protocols (simplified versions for state management)
+/// Service protocols (simplified versions for state management)
 public protocol AnalyticsServiceProtocol {
     func track(event: String, properties: [String: Any]?, userId: String?) async
 }
@@ -91,7 +91,7 @@ public protocol CrossProjectServiceProtocol {
     func syncData(from sourceProject: ProjectType, to targetProject: ProjectType) async throws
 }
 
-// Supporting types
+/// Supporting types
 public enum MoodRating: Int, CaseIterable {
     case veryPoor = 1, poor, fair, good, excellent
 }
@@ -289,7 +289,7 @@ public struct GoalProgress {
     }
 }
 
-// Mock Injected property wrapper for compilation
+/// Mock Injected property wrapper for compilation
 @propertyWrapper
 public struct MockInjected<T> {
     public var wrappedValue: T
@@ -304,7 +304,7 @@ public struct MockInjected<T> {
     }
 }
 
-// Mock service implementations for compilation
+/// Mock service implementations for compilation
 public class MockAnalyticsService: AnalyticsServiceProtocol {
     public func track(event: String, properties _: [String: Any]?, userId _: String?) async {
         print("📊 Mock Analytics: \(event)")
@@ -410,7 +410,7 @@ public class MockCrossProjectService: CrossProjectServiceProtocol {
     }
 }
 
-// Mock model implementations
+/// Mock model implementations
 public struct MockHabitLog: EnhancedHabitLogProtocol {
     public let id: UUID
     public var habitId: UUID

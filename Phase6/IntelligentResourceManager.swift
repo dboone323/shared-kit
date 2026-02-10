@@ -207,7 +207,7 @@ public final class IntelligentResourceManager: ObservableObject {
     private let optimizationInterval: TimeInterval = 300.0 // 5 minutes
     private let scalingCooldown: TimeInterval = 180.0 // 3 minutes
 
-    // Resource policies
+    /// Resource policies
     private var resourcePolicies: [ResourceType: ResourcePolicy] = [:]
 
     // State tracking
@@ -472,23 +472,23 @@ public final class IntelligentResourceManager: ObservableObject {
     private func monitorResource(_ resourceType: ResourceType) async -> ResourceMetrics {
         switch resourceType {
         case .cpu:
-            return await monitorCPU()
+            await monitorCPU()
         case .memory:
-            return await monitorMemory()
+            await monitorMemory()
         case .disk:
-            return await monitorDisk()
+            await monitorDisk()
         case .network:
-            return await monitorNetwork()
+            await monitorNetwork()
         case .gpu:
-            return await monitorGPU()
+            await monitorGPU()
         case .quantumProcessor:
-            return await monitorQuantumProcessor()
+            await monitorQuantumProcessor()
         case .cloudInstances:
-            return await monitorCloudInstances()
+            await monitorCloudInstances()
         case .databaseConnections:
-            return await monitorDatabaseConnections()
+            await monitorDatabaseConnections()
         case .apiRateLimits:
-            return await monitorAPIRateLimits()
+            await monitorAPIRateLimits()
         }
     }
 

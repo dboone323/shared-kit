@@ -407,13 +407,13 @@ public final class AutonomousAgentSystem: AutonomousAgent {
         // Simple matching logic - in practice, this would be more sophisticated
         switch input.type {
         case .task:
-            return capability.domain == .operational || capability.domain == .general
+            capability.domain == .operational || capability.domain == .general
         case .query:
-            return capability.domain == .analytical || capability.domain == .general
+            capability.domain == .analytical || capability.domain == .general
         case .observation:
-            return capability.domain == .analytical || capability.domain == .general
+            capability.domain == .analytical || capability.domain == .general
         default:
-            return capability.domain == .general
+            capability.domain == .general
         }
     }
 
@@ -509,7 +509,7 @@ public final class AutonomousAgentSystem: AutonomousAgent {
         let averageReward =
             recentExperiences.map(\.reward).reduce(0, +) / Double(recentExperiences.count)
         let successRate =
-            Double(recentExperiences.filter { $0.outcome == .success }.count)
+            Double(recentExperiences.count(where: { $0.outcome == .success }))
             / Double(recentExperiences.count)
 
         return PerformanceAnalysis(
@@ -524,7 +524,7 @@ public final class AutonomousAgentSystem: AutonomousAgent {
         var areas: [String] = []
 
         let failureRate =
-            Double(experiences.filter { $0.outcome != .success }.count) / Double(experiences.count)
+            Double(experiences.count(where: { $0.outcome != .success })) / Double(experiences.count)
         if failureRate > 0.3 {
             areas.append("error_handling")
         }
@@ -612,14 +612,13 @@ public final class AutonomousAgentSystem: AutonomousAgent {
             throw AgentError.invalidMessage
         }
 
-        let response: [String: AnyCodable]
-        switch query {
+        let response: [String: AnyCodable] = switch query {
         case "status":
-            response = ["status": state.rawValue, "capabilities": capabilities.count]
+            ["status": state.rawValue, "capabilities": capabilities.count]
         case "expertise":
-            response = ["domains": capabilities.map(\.domain.rawValue)]
+            ["domains": capabilities.map(\.domain.rawValue)]
         default:
-            response = ["response": "Query not understood"]
+            ["response": "Query not understood"]
         }
 
         return AgentMessage(
@@ -759,17 +758,17 @@ private struct BasicCapability: AgentCapability {
         // Basic execution logic
         switch name {
         case "reasoning":
-            return ["result": "Reasoned about: \(input.description)"]
+            ["result": "Reasoned about: \(input.description)"]
         case "learning":
-            return ["result": "Learned from: \(input.description)"]
+            ["result": "Learned from: \(input.description)"]
         case "communication":
-            return ["result": "Communicated: \(input.description)"]
+            ["result": "Communicated: \(input.description)"]
         case "advanced_error_handling":
-            return ["result": "Handled errors gracefully"]
+            ["result": "Handled errors gracefully"]
         case "confidence_calibration":
-            return ["result": "Calibrated confidence levels"]
+            ["result": "Calibrated confidence levels"]
         default:
-            return ["result": "Executed \(name) capability"]
+            ["result": "Executed \(name) capability"]
         }
     }
 

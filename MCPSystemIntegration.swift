@@ -328,7 +328,7 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
     public func getSystemStatus() async -> MCPSystemStatus {
         let componentHealth = await getAllComponentHealth()
         let overallHealth = calculateOverallHealth(componentHealth)
-        let activeComponents = componentHealth.values.filter { $0.status == .healthy }.count
+        let activeComponents = componentHealth.values.count(where: { $0.status == .healthy })
         let totalComponents = componentHealth.count
 
         return MCPSystemStatus(

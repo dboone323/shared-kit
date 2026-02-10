@@ -140,14 +140,13 @@ public class FeedforwardSNN: NeuromorphicNetwork {
             var layer: [NeuromorphicNeuron] = []
 
             for _ in 0..<size {
-                let neuron: NeuromorphicNeuron
-                switch neuronType {
+                let neuron: NeuromorphicNeuron = switch neuronType {
                 case .lif:
-                    neuron = LIFNeuron()
+                    LIFNeuron()
                 case .adex:
-                    neuron = AdExNeuron()
+                    AdExNeuron()
                 case .izhikevich:
-                    neuron = IzhikevichNeuron()
+                    IzhikevichNeuron()
                 }
 
                 addNeuron(neuron)

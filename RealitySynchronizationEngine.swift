@@ -306,7 +306,7 @@ final class RealitySynchronizationEngineImpl: RealitySynchronizationProtocol,
         return CoordState(
             coordinatedOperations: operations.count,
             successfulOperations: coordinationResults.filter(\.success).count,
-            failedOperations: coordinationResults.filter { !$0.success }.count,
+            failedOperations: coordinationResults.count(where: { !$0.success }),
             coordinationStrength: calculateCoordinationStrength(coordinationResults),
             energyConsumed: coordinationResults.reduce(0) { $0 + $1.energyConsumed },
             coordinationTime: coordinationResults.reduce(0) { $0 + $1.executionTime },

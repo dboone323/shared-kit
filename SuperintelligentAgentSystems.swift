@@ -444,25 +444,25 @@ public final class SuperintelligentAgent: AutonomousAgent, SuperintelligentAgent
         task.parameters.compactMap { key, value in
             switch key {
             case "timeLimit":
-                return ProblemConstraint(
+                ProblemConstraint(
                     type: .temporal,
                     value: value,
                     priority: 1.0
                 )
             case "ethical":
-                return ProblemConstraint(
+                ProblemConstraint(
                     type: .ethical,
                     value: value,
                     priority: 0.9
                 )
             case "consciousness":
-                return ProblemConstraint(
+                ProblemConstraint(
                     type: .consciousness,
                     value: value,
                     priority: 0.8
                 )
             default:
-                return nil
+                nil
             }
         }
     }

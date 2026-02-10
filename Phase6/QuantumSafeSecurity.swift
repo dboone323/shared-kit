@@ -566,9 +566,9 @@ public actor QuantumSafeKeyManager {
     public func assessKeyHealth() async throws -> KeyHealthAssessment {
         let totalKeys = keyStore.count
         let activeKeys = keyMetadata.values.filter(\.isActive).count
-        let oldKeys = keyMetadata.values.filter {
+        let oldKeys = keyMetadata.values.count(where: {
             Date().timeIntervalSince($0.creationDate) > 7_776_000 // 90 days
-        }.count
+        })
 
         let healthScore = Double(activeKeys) / Double(totalKeys)
         let freshnessScore = 1.0 - (Double(oldKeys) / Double(totalKeys))
@@ -759,8 +759,8 @@ public actor QuantumThreatDetector {
         return ThreatAssessment(
             overallScore: threatScore,
             activeThreats: threatCount,
-            criticalThreats: activeThreats.filter { $0.severity == .critical }.count,
-            highThreats: activeThreats.filter { $0.severity == .high }.count,
+            criticalThreats: activeThreats.count(where: { $0.severity == .critical }),
+            highThreats: activeThreats.count(where: { $0.severity == .high }),
             threatPatterns: threatPatterns,
             assessmentDate: Date()
         )

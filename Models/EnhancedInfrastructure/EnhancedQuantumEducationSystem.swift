@@ -65,7 +65,7 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
     public var accessibilityScore: Double
     public var culturalPreservationIndex: Double
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade, inverse: \EnhancedEducationCourse.educationSystem)
     public var courses: [EnhancedEducationCourse] = []
 
@@ -403,11 +403,11 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
     @MainActor
     public func updateSocialImpactMetrics() {
         // Calculate literacy rates based on student progress
-        let completedStudents = self.studentProfiles.filter { $0.overallProgress >= 0.8 }.count
+        let completedStudents = self.studentProfiles.count(where: { $0.overallProgress >= 0.8 })
         self.literacyRate = Double(completedStudents) / Double(max(1, self.totalStudents))
 
         // Digital literacy based on technology engagement
-        let techEngagedStudents = self.studentProfiles.filter { $0.averageEngagement >= 0.7 }.count
+        let techEngagedStudents = self.studentProfiles.count(where: { $0.averageEngagement >= 0.7 })
         self.digitalLiteracyRate = Double(techEngagedStudents) / Double(max(1, self.totalStudents))
 
         // Gender equality based on enrollment distribution

@@ -768,9 +768,9 @@ public final class AutonomousTestingFramework: ObservableObject {
         metrics["averageDuration"] =
             executions.map(\.duration).reduce(0, +) / Double(executions.count)
         metrics["successRate"] =
-            Double(executions.filter { $0.result == .passed }.count) / Double(executions.count)
+            Double(executions.count(where: { $0.result == .passed })) / Double(executions.count)
         metrics["failureRate"] =
-            Double(executions.filter { $0.result == .failed }.count) / Double(executions.count)
+            Double(executions.count(where: { $0.result == .failed })) / Double(executions.count)
 
         return metrics
     }
@@ -828,7 +828,7 @@ public final class AutonomousTestingFramework: ObservableObject {
 
     private func calculateTestEffectiveness(_ executions: [TestExecution]) -> Double {
         let successRate =
-            Double(executions.filter { $0.result == .passed }.count) / Double(executions.count)
+            Double(executions.count(where: { $0.result == .passed })) / Double(executions.count)
         let avgCoverage = executions.map(\.coverage).reduce(0, +) / Double(executions.count)
 
         // Effectiveness is a combination of reliability and coverage
@@ -939,10 +939,10 @@ private actor AsyncSemaphore {
 extension TestPriority {
     var sortOrder: Int {
         switch self {
-        case .critical: return 4
-        case .high: return 3
-        case .medium: return 2
-        case .low: return 1
+        case .critical: 4
+        case .high: 3
+        case .medium: 2
+        case .low: 1
         }
     }
 }

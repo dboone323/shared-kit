@@ -51,7 +51,7 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
     public var projectContext: String
     public var externalReferences: [ExternalReference]
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade)
     public var transactions: [EnhancedFinancialTransaction] = []
 
@@ -61,7 +61,7 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
     @Relationship(deleteRule: .cascade)
     public var goals: [EnhancedSavingsGoal] = []
 
-    // Computed Properties
+    /// Computed Properties
     public var availableCredit: Double {
         guard let creditLimit, accountType == .credit else { return 0 }
         return creditLimit - self.balance
@@ -102,7 +102,7 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         return self.transactions.reduce(0) { $0 + $1.amount } / Double(self.transactions.count)
     }
 
-    // Initialization
+    /// Initialization
     public init(
         name: String,
         balance: Double,
@@ -321,7 +321,7 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
     public var importSource: String?
     public var lastModifiedBy: String?
 
-    // Relationships
+    /// Relationships
     public var account: EnhancedFinancialAccount?
 
     @Relationship(deleteRule: .cascade)
@@ -338,7 +338,7 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
         case other = "Other"
     }
 
-    // Computed Properties
+    /// Computed Properties
     public var displayAmount: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
@@ -361,7 +361,7 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
         return category ?? "Uncategorized"
     }
 
-    // Initialization
+    /// Initialization
     public init(
         amount: Double,
         date: Date = Date(),
@@ -489,7 +489,7 @@ public final class EnhancedBudget: Validatable, Trackable {
     public var periodsUnder: Int
     public var lastResetDate: Date?
 
-    // Relationships
+    /// Relationships
     public var account: EnhancedFinancialAccount?
 
     @Relationship(deleteRule: .cascade)
@@ -510,7 +510,7 @@ public final class EnhancedBudget: Validatable, Trackable {
         case debt = "Debt Payoff"
     }
 
-    // Computed Properties
+    /// Computed Properties
     public var remainingAmount: Double {
         max(0, self.amount - self.totalSpent)
     }
@@ -553,7 +553,7 @@ public final class EnhancedBudget: Validatable, Trackable {
         case exceeded = "Exceeded"
     }
 
-    // Initialization
+    /// Initialization
     public init(
         name: String,
         amount: Double,
@@ -694,10 +694,10 @@ public final class EnhancedSavingsGoal: Validatable, Trackable {
     public var iconName: String
     public var notes: String
 
-    // Relationships
+    /// Relationships
     public var account: EnhancedFinancialAccount?
 
-    // Computed Properties
+    /// Computed Properties
     public var progressPercentage: Double {
         guard self.targetAmount > 0 else { return 0 }
         return (self.currentAmount / self.targetAmount) * 100
@@ -793,7 +793,7 @@ public final class TransactionAttachment {
     public var uploadDate: Date
     public var notes: String?
 
-    // Relationship
+    /// Relationship
     public var transaction: EnhancedFinancialTransaction?
 
     public init(fileName: String, fileUrl: String, fileType: String, fileSize: Int64) {

@@ -326,21 +326,21 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
     private func collectMetrics(for component: String) async -> SystemMetrics {
         switch component {
         case "memory":
-            return await collectMemoryMetrics()
+            await collectMemoryMetrics()
         case "cpu":
-            return await collectCPUMetrics()
+            await collectCPUMetrics()
         case "disk":
-            return await collectDiskMetrics()
+            await collectDiskMetrics()
         case "network":
-            return await collectNetworkMetrics()
+            await collectNetworkMetrics()
         case "database":
-            return await collectDatabaseMetrics()
+            await collectDatabaseMetrics()
         case "api":
-            return await collectAPIMetrics()
+            await collectAPIMetrics()
         case "filesystem":
-            return await collectFilesystemMetrics()
+            await collectFilesystemMetrics()
         default:
-            return SystemMetrics(component: component, metrics: [:])
+            SystemMetrics(component: component, metrics: [:])
         }
     }
 

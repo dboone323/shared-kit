@@ -400,7 +400,7 @@ public final class IntelligenceSynthesisEngine: Sendable {
 
     /// Calculate synthesis potential
     private func calculateSynthesisPotential(_ matrix: [[Double]]) -> Double {
-        let totalCompatibility = matrix.flatMap { $0 }.reduce(0, +)
+        let totalCompatibility = matrix.flatMap(\.self).reduce(0, +)
         let averageCompatibility = totalCompatibility / Double(matrix.count * matrix.count)
         return averageCompatibility
     }
@@ -600,7 +600,7 @@ public final class KnowledgeIntegrationNetwork: Sendable {
 
     /// Calculate integration feasibility
     private func calculateIntegrationFeasibility(_ matrix: [[Double]]) -> Double {
-        let totalConnectivity = matrix.flatMap { $0 }.reduce(0, +)
+        let totalConnectivity = matrix.flatMap(\.self).reduce(0, +)
         let averageConnectivity = totalConnectivity / Double(matrix.count * matrix.count)
         return averageConnectivity
     }

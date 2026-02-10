@@ -950,11 +950,11 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
         let validationId = UUID()
 
         // Calculate accuracy metrics
-        let correctPredictions = Double(predictions.filter { prediction in
+        let correctPredictions = Double(predictions.count(where: { prediction in
             actualOutcomes.contains { _ in
                 abs(prediction.probability - 0.5) < 0.3 // Simplified accuracy check
             }
-        }.count)
+        }))
 
         let accuracy = correctPredictions / Double(predictions.count)
         let precision = accuracy
@@ -1123,7 +1123,7 @@ final class QuantumIntuitionDatabase {
 
     func getEnhancementMetrics() async throws -> EnhancementMetrics {
         let totalAmplifications = intuitionAmplifications.count
-        let activeAmplifications = intuitionAmplifications.values.filter { $0.effectivenessRating > 0.7 }.count
+        let activeAmplifications = intuitionAmplifications.values.count(where: { $0.effectivenessRating > 0.7 })
         let averageEffectiveness = intuitionAmplifications.values.map(\.effectivenessRating).reduce(0, +) / Double(max(
             totalAmplifications,
             1

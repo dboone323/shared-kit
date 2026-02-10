@@ -311,9 +311,9 @@ public final class SingularitySafetyCoordinator: ObservableObject, @unchecked Se
         // Generate interventions required to make the action safe
         switch riskLevel {
         case SafetyRiskLevel.low:
-            return []
+            []
         case SafetyRiskLevel.medium:
-            return [
+            [
                 SafetyIntervention(
                     name: "Enhanced Monitoring",
                     type: .monitoring,
@@ -322,7 +322,7 @@ public final class SingularitySafetyCoordinator: ObservableObject, @unchecked Se
                 ),
             ]
         case SafetyRiskLevel.high:
-            return [
+            [
                 SafetyIntervention(
                     name: "Risk Mitigation",
                     type: .mitigation,
@@ -337,7 +337,7 @@ public final class SingularitySafetyCoordinator: ObservableObject, @unchecked Se
                 ),
             ]
         case SafetyRiskLevel.critical:
-            return [
+            [
                 SafetyIntervention(
                     name: "Emergency Intervention",
                     type: .emergency,

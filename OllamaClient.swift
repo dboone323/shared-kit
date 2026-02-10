@@ -125,9 +125,9 @@ private struct CloudFallbackPolicy {
     }
 }
 
-/// Enhanced Free AI Client for Ollama with Quantum Performance
-/// Zero-cost AI inference with advanced error handling, caching, and monitoring
-/// Enhanced by AI System v2.1 on 9/12/25
+// Enhanced Free AI Client for Ollama with Quantum Performance
+// Zero-cost AI inference with advanced error handling, caching, and monitoring
+// Enhanced by AI System v2.1 on 9/12/25
 
 // MARK: - Configuration
 

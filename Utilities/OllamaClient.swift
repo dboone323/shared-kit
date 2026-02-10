@@ -73,7 +73,7 @@ private struct CloudFallbackPolicy {
         }
     }
 
-    // Helpers
+    /// Helpers
     private static func readJSON(path: String) -> [String: Any]? {
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return nil }
         return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
@@ -157,7 +157,7 @@ public final class OllamaClient: LLMClient {
         throw OllamaClientError.emptyResponse
     }
 
-    // Multimodal image support for vision-capable models (e.g., llava, llama3.2-vision)
+    /// Multimodal image support for vision-capable models (e.g., llava, llama3.2-vision)
     public func generate(
         model: String,
         prompt: String,

@@ -643,7 +643,7 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                     completedSteps: result.success
                         ? workflow.steps.count
                         : result.stepResults.filter(\.value.success).count,
-                    failedSteps: result.stepResults.filter { !$0.value.success }.count
+                    failedSteps: result.stepResults.count(where: { !$0.value.success })
                 ),
                 stepResults: result.stepResults.map { stepId, toolResult in
                     MCPWorkflowStepResult(
@@ -1128,13 +1128,13 @@ public final class BasicMCPWorkflowMonitor: MCPWorkflowMonitor, @unchecked Senda
     public func getWorkflowMetrics(timeRange: DateInterval) async -> MCPWorkflowMetrics {
         await withCheckedContinuation { continuation in
             monitorQueue.async {
-                let allExecutions = self.executionHistory.values.flatMap { $0 }
+                let allExecutions = self.executionHistory.values.flatMap(\.self)
                 let relevantExecutions = allExecutions.filter { timeRange.contains($0.startTime) }
 
                 let totalExecutions = relevantExecutions.count
-                let successfulExecutions = relevantExecutions.filter { $0.state == .completed }
-                    .count
-                let failedExecutions = relevantExecutions.filter { $0.state == .failed }.count
+                let successfulExecutions = relevantExecutions.count(where: { $0.state == .completed })
+
+                let failedExecutions = relevantExecutions.count(where: { $0.state == .failed })
 
                 let completedExecutions = relevantExecutions.filter { $0.totalExecutionTime != nil }
                 let averageExecutionTime =

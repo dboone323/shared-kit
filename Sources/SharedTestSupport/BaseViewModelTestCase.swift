@@ -149,15 +149,15 @@ open class SharedViewModelTestCase: XCTestCase {
     public func generateTestData(for project: TestProject, count: Int = 1) -> [[String: Any]] {
         switch project {
         case .habitQuest:
-            return MockDataGenerator.generateHabits(count: count)
+            MockDataGenerator.generateHabits(count: count)
         case .momentumFinance:
-            return MockDataGenerator.generateTransactions(count: count)
+            MockDataGenerator.generateTransactions(count: count)
         case .codingReviewer:
-            return MockDataGenerator.generateCodeFiles(count: count)
+            MockDataGenerator.generateCodeFiles(count: count)
         case .plannerApp:
-            return MockDataGenerator.generatePlannerTasks(count: count)
+            MockDataGenerator.generatePlannerTasks(count: count)
         case .avoidObstaclesGame:
-            return MockDataGenerator.generateGameSessions(count: count)
+            MockDataGenerator.generateGameSessions(count: count)
         }
     }
 

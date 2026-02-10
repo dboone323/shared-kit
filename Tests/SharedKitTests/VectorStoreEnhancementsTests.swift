@@ -113,7 +113,7 @@ final class VectorStoreEnhancementsTests: XCTestCase {
             await metrics.recordQuery(duration: Double(i) * 0.001)
         }
 
-        let (_, _, _) = await metrics.getMetrics()
+        _ = await metrics.getMetrics()
         // Should maintain only last 1000
         // Actual verification would require internal state access
         XCTAssertTrue(true, "Should handle rolling window")

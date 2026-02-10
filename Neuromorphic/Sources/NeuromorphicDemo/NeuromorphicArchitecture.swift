@@ -349,11 +349,11 @@ public class NeuroQuantumNetwork {
     public func processHybrid(_ input: [Double]) -> [Double] {
         switch hybridMode {
         case .neuromorphic:
-            return processNeuromorphic(input)
+            processNeuromorphic(input)
         case .quantum:
-            return processQuantum(input)
+            processQuantum(input)
         case .hybrid:
-            return processHybridCombined(input)
+            processHybridCombined(input)
         }
     }
 

@@ -1142,17 +1142,17 @@ enum QuantumRealityError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .validationFailed(errors):
-            return "Validation failed with \(errors.count) errors"
+            "Validation failed with \(errors.count) errors"
         case let .manipulationFailed(reason):
-            return "Manipulation failed: \(reason)"
+            "Manipulation failed: \(reason)"
         case let .transformationFailed(errors):
-            return "Transformation failed with \(errors.count) errors"
+            "Transformation failed with \(errors.count) errors"
         case let .synchronizationFailed(reason):
-            return "Synchronization failed: \(reason)"
+            "Synchronization failed: \(reason)"
         case let .fieldEngineeringFailed(reason):
-            return "Field engineering failed: \(reason)"
+            "Field engineering failed: \(reason)"
         case let .stateManagementFailed(reason):
-            return "State management failed: \(reason)"
+            "State management failed: \(reason)"
         }
     }
 }

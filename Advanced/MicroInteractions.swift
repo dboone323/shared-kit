@@ -5,8 +5,8 @@ import SwiftUI
     import UIKit
 #endif
 
-/// Micro-interactions for Enhanced User Feedback
-/// Provides subtle animations and feedback for user actions
+// Micro-interactions for Enhanced User Feedback
+// Provides subtle animations and feedback for user actions
 
 public struct MicroInteractions {
     // MARK: - Haptic Feedback

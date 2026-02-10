@@ -1,7 +1,7 @@
 import Foundation
 
-// Minimal Complex type for Phase8GDemo target isolation.
-// This avoids pulling the broader Phase6 environment to prevent type name collisions.
+/// Minimal Complex type for Phase8GDemo target isolation.
+/// This avoids pulling the broader Phase6 environment to prevent type name collisions.
 public struct Complex: Sendable, Codable, Equatable {
     public let real: Double
     public let imaginary: Double

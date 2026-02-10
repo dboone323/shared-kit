@@ -72,7 +72,7 @@ final class RAGIntegrationTests: XCTestCase {
         _ = try await agent.process(query: "How do I check status?")
 
         // Verify history tracking
-        XCTAssertEqual(agent.conversationHistory.count, 4)  // 2 user + 2 assistant
+        XCTAssertEqual(agent.conversationHistory.count, 4) // 2 user + 2 assistant
         XCTAssertEqual(agent.conversationHistory[0].role, "user")
         XCTAssertEqual(agent.conversationHistory[1].role, "assistant")
     }
@@ -152,17 +152,17 @@ final class RAGIntegrationTests: XCTestCase {
 
     func testToolResultParsing() {
         let rawOutput = """
-            Container Status:
-            - db: running
-            - ollama: running
-            Error: Some warning message
-            Total containers: 2
-            """
+        Container Status:
+        - db: running
+        - ollama: running
+        Error: Some warning message
+        Total containers: 2
+        """
 
         let result = ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
 
         XCTAssertEqual(result.toolName, "status")
-        XCTAssertFalse(result.success)  // Contains "error"
+        XCTAssertFalse(result.success) // Contains "error"
         XCTAssertFalse(result.warnings.isEmpty)
     }
 

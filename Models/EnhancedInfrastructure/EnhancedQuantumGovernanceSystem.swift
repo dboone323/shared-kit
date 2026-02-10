@@ -58,7 +58,7 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
     public var projectContext: String
     public var externalReferences: [ExternalReference]
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade, inverse: \EnhancedGovernanceDecision.governanceSystem)
     public var decisions: [EnhancedGovernanceDecision] = []
 
@@ -71,7 +71,7 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
     @Relationship(deleteRule: .cascade)
     public var performanceMetrics: [EnhancedInfrastructureMetric] = []
 
-    // Computed Properties
+    /// Computed Properties
     public var overallEfficiency: Double {
         (decisionAccuracy + ethicalComplianceScore + quantumCoherence + globalCoverage) / 4.0
     }
@@ -90,7 +90,7 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         policies.reduce(0.0) { $0 + $1.optimizationScore } / Double(max(1, policies.count))
     }
 
-    // Initialization
+    /// Initialization
     public init(
         name: String,
         governanceDescription: String,

@@ -1681,7 +1681,7 @@ final class BasicAlertManagementEngine: AlertManagementEngineProtocol {
         async throws -> Int
     {
         // Basic alert processing
-        anomalies.filter { $0.severity > 0.5 }.count
+        anomalies.count(where: { $0.severity > 0.5 })
     }
 }
 

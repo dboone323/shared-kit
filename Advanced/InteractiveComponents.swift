@@ -9,8 +9,8 @@ import SwiftUI
     import AppKit
 #endif
 
-/// Interactive UI Components for Enhanced User Experience
-/// Provides advanced interactive elements with gesture support
+// Interactive UI Components for Enhanced User Experience
+// Provides advanced interactive elements with gesture support
 
 public struct InteractiveComponents {
     // MARK: - Interactive Button

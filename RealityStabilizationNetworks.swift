@@ -311,7 +311,7 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
         return SynchronizationResult(
             synchronizedNodes: networkNodes.count,
             successfulSyncs: results.filter(\.success).count,
-            failedSyncs: results.filter { !$0.success }.count,
+            failedSyncs: results.count(where: { !$0.success }),
             averageLatency: results.map(\.latency).reduce(0, +) / Double(results.count),
             dataTransferred: results.map(\.dataTransferred).reduce(0, +),
             validationResults: ValidationResult(
@@ -334,7 +334,7 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
         return PropagationResult(
             propagatedNodes: networkNodes.count,
             successfulPropagations: results.filter(\.success).count,
-            failedPropagations: results.filter { !$0.success }.count,
+            failedPropagations: results.count(where: { !$0.success }),
             totalStabilizationEffect: results.map(\.stabilizationEffect).reduce(0, +),
             averagePropagationTime: results.map(\.propagationTime).reduce(0, +)
                 / Double(results.count),
@@ -548,7 +548,7 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
 
     private func analyzeChangeImpact(_ changes: [RealityChange]) -> ChangeImpactAnalysis {
         let totalMagnitude = changes.map(\.magnitude).reduce(0, +)
-        let affectedAreas = changes.flatMap { [$0.affectedArea] }.flatMap { $0 }
+        let affectedAreas = changes.flatMap { [$0.affectedArea] }.flatMap(\.self)
         let propagationSpeed = changes.map(\.propagationSpeed).max() ?? 0.0
 
         return ChangeImpactAnalysis(
@@ -740,15 +740,15 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
     {
         switch pattern.patternType {
         case .coherenceBreakdown:
-            return .coherenceReinforcement
+            .coherenceReinforcement
         case .dimensionalShift:
-            return .dimensionalAnchoring
+            .dimensionalAnchoring
         case .temporalDistortion:
-            return .temporalSynchronization
+            .temporalSynchronization
         case .quantumDecoherence:
-            return .quantumStabilization
+            .quantumStabilization
         default:
-            return .adaptiveCompensation
+            .adaptiveCompensation
         }
     }
 

@@ -65,7 +65,7 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
     public var sustainableDevelopment: Double
     public var climateResilience: Double
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade, inverse: \EnhancedEnvironmentalZone.environmentalSystem)
     public var environmentalZones: [EnhancedEnvironmentalZone] = []
 

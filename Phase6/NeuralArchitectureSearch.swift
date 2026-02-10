@@ -341,9 +341,9 @@ public actor NeuralArchitectureSearch {
         var motifs: [ArchitectureMotif] = []
 
         // Residual connections
-        let residualCount = successfulArchitectures.filter { architecture in
+        let residualCount = successfulArchitectures.count(where: { architecture in
             architecture.layers.contains { $0.type == .residual }
-        }.count
+        })
 
         if Double(residualCount) / Double(successfulArchitectures.count) > 0.6 {
             motifs.append(
@@ -356,9 +356,9 @@ public actor NeuralArchitectureSearch {
         }
 
         // Attention mechanisms
-        let attentionCount = successfulArchitectures.filter { architecture in
+        let attentionCount = successfulArchitectures.count(where: { architecture in
             architecture.layers.contains { $0.type == .attention }
-        }.count
+        })
 
         if Double(attentionCount) / Double(successfulArchitectures.count) > 0.4 {
             motifs.append(
@@ -455,13 +455,13 @@ public actor ArchitectureSearchSpace {
         // Return known good architectures for the task
         switch task.type {
         case .classification:
-            return [createResNetLikeArchitecture(), createVGGLikeArchitecture()]
+            [createResNetLikeArchitecture(), createVGGLikeArchitecture()]
         case .detection:
-            return [createYOLONetwork(), createRCNNNetwork()]
+            [createYOLONetwork(), createRCNNNetwork()]
         case .generation:
-            return [createTransformerArchitecture(), createGANArchitecture()]
+            [createTransformerArchitecture(), createGANArchitecture()]
         case .nlp:
-            return [createBERTLikeArchitecture(), createGPTLikeArchitecture()]
+            [createBERTLikeArchitecture(), createGPTLikeArchitecture()]
         }
     }
 
@@ -496,15 +496,13 @@ public actor ArchitectureSearchSpace {
     }
 
     private func sampleLayerType(for task: MLTask) -> LayerType {
-        let layerTypes: [LayerType]
-
-        switch task.type {
+        let layerTypes: [LayerType] = switch task.type {
         case .classification, .detection:
-            layerTypes = [.convolution, .dense, .pooling, .normalization, .dropout, .residual]
+            [.convolution, .dense, .pooling, .normalization, .dropout, .residual]
         case .generation:
-            layerTypes = [.dense, .attention, .dropout, .residual, .recurrent]
+            [.dense, .attention, .dropout, .residual, .recurrent]
         case .nlp:
-            layerTypes = [.attention, .dense, .dropout, .residual, .recurrent]
+            [.attention, .dense, .dropout, .residual, .recurrent]
         }
 
         return layerTypes.randomElement() ?? .dense
@@ -586,7 +584,7 @@ public actor ArchitectureSearchSpace {
         }
     }
 
-    // Predefined architectures for seeding
+    /// Predefined architectures for seeding
     private func createResNetLikeArchitecture() -> NeuralArchitecture {
         // Simplified ResNet-like architecture
         let layers = [
@@ -1073,20 +1071,20 @@ public actor ArchitectureEvaluator {
 
     private func getOptimalParameterCount(_ taskType: TaskType) -> Int {
         switch taskType {
-        case .classification: return 25_000_000
-        case .detection: return 50_000_000
-        case .generation: return 100_000_000
-        case .nlp: return 340_000_000
+        case .classification: 25_000_000
+        case .detection: 50_000_000
+        case .generation: 100_000_000
+        case .nlp: 340_000_000
         }
     }
 
     private func getTaskAccuracyMultiplier(_ task: MLTask) -> Double {
         // Task difficulty multipliers
         switch task.type {
-        case .classification: return 1.0
-        case .detection: return 0.8
-        case .generation: return 0.6
-        case .nlp: return 0.7
+        case .classification: 1.0
+        case .detection: 0.8
+        case .generation: 0.6
+        case .nlp: 0.7
         }
     }
 
@@ -1396,15 +1394,15 @@ public actor ArchitecturePerformancePredictor {
         // Estimate latency for different layer types
         switch layer.type {
         case .convolution:
-            return 0.01
+            0.01
         case .dense:
-            return 0.005
+            0.005
         case .attention:
-            return 0.02
+            0.02
         case .recurrent:
-            return 0.015
+            0.015
         default:
-            return 0.001
+            0.001
         }
     }
 

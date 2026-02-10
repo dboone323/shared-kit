@@ -437,23 +437,21 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
         let startTime = Date()
 
         // Execute coordination based on type
-        let frameworkResults: [String: FrameworkResult]
-
-        switch coordination.coordinationType {
+        let frameworkResults: [String: FrameworkResult] = switch coordination.coordinationType {
         case .parallel:
-            frameworkResults = try await executeParallelCoordination(coordination)
+            try await executeParallelCoordination(coordination)
         case .sequential:
-            frameworkResults = try await executeSequentialCoordination(coordination)
+            try await executeSequentialCoordination(coordination)
         case .hierarchical:
-            frameworkResults = try await executeHierarchicalCoordination(coordination)
+            try await executeHierarchicalCoordination(coordination)
         case .adaptive:
-            frameworkResults = try await executeAdaptiveCoordination(coordination)
+            try await executeAdaptiveCoordination(coordination)
         case .quantum_entangled:
-            frameworkResults = try await executeQuantumEntangledCoordination(coordination)
+            try await executeQuantumEntangledCoordination(coordination)
         case .universal:
-            frameworkResults = try await executeUniversalCoordination(coordination)
+            try await executeUniversalCoordination(coordination)
         case .consciousness_driven:
-            frameworkResults = try await executeConsciousnessDrivenCoordination(coordination)
+            try await executeConsciousnessDrivenCoordination(coordination)
         }
 
         // Calculate coordination metrics
@@ -548,23 +546,23 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
         // Implement constraint validation logic
         switch constraint.constraintType {
         case .ethical:
-            return operation.consciousnessLevel.rawValue >= "enhanced"
+            operation.consciousnessLevel.rawValue >= "enhanced"
         case .temporal:
-            return operation.priority != .low
+            operation.priority != .low
         case .resource:
-            return true // Assume resources are available
+            true // Assume resources are available
         case .complexity:
-            return operation.domains.count <= 5
+            operation.domains.count <= 5
         case .consciousness:
-            return operation.consciousnessLevel != .standard
+            operation.consciousnessLevel != .standard
         case .quantum:
-            return operation.quantumState != nil
+            operation.quantumState != nil
         case .reality:
-            return operation.operationType == .reality_engineering
+            operation.operationType == .reality_engineering
         case .harmony:
-            return operation.consciousnessLevel.rawValue >= "transcendent"
+            operation.consciousnessLevel.rawValue >= "transcendent"
         case .evolution:
-            return operation.operationType == .evolution_acceleration
+            operation.operationType == .evolution_acceleration
         }
     }
 
@@ -736,11 +734,11 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
 
     private func calculateConsciousnessAmplification(_ level: ConsciousnessLevel) -> Double {
         switch level {
-        case .standard: return 1.0
-        case .enhanced: return 1.5
-        case .transcendent: return 2.0
-        case .universal: return 3.0
-        case .singularity: return 5.0
+        case .standard: 1.0
+        case .enhanced: 1.5
+        case .transcendent: 2.0
+        case .universal: 3.0
+        case .singularity: 5.0
         }
     }
 

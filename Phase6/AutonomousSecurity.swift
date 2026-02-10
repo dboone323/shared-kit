@@ -434,23 +434,23 @@ public actor SecurityAnalyzer {
         // Assess severity based on incident type and characteristics
         switch incident.type {
         case .bruteForce:
-            return incident.details.contains("admin") ? .critical : .high
+            incident.details.contains("admin") ? .critical : .high
         case .injection:
-            return .high
+            .high
         case .xss:
-            return .medium
+            .medium
         case .dataBreach:
-            return .critical
+            .critical
         case .ddos, .denialOfService:
-            return .high
+            .high
         case .malware:
-            return .critical
+            .critical
         case .networkIntrusion:
-            return .high
+            .high
         case .suspiciousActivity:
-            return .medium
+            .medium
         case .privilegeEscalation:
-            return .high
+            .high
         }
     }
 
@@ -458,13 +458,13 @@ public actor SecurityAnalyzer {
         // Assess potential impact of the incident
         switch incident.severity {
         case .low:
-            return .minimal
+            .minimal
         case .medium:
-            return .moderate
+            .moderate
         case .high:
-            return .significant
+            .significant
         case .critical:
-            return .severe
+            .severe
         }
     }
 

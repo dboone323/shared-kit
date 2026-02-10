@@ -77,7 +77,7 @@ public enum ProjectType: String, CaseIterable {
     case avoidObstaclesGame = "avoid_obstacles_game"
 }
 
-// Protocol forward declarations
+/// Protocol forward declarations
 public protocol EnhancedHabitProtocol {
     var id: UUID { get }
     var name: String { get set }
@@ -103,7 +103,7 @@ public protocol EnhancedTaskProtocol {
     var title: String { get set }
 }
 
-// Service protocols (simplified versions for state management)
+/// Service protocols (simplified versions for state management)
 public protocol AnalyticsServiceProtocol {
     func track(event: String, properties: [String: Any]?, userId: String?) async
 }

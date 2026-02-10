@@ -186,7 +186,7 @@ public class EntanglementNetwork: ObservableObject {
     /// Get network statistics
     public func getNetworkStatistics() async -> EntanglementNetworkStatistics {
         let totalPairs = entanglementPairs.count
-        let activePairs = entanglementPairs.filter { !$0.isExpired }.count
+        let activePairs = entanglementPairs.count(where: { !$0.isExpired })
         let averageFidelity =
             entanglementPairs.map(\.currentFidelity).reduce(0, +)
             / Double(max(1, entanglementPairs.count))

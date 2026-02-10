@@ -240,11 +240,11 @@ public actor AutonomousDeployment {
     {
         // Select the best deployment strategy based on environment analysis
         if environment.currentLoad > 0.8 {
-            return .blueGreen
+            .blueGreen
         } else if target.type == .microservice {
-            return .canary
+            .canary
         } else {
-            return .rolling
+            .rolling
         }
     }
 
@@ -254,14 +254,14 @@ public actor AutonomousDeployment {
         // Create deployment steps based on strategy
         switch strategy {
         case .rolling:
-            return [
+            [
                 DeploymentStep(type: .backup, description: "Create backup", duration: 60),
                 DeploymentStep(type: .deploy, description: "Deploy new version", duration: 300),
                 DeploymentStep(type: .verify, description: "Verify deployment", duration: 120),
                 DeploymentStep(type: .cleanup, description: "Cleanup old versions", duration: 30),
             ]
         case .blueGreen:
-            return [
+            [
                 DeploymentStep(
                     type: .provision, description: "Provision green environment", duration: 180
                 ),
@@ -277,7 +277,7 @@ public actor AutonomousDeployment {
                 ),
             ]
         case .canary:
-            return [
+            [
                 DeploymentStep(type: .deploy, description: "Deploy to canary group", duration: 120),
                 DeploymentStep(
                     type: .monitor, description: "Monitor canary performance", duration: 300
@@ -299,11 +299,11 @@ public actor AutonomousDeployment {
     {
         // Assess deployment risk based on target and steps
         if target.criticality == .high && steps.count > 4 {
-            return .high
+            .high
         } else if target.criticality == .medium {
-            return .medium
+            .medium
         } else {
-            return .low
+            .low
         }
     }
 
@@ -321,7 +321,7 @@ public actor AutonomousDeployment {
 
     private func calculateRollbackFrequency() -> Double {
         guard !deploymentHistory.isEmpty else { return 0.0 }
-        let rollbacks = deploymentHistory.filter { !$0.success }.count
+        let rollbacks = deploymentHistory.count(where: { !$0.success })
         return Double(rollbacks) / Double(deploymentHistory.count)
     }
 
@@ -527,13 +527,13 @@ public actor IntelligentRollbackManager {
     private func selectRollbackStrategy(_ analysis: FailureAnalysis) -> RollbackStrategy {
         switch analysis.primaryCause {
         case .deploymentError:
-            return .immediate
+            .immediate
         case .configurationError:
-            return .gradual
+            .gradual
         case .resourceError:
-            return .staged
+            .staged
         case .compatibilityError:
-            return .parallel
+            .parallel
         }
     }
 

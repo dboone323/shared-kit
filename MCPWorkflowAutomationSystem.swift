@@ -480,20 +480,20 @@ public final class MCPWorkflowAutomationSystem: Sendable {
 
     private func determineExecutionMode(_ automationLevel: AutomationLevel) -> ExecutionMode {
         switch automationLevel {
-        case .minimal: return .sequential
-        case .moderate: return .parallel
-        case .full: return .distributed
-        case .intelligent: return .adaptive
+        case .minimal: .sequential
+        case .moderate: .parallel
+        case .full: .distributed
+        case .intelligent: .adaptive
         }
     }
 
     private func determineOrchestrationStrategy(_ tools: [MCPTool]) -> ToolOrchestrationStrategy {
         if tools.count > 10 {
-            return .distributed
+            .distributed
         } else if tools.contains(where: { $0.capabilities.contains(.parallelExecution) }) {
-            return .parallel
+            .parallel
         } else {
-            return .sequential
+            .sequential
         }
     }
 
@@ -590,7 +590,7 @@ public final class MCPWorkflowAutomationSystem: Sendable {
 
         // Identify repetitive patterns
         let repetitiveSteps = workflow.steps.filter { step in
-            workflow.steps.filter { $0.type == step.type }.count > 1
+            workflow.steps.count(where: { $0.type == step.type }) > 1
         }
 
         if !repetitiveSteps.isEmpty {
@@ -1223,19 +1223,19 @@ public struct AutomationScheduleConfig: Sendable, Codable {
         // Calculate next execution time based on schedule
         switch type {
         case .interval:
-            return date.addingTimeInterval(interval ?? 3600)
+            date.addingTimeInterval(interval ?? 3600)
         case .cron:
             // Parse cron expression and calculate next execution
-            return date.addingTimeInterval(3600) // Placeholder
+            date.addingTimeInterval(3600) // Placeholder
         }
     }
 
     public var isValid: Bool {
         switch type {
         case .interval:
-            return interval != nil && interval! > 0
+            interval != nil && interval! > 0
         case .cron:
-            return cronExpression != nil && !cronExpression!.isEmpty
+            cronExpression != nil && !cronExpression!.isEmpty
         }
     }
 }

@@ -1044,15 +1044,15 @@ enum DimensionalError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .validationFailed(errors):
-            return "Validation failed with \(errors.count) errors"
+            "Validation failed with \(errors.count) errors"
         case let .operationFailed(errors):
-            return "Operation failed with \(errors.count) errors"
+            "Operation failed with \(errors.count) errors"
         case let .constructionFailed(reason):
-            return "Construction failed: \(reason)"
+            "Construction failed: \(reason)"
         case let .stabilityCritical(reason):
-            return "Stability critical: \(reason)"
+            "Stability critical: \(reason)"
         case let .bridgeFailed(reason):
-            return "Bridge failed: \(reason)"
+            "Bridge failed: \(reason)"
         }
     }
 }

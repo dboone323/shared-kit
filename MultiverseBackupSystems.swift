@@ -282,14 +282,14 @@ enum RepairAlgorithm {
 
     var complexity: Int {
         switch self {
-        case .quantumStabilization: return 1
-        case .entropyReduction: return 2
-        case .coherenceRestoration: return 3
-        case .dimensionalRepair: return 4
-        case .timelineCorrection: return 5
-        case .entanglementReconstruction: return 6
-        case .noiseCancellation: return 7
-        case .integrityRestoration: return 8
+        case .quantumStabilization: 1
+        case .entropyReduction: 2
+        case .coherenceRestoration: 3
+        case .dimensionalRepair: 4
+        case .timelineCorrection: 5
+        case .entanglementReconstruction: 6
+        case .noiseCancellation: 7
+        case .integrityRestoration: 8
         }
     }
 }
@@ -838,10 +838,10 @@ final class MultiverseBackupEngine: @preconcurrency MultiverseBackupProtocol {
 
     private func calculateRetentionPeriod(for tier: ArchiveTier) -> TimeInterval {
         switch tier {
-        case .hot: return 30 * 24 * 3600 // 30 days
-        case .warm: return 365 * 24 * 3600 // 1 year
-        case .cold: return 5 * 365 * 24 * 3600 // 5 years
-        case .glacial: return 25 * 365 * 24 * 3600 // 25 years
+        case .hot: 30 * 24 * 3600 // 30 days
+        case .warm: 365 * 24 * 3600 // 1 year
+        case .cold: 5 * 365 * 24 * 3600 // 5 years
+        case .glacial: 25 * 365 * 24 * 3600 // 25 years
         }
     }
 

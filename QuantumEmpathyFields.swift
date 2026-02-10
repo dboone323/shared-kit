@@ -794,7 +794,7 @@ final class QuantumEmpathyFieldsEngine: QuantumEmpathyFieldsProtocol {
     {
         switch fieldType {
         case .interpersonal:
-            return EmpathyField.FieldParameters(
+            EmpathyField.FieldParameters(
                 radius: 10.0,
                 intensity: 0.7,
                 frequency: 1.0,
@@ -802,7 +802,7 @@ final class QuantumEmpathyFieldsEngine: QuantumEmpathyFieldsProtocol {
                 modulation: .constant
             )
         case .group:
-            return EmpathyField.FieldParameters(
+            EmpathyField.FieldParameters(
                 radius: 50.0,
                 intensity: 0.8,
                 frequency: 1.2,
@@ -810,7 +810,7 @@ final class QuantumEmpathyFieldsEngine: QuantumEmpathyFieldsProtocol {
                 modulation: .oscillating
             )
         case .universal:
-            return EmpathyField.FieldParameters(
+            EmpathyField.FieldParameters(
                 radius: 1000.0,
                 intensity: 0.9,
                 frequency: 1.5,
@@ -818,7 +818,7 @@ final class QuantumEmpathyFieldsEngine: QuantumEmpathyFieldsProtocol {
                 modulation: .adaptive
             )
         case .quantumEntangled:
-            return EmpathyField.FieldParameters(
+            EmpathyField.FieldParameters(
                 radius: 100.0,
                 intensity: 0.95,
                 frequency: 2.0,
@@ -826,7 +826,7 @@ final class QuantumEmpathyFieldsEngine: QuantumEmpathyFieldsProtocol {
                 modulation: .quantum
             )
         case .consciousnessNetwork:
-            return EmpathyField.FieldParameters(
+            EmpathyField.FieldParameters(
                 radius: 500.0,
                 intensity: 0.85,
                 frequency: 1.8,

@@ -140,7 +140,7 @@ public actor HybridSearchEngine {
         }
 
         // Re-sort
-        return hybridResults.sorted { $0.score > $1.score }.prefix(limit).map { $0 }
+        return hybridResults.sorted { $0.score > $1.score }.prefix(limit).map(\.self)
     }
 
     private func calculateKeywordScore(_ query: String, content: String) -> Double {

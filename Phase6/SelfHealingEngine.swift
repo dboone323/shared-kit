@@ -275,19 +275,19 @@ public final class SelfHealingEngine: ObservableObject {
     private func checkComponentHealth(_ component: String) async -> ComponentHealth {
         switch component {
         case "memory":
-            return await checkMemoryHealth()
+            await checkMemoryHealth()
         case "cpu":
-            return await checkCPUHealth()
+            await checkCPUHealth()
         case "disk":
-            return await checkDiskHealth()
+            await checkDiskHealth()
         case "network":
-            return await checkNetworkHealth()
+            await checkNetworkHealth()
         case "database":
-            return await checkDatabaseHealth()
+            await checkDatabaseHealth()
         case "api":
-            return await checkAPIHealth()
+            await checkAPIHealth()
         default:
-            return .healthy
+            .healthy
         }
     }
 
@@ -583,21 +583,21 @@ public final class SelfHealingEngine: ObservableObject {
     {
         switch strategy {
         case .restart:
-            return try await performRestart(for: error)
+            try await performRestart(for: error)
         case .reconfigure:
-            return try await performReconfiguration(for: error)
+            try await performReconfiguration(for: error)
         case .scaleUp:
-            return try await performScaling(for: error)
+            try await performScaling(for: error)
         case .failover:
-            return try await performFailover(for: error)
+            try await performFailover(for: error)
         case .rollback:
-            return try await performRollback(for: error)
+            try await performRollback(for: error)
         case .patch:
-            return try await performPatch(for: error)
+            try await performPatch(for: error)
         case .isolate:
-            return try await performIsolation(for: error)
+            try await performIsolation(for: error)
         case .notify:
-            return try await performNotification(for: error)
+            try await performNotification(for: error)
         }
     }
 

@@ -11,24 +11,24 @@ public extension Result {
     /// Returns the success value if available, otherwise nil
     var value: Success? {
         switch self {
-        case let .success(value): return value
-        case .failure: return nil
+        case let .success(value): value
+        case .failure: nil
         }
     }
 
     /// Returns the error if available, otherwise nil
     var error: Failure? {
         switch self {
-        case .success: return nil
-        case let .failure(error): return error
+        case .success: nil
+        case let .failure(error): error
         }
     }
 
     /// Returns true if the result is a success
     var isSuccess: Bool {
         switch self {
-        case .success: return true
-        case .failure: return false
+        case .success: true
+        case .failure: false
         }
     }
 

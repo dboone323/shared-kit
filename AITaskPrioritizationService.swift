@@ -1,9 +1,9 @@
 import Combine
 import Foundation
 
-/// AI-powered task prioritization service for PlannerApp
-/// Provides intelligent task suggestions and productivity insights
-/// Integrates with the shared AI framework for consistent behavior
+// AI-powered task prioritization service for PlannerApp
+// Provides intelligent task suggestions and productivity insights
+// Integrates with the shared AI framework for consistent behavior
 
 @available(iOS 13.0, macOS 10.15, *)
 public class AITaskPrioritizationService {
@@ -465,7 +465,7 @@ public class AITaskPrioritizationService {
         }
         guard !taskActivities.isEmpty else { return 0.0 }
 
-        let completedCount = taskActivities.filter { $0.type == .taskCompleted }.count
+        let completedCount = taskActivities.count(where: { $0.type == .taskCompleted })
         return Double(completedCount) / Double(taskActivities.count)
     }
 

@@ -146,7 +146,7 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
     public var projectContext: String
     public var externalReferences: [ExternalReference]
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade)
     public var subtasks: [EnhancedTask] = []
 
@@ -156,7 +156,7 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
     @Relationship(deleteRule: .cascade)
     public var timeEntries: [TimeEntry] = []
 
-    // Computed Properties
+    /// Computed Properties
     public var isOverdue: Bool {
         guard let dueDate, !isCompleted else { return false }
         return dueDate < Date()
@@ -214,7 +214,7 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
         return score
     }
 
-    // Initialization
+    /// Initialization
     public init(
         title: String,
         description: String = "",
@@ -536,14 +536,14 @@ public final class EnhancedGoal: Validatable, Trackable, CrossProjectRelatable {
     public var projectContext: String
     public var externalReferences: [ExternalReference]
 
-    // Relationships
+    /// Relationships
     @Relationship(deleteRule: .cascade)
     public var relatedTasks: [EnhancedTask] = []
 
     @Relationship(deleteRule: .cascade)
     public var progressEntries: [GoalProgressEntry] = []
 
-    // Computed Properties
+    /// Computed Properties
     public var progressPercentage: Double {
         self.progress * 100.0
     }
@@ -568,7 +568,7 @@ public final class EnhancedGoal: Validatable, Trackable, CrossProjectRelatable {
         self.relatedTasks.count
     }
 
-    // Initialization
+    /// Initialization
     public init(
         title: String,
         description: String = "",
@@ -776,7 +776,7 @@ public final class EnhancedJournalEntry: Validatable, Trackable, CrossProjectRel
     public var projectContext: String
     public var externalReferences: [ExternalReference]
 
-    // Computed Properties
+    /// Computed Properties
     public var estimatedReadingTime: TimeInterval {
         // Average reading speed: 200 words per minute
         Double(self.wordCount) / 200.0 * 60.0
@@ -786,7 +786,7 @@ public final class EnhancedJournalEntry: Validatable, Trackable, CrossProjectRel
         !self.photos.isEmpty
     }
 
-    // Initialization
+    /// Initialization
     public init(title: String, content: String, date: Date = Date()) {
         self.id = UUID()
         self.title = title

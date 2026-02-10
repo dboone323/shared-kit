@@ -160,13 +160,13 @@ public extension AnyCodable {
 extension AnyCodable: CustomStringConvertible {
     public var description: String {
         switch value {
-        case let .string(value): return "\"\(value)\""
-        case let .int(value): return "\(value)"
-        case let .double(value): return "\(value)"
-        case let .bool(value): return "\(value)"
-        case let .array(value): return "\(value)"
-        case let .dictionary(value): return "\(value)"
-        case .null: return "null"
+        case let .string(value): "\"\(value)\""
+        case let .int(value): "\(value)"
+        case let .double(value): "\(value)"
+        case let .bool(value): "\(value)"
+        case let .array(value): "\(value)"
+        case let .dictionary(value): "\(value)"
+        case .null: "null"
         }
     }
 }
@@ -176,14 +176,14 @@ extension AnyCodable: CustomStringConvertible {
 extension AnyCodable: Equatable {
     public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {
         switch (lhs.value, rhs.value) {
-        case let (.string(lhs), .string(rhs)): return lhs == rhs
-        case let (.int(lhs), .int(rhs)): return lhs == rhs
-        case let (.double(lhs), .double(rhs)): return lhs == rhs
-        case let (.bool(lhs), .bool(rhs)): return lhs == rhs
-        case let (.array(lhs), .array(rhs)): return lhs == rhs
-        case let (.dictionary(lhs), .dictionary(rhs)): return lhs == rhs
-        case (.null, .null): return true
-        default: return false
+        case let (.string(lhs), .string(rhs)): lhs == rhs
+        case let (.int(lhs), .int(rhs)): lhs == rhs
+        case let (.double(lhs), .double(rhs)): lhs == rhs
+        case let (.bool(lhs), .bool(rhs)): lhs == rhs
+        case let (.array(lhs), .array(rhs)): lhs == rhs
+        case let (.dictionary(lhs), .dictionary(rhs)): lhs == rhs
+        case (.null, .null): true
+        default: false
         }
     }
 }

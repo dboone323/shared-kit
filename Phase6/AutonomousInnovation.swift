@@ -269,7 +269,7 @@ public actor AutonomousInnovation {
         // Success rate by complexity
         let complexitySuccess = Dictionary(grouping: successful, by: { $0.complexity })
             .mapValues { innovations in
-                Double(innovations.filter { $0.status == .implemented }.count)
+                Double(innovations.count(where: { $0.status == .implemented }))
                     / Double(innovations.count)
             }
 
@@ -505,12 +505,10 @@ public actor InnovationGenerator {
     private func estimateEffort(_ complexity: InnovationComplexity, _ featureCount: Int)
         -> TimeInterval
     {
-        let baseEffort: TimeInterval
-
-        switch complexity {
-        case .low: baseEffort = 30 * 24 * 3600 // 30 days
-        case .medium: baseEffort = 90 * 24 * 3600 // 90 days
-        case .high: baseEffort = 180 * 24 * 3600 // 180 days
+        let baseEffort: TimeInterval = switch complexity {
+        case .low: 30 * 24 * 3600 // 30 days
+        case .medium: 90 * 24 * 3600 // 90 days
+        case .high: 180 * 24 * 3600 // 180 days
         }
 
         return baseEffort * Double(featureCount) / 4.0 // Adjust for feature count
@@ -813,7 +811,7 @@ public actor ImplementationSynthesizer {
     {
         let complexityRisk = innovation.complexity == .high ? 0.8 : 0.3
         let dependencyRisk =
-            Double(steps.filter { !$0.dependencies.isEmpty }.count) / Double(steps.count)
+            Double(steps.count(where: { !$0.dependencies.isEmpty })) / Double(steps.count)
         let technicalRisk = (complexityRisk + dependencyRisk) / 2.0
 
         return RiskAssessment(
@@ -851,7 +849,7 @@ public actor ImplementationSynthesizer {
     {
         switch platform {
         case .swift:
-            return """
+            """
             // \(step.title)
             // Generated implementation
 
@@ -867,7 +865,7 @@ public actor ImplementationSynthesizer {
             }
             """
         case .python:
-            return """
+            """
             # \(step.title)
             # Generated implementation
 
@@ -879,7 +877,7 @@ public actor ImplementationSynthesizer {
                     print("\(step.description)")
             """
         case .javascript:
-            return """
+            """
             // \(step.title)
             // Generated implementation
 
@@ -894,7 +892,7 @@ public actor ImplementationSynthesizer {
             }
             """
         case .java:
-            return """
+            """
             // \(step.title)
             // Generated implementation
 
@@ -909,7 +907,7 @@ public actor ImplementationSynthesizer {
             }
             """
         case .cpp:
-            return """
+            """
             // \(step.title)
             // Generated implementation
 

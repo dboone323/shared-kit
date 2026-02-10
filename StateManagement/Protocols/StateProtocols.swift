@@ -30,7 +30,7 @@ public enum ProjectType: String, CaseIterable {
     }
 }
 
-// Re-export types from service protocols for state management
+/// Re-export types from service protocols for state management
 public protocol EnhancedHabitProtocol {
     var id: UUID { get }
     var name: String { get set }

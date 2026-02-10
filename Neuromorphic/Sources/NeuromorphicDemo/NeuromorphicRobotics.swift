@@ -12,7 +12,7 @@ public class MotorCortex {
     public var premotorCortex: [MotorNeuron] = []
     public var supplementaryMotorArea: [MotorNeuron] = []
 
-    // Motor maps for different body parts
+    /// Motor maps for different body parts
     public var motorHomunculus: [String: [MotorNeuron]] = [:] // Body part -> neurons
 
     public init() {
@@ -143,11 +143,10 @@ public class MotorNeuron: NeuromorphicNeuron {
         let distance = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z)
 
         // Normalize direction vector
-        let direction: SIMD3<Double>
-        if distance > 0 {
-            direction = SIMD3(diff.x / distance, diff.y / distance, diff.z / distance)
+        let direction: SIMD3<Double> = if distance > 0 {
+            SIMD3(diff.x / distance, diff.y / distance, diff.z / distance)
         } else {
-            direction = SIMD3(0, 0, 0)
+            SIMD3(0, 0, 0)
         }
 
         // Proportional control with reasonable scaling

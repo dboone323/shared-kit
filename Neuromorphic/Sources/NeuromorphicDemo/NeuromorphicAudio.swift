@@ -307,7 +307,7 @@ public class NeuromorphicSpeechRecognizer {
             detectedPhonemes: detectedPhonemes,
             confidence: calculateConfidence(recognizedWords),
             processingTime: processingTime,
-            spikeCount: nerveSpikes.flatMap { $0 }.count
+            spikeCount: nerveSpikes.flatMap(\.self).count
         )
     }
 
@@ -519,11 +519,11 @@ public struct LocalizationResult {
 
     public var directionDescription: String {
         if estimatedDirection > 30 {
-            return "Right side"
+            "Right side"
         } else if estimatedDirection < -30 {
-            return "Left side"
+            "Left side"
         } else {
-            return "Center"
+            "Center"
         }
     }
 }

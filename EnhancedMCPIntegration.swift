@@ -511,17 +511,16 @@ public actor EnhancedMCPOrchestrator: AdvancedMCPOrchestrator {
             let result = try await tool.execute(parameters: parameters)
             let executionTime = Date().timeIntervalSince(startTime)
 
-            let output: AnyCodable?
-            if let stringResult = result as? String {
-                output = AnyCodable(stringResult)
+            let output: AnyCodable? = if let stringResult = result as? String {
+                AnyCodable(stringResult)
             } else if let intResult = result as? Int {
-                output = AnyCodable(intResult)
+                AnyCodable(intResult)
             } else if let doubleResult = result as? Double {
-                output = AnyCodable(doubleResult)
+                AnyCodable(doubleResult)
             } else if let boolResult = result as? Bool {
-                output = AnyCodable(boolResult)
+                AnyCodable(boolResult)
             } else {
-                output = AnyCodable(String(describing: result))
+                AnyCodable(String(describing: result))
             }
 
             let toolResult = MCPToolResult(

@@ -1440,8 +1440,8 @@ final class QuantumConsciousnessDatabase {
 
     func getStorageMetrics() async throws -> StorageMetrics {
         let totalStorage = consciousnessStorage.count
-        let activeStorage = consciousnessStorage.values.filter { $0.storageType == .permanent }
-            .count
+        let activeStorage = consciousnessStorage.values.count(where: { $0.storageType == .permanent })
+
         let averageCoherence =
             consciousnessStorage.values.map(\.coherenceLevel).reduce(0, +)
             / Double(max(totalStorage, 1))
