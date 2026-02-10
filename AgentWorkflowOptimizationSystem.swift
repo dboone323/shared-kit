@@ -199,7 +199,7 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
         let optimizationAnalysis = try await analyzeWorkflowForOptimization(configurationRequest.workflow)
 
         // Generate optimized configuration
-        let configuration = OptimizedWorkflowConfiguration(
+        return OptimizedWorkflowConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -212,8 +212,6 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
             optimizationStrategies: generateOptimizationStrategies(optimizationAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute workflow with optimized configuration
@@ -1541,9 +1539,8 @@ public extension AgentWorkflowOptimizationSystem {
     static func createSpecializedOptimizationSystem(
         for workflowType: WorkflowType
     ) async throws -> AgentWorkflowOptimizationSystem {
-        let system = try await AgentWorkflowOptimizationSystem()
+        try await AgentWorkflowOptimizationSystem()
         // Configure for specific workflow type
-        return system
     }
 
     /// Execute batch optimization for multiple workflows

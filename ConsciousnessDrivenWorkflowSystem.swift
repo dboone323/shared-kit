@@ -191,7 +191,7 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
         let consciousnessAnalysis = try await analyzeWorkflowForConsciousnessEnhancement(configurationRequest.workflow)
 
         // Generate consciousness-enhanced configuration
-        let configuration = ConsciousnessEnhancedWorkflowConfiguration(
+        return ConsciousnessEnhancedWorkflowConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -203,8 +203,6 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
             enhancementStrategies: generateConsciousnessEnhancementStrategies(consciousnessAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute workflow with consciousness enhancement
@@ -1421,9 +1419,8 @@ public extension ConsciousnessDrivenWorkflowSystem {
     static func createSpecializedConsciousnessSystem(
         for workflowType: WorkflowType
     ) async throws -> ConsciousnessDrivenWorkflowSystem {
-        let system = try await ConsciousnessDrivenWorkflowSystem()
+        try await ConsciousnessDrivenWorkflowSystem()
         // Configure for specific workflow type
-        return system
     }
 
     /// Execute batch consciousness workflow processing

@@ -196,7 +196,7 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         let automationPatterns = try await analyzeWorkflowForAutomation(templateRequest.workflow)
 
         // Generate automation template
-        let template = AutomatedWorkflowTemplate(
+        return AutomatedWorkflowTemplate(
             templateId: templateId,
             name: templateRequest.name,
             description: templateRequest.description,
@@ -207,8 +207,6 @@ public final class MCPWorkflowAutomationSystem: Sendable {
             optimizationStrategies: generateOptimizationStrategies(automationPatterns),
             createdAt: Date()
         )
-
-        return template
     }
 
     /// Execute automated workflow from template
@@ -303,15 +301,13 @@ public final class MCPWorkflowAutomationSystem: Sendable {
         let availableTools = try await mcpToolOrchestrator.discoverAvailableTools()
         let requiredTools = request.mcpTools
 
-        let orchestrationSetup = MCPToolOrchestrationSetup(
+        return MCPToolOrchestrationSetup(
             availableTools: availableTools,
             requiredTools: requiredTools,
             toolMapping: createToolMapping(requiredTools, availableTools),
             orchestrationStrategy: determineOrchestrationStrategy(requiredTools),
             setupTimestamp: Date()
         )
-
-        return orchestrationSetup
     }
 
     private func developAutomationStrategy(
@@ -329,7 +325,7 @@ public final class MCPWorkflowAutomationSystem: Sendable {
             monitoringStrategy: generateMonitoringStrategy(request.workflow)
         )
 
-        let automationStrategy = MCPAutomationStrategy(
+        return MCPAutomationStrategy(
             strategyId: UUID().uuidString,
             automationLevel: request.automationLevel,
             components: strategyComponents,
@@ -338,8 +334,6 @@ public final class MCPWorkflowAutomationSystem: Sendable {
             implementationPlan: generateAutomationImplementationPlan(strategyComponents),
             validationCriteria: generateAutomationValidationCriteria(strategyComponents)
         )
-
-        return automationStrategy
     }
 
     private func createExecutionPlan(
@@ -353,7 +347,7 @@ public final class MCPWorkflowAutomationSystem: Sendable {
             workflowSteps, strategy: strategy
         )
 
-        let executionPlan = MCPExecutionPlan(
+        return MCPExecutionPlan(
             planId: UUID().uuidString,
             strategy: strategy,
             workflowSteps: workflowSteps,
@@ -364,8 +358,6 @@ public final class MCPWorkflowAutomationSystem: Sendable {
             estimatedExecutionTime: estimateExecutionTime(workflowSteps, mcpToolAssignments),
             createdAt: Date()
         )
-
-        return executionPlan
     }
 
     private func executeMCPPoweredWorkflow(
@@ -1575,9 +1567,8 @@ public extension MCPWorkflowAutomationSystem {
     static func createSpecializedAutomationSystem(
         for workflowType: WorkflowType
     ) async throws -> MCPWorkflowAutomationSystem {
-        let system = try await MCPWorkflowAutomationSystem()
+        try await MCPWorkflowAutomationSystem()
         // Configure for specific workflow type
-        return system
     }
 
     /// Execute batch automation for multiple workflows

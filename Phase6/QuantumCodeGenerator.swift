@@ -482,9 +482,7 @@ public final class QuantumCodeGenerator: ObservableObject {
 
         // Use quantum-inspired creativity
         let baseCode = try await generateTemplateBasedCode(request)
-        let inspiredCode = try await applyQuantumInspiration(baseCode, request: request)
-
-        return inspiredCode
+        return try await applyQuantumInspiration(baseCode, request: request)
     }
 
     private func generateCodeVariation(_ request: CodeGenerationRequest) async throws -> String {

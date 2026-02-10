@@ -11,7 +11,7 @@
     // MARK: - Habit Quest UI Tests
 
     class HabitQuestUITests: UITestCase {
-        func testHabitCreationFlow() throws {
+        func testHabitCreationFlow() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--ui-testing")
@@ -42,7 +42,7 @@
             XCTAssertTrue(habitCell.exists)
         }
 
-        func testHabitCompletionFlow() throws {
+        func testHabitCompletionFlow() {
             // Given
             self.setupTestHabits()
 
@@ -63,7 +63,7 @@
             XCTAssertTrue(streakLabel.label.contains("1"))
         }
 
-        func testHabitSwipeActions() throws {
+        func testHabitSwipeActions() {
             // Given
             self.setupTestHabits()
 
@@ -91,7 +91,7 @@
     // MARK: - MomentumFinance UI Tests
 
     class MomentumFinanceUITests: UITestCase {
-        func testAccountCreationFlow() throws {
+        func testAccountCreationFlow() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--ui-testing")
@@ -127,7 +127,7 @@
             XCTAssertTrue(balanceLabel.exists)
         }
 
-        func testTransactionFlow() throws {
+        func testTransactionFlow() {
             // Given
             self.setupTestAccounts()
 
@@ -163,7 +163,7 @@
             XCTAssertTrue(transactionItem.exists)
         }
 
-        func testTransferFlow() throws {
+        func testTransferFlow() {
             // Given
             self.setupTestAccounts()
 
@@ -207,7 +207,7 @@
     // MARK: - PlannerApp UI Tests
 
     class PlannerAppUITests: UITestCase {
-        func testTaskCreationFlow() throws {
+        func testTaskCreationFlow() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--ui-testing")
@@ -255,7 +255,7 @@
             XCTAssertTrue(highPriorityIndicator.exists)
         }
 
-        func testTaskCompletionFlow() throws {
+        func testTaskCompletionFlow() {
             // Given
             self.setupTestTasks()
 
@@ -277,7 +277,7 @@
             // Note: In actual implementation, you'd verify strikethrough styling
         }
 
-        func testTaskFilteringFlow() throws {
+        func testTaskFilteringFlow() {
             // Given
             self.setupTestTasks()
 
@@ -315,7 +315,7 @@
     // MARK: - CodingReviewer UI Tests
 
     class CodingReviewerUITests: UITestCase {
-        func testPullRequestListFlow() throws {
+        func testPullRequestListFlow() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--ui-testing")
@@ -344,7 +344,7 @@
             XCTAssertTrue(prStatus.exists)
         }
 
-        func testPullRequestReviewFlow() throws {
+        func testPullRequestReviewFlow() {
             // Given
             self.setupTestPullRequests()
 
@@ -378,7 +378,7 @@
             XCTAssertTrue(requestChangesButton.exists)
         }
 
-        func testCodeCommentFlow() throws {
+        func testCodeCommentFlow() {
             // Given
             self.setupTestPullRequests()
             self.startPRReview()
@@ -428,7 +428,7 @@
     // MARK: - AvoidObstaclesGame UI Tests
 
     class AvoidObstaclesGameUITests: UITestCase {
-        func testGameStartFlow() throws {
+        func testGameStartFlow() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--ui-testing")
@@ -454,7 +454,7 @@
             XCTAssertTrue(pauseButton.exists)
         }
 
-        func testPlayerMovementControls() throws {
+        func testPlayerMovementControls() {
             // Given
             self.startGame()
 
@@ -475,7 +475,7 @@
             XCTAssertNotEqual(initialPlayerPosition.midY, newPlayerPosition.midY)
         }
 
-        func testPauseResumeFlow() throws {
+        func testPauseResumeFlow() {
             // Given
             self.startGame()
 
@@ -503,7 +503,7 @@
             XCTAssertFalse(pauseMenu.exists)
         }
 
-        func testGameOverFlow() throws {
+        func testGameOverFlow() {
             // Given
             self.startGame()
 
@@ -546,7 +546,7 @@
     // MARK: - Animation and Interaction Tests
 
     class AnimationInteractionTests: UITestCase {
-        func testButtonAnimations() throws {
+        func testButtonAnimations() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--animation-testing")
@@ -564,7 +564,7 @@
             XCTAssertTrue(neumorphicButton.exists)
         }
 
-        func testSwipeGestures() throws {
+        func testSwipeGestures() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--gesture-testing")
@@ -591,7 +591,7 @@
             XCTAssertTrue(rightSwipeAlert.exists)
         }
 
-        func testInteractiveComponents() throws {
+        func testInteractiveComponents() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--interactive-testing")
@@ -619,7 +619,7 @@
             XCTAssertNotEqual(initialToggleState, newToggleState)
         }
 
-        func testCustomTransitions() throws {
+        func testCustomTransitions() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--transition-testing")
@@ -648,7 +648,7 @@
     // MARK: - Cross-Platform UI Tests
 
     class CrossPlatformUITests: UITestCase {
-        func testAdaptiveLayout() throws {
+        func testAdaptiveLayout() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--adaptive-layout-testing")
@@ -672,7 +672,7 @@
             XCTAssertTrue(mainView.exists)
         }
 
-        func testAccessibilityFeatures() throws {
+        func testAccessibilityFeatures() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--accessibility-testing")
@@ -692,7 +692,7 @@
             XCTAssertTrue(hintButton.exists)
         }
 
-        func testDarkModeSupport() throws {
+        func testDarkModeSupport() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--dark-mode-testing")
@@ -716,7 +716,7 @@
     // MARK: - Performance UI Tests
 
     class PerformanceUITests: UITestCase {
-        func testLaunchPerformance() throws {
+        func testLaunchPerformance() {
             if #available(iOS 13.0, *) {
                 // Given
                 let app = XCUIApplication()
@@ -734,7 +734,7 @@
             }
         }
 
-        func testScrollPerformance() throws {
+        func testScrollPerformance() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--performance-testing-large-list")
@@ -758,7 +758,7 @@
             }
         }
 
-        func testAnimationPerformance() throws {
+        func testAnimationPerformance() {
             // Given
             let app = XCUIApplication()
             app.launchArguments.append("--animation-performance-testing")

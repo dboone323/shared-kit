@@ -125,7 +125,7 @@
     // MARK: - State Management Integration Tests
 
     class StateManagementIntegrationTests: IntegrationTestCase {
-        func testGlobalStateCoordination() async throws {
+        func testGlobalStateCoordination() async {
             // Given - Multiple state managers coordinating
             let habitStateManager = HabitStateManager()
             let financialStateManager = FinancialStateManager()
@@ -152,7 +152,7 @@
             XCTAssertEqual(globalHabits.count, 1) // Should still have habit
         }
 
-        func testStateTransitions() async throws {
+        func testStateTransitions() async {
             // Given - State manager with transitions
             let stateManager = AppStateManager()
 
@@ -175,7 +175,7 @@
             XCTAssertEqual(history.count, 3)
         }
 
-        func testConcurrentStateUpdates() async throws {
+        func testConcurrentStateUpdates() async {
             // Given - Multiple concurrent state updates
             let stateManager = ConcurrentStateManager()
             let expectation = expectation(description: "Concurrent updates")
@@ -254,7 +254,7 @@
             XCTAssertFalse(recoveryCalls.isEmpty)
         }
 
-        func testCascadingErrorHandling() async throws {
+        func testCascadingErrorHandling() async {
             // Given - System with cascading dependencies
             let primaryService = PrimaryService(dataService: mockDataService)
             let secondaryService = SecondaryService(primaryService: primaryService)

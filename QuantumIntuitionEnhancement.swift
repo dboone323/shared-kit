@@ -814,7 +814,7 @@ final class QuantumProcessingEngine: QuantumProcessingProtocol {
             }
         }
 
-        let entanglement = QuantumEntanglement(
+        return QuantumEntanglement(
             entanglementId: entanglementId,
             entangledEntities: entities,
             entanglementStrength: 0.85,
@@ -822,8 +822,6 @@ final class QuantumProcessingEngine: QuantumProcessingProtocol {
             establishmentTimestamp: Date(),
             stabilityIndex: 0.9
         )
-
-        return entanglement
     }
 
     func performSuperpositionAnalysis(possibilities: [Possibility]) async throws -> SuperpositionAnalysis {
@@ -833,15 +831,13 @@ final class QuantumProcessingEngine: QuantumProcessingProtocol {
         let optimalOutcome = possibilities
             .max { $0.probability * $0.impact < $1.probability * $1.impact } ?? possibilities.first!
 
-        let analysis = SuperpositionAnalysis(
+        return SuperpositionAnalysis(
             analysisId: analysisId,
             possibilities: possibilities,
             optimalOutcome: optimalOutcome,
             uncertaintyLevel: 1.0 - optimalOutcome.probability,
             analysisTimestamp: Date()
         )
-
-        return analysis
     }
 
     func collapseQuantumStates(_ states: [QuantumState]) async throws -> StateCollapse {
@@ -850,15 +846,13 @@ final class QuantumProcessingEngine: QuantumProcessingProtocol {
         // Select highest coherence state
         let collapsedState = states.max { $0.coherenceLevel < $1.coherenceLevel } ?? states.first!
 
-        let collapse = StateCollapse(
+        return StateCollapse(
             collapseId: collapseId,
             collapsedState: collapsedState,
             collapseProbability: collapsedState.coherenceLevel,
             decisionConfidence: 0.9,
             collapseTimestamp: Date()
         )
-
-        return collapse
     }
 }
 
@@ -879,15 +873,13 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
             )
         }
 
-        let analysis = PatternAnalysis(
+        return PatternAnalysis(
             analysisId: analysisId,
             patterns: patterns,
             analysisResults: analysisResults,
             analysisTimestamp: Date(),
             overallSignificance: analysisResults.map(\.predictiveValue).reduce(0, +) / Double(analysisResults.count)
         )
-
-        return analysis
     }
 
     func detectEmergingTrends(historicalData: [ConsciousnessData]) async throws -> TrendDetection {
@@ -905,15 +897,13 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
             ),
         ]
 
-        let detection = TrendDetection(
+        return TrendDetection(
             detectionId: detectionId,
             historicalData: historicalData,
             detectedTrends: trends,
             detectionTimestamp: Date(),
             trendStrength: 0.75
         )
-
-        return detection
     }
 
     func correlateWithExternalFactors(intuitionData: ConsciousnessData,
@@ -932,7 +922,7 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
             )
         }
 
-        let analysis = CorrelationAnalysis(
+        return CorrelationAnalysis(
             analysisId: analysisId,
             intuitionData: intuitionData,
             externalFactors: externalFactors,
@@ -940,8 +930,6 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
             analysisTimestamp: Date(),
             significanceLevel: 0.8
         )
-
-        return analysis
     }
 
     func validateIntuitionAccuracy(predictions: [Prediction],
@@ -962,7 +950,7 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
         let f1Score = 2 * (precision * recall) / (precision + recall)
         let meanAbsoluteError = 0.1
 
-        let validation = AccuracyValidation(
+        return AccuracyValidation(
             validationId: validationId,
             predictions: predictions,
             actualOutcomes: actualOutcomes,
@@ -975,8 +963,6 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
             ),
             validationTimestamp: Date()
         )
-
-        return validation
     }
 }
 
@@ -1023,7 +1009,7 @@ final class PredictiveModelingEngine: PredictiveModelingProtocol {
             ),
         ]
 
-        let result = PredictionResult(
+        return PredictionResult(
             resultId: resultId,
             modelId: model.modelId,
             inputData: inputData,
@@ -1031,8 +1017,6 @@ final class PredictiveModelingEngine: PredictiveModelingProtocol {
             confidence: 0.8,
             processingTime: 2.0
         )
-
-        return result
     }
 
     func updatePredictiveModel(model: PredictiveModel, newData: [ConsciousnessData]) async throws -> PredictiveModel {
@@ -1063,7 +1047,7 @@ final class PredictiveModelingEngine: PredictiveModelingProtocol {
         let evaluationId = UUID()
 
         // Evaluate model performance
-        let evaluation = PerformanceEvaluation(
+        return PerformanceEvaluation(
             evaluationId: evaluationId,
             modelId: model.modelId,
             testData: testData,
@@ -1078,8 +1062,6 @@ final class PredictiveModelingEngine: PredictiveModelingProtocol {
             evaluationTimestamp: Date(),
             recommendations: ["Model performing well", "Consider additional training data"]
         )
-
-        return evaluation
     }
 }
 

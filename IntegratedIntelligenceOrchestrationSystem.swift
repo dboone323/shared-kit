@@ -918,9 +918,8 @@ public extension IntegratedIntelligenceOrchestrationSystem {
     static func createSpecializedOrchestration(
         for domain: IntelligenceDomain
     ) async throws -> IntegratedIntelligenceOrchestrationSystem {
-        let system = try await IntegratedIntelligenceOrchestrationSystem()
+        try await IntegratedIntelligenceOrchestrationSystem()
         // Configure for specific domain
-        return system
     }
 
     /// Execute emergency orchestration with maximum priority

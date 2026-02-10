@@ -312,13 +312,11 @@ public final class OllamaModelEcosystems: Sendable {
         )
 
         // Combine all results
-        let finalResult = try await synthesizeFinalOutput(
+        return try await synthesizeFinalOutput(
             coordinated: coordinatedResults,
             quantum: quantumEnhanced,
             consciousness: consciousnessExpanded
         )
-
-        return finalResult
     }
 
     /// Evolve all ecosystems based on performance

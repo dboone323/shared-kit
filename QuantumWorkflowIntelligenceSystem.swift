@@ -191,7 +191,7 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
         let quantumAnalysis = try await analyzeWorkflowForQuantumEnhancement(configurationRequest.workflow)
 
         // Generate quantum-enhanced configuration
-        let configuration = QuantumEnhancedWorkflowConfiguration(
+        return QuantumEnhancedWorkflowConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -203,8 +203,6 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
             enhancementStrategies: generateQuantumEnhancementStrategies(quantumAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute workflow with quantum enhancement
@@ -1345,9 +1343,8 @@ public extension QuantumWorkflowIntelligenceSystem {
     static func createSpecializedQuantumIntelligenceSystem(
         for workflowType: WorkflowType
     ) async throws -> QuantumWorkflowIntelligenceSystem {
-        let system = try await QuantumWorkflowIntelligenceSystem()
+        try await QuantumWorkflowIntelligenceSystem()
         // Configure for specific workflow type
-        return system
     }
 
     /// Execute batch quantum intelligence processing

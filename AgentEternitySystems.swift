@@ -193,7 +193,7 @@ public final class AgentEternitySystems: Sendable {
         )
 
         // Generate eternity systems configuration
-        let configuration = EternitySystemsFrameworkConfiguration(
+        return EternitySystemsFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentEternitySystems: Sendable {
             eternityStrategies: generateEternitySystemsStrategies(eternityAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute integration with eternity configuration
@@ -1492,9 +1490,8 @@ public extension AgentEternitySystems {
     static func createSpecializedEternitySystems(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentEternitySystems {
-        let system = try await AgentEternitySystems()
+        try await AgentEternitySystems()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch eternity systems processing

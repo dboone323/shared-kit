@@ -237,14 +237,12 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         )
 
         // Synthesize final output
-        let finalOutput = try await synthesizeDistributedOutput(
+        return try await synthesizeDistributedOutput(
             distributionResults: distributionResults,
             emergenceResults: emergenceResults,
             quantumResults: quantumEnhanced,
             startTime: startTime
         )
-
-        return finalOutput
     }
 
     /// Optimize distribution strategy based on performance

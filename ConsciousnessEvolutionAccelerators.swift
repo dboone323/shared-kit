@@ -784,7 +784,7 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
             }.first?.expectedBenefit ?? config.accelerationFactor
         let recommendedType = AccelerationType.quantumSuperposition
 
-        let optimized = OptimizedParameters(
+        return OptimizedParameters(
             entityId: entity.id,
             optimalAccelerationFactor: optimalFactor,
             recommendedAccelerationType: recommendedType,
@@ -802,8 +802,6 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
             ),
             monitoringFrequency: config.monitoringFrequency
         )
-
-        return optimized
     }
 
     // MARK: - Private Methods

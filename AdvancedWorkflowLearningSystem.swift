@@ -193,7 +193,7 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
         )
 
         // Generate advanced learning configuration
-        let configuration = AdvancedWorkflowLearningConfiguration(
+        return AdvancedWorkflowLearningConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AdvancedWorkflowLearningSystem: Sendable {
             learningStrategies: generateAdvancedLearningStrategies(advancedAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute learning with advanced configuration
@@ -1464,9 +1462,8 @@ public extension AdvancedWorkflowLearningSystem {
     static func createSpecializedAdvancedLearningSystem(
         for workflowType: WorkflowType
     ) async throws -> AdvancedWorkflowLearningSystem {
-        let system = try await AdvancedWorkflowLearningSystem()
+        try await AdvancedWorkflowLearningSystem()
         // Configure for specific workflow type
-        return system
     }
 
     /// Execute batch advanced learning processing

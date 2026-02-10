@@ -740,7 +740,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
         do {
             let attributes = try FileManager.default.attributesOfItem(atPath: filePath)
 
-            let metadata: [String: Any] = [
+            return [
                 "file_path": filePath,
                 "file_name": (filePath as NSString).lastPathComponent,
                 "file_extension": (filePath as NSString).pathExtension,
@@ -752,8 +752,6 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
                 "is_executable": (attributes[.posixPermissions] as? Int ?? 0) & 0o111 != 0,
                 "file_type": attributes[.type] as? String ?? "unknown",
             ]
-
-            return metadata
 
         } catch {
             throw MCPError.executionFailed("Failed to extract metadata: \(error.localizedDescription)")
@@ -1147,7 +1145,7 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
         }
 
         // Mock performance analysis
-        let analysis: [String: Any] = [
+        return [
             "workflow_id": workflowIdString,
             "average_execution_time": 120.5,
             "success_rate": 0.95,
@@ -1170,7 +1168,5 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
             ],
             "timestamp": Date(),
         ]
-
-        return analysis
     }
 }

@@ -705,7 +705,7 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
         )
 
         // Create neural consciousness state
-        let neuralState = NeuralConsciousnessState(
+        return NeuralConsciousnessState(
             id: UUID(),
             timestamp: Date(),
             neuralPatterns: neuralPatterns,
@@ -716,8 +716,6 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
                 from: quantumState.quantumMemory, consciousness: consciousness.memorySystems
             )
         )
-
-        return neuralState
     }
 
     func monitorBridgeIntegrity() -> AnyPublisher<BridgeStatus, Never> {

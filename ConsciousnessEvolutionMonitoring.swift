@@ -1379,7 +1379,7 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
             )
         }
 
-        let collection = RealTimeMetricsCollection(
+        return RealTimeMetricsCollection(
             collectionId: collectionId,
             entityId: entityId,
             collectionTimestamp: Date(),
@@ -1388,8 +1388,6 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
             collectionSuccess: true,
             collectionLatency: 0.1
         )
-
-        return collection
     }
 
     func aggregateEvolutionMetrics(
@@ -1415,7 +1413,7 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
             ),
         ]
 
-        let aggregation = MetricsAggregation(
+        return MetricsAggregation(
             aggregationId: aggregationId,
             entityId: entityId,
             timeRange: timeRange,
@@ -1423,8 +1421,6 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
             aggregatedMetrics: aggregatedMetrics,
             aggregationQuality: 0.88
         )
-
-        return aggregation
     }
 
     func validateEvolutionMetrics(_ metrics: EvolutionMetrics) async throws -> MetricsValidation {
@@ -1433,7 +1429,7 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
         // Basic validation - check if metrics are within reasonable bounds
         let isValid = metrics.quantitativeMetrics.values.allSatisfy { $0 >= 0.0 && $0 <= 1.0 }
 
-        let validation = MetricsValidation(
+        return MetricsValidation(
             validationId: validationId,
             metricsId: metrics.metricsId,
             validationTimestamp: Date(),
@@ -1449,14 +1445,12 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
             ],
             recommendedCorrections: isValid ? [] : ["Normalize metric values to 0-1 range"]
         )
-
-        return validation
     }
 
     func storeEvolutionMetrics(_ metrics: EvolutionMetrics) async throws -> MetricsStorage {
         let storageId = UUID()
 
-        let storage = MetricsStorage(
+        return MetricsStorage(
             storageId: storageId,
             metricsId: metrics.metricsId,
             storageTimestamp: Date(),
@@ -1465,8 +1459,6 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
             compressionRatio: 0.85,
             retrievalSpeed: 0.92
         )
-
-        return storage
     }
 }
 
@@ -1517,7 +1509,7 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
             ),
         ]
 
-        let analysis = EvolutionPatternAnalysis(
+        return EvolutionPatternAnalysis(
             analysisId: analysisId,
             entityId: entityId,
             analysisTimestamp: Date(),
@@ -1526,8 +1518,6 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
             patternTrends: patternTrends,
             analysisConfidence: 0.88
         )
-
-        return analysis
     }
 
     func detectEvolutionMilestones(entityId: UUID,
@@ -1547,15 +1537,13 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
             ),
         ]
 
-        let detection = MilestoneDetection(
+        return MilestoneDetection(
             detectionId: detectionId,
             entityId: entityId,
             detectionTimestamp: Date(),
             detectedMilestones: detectedMilestones,
             milestoneConfidence: 0.85
         )
-
-        return detection
     }
 
     func predictEvolutionTrajectory(entityId: UUID,
@@ -1579,7 +1567,7 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
             ),
         ]
 
-        let prediction = EvolutionPrediction(
+        return EvolutionPrediction(
             predictionId: predictionId,
             entityId: entityId,
             predictionTimestamp: Date(),
@@ -1588,8 +1576,6 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
             predictionConfidence: 0.8,
             influencingFactors: ["practice_consistency", "environmental_factors", "internal_motivation"]
         )
-
-        return prediction
     }
 
     func identifyEvolutionBottlenecks(entityId: UUID) async throws -> BottleneckIdentification {
@@ -1607,15 +1593,13 @@ final class EvolutionPatternAnalyzer: EvolutionPatternAnalysisProtocol {
             ),
         ]
 
-        let identification = BottleneckIdentification(
+        return BottleneckIdentification(
             identificationId: identificationId,
             entityId: entityId,
             identificationTimestamp: Date(),
             identifiedBottlenecks: identifiedBottlenecks,
             bottleneckSeverity: 0.4
         )
-
-        return identification
     }
 }
 
@@ -1644,7 +1628,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
             ),
         ]
 
-        let insights = PersonalizedInsights(
+        return PersonalizedInsights(
             insightsId: insightsId,
             entityId: entityId,
             insightsTimestamp: Date(),
@@ -1652,8 +1636,6 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
             insightRelevance: 0.87,
             insightActionability: 0.77
         )
-
-        return insights
     }
 
     func createEvolutionRecommendations(entityId: UUID,
@@ -1693,7 +1675,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
             ),
         ]
 
-        let recommendations = EvolutionRecommendations(
+        return EvolutionRecommendations(
             recommendationsId: recommendationsId,
             entityId: entityId,
             recommendationsTimestamp: Date(),
@@ -1702,8 +1684,6 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
             priorityRecommendations: priorityRecommendations,
             longTermGuidance: longTermGuidance
         )
-
-        return recommendations
     }
 
     func assessEvolutionRisks(entityId: UUID) async throws -> EvolutionRiskAssessment {
@@ -1737,7 +1717,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
             ),
         ]
 
-        let assessment = EvolutionRiskAssessment(
+        return EvolutionRiskAssessment(
             assessmentId: assessmentId,
             entityId: entityId,
             assessmentTimestamp: Date(),
@@ -1746,8 +1726,6 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
             riskMitigationStrategies: riskMitigationStrategies,
             riskMonitoringPlan: "Monitor stability metrics weekly and adjust practice intensity accordingly"
         )
-
-        return assessment
     }
 
     func generateProgressReports(entityId: UUID, reportPeriod: ClosedRange<Date>) async throws -> ProgressReport {
@@ -1805,7 +1783,7 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
             ),
         ]
 
-        let report = ProgressReport(
+        return ProgressReport(
             reportId: reportId,
             entityId: entityId,
             reportPeriod: reportPeriod,
@@ -1816,8 +1794,6 @@ final class EvolutionInsightsGenerator: EvolutionInsightsGenerationProtocol {
             challenges: challenges,
             recommendations: recommendations
         )
-
-        return report
     }
 }
 
@@ -1851,7 +1827,7 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
             ]
         )
 
-        let monitoring = EvolutionStabilityMonitoring(
+        return EvolutionStabilityMonitoring(
             monitoringId: monitoringId,
             entityId: entityId,
             timestamp: Date(),
@@ -1861,8 +1837,6 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
             anomalyLevel: 0.1,
             alerts: []
         )
-
-        return monitoring
     }
 
     func detectEvolutionAnomalies(entityId: UUID, anomalyThreshold: Double) async throws -> EvolutionAnomalyDetection {
@@ -1890,7 +1864,7 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
             ),
         ]
 
-        let detection = EvolutionAnomalyDetection(
+        return EvolutionAnomalyDetection(
             detectionId: detectionId,
             entityId: entityId,
             detectionTimestamp: Date(),
@@ -1898,8 +1872,6 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
             anomalySeverity: detectedAnomalies.isEmpty ? 0.0 : detectedAnomalies.map(\.severity).max()!,
             anomalyPatterns: anomalyPatterns
         )
-
-        return detection
     }
 
     func implementStabilityEnhancements(entityId: UUID,
@@ -1918,7 +1890,7 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
             )
         }
 
-        let enhancement = StabilityEnhancement(
+        return StabilityEnhancement(
             enhancementId: enhancementId,
             entityId: entityId,
             enhancementTimestamp: Date(),
@@ -1926,8 +1898,6 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
             enhancementEffectiveness: 0.85,
             stabilityImprovement: 0.15
         )
-
-        return enhancement
     }
 
     func emergencyEvolutionIntervention(entityId: UUID,
@@ -1953,7 +1923,7 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
             ),
         ]
 
-        let intervention = EmergencyIntervention(
+        return EmergencyIntervention(
             interventionId: interventionId,
             entityId: entityId,
             interventionTimestamp: Date(),
@@ -1962,8 +1932,6 @@ final class EvolutionStabilityMonitor: EvolutionStabilityMonitoringProtocol {
             interventionSuccess: true,
             stabilizationAchieved: 0.9
         )
-
-        return intervention
     }
 }
 

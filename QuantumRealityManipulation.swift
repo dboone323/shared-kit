@@ -733,25 +733,22 @@ final class QuantumStateManager {
     private func applySuperpositionTransformation(
         _ transformation: QuantumTransformation, to state: QuantumRealityState
     ) async throws -> QuantumRealityState {
-        var newState = state
+        state
         // Apply superposition transformation logic
-        return newState
     }
 
     private func applyEntanglementTransformation(
         _ transformation: QuantumTransformation, to state: QuantumRealityState
     ) async throws -> QuantumRealityState {
-        var newState = state
+        state
         // Apply entanglement transformation logic
-        return newState
     }
 
     private func applyMeasurementTransformation(
         _ transformation: QuantumTransformation, to state: QuantumRealityState
     ) async throws -> QuantumRealityState {
-        var newState = state
+        state
         // Apply measurement transformation logic
-        return newState
     }
 }
 

@@ -122,7 +122,7 @@ final class RAGIntegrationTests: XCTestCase {
 
     // MARK: - Performance Tests
 
-    func testEmbeddingPerformance() throws {
+    func testEmbeddingPerformance() {
         measure {
             let exp = expectation(description: "Embedding completed")
             Task {
@@ -134,7 +134,7 @@ final class RAGIntegrationTests: XCTestCase {
         }
     }
 
-    func testVectorSearchPerformance() throws {
+    func testVectorSearchPerformance() {
         measure {
             let exp = expectation(description: "Search completed")
             Task {

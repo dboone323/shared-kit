@@ -193,7 +193,7 @@ public final class UniversalIntelligenceCoordinationSystem: Sendable {
         )
 
         // Generate universal coordination configuration
-        let configuration = UniversalIntelligenceCoordinationConfiguration(
+        return UniversalIntelligenceCoordinationConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class UniversalIntelligenceCoordinationSystem: Sendable {
             coordinationStrategies: generateUniversalCoordinationStrategies(universalAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute coordination with universal configuration
@@ -1472,9 +1470,8 @@ public extension UniversalIntelligenceCoordinationSystem {
     static func createSpecializedUniversalCoordinationSystem(
         for domainCombination: [IntelligenceDomainType]
     ) async throws -> UniversalIntelligenceCoordinationSystem {
-        let system = try await UniversalIntelligenceCoordinationSystem()
+        try await UniversalIntelligenceCoordinationSystem()
         // Configure for specific domain combination
-        return system
     }
 
     /// Execute batch universal coordination processing

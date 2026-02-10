@@ -1319,7 +1319,7 @@ final class EmpathyFieldCommunicator: EmpathyFieldCommunicationProtocol {
         let receivedStrength = signal.signalStrength * channel.channelParameters.reliability
         let quantumFidelity = calculateQuantumFidelity(signal, channel)
 
-        let result = TransmissionResult(
+        return TransmissionResult(
             signalId: signal.signalId,
             success: signalIntegrity > 0.8,
             transmissionTime: transmissionTime,
@@ -1328,8 +1328,6 @@ final class EmpathyFieldCommunicator: EmpathyFieldCommunicationProtocol {
             quantumFidelity: quantumFidelity,
             timestamp: Date()
         )
-
-        return result
     }
 
     func receiveEmpathySignals(from channel: EmpathyChannel) async throws -> [EmpathySignal] {

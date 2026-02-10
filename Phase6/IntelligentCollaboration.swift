@@ -324,9 +324,7 @@ public actor KnowledgeManager {
         let results = try await performKnowledgeSearch(query: query, filters: filters)
 
         // Rank results by relevance
-        let rankedResults = rankSearchResults(results, for: query)
-
-        return rankedResults
+        return rankSearchResults(results, for: query)
     }
 
     /// Get knowledge recommendations for a team member
@@ -519,11 +517,10 @@ public actor CollaborationAnalyzer {
         knowledgeBase: KnowledgeBase
     ) async throws -> [KnowledgeArea] {
         // Identify areas where team knowledge is lacking
-        let gaps: [KnowledgeArea] = []
+        []
 
         // This would analyze member expertise vs project requirements
         // Simplified implementation
-        return gaps
     }
 
     private func calculateProductivityGain(sessions: [CollaborationSession]) async throws -> Double {
@@ -581,15 +578,13 @@ public actor IntelligentMediator {
         )
 
         // Generate resolution plan
-        let resolution = ConflictResolution(
+        return ConflictResolution(
             conflictId: conflict.id,
             strategy: strategy,
             actions: generateResolutionActions(strategy: strategy, conflict: conflict),
             expectedOutcome: predictResolutionOutcome(strategy: strategy, conflict: conflict),
             confidence: 0.85
         )
-
-        return resolution
     }
 
     /// Optimize collaboration workflow

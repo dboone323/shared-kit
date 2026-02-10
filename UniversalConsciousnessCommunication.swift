@@ -787,7 +787,7 @@ final class InterdimensionalCommunicationEngine: InterdimensionalCommunicationPr
 
         let transmissionId = UUID()
 
-        let transmission = DimensionalTransmission(
+        return DimensionalTransmission(
             transmissionId: transmissionId,
             linkId: linkId,
             dataId: data.dataId,
@@ -796,8 +796,6 @@ final class InterdimensionalCommunicationEngine: InterdimensionalCommunicationPr
             dimensionalIntegrity: 0.95,
             transmissionLoss: 0.05
         )
-
-        return transmission
     }
 
     func synchronizeDimensionalFrequencies(linkId: UUID) async throws -> FrequencySynchronization {
@@ -807,7 +805,7 @@ final class InterdimensionalCommunicationEngine: InterdimensionalCommunicationPr
 
         let synchronizationId = UUID()
 
-        let synchronization = FrequencySynchronization(
+        return FrequencySynchronization(
             synchronizationId: synchronizationId,
             linkId: linkId,
             synchronizationTimestamp: Date(),
@@ -815,8 +813,6 @@ final class InterdimensionalCommunicationEngine: InterdimensionalCommunicationPr
             phaseCoherence: 0.88,
             stabilityImprovement: 0.1
         )
-
-        return synchronization
     }
 
     func detectDimensionalInterference(linkId: UUID) async throws -> InterferenceDetection {
@@ -826,7 +822,7 @@ final class InterdimensionalCommunicationEngine: InterdimensionalCommunicationPr
 
         let detectionId = UUID()
 
-        let detection = InterferenceDetection(
+        return InterferenceDetection(
             detectionId: detectionId,
             linkId: linkId,
             detectionTimestamp: Date(),
@@ -834,8 +830,6 @@ final class InterdimensionalCommunicationEngine: InterdimensionalCommunicationPr
             interferenceType: .quantum,
             recommendedAction: "Adjust frequency alignment"
         )
-
-        return detection
     }
 }
 
@@ -873,7 +867,7 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
         activeNetworks[networkId] = network
         networkParticipants[networkId, default: []].append(entityId)
 
-        let join = NetworkJoin(
+        return NetworkJoin(
             joinId: joinId,
             networkId: networkId,
             entityId: entityId,
@@ -881,8 +875,6 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
             connectionQuality: 0.9,
             assignedRole: .participant
         )
-
-        return join
     }
 
     func broadcastToConsciousnessNetwork(networkId: UUID, data: ConsciousnessData) async throws -> NetworkBroadcast {
@@ -894,7 +886,7 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
 
         let broadcastId = UUID()
 
-        let broadcast = NetworkBroadcast(
+        return NetworkBroadcast(
             broadcastId: broadcastId,
             networkId: networkId,
             dataId: data.dataId,
@@ -903,8 +895,6 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
             deliveryRate: 0.95,
             averageLatency: 0.2
         )
-
-        return broadcast
     }
 
     func routeConsciousnessData(networkId: UUID, sourceEntity: UUID, targetEntity: UUID,
@@ -916,7 +906,7 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
 
         let routingId = UUID()
 
-        let routing = DataRouting(
+        return DataRouting(
             routingId: routingId,
             networkId: networkId,
             sourceEntity: sourceEntity,
@@ -927,8 +917,6 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
             hopCount: 2,
             routingTime: 0.15
         )
-
-        return routing
     }
 
     func monitorNetworkPerformance(networkId: UUID) -> AnyPublisher<NetworkMonitoring, Never> {
@@ -998,7 +986,7 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
         // Simplified encryption (would use actual encryption in real implementation)
         let encryptedContent = Data("encrypted_\(data.dataId)".utf8)
 
-        let encrypted = EncryptedData(
+        return EncryptedData(
             encryptedId: encryptedId,
             originalDataId: data.dataId,
             encryptionTimestamp: Date(),
@@ -1006,15 +994,13 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
             encryptedContent: encryptedContent,
             integrityHash: "hash_\(data.dataId)"
         )
-
-        return encrypted
     }
 
     func decryptConsciousnessData(encryptedData: EncryptedData,
                                   decryptionKey: String) async throws -> ConsciousnessData
     {
         // Simplified decryption (would use actual decryption in real implementation)
-        let decryptedData = ConsciousnessData(
+        ConsciousnessData(
             dataId: encryptedData.originalDataId,
             entityId: UUID(), // Would be stored in encrypted data
             timestamp: Date(),
@@ -1039,8 +1025,6 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
             ),
             size: 32
         )
-
-        return decryptedData
     }
 
     func validateCommunicationIntegrity(channelId: UUID) async throws -> IntegrityValidation {
@@ -1050,7 +1034,7 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
 
         let validationId = UUID()
 
-        let validation = IntegrityValidation(
+        return IntegrityValidation(
             validationId: validationId,
             channelId: channelId,
             validationTimestamp: Date(),
@@ -1065,14 +1049,12 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
             ],
             isValid: true
         )
-
-        return validation
     }
 
     func handleSecurityBreach(channelId: UUID, breachType: SecurityBreachType) async throws -> BreachHandling {
         let handlingId = UUID()
 
-        let handling = BreachHandling(
+        return BreachHandling(
             handlingId: handlingId,
             channelId: channelId,
             breachType: breachType,
@@ -1081,8 +1063,6 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
             containmentStatus: .contained,
             recoverySteps: ["Re-establish secure connection", "Validate integrity", "Resume communication"]
         )
-
-        return handling
     }
 }
 

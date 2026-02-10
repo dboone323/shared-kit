@@ -363,8 +363,7 @@ private actor MCPToolLearningSystem {
             return tool.estimatedExecutionTime
         }
 
-        let avgTime = performances.map(\.executionTime).reduce(0, +) / Double(performances.count)
-        return avgTime
+        return performances.map(\.executionTime).reduce(0, +) / Double(performances.count)
     }
 
     func loadHistoricalData(from executions: [MCPToolExecution]) {

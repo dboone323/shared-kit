@@ -13,7 +13,7 @@ final class OllamaClientIntegrationTests: XCTestCase {
     }
 
     /// Test retry logic with simulated failure
-    func testRetryLogicWithFailure() async throws {
+    func testRetryLogicWithFailure() async {
         // This test verifies the retry mechanism
         // In real scenario, first attempts might fail, then succeed
 
@@ -23,7 +23,7 @@ final class OllamaClientIntegrationTests: XCTestCase {
     }
 
     /// Test health tracking updates
-    func testHealthTrackingUpdates() async throws {
+    func testHealthTrackingUpdates() async {
         // Verify health tracker is initialized
         XCTAssertNotNil(client)
 
@@ -32,7 +32,7 @@ final class OllamaClientIntegrationTests: XCTestCase {
     }
 
     /// Test connection pool reuse
-    func testConnectionPoolReuse() async throws {
+    func testConnectionPoolReuse() async {
         // Verify connection pool is initialized
         XCTAssertNotNil(client)
 
@@ -43,7 +43,7 @@ final class OllamaClientIntegrationTests: XCTestCase {
     }
 
     /// Test model failover on health issues
-    func testModelFailover() async throws {
+    func testModelFailover() async {
         // When a model is unhealthy, should failover to backup
         XCTAssertNotNil(client)
 
@@ -54,7 +54,7 @@ final class OllamaClientIntegrationTests: XCTestCase {
     }
 
     /// Test exponential backoff timing
-    func testExponentialBackoff() async throws {
+    func testExponentialBackoff() async {
         // Verify retry delays increase exponentially
         let retryConfig = RetryConfig(maxRetries: 3, baseDelay: 1.0)
 
@@ -68,7 +68,7 @@ final class OllamaClientIntegrationTests: XCTestCase {
     }
 
     /// Test request queue rate limiting
-    func testRequestQueueRateLimiting() async throws {
+    func testRequestQueueRateLimiting() async {
         // Verify request queue manages concurrent requests
         XCTAssertNotNil(client)
 

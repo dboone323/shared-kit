@@ -193,7 +193,7 @@ public final class AgentRealityEngineering: Sendable {
         )
 
         // Generate reality engineering configuration
-        let configuration = RealityEngineeringFrameworkConfiguration(
+        return RealityEngineeringFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentRealityEngineering: Sendable {
             engineeringStrategies: generateRealityEngineeringStrategies(realityAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute engineering with reality configuration
@@ -1504,9 +1502,8 @@ public extension AgentRealityEngineering {
     static func createSpecializedRealityEngineeringSystem(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentRealityEngineering {
-        let system = try await AgentRealityEngineering()
+        try await AgentRealityEngineering()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch reality engineering processing

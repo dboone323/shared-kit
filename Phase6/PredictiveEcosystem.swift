@@ -405,13 +405,11 @@ public actor PredictionEngine {
         let history = historicalData[system] ?? []
 
         // Generate prediction
-        let prediction = try await model.predict(
+        return try await model.predict(
             system: system,
             history: history,
             timeHorizon: timeHorizon
         )
-
-        return prediction
     }
 
     private func initializeDefaultModels() async throws {
@@ -519,15 +517,13 @@ public actor OptimizationCoordinator {
         logger.info("📊 Optimizing resource allocation")
 
         // Analyze usage patterns
-        let optimization = ResourceOptimization(
+        return ResourceOptimization(
             id: UUID().uuidString,
             recommendations: generateResourceRecommendations(current, patterns),
             efficiencyGain: calculateEfficiencyGain(current, patterns),
             implementationCost: estimateImplementationCost(current, patterns),
             timestamp: Date()
         )
-
-        return optimization
     }
 
     /// Get optimization history

@@ -362,9 +362,7 @@ public class SynchronizationEngine: ObservableObject {
 
     public func getAccuracy() async -> Double {
         guard !syncPairs.isEmpty else { return 0.0 }
-        let averageAccuracy =
-            syncPairs.values.map(\.accuracy).reduce(0, +) / Double(syncPairs.count)
-        return averageAccuracy
+        return syncPairs.values.map(\.accuracy).reduce(0, +) / Double(syncPairs.count)
     }
 }
 

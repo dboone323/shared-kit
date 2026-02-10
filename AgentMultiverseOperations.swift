@@ -193,7 +193,7 @@ public final class AgentMultiverseOperations: Sendable {
         )
 
         // Generate multiverse operation configuration
-        let configuration = MultiverseOperationFrameworkConfiguration(
+        return MultiverseOperationFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentMultiverseOperations: Sendable {
             operationStrategies: generateMultiverseOperationStrategies(multiverseAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute operation with multiverse configuration
@@ -1521,9 +1519,8 @@ public extension AgentMultiverseOperations {
     static func createSpecializedMultiverseOperationSystem(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentMultiverseOperations {
-        let system = try await AgentMultiverseOperations()
+        try await AgentMultiverseOperations()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch multiverse operation processing

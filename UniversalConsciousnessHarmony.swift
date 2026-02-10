@@ -1187,7 +1187,7 @@ final class HarmonyFieldManager: HarmonyFieldManagementProtocol {
         let creationId = UUID()
 
         // Simulate field creation
-        let creation = HarmonyFieldCreation(
+        return HarmonyFieldCreation(
             creationId: creationId,
             entityId: entityId,
             creationTimestamp: Date(),
@@ -1201,15 +1201,13 @@ final class HarmonyFieldManager: HarmonyFieldManagementProtocol {
                 resonance: fieldParameters.resonance
             )
         )
-
-        return creation
     }
 
     func expandHarmonyField(fieldId: UUID, newRadius: Double) async throws -> FieldExpansion {
         let expansionId = UUID()
 
         // Simulate field expansion
-        let expansion = FieldExpansion(
+        return FieldExpansion(
             expansionId: expansionId,
             fieldId: fieldId,
             expansionTimestamp: Date(),
@@ -1218,8 +1216,6 @@ final class HarmonyFieldManager: HarmonyFieldManagementProtocol {
             expansionSuccess: true,
             stabilityImpact: 0.05
         )
-
-        return expansion
     }
 
     func stabilizeHarmonyField(fieldId: UUID,
@@ -1228,7 +1224,7 @@ final class HarmonyFieldManager: HarmonyFieldManagementProtocol {
         let stabilizationId = UUID()
 
         // Simulate field stabilization
-        let stabilization = FieldStabilization(
+        return FieldStabilization(
             stabilizationId: stabilizationId,
             fieldId: fieldId,
             stabilizationTimestamp: Date(),
@@ -1237,15 +1233,13 @@ final class HarmonyFieldManager: HarmonyFieldManagementProtocol {
             stabilityImprovement: 0.1,
             duration: stabilizationParameters.duration
         )
-
-        return stabilization
     }
 
     func dissolveHarmonyField(fieldId: UUID) async throws -> FieldDissolution {
         let dissolutionId = UUID()
 
         // Simulate field dissolution
-        let dissolution = FieldDissolution(
+        return FieldDissolution(
             dissolutionId: dissolutionId,
             fieldId: fieldId,
             dissolutionTimestamp: Date(),
@@ -1253,8 +1247,6 @@ final class HarmonyFieldManager: HarmonyFieldManagementProtocol {
             dissolutionSuccess: true,
             residualEffects: ["harmonic_resonance", "energy_alignment"]
         )
-
-        return dissolution
     }
 }
 
@@ -1275,7 +1267,7 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
             )
         }
 
-        let analysis = DimensionalAnalysis(
+        return DimensionalAnalysis(
             analysisId: analysisId,
             entityId: entityId,
             analysisTimestamp: Date(),
@@ -1284,8 +1276,6 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
             dimensionalCompatibility: 0.85,
             bridgingComplexity: 0.6
         )
-
-        return analysis
     }
 
     func bridgeConsciousnessDimensions(
@@ -1296,7 +1286,7 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
         let bridgingId = UUID()
 
         // Simulate dimensional bridging
-        let bridging = DimensionalBridging(
+        return DimensionalBridging(
             bridgingId: bridgingId,
             entityId: entityId,
             bridgingTimestamp: Date(),
@@ -1306,8 +1296,6 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
             bridgeStability: 0.9,
             energyTransfer: 0.85
         )
-
-        return bridging
     }
 
     func balanceDimensionalEnergies(entityId: UUID,
@@ -1316,7 +1304,7 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
         let balancingId = UUID()
 
         // Simulate energy balancing
-        let balancing = EnergyBalancing(
+        return EnergyBalancing(
             balancingId: balancingId,
             entityId: entityId,
             balancingTimestamp: Date(),
@@ -1325,8 +1313,6 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
             overallBalance: 0.88,
             energyFlowOptimization: 0.92
         )
-
-        return balancing
     }
 
     func synchronizeDimensionalFrequencies(entityId: UUID,
@@ -1336,7 +1322,7 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
         let synchronizationId = UUID()
 
         // Simulate dimensional synchronization
-        let synchronization = DimensionalSynchronization(
+        return DimensionalSynchronization(
             synchronizationId: synchronizationId,
             entityId: entityId,
             synchronizationTimestamp: Date(),
@@ -1345,8 +1331,6 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
             coherenceLevel: 0.87,
             phaseAlignment: 0.91
         )
-
-        return synchronization
     }
 }
 
@@ -1371,7 +1355,7 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
             ),
         ]
 
-        let detection = FrequencyDetection(
+        return FrequencyDetection(
             detectionId: detectionId,
             entityId: entityId,
             detectionTimestamp: Date(),
@@ -1379,8 +1363,6 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
             detectionAccuracy: 0.9,
             frequencyRange: 10.0 ... 50.0
         )
-
-        return detection
     }
 
     func analyzeFrequencyPatterns(entityId: UUID,
@@ -1399,7 +1381,7 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
             ),
         ]
 
-        let analysis = FrequencyPatternAnalysis(
+        return FrequencyPatternAnalysis(
             analysisId: analysisId,
             entityId: entityId,
             analysisTimestamp: Date(),
@@ -1408,8 +1390,6 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
             dominantFrequency: 25.0,
             patternStability: 0.82
         )
-
-        return analysis
     }
 
     func synchronizeToTargetFrequency(entityId: UUID,
@@ -1418,7 +1398,7 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
         let synchronizationId = UUID()
 
         // Simulate target synchronization
-        let synchronization = TargetSynchronization(
+        return TargetSynchronization(
             synchronizationId: synchronizationId,
             entityId: entityId,
             synchronizationTimestamp: Date(),
@@ -1427,8 +1407,6 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
             achievedCoherence: 0.9,
             stabilizationTime: 120.0
         )
-
-        return synchronization
     }
 
     func maintainFrequencyCoherence(entityId: UUID,
@@ -1437,7 +1415,7 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
         let maintenanceId = UUID()
 
         // Simulate coherence maintenance
-        let maintenance = CoherenceMaintenance(
+        return CoherenceMaintenance(
             maintenanceId: maintenanceId,
             entityId: entityId,
             maintenanceTimestamp: Date(),
@@ -1446,8 +1424,6 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
             adjustmentsMade: 3,
             stabilityDuration: 600.0
         )
-
-        return maintenance
     }
 }
 
@@ -1474,7 +1450,7 @@ final class AspectIntegrator: AspectIntegrationProtocol {
             ),
         ]
 
-        let identification = AspectIdentification(
+        return AspectIdentification(
             identificationId: identificationId,
             entityId: entityId,
             identificationTimestamp: Date(),
@@ -1482,8 +1458,6 @@ final class AspectIntegrator: AspectIntegrationProtocol {
             identificationConfidence: 0.88,
             aspectDiversity: 0.75
         )
-
-        return identification
     }
 
     func assessAspectCompatibility(aspects: [ConsciousnessAspect]) async throws -> CompatibilityAssessment {
@@ -1503,7 +1477,7 @@ final class AspectIntegrator: AspectIntegrationProtocol {
             ),
         ].filter { $0.conflictLevel > 0.5 }
 
-        let assessment = CompatibilityAssessment(
+        return CompatibilityAssessment(
             assessmentId: assessmentId,
             aspects: aspects,
             assessmentTimestamp: Date(),
@@ -1511,8 +1485,6 @@ final class AspectIntegrator: AspectIntegrationProtocol {
             overallCompatibility: 0.82,
             conflictPairs: conflictPairs
         )
-
-        return assessment
     }
 
     func integrateCompatibleAspects(entityId: UUID,
@@ -1521,7 +1493,7 @@ final class AspectIntegrator: AspectIntegrationProtocol {
         let integrationId = UUID()
 
         // Simulate aspect integration
-        let integration = AspectIntegrationResult(
+        return AspectIntegrationResult(
             integrationId: integrationId,
             entityId: entityId,
             integrationTimestamp: Date(),
@@ -1535,15 +1507,13 @@ final class AspectIntegrator: AspectIntegrationProtocol {
                 stabilityIndex: 0.88
             )
         )
-
-        return integration
     }
 
     func resolveAspectConflicts(entityId: UUID, conflicts: [AspectConflict]) async throws -> ConflictResolution {
         let resolutionId = UUID()
 
         // Simulate conflict resolution
-        let resolution = ConflictResolution(
+        return ConflictResolution(
             resolutionId: resolutionId,
             entityId: entityId,
             resolutionTimestamp: Date(),
@@ -1552,8 +1522,6 @@ final class AspectIntegrator: AspectIntegrationProtocol {
             harmonyImprovement: 0.1,
             remainingConflicts: []
         )
-
-        return resolution
     }
 }
 

@@ -510,11 +510,9 @@ actor IntelligenceAmplificationEngine {
             return 0.5 // Default score with no history
         }
 
-        let avgSuccessRate =
-            history.reduce(into: 0.0) {
-                $0 += Double($1.successfulExecutions) / Double(max($1.totalExecutions, 1))
-            } / Double(history.count)
-        return avgSuccessRate
+        return history.reduce(into: 0.0) {
+            $0 += Double($1.successfulExecutions) / Double(max($1.totalExecutions, 1))
+        } / Double(history.count)
     }
 
     func getConfiguration() -> IntelligenceAmplificationConfiguration {

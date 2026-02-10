@@ -477,7 +477,7 @@ final class AnchorManager: Sendable {
     }
 
     func createAnchor(_ specification: AnchorSpecification) async throws -> RealityAnchor {
-        let anchor = RealityAnchor(
+        RealityAnchor(
             id: UUID(),
             name: specification.name,
             anchorType: specification.type,
@@ -492,8 +492,6 @@ final class AnchorManager: Sendable {
             lastMaintenance: Date(),
             integrityScore: 0.98
         )
-
-        return anchor
     }
 
     func strengthenAnchor(_ anchor: RealityAnchor, with reinforcement: AnchorReinforcement)

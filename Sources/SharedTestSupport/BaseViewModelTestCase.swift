@@ -48,8 +48,7 @@ open class SharedViewModelTestCase: XCTestCase {
             }
 
             do {
-                let result = try await operationTask.value
-                return result
+                return try await operationTask.value
             } catch {
                 // Task is still running, continue waiting
             }

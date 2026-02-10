@@ -640,7 +640,7 @@ final class ConstructBuilder {
     func buildConstruct(_ specification: DimensionalSpecification,
                         in state: DimensionalState) async throws -> DimensionalConstruct
     {
-        let construct = DimensionalConstruct(
+        DimensionalConstruct(
             id: UUID(),
             name: specification.name,
             dimensionality: specification.dimensionality,
@@ -652,8 +652,6 @@ final class ConstructBuilder {
             parentDimensions: specification.parentDimension.map { [$0] } ?? [],
             childDimensions: []
         )
-
-        return construct
     }
 }
 

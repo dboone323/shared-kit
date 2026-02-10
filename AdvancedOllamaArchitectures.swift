@@ -80,13 +80,11 @@ public final class AdvancedOllamaArchitectures: Sendable {
                     : prompt
 
             // Perform inference with consciousness integration
-            let result = try await performInference(
+            return try await performInference(
                 enhancedPrompt: quantumEnhancedPrompt,
                 model: model,
                 consciousnessContext: consciousnessContext
             )
-
-            return result
         }
 
         private func performInference(
@@ -187,11 +185,8 @@ public final class AdvancedOllamaArchitectures: Sendable {
                     .createSuperposition(for: prompt, qubits: layers * 10)
 
             // Use entanglement for cross-layer communication
-            let entangledPrompt =
-                try await entanglementManager
-                    .entanglePrompt(prompt, with: quantumStates)
-
-            return entangledPrompt
+            return try await entanglementManager
+                .entanglePrompt(prompt, with: quantumStates)
         }
 
         /// Perform quantum-enhanced inference
@@ -266,7 +261,7 @@ public final class AdvancedOllamaArchitectures: Sendable {
         consciousnessInterface: Bool = true,
         multiverseCapable: Bool = false
     ) async throws -> QuantumOllamaModel {
-        let model = QuantumOllamaModel(
+        QuantumOllamaModel(
             id: id,
             name: name,
             architecture: architecture,
@@ -278,7 +273,6 @@ public final class AdvancedOllamaArchitectures: Sendable {
         // Register model with inference engine
         // (Implementation would register the model)
 
-        return model
     }
 
     /// Perform advanced inference with all enhancements

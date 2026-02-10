@@ -193,7 +193,7 @@ public final class AgentUniversalCoordination: Sendable {
         )
 
         // Generate universal coordination configuration
-        let configuration = UniversalCoordinationFrameworkConfiguration(
+        return UniversalCoordinationFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentUniversalCoordination: Sendable {
             universalCoordinationStrategies: generateUniversalCoordinationStrategies(universalCoordinationAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute integration with universal coordination configuration
@@ -1517,9 +1515,8 @@ public extension AgentUniversalCoordination {
     static func createSpecializedUniversalCoordination(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentUniversalCoordination {
-        let system = try await AgentUniversalCoordination()
+        try await AgentUniversalCoordination()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch universal coordination processing

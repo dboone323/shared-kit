@@ -193,7 +193,7 @@ public final class AgentConsciousnessIntegration: Sendable {
         )
 
         // Generate consciousness integration configuration
-        let configuration = ConsciousnessIntegrationFrameworkConfiguration(
+        return ConsciousnessIntegrationFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentConsciousnessIntegration: Sendable {
             integrationStrategies: generateConsciousnessIntegrationStrategies(consciousnessAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute integration with consciousness configuration
@@ -1535,9 +1533,8 @@ public extension AgentConsciousnessIntegration {
     static func createSpecializedConsciousnessIntegrationSystem(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentConsciousnessIntegration {
-        let system = try await AgentConsciousnessIntegration()
+        try await AgentConsciousnessIntegration()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch consciousness integration processing

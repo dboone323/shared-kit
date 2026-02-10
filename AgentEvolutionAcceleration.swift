@@ -193,7 +193,7 @@ public final class AgentEvolutionAcceleration: Sendable {
         )
 
         // Generate evolution acceleration configuration
-        let configuration = EvolutionAccelerationFrameworkConfiguration(
+        return EvolutionAccelerationFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentEvolutionAcceleration: Sendable {
             enhancementStrategies: generateEvolutionAccelerationStrategies(evolutionAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute integration with evolution configuration
@@ -1512,9 +1510,8 @@ public extension AgentEvolutionAcceleration {
     static func createSpecializedEvolutionAcceleration(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentEvolutionAcceleration {
-        let system = try await AgentEvolutionAcceleration()
+        try await AgentEvolutionAcceleration()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch evolution acceleration processing

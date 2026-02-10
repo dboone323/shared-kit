@@ -267,9 +267,8 @@ public final class AggregatorAgent: Sendable {
 
         for attempt in 0 ..< maxRetries {
             do {
-                let result = try await runDockerManager(command: command, args: args)
+                return try await runDockerManager(command: command, args: args)
                 // Success - return immediately
-                return result
             } catch {
                 lastError = error
                 SecureLogger.error(

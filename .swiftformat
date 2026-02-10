@@ -87,6 +87,8 @@
 --enable redundantReturn
 --enable redundantType
 --enable spaceAroundOperators
+--enable redundantProperty
+--enable redundantThrows
 
 # Disabled Rules
 --disable andOperator

@@ -193,7 +193,7 @@ public final class AgentEthicalTranscendence: Sendable {
         )
 
         // Generate ethical transcendence configuration
-        let configuration = EthicalTranscendenceFrameworkConfiguration(
+        return EthicalTranscendenceFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentEthicalTranscendence: Sendable {
             transcendenceStrategies: generateEthicalTranscendenceStrategies(ethicalAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute transcendence with ethical configuration
@@ -1506,9 +1504,8 @@ public extension AgentEthicalTranscendence {
     static func createSpecializedEthicalTranscendenceSystem(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentEthicalTranscendence {
-        let system = try await AgentEthicalTranscendence()
+        try await AgentEthicalTranscendence()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch ethical transcendence processing

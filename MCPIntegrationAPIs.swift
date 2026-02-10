@@ -473,8 +473,7 @@ public final class MCPHTTPClient: MCPAPIClient, Sendable {
         }
 
         // Decode as AnyCodable dictionary
-        let jsonObject = try decoder.decode([String: AnyCodable].self, from: data)
-        return jsonObject
+        return try decoder.decode([String: AnyCodable].self, from: data)
     }
 
     public func stream(_ endpoint: MCPAPIEndpoint) -> AsyncThrowingStream<

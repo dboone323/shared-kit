@@ -193,7 +193,7 @@ public final class AgentHarmonyNetworks: Sendable {
         )
 
         // Generate harmony networks configuration
-        let configuration = HarmonyNetworksFrameworkConfiguration(
+        return HarmonyNetworksFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentHarmonyNetworks: Sendable {
             harmonyStrategies: generateHarmonyNetworksStrategies(harmonyAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute integration with harmony configuration
@@ -1484,9 +1482,8 @@ public extension AgentHarmonyNetworks {
     static func createSpecializedHarmonyNetworks(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentHarmonyNetworks {
-        let system = try await AgentHarmonyNetworks()
+        try await AgentHarmonyNetworks()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch harmony networks processing

@@ -124,7 +124,7 @@ final class VectorStoreEnhancementsTests: XCTestCase {
 
 @available(macOS 11.0, iOS 14.0, *)
 final class EnhancementsIntegrationTests: XCTestCase {
-    func testEndToEndWorkflow() async throws {
+    func testEndToEndWorkflow() async {
         // This would be an integration test showing full workflow
         // Requires actual Ollama and Postgres instances
 

@@ -630,9 +630,7 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
         let decompressedData = try await applyDecompression(consciousnessData)
 
         // Apply decryption if needed
-        let decryptedData = try await applyDecryption(decompressedData)
-
-        return decryptedData
+        return try await applyDecryption(decompressedData)
     }
 
     func updateConsciousnessData(_ storageId: UUID, newData: ConsciousnessData) async throws
@@ -749,7 +747,7 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
         let coherenceImprovement = 0.05
         let spaceRecovered = 1000
 
-        let optimization = StorageOptimization(
+        return StorageOptimization(
             optimizationId: optimizationId,
             timestamp: Date(),
             optimizationType: .defragmentation,
@@ -758,8 +756,6 @@ final class QuantumConsciousnessStorageEngine: QuantumConsciousnessStorageProtoc
             spaceRecovered: spaceRecovered,
             operationsPerformed: operations
         )
-
-        return optimization
     }
 
     // MARK: - Private Methods

@@ -171,8 +171,7 @@ public class HomeostaticPlasticityRule: SynapticPlasticityRule {
         firingHistory = firingHistory.filter { currentTime - $0 <= timeWindow }
 
         // Calculate rate in Hz
-        let rate = Double(firingHistory.count) / timeWindow
-        return rate
+        return Double(firingHistory.count) / timeWindow
     }
 
     public func recordSpike(at time: TimeInterval) {

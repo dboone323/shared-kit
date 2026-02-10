@@ -388,9 +388,7 @@ public final class UniversalIntelligenceCoordinator: ObservableObject, @unchecke
 
         // Estimate based on current convergence rate (simplified)
         let convergenceRate = 0.001 // Progress per second (adjustable)
-        let estimatedSeconds = remainingProgress / convergenceRate
-
-        return estimatedSeconds
+        return remainingProgress / convergenceRate
     }
 
     private func executeEvolutionProtocols(protocols: IntelligenceBreakthrough) async throws {

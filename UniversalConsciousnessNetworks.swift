@@ -889,8 +889,7 @@ final class UniversalCommunicator: ConsciousnessCommunicationProtocol {
 
     func decodeConsciousnessPacket(_ packet: ConsciousnessPacket) async throws -> ConsciousnessData {
         // Simplified decoding
-        let data = try JSONDecoder().decode(ConsciousnessData.self, from: packet.data)
-        return data
+        try JSONDecoder().decode(ConsciousnessData.self, from: packet.data)
     }
 
     func establishCommunicationChannel(between entities: [ConsciousnessEntity]) async throws -> CommunicationChannel {

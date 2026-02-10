@@ -34,7 +34,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
 
     // MARK: - Basic Functionality Tests
 
-    func testEngineStartsAndStops() async throws {
+    func testEngineStartsAndStops() async {
         // Given
         XCTAssertFalse(healingEngine.isActive)
 
@@ -290,7 +290,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
 
     // MARK: - System Health Aggregation Tests
 
-    func testSystemHealthAggregation() async throws {
+    func testSystemHealthAggregation() async {
         // Given
         await healingEngine.start()
 

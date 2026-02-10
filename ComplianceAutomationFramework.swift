@@ -212,7 +212,7 @@ private final class GDPRManager {
     }
 
     func checkViolations() async -> [ComplianceViolation] {
-        var violations: [ComplianceViolation] = []
+        []
 
         // Check for GDPR violations
         // This would include checks for:
@@ -223,7 +223,6 @@ private final class GDPRManager {
         // - Privacy by design
 
         // For demonstration, return empty array (compliant)
-        return violations
     }
 }
 

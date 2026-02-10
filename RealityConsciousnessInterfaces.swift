@@ -125,7 +125,7 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
     {
         guard interfaces[interface.interfaceId] != nil else { throw RCIError.interfaceNotFound }
         let delivered = Bool.random()
-        let result = RCITransmissionResult(
+        return RCITransmissionResult(
             interfaceId: interface.interfaceId,
             signalId: signal.id,
             delivered: delivered,
@@ -152,7 +152,6 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
                 recommendations: ["Maintain alignment > 0.9", "Monitor decoherence rate"]
             )
         )
-        return result
     }
 
     func synchronizeStates(_ interface: RCIRealityInterface) async throws

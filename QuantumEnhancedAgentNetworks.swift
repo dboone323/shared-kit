@@ -193,7 +193,7 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
         )
 
         // Generate quantum network configuration
-        let configuration = QuantumEnhancedAgentNetworkConfiguration(
+        return QuantumEnhancedAgentNetworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
             networkStrategies: generateQuantumNetworkStrategies(quantumAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute network with quantum configuration
@@ -1442,9 +1440,8 @@ public extension QuantumEnhancedAgentNetworks {
     static func createSpecializedQuantumNetworkSystem(
         for networkTopology: NetworkTopology
     ) async throws -> QuantumEnhancedAgentNetworks {
-        let system = try await QuantumEnhancedAgentNetworks()
+        try await QuantumEnhancedAgentNetworks()
         // Configure for specific network topology
-        return system
     }
 
     /// Execute batch quantum network processing

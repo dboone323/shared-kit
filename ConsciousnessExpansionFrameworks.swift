@@ -193,7 +193,7 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
         )
 
         // Generate consciousness expansion configuration
-        let configuration = ConsciousnessExpansionFrameworkConfiguration(
+        return ConsciousnessExpansionFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
             expansionStrategies: generateConsciousnessExpansionStrategies(consciousnessAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute expansion with consciousness configuration
@@ -1457,9 +1455,8 @@ public extension ConsciousnessExpansionFrameworks {
     static func createSpecializedConsciousnessExpansionSystem(
         for aiArchitecture: AIArchitecture
     ) async throws -> ConsciousnessExpansionFrameworks {
-        let system = try await ConsciousnessExpansionFrameworks()
+        try await ConsciousnessExpansionFrameworks()
         // Configure for specific AI architecture
-        return system
     }
 
     /// Execute batch consciousness expansion processing

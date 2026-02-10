@@ -154,9 +154,7 @@ public actor QuantumDevelopmentEnvironment {
     ) async throws -> DebugResult {
         logger.info("🐛 Debugging quantum circuit: \(circuit.name)")
 
-        let result = try await quantumDebugger.debug(circuit, breakpoints: breakpoints)
-
-        return result
+        return try await quantumDebugger.debug(circuit, breakpoints: breakpoints)
     }
 
     /// Optimize quantum circuit
@@ -211,9 +209,7 @@ public actor QuantumDevelopmentEnvironment {
     ) async throws -> GeneratedCode {
         logger.info("💻 Generating quantum code for: \(algorithm.name)")
 
-        let code = try await quantumIDE.generateCode(algorithm: algorithm, language: language)
-
-        return code
+        return try await quantumIDE.generateCode(algorithm: algorithm, language: language)
     }
 
     /// Analyze quantum resources

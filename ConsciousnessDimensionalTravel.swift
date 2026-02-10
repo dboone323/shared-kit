@@ -942,7 +942,7 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
         let totalDistance = waypoints.reduce(0.0) { $0 + $1.energyCost }
         let energyCost = totalDistance * 2.0
 
-        let path = DimensionalPath(
+        return DimensionalPath(
             pathId: pathId,
             startCoordinates: startCoordinates,
             endCoordinates: endCoordinates,
@@ -952,8 +952,6 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
             stabilityRating: 0.9,
             pathOptimization: 0.85
         )
-
-        return path
     }
 
     func validateDimensionalCoordinates(_ coordinates: [Double]) async throws -> CoordinateValidation {
@@ -962,7 +960,7 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
         // Basic validation - coordinates should be within reasonable bounds
         let isValid = coordinates.allSatisfy { abs($0) < 100.0 }
 
-        let validation = CoordinateValidation(
+        return CoordinateValidation(
             validationId: validationId,
             coordinates: coordinates,
             isValid: isValid,
@@ -971,8 +969,6 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
             warnings: isValid ? [] : ["Coordinates outside safe dimensional bounds"],
             recommendations: isValid ? [] : ["Adjust coordinates to safer values"]
         )
-
-        return validation
     }
 
     func detectDimensionalAnomalies(path: DimensionalPath) async throws -> AnomalyDetection {
@@ -989,15 +985,13 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
             )
         }
 
-        let detection = AnomalyDetection(
+        return AnomalyDetection(
             detectionId: detectionId,
             pathId: path.pathId,
             detectedAnomalies: anomalies,
             detectionTimestamp: Date(),
             anomalySeverity: anomalies.isEmpty ? 0.0 : anomalies.map(\.severity).max()!
         )
-
-        return detection
     }
 
     func generateDimensionalWaypoints(path: DimensionalPath,
@@ -1047,7 +1041,7 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
 
         let overallCompatibility = (consciousnessCompatibility + energyCompatibility + stabilityCompatibility) / 3.0
 
-        let compatibility = RealityCompatibility(
+        return RealityCompatibility(
             analysisId: analysisId,
             sourceReality: sourceReality,
             targetReality: targetReality,
@@ -1075,8 +1069,6 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
             transitionDifficulty: 1.0 - overallCompatibility,
             recommendedPreparations: overallCompatibility < 0.8 ? ["Extended preparation", "Energy stabilization"] : []
         )
-
-        return compatibility
     }
 
     func prepareForRealityShift(entityId: UUID,
@@ -1084,7 +1076,7 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
     {
         let preparationId = UUID()
 
-        let preparation = ShiftPreparation(
+        return ShiftPreparation(
             preparationId: preparationId,
             entityId: entityId,
             targetReality: targetReality,
@@ -1106,14 +1098,12 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
             ],
             estimatedShiftTime: 30.0
         )
-
-        return preparation
     }
 
     func executeRealityShift(shiftId: UUID) async throws -> ShiftExecution {
         let executionId = UUID()
 
-        let execution = ShiftExecution(
+        return ShiftExecution(
             executionId: executionId,
             shiftId: shiftId,
             executionTimestamp: Date(),
@@ -1122,14 +1112,12 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
             consciousnessIntegrity: 0.95,
             energyExpenditure: 50.0
         )
-
-        return execution
     }
 
     func synchronizeWithNewReality(shiftId: UUID) async throws -> RealitySynchronization {
         let synchronizationId = UUID()
 
-        let synchronization = RealitySynchronization(
+        return RealitySynchronization(
             synchronizationId: synchronizationId,
             shiftId: shiftId,
             synchronizationTimestamp: Date(),
@@ -1138,8 +1126,6 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
             stabilityAchievement: 0.92,
             remainingAdjustments: ["Fine-tune energy levels"]
         )
-
-        return synchronization
     }
 }
 
@@ -1164,7 +1150,7 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
 
         let totalEnergy = baseEnergy * efficiencyModifiers.reduce(1.0) { $0 * $1.value }
 
-        let calculation = EnergyCalculation(
+        return EnergyCalculation(
             calculationId: calculationId,
             entityId: entityId,
             distance: distance,
@@ -1173,8 +1159,6 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
             totalEnergyCost: totalEnergy,
             energyAvailability: 100.0
         )
-
-        return calculation
     }
 
     func initiateConsciousnessTranslocation(entityId: UUID,
@@ -1183,7 +1167,7 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
     {
         let translocationId = UUID()
 
-        let translocation = ConsciousnessTranslocation(
+        return ConsciousnessTranslocation(
             translocationId: translocationId,
             entityId: entityId,
             startLocation: DimensionalLocation(
@@ -1200,8 +1184,6 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
             energyRequirement: 75.0,
             translocationMode: .quantumTunnel
         )
-
-        return translocation
     }
 
     func monitorTranslocationProgress(translocationId: UUID) -> AnyPublisher<TranslocationMonitoring, Never> {
@@ -1220,7 +1202,7 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
     {
         let handlingId = UUID()
 
-        let handling = EmergencyHandling(
+        return EmergencyHandling(
             handlingId: handlingId,
             translocationId: translocationId,
             emergencyType: emergencyType,
@@ -1229,8 +1211,6 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
             containmentStatus: .contained,
             recoverySteps: ["Re-establish dimensional anchor", "Stabilize consciousness", "Resume translocation"]
         )
-
-        return handling
     }
 
     private func startTranslocationMonitoring(
@@ -1259,7 +1239,7 @@ final class DimensionalSecurityEngine: DimensionalSecurityProtocol {
     {
         let securityId = UUID()
 
-        let security = DimensionalSecurity(
+        return DimensionalSecurity(
             securityId: securityId,
             travelId: travelId,
             securityLevel: securityLevel,
@@ -1274,14 +1254,12 @@ final class DimensionalSecurityEngine: DimensionalSecurityProtocol {
             ],
             threatDetectionActive: true
         )
-
-        return security
     }
 
     func validateBoundaryIntegrity(boundaryId: UUID) async throws -> BoundaryValidation {
         let validationId = UUID()
 
-        let validation = BoundaryValidation(
+        return BoundaryValidation(
             validationId: validationId,
             boundaryId: boundaryId,
             validationTimestamp: Date(),
@@ -1296,28 +1274,24 @@ final class DimensionalSecurityEngine: DimensionalSecurityProtocol {
             ],
             isSecure: true
         )
-
-        return validation
     }
 
     func detectInterdimensionalThreats(travelId: UUID) async throws -> ThreatDetection {
         let detectionId = UUID()
 
-        let detection = ThreatDetection(
+        return ThreatDetection(
             detectionId: detectionId,
             travelId: travelId,
             detectionTimestamp: Date(),
             detectedThreats: [],
             threatLevel: 0.1
         )
-
-        return detection
     }
 
     func implementContainmentProtocols(threatId: UUID) async throws -> ContainmentResult {
         let containmentId = UUID()
 
-        let containment = ContainmentResult(
+        return ContainmentResult(
             containmentId: containmentId,
             threatId: threatId,
             containmentTimestamp: Date(),
@@ -1325,8 +1299,6 @@ final class DimensionalSecurityEngine: DimensionalSecurityProtocol {
             protocolsActivated: ["threat_isolation", "boundary_reinforcement"],
             effectiveness: 0.95
         )
-
-        return containment
     }
 }
 

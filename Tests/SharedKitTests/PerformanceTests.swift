@@ -11,7 +11,7 @@ final class PerformanceTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testVectorBatchOperationInitializationPerformance() throws {
+    func testVectorBatchOperationInitializationPerformance() {
         let largeContent = (0 ..< 1000).map { "Content \($0)" }
         let largeVectors = (0 ..< 1000).map { _ in (0 ..< 128).map { _ in Double.random(in: 0 ... 1) } }
         let largeMetadata = (0 ..< 1000).map { ["id": "\($0)"] }
@@ -24,7 +24,7 @@ final class PerformanceTests: XCTestCase {
     }
 
     @available(macOS 12.0, iOS 15.0, *)
-    func testHybridSearchCalculationPerformance() async throws {
+    func testHybridSearchCalculationPerformance() async {
         // We can't easily init HybridSearchEngine without a PostgresVectorStore,
         // but we can benchmark the calculation logic if we could access it.
         // However, it's private.

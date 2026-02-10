@@ -193,7 +193,7 @@ public final class AgentWisdomAmplification: Sendable {
         )
 
         // Generate wisdom amplification configuration
-        let configuration = WisdomAmplificationFrameworkConfiguration(
+        return WisdomAmplificationFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentWisdomAmplification: Sendable {
             amplificationStrategies: generateWisdomAmplificationStrategies(wisdomAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute integration with wisdom configuration
@@ -1505,9 +1503,8 @@ public extension AgentWisdomAmplification {
     static func createSpecializedWisdomAmplification(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentWisdomAmplification {
-        let system = try await AgentWisdomAmplification()
+        try await AgentWisdomAmplification()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch wisdom amplification processing

@@ -697,7 +697,7 @@ public final class AutonomousDocumentation: ObservableObject {
 
     private func generateWithAI(_ request: ContentGenerationRequest) async throws -> String {
         // Simulate AI content generation
-        let baseContent = """
+        """
         # \(request.title)
 
         ## Overview
@@ -721,8 +721,6 @@ public final class AutonomousDocumentation: ObservableObject {
         2. Test thoroughly
         3. Document your changes
         """
-
-        return baseContent
     }
 
     private func generateHybrid(_ request: ContentGenerationRequest) async throws -> String {

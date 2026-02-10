@@ -193,7 +193,7 @@ public final class AgentCreativitySystems: Sendable {
         )
 
         // Generate creativity systems configuration
-        let configuration = CreativitySystemsFrameworkConfiguration(
+        return CreativitySystemsFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentCreativitySystems: Sendable {
             creativityStrategies: generateCreativitySystemsStrategies(creativityAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute integration with creativity configuration
@@ -1504,9 +1502,8 @@ public extension AgentCreativitySystems {
     static func createSpecializedCreativitySystems(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentCreativitySystems {
-        let system = try await AgentCreativitySystems()
+        try await AgentCreativitySystems()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch creativity systems processing

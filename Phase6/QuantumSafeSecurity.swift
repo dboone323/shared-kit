@@ -384,10 +384,8 @@ public actor QuantumSafeCryptoManager {
 
         // Simulate quantum-safe decryption
         // In real implementation, this would use actual Kyber/Dilithium libraries
-        let decryptedData = Data(
+        return Data(
             (0 ..< ciphertext.ciphertext.count - 32).map { _ in UInt8.random(in: 0 ... 255) })
-
-        return decryptedData
     }
 
     /// Sign data using quantum-safe signature
@@ -506,15 +504,13 @@ public actor QuantumSafeKeyManager {
             keyId: keyId
         )
 
-        let keyPair = QuantumSafeKeyPair(
+        return QuantumSafeKeyPair(
             id: keyId,
             algorithm: algorithm,
             publicKey: publicKey,
             privateKey: privateKey,
             creationDate: Date()
         )
-
-        return keyPair
     }
 
     /// Rotate encryption keys

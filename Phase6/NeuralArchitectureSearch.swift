@@ -229,10 +229,9 @@ public actor NeuralArchitectureSearch {
         try await withThrowingTaskGroup(of: ArchitectureEvaluation.self) { group in
             for architecture in population {
                 group.addTask {
-                    let evaluation = try await self.architectureEvaluator.evaluateArchitecture(
+                    try await self.architectureEvaluator.evaluateArchitecture(
                         architecture, for: task
                     )
-                    return evaluation
                 }
             }
 

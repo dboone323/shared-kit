@@ -193,7 +193,7 @@ public final class AgentEmpathyNetworks: Sendable {
         )
 
         // Generate empathy networks configuration
-        let configuration = EmpathyNetworksFrameworkConfiguration(
+        return EmpathyNetworksFrameworkConfiguration(
             configurationId: configurationId,
             name: configurationRequest.name,
             description: configurationRequest.description,
@@ -205,8 +205,6 @@ public final class AgentEmpathyNetworks: Sendable {
             empathyStrategies: generateEmpathyNetworksStrategies(empathyAnalysis),
             createdAt: Date()
         )
-
-        return configuration
     }
 
     /// Execute integration with empathy configuration
@@ -1496,9 +1494,8 @@ public extension AgentEmpathyNetworks {
     static func createSpecializedEmpathyNetworks(
         for agentArchitecture: AgentArchitecture
     ) async throws -> AgentEmpathyNetworks {
-        let system = try await AgentEmpathyNetworks()
+        try await AgentEmpathyNetworks()
         // Configure for specific agent architecture
-        return system
     }
 
     /// Execute batch empathy networks processing

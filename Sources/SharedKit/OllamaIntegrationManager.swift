@@ -88,7 +88,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         let codellamaAvailable = await client.checkModelAvailability("codellama")
         let availableModels = llama2Available && codellamaAvailable
 
-        let health = await ServiceHealth(
+        return await ServiceHealth(
             serviceName: "Ollama",
             isRunning: serverStatus.running,
             modelsAvailable: availableModels,
@@ -97,8 +97,6 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             lastChecked: Date(),
             recommendations: generateHealthRecommendations(serverStatus, availableModels)
         )
-
-        return health
     }
 
     private func generateHealthRecommendations(
