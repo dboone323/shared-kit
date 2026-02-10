@@ -17,6 +17,10 @@ let package = Package(
             name: "SharedTestSupport",
             targets: ["SharedTestSupport"]
         ),
+        .library(
+            name: "EnterpriseScalingFramework",
+            targets: ["EnterpriseScalingFramework"]
+        ),
         .executable(
             name: "RAGVerifier",
             targets: ["RAGVerifier"]
@@ -49,6 +53,11 @@ let package = Package(
             name: "RAGVerifier",
             dependencies: ["SharedKit"],
             path: "Sources/RAGVerifier"
+        ),
+        .target(
+            name: "EnterpriseScalingFramework",
+            dependencies: [],
+            path: "Sources/EnterpriseScalingFramework"
         ),
         .target(
             name: "SharedKit",
