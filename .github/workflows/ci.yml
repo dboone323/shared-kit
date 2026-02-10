@@ -1,22 +1,169 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
+    tags: ['v*']
   pull_request:
-    branches: [main]
+    branches: [main, develop]
+  workflow_dispatch:
 
 jobs:
+  # 1. Code Quality & Linting
+  quality-checks:
+    name: 🔍 Code Quality
+    runs-on: macos-15
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Setup Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
+
+      - name: 📦 Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: 🎨 SwiftFormat Check
+        run: |
+          if command -v swiftformat >/dev/null 2>&1; then
+            swiftformat . --config .swiftformat --lint --verbose
+          else
+            echo "⚠️ SwiftFormat check skipped (not installed)"
+          fi
+
+      - name: 🔍 SwiftLint
+        run: |
+          if command -v swiftlint >/dev/null 2>&1; then
+            swiftlint --strict --reporter github-actions-logging
+          else
+            echo "⚠️ SwiftLint check skipped (not installed)"
+          fi
+
+  # 2. Security Scanning
+  security-scan:
+    name: 🔒 Security Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🛡️ Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          ignore-unfixed: true
+
+      - name: 📤 Upload Trivy Results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: 🔍 Check for Secrets (TruffleHog)
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.before }}
+          head: ${{ github.sha }}
+          extra_args: --debug --only-verified
+
+      - name: 🧠 CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python # Only python supported by CodeQL without build. Swift requires build mode but is Mac-only.
+
+      - name: 🕵️ Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: 🐚 Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          severity: error
+          ignore_paths: |
+             node_modules
+             .build
+             .swiftpm
+          ignore_names: |
+            launch_iphone16.sh
+            run_ios_fixed.sh
+            verify-project-structure.sh
+            fix_file_headers.sh
+            launch_multiplatform.sh
+            run_tests.sh
+            diagnose_ios_install.sh
+            launch_ios_simple.sh
+            integrate_macos_ui.sh
+            test-compilation.sh
+            quick-sync.sh
+
+  # 3. Build & Test
   build-and-test:
+    name: 🏗️ Build & Test
     runs-on: macos-15
     timeout-minutes: 30
-    
+    needs: quality-checks
+
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Code
         uses: actions/checkout@v4
-        
-      - name: Build
-        run: swift build
-            
-      - name: Test
-        run: swift test
+
+      - name: 🔧 Setup Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
+
+      - name: 📦 Cache DerivedData
+        uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: 🏗️ Build
+        run: swift build -v
+
+      - name: 🧪 Run Tests
+        run: swift test -v --enable-code-coverage
+
+  # 5. Quality Gate
+  quality-gate:
+    name: ✅ Quality Gate
+    runs-on: ubuntu-latest
+    needs: [quality-checks, build-and-test, security-scan]
+    if: always()
+    steps:
+      - name: 📊 Evaluate
+        run: |
+          if [ "${{ needs.quality-checks.result }}" = "success" ] && \
+             [ "${{ needs.build-and-test.result }}" = "success" ] && \
+             [ "${{ needs.security-scan.result }}" = "success" ]; then
+            echo "✅ All checks passed!"
+            exit 0
+          else
+            echo "❌ Workflow failed."
+            exit 1
+          fi
