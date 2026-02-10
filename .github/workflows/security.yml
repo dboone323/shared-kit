@@ -71,6 +71,8 @@ jobs:
                   ignore_paths: |
                     node_modules
                     Tools/Automation
+                    .build
+                    .swiftpm
 
             - name: Security audit for Python dependencies
               run: |
