@@ -326,7 +326,8 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
     }
 
     private func assessQuantumAgentNetwork(_ request: QuantumAgentNetworkRequest) async throws
-    -> QuantumAgentNetworkAssessment {
+        -> QuantumAgentNetworkAssessment
+    {
         // Assess quantum agent network
         let assessmentContext = QuantumAgentNetworkAssessmentContext(
             agentNetworks: request.agentNetworks,
@@ -501,7 +502,8 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeAgentNetworksForQuantumEnhancement(_ agentNetworks: [AgentNetwork]) async throws
-    -> QuantumEnhancementAnalysis {
+        -> QuantumEnhancementAnalysis
+    {
         // Analyze agent networks for quantum enhancement opportunities
         let quantumEnhancements = await quantumAgentNetworkCoordinator.analyzeQuantumEnhancementPotential(agentNetworks)
         let networkOptimizations = await quantumCoordinationOptimizer.analyzeNetworkOptimizationPotential(agentNetworks)
@@ -644,7 +646,8 @@ public final class QuantumEnhancedAgentNetworks: Sendable {
     }
 
     private func generateOrchestrationRequirements(_ request: QuantumAgentNetworkRequest)
-    -> QuantumOrchestrationRequirements {
+        -> QuantumOrchestrationRequirements
+    {
         QuantumOrchestrationRequirements(
             quantumConnectivity: .maximum,
             agentHarmony: .perfect,
@@ -1113,7 +1116,8 @@ private final class QuantumAgentNetworkCoordinator: Sendable {
     }
 
     func assessQuantumAgentNetwork(_ context: QuantumAgentNetworkAssessmentContext) async throws
-    -> QuantumAgentNetworkAssessmentResult {
+        -> QuantumAgentNetworkAssessmentResult
+    {
         // Assess quantum agent network
         QuantumAgentNetworkAssessmentResult(
             quantumPotential: 0.87,
@@ -1168,7 +1172,8 @@ private final class QuantumEnhancedCommunicationLayer: Sendable {
     }
 
     func establishQuantumEnhancedCommunication(_ context: QuantumEnhancedCommunicationContext) async throws
-    -> QuantumEnhancedCommunicationResult {
+        -> QuantumEnhancedCommunicationResult
+    {
         // Establish quantum-enhanced communication
         QuantumEnhancedCommunicationResult(
             quantumConnectivity: 0.92,
@@ -1210,7 +1215,8 @@ private final class QuantumCoordinationOptimizer: Sendable {
     }
 
     func optimizeQuantumCoordination(_ context: QuantumCoordinationOptimizationContext) async throws
-    -> QuantumCoordinationOptimizationResult {
+        -> QuantumCoordinationOptimizationResult
+    {
         // Optimize quantum coordination
         QuantumCoordinationOptimizationResult(
             coordinationEfficiency: 0.91,
@@ -1261,7 +1267,8 @@ private final class QuantumNetworkOrchestrator: Sendable {
     }
 
     func orchestrateQuantumNetwork(_ context: QuantumNetworkOrchestrationContext) async throws
-    -> QuantumNetworkOrchestrationResult {
+        -> QuantumNetworkOrchestrationResult
+    {
         // Orchestrate quantum network
         QuantumNetworkOrchestrationResult(
             quantumEnhancedNetworks: context.agentNetworks,

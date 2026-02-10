@@ -1141,37 +1141,37 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
         -> InterdimensionalMarket.QuantumTradingEngine
     {
         // Create trading algorithms
-        let algorithms = (0..<10).map { index in
+        let algorithms = (0 ..< 10).map { index in
             InterdimensionalMarket.QuantumTradingEngine.TradingAlgorithm(
                 id: UUID(),
                 name: "Quantum Algorithm \(index + 1)",
                 type: InterdimensionalMarket.QuantumTradingEngine.TradingAlgorithm.AlgorithmType
                     .allCases.randomElement()!,
-                parameters: ["learning_rate": Double.random(in: 0.01...0.1)],
-                performance: Double.random(in: 0.7...0.95)
+                parameters: ["learning_rate": Double.random(in: 0.01 ... 0.1)],
+                performance: Double.random(in: 0.7 ... 0.95)
             )
         }
 
         // Create prediction models
-        let predictionModels = (0..<5).map { _ in
+        let predictionModels = (0 ..< 5).map { _ in
             InterdimensionalMarket.QuantumTradingEngine.PredictionModel(
                 id: UUID(),
                 type: InterdimensionalMarket.QuantumTradingEngine.PredictionModel.ModelType.allCases
                     .randomElement()!,
-                accuracy: Double.random(in: 0.8...0.98),
-                confidence: Double.random(in: 0.7...0.95),
+                accuracy: Double.random(in: 0.8 ... 0.98),
+                confidence: Double.random(in: 0.7 ... 0.95),
                 lastUpdate: Date()
             )
         }
 
         // Create execution systems
-        let executionSystems = (0..<3).map { _ in
+        let executionSystems = (0 ..< 3).map { _ in
             InterdimensionalMarket.QuantumTradingEngine.ExecutionSystem(
                 id: UUID(),
                 type: InterdimensionalMarket.QuantumTradingEngine.ExecutionSystem.ExecutionType
                     .allCases.randomElement()!,
-                speed: Double.random(in: 0.001...0.01),
-                reliability: Double.random(in: 0.95...0.999),
+                speed: Double.random(in: 0.001 ... 0.01),
+                reliability: Double.random(in: 0.95 ... 0.999),
                 quantumBoost: true
             )
         }
@@ -1181,11 +1181,11 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
             predictionModels: predictionModels,
             executionSystems: executionSystems,
             performance: InterdimensionalMarket.QuantumTradingEngine.EnginePerformance(
-                winRate: Double.random(in: 0.6...0.85),
-                profitFactor: Double.random(in: 1.2...2.0),
-                maxDrawdown: Double.random(in: 0.05...0.2),
-                sharpeRatio: Double.random(in: 1.5...3.0),
-                quantumAdvantage: Double.random(in: 0.8...0.98)
+                winRate: Double.random(in: 0.6 ... 0.85),
+                profitFactor: Double.random(in: 1.2 ... 2.0),
+                maxDrawdown: Double.random(in: 0.05 ... 0.2),
+                sharpeRatio: Double.random(in: 1.5 ... 3.0),
+                quantumAdvantage: Double.random(in: 0.8 ... 0.98)
             )
         )
     }
@@ -1194,15 +1194,15 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
         config: MarketConfiguration, dimensions: [Dimension]
     ) async throws -> InterdimensionalMarket.DimensionalArbitrageSystem {
         // Create arbitrage strategies
-        let strategies = (0..<5).map { index in
+        let strategies = (0 ..< 5).map { index in
             InterdimensionalMarket.DimensionalArbitrageSystem.ArbitrageStrategy(
                 id: UUID(),
                 name: "Arbitrage Strategy \(index + 1)",
                 type: InterdimensionalMarket.DimensionalArbitrageSystem.ArbitrageStrategy
                     .StrategyType.allCases.randomElement()!,
                 dimensions: dimensions.map(\.id),
-                parameters: ["threshold": Double.random(in: 0.001...0.01)],
-                successRate: Double.random(in: 0.7...0.9)
+                parameters: ["threshold": Double.random(in: 0.001 ... 0.01)],
+                successRate: Double.random(in: 0.7 ... 0.9)
             )
         }
 
@@ -1224,13 +1224,13 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
         -> InterdimensionalMarket.InterdimensionalRiskManagement
     {
         // Create risk models
-        let riskModels = (0..<3).map { _ in
+        let riskModels = (0 ..< 3).map { _ in
             InterdimensionalMarket.InterdimensionalRiskManagement.RiskModel(
                 id: UUID(),
                 type: InterdimensionalMarket.InterdimensionalRiskManagement.RiskModel.RiskType
                     .allCases.randomElement()!,
                 parameters: ["confidence": 0.95],
-                confidence: Double.random(in: 0.9...0.99)
+                confidence: Double.random(in: 0.9 ... 0.99)
             )
         }
 
@@ -1259,22 +1259,22 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
                     id: UUID(),
                     dimension: dimension.id,
                     asset: asset.symbol,
-                    depth: Double.random(in: 100_000...1_000_000),
-                    utilization: Double.random(in: 0.3...0.8),
-                    fee: Double.random(in: 0.001...0.01)
+                    depth: Double.random(in: 100_000 ... 1_000_000),
+                    utilization: Double.random(in: 0.3 ... 0.8),
+                    fee: Double.random(in: 0.001 ... 0.01)
                 )
             }
         }
 
         // Create liquidity providers
-        let providers = (0..<10).map { _ in
+        let providers = (0 ..< 10).map { _ in
             InterdimensionalMarket.InterdimensionalLiquidityPool.LiquidityProvider(
                 id: UUID(),
                 type: InterdimensionalMarket.InterdimensionalLiquidityPool.LiquidityProvider
                     .ProviderType.allCases.randomElement()!,
-                capacity: Double.random(in: 10000...100_000),
-                reliability: Double.random(in: 0.9...0.99),
-                fee: Double.random(in: 0.001...0.005)
+                capacity: Double.random(in: 10000 ... 100_000),
+                reliability: Double.random(in: 0.9 ... 0.99),
+                fee: Double.random(in: 0.001 ... 0.005)
             )
         }
 
@@ -1302,7 +1302,7 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
 
             for asset in dimension.assets {
                 assetData[asset.symbol] = MarketData.DimensionalData.AssetData(
-                    price: asset.marketData.price * Double.random(in: 0.95...1.05),
+                    price: asset.marketData.price * Double.random(in: 0.95 ... 1.05),
                     volume: asset.marketData.volume,
                     volatility: asset.marketData.volatility,
                     bid: asset.marketData.price * 0.999,
@@ -1316,7 +1316,7 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
                         id: UUID(),
                         asset: asset.symbol,
                         price: asset.marketData.price,
-                        quantity: Double.random(in: 1...100),
+                        quantity: Double.random(in: 1 ... 100),
                         timestamp: Date(),
                         type: MarketData.DimensionalData.Trade.TradeType.allCases.randomElement()!
                     ))
@@ -1415,10 +1415,10 @@ final class BasicQuantumTradingEngine: QuantumTradingEngineProtocol {
                 asset: "QTM", // Quantum Token
                 dimension: UUID(),
                 action: TradingDecision.TradingAction.allCases.randomElement()!,
-                quantity: Double.random(in: 1...100),
-                price: Double.random(in: 100...1000),
-                confidence: Double.random(in: 0.5...0.9),
-                risk: Double.random(in: 0.01...0.1),
+                quantity: Double.random(in: 1 ... 100),
+                price: Double.random(in: 100 ... 1000),
+                confidence: Double.random(in: 0.5 ... 0.9),
+                risk: Double.random(in: 0.01 ... 0.1),
                 timestamp: Date()
             )
         }
@@ -1465,16 +1465,16 @@ final class BasicDimensionalArbitrage: DimensionalArbitrageProtocol {
         -> [InterdimensionalMarket.DimensionalArbitrageSystem.ArbitrageOpportunity]
     {
         // Basic arbitrage opportunity identification
-        (0..<5).map { _ in
+        (0 ..< 5).map { _ in
             InterdimensionalMarket.DimensionalArbitrageSystem.ArbitrageOpportunity(
                 id: UUID(),
                 type: InterdimensionalMarket.DimensionalArbitrageSystem.ArbitrageOpportunity
                     .OpportunityType.allCases.randomElement()!,
                 dimensions: market.dimensions.map(\.id),
                 assets: ["QTM"],
-                priceDifferential: Double.random(in: 0.001...0.01),
-                confidence: Double.random(in: 0.7...0.9),
-                risk: Double.random(in: 0.01...0.05),
+                priceDifferential: Double.random(in: 0.001 ... 0.01),
+                confidence: Double.random(in: 0.7 ... 0.9),
+                risk: Double.random(in: 0.01 ... 0.05),
                 timestamp: Date()
             )
         }

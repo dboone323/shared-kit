@@ -1,6 +1,6 @@
 import Foundation
 
-/* 
+/*
  * Demonstration of Ollama v0.12 Cloud Model Integration
  * Shows how to use the new cloud models: qwen3-coder:480b-cloud, gpt-oss:120b-cloud, etc.
  *

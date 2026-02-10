@@ -210,7 +210,7 @@ final class SharedArchitectureTests: XCTestCase {
 
     func testConcurrentStateUpdates() async {
         await withTaskGroup(of: Void.self) { group in
-            for i in 0..<10 {
+            for i in 0 ..< 10 {
                 group.addTask { @MainActor in
                     if i % 2 == 0 {
                         self.viewModel.handle(.loadData)
@@ -227,7 +227,7 @@ final class SharedArchitectureTests: XCTestCase {
 
     func testConcurrentLoadingStateChanges() async {
         await withTaskGroup(of: Void.self) { group in
-            for i in 0..<20 {
+            for i in 0 ..< 20 {
                 group.addTask { @MainActor in
                     self.viewModel.setLoading(i % 2 == 0)
                 }
@@ -294,7 +294,7 @@ final class SharedArchitectureTests: XCTestCase {
 
     func testActionHandlingPerformance() {
         measure {
-            for _ in 0..<1000 {
+            for _ in 0 ..< 1000 {
                 viewModel.handle(.loadData)
                 viewModel.handle(.clearData)
             }
@@ -303,7 +303,7 @@ final class SharedArchitectureTests: XCTestCase {
 
     func testStateUpdatePerformance() {
         measure {
-            for _ in 0..<1000 {
+            for _ in 0 ..< 1000 {
                 viewModel.setLoading(true)
                 viewModel.setLoading(false)
             }

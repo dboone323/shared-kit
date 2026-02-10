@@ -945,7 +945,7 @@ private actor RetryManager {
 
     private func calculateDelay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
-        let jitter = Double.random(in: 0...0.1) * exponentialDelay
+        let jitter = Double.random(in: 0 ... 0.1) * exponentialDelay
         return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
     }
 

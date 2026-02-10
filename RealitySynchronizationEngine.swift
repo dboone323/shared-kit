@@ -437,13 +437,13 @@ final class RealitySynchronizationEngineImpl: RealitySynchronizationProtocol,
         var drifts: [SynchronizationDrift] = []
 
         // Check each pair of realities for drift
-        for i in 0..<synchronizedRealities.count {
-            for j in (i + 1)..<synchronizedRealities.count {
+        for i in 0 ..< synchronizedRealities.count {
+            for j in (i + 1) ..< synchronizedRealities.count {
                 let source = synchronizedRealities[i]
                 let target = synchronizedRealities[j]
 
                 // Simulate drift detection
-                let driftMagnitude = Double.random(in: 0...0.3)
+                let driftMagnitude = Double.random(in: 0 ... 0.3)
                 if driftMagnitude > 0.1 {
                     let drift = SynchronizationDrift(
                         driftId: UUID(),
@@ -489,8 +489,8 @@ final class RealitySynchronizationEngineImpl: RealitySynchronizationProtocol,
 
     private func createInitialCoordinationMatrix() -> [[Double]] {
         let count = synchronizedRealities.count
-        return (0..<count).map { i in
-            (0..<count).map { j in
+        return (0 ..< count).map { i in
+            (0 ..< count).map { j in
                 i == j ? 1.0 : 0.8 // Self-coordination is perfect, others are high
             }
         }
@@ -498,9 +498,9 @@ final class RealitySynchronizationEngineImpl: RealitySynchronizationProtocol,
 
     private func updateCoordinationMatrix(for realities: [RealityConstruct]) {
         let count = realities.count
-        let strengths = (0..<count).map { i in
-            (0..<count).map { j in
-                i == j ? 1.0 : Double.random(in: 0.7...0.9)
+        let strengths = (0 ..< count).map { i in
+            (0 ..< count).map { j in
+                i == j ? 1.0 : Double.random(in: 0.7 ... 0.9)
             }
         }
 
@@ -614,27 +614,27 @@ final class RealitySynchronizationEngineImpl: RealitySynchronizationProtocol,
 
     private func calculateHealthScore() -> Double {
         // Simplified health calculation
-        0.85 + Double.random(in: -0.1...0.1)
+        0.85 + Double.random(in: -0.1 ... 0.1)
     }
 
     private func calculateSynchronizationAccuracy() -> Double {
-        0.92 + Double.random(in: -0.05...0.05)
+        0.92 + Double.random(in: -0.05 ... 0.05)
     }
 
     private func calculateOperationLatency() -> TimeInterval {
-        1.5 + Double.random(in: -0.5...0.5)
+        1.5 + Double.random(in: -0.5 ... 0.5)
     }
 
     private func calculateResourceUtilization() -> Double {
-        0.75 + Double.random(in: -0.1...0.1)
+        0.75 + Double.random(in: -0.1 ... 0.1)
     }
 
     private func calculateErrorRate() -> Double {
-        0.05 + Double.random(in: -0.02...0.02)
+        0.05 + Double.random(in: -0.02 ... 0.02)
     }
 
     private func calculateRecoveryRate() -> Double {
-        0.95 + Double.random(in: -0.05...0.05)
+        0.95 + Double.random(in: -0.05 ... 0.05)
     }
 }
 

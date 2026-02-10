@@ -1035,8 +1035,8 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
 
         // Create entity pairs
         var entityPairs: [ResonancePatterns.EntityPair] = []
-        for i in 0..<entities.count {
-            for j in (i + 1)..<entities.count {
+        for i in 0 ..< entities.count {
+            for j in (i + 1) ..< entities.count {
                 let entity1 = entities[i]
                 let entity2 = entities[j]
                 let resonanceStrength = calculateResonanceBetween(entity1, entity2)
@@ -1120,8 +1120,8 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
     {
         var patterns: [QuantumFieldConfiguration.EntanglementPattern] = []
 
-        for i in 0..<entities.count {
-            for j in (i + 1)..<entities.count {
+        for i in 0 ..< entities.count {
+            for j in (i + 1) ..< entities.count {
                 let pattern = QuantumFieldConfiguration.EntanglementPattern(
                     entities: [entities[i].id, entities[j].id],
                     entanglementStrength: 0.8,
@@ -1144,8 +1144,8 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
         )
 
         // Simplified coherence matrix
-        for i in 0..<size {
-            for j in 0..<size {
+        for i in 0 ..< size {
+            for j in 0 ..< size {
                 if i != j {
                     matrix[i][j] = Complex(real: 0.8, imaginary: 0.1)
                 }
@@ -1166,7 +1166,7 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
             repeating: Array(repeating: Complex(real: 0.0, imaginary: 0.0), count: size),
             count: size
         )
-        for i in 0..<size {
+        for i in 0 ..< size {
             matrix[i][i] = Complex(real: 1.0, imaginary: 0.0)
         }
 
@@ -1246,8 +1246,8 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
         let nodes = entities.map(\.id)
 
         var edges: [ResonancePatterns.CoherenceNetwork.NetworkEdge] = []
-        for i in 0..<entities.count {
-            for j in (i + 1)..<entities.count {
+        for i in 0 ..< entities.count {
+            for j in (i + 1) ..< entities.count {
                 if matrix[i][j] > 0.5 {
                     edges.append(
                         ResonancePatterns.CoherenceNetwork.NetworkEdge(

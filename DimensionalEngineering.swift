@@ -214,7 +214,8 @@ struct DimensionalState: Sendable {
 /// Main dimensional engineering engine
 @MainActor
 final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, DimensionalManipulationProtocol,
-DimensionalStabilityProtocol {
+    DimensionalStabilityProtocol
+{
     typealias DimensionType = Dimension
     typealias EngineeringResult = DimensionalEngineeringResult
 
@@ -250,7 +251,8 @@ DimensionalStabilityProtocol {
     }
 
     func createDimensionalConstruct(_ specification: DimensionalSpecification) async throws
-    -> DimensionalEngineeringResult {
+        -> DimensionalEngineeringResult
+    {
         let validation = try await validateSpecification(specification)
         guard validation.isValid else {
             throw DimensionalError.validationFailed(validation.errors)
@@ -732,8 +734,8 @@ final class StabilityController {
         let fluctuations = state.dimensions.map { dimension in
             DimensionalFluctuation(
                 dimensionId: dimension.id,
-                fluctuationMagnitude: Double.random(in: 0.01...0.1),
-                fluctuationFrequency: Double.random(in: 0.1...1.0),
+                fluctuationMagnitude: Double.random(in: 0.01 ... 0.1),
+                fluctuationFrequency: Double.random(in: 0.1 ... 1.0),
                 stability: dimension.stability,
                 timestamp: Date()
             )

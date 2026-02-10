@@ -430,7 +430,8 @@ public final class MCPMultiverseCoordinationCoordinator: MCPMultiverseCoordinati
 
     /// Coordinate multiverse operations
     public func coordinateMultiverse(_ coordination: MultiverseCoordination) async throws
-    -> MultiverseCoordinationResult {
+        -> MultiverseCoordinationResult
+    {
         let startTime = Date()
 
         // Validate coordination parameters
@@ -471,7 +472,8 @@ public final class MCPMultiverseCoordinationCoordinator: MCPMultiverseCoordinati
 
     /// Synchronize universe states
     public func synchronizeUniverses(_ synchronization: UniverseSynchronization) async throws
-    -> UniverseSynchronizationResult {
+        -> UniverseSynchronizationResult
+    {
         let startTime = Date()
 
         // Validate synchronization parameters
@@ -646,7 +648,7 @@ private final class UniverseManager: Sendable {
     func getUniverseStatus() async -> UniverseStatus {
         UniverseStatus(
             operational: true,
-            accessibleUniverses: Int.random(in: 100...10000)
+            accessibleUniverses: Int.random(in: 100 ... 10000)
         )
     }
 }
@@ -657,8 +659,8 @@ private final class SynchronizationEngine: Sendable {
                              universeAccess: UniverseAccess) async throws -> CoordinationResult
     {
         CoordinationResult(
-            success: Double.random(in: 0.8...1.0) > 0.2,
-            synchronizationLevel: Double.random(in: 0.7...1.0)
+            success: Double.random(in: 0.8 ... 1.0) > 0.2,
+            synchronizationLevel: Double.random(in: 0.7 ... 1.0)
         )
     }
 
@@ -668,8 +670,8 @@ private final class SynchronizationEngine: Sendable {
         targetAccess: UniverseAccess
     ) async throws -> SynchronizationResult {
         SynchronizationResult(
-            success: Double.random(in: 0.85...1.0) > 0.15,
-            quality: Double.random(in: 0.8...1.0)
+            success: Double.random(in: 0.85 ... 1.0) > 0.15,
+            quality: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -684,9 +686,9 @@ private final class SynchronizationEngine: Sendable {
     func getSynchronizationStatus() async -> SynchronizationStatus {
         SynchronizationStatus(
             operational: true,
-            level: Double.random(in: 0.9...1.0),
-            activeCoordinations: Int.random(in: 1...50),
-            successRate: Double.random(in: 0.9...0.98)
+            level: Double.random(in: 0.9 ... 1.0),
+            activeCoordinations: Int.random(in: 1 ... 50),
+            successRate: Double.random(in: 0.9 ... 0.98)
         )
     }
 }
@@ -698,7 +700,7 @@ private final class EntanglementCoordinator: Sendable {
     {
         EntanglementResult(
             success: true,
-            entanglementStrength: Double.random(in: 0.8...1.0)
+            entanglementStrength: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -707,7 +709,7 @@ private final class EntanglementCoordinator: Sendable {
     {
         EntanglementResult(
             success: true,
-            transferred: Double.random(in: 0.7...1.0)
+            transferred: Double.random(in: 0.7 ... 1.0)
         )
     }
 
@@ -722,7 +724,7 @@ private final class EntanglementCoordinator: Sendable {
     func getEntanglementStatus() async -> EntanglementStatus {
         EntanglementStatus(
             operational: true,
-            strength: Double.random(in: 0.9...1.0)
+            strength: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -734,7 +736,7 @@ private final class CausalityGuardian: Sendable {
     {
         CausalityResult(
             success: true,
-            causalityIntegrity: Double.random(in: 0.85...1.0)
+            causalityIntegrity: Double.random(in: 0.85 ... 1.0)
         )
     }
 
@@ -743,7 +745,7 @@ private final class CausalityGuardian: Sendable {
     {
         CausalityResult(
             success: true,
-            integrity: Double.random(in: 0.9...1.0)
+            integrity: Double.random(in: 0.9 ... 1.0)
         )
     }
 
@@ -758,7 +760,7 @@ private final class CausalityGuardian: Sendable {
     func getCausalityStatus() async -> CausalityStatus {
         CausalityStatus(
             operational: true,
-            integrity: Double.random(in: 0.95...1.0)
+            integrity: Double.random(in: 0.95 ... 1.0)
         )
     }
 }
@@ -776,7 +778,7 @@ private final class MultiverseOptimizer: Sendable {
     func getOptimizerStatus() async -> OptimizerStatus {
         OptimizerStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8...1.0)
+            efficiency: Double.random(in: 0.8 ... 1.0)
         )
     }
 }

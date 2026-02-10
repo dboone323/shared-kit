@@ -788,24 +788,24 @@ final class AdaptiveOptimizationAlgorithm: AdaptiveOptimizationAlgorithmProtocol
     {
         var variations: [RealityParameters] = []
 
-        for _ in 0..<10 { // Generate 10 variations
+        for _ in 0 ..< 10 { // Generate 10 variations
             var newParameters = parameters
 
             // Randomly adjust parameters within exploration bounds
             let exploration = algorithmParameters.explorationFactor
 
             newParameters.dimensionalParameters.dimensionalStability *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.quantumParameters.coherence *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.consciousnessParameters.awarenessLevel *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.temporalParameters.temporalStability *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.causalParameters.outcomeOptimization *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
             newParameters.stabilityParameters.structuralIntegrity *=
-                (1.0 + Double.random(in: -exploration...exploration))
+                (1.0 + Double.random(in: -exploration ... exploration))
 
             variations.append(newParameters)
         }
@@ -841,15 +841,15 @@ final class OptimizationMonitoringSystem {
         // In practice, this would collect real metrics from various sources
         OptimizationMetrics(
             timestamp: Date(),
-            performanceScore: Double.random(in: 0.7...0.95),
-            stabilityIndex: Double.random(in: 0.8...0.98),
-            consciousnessLevel: Double.random(in: 0.6...0.9),
-            energyEfficiency: Double.random(in: 0.75...0.95),
-            temporalCoherence: Double.random(in: 0.7...0.95),
-            causalIntegrity: Double.random(in: 0.8...0.98),
-            adaptationRate: Double.random(in: 0.1...0.5),
-            convergenceSpeed: Double.random(in: 10...100),
-            issueResolution: Double.random(in: 0.8...0.98)
+            performanceScore: Double.random(in: 0.7 ... 0.95),
+            stabilityIndex: Double.random(in: 0.8 ... 0.98),
+            consciousnessLevel: Double.random(in: 0.6 ... 0.9),
+            energyEfficiency: Double.random(in: 0.75 ... 0.95),
+            temporalCoherence: Double.random(in: 0.7 ... 0.95),
+            causalIntegrity: Double.random(in: 0.8 ... 0.98),
+            adaptationRate: Double.random(in: 0.1 ... 0.5),
+            convergenceSpeed: Double.random(in: 10 ... 100),
+            issueResolution: Double.random(in: 0.8 ... 0.98)
         )
     }
 }

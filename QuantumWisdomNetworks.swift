@@ -805,7 +805,7 @@ struct EvolutionMonitoring {
                 wisdomLevels: synthesisCriteria.wisdomLevels,
                 entityIds: nil,
                 timeRange: synthesisCriteria.timeRange,
-                significanceRange: synthesisCriteria.significanceThreshold...1.0,
+                significanceRange: synthesisCriteria.significanceThreshold ... 1.0,
                 keywords: nil,
                 validationStatuses: [.validated]
             )
@@ -924,7 +924,7 @@ struct EvolutionMonitoring {
                     let criteria = SynthesisCriteria(
                         knowledgeTypes: [.insight, .experience, .pattern],
                         wisdomLevels: [.adept, .master, .sage],
-                        timeRange: Date().addingTimeInterval(-3600)...Date(),
+                        timeRange: Date().addingTimeInterval(-3600) ... Date(),
                         significanceThreshold: 0.7,
                         synthesisDepth: 3,
                         includeDisputed: false

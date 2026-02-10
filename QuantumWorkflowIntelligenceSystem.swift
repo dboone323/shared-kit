@@ -497,7 +497,8 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeWorkflowForQuantumEnhancement(_ workflow: MCPWorkflow) async throws
-    -> QuantumEnhancementAnalysis {
+        -> QuantumEnhancementAnalysis
+    {
         // Analyze workflow for quantum enhancement opportunities
         let quantumEnhancements = await quantumIntelligenceEngine.analyzeQuantumEnhancementPotential(workflow)
         let intelligenceImprovements = await quantumWorkflowProcessor.analyzeIntelligenceImprovementPotential(workflow)
@@ -525,7 +526,8 @@ public final class QuantumWorkflowIntelligenceSystem: Sendable {
     }
 
     private func generateQuantumEnhancementStrategies(_ analysis: QuantumEnhancementAnalysis)
-    -> [QuantumEnhancementStrategy] {
+        -> [QuantumEnhancementStrategy]
+    {
         // Generate quantum enhancement strategies based on analysis
         var strategies: [QuantumEnhancementStrategy] = []
 
@@ -1019,7 +1021,8 @@ private final class QuantumIntelligenceEngine: Sendable {
     }
 
     func processIntelligence(_ context: QuantumIntelligenceProcessingContext) async throws
-    -> QuantumIntelligenceProcessingResult {
+        -> QuantumIntelligenceProcessingResult
+    {
         // Process quantum intelligence
         QuantumIntelligenceProcessingResult(
             intelligenceEnhancement: 0.85,
@@ -1166,7 +1169,8 @@ private final class QuantumCoherenceManager: Sendable {
     }
 
     func manageCoherence(_ context: QuantumCoherenceManagementContext) async throws
-    -> QuantumCoherenceManagementResult {
+        -> QuantumCoherenceManagementResult
+    {
         // Manage quantum coherence
         QuantumCoherenceManagementResult(
             coherenceLevel: 0.87,
@@ -1218,7 +1222,8 @@ private final class QuantumIntelligenceSynthesizer: Sendable {
     }
 
     func synthesizeIntelligence(_ context: QuantumIntelligenceSynthesisContext) async throws
-    -> QuantumIntelligenceSynthesisResult {
+        -> QuantumIntelligenceSynthesisResult
+    {
         // Synthesize quantum intelligence
         QuantumIntelligenceSynthesisResult(
             quantumEnhancedWorkflow: context.workflow, // Would be enhanced

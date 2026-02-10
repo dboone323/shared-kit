@@ -289,7 +289,7 @@ public actor QuantumCompiler {
             gateCount: gateCount,
             circuitDepth: depth,
             expectedFidelity: fidelity,
-            compilationTime: Double.random(in: 0.1...2.0),
+            compilationTime: Double.random(in: 0.1 ... 2.0),
             compiledDate: Date()
         )
 
@@ -362,7 +362,7 @@ public actor QuantumDebugger {
         return DebugResult(
             circuitId: circuit.id,
             debugStates: debugStates,
-            executionTime: Double.random(in: 0.5...5.0),
+            executionTime: Double.random(in: 0.5 ... 5.0),
             issues: [], // No issues found in simulation
             completedDate: Date()
         )
@@ -374,13 +374,13 @@ public actor QuantumDebugger {
         // Simplified qubit state simulation
         var states: [Int: QuantumState] = [:]
 
-        for qubit in 0..<circuit.qubits {
+        for qubit in 0 ..< circuit.qubits {
             states[qubit] = QuantumState(
                 qubit: qubit,
                 amplitude: Complex(
-                    real: Double.random(in: 0...1), imaginary: Double.random(in: 0...1)
+                    real: Double.random(in: 0 ... 1), imaginary: Double.random(in: 0 ... 1)
                 ),
-                phase: Double.random(in: 0...(2 * .pi))
+                phase: Double.random(in: 0 ... (2 * .pi))
             )
         }
 
@@ -412,8 +412,8 @@ public actor QuantumSimulator {
         var outcomes: [String: Int] = [:]
         let possibleOutcomes = Int(pow(2.0, Double(circuit.qubits)))
 
-        for _ in 0..<shots {
-            let outcome = Int.random(in: 0..<possibleOutcomes)
+        for _ in 0 ..< shots {
+            let outcome = Int.random(in: 0 ..< possibleOutcomes)
             let outcomeString = String(outcome, radix: 2).leftPadding(
                 toLength: circuit.qubits, withPad: "0"
             )
@@ -424,8 +424,8 @@ public actor QuantumSimulator {
             circuitId: circuit.id,
             outcomes: outcomes,
             shots: shots,
-            executionTime: Double.random(in: 1.0...10.0),
-            accuracy: Double.random(in: 0.95...0.999),
+            executionTime: Double.random(in: 1.0 ... 10.0),
+            accuracy: Double.random(in: 0.95 ... 0.999),
             completedDate: Date()
         )
 
@@ -480,7 +480,7 @@ public actor QuantumOptimizer {
             gateReduction: gateReduction,
             depthReduction: gateReduction * 0.8,
             fidelityImprovement: gateReduction * 0.1,
-            optimizationTime: Double.random(in: 0.2...3.0),
+            optimizationTime: Double.random(in: 0.2 ... 3.0),
             optimizationLevel: level,
             optimizedDate: Date()
         )
@@ -670,7 +670,7 @@ public actor QuantumTesting {
             failedTests: failedTests,
             coverage: coverage,
             testResults: testResults,
-            executionTime: Double.random(in: 5.0...30.0),
+            executionTime: Double.random(in: 5.0 ... 30.0),
             completedDate: Date()
         )
     }
@@ -685,7 +685,7 @@ public actor QuantumTesting {
             algorithmId: algorithm.id,
             testCaseId: testCase.id,
             passed: passed,
-            executionTime: Double.random(in: 0.1...2.0),
+            executionTime: Double.random(in: 0.1 ... 2.0),
             expectedOutput: testCase.expectedOutput,
             actualOutput: passed ? testCase.expectedOutput : [:], // Simplified
             error: passed ? nil : "Test failed",
@@ -719,7 +719,7 @@ public actor QuantumDeployment {
             applicationId: application.id,
             target: target,
             success: success,
-            deploymentTime: Double.random(in: 10.0...300.0),
+            deploymentTime: Double.random(in: 10.0 ... 300.0),
             endpoint: success ? "https://quantum-api.example.com/\(application.id)" : nil,
             error: success ? nil : "Deployment failed",
             deployedDate: Date()

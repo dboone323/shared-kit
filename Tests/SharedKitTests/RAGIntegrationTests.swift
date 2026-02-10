@@ -139,7 +139,7 @@ final class RAGIntegrationTests: XCTestCase {
             let exp = expectation(description: "Search completed")
             Task {
                 // Generate random vector for search
-                let randomVector = (0..<512).map { _ in Double.random(in: -1...1) }
+                let randomVector = (0 ..< 512).map { _ in Double.random(in: -1 ... 1) }
                 let results = try await vectorStore.search(queryVector: randomVector, limit: 3)
                 XCTAssertNotNil(results)
                 exp.fulfill()

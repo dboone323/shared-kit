@@ -498,7 +498,7 @@ public struct InteractiveSlider: View {
 
     public init(
         value: Binding<Double>,
-        in range: ClosedRange<Double> = 0...1,
+        in range: ClosedRange<Double> = 0 ... 1,
         step: Double = 0.01,
         trackHeight: CGFloat = 6,
         thumbSize: CGFloat = 24,

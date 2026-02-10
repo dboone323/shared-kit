@@ -178,7 +178,7 @@ public actor QuantumComputingIntegration {
                     // Update metrics
                     let errorRate =
                         hardwareHealth.map(\.errorRate).reduce(0, +)
-                        / Double(hardwareHealth.count)
+                            / Double(hardwareHealth.count)
                     self.quantumMetrics = QuantumMetrics(
                         totalCircuitsExecuted: self.quantumMetrics.totalCircuitsExecuted,
                         averageExecutionTime: self.quantumMetrics.averageExecutionTime,
@@ -236,7 +236,7 @@ public actor QuantumComputingIntegration {
         // In a real implementation, this would interface with actual quantum hardware
         // For now, simulate execution with realistic timing and results
 
-        let executionTime = Double(circuit.gates.count) * 0.001 + Double.random(in: 0.1..<1.0)
+        let executionTime = Double(circuit.gates.count) * 0.001 + Double.random(in: 0.1 ..< 1.0)
 
         // Simulate execution
         try await Task.sleep(for: .seconds(executionTime))
@@ -245,8 +245,8 @@ public actor QuantumComputingIntegration {
             circuitId: circuit.id,
             solution: generateSimulatedSolution(for: circuit),
             executionTime: executionTime,
-            fidelity: Double.random(in: 0.85..<0.98),
-            confidence: Double.random(in: 0.7..<0.95)
+            fidelity: Double.random(in: 0.85 ..< 0.98),
+            confidence: Double.random(in: 0.7 ..< 0.95)
         )
     }
 
@@ -297,8 +297,8 @@ public actor QuantumComputingIntegration {
             totalCircuitsExecuted: circuitsExecuted,
             averageExecutionTime: avgExecutionTime,
             quantumAdvantage: avgAdvantage,
-            errorRate: Double.random(in: 0.001..<0.01),
-            coherenceTime: Double.random(in: 50..<200),
+            errorRate: Double.random(in: 0.001 ..< 0.01),
+            coherenceTime: Double.random(in: 50 ..< 200),
             timestamp: Date()
         )
     }
@@ -326,15 +326,15 @@ public actor QuantumComputingIntegration {
     private func estimateClassicalTime(for problem: OptimizationProblem) -> Double {
         // Estimate classical computation time for comparison
         switch problem.complexity {
-        case .low: Double.random(in: 0.1..<1.0)
-        case .medium: Double.random(in: 1..<10)
-        case .high: Double.random(in: 10..<100)
+        case .low: Double.random(in: 0.1 ..< 1.0)
+        case .medium: Double.random(in: 1 ..< 10)
+        case .high: Double.random(in: 10 ..< 100)
         }
     }
 
     private func generateSimulatedSolution(for circuit: QuantumCircuit) -> [Double] {
         // Generate a simulated quantum computation result
-        (0..<circuit.qubits.count).map { _ in Double.random(in: 0..<1) }
+        (0 ..< circuit.qubits.count).map { _ in Double.random(in: 0 ..< 1) }
     }
 }
 
@@ -422,8 +422,8 @@ public actor QuantumHardwareManager {
                 qubitCount: connection.capabilities.qubitCount,
                 errorRate: connection.capabilities.errorRate,
                 coherenceTime: connection.capabilities.coherenceTime,
-                queueDepth: Int.random(in: 0..<10),
-                lastCalibration: Date().addingTimeInterval(-Double.random(in: 3600..<86400))
+                queueDepth: Int.random(in: 0 ..< 10),
+                lastCalibration: Date().addingTimeInterval(-Double.random(in: 3600 ..< 86400))
             )
         }
     }
@@ -435,10 +435,10 @@ public actor QuantumHardwareManager {
         return hardware.map { connection in
             QuantumHardwareHealth(
                 hardwareId: connection.id,
-                status: Double.random(in: 0..<1) > 0.9 ? .degraded : .healthy,
-                errorRate: connection.capabilities.errorRate * Double.random(in: 0.8..<1.2),
-                calibrationDrift: Double.random(in: 0..<0.1),
-                temperature: Double.random(in: 0..<10),
+                status: Double.random(in: 0 ..< 1) > 0.9 ? .degraded : .healthy,
+                errorRate: connection.capabilities.errorRate * Double.random(in: 0.8 ..< 1.2),
+                calibrationDrift: Double.random(in: 0 ..< 0.1),
+                temperature: Double.random(in: 0 ..< 10),
                 lastHealthCheck: Date()
             )
         }
@@ -488,7 +488,7 @@ public actor QuantumCircuitBuilder {
         case .high: 20
         }
 
-        return (0..<qubitCount).map { index in
+        return (0 ..< qubitCount).map { index in
             QuantumQubit(
                 id: index,
                 state: .zero,
@@ -545,7 +545,7 @@ public actor QuantumCircuitBuilder {
         var gates: [QuantumGate] = []
 
         // QAOA-style optimization circuit
-        for i in 0..<qubits.count - 1 {
+        for i in 0 ..< qubits.count - 1 {
             gates.append(
                 QuantumGate(
                     type: .cx,
@@ -561,7 +561,7 @@ public actor QuantumCircuitBuilder {
                 QuantumGate(
                     type: .rz,
                     qubits: [qubit.id],
-                    parameters: [Double.random(in: 0..<2 * .pi)],
+                    parameters: [Double.random(in: 0 ..< 2 * .pi)],
                     duration: 100
                 ))
         }
@@ -573,8 +573,8 @@ public actor QuantumCircuitBuilder {
         var gates: [QuantumGate] = []
 
         // Quantum simulation circuit
-        for i in 0..<qubits.count {
-            for j in (i + 1)..<qubits.count {
+        for i in 0 ..< qubits.count {
+            for j in (i + 1) ..< qubits.count {
                 gates.append(
                     QuantumGate(
                         type: .cz,
@@ -594,7 +594,7 @@ public actor QuantumCircuitBuilder {
         // Grover search algorithm structure
         let oracle = QuantumGate(
             type: .oracle,
-            qubits: Array(0..<qubits.count),
+            qubits: Array(0 ..< qubits.count),
             parameters: [],
             duration: 500
         )
@@ -775,7 +775,7 @@ public actor QuantumSimulator {
             finalState: finalState,
             measurements: measurements,
             executionTime: executionTime,
-            fidelity: Double.random(in: 0.9..<0.99),
+            fidelity: Double.random(in: 0.9 ..< 0.99),
             timestamp: Date()
         )
     }
@@ -783,8 +783,8 @@ public actor QuantumSimulator {
     private func simulateQuantumState(_ circuit: QuantumCircuit) -> [Complex] {
         // Simplified quantum state simulation
         let stateSize = 1 << circuit.qubits.count // 2^n for n qubits
-        return (0..<stateSize).map { _ in
-            Complex(real: Double.random(in: -1..<1), imaginary: Double.random(in: -1..<1))
+        return (0 ..< stateSize).map { _ in
+            Complex(real: Double.random(in: -1 ..< 1), imaginary: Double.random(in: -1 ..< 1))
         }
     }
 
@@ -793,8 +793,8 @@ public actor QuantumSimulator {
         circuit.qubits.map { qubit in
             Measurement(
                 qubitId: qubit.id,
-                outcome: Int.random(in: 0..<2),
-                probability: Double.random(in: 0.4..<0.6)
+                outcome: Int.random(in: 0 ..< 2),
+                probability: Double.random(in: 0.4 ..< 0.6)
             )
         }
     }

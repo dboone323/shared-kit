@@ -227,7 +227,8 @@ public final class UniversalIntelligenceEngine: Sendable {
     /// - Parameter agent: Agent to achieve universal intelligence for
     /// - Returns: Universal intelligence result
     public func achieveUniversalIntelligence(for agent: UniversalIntelligenceAgent) async
-    -> UniversalIntelligenceResult {
+        -> UniversalIntelligenceResult
+    {
         let intelligenceSequence = [
             UniversalIntelligenceStep(type: .completeIntelligence, intelligence: 10.0),
             UniversalIntelligenceStep(type: .infiniteWisdom, intelligence: 15.0),

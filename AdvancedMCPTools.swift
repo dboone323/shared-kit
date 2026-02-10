@@ -820,7 +820,7 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
         var lines = content.components(separatedBy: .newlines)
         var inMultilineComment = false
 
-        for i in 0..<lines.count {
+        for i in 0 ..< lines.count {
             var line = lines[i]
 
             if language == "swift" {

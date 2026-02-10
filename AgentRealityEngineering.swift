@@ -328,7 +328,8 @@ public final class AgentRealityEngineering: Sendable {
     }
 
     private func assessRealityEngineering(_ request: RealityEngineeringRequest) async throws
-    -> RealityEngineeringAssessment {
+        -> RealityEngineeringAssessment
+    {
         // Assess reality engineering
         let assessmentContext = RealityEngineeringAssessmentContext(
             agents: request.agents,
@@ -527,7 +528,8 @@ public final class AgentRealityEngineering: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeAgentsForRealityEngineering(_ agents: [RealityEngineeringAgent]) async throws
-    -> RealityEngineeringAnalysis {
+        -> RealityEngineeringAnalysis
+    {
         // Analyze agents for reality engineering opportunities
         let realityManipulations = await realityManipulationEngine.analyzeRealityManipulationPotential(agents)
         let realityTransformations = await realityEngineeringCoordinator.analyzeRealityTransformationPotential(agents)
@@ -555,7 +557,8 @@ public final class AgentRealityEngineering: Sendable {
     }
 
     private func generateRealityEngineeringStrategies(_ analysis: RealityEngineeringAnalysis)
-    -> [RealityEngineeringStrategy] {
+        -> [RealityEngineeringStrategy]
+    {
         // Generate reality engineering strategies based on analysis
         var strategies: [RealityEngineeringStrategy] = []
 
@@ -1135,7 +1138,8 @@ private final class RealityManipulationEngine: Sendable {
     }
 
     func assessRealityEngineering(_ context: RealityEngineeringAssessmentContext) async throws
-    -> RealityEngineeringAssessmentResult {
+        -> RealityEngineeringAssessmentResult
+    {
         // Assess reality engineering
         RealityEngineeringAssessmentResult(
             realityPotential: 0.88,
@@ -1145,7 +1149,8 @@ private final class RealityManipulationEngine: Sendable {
     }
 
     func processRealityManipulation(_ context: RealityManipulationProcessingContext) async throws
-    -> RealityManipulationProcessingResult {
+        -> RealityManipulationProcessingResult
+    {
         // Process reality manipulation
         RealityManipulationProcessingResult(
             realityManipulation: 0.93,
@@ -1200,7 +1205,8 @@ private final class RealityEngineeringCoordinator: Sendable {
     }
 
     func coordinateRealityEngineering(_ context: RealityEngineeringCoordinationContext) async throws
-    -> RealityEngineeringCoordinationResult {
+        -> RealityEngineeringCoordinationResult
+    {
         // Coordinate reality engineering
         RealityEngineeringCoordinationResult(
             realityEngineering: 0.91,
@@ -1235,7 +1241,8 @@ private final class RealityEngineeringCoordinator: Sendable {
     }
 
     func analyzeRealityTransformationPotential(_ agents: [RealityEngineeringAgent]) async
-    -> RealityTransformationAnalysis {
+        -> RealityTransformationAnalysis
+    {
         RealityTransformationAnalysis(
             transformationPotential: 0.69,
             transformationStrengthPotential: 0.65,
@@ -1252,7 +1259,8 @@ private final class RealityTransformationNetwork: Sendable {
     }
 
     func synthesizeRealityTransformation(_ context: RealityTransformationSynthesisContext) async throws
-    -> RealityTransformationSynthesisResult {
+        -> RealityTransformationSynthesisResult
+    {
         // Synthesize reality transformation
         RealityTransformationSynthesisResult(
             realityTransformedAgents: context.agents,
@@ -1283,7 +1291,8 @@ private final class RealityIntelligenceSynthesizer: Sendable {
     }
 
     func synthesizeRealityIntelligence(_ context: RealityIntelligenceSynthesisContext) async throws
-    -> RealityIntelligenceSynthesisResult {
+        -> RealityIntelligenceSynthesisResult
+    {
         // Synthesize reality intelligence
         RealityIntelligenceSynthesisResult(
             realityEngineeredAgents: context.agents,
@@ -1305,7 +1314,8 @@ private final class QuantumRealityOrchestrator: Sendable {
     }
 
     func orchestrateQuantumReality(_ context: QuantumRealityOrchestrationContext) async throws
-    -> QuantumRealityOrchestrationResult {
+        -> QuantumRealityOrchestrationResult
+    {
         // Orchestrate quantum reality
         QuantumRealityOrchestrationResult(
             quantumRealityAgents: context.agents,

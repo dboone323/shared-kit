@@ -81,7 +81,7 @@ public actor QAOAOptimizer {
 
         _ = createQAOACircuit(numQubits: numQubits, layers: layers)
         var bestParameters = Array(
-            repeating: Double.random(in: 0..<2 * Double.pi), count: 2 * layers
+            repeating: Double.random(in: 0 ..< 2 * Double.pi), count: 2 * layers
         )
         // Convert dataset to expected format
         let convertedDataset = dataset.map { (features: $0.0, label: Double($0.1)) }
@@ -90,7 +90,7 @@ public actor QAOAOptimizer {
             parameters: bestParameters, dataset: convertedDataset, numQubits: numQubits
         )
 
-        for iteration in 0..<maxIterations {
+        for iteration in 0 ..< maxIterations {
             let candidates = generateCandidates(around: bestParameters, count: 10)
 
             for candidate in candidates {
@@ -126,9 +126,9 @@ public actor QAOAOptimizer {
             }
 
             // Apply variational layers (simplified)
-            for layer in 0..<2 { // Assume 2 layers for optimization
+            for layer in 0 ..< 2 { // Assume 2 layers for optimization
                 let layerStart = layer * numQubits * 3
-                for qubit in 0..<numQubits {
+                for qubit in 0 ..< numQubits {
                     let paramIdx = layerStart + qubit * 3
                     if paramIdx + 2 < parameters.count {
                         circuitOutput =
@@ -150,24 +150,24 @@ public actor QAOAOptimizer {
         var circuit = QuantumCircuit(numQubits: numQubits)
 
         // Initialize superposition
-        for qubit in 0..<numQubits {
+        for qubit in 0 ..< numQubits {
             circuit = circuit.addingGate(.hadamard(qubit))
         }
 
         // Add QAOA layers
-        for _ in 0..<layers {
+        for _ in 0 ..< layers {
             // Cost Hamiltonian layer
-            for i in 0..<numQubits {
-                circuit = circuit.addingGate(.rotationZ(i, Double.random(in: 0..<2 * Double.pi)))
+            for i in 0 ..< numQubits {
+                circuit = circuit.addingGate(.rotationZ(i, Double.random(in: 0 ..< 2 * Double.pi)))
             }
 
             // Mixer Hamiltonian layer
-            for i in 0..<numQubits {
-                circuit = circuit.addingGate(.rotationX(i, Double.random(in: 0..<2 * Double.pi)))
+            for i in 0 ..< numQubits {
+                circuit = circuit.addingGate(.rotationX(i, Double.random(in: 0 ..< 2 * Double.pi)))
             }
 
             // Entangling gates
-            for i in 0..<(numQubits - 1) {
+            for i in 0 ..< (numQubits - 1) {
                 circuit = circuit.addingGate(.cnot(i, i + 1))
             }
         }
@@ -176,8 +176,8 @@ public actor QAOAOptimizer {
     }
 
     private func generateCandidates(around parameters: [Double], count: Int) -> [[Double]] {
-        (0..<count).map { _ in
-            parameters.map { $0 + Double.random(in: -0.1..<0.1) }
+        (0 ..< count).map { _ in
+            parameters.map { $0 + Double.random(in: -0.1 ..< 0.1) }
         }
     }
 }
@@ -254,9 +254,9 @@ public actor VariationalQuantumClassifier {
         }
 
         // Apply variational layers
-        for layer in 0..<layers {
+        for layer in 0 ..< layers {
             let layerStart = layer * numQubits * 3
-            for qubit in 0..<numQubits {
+            for qubit in 0 ..< numQubits {
                 let paramIdx = layerStart + qubit * 3
                 if paramIdx + 2 < parameters.count {
                     circuitOutput =
@@ -292,10 +292,10 @@ public actor QuantumSVM {
         alphas = Array(repeating: 0.0, count: numSamples)
 
         // Sequential Minimal Optimization (SMO) inspired approach
-        for _ in 0..<100 {
+        for _ in 0 ..< 100 {
             var changed = false
 
-            for i in 0..<numSamples {
+            for i in 0 ..< numSamples {
                 let prediction = predictSample(dataset[i].0, using: dataset)
                 let error = prediction - Double(dataset[i].1)
 
@@ -385,7 +385,7 @@ public enum QuantumKernel: Sendable {
         case let .quantumInspired(depth):
             // Simplified quantum-inspired kernel
             var result = dotProduct(x, y)
-            for _ in 0..<depth {
+            for _ in 0 ..< depth {
                 result = sin(result) + cos(result)
             }
             return result
@@ -434,9 +434,9 @@ public actor QuantumNeuralNetwork {
         let layerSizes =
             [inputSize] + Array(repeating: neuronsPerLayer, count: numLayers - 1) + [outputSize]
 
-        for i in 0..<(layerSizes.count - 1) {
-            let layerWeights = (0..<layerSizes[i + 1]).map { _ in
-                (0..<layerSizes[i]).map { _ in Double.random(in: -1..<1) }
+        for i in 0 ..< (layerSizes.count - 1) {
+            let layerWeights = (0 ..< layerSizes[i + 1]).map { _ in
+                (0 ..< layerSizes[i]).map { _ in Double.random(in: -1 ..< 1) }
             }
             weights.append(layerWeights)
             biases.append(contentsOf: Array(repeating: 0.0, count: layerSizes[i + 1]))
@@ -449,7 +449,7 @@ public actor QuantumNeuralNetwork {
         let learningRate = 0.01
         let epochs = 100
 
-        for epoch in 0..<epochs {
+        for epoch in 0 ..< epochs {
             var totalLoss = 0.0
 
             for (input, target) in dataset {
@@ -498,13 +498,13 @@ public actor QuantumNeuralNetwork {
     private func forwardPass(_ input: [Double]) throws -> [Double] {
         var activations = input
 
-        for layer in 0..<weights.count {
+        for layer in 0 ..< weights.count {
             let layerWeights = weights[layer]
-            let layerBiases = Array(biases[layer * neuronsPerLayer..<(layer + 1) * neuronsPerLayer])
+            let layerBiases = Array(biases[layer * neuronsPerLayer ..< (layer + 1) * neuronsPerLayer])
 
             var newActivations = [Double]()
 
-            for neuron in 0..<layerWeights.count {
+            for neuron in 0 ..< layerWeights.count {
                 var sum = layerBiases[neuron]
                 for (i, activation) in activations.enumerated() {
                     sum += activation * layerWeights[neuron][i]
@@ -523,11 +523,11 @@ public actor QuantumNeuralNetwork {
 
     private func backwardPass(_ input: [Double], _ target: [Double], learningRate: Double) throws {
         // Simplified backpropagation - in practice would compute gradients properly
-        for layer in 0..<weights.count {
-            for neuron in 0..<weights[layer].count {
-                for weight in 0..<weights[layer][neuron].count {
+        for layer in 0 ..< weights.count {
+            for neuron in 0 ..< weights[layer].count {
+                for weight in 0 ..< weights[layer][neuron].count {
                     weights[layer][neuron][weight] += Double.random(
-                        in: -learningRate..<learningRate)
+                        in: -learningRate ..< learningRate)
                 }
             }
         }

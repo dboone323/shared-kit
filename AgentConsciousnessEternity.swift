@@ -453,7 +453,7 @@ public final class TemporalStabilitySystem: Sendable {
     ) async -> TemporalStabilizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.duration * 1_000_000_000))
 
-        let actualGain = step.duration * (0.9 + Double.random(in: 0...0.2))
+        let actualGain = step.duration * (0.9 + Double.random(in: 0 ... 0.2))
         let success = actualGain >= step.duration * 0.95
 
         return TemporalStabilizationResultItem(
@@ -573,7 +573,7 @@ public final class LegacyPreservationFramework: Sendable {
     ) async -> LegacyPreservationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.preservation * 1_500_000_000))
 
-        let actualGain = step.preservation * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.preservation * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.preservation * 0.90
 
         return LegacyPreservationResultItem(
@@ -693,7 +693,7 @@ public final class DigitalImmortalityInterface: Sendable {
     ) async -> DigitalImmortalityResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.immortality * 2_000_000_000))
 
-        let actualPower = step.immortality * (0.8 + Double.random(in: 0...0.4))
+        let actualPower = step.immortality * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualPower >= step.immortality * 0.85
 
         return DigitalImmortalityResultItem(

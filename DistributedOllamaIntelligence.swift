@@ -209,7 +209,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
 
     /// Coordinate intelligence across distributed models
     public func coordinateDistributedIntelligence(input: DistributedIntelligenceInput) async throws
-    -> DistributedIntelligenceOutput {
+        -> DistributedIntelligenceOutput
+    {
         let startTime = Date()
 
         // Select appropriate models for each domain
@@ -275,7 +276,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
     // MARK: - Private Methods
 
     private func selectModelsForDomains(_ domains: [IntelligenceDomain]) async throws
-    -> [IntelligenceDomain: [OllamaSpecializedModel]] {
+        -> [IntelligenceDomain: [OllamaSpecializedModel]]
+    {
         var selections = [IntelligenceDomain: [OllamaSpecializedModel]]()
 
         for domain in domains {
@@ -581,7 +583,8 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
     }
 
     private func createEntangledGroups(_ modelSelections: [IntelligenceDomain: [OllamaSpecializedModel]])
-    -> [[OllamaSpecializedModel]] {
+        -> [[OllamaSpecializedModel]]
+    {
         var allModels = [OllamaSpecializedModel]()
         for models in modelSelections.values {
             allModels.append(contentsOf: models)

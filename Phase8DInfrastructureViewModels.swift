@@ -388,7 +388,7 @@ class UniversalComputationViewModel: BaseViewModel {
         // Simulate scaling operations
         try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second per 1000 points
 
-        for i in 0..<pointsToAdd {
+        for i in 0 ..< pointsToAdd {
             let location = "Access Point \(system.totalAccessPoints + i + 1)"
             let type: AccessPointType = i % 4 == 0 ? .publicTerminal : .personalDevice
             system.addAccessPoint(location: location, type: type)

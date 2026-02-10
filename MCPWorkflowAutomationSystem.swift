@@ -549,7 +549,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
     }
 
     private func generateAutomationImplementationPlan(_ components: AutomationStrategyComponents)
-    -> AutomationImplementationPlan {
+        -> AutomationImplementationPlan
+    {
         AutomationImplementationPlan(
             phases: [
                 ImplementationPhase(phase: "Setup", duration: 300, dependencies: []),
@@ -563,7 +564,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
     }
 
     private func generateAutomationValidationCriteria(_ components: AutomationStrategyComponents)
-    -> AutomationValidationCriteria {
+        -> AutomationValidationCriteria
+    {
         AutomationValidationCriteria(
             efficiencyThreshold: 0.75,
             successRateThreshold: 0.9,
@@ -714,7 +716,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
     }
 
     private func generatePerformanceMetrics(_ optimizationResult: AutomationOptimizationResult)
-    -> AutomationPerformanceMetrics {
+        -> AutomationPerformanceMetrics
+    {
         AutomationPerformanceMetrics(
             executionTime: optimizationResult.optimizedResult.totalExecutionTime,
             resourceUtilization: optimizationResult.optimizedResult.resourceUtilization,
@@ -798,7 +801,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
     }
 
     private func executionManager
-    .executeAutomatedWorkflow(_ context: MCPExecutionContext) async throws -> AutomatedExecutionResult {
+        .executeAutomatedWorkflow(_ context: MCPExecutionContext) async throws -> AutomatedExecutionResult
+    {
         // Execute automated workflow
         AutomatedExecutionResult(
             stepResults: [],
@@ -818,7 +822,8 @@ public final class MCPWorkflowAutomationSystem: Sendable {
     }
 
     private func automationEngine
-    .identifyOptimizationOpportunities(_ result: MCPExecutionResult) async -> [OptimizationOpportunity] {
+        .identifyOptimizationOpportunities(_ result: MCPExecutionResult) async -> [OptimizationOpportunity]
+    {
         // Identify optimization opportunities
         []
     }

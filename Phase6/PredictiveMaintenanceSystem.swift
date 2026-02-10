@@ -377,9 +377,9 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         var metrics = [String: Double]()
 
         // CPU usage (simplified - would use more sophisticated monitoring in production)
-        metrics["usage_percent"] = Double.random(in: 10...80)
+        metrics["usage_percent"] = Double.random(in: 10 ... 80)
         metrics["core_count"] = Double(ProcessInfo.processInfo.activeProcessorCount)
-        metrics["temperature"] = Double.random(in: 40...80) // Simulated temperature
+        metrics["temperature"] = Double.random(in: 40 ... 80) // Simulated temperature
 
         let anomalies = detectAnomalies(in: metrics, for: "cpu")
         let trends = analyzeTrends(for: "cpu")
@@ -423,9 +423,9 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         var metrics = [String: Double]()
 
         // Network metrics (simplified)
-        metrics["latency_ms"] = Double.random(in: 10...200)
-        metrics["bandwidth_mbps"] = Double.random(in: 50...1000)
-        metrics["packet_loss_percent"] = Double.random(in: 0...5)
+        metrics["latency_ms"] = Double.random(in: 10 ... 200)
+        metrics["bandwidth_mbps"] = Double.random(in: 50 ... 1000)
+        metrics["packet_loss_percent"] = Double.random(in: 0 ... 5)
 
         let anomalies = detectAnomalies(in: metrics, for: "network")
         let trends = analyzeTrends(for: "network")
@@ -525,7 +525,7 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
             let url = URL(string: "https://www.apple.com")! // Using Apple as a reliable test endpoint
             let (_, response) = try await URLSession.shared.data(from: url)
             if let httpResponse = response as? HTTPURLResponse {
-                return (200...299).contains(httpResponse.statusCode)
+                return (200 ... 299).contains(httpResponse.statusCode)
             }
         } catch {
             // Fallback: check if we can reach localhost
@@ -535,7 +535,7 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
                     from: localhostURL, delegate: nil
                 )
                 if let httpResponse = response as? HTTPURLResponse {
-                    return (200...299).contains(httpResponse.statusCode)
+                    return (200 ... 299).contains(httpResponse.statusCode)
                 }
             } catch {
                 return false
@@ -895,11 +895,11 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         logger.info("🔧 Performing \(action.rawValue) maintenance on \(component)")
 
         // Simulate maintenance duration
-        let duration = Double.random(in: 300...1800) // 5-30 minutes
+        let duration = Double.random(in: 300 ... 1800) // 5-30 minutes
         try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
 
         // Simulate success/failure (80% success rate)
-        let success = Double.random(in: 0...1) < 0.8
+        let success = Double.random(in: 0 ... 1) < 0.8
 
         if success {
             // Clear related predictions

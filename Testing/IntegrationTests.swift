@@ -182,7 +182,7 @@
             expectation.expectedFulfillmentCount = 100
 
             // When - Perform concurrent updates
-            for i in 0..<100 {
+            for i in 0 ..< 100 {
                 Task {
                     await stateManager.updateValue(key: "key_\(i)", value: i)
                     expectation.fulfill()
@@ -314,7 +314,7 @@
 
             // When - Create and use multiple managers
             let memoryMetrics = try PerformanceTester.measureMemoryUsage {
-                for i in 0..<100 {
+                for i in 0 ..< 100 {
                     let habitManager = HabitManager(
                         dataService: MockDataService(),
                         analyticsService: MockAnalyticsService()
@@ -338,7 +338,7 @@
             // Force garbage collection (not reliable in all environments)
             let cleanupMetrics = try PerformanceTester.measureMemoryUsage {
                 // Perform some operations to trigger cleanup
-                for _ in 0..<10 {
+                for _ in 0 ..< 10 {
                     _ = TestDataBuilder.createTestHabit()
                 }
             }
@@ -357,7 +357,7 @@
             let startTime = CFAbsoluteTimeGetCurrent()
 
             try await withThrowingTaskGroup(of: Void.self) { group in
-                for i in 0..<20 {
+                for i in 0 ..< 20 {
                     group.addTask {
                         let habit = TestDataBuilder.createTestHabit(name: "Concurrent Habit \(i)")
                         try await concurrencyManager.processHabit(habit)

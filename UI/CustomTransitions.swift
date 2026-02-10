@@ -267,7 +267,7 @@ private struct FanShape: Shape {
         let anglePerSegment = 2 * CGFloat.pi / CGFloat(self.segments)
         let visibleSegments = Int(progress * CGFloat(self.segments))
 
-        for i in 0..<visibleSegments {
+        for i in 0 ..< visibleSegments {
             let startAngle = CGFloat(i) * anglePerSegment - CGFloat.pi / 2
             let endAngle = startAngle + anglePerSegment
 
@@ -419,7 +419,7 @@ private struct RippleShape: Shape {
             max(centerPoint.y, rect.height - centerPoint.y)
         )
 
-        for i in 0..<self.rippleCount {
+        for i in 0 ..< self.rippleCount {
             let rippleProgress = max(0, progress * CGFloat(self.rippleCount) - CGFloat(i))
             let rippleRadius = maxRadius * min(1, rippleProgress)
 

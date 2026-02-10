@@ -415,13 +415,13 @@ public final class OllamaModelEcosystems: Sendable {
             quantum.consciousnessLevel,
             consciousness.consciousnessLevel,
         ]
-            .max { level1, level2 in
-                // Define ordering: basic < advanced < transcendent < universal < cosmic
-                let order: [ConsciousnessLevel: Int] = [
-                    .basic: 0, .advanced: 1, .transcendent: 2, .universal: 3, .cosmic: 4,
-                ]
-                return order[level1, default: 0] < order[level2, default: 0]
-            } ?? .basic
+        .max { level1, level2 in
+            // Define ordering: basic < advanced < transcendent < universal < cosmic
+            let order: [ConsciousnessLevel: Int] = [
+                .basic: 0, .advanced: 1, .transcendent: 2, .universal: 3, .cosmic: 4,
+            ]
+            return order[level1, default: 0] < order[level2, default: 0]
+        } ?? .basic
 
         // Calculate combined confidence
         let combinedConfidence = (coordinated.confidence + quantum.confidence + consciousness.confidence) / 3.0

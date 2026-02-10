@@ -375,7 +375,7 @@ public final class QuantumCodeGenerator: ObservableObject {
 
     private func maintainQuantumCoherence() async {
         // Quantum-inspired coherence maintenance
-        if Double.random(in: 0...1) < 0.1 { // 10% chance
+        if Double.random(in: 0 ... 1) < 0.1 { // 10% chance
             quantumState = .superposition
         }
     }
@@ -405,7 +405,7 @@ public final class QuantumCodeGenerator: ObservableObject {
         // Create multiple code variations in superposition
         var superpositions = [String]()
 
-        for _ in 0..<superpositionStates {
+        for _ in 0 ..< superpositionStates {
             let variation = try await generateCodeVariation(request)
             superpositions.append(variation)
         }
@@ -430,7 +430,7 @@ public final class QuantumCodeGenerator: ObservableObject {
         var currentCode = try await generateInitialCode(request)
         var currentEnergy = assessCodeEnergy(currentCode, request: request)
 
-        for step in 0..<quantumAnnealingSteps {
+        for step in 0 ..< quantumAnnealingSteps {
             let temperature = Double(quantumAnnealingSteps - step) / Double(quantumAnnealingSteps)
 
             // Generate neighbor solution
@@ -439,7 +439,7 @@ public final class QuantumCodeGenerator: ObservableObject {
 
             // Accept better solution or probabilistically accept worse solution
             if neighborEnergy < currentEnergy
-                || Double.random(in: 0...1) < exp(-(neighborEnergy - currentEnergy) / temperature)
+                || Double.random(in: 0 ... 1) < exp(-(neighborEnergy - currentEnergy) / temperature)
             {
                 currentCode = neighborCode
                 currentEnergy = neighborEnergy
@@ -457,7 +457,7 @@ public final class QuantumCodeGenerator: ObservableObject {
         var bestCode = currentPosition
         var bestQuality = assessCodeQuality(bestCode, language: request.language).overall
 
-        for _ in 0..<50 { // Walk steps
+        for _ in 0 ..< 50 { // Walk steps
             let candidates = try await generateWalkCandidates(
                 from: currentPosition, request: request
             )
@@ -660,7 +660,7 @@ public final class QuantumCodeGenerator: ObservableObject {
         // Generate candidate solutions for quantum walk
         var candidates = [String]()
 
-        for _ in 0..<5 {
+        for _ in 0 ..< 5 {
             let candidate = try await generateNeighborCode(currentCode, request: request)
             candidates.append(candidate)
         }

@@ -510,7 +510,7 @@ public final class AutonomousAgentSystem: AutonomousAgent {
             recentExperiences.map(\.reward).reduce(0, +) / Double(recentExperiences.count)
         let successRate =
             Double(recentExperiences.count(where: { $0.outcome == .success }))
-            / Double(recentExperiences.count)
+                / Double(recentExperiences.count)
 
         return PerformanceAnalysis(
             averageReward: averageReward,

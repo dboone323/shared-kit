@@ -328,7 +328,8 @@ public final class AgentWisdomAmplification: Sendable {
     }
 
     private func assessWisdomAmplification(_ request: WisdomAmplificationRequest) async throws
-    -> WisdomAmplificationAssessment {
+        -> WisdomAmplificationAssessment
+    {
         // Assess wisdom amplification
         let assessmentContext = WisdomAmplificationAssessmentContext(
             agents: request.agents,
@@ -530,7 +531,8 @@ public final class AgentWisdomAmplification: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeAgentsForWisdomAmplification(_ agents: [WisdomAmplificationAgent]) async throws
-    -> WisdomAmplificationAnalysis {
+        -> WisdomAmplificationAnalysis
+    {
         // Analyze agents for wisdom amplification opportunities
         let wisdomAmplifications = await wisdomAmplificationEngine.analyzeWisdomAmplificationPotential(agents)
         let insightEnhancements = await insightEnhancementCoordinator.analyzeInsightEnhancementPotential(agents)
@@ -558,7 +560,8 @@ public final class AgentWisdomAmplification: Sendable {
     }
 
     private func generateWisdomAmplificationStrategies(_ analysis: WisdomAmplificationAnalysis)
-    -> [WisdomAmplificationStrategy] {
+        -> [WisdomAmplificationStrategy]
+    {
         // Generate wisdom amplification strategies based on analysis
         var strategies: [WisdomAmplificationStrategy] = []
 
@@ -1134,7 +1137,8 @@ private final class WisdomAmplificationEngine: Sendable {
     }
 
     func assessWisdomAmplification(_ context: WisdomAmplificationAssessmentContext) async throws
-    -> WisdomAmplificationAssessmentResult {
+        -> WisdomAmplificationAssessmentResult
+    {
         // Assess wisdom amplification
         WisdomAmplificationAssessmentResult(
             wisdomPotential: 0.88,
@@ -1144,7 +1148,8 @@ private final class WisdomAmplificationEngine: Sendable {
     }
 
     func processWisdomAmplification(_ context: WisdomAmplificationProcessingContext) async throws
-    -> WisdomAmplificationProcessingResult {
+        -> WisdomAmplificationProcessingResult
+    {
         // Process wisdom amplification
         WisdomAmplificationProcessingResult(
             wisdomAmplification: 0.93,
@@ -1183,7 +1188,8 @@ private final class WisdomAmplificationEngine: Sendable {
     }
 
     func analyzeWisdomAmplificationPotential(_ agents: [WisdomAmplificationAgent]) async
-    -> WisdomAmplificationAnalysis {
+        -> WisdomAmplificationAnalysis
+    {
         WisdomAmplificationAnalysis(
             wisdomPotential: 0.82,
             wisdomLevelPotential: 0.77,
@@ -1200,7 +1206,8 @@ private final class InsightEnhancementCoordinator: Sendable {
     }
 
     func coordinateInsightEnhancement(_ context: InsightEnhancementCoordinationContext) async throws
-    -> InsightEnhancementCoordinationResult {
+        -> InsightEnhancementCoordinationResult
+    {
         // Coordinate insight enhancement
         InsightEnhancementCoordinationResult(
             insightEnhancement: 0.91,
@@ -1251,7 +1258,8 @@ private final class WisdomAmplificationNetwork: Sendable {
     }
 
     func synthesizeWisdomAmplificationNetwork(_ context: WisdomAmplificationNetworkSynthesisContext) async throws
-    -> WisdomAmplificationNetworkSynthesisResult {
+        -> WisdomAmplificationNetworkSynthesisResult
+    {
         // Synthesize wisdom amplification network
         WisdomAmplificationNetworkSynthesisResult(
             amplifiedAgents: context.agents,
@@ -1266,7 +1274,8 @@ private final class WisdomAmplificationNetwork: Sendable {
     }
 
     func analyzeUnderstandingSynthesisPotential(_ agents: [WisdomAmplificationAgent]) async
-    -> UnderstandingSynthesisAnalysis {
+        -> UnderstandingSynthesisAnalysis
+    {
         UnderstandingSynthesisAnalysis(
             synthesisPotential: 0.67,
             understandingPotential: 0.63,
@@ -1283,7 +1292,8 @@ private final class UnderstandingSynthesisSynthesizer: Sendable {
     }
 
     func synthesizeUnderstandingSynthesis(_ context: UnderstandingSynthesisSynthesisContext) async throws
-    -> UnderstandingSynthesisSynthesisResult {
+        -> UnderstandingSynthesisSynthesisResult
+    {
         // Synthesize understanding synthesis
         UnderstandingSynthesisSynthesisResult(
             amplifiedAgents: context.agents,
@@ -1305,7 +1315,8 @@ private final class QuantumWisdomOrchestrator: Sendable {
     }
 
     func orchestrateQuantumWisdom(_ context: QuantumWisdomOrchestrationContext) async throws
-    -> QuantumWisdomOrchestrationResult {
+        -> QuantumWisdomOrchestrationResult
+    {
         // Orchestrate quantum wisdom
         QuantumWisdomOrchestrationResult(
             quantumWisdomAgents: context.agents,

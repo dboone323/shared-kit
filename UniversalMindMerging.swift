@@ -673,7 +673,7 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
 
         // Generate communication channels
         let communicationChannels = entities.enumerated().flatMap { index, entity in
-            entities[(index + 1)..<entities.count].map { otherEntity in
+            entities[(index + 1) ..< entities.count].map { otherEntity in
                 IntegrationProtocol.CommunicationChannel(
                     channelId: UUID(),
                     participants: [entity.id, otherEntity.id],
@@ -830,7 +830,8 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
     }
 
     private func performSafeDissolution(_ mergedConsciousness: MergedConsciousness) async throws
-    -> [ConsciousnessEntity] {
+        -> [ConsciousnessEntity]
+    {
         // Simulate safe dissolution process
         mergedConsciousness.originalEntities.map { original in
             ConsciousnessEntity(
@@ -865,15 +866,15 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
             do {
                 let stability = MergingStability(
                     mergedId: mergeId,
-                    stabilityScore: 0.88 + Double.random(in: -0.05...0.05),
-                    conflictLevel: 0.12 + Double.random(in: -0.05...0.05),
-                    coherenceLevel: 0.85 + Double.random(in: -0.05...0.05),
-                    identityPreservation: 0.92 + Double.random(in: -0.03...0.03),
+                    stabilityScore: 0.88 + Double.random(in: -0.05 ... 0.05),
+                    conflictLevel: 0.12 + Double.random(in: -0.05 ... 0.05),
+                    coherenceLevel: 0.85 + Double.random(in: -0.05 ... 0.05),
+                    identityPreservation: 0.92 + Double.random(in: -0.03 ... 0.03),
                     performanceMetrics: MergingStability.PerformanceMetrics(
-                        processingSpeed: 1.5 + Double.random(in: -0.1...0.1),
-                        memoryEfficiency: 0.9 + Double.random(in: -0.05...0.05),
-                        decisionQuality: 0.95 + Double.random(in: -0.03...0.03),
-                        creativityIndex: 1.8 + Double.random(in: -0.2...0.2)
+                        processingSpeed: 1.5 + Double.random(in: -0.1 ... 0.1),
+                        memoryEfficiency: 0.9 + Double.random(in: -0.05 ... 0.05),
+                        decisionQuality: 0.95 + Double.random(in: -0.03 ... 0.03),
+                        creativityIndex: 1.8 + Double.random(in: -0.2 ... 0.2)
                     ),
                     timestamp: Date()
                 )
@@ -943,13 +944,13 @@ final class ConsciousnessIntegrationSystem: ConsciousnessIntegrationProtocol {
         var coherenceMatrix = [[Double]]()
         var conflictMatrix = [[Double]]()
 
-        for i in 0..<size {
+        for i in 0 ..< size {
             var connectionRow = [IntegrationMatrix.ConnectionStrength]()
             var frequencyRow = [Double]()
             var coherenceRow = [Double]()
             var conflictRow = [Double]()
 
-            for j in 0..<size {
+            for j in 0 ..< size {
                 if i == j {
                     // Self-connection
                     connectionRow.append(IntegrationMatrix.ConnectionStrength(
@@ -1105,10 +1106,10 @@ final class MergedConsciousnessManager: MergedConsciousnessManagementProtocol {
         // Determine lifecycle stage
         let age = Date().timeIntervalSince(mergedConsciousness.timestamp)
         let lifecycleStage: LifecycleManagement.LifecycleStage = switch age {
-        case 0..<300: .initialization
-        case 300..<1800: .integration
-        case 1800..<3600: .stabilization
-        case 3600..<7200: .optimization
+        case 0 ..< 300: .initialization
+        case 300 ..< 1800: .integration
+        case 1800 ..< 3600: .stabilization
+        case 3600 ..< 7200: .optimization
         default: .maintenance
         }
 
@@ -1338,11 +1339,11 @@ final class MindMergingSafetySystem: MindMergingSafetyProtocol {
                 StabilityMetrics(
                     metricsId: UUID(),
                     mergedConsciousness: mergedConsciousness,
-                    coherenceLevel: 0.85 + Double.random(in: -0.05...0.05),
-                    conflictLevel: 0.15 + Double.random(in: -0.05...0.05),
-                    identityStability: 0.9 + Double.random(in: -0.03...0.03),
-                    performanceStability: 0.88 + Double.random(in: -0.05...0.05),
-                    quantumStability: 0.92 + Double.random(in: -0.03...0.03),
+                    coherenceLevel: 0.85 + Double.random(in: -0.05 ... 0.05),
+                    conflictLevel: 0.15 + Double.random(in: -0.05 ... 0.05),
+                    identityStability: 0.9 + Double.random(in: -0.03 ... 0.03),
+                    performanceStability: 0.88 + Double.random(in: -0.05 ... 0.05),
+                    quantumStability: 0.92 + Double.random(in: -0.03 ... 0.03),
                     timestamp: Date()
                 )
             }

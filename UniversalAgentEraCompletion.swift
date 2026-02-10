@@ -227,7 +227,8 @@ public final class UniversalAgentEraCompletionEngine: Sendable {
     /// - Parameter agent: Agent to achieve universal agent era completion for
     /// - Returns: Universal agent era completion result
     public func achieveUniversalAgentEraCompletion(for agent: UniversalAgentEraCompletionAgent) async
-    -> UniversalAgentEraCompletionResult {
+        -> UniversalAgentEraCompletionResult
+    {
         let eraSequence = [
             UniversalAgentEraCompletionStep(type: .completeEra, era: 10.0),
             UniversalAgentEraCompletionStep(type: .infiniteAchievement, era: 15.0),

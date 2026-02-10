@@ -334,7 +334,8 @@ public final class AgentEvolutionAcceleration: Sendable {
     }
 
     private func assessEvolutionAcceleration(_ request: EvolutionAccelerationRequest) async throws
-    -> EvolutionAccelerationAssessment {
+        -> EvolutionAccelerationAssessment
+    {
         // Assess evolution acceleration
         let assessmentContext = EvolutionAccelerationAssessmentContext(
             agents: request.agents,
@@ -535,7 +536,8 @@ public final class AgentEvolutionAcceleration: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeAgentsForEvolutionAcceleration(_ agents: [EvolutionAccelerationAgent]) async throws
-    -> EvolutionAccelerationAnalysis {
+        -> EvolutionAccelerationAnalysis
+    {
         // Analyze agents for evolution acceleration opportunities
         let evolutionAccelerations = await evolutionAccelerationEngine.analyzeEvolutionAccelerationPotential(agents)
         let rapidEnhancements = await rapidEnhancementCoordinator.analyzeRapidEnhancementPotential(agents)
@@ -563,7 +565,8 @@ public final class AgentEvolutionAcceleration: Sendable {
     }
 
     private func generateEvolutionAccelerationStrategies(_ analysis: EvolutionAccelerationAnalysis)
-    -> [EvolutionAccelerationStrategy] {
+        -> [EvolutionAccelerationStrategy]
+    {
         // Generate evolution acceleration strategies based on analysis
         var strategies: [EvolutionAccelerationStrategy] = []
 
@@ -678,7 +681,8 @@ public final class AgentEvolutionAcceleration: Sendable {
     }
 
     private func generateOrchestrationRequirements(_ request: EvolutionAccelerationRequest)
-    -> QuantumEvolutionRequirements {
+        -> QuantumEvolutionRequirements
+    {
         QuantumEvolutionRequirements(
             capabilityLevel: .rapid,
             enhancementDepth: .perfect,
@@ -1140,7 +1144,8 @@ private final class EvolutionAccelerationEngine: Sendable {
     }
 
     func assessEvolutionAcceleration(_ context: EvolutionAccelerationAssessmentContext) async throws
-    -> EvolutionAccelerationAssessmentResult {
+        -> EvolutionAccelerationAssessmentResult
+    {
         // Assess evolution acceleration
         EvolutionAccelerationAssessmentResult(
             evolutionPotential: 0.88,
@@ -1150,7 +1155,8 @@ private final class EvolutionAccelerationEngine: Sendable {
     }
 
     func processEvolutionAcceleration(_ context: EvolutionAccelerationProcessingContext) async throws
-    -> EvolutionAccelerationProcessingResult {
+        -> EvolutionAccelerationProcessingResult
+    {
         // Process evolution acceleration
         EvolutionAccelerationProcessingResult(
             evolutionAcceleration: 0.93,
@@ -1189,7 +1195,8 @@ private final class EvolutionAccelerationEngine: Sendable {
     }
 
     func analyzeEvolutionAccelerationPotential(_ agents: [EvolutionAccelerationAgent]) async
-    -> EvolutionAccelerationAnalysis {
+        -> EvolutionAccelerationAnalysis
+    {
         EvolutionAccelerationAnalysis(
             evolutionPotential: 0.82,
             capabilityLevelPotential: 0.77,
@@ -1206,7 +1213,8 @@ private final class RapidEnhancementCoordinator: Sendable {
     }
 
     func coordinateRapidEnhancement(_ context: RapidEnhancementCoordinationContext) async throws
-    -> RapidEnhancementCoordinationResult {
+        -> RapidEnhancementCoordinationResult
+    {
         // Coordinate rapid enhancement
         RapidEnhancementCoordinationResult(
             rapidEnhancement: 0.91,
@@ -1257,7 +1265,8 @@ private final class EvolutionAccelerationNetwork: Sendable {
     }
 
     func synthesizeEvolutionAccelerationNetwork(_ context: EvolutionAccelerationNetworkSynthesisContext) async throws
-    -> EvolutionAccelerationNetworkSynthesisResult {
+        -> EvolutionAccelerationNetworkSynthesisResult
+    {
         // Synthesize evolution acceleration network
         EvolutionAccelerationNetworkSynthesisResult(
             evolvedAgents: context.agents,
@@ -1272,7 +1281,8 @@ private final class EvolutionAccelerationNetwork: Sendable {
     }
 
     func analyzeCapabilitySynthesisPotential(_ agents: [EvolutionAccelerationAgent]) async
-    -> CapabilitySynthesisAnalysis {
+        -> CapabilitySynthesisAnalysis
+    {
         CapabilitySynthesisAnalysis(
             synthesisPotential: 0.67,
             capabilityPotential: 0.63,
@@ -1289,7 +1299,8 @@ private final class CapabilityEnhancementSynthesizer: Sendable {
     }
 
     func synthesizeCapabilityEnhancement(_ context: CapabilityEnhancementSynthesisContext) async throws
-    -> CapabilityEnhancementSynthesisResult {
+        -> CapabilityEnhancementSynthesisResult
+    {
         // Synthesize capability enhancement
         CapabilityEnhancementSynthesisResult(
             evolvedAgents: context.agents,
@@ -1311,7 +1322,8 @@ private final class QuantumEvolutionOrchestrator: Sendable {
     }
 
     func orchestrateQuantumEvolution(_ context: QuantumEvolutionOrchestrationContext) async throws
-    -> QuantumEvolutionOrchestrationResult {
+        -> QuantumEvolutionOrchestrationResult
+    {
         // Orchestrate quantum evolution
         QuantumEvolutionOrchestrationResult(
             quantumEvolutionAgents: context.agents,

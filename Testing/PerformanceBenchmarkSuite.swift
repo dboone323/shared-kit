@@ -893,7 +893,7 @@ class PerformanceBenchmarkSuite {
     private func simulateMultiThreadedOperations() async {
         // Simulate multi-threaded operations
         await withTaskGroup(of: Void.self) { group in
-            for _ in 0..<4 {
+            for _ in 0 ..< 4 {
                 group.addTask {
                     try? await Task.sleep(nanoseconds: 1_000_000_000) // 1s
                 }
@@ -959,7 +959,7 @@ class PerformanceBenchmarkSuite {
 
     private func simulateConcurrentOperations() async {
         await withTaskGroup(of: Void.self) { group in
-            for _ in 0..<8 {
+            for _ in 0 ..< 8 {
                 group.addTask {
                     try? await Task.sleep(nanoseconds: 2_000_000_000) // 2s
                 }
@@ -1022,7 +1022,7 @@ class PerformanceBenchmarkSuite {
         let endTime = Date()
 
         // Simulate memory usage recording during operation
-        for i in 0..<10 {
+        for i in 0 ..< 10 {
             let timestamp = startTime.addingTimeInterval(Double(i) * (endTime.timeIntervalSince(startTime) / 10))
             let usage = Int64(60 + i * 5) * 1024 * 1024 // Simulate increasing memory usage
             metrics.append((usage: usage, timestamp: timestamp))
@@ -1038,7 +1038,7 @@ class PerformanceBenchmarkSuite {
         let endTime = Date()
 
         // Simulate CPU usage recording during operation
-        for i in 0..<10 {
+        for i in 0 ..< 10 {
             let timestamp = startTime.addingTimeInterval(Double(i) * (endTime.timeIntervalSince(startTime) / 10))
             let usage = 20.0 + Double(i) * 3.0 // Simulate varying CPU usage
             metrics.append((usage: usage, timestamp: timestamp))

@@ -407,7 +407,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
             let emergencyToAdd =
                 facilitiesToAdd - hospitalsToAdd - clinicsToAdd - telemedicineToAdd - researchToAdd
 
-            for i in 0..<hospitalsToAdd {
+            for i in 0 ..< hospitalsToAdd {
                 self.addMedicalFacility(
                     name: "Quantum Hospital \(self.hospitals + i + 1)",
                     type: .hospital,
@@ -417,7 +417,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 )
             }
 
-            for i in 0..<clinicsToAdd {
+            for i in 0 ..< clinicsToAdd {
                 self.addMedicalFacility(
                     name: "Quantum Clinic \(self.clinics + i + 1)",
                     type: .clinic,
@@ -427,7 +427,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 )
             }
 
-            for i in 0..<telemedicineToAdd {
+            for i in 0 ..< telemedicineToAdd {
                 self.addMedicalFacility(
                     name: "Telemedicine Center \(self.telemedicineCenters + i + 1)",
                     type: .telemedicine,
@@ -437,7 +437,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 )
             }
 
-            for i in 0..<researchToAdd {
+            for i in 0 ..< researchToAdd {
                 self.addMedicalFacility(
                     name: "Research Lab \(self.researchLabs + i + 1)",
                     type: .research,
@@ -447,7 +447,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                 )
             }
 
-            for i in 0..<emergencyToAdd {
+            for i in 0 ..< emergencyToAdd {
                 self.addMedicalFacility(
                     name: "Emergency Unit \(self.emergencyResponseUnits + i + 1)",
                     type: .emergency,

@@ -237,7 +237,7 @@ actor SemanticCache {
         var dot: Float = 0
         var mag1: Float = 0
         var mag2: Float = 0
-        for i in 0..<v1.count {
+        for i in 0 ..< v1.count {
             dot += v1[i] * v2[i]
             mag1 += v1[i] * v1[i]
             mag2 += v2[i] * v2[i]

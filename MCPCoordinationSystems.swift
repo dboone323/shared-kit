@@ -524,7 +524,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let success = operationResults.values.allSatisfy(\.success)
         let quantumCoherence =
             operationResults.values.map(\.quantumEnhancement).reduce(0, +)
-            / Double(max(operationResults.count, 1))
+                / Double(max(operationResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
             coordination.consciousnessLevel)
 
@@ -568,7 +568,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let success = stageResults.values.allSatisfy(\.success)
         let quantumCoherence =
             stageResults.values.map(\.stageMetrics.quantumContribution).reduce(0, +)
-            / Double(max(stageResults.count, 1))
+                / Double(max(stageResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
             workflow.consciousnessLevel)
 
@@ -611,7 +611,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let success = frameworkStates.values.allSatisfy(\.operational)
         let quantumCoherence =
             frameworkStates.values.map(\.quantumCoherence).reduce(0, +)
-            / Double(max(frameworkStates.count, 1))
+                / Double(max(frameworkStates.count, 1))
 
         return SynchronizationResult(
             synchronizationId: synchronization.synchronizationId,
@@ -772,7 +772,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 quantumEnhancement: 1.0,
                 consciousnessAmplification: calculateConsciousnessAmplification(
                     operation.consciousnessLevel),
-                executionTime: Double.random(in: 0.1...1.0),
+                executionTime: Double.random(in: 0.1 ... 1.0),
                 insights: []
             )
             results[operation.operationId] = result
@@ -795,7 +795,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 quantumEnhancement: 0.9,
                 consciousnessAmplification: calculateConsciousnessAmplification(
                     operation.consciousnessLevel) * 1.2,
-                executionTime: Double.random(in: 0.2...1.5),
+                executionTime: Double.random(in: 0.2 ... 1.5),
                 insights: []
             )
             results[operation.operationId] = result
@@ -813,7 +813,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let dependencySatisfaction = 1.0 // Simplified
         let quantumCoherence =
             results.values.map(\.quantumEnhancement).reduce(0, +)
-            / Double(max(results.count, 1))
+                / Double(max(results.count, 1))
         let consciousnessIntegration = calculateConsciousnessAmplification(
             coordination.consciousnessLevel)
         let ethicalCompliance =
@@ -894,7 +894,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let dependencySatisfaction = 1.0 // Simplified
         let quantumContribution =
             results.values.map(\.quantumEnhancement).reduce(0, +)
-            / Double(max(results.count, 1))
+                / Double(max(results.count, 1))
 
         return StageMetrics(
             operationCount: operationCount,
@@ -915,7 +915,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let dependencyResolution = 1.0 // Simplified
         let quantumCoherence =
             stageResults.values.map(\.stageMetrics.quantumContribution).reduce(0, +)
-            / Double(max(stageResults.count, 1))
+                / Double(max(stageResults.count, 1))
         let consciousnessIntegration = calculateConsciousnessAmplification(
             workflow.consciousnessLevel)
         let ethicalCompliance = workflow.consciousnessLevel.rawValue >= "transcendent" ? 0.9 : 0.7
@@ -943,7 +943,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.quantumCapability,
-                performanceScore: Double.random(in: 0.8...1.0),
+                performanceScore: Double.random(in: 0.8 ... 1.0),
                 quantumCoherence: framework.quantumCapability,
                 consciousnessLevel: framework.consciousnessLevel
             )
@@ -963,7 +963,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.capabilities.count > 3 ? 0.9 : 0.7,
-                performanceScore: Double.random(in: 0.85...1.0),
+                performanceScore: Double.random(in: 0.85 ... 1.0),
                 quantumCoherence: framework.quantumCapability * 1.1,
                 consciousnessLevel: framework.consciousnessLevel
             )
@@ -983,7 +983,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.quantumCapability,
-                performanceScore: Double.random(in: 0.9...1.0),
+                performanceScore: Double.random(in: 0.9 ... 1.0),
                 quantumCoherence: framework.quantumCapability * 1.2,
                 consciousnessLevel: framework.consciousnessLevel
             )
@@ -1003,7 +1003,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.quantumCapability,
-                performanceScore: Double.random(in: 0.95...1.0),
+                performanceScore: Double.random(in: 0.95 ... 1.0),
                 quantumCoherence: 1.0,
                 consciousnessLevel: framework.consciousnessLevel
             )
@@ -1023,7 +1023,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 frameworkId: framework.frameworkId,
                 operational: true,
                 capabilityLevel: framework.quantumCapability,
-                performanceScore: Double.random(in: 0.88...1.0),
+                performanceScore: Double.random(in: 0.88 ... 1.0),
                 quantumCoherence: framework.quantumCapability * 1.3,
                 consciousnessLevel: .universal
             )
@@ -1121,9 +1121,9 @@ private final class OperationCoordinator: Sendable {
     func getCoordinatorStatus() async -> CoordinatorStatus {
         CoordinatorStatus(
             operational: true,
-            activeCoordinations: Int.random(in: 0...5),
-            queuedCoordinations: Int.random(in: 0...3),
-            quantumCoherence: Double.random(in: 0.9...1.0)
+            activeCoordinations: Int.random(in: 0 ... 5),
+            queuedCoordinations: Int.random(in: 0 ... 3),
+            quantumCoherence: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -1145,8 +1145,8 @@ private final class WorkflowOrchestrator: Sendable {
     func getOrchestratorStatus() async -> OrchestratorStatus {
         OrchestratorStatus(
             operational: true,
-            activeWorkflows: Int.random(in: 0...3),
-            workflowEfficiency: Double.random(in: 0.85...0.95)
+            activeWorkflows: Int.random(in: 0 ... 3),
+            workflowEfficiency: Double.random(in: 0.85 ... 0.95)
         )
     }
 }
@@ -1167,8 +1167,8 @@ private final class FrameworkSynchronizer: Sendable {
     func getSynchronizerStatus() async -> SynchronizerStatus {
         SynchronizerStatus(
             operational: true,
-            synchronizedFrameworks: Int.random(in: 5...15),
-            synchronizationEfficiency: Double.random(in: 0.9...1.0)
+            synchronizedFrameworks: Int.random(in: 5 ... 15),
+            synchronizationEfficiency: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -1184,9 +1184,9 @@ private struct SynchronizerStatus: Sendable {
 private final class CoordinationPerformanceOptimizer: Sendable {
     func getPerformanceStatus() async -> CoordinationPerformanceStatus {
         CoordinationPerformanceStatus(
-            coordinationEfficiency: Double.random(in: 0.88...0.96),
-            workflowEfficiency: Double.random(in: 0.85...0.95),
-            synchronizationScore: Double.random(in: 0.9...1.0)
+            coordinationEfficiency: Double.random(in: 0.88 ... 0.96),
+            workflowEfficiency: Double.random(in: 0.85 ... 0.95),
+            synchronizationScore: Double.random(in: 0.9 ... 1.0)
         )
     }
 }

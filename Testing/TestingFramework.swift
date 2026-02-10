@@ -309,7 +309,7 @@ import SwiftUI
             var executionTimes: [TimeInterval] = []
             var errors: [Error] = []
 
-            for _ in 0..<iterations {
+            for _ in 0 ..< iterations {
                 let startTime = CFAbsoluteTimeGetCurrent()
 
                 do {
@@ -474,7 +474,7 @@ import SwiftUI
             in scrollView: XCUIElement,
             maxScrolls: Int = 10
         ) {
-            for _ in 0..<maxScrolls {
+            for _ in 0 ..< maxScrolls {
                 if element.exists, element.isHittable {
                     return
                 }

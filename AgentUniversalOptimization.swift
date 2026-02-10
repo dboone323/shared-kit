@@ -239,7 +239,8 @@ public final class UniversalOptimizationEngine: Sendable {
     /// - Parameter agent: Agent to achieve optimization for
     /// - Returns: Universal optimization result
     public func achieveUniversalOptimization(for agent: UniversallyOptimizedAgent) async
-    -> UniversalOptimizationResult {
+        -> UniversalOptimizationResult
+    {
         let computationalResult = await performComputationalOptimization(for: agent)
         let resourceResult = await achieveResourceMaximization(for: agent)
         let performanceResult = await masterPerformanceEnhancement(for: agent)
@@ -388,7 +389,8 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
     /// - Parameter computational: Computational entity to optimize
     /// - Returns: Optimization result
     public func optimizeComputationalEfficiency(_ computational: ComputationallyOptimizable) async
-    -> ComputationalOptimizationResult {
+        -> ComputationalOptimizationResult
+    {
         let optimizationAssessment = assessComputationalOptimizationPotential(computational)
         let optimizationStrategy = designOptimizationStrategy(optimizationAssessment)
         let optimizationResults = await executeOptimization(computational, strategy: optimizationStrategy)
@@ -406,7 +408,8 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
 
     /// Assess computational optimization potential
     private func assessComputationalOptimizationPotential(_ computational: ComputationallyOptimizable)
-    -> ComputationalOptimizationAssessment {
+        -> ComputationalOptimizationAssessment
+    {
         let efficiency = computational.computationalMetrics.efficiency
         let throughput = computational.computationalMetrics.throughput
         let latency = computational.computationalMetrics.latency
@@ -422,7 +425,8 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
 
     /// Design optimization strategy
     private func designOptimizationStrategy(_ assessment: ComputationalOptimizationAssessment)
-    -> ComputationalOptimizationStrategy {
+        -> ComputationalOptimizationStrategy
+    {
         var optimizationSteps: [ComputationalOptimizationStep] = []
 
         if assessment.efficiency < 0.95 {
@@ -474,7 +478,7 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
     ) async -> ComputationalOptimizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.efficiency * 1_500_000_000))
 
-        let actualGain = step.efficiency * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.efficiency * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.efficiency * 0.90
 
         return ComputationalOptimizationResultItem(
@@ -489,7 +493,8 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
 
     /// Generate computational optimizer
     private func generateComputationalOptimizer(_ results: [ComputationalOptimizationResultItem])
-    -> ComputationalOptimizer {
+        -> ComputationalOptimizer
+    {
         let successRate = Double(results.filter(\.success).count) / Double(results.count)
         let totalGain = results.map(\.actualEfficiencyGain).reduce(0, +)
         let optimizerValue = 1.0 + (totalGain * successRate / 15.0)
@@ -529,7 +534,8 @@ public final class ResourceUtilizationMaximizer: Sendable {
 
     /// Assess resource maximization potential
     private func assessResourceMaximizationPotential(_ resource: ResourceOptimizable)
-    -> ResourceMaximizationAssessment {
+        -> ResourceMaximizationAssessment
+    {
         let utilization = resource.resourceMetrics.utilization
         let efficiency = resource.resourceMetrics.efficiency
         let optimization = resource.resourceMetrics.optimization
@@ -545,7 +551,8 @@ public final class ResourceUtilizationMaximizer: Sendable {
 
     /// Design maximization strategy
     private func designMaximizationStrategy(_ assessment: ResourceMaximizationAssessment)
-    -> ResourceMaximizationStrategy {
+        -> ResourceMaximizationStrategy
+    {
         var maximizationSteps: [ResourceMaximizationStep] = []
 
         if assessment.utilization < 0.90 {
@@ -597,7 +604,7 @@ public final class ResourceUtilizationMaximizer: Sendable {
     ) async -> ResourceMaximizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.utilization * 2_000_000_000))
 
-        let actualGain = step.utilization * (0.8 + Double.random(in: 0...0.4))
+        let actualGain = step.utilization * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualGain >= step.utilization * 0.85
 
         return ResourceMaximizationResultItem(
@@ -651,7 +658,8 @@ public final class PerformanceOptimizationFramework: Sendable {
 
     /// Assess performance optimization potential
     private func assessPerformanceOptimizationPotential(_ performance: PerformanceOptimizable)
-    -> PerformanceOptimizationAssessment {
+        -> PerformanceOptimizationAssessment
+    {
         let scalability = performance.performanceMetrics.scalability
         let reliability = performance.performanceMetrics.reliability
         let enhancement = performance.performanceMetrics.enhancement
@@ -667,7 +675,8 @@ public final class PerformanceOptimizationFramework: Sendable {
 
     /// Design performance strategy
     private func designPerformanceStrategy(_ assessment: PerformanceOptimizationAssessment)
-    -> PerformanceOptimizationStrategy {
+        -> PerformanceOptimizationStrategy
+    {
         var optimizationSteps: [PerformanceOptimizationStep] = []
 
         if assessment.scalability < 0.85 {
@@ -719,7 +728,7 @@ public final class PerformanceOptimizationFramework: Sendable {
     ) async -> PerformanceOptimizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.optimization * 2_500_000_000))
 
-        let actualPower = step.optimization * (0.75 + Double.random(in: 0...0.5))
+        let actualPower = step.optimization * (0.75 + Double.random(in: 0 ... 0.5))
         let success = actualPower >= step.optimization * 0.80
 
         return PerformanceOptimizationResultItem(

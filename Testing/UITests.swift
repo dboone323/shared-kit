@@ -746,12 +746,12 @@
             // When - Measure scroll performance
             measure(metrics: [XCTCPUMetric(), XCTMemoryMetric()]) {
                 // Perform rapid scrolling
-                for _ in 0..<10 {
+                for _ in 0 ..< 10 {
                     scrollView.swipeUp()
                     Thread.sleep(forTimeInterval: 0.1)
                 }
 
-                for _ in 0..<10 {
+                for _ in 0 ..< 10 {
                     scrollView.swipeDown()
                     Thread.sleep(forTimeInterval: 0.1)
                 }
@@ -770,7 +770,7 @@
             // When - Measure animation performance
             measure(metrics: [XCTCPUMetric()]) {
                 // Trigger multiple animations
-                for _ in 0..<5 {
+                for _ in 0 ..< 5 {
                     animationTrigger.tap()
                     Thread.sleep(forTimeInterval: 1.0)
                 }

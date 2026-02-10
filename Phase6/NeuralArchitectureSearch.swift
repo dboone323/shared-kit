@@ -66,7 +66,7 @@ public actor NeuralArchitectureSearch {
         var bestArchitecture: NeuralArchitecture?
         var bestScore = 0.0
 
-        for generation in 0..<constraints.maxGenerations {
+        for generation in 0 ..< constraints.maxGenerations {
             currentGeneration = generation
             logger.info("🌀 Generation \(generation + 1)/\(constraints.maxGenerations)")
 
@@ -205,7 +205,7 @@ public actor NeuralArchitectureSearch {
         var initialPopulation: [NeuralArchitecture] = []
 
         // Generate random architectures
-        for _ in 0..<constraints.populationSize {
+        for _ in 0 ..< constraints.populationSize {
             let architecture = try await searchSpace.sampleRandomArchitecture(for: task)
             initialPopulation.append(architecture)
         }
@@ -431,10 +431,10 @@ public actor ArchitectureSearchSpace {
     public func sampleRandomArchitecture(for task: MLTask) async throws -> NeuralArchitecture {
         // Generate random architecture based on task requirements
 
-        let layerCount = Int.random(in: 3...12)
+        let layerCount = Int.random(in: 3 ... 12)
         var layers: [NeuralLayer] = []
 
-        for i in 0..<layerCount {
+        for i in 0 ..< layerCount {
             let layerType = sampleLayerType(for: task)
             let layer = try await generateLayer(ofType: layerType, index: i, task: task)
             layers.append(layer)
@@ -474,7 +474,7 @@ public actor ArchitectureSearchSpace {
         let activationOptions = 6 // relu, sigmoid, tanh, etc.
 
         var total = 1
-        for layerCount in 1...maxLayers {
+        for layerCount in 1 ... maxLayers {
             total += Int(pow(Double(layerTypeOptions * activationOptions), Double(layerCount)))
         }
 
@@ -560,7 +560,7 @@ public actor ArchitectureSearchSpace {
     private func generateConnections(_ layers: [NeuralLayer]) -> [LayerConnection] {
         var connections: [LayerConnection] = []
 
-        for i in 0..<layers.count - 1 {
+        for i in 0 ..< layers.count - 1 {
             connections.append(
                 LayerConnection(
                     from: layers[i].id,
@@ -1006,9 +1006,9 @@ public actor ArchitectureEvaluator {
         // Simulate architecture evaluation
         // In a real implementation, this would train and test the architecture
 
-        let trainingTime = Double(architecture.layers.count * 10) + Double.random(in: 60..<600)
+        let trainingTime = Double(architecture.layers.count * 10) + Double.random(in: 60 ..< 600)
         let accuracy = calculateEstimatedAccuracy(architecture, task)
-        let loss = 1.0 - accuracy + Double.random(in: -0.1..<0.1)
+        let loss = 1.0 - accuracy + Double.random(in: -0.1 ..< 0.1)
         let inferenceTime = Double(architecture.layers.count) * 0.001
         let memoryUsage = calculateEstimatedMemory(architecture)
 
@@ -1168,7 +1168,7 @@ public actor ArchitectureEvolutionEngine {
         let tournamentSize = 3
         var candidates: [NeuralArchitecture] = []
 
-        for _ in 0..<tournamentSize {
+        for _ in 0 ..< tournamentSize {
             candidates.append(population.randomElement()!)
         }
 
@@ -1193,9 +1193,9 @@ public actor ArchitectureEvolutionEngine {
         _ parent2: NeuralArchitecture
     ) async throws -> NeuralArchitecture {
         // Single-point crossover of layer sequences
-        let crossoverPoint = Int.random(in: 1..<min(parent1.layers.count, parent2.layers.count))
+        let crossoverPoint = Int.random(in: 1 ..< min(parent1.layers.count, parent2.layers.count))
 
-        var childLayers = Array(parent1.layers[0..<crossoverPoint])
+        var childLayers = Array(parent1.layers[0 ..< crossoverPoint])
         childLayers.append(contentsOf: parent2.layers[crossoverPoint...])
 
         return NeuralArchitecture(
@@ -1214,8 +1214,8 @@ public actor ArchitectureEvolutionEngine {
     ) async throws -> NeuralArchitecture {
         var mutatedLayers = architecture.layers
 
-        for i in 0..<mutatedLayers.count {
-            if Double.random(in: 0..<1) < mutationRate {
+        for i in 0 ..< mutatedLayers.count {
+            if Double.random(in: 0 ..< 1) < mutationRate {
                 // Apply random mutation to layer
                 mutatedLayers[i] = try await mutateLayer(mutatedLayers[i])
             }
@@ -1233,7 +1233,7 @@ public actor ArchitectureEvolutionEngine {
 
     private func mutateLayer(_ layer: NeuralLayer) async throws -> NeuralLayer {
         // Randomly mutate layer properties
-        switch Int.random(in: 0..<3) {
+        switch Int.random(in: 0 ..< 3) {
         case 0: // Change activation function
             let newActivation = ActivationFunction.allCases.randomElement()
             return NeuralLayer(
@@ -1249,7 +1249,7 @@ public actor ArchitectureEvolutionEngine {
             var newHyperparams = layer.hyperparameters
             if let key = newHyperparams.keys.randomElement() {
                 if case var .int(intValue) = newHyperparams[key]! {
-                    intValue *= Int.random(in: 1...2)
+                    intValue *= Int.random(in: 1 ... 2)
                     newHyperparams[key] = .int(intValue)
                 }
             }
@@ -1282,7 +1282,7 @@ public actor ArchitectureEvolutionEngine {
     private func generateConnections(_ layers: [NeuralLayer]) -> [LayerConnection] {
         var connections: [LayerConnection] = []
 
-        for i in 0..<layers.count - 1 {
+        for i in 0 ..< layers.count - 1 {
             connections.append(
                 LayerConnection(
                     from: layers[i].id,
@@ -1372,7 +1372,7 @@ public actor ArchitecturePerformancePredictor {
     private func predictLatency(_ architecture: NeuralArchitecture, _ task: MLTask) -> TimeInterval {
         // Estimate inference latency
         let layerTime = architecture.layers.map { estimateLayerLatency($0) }.reduce(0, +)
-        return layerTime * Double.random(in: 0.8..<1.2)
+        return layerTime * Double.random(in: 0.8 ..< 1.2)
     }
 
     private func predictMemoryUsage(_ architecture: NeuralArchitecture, _ task: MLTask) -> Double {
@@ -1387,7 +1387,7 @@ public actor ArchitecturePerformancePredictor {
         // Estimate training time
         let totalParams = architecture.layers.map(\.parameters).reduce(0, +)
         let baseTime = Double(totalParams) / 1_000_000.0 // Rough heuristic
-        return baseTime * Double.random(in: 0.5..<2.0)
+        return baseTime * Double.random(in: 0.5 ..< 2.0)
     }
 
     private func estimateLayerLatency(_ layer: NeuralLayer) -> TimeInterval {

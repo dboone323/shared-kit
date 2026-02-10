@@ -241,7 +241,8 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
 
     /// Get consciousness intelligence analytics
     public func getConsciousnessIntelligenceAnalytics(timeRange: DateInterval) async
-    -> ConsciousnessIntelligenceAnalytics {
+        -> ConsciousnessIntelligenceAnalytics
+    {
         let consciousnessAnalytics = await consciousnessEngine.getConsciousnessAnalytics(timeRange: timeRange)
         let workflowAnalytics = await consciousnessWorkflowProcessor.getWorkflowAnalytics(timeRange: timeRange)
         let stateAnalytics = await consciousnessStateManager.getStateAnalytics(timeRange: timeRange)
@@ -330,7 +331,8 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     }
 
     private func initializeConsciousnessState(_ request: ConsciousnessWorkflowRequest) async throws
-    -> ConsciousnessState {
+        -> ConsciousnessState
+    {
         // Initialize consciousness state for workflow processing
         let stateInitializationContext = ConsciousnessStateInitializationContext(
             workflow: request.workflow,
@@ -508,7 +510,8 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeWorkflowForConsciousnessEnhancement(_ workflow: MCPWorkflow) async throws
-    -> ConsciousnessEnhancementAnalysis {
+        -> ConsciousnessEnhancementAnalysis
+    {
         // Analyze workflow for consciousness enhancement opportunities
         let consciousnessEnhancements = await consciousnessEngine.analyzeConsciousnessEnhancementPotential(workflow)
         let intelligenceExpansions = await consciousnessWorkflowProcessor
@@ -523,7 +526,8 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     }
 
     private func generateConsciousnessCapabilities(_ analysis: ConsciousnessEnhancementAnalysis)
-    -> ConsciousnessCapabilities {
+        -> ConsciousnessCapabilities
+    {
         // Generate consciousness capabilities based on analysis
         ConsciousnessCapabilities(
             intelligenceExpansion: 0.9,
@@ -538,7 +542,8 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     }
 
     private func generateConsciousnessEnhancementStrategies(_ analysis: ConsciousnessEnhancementAnalysis)
-    -> [ConsciousnessEnhancementStrategy] {
+        -> [ConsciousnessEnhancementStrategy]
+    {
         // Generate consciousness enhancement strategies based on analysis
         var strategies: [ConsciousnessEnhancementStrategy] = []
 
@@ -653,7 +658,8 @@ public final class ConsciousnessDrivenWorkflowSystem: Sendable {
     }
 
     private func generateOrchestrationRequirements(_ request: ConsciousnessWorkflowRequest)
-    -> OrchestrationRequirements {
+        -> OrchestrationRequirements
+    {
         OrchestrationRequirements(
             consciousnessIntegration: .high,
             workflowEfficiency: .maximum,
@@ -1053,7 +1059,8 @@ private final class ConsciousnessEngine: Sendable {
     }
 
     func processConsciousnessIntelligence(_ context: ConsciousnessIntelligenceProcessingContext) async throws
-    -> ConsciousnessIntelligenceProcessingResult {
+        -> ConsciousnessIntelligenceProcessingResult
+    {
         // Process consciousness intelligence
         ConsciousnessIntelligenceProcessingResult(
             intelligenceExpansion: 0.92,
@@ -1163,7 +1170,8 @@ private final class ConsciousnessStateManager: Sendable {
     }
 
     func initializeConsciousnessState(_ context: ConsciousnessStateInitializationContext) async throws
-    -> ConsciousnessStateInitializationResult {
+        -> ConsciousnessStateInitializationResult
+    {
         // Initialize consciousness state
         ConsciousnessStateInitializationResult(
             awarenessLevel: 0.85,
@@ -1175,7 +1183,8 @@ private final class ConsciousnessStateManager: Sendable {
     }
 
     func manageConsciousnessState(_ context: ConsciousnessStateManagementContext) async throws
-    -> ConsciousnessStateManagementResult {
+        -> ConsciousnessStateManagementResult
+    {
         // Manage consciousness state
         ConsciousnessStateManagementResult(
             consciousnessState: context.consciousnessState,
@@ -1227,7 +1236,8 @@ private final class ConsciousnessIntelligenceSynthesizer: Sendable {
     }
 
     func synthesizeConsciousnessIntelligence(_ context: ConsciousnessIntelligenceSynthesisContext) async throws
-    -> ConsciousnessIntelligenceSynthesisResult {
+        -> ConsciousnessIntelligenceSynthesisResult
+    {
         // Synthesize consciousness intelligence
         ConsciousnessIntelligenceSynthesisResult(
             consciousnessEnhancedWorkflow: context.workflow, // Would be enhanced
@@ -1249,7 +1259,8 @@ private final class ConsciousnessWorkflowOrchestrator: Sendable {
     }
 
     func orchestrateConsciousnessWorkflow(_ context: ConsciousnessWorkflowOrchestrationContext) async throws
-    -> ConsciousnessWorkflowOrchestrationResult {
+        -> ConsciousnessWorkflowOrchestrationResult
+    {
         // Orchestrate consciousness workflow
         ConsciousnessWorkflowOrchestrationResult(
             consciousnessEnhancedWorkflow: context.consciousnessEnhancedWorkflow,

@@ -646,7 +646,7 @@ public final class SelfOptimizingCICD: ObservableObject {
             recentMetrics.compactMap(\.duration).reduce(0, +) / Double(recentMetrics.count)
         let failureRate =
             Double(recentMetrics.count(where: { $0.status == .failed }))
-            / Double(recentMetrics.count)
+                / Double(recentMetrics.count)
         let averageCost = recentMetrics.map(\.cost).reduce(0, +) / Double(recentMetrics.count)
 
         // Generate optimization recommendations
@@ -900,12 +900,12 @@ public final class SelfOptimizingCICD: ObservableObject {
         [String: Double], Double, Double, Int, Int
     ) {
         // Simulate build operation with potential failures
-        let buildTime = Double.random(in: 30...120)
+        let buildTime = Double.random(in: 30 ... 120)
         try await Task.sleep(nanoseconds: UInt64(buildTime * 1_000_000_000))
 
-        let hasErrors = Double.random(in: 0...1) < 0.1 // 10% chance of build errors
-        let errorCount = hasErrors ? Int.random(in: 1...5) : 0
-        let warningCount = Int.random(in: 0...10)
+        let hasErrors = Double.random(in: 0 ... 1) < 0.1 // 10% chance of build errors
+        let errorCount = hasErrors ? Int.random(in: 1 ... 5) : 0
+        let warningCount = Int.random(in: 0 ... 10)
 
         if hasErrors {
             throw CICDError.buildFailed("Build failed with \(errorCount) errors")
@@ -918,12 +918,12 @@ public final class SelfOptimizingCICD: ObservableObject {
         [String: Double], Double, Double, Int, Int
     ) {
         // Simulate test execution
-        let testTime = Double.random(in: 60...300)
+        let testTime = Double.random(in: 60 ... 300)
         try await Task.sleep(nanoseconds: UInt64(testTime * 1_000_000_000))
 
-        let hasFailures = Double.random(in: 0...1) < 0.05 // 5% chance of test failures
-        let errorCount = hasFailures ? Int.random(in: 1...3) : 0
-        let warningCount = Int.random(in: 0...5)
+        let hasFailures = Double.random(in: 0 ... 1) < 0.05 // 5% chance of test failures
+        let errorCount = hasFailures ? Int.random(in: 1 ... 3) : 0
+        let warningCount = Int.random(in: 0 ... 5)
 
         if hasFailures {
             throw CICDError.testsFailed("Tests failed with \(errorCount) failures")
@@ -938,8 +938,8 @@ public final class SelfOptimizingCICD: ObservableObject {
         // Simulate code analysis
         try await Task.sleep(nanoseconds: UInt64(15_000_000_000)) // 15 seconds
 
-        let errorCount = Int.random(in: 0...2)
-        let warningCount = Int.random(in: 5...20)
+        let errorCount = Int.random(in: 0 ... 2)
+        let warningCount = Int.random(in: 5 ... 20)
 
         return (["cpu": 1.0, "memory": 1.0], 0.98, 0.1, errorCount, warningCount)
     }
@@ -1005,10 +1005,10 @@ public extension SelfOptimizingCICD {
         let appliedRecommendations = optimizationHistory.count
         let averageConfidence =
             optimizationRecommendations.map(\.confidence).reduce(0, +)
-            / Double(max(1, optimizationRecommendations.count))
+                / Double(max(1, optimizationRecommendations.count))
         let averageImprovement =
             optimizationRecommendations.map(\.expectedImprovement).reduce(0, +)
-            / Double(max(1, optimizationRecommendations.count))
+                / Double(max(1, optimizationRecommendations.count))
 
         return [
             "totalRecommendations": totalRecommendations,

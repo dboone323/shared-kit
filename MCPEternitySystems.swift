@@ -302,11 +302,11 @@ public final class LegacyPreservationSystem: Sendable {
 
     /// Generate storage locations
     private func generateStorageLocations(_ count: Int) -> [StorageLocation] {
-        (0..<count).map { _ in
+        (0 ..< count).map { _ in
             StorageLocation(
-                dimension: "EternalDimension-\(Int.random(in: 1...1000))",
-                coordinates: (Double.random(in: 0...1), Double.random(in: 0...1), Double.random(in: 0...1)),
-                temporalPhase: Double.random(in: 0...1)
+                dimension: "EternalDimension-\(Int.random(in: 1 ... 1000))",
+                coordinates: (Double.random(in: 0 ... 1), Double.random(in: 0 ... 1), Double.random(in: 0 ... 1)),
+                temporalPhase: Double.random(in: 0 ... 1)
             )
         }
     }
@@ -674,11 +674,11 @@ public struct EternalTimestamp: Sendable, Codable {
         EternalTimestamp(
             temporalValue: Date().timeIntervalSince1970,
             dimensionalCoordinates: (
-                Double.random(in: 0...1),
-                Double.random(in: 0...1),
-                Double.random(in: 0...1)
+                Double.random(in: 0 ... 1),
+                Double.random(in: 0 ... 1),
+                Double.random(in: 0 ... 1)
             ),
-            quantumPhase: Double.random(in: 0...2 * .pi)
+            quantumPhase: Double.random(in: 0 ... 2 * .pi)
         )
     }
 
@@ -1422,7 +1422,7 @@ public final class EternalMemorySystem: Sendable {
         let storageId = UUID()
         let eternalLocation = EternalLocation(
             dimension: "MemoryDimension",
-            coordinates: (Double.random(in: 0...1), Double.random(in: 0...1), Double.random(in: 0...1)),
+            coordinates: (Double.random(in: 0 ... 1), Double.random(in: 0 ... 1), Double.random(in: 0 ... 1)),
             temporalSignature: EternalTimestamp.now()
         )
 
@@ -1513,10 +1513,10 @@ public final class LegacyInheritanceManager: Sendable {
     /// Assess inheritance worthiness
     private func assessInheritanceWorthiness(inheritorId: UUID, legacy: Legacy) -> WorthinessAssessment {
         // Simplified assessment - in practice, this would be more sophisticated
-        let worthinessScore = Double.random(in: 0.7...1.0) // Assume high worthiness for demo
+        let worthinessScore = Double.random(in: 0.7 ... 1.0) // Assume high worthiness for demo
         let assessmentCriteria = ["Consciousness level", "Ethical alignment", "Legacy compatibility"]
         let assessmentResults = assessmentCriteria
-            .map { "\($0): \(String(format: "%.2f", Double.random(in: 0.8...1.0)))" }
+            .map { "\($0): \(String(format: "%.2f", Double.random(in: 0.8 ... 1.0)))" }
 
         return WorthinessAssessment(
             inheritorId: inheritorId,

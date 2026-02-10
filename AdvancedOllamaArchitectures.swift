@@ -511,7 +511,7 @@ public final class QuantumComputer: Sendable {
         let numStates = max(2, min(1 << min(qubits, 10), Int(promptComplexity * 100))) // 2^qubits states, max 1024
 
         var states = [QuantumState]()
-        for i in 0..<numStates {
+        for i in 0 ..< numStates {
             let amplitude = 1.0 / sqrt(Double(numStates)) // Equal superposition
             let phase = Double(i) * 2.0 * .pi / Double(numStates) // Phase based on index
             states.append(QuantumState(amplitude: amplitude, phase: phase, index: i))
@@ -530,7 +530,7 @@ public final class QuantumComputer: Sendable {
         var gates = [QuantumGate]()
 
         // Add Hadamard gates for superposition
-        for i in 0..<numQubits {
+        for i in 0 ..< numQubits {
             gates.append(QuantumGate(type: .hadamard, qubit: i))
         }
 

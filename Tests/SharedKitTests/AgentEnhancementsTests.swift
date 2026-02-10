@@ -10,7 +10,7 @@ final class AgentEnhancementsTests: XCTestCase {
         let manager = ContextWindowManager(maxTokens: 100)
 
         // Create messages that exceed token limit
-        let messages = (0..<20).map { i in
+        let messages = (0 ..< 20).map { i in
             ConversationMessage(role: "user", content: "Message \(i) with some content")
         }
 

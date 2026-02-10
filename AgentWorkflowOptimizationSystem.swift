@@ -672,7 +672,8 @@ public final class AgentWorkflowOptimizationSystem: Sendable {
     }
 
     private func generateCoordinationRequirements(_ request: AgentWorkflowOptimizationRequest)
-    -> CoordinationRequirements {
+        -> CoordinationRequirements
+    {
         CoordinationRequirements(
             communicationFrequency: .high,
             synchronizationLevel: .tight,
@@ -1312,7 +1313,8 @@ private final class IntelligenceUtilizationMaximizer: Sendable {
     }
 
     func maximizeUtilization(_ context: IntelligenceOptimizationContext) async throws
-    -> IntelligenceOptimizationResult {
+        -> IntelligenceOptimizationResult
+    {
         // Maximize intelligence utilization
         IntelligenceOptimizationResult(
             intelligenceUtilization: 0.85,
@@ -1388,7 +1390,8 @@ private final class AgentWorkflowCoordinationOptimizer: Sendable {
     }
 
     func optimizeCoordination(_ context: CoordinationOptimizationContext) async throws
-    -> CoordinationOptimizationResult {
+        -> CoordinationOptimizationResult
+    {
         // Optimize agent-workflow coordination
         CoordinationOptimizationResult(
             coordinationStrategy: CoordinationStrategy(

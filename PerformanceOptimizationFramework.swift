@@ -324,22 +324,22 @@ private final class PerformanceProfiler {
 
     private func getCPUUsage() -> Double {
         // In a real implementation, this would use system APIs
-        Double.random(in: 0.1...0.8)
+        Double.random(in: 0.1 ... 0.8)
     }
 
     private func getMemoryUsage() -> Double {
         // In a real implementation, this would use system APIs
-        Double.random(in: 0.2...0.9)
+        Double.random(in: 0.2 ... 0.9)
     }
 
     private func getDiskUsage() -> Double {
         // In a real implementation, this would use system APIs
-        Double.random(in: 0.1...0.7)
+        Double.random(in: 0.1 ... 0.7)
     }
 
     private func getNetworkUsage() -> Double {
         // In a real implementation, this would use system APIs
-        Double.random(in: 0.05...0.5)
+        Double.random(in: 0.05 ... 0.5)
     }
 
     private func getAverageResponseTime() -> TimeInterval {
@@ -356,12 +356,12 @@ private final class PerformanceProfiler {
 
     private func getErrorRate() -> Double {
         // In a real implementation, this would track errors
-        Double.random(in: 0.001...0.05)
+        Double.random(in: 0.001 ... 0.05)
     }
 
     private func getActiveConnections() -> Int {
         // In a real implementation, this would track connections
-        Int.random(in: 10...100)
+        Int.random(in: 10 ... 100)
     }
 
     func getOperationMetrics(operation: String) -> OperationMetrics {

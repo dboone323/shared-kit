@@ -891,11 +891,11 @@ public class NetworkMonitor: ObservableObject {
         let estimatedBandwidth: Double =
             switch self.currentStatus.connectionType {
             case .wifi:
-                Double.random(in: 10...100)
+                Double.random(in: 10 ... 100)
             case .ethernet:
-                Double.random(in: 50...1000)
+                Double.random(in: 50 ... 1000)
             case .cellular:
-                Double.random(in: 1...50)
+                Double.random(in: 1 ... 50)
             default:
                 0
             }

@@ -46,9 +46,9 @@ public class NeuromorphicRetina {
         self.resolution = resolution
 
         // Create receptive fields
-        for y in 0..<resolution.height {
+        for y in 0 ..< resolution.height {
             var row: [ReceptiveField] = []
-            for x in 0..<resolution.width {
+            for x in 0 ..< resolution.width {
                 let onCenter = ((x + y) % 2 == 0) // Checkerboard pattern
                 let field = ReceptiveField(center: (x, y), radius: fieldSize, onCenter: onCenter)
                 row.append(field)
@@ -57,7 +57,7 @@ public class NeuromorphicRetina {
         }
 
         // Create ganglion cells
-        for _ in 0..<(resolution.width * resolution.height) {
+        for _ in 0 ..< (resolution.width * resolution.height) {
             let ganglionCell = LIFNeuron(threshold: 0.7, leakRate: 0.95)
             ganglionCells.append(ganglionCell)
         }
@@ -66,8 +66,8 @@ public class NeuromorphicRetina {
     public func processImage(_ image: [[Double]]) -> [NeuromorphicSpike] {
         var spikes: [NeuromorphicSpike] = []
 
-        for y in 0..<min(resolution.height, image.count) {
-            for x in 0..<min(resolution.width, image[y].count) {
+        for y in 0 ..< min(resolution.height, image.count) {
+            for x in 0 ..< min(resolution.width, image[y].count) {
                 let intensity = image[y][x]
                 let field = receptiveFields[y][x]
                 let response = field.processPixel(intensity: intensity, at: (x, y))
@@ -112,7 +112,7 @@ public class LGNLayer {
 
     public init(cellCount: Int = 100) {
         // Create different cell types
-        for _ in 0..<cellCount {
+        for _ in 0 ..< cellCount {
             magnocellularCells.append(LIFNeuron(threshold: 0.6, leakRate: 0.9))
             parvocellularCells.append(LIFNeuron(threshold: 0.8, leakRate: 0.95))
             koniocellularCells.append(LIFNeuron(threshold: 0.7, leakRate: 0.92))
@@ -153,7 +153,7 @@ public class LGNLayer {
             }
 
             // Koniocellular pathway (blue-sensitive)
-            if Double.random(in: 0...1) < 0.3 { // Less common
+            if Double.random(in: 0 ... 1) < 0.3 { // Less common
                 if let konCell = koniocellularCells.randomElement() {
                     let konSynapse = NeuromorphicSynapse(
                         from: spike.sourceNeuron, to: konCell, weight: 0.7
@@ -191,7 +191,7 @@ public class V1Cortex {
             self.receptiveFieldSize = fieldSize
 
             // Create neurons for different spatial frequencies
-            for _ in 0..<10 {
+            for _ in 0 ..< 10 {
                 neurons.append(LIFNeuron(threshold: 0.75, leakRate: 0.93))
             }
         }
@@ -213,7 +213,7 @@ public class V1Cortex {
             self.preferredOrientation = orientation
             self.preferredSpeed = speed
 
-            for _ in 0..<8 {
+            for _ in 0 ..< 8 {
                 neurons.append(LIFNeuron(threshold: 0.7, leakRate: 0.91))
             }
         }
@@ -235,7 +235,7 @@ public class V1Cortex {
             self.preferredOrientation = orientation
             self.endStopLength = endStopLength
 
-            for _ in 0..<6 {
+            for _ in 0 ..< 6 {
                 neurons.append(LIFNeuron(threshold: 0.8, leakRate: 0.94))
             }
         }
@@ -287,7 +287,7 @@ public class V1Cortex {
         var outputSpikes: [NeuromorphicSpike] = []
 
         for cell in simpleCells {
-            let response = Double.random(in: 0...1) // Simplified - would analyze spike patterns
+            let response = Double.random(in: 0 ... 1) // Simplified - would analyze spike patterns
 
             if response > 0.6 {
                 if let neuron = cell.neurons.randomElement() {
@@ -312,7 +312,7 @@ public class V1Cortex {
         var outputSpikes: [NeuromorphicSpike] = []
 
         for cell in complexCells {
-            let response = Double.random(in: 0...1) // Would analyze motion patterns
+            let response = Double.random(in: 0 ... 1) // Would analyze motion patterns
 
             if response > 0.5 {
                 if let neuron = cell.neurons.randomElement() {
@@ -337,7 +337,7 @@ public class V1Cortex {
         var outputSpikes: [NeuromorphicSpike] = []
 
         for cell in hypercomplexCells {
-            let response = Double.random(in: 0...1) // Would analyze line segments
+            let response = Double.random(in: 0 ... 1) // Would analyze line segments
 
             if response > 0.7 {
                 if let neuron = cell.neurons.randomElement() {
@@ -365,7 +365,7 @@ public class ITCortex {
     public var recognitionNeurons: [NeuromorphicNeuron] = []
 
     public init(templateCount: Int = 1000) {
-        for _ in 0..<templateCount {
+        for _ in 0 ..< templateCount {
             recognitionNeurons.append(LIFNeuron(threshold: 0.85, leakRate: 0.96))
         }
     }
@@ -461,7 +461,7 @@ public class NeuromorphicVisionSystem {
         }
 
         // Add orientation histogram features
-        let orientations = (0..<8).map { Double($0) * .pi / 8 }
+        let orientations = (0 ..< 8).map { Double($0) * .pi / 8 }
         for orientation in orientations {
             let response =
                 v1.simpleCells.first { abs($0.preferredOrientation - orientation) < 0.1 }?.neurons
@@ -516,7 +516,7 @@ public class MotionPathway {
 
         public init(direction: Double) {
             self.preferredDirection = direction
-            for _ in 0..<5 {
+            for _ in 0 ..< 5 {
                 neurons.append(LIFNeuron(threshold: 0.65, leakRate: 0.88))
             }
         }
@@ -580,15 +580,15 @@ public class VisualAttentionSystem {
             repeating: Array(repeating: 0.0, count: mapSize.width), count: mapSize.height
         )
 
-        for _ in 0..<(mapSize.width * mapSize.height) {
+        for _ in 0 ..< (mapSize.width * mapSize.height) {
             attentionNeurons.append(LIFNeuron(threshold: 0.9, leakRate: 0.97))
         }
     }
 
     public func computeSaliency(features: [String: [[Double]]]) {
         // Reset saliency map
-        for y in 0..<saliencyMap.count {
-            for x in 0..<saliencyMap[y].count {
+        for y in 0 ..< saliencyMap.count {
+            for x in 0 ..< saliencyMap[y].count {
                 saliencyMap[y][x] = 0.0
             }
         }
@@ -597,8 +597,8 @@ public class VisualAttentionSystem {
         for (featureType, featureMap) in features {
             let weight = getFeatureWeight(featureType)
 
-            for y in 0..<min(saliencyMap.count, featureMap.count) {
-                for x in 0..<min(saliencyMap[y].count, featureMap[y].count) {
+            for y in 0 ..< min(saliencyMap.count, featureMap.count) {
+                for x in 0 ..< min(saliencyMap[y].count, featureMap[y].count) {
                     saliencyMap[y][x] += featureMap[y][x] * weight
                 }
             }
@@ -625,8 +625,8 @@ public class VisualAttentionSystem {
         let centerY = saliencyMap.count / 2
         let centerX = saliencyMap[0].count / 2
 
-        for y in 0..<saliencyMap.count {
-            for x in 0..<saliencyMap[y].count {
+        for y in 0 ..< saliencyMap.count {
+            for x in 0 ..< saliencyMap[y].count {
                 let distanceFromCenter = sqrt(
                     pow(Double(x - centerX), 2) + pow(Double(y - centerY), 2))
                 let bias = exp(-distanceFromCenter / 50.0) // Gaussian falloff
@@ -638,8 +638,8 @@ public class VisualAttentionSystem {
     private func normalizeSaliencyMap() {
         let maxValue = saliencyMap.flatMap(\.self).max() ?? 1.0
         if maxValue > 0 {
-            for y in 0..<saliencyMap.count {
-                for x in 0..<saliencyMap[y].count {
+            for y in 0 ..< saliencyMap.count {
+                for x in 0 ..< saliencyMap[y].count {
                     saliencyMap[y][x] /= maxValue
                 }
             }
@@ -650,8 +650,8 @@ public class VisualAttentionSystem {
         var maxSaliency = 0.0
         var focus: (x: Int, y: Int)?
 
-        for y in 0..<saliencyMap.count {
-            for x in 0..<saliencyMap[y].count {
+        for y in 0 ..< saliencyMap.count {
+            for x in 0 ..< saliencyMap[y].count {
                 if saliencyMap[y][x] > maxSaliency {
                     maxSaliency = saliencyMap[y][x]
                     focus = (x, y)

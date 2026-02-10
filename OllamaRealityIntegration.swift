@@ -472,7 +472,8 @@ public final class QuantumRealityProcessor: Sendable {
     }
 
     public func processQuantumManipulation(_ request: RealityManipulationRequest) async throws
-    -> QuantumManipulationResult {
+        -> QuantumManipulationResult
+    {
         guard isInitialized else { throw RealityIntegrationError.notInitialized }
 
         return try await quantumField.manipulate(request)
@@ -519,7 +520,8 @@ public final class ConsciousnessRealityBridge: Sendable {
     }
 
     public func integrateConsciousness(_ request: RealityManipulationRequest) async throws
-    -> ConsciousnessManipulationResult {
+        -> ConsciousnessManipulationResult
+    {
         guard isConnected else { throw RealityIntegrationError.notConnected }
 
         return try await consciousnessField.manipulate(request)
@@ -1043,7 +1045,7 @@ private struct RealityControlsView: View {
 
             VStack(alignment: .leading) {
                 Text("Intensity: \(Int(intensity * 100))%")
-                Slider(value: $intensity, in: 0.01...0.5)
+                Slider(value: $intensity, in: 0.01 ... 0.5)
             }
 
             Button(action: performManipulation) {

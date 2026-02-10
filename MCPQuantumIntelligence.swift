@@ -424,7 +424,8 @@ public final class MCPQuantumIntelligenceCoordinator: MCPQuantumIntelligence, Se
 
     /// Process quantum intelligence operations
     public func processQuantumIntelligence(_ operation: QuantumIntelligenceOperation) async throws
-    -> QuantumIntelligenceResult {
+        -> QuantumIntelligenceResult
+    {
         let startTime = Date()
 
         // Validate operation parameters
@@ -626,9 +627,9 @@ private final class QuantumProcessor: Sendable {
                           state: QuantumState) async throws -> OperationResult
     {
         OperationResult(
-            success: Double.random(in: 0.85...1.0) > 0.15,
-            quantumAdvantage: Double.random(in: 1.5...5.0),
-            speedup: Double.random(in: 10...1000)
+            success: Double.random(in: 0.85 ... 1.0) > 0.15,
+            quantumAdvantage: Double.random(in: 1.5 ... 5.0),
+            speedup: Double.random(in: 10 ... 1000)
         )
     }
 
@@ -636,9 +637,9 @@ private final class QuantumProcessor: Sendable {
                          superposition: [SuperpositionState]) async throws -> DecisionResult
     {
         DecisionResult(
-            optimalChoice: "quantum_choice_\(Int.random(in: 1...decision.quantumStates))",
-            quantumAdvantage: Double.random(in: 2.0...10.0),
-            confidence: Double.random(in: 0.8...1.0)
+            optimalChoice: "quantum_choice_\(Int.random(in: 1 ... decision.quantumStates))",
+            quantumAdvantage: Double.random(in: 2.0 ... 10.0),
+            confidence: Double.random(in: 0.8 ... 1.0)
         )
     }
 
@@ -649,10 +650,10 @@ private final class QuantumProcessor: Sendable {
     func getProcessorStatus() async -> ProcessorStatus {
         ProcessorStatus(
             operational: true,
-            capability: Double.random(in: 0.9...1.0),
-            power: Double.random(in: 100...1000),
-            activeOperations: Int.random(in: 1...20),
-            successRate: Double.random(in: 0.9...0.98)
+            capability: Double.random(in: 0.9 ... 1.0),
+            power: Double.random(in: 100 ... 1000),
+            activeOperations: Int.random(in: 1 ... 20),
+            successRate: Double.random(in: 0.9 ... 0.98)
         )
     }
 }
@@ -664,14 +665,14 @@ private final class EntanglementManager: Sendable {
     {
         EntanglementResult(
             success: true,
-            entanglementStrength: Double.random(in: 0.8...1.0)
+            entanglementStrength: Double.random(in: 0.8 ... 1.0)
         )
     }
 
     func applyConstraints(_ decision: QuantumDecision, result: DecisionResult) async -> EntanglementResult {
         EntanglementResult(
             success: true,
-            quality: Double.random(in: 0.85...1.0)
+            quality: Double.random(in: 0.85 ... 1.0)
         )
     }
 
@@ -686,7 +687,7 @@ private final class EntanglementManager: Sendable {
     func getEntanglementStatus() async -> EntanglementStatus {
         EntanglementStatus(
             operational: true,
-            strength: Double.random(in: 0.9...1.0)
+            strength: Double.random(in: 0.9 ... 1.0)
         )
     }
 }
@@ -698,7 +699,7 @@ private final class CoherenceController: Sendable {
     {
         CoherenceResult(
             success: true,
-            coherenceLevel: Double.random(in: 0.85...1.0)
+            coherenceLevel: Double.random(in: 0.85 ... 1.0)
         )
     }
 
@@ -713,7 +714,7 @@ private final class CoherenceController: Sendable {
     func getCoherenceStatus() async -> CoherenceStatus {
         CoherenceStatus(
             operational: true,
-            coherence: Double.random(in: 0.95...1.0)
+            coherence: Double.random(in: 0.95 ... 1.0)
         )
     }
 }
@@ -721,8 +722,8 @@ private final class CoherenceController: Sendable {
 /// Superposition Engine
 private final class SuperpositionEngine: Sendable {
     func createSuperposition(_ decision: QuantumDecision) async throws -> [SuperpositionState] {
-        (0..<decision.quantumStates).map { _ in
-            SuperpositionState(amplitude: Double.random(in: 0...1), phase: Double.random(in: 0...(2 * .pi)))
+        (0 ..< decision.quantumStates).map { _ in
+            SuperpositionState(amplitude: Double.random(in: 0 ... 1), phase: Double.random(in: 0 ... (2 * .pi)))
         }
     }
 
@@ -737,7 +738,7 @@ private final class SuperpositionEngine: Sendable {
     func getSuperpositionStatus() async -> SuperpositionStatus {
         SuperpositionStatus(
             operational: true,
-            states: Int.random(in: 10...100)
+            states: Int.random(in: 10 ... 100)
         )
     }
 }
@@ -755,7 +756,7 @@ private final class QuantumOptimizer: Sendable {
     func getOptimizerStatus() async -> OptimizerStatus {
         OptimizerStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8...1.0)
+            efficiency: Double.random(in: 0.8 ... 1.0)
         )
     }
 }

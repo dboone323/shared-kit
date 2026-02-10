@@ -32,7 +32,7 @@ final class OllamaEnhancementsTests: XCTestCase {
         let config = RetryConfig(maxRetries: 3, baseDelay: 10.0, maxDelay: 100.0, jitterFactor: 0.2)
 
         // Multiple calls should produce different results due to jitter
-        let delays = (0..<5).map { _ in config.delay(for: 1) }
+        let delays = (0 ..< 5).map { _ in config.delay(for: 1) }
         let allSame = delays.allSatisfy { $0 == delays.first }
 
         XCTAssertFalse(allSame, "Jitter should produce varying delays")
@@ -59,7 +59,7 @@ final class OllamaEnhancementsTests: XCTestCase {
         let tracker = ModelHealthTracker()
 
         // Multiple failures should degrade health
-        for _ in 0..<5 {
+        for _ in 0 ..< 5 {
             tracker.recordFailure(for: "test-model")
         }
 

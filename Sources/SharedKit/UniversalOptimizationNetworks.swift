@@ -464,7 +464,7 @@ public final class UniversalOptimizationCoordinator: ObservableObject, @unchecke
         // Weighted combination with exponential optimization emergence
         let combinedFactor =
             (readinessFactor * 0.25) + (convergenceFactor * 0.25) + (harmonyFactor * 0.25)
-            + (completionFactor * 0.25)
+                + (completionFactor * 0.25)
         return min(pow(combinedFactor, 1.2), 1.0)
     }
 
@@ -661,7 +661,7 @@ private class OptimizationNetworkCoordinator {
 
     func initialize() async throws {}
     func activate() async throws { isActive = true }
-    func assessReadiness() async -> Double { Double.random(in: 0.8...0.98) }
+    func assessReadiness() async -> Double { Double.random(in: 0.8 ... 0.98) }
 
     let readinessPublisher = PassthroughSubject<(OptimizationDomain, Double), Never>()
 }

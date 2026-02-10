@@ -98,7 +98,7 @@ public class GlobalQuantumCommunicationNetwork: ObservableObject {
         // Establish connection between continents
         let continents = ["North America", "Europe", "Asia", "Africa", "South America", "Australia"]
 
-        for i in 0..<continents.count - 1 {
+        for i in 0 ..< continents.count - 1 {
             let result = await establishIntercontinentalLink(from: continents[i], to: continents[i + 1])
             print("Link \(continents[i]) ↔ \(continents[i + 1]):")
             print("- Distance: \(String(format: "%.0f", result.distance)) km")
@@ -192,7 +192,7 @@ public class GlobalQuantumCommunicationNetwork: ObservableObject {
 
         // Demonstrate inter-data-center communication
         let majorCities = ["New York", "London", "Tokyo", "Singapore", "São Paulo"]
-        for i in 0..<majorCities.count - 1 {
+        for i in 0 ..< majorCities.count - 1 {
             let commResult = await quantumDataCenters.establishInterDataCenterLink(
                 from: majorCities[i],
                 to: majorCities[i + 1]
@@ -208,10 +208,10 @@ public class GlobalQuantumCommunicationNetwork: ObservableObject {
                                                to continentB: String) async -> IntercontinentalLinkResult
     {
         // Simulate intercontinental quantum link establishment
-        let distance = Double.random(in: 5000...15000)
+        let distance = Double.random(in: 5000 ... 15000)
         let latency = distance / 200_000.0 * 1000 // Speed of light in fiber ~200,000 km/s
-        let fidelity = Double.random(in: 0.85...0.95)
-        let throughput = Double.random(in: 50...200)
+        let fidelity = Double.random(in: 0.85 ... 0.95)
+        let throughput = Double.random(in: 50 ... 200)
 
         return IntercontinentalLinkResult(
             continentA: continentA,
@@ -225,10 +225,10 @@ public class GlobalQuantumCommunicationNetwork: ObservableObject {
 
     private func updateNetworkStatistics() async {
         // Simulate network statistics update
-        totalConnectedNodes = Int.random(in: 1_000_000...5_000_000)
-        globalCoverage = Double.random(in: 0.75...0.95)
-        averageLatency = Double.random(in: 50...200)
-        networkReliability = Double.random(in: 0.995...0.9999)
+        totalConnectedNodes = Int.random(in: 1_000_000 ... 5_000_000)
+        globalCoverage = Double.random(in: 0.75 ... 0.95)
+        averageLatency = Double.random(in: 50 ... 200)
+        networkReliability = Double.random(in: 0.995 ... 0.9999)
     }
 }
 
@@ -263,9 +263,9 @@ public class SatelliteQuantumLinks {
     public func establishSatelliteLink(to station: String) async -> SatelliteCommunicationResult {
         SatelliteCommunicationResult(
             station: station,
-            signalStrength: Double.random(in: 0.8...0.95),
-            bitErrorRate: Double.random(in: 1e-9...1e-7),
-            latency: Double.random(in: 25...50)
+            signalStrength: Double.random(in: 0.8 ... 0.95),
+            bitErrorRate: Double.random(in: 1e-9 ... 1e-7),
+            latency: Double.random(in: 25 ... 50)
         )
     }
 }
@@ -281,10 +281,10 @@ public class UnderwaterQuantumCables {
     public func deployTransoceanicCable(ocean: String) async -> TransoceanicCableResult {
         TransoceanicCableResult(
             ocean: ocean,
-            length: Double.random(in: 8000...18000),
-            capacity: Double.random(in: 10...50),
-            reliability: Double.random(in: 0.98...0.995),
-            powerConsumption: Double.random(in: 5...15)
+            length: Double.random(in: 8000 ... 18000),
+            capacity: Double.random(in: 10 ... 50),
+            reliability: Double.random(in: 0.98 ... 0.995),
+            powerConsumption: Double.random(in: 5 ... 15)
         )
     }
 
@@ -328,9 +328,9 @@ public class QuantumDataCenters {
         DataCenterLinkResult(
             cityA: cityA,
             cityB: cityB,
-            bandwidth: Double.random(in: 5...20),
-            latency: Double.random(in: 0.1...0.5),
-            reliability: Double.random(in: 0.9995...0.9999)
+            bandwidth: Double.random(in: 5 ... 20),
+            latency: Double.random(in: 0.1 ... 0.5),
+            reliability: Double.random(in: 0.9995 ... 0.9999)
         )
     }
 }
@@ -349,8 +349,8 @@ public class GlobalRoutingCoordinator {
             from: cityA,
             to: cityB,
             path: path,
-            totalDistance: Double.random(in: 10000...25000),
-            estimatedLatency: Double.random(in: 45...120),
+            totalDistance: Double.random(in: 10000 ... 25000),
+            estimatedLatency: Double.random(in: 45 ... 120),
             networkTypes: ["Terrestrial", "Satellite", "Terrestrial"],
             securityLevel: .quantum
         )

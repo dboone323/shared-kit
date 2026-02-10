@@ -466,7 +466,7 @@ public final class MCPHTTPClient: MCPAPIClient, Sendable {
             throw MCPAPIError(code: "network_error", message: "Invalid response type")
         }
 
-        guard (200...299).contains(httpResponse.statusCode) else {
+        guard (200 ... 299).contains(httpResponse.statusCode) else {
             throw MCPAPIError(
                 code: "http_\(httpResponse.statusCode)", message: "HTTP \(httpResponse.statusCode)"
             )
@@ -500,7 +500,7 @@ public final class MCPHTTPClient: MCPAPIClient, Sendable {
                     let (bytes, response) = try await session.bytes(for: request)
 
                     guard let httpResponse = response as? HTTPURLResponse,
-                          (200...299).contains(httpResponse.statusCode)
+                          (200 ... 299).contains(httpResponse.statusCode)
                     else {
                         throw MCPAPIError(
                             code: "stream_error", message: "Failed to establish stream"
@@ -652,10 +652,10 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
 
         let overallHealth =
             serviceHealth.values.contains(MCPHealthState.unhealthy)
-            ? MCPHealthState.unhealthy
-            : serviceHealth.values.contains(MCPHealthState.degraded)
-                ? MCPHealthState.degraded
-                : MCPHealthState.healthy
+                ? MCPHealthState.unhealthy
+                : serviceHealth.values.contains(MCPHealthState.degraded)
+                    ? MCPHealthState.degraded
+                    : MCPHealthState.healthy
 
         return MCPHealthStatus(
             overall: overallHealth,

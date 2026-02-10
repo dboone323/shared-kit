@@ -333,7 +333,8 @@ public final class UniversalIntelligenceCoordinationSystem: Sendable {
     }
 
     private func assessUniversalIntelligence(_ request: UniversalCoordinationRequest) async throws
-    -> UniversalIntelligenceAssessment {
+        -> UniversalIntelligenceAssessment
+    {
         // Assess universal intelligence across domains
         let assessmentContext = UniversalIntelligenceAssessmentContext(
             intelligenceDomains: request.intelligenceDomains,
@@ -516,7 +517,8 @@ public final class UniversalIntelligenceCoordinationSystem: Sendable {
     private func analyzeIntelligenceDomainsForUniversalCoordination(
         _ intelligenceDomains: [IntelligenceDomain]
     ) async throws
-    -> UniversalCoordinationAnalysis {
+        -> UniversalCoordinationAnalysis
+    {
         // Analyze intelligence domains for universal coordination opportunities
         let universalCoordinations = await universalIntelligenceCoordinator
             .analyzeUniversalCoordinationPotential(intelligenceDomains)
@@ -547,7 +549,8 @@ public final class UniversalIntelligenceCoordinationSystem: Sendable {
     }
 
     private func generateUniversalCoordinationStrategies(_ analysis: UniversalCoordinationAnalysis)
-    -> [UniversalCoordinationStrategy] {
+        -> [UniversalCoordinationStrategy]
+    {
         // Generate universal coordination strategies based on analysis
         var strategies: [UniversalCoordinationStrategy] = []
 
@@ -662,7 +665,8 @@ public final class UniversalIntelligenceCoordinationSystem: Sendable {
     }
 
     private func generateOrchestrationRequirements(_ request: UniversalCoordinationRequest)
-    -> UniversalOrchestrationRequirements {
+        -> UniversalOrchestrationRequirements
+    {
         UniversalOrchestrationRequirements(
             universalIntegration: .maximum,
             intelligenceHarmony: .perfect,
@@ -1120,7 +1124,8 @@ private final class UniversalIntelligenceCoordinator: Sendable {
     }
 
     func assessUniversalIntelligence(_ context: UniversalIntelligenceAssessmentContext) async throws
-    -> UniversalIntelligenceAssessmentResult {
+        -> UniversalIntelligenceAssessmentResult
+    {
         // Assess universal intelligence
         UniversalIntelligenceAssessmentResult(
             coordinationPotential: 0.88,
@@ -1159,7 +1164,8 @@ private final class UniversalIntelligenceCoordinator: Sendable {
     }
 
     func analyzeUniversalCoordinationPotential(_ intelligenceDomains: [IntelligenceDomain]) async
-    -> UniversalCoordinationAnalysis {
+        -> UniversalCoordinationAnalysis
+    {
         UniversalCoordinationAnalysis(
             universalCoordinationPotential: 0.82,
             crossDomainSynergyPotential: 0.78,
@@ -1176,7 +1182,8 @@ private final class CrossDomainIntelligenceIntegrator: Sendable {
     }
 
     func integrateCrossDomainIntelligence(_ context: CrossDomainIntelligenceIntegrationContext) async throws
-    -> CrossDomainIntelligenceIntegrationResult {
+        -> CrossDomainIntelligenceIntegrationResult
+    {
         // Integrate cross-domain intelligence
         CrossDomainIntelligenceIntegrationResult(
             integrationStrength: 0.89,
@@ -1211,7 +1218,8 @@ private final class CrossDomainIntelligenceIntegrator: Sendable {
     }
 
     func analyzeCrossDomainIntegrationPotential(_ intelligenceDomains: [IntelligenceDomain]) async
-    -> CrossDomainIntegrationAnalysis {
+        -> CrossDomainIntegrationAnalysis
+    {
         CrossDomainIntegrationAnalysis(
             crossDomainIntegrationPotential: 0.72,
             synergyEnhancementPotential: 0.68,
@@ -1228,7 +1236,8 @@ private final class UniversalCoordinationOptimizer: Sendable {
     }
 
     func optimizeUniversalCoordination(_ context: UniversalCoordinationOptimizationContext) async throws
-    -> UniversalCoordinationOptimizationResult {
+        -> UniversalCoordinationOptimizationResult
+    {
         // Optimize universal coordination
         UniversalCoordinationOptimizationResult(
             coordinationEfficiency: 0.91,
@@ -1242,7 +1251,8 @@ private final class UniversalCoordinationOptimizer: Sendable {
     }
 
     func analyzeCoordinationOptimizationPotential(_ intelligenceDomains: [IntelligenceDomain]) async
-    -> CoordinationOptimizationAnalysis {
+        -> CoordinationOptimizationAnalysis
+    {
         CoordinationOptimizationAnalysis(
             coordinationOptimizationPotential: 0.69,
             efficiencyImprovementPotential: 0.65,
@@ -1259,7 +1269,8 @@ private final class IntelligenceCoordinationSynthesizer: Sendable {
     }
 
     func synthesizeIntelligenceCoordination(_ context: IntelligenceCoordinationSynthesisContext) async throws
-    -> IntelligenceCoordinationSynthesisResult {
+        -> IntelligenceCoordinationSynthesisResult
+    {
         // Synthesize intelligence coordination
         IntelligenceCoordinationSynthesisResult(
             coordinatedDomains: context.intelligenceDomains,
@@ -1281,7 +1292,8 @@ private final class UniversalIntelligenceOrchestrator: Sendable {
     }
 
     func orchestrateUniversalIntelligence(_ context: UniversalIntelligenceOrchestrationContext) async throws
-    -> UniversalIntelligenceOrchestrationResult {
+        -> UniversalIntelligenceOrchestrationResult
+    {
         // Orchestrate universal intelligence
         UniversalIntelligenceOrchestrationResult(
             universallyCoordinatedDomains: context.intelligenceDomains,

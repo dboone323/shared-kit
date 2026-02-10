@@ -559,7 +559,8 @@ struct StabilizationResult: Sendable {
 /// Main reality matrix engineering engine
 @MainActor
 final class RealityMatrixEngineeringEngine: RealityMatrixEngineeringProtocol, RealityMatrixManipulationProtocol,
-MatrixStabilityProtocol {
+    MatrixStabilityProtocol
+{
 
     typealias MatrixType = RealityMatrix
     typealias EngineeringResult = RealityMatrixEngineeringResult

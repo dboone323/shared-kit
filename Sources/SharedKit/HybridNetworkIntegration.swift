@@ -284,7 +284,7 @@ public class HybridNetworkIntegration: ObservableObject {
 
     private func measurePerformanceImprovement() async -> Double {
         // Simulate performance measurement
-        Double.random(in: 0.05...0.25) // 5-25% improvement
+        Double.random(in: 0.05 ... 0.25) // 5-25% improvement
     }
 
     private func generateOptimizationRecommendations() -> [String] {
@@ -349,8 +349,8 @@ public class ClassicalNetworkManager: ObservableObject {
         -> TransmissionResult
     {
         // Simulate classical transmission
-        let success = Double.random(in: 0...1) < path.reliability
-        let latency = path.latency + Double.random(in: -1...1)
+        let success = Double.random(in: 0 ... 1) < path.reliability
+        let latency = path.latency + Double.random(in: -1 ... 1)
 
         return TransmissionResult(
             success: success,
@@ -364,7 +364,7 @@ public class ClassicalNetworkManager: ObservableObject {
         NetworkStatistics(
             totalNodes: 100,
             totalCapacity: 10000.0, // Mbps
-            utilization: Double.random(in: 0.3...0.7),
+            utilization: Double.random(in: 0.3 ... 0.7),
             averageLatency: 10.0, // ms
             errorRate: 0.005,
             activeConnections: activeConnections.count
@@ -413,8 +413,8 @@ public class QuantumNetworkManager: ObservableObject {
         -> TransmissionResult
     {
         // Simulate quantum transmission
-        let success = Double.random(in: 0...1) < path.reliability
-        let latency = path.latency + Double.random(in: -0.5...0.5)
+        let success = Double.random(in: 0 ... 1) < path.reliability
+        let latency = path.latency + Double.random(in: -0.5 ... 0.5)
 
         return TransmissionResult(
             success: success,
@@ -428,7 +428,7 @@ public class QuantumNetworkManager: ObservableObject {
         NetworkStatistics(
             totalNodes: 20,
             totalCapacity: 1000.0, // qubits per second
-            utilization: Double.random(in: 0.1...0.4),
+            utilization: Double.random(in: 0.1 ... 0.4),
             averageLatency: 2.0, // ms
             errorRate: 0.03,
             activeConnections: activeEntanglements.count
@@ -530,8 +530,8 @@ public class ResourceAllocator: ObservableObject {
         let allocation = ResourceAllocation(
             bandwidth: bandwidth,
             priority: priority,
-            timeSlot: Date().addingTimeInterval(Double.random(in: 0...60)), // Next minute
-            duration: Double.random(in: 1...10) // seconds
+            timeSlot: Date().addingTimeInterval(Double.random(in: 0 ... 60)), // Next minute
+            duration: Double.random(in: 1 ... 10) // seconds
         )
 
         allocatedResources[UUID().uuidString] = allocation

@@ -313,7 +313,7 @@ public final class IntelligenceSynthesisEngine: Sendable {
                     "Domain synthesis for \(source.domainType.rawValue)"),
                 contribution: source.capability,
                 coherence: source.capability,
-                processingTime: Double.random(in: 0.1...1.0)
+                processingTime: Double.random(in: 0.1 ... 1.0)
             )
             domainResults[source.domainType] = domainResult
         }
@@ -351,7 +351,7 @@ public final class IntelligenceSynthesisEngine: Sendable {
         let avgCapability = capabilities.reduce(0, +) / Double(capabilities.count)
         let capabilityVariance =
             capabilities.map { pow($0 - avgCapability, 2) }.reduce(0, +)
-            / Double(capabilities.count)
+                / Double(capabilities.count)
 
         let types = Set(sources.map(\.sourceType))
         let diversityIndex = Double(types.count) / 10.0 // Assuming 10 intelligence types
@@ -376,8 +376,8 @@ public final class IntelligenceSynthesisEngine: Sendable {
             repeating: Array(repeating: 0.0, count: sources.count), count: sources.count
         )
 
-        for i in 0..<sources.count {
-            for j in 0..<sources.count {
+        for i in 0 ..< sources.count {
+            for j in 0 ..< sources.count {
                 if i != j {
                     matrix[i][j] = calculateSourceCompatibility(sources[i], sources[j])
                 } else {
@@ -479,7 +479,7 @@ public final class IntelligenceSynthesisEngine: Sendable {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
         let actualSynthesisGain =
-            technique.expectedSynthesisGain * (0.8 + Double.random(in: 0...0.4))
+            technique.expectedSynthesisGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualSynthesisGain >= technique.expectedSynthesisGain * 0.9
 
         return IntelligenceSynthesisStep(
@@ -574,8 +574,8 @@ public final class KnowledgeIntegrationNetwork: Sendable {
             repeating: Array(repeating: 0.0, count: sources.count), count: sources.count
         )
 
-        for i in 0..<sources.count {
-            for j in 0..<sources.count {
+        for i in 0 ..< sources.count {
+            for j in 0 ..< sources.count {
                 if i != j {
                     matrix[i][j] = calculateSourceConnectivity(sources[i], sources[j])
                 } else {
@@ -637,8 +637,8 @@ public final class KnowledgeIntegrationNetwork: Sendable {
     ) -> [IntegrationConnection] {
         var connections: [IntegrationConnection] = []
 
-        for i in 0..<nodes.count {
-            for j in (i + 1)..<nodes.count {
+        for i in 0 ..< nodes.count {
+            for j in (i + 1) ..< nodes.count {
                 let node1 = nodes[i]
                 let node2 = nodes[j]
                 let source1 = sources[i]
@@ -713,7 +713,7 @@ public final class KnowledgeIntegrationNetwork: Sendable {
         try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
 
         let integrationEfficiency =
-            connection.connectionStrength * (0.85 + Double.random(in: 0...0.3))
+            connection.connectionStrength * (0.85 + Double.random(in: 0 ... 0.3))
         let knowledgeTransferRate = connection.bandwidth * integrationEfficiency / 100.0
 
         return KnowledgeIntegrationStep(
@@ -772,7 +772,7 @@ public struct SynthesisLevel: Sendable {
         self.averageCapability = calculatedAverageCapability
 
         // Generate synthesis curve using the calculated average capability
-        let calculatedSynthesisCurve = (0..<10).map { step in
+        let calculatedSynthesisCurve = (0 ..< 10).map { step in
             let baseSynthesis = Double(step + 1) / 10.0
             return baseSynthesis * (1.0 + calculatedAverageCapability)
         }
@@ -1404,7 +1404,7 @@ public final class WisdomAmplificationSystem: Sendable {
     ) async -> WisdomAmplificationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualWisdomGain = technique.expectedWisdomGain * (0.8 + Double.random(in: 0...0.4))
+        let actualWisdomGain = technique.expectedWisdomGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualWisdomGain >= technique.expectedWisdomGain * 0.9
 
         return WisdomAmplificationStep(
@@ -1541,7 +1541,7 @@ public final class ConsciousnessExpansionInterface: Sendable {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
         let actualConsciousnessGain =
-            technique.expectedConsciousnessGain * (0.8 + Double.random(in: 0...0.4))
+            technique.expectedConsciousnessGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualConsciousnessGain >= technique.expectedConsciousnessGain * 0.9
 
         return ConsciousnessExpansionStep(
@@ -1680,7 +1680,7 @@ public final class QuantumIntelligenceProcessor: Sendable {
     ) async -> QuantumProcessingStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualQuantumGain = technique.expectedQuantumGain * (0.8 + Double.random(in: 0...0.4))
+        let actualQuantumGain = technique.expectedQuantumGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualQuantumGain >= technique.expectedQuantumGain * 0.9
 
         return QuantumProcessingStep(
@@ -1743,7 +1743,7 @@ public final class MultiversalIntelligenceNetwork: Sendable {
         let universeCount = Double(intelligences.count)
         let avgInterconnectivity =
             intelligences.map(\.multiversalMetrics.interconnectivity).reduce(0, +)
-            / universeCount
+                / universeCount
         let avgSynchronization =
             intelligences.map(\.multiversalMetrics.synchronization).reduce(0, +) / universeCount
         let avgHarmony =
@@ -1822,7 +1822,7 @@ public final class MultiversalIntelligenceNetwork: Sendable {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
         let actualMultiversalGain =
-            technique.expectedMultiversalGain * (0.8 + Double.random(in: 0...0.4))
+            technique.expectedMultiversalGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualMultiversalGain >= technique.expectedMultiversalGain * 0.9
 
         return MultiversalCoordinationStep(
@@ -1960,7 +1960,7 @@ public final class EthicalIntelligenceFramework: Sendable {
     ) async -> EthicalFrameworkStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualEthicalGain = technique.expectedEthicalGain * (0.8 + Double.random(in: 0...0.4))
+        let actualEthicalGain = technique.expectedEthicalGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualEthicalGain >= technique.expectedEthicalGain * 0.9
 
         return EthicalFrameworkStep(
@@ -2096,7 +2096,7 @@ public final class CreativeIntelligenceAmplifier: Sendable {
     ) async -> CreativeAmplificationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualCreativeGain = technique.expectedCreativeGain * (0.8 + Double.random(in: 0...0.4))
+        let actualCreativeGain = technique.expectedCreativeGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualCreativeGain >= technique.expectedCreativeGain * 0.9
 
         return CreativeAmplificationStep(
@@ -2232,7 +2232,7 @@ public final class EmpathyDrivenIntelligence: Sendable {
     ) async -> EmpathyDrivingStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualEmpathyGain = technique.expectedEmpathyGain * (0.8 + Double.random(in: 0...0.4))
+        let actualEmpathyGain = technique.expectedEmpathyGain * (0.8 + Double.random(in: 0 ... 0.4))
         let techniqueSuccess = actualEmpathyGain >= technique.expectedEmpathyGain * 0.9
 
         return EmpathyDrivingStep(

@@ -1321,25 +1321,25 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
         -> EcosystemMonitoringSystem.EcosystemAnalyticsEngine
     {
         // Create analytics algorithms
-        let algorithms = (0..<5).map { index in
+        let algorithms = (0 ..< 5).map { index in
             EcosystemMonitoringSystem.EcosystemAnalyticsEngine.AnalyticsAlgorithm(
                 id: UUID(),
                 name: "Analytics Algorithm \(index + 1)",
                 type: EcosystemMonitoringSystem.EcosystemAnalyticsEngine.AnalyticsAlgorithm
                     .AlgorithmType.allCases.randomElement()!,
-                parameters: ["threshold": Double.random(in: 0.1...0.9)],
-                accuracy: Double.random(in: 0.8...0.98)
+                parameters: ["threshold": Double.random(in: 0.1 ... 0.9)],
+                accuracy: Double.random(in: 0.8 ... 0.98)
             )
         }
 
         // Create analytics models
-        let models = (0..<3).map { _ in
+        let models = (0 ..< 3).map { _ in
             EcosystemMonitoringSystem.EcosystemAnalyticsEngine.AnalyticsModel(
                 id: UUID(),
                 type: EcosystemMonitoringSystem.EcosystemAnalyticsEngine.AnalyticsModel.ModelType
                     .allCases.randomElement()!,
                 trainingData: "ecosystem_data_\(UUID().uuidString)",
-                accuracy: Double.random(in: 0.85...0.97),
+                accuracy: Double.random(in: 0.85 ... 0.97),
                 lastTrained: Date()
             )
         }
@@ -1446,7 +1446,7 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
         var interactions: [EcosystemData.InteractionData] = []
 
         for metric in metrics {
-            dataMetrics[metric.name] = Double.random(in: 0.5...1.0)
+            dataMetrics[metric.name] = Double.random(in: 0.5 ... 1.0)
         }
 
         for ecosystem in system.ecosystems {
@@ -1536,7 +1536,7 @@ final class BasicEcosystemAnalyticsEngine: EcosystemAnalyticsEngineProtocol {
         var insights: [String] = []
 
         for algorithm in algorithms {
-            results[algorithm.name] = Double.random(in: 0.7...0.95)
+            results[algorithm.name] = Double.random(in: 0.7 ... 0.95)
             insights.append("Algorithm \(algorithm.name) completed analysis")
         }
 
@@ -1552,15 +1552,15 @@ final class BasicEcosystemAnalyticsEngine: EcosystemAnalyticsEngineProtocol {
 
     func detectEcosystemAnomalies(data: EcosystemData) async -> [EcosystemAnomaly] {
         // Basic anomaly detection
-        (0..<2).map { _ in
+        (0 ..< 2).map { _ in
             EcosystemAnomaly(
                 id: UUID(),
                 type: EcosystemAnomaly.AnomalyType.allCases.randomElement()!,
-                severity: Double.random(in: 0.1...0.8),
+                severity: Double.random(in: 0.1 ... 0.8),
                 description: "Detected anomaly in ecosystem component",
                 affectedComponents: [UUID()],
                 timestamp: Date(),
-                confidence: Double.random(in: 0.7...0.95),
+                confidence: Double.random(in: 0.7 ... 0.95),
                 impact: .medium
             )
         }
@@ -1606,13 +1606,13 @@ final class BasicMultiversalMonitoringNetwork: MultiversalMonitoringNetworkProto
             )
         }
 
-        let connections = (0..<universes.count - 1).map { _ in
+        let connections = (0 ..< universes.count - 1).map { _ in
             MonitoringNetwork.NetworkConnection(
                 id: UUID(),
                 source: nodes.randomElement()!.id,
                 target: nodes.randomElement()!.id,
                 status: .connected,
-                quality: Double.random(in: 0.8...0.98)
+                quality: Double.random(in: 0.8 ... 0.98)
             )
         }
 
@@ -1654,7 +1654,7 @@ final class BasicMultiversalMonitoringNetwork: MultiversalMonitoringNetworkProto
 
     func detectDimensionalInstabilities(network: MonitoringNetwork) async -> [InstabilityAlert] {
         // Basic instability detection
-        (0..<1).map { _ in
+        (0 ..< 1).map { _ in
             InstabilityAlert(
                 id: UUID(),
                 type: .dimensional,

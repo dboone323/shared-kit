@@ -329,7 +329,8 @@ public final class AgentCreativitySystems: Sendable {
     }
 
     private func assessCreativitySystems(_ request: CreativitySystemsRequest) async throws
-    -> CreativitySystemsAssessment {
+        -> CreativitySystemsAssessment
+    {
         // Assess creativity systems
         let assessmentContext = CreativitySystemsAssessmentContext(
             agents: request.agents,
@@ -529,7 +530,8 @@ public final class AgentCreativitySystems: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeAgentsForCreativitySystems(_ agents: [CreativitySystemsAgent]) async throws
-    -> CreativitySystemsAnalysis {
+        -> CreativitySystemsAnalysis
+    {
         // Analyze agents for creativity systems opportunities
         let creativitySystems = await creativitySystemsEngine.analyzeCreativitySystemsPotential(agents)
         let innovationEnhancements = await innovationEnhancementCoordinator
@@ -558,7 +560,8 @@ public final class AgentCreativitySystems: Sendable {
     }
 
     private func generateCreativitySystemsStrategies(_ analysis: CreativitySystemsAnalysis)
-    -> [CreativitySystemsStrategy] {
+        -> [CreativitySystemsStrategy]
+    {
         // Generate creativity systems strategies based on analysis
         var strategies: [CreativitySystemsStrategy] = []
 
@@ -673,7 +676,8 @@ public final class AgentCreativitySystems: Sendable {
     }
 
     private func generateOrchestrationRequirements(_ request: CreativitySystemsRequest)
-    -> QuantumCreativityRequirements {
+        -> QuantumCreativityRequirements
+    {
         QuantumCreativityRequirements(
             innovationLevel: .innovative,
             creativityDepth: .perfect,
@@ -1134,7 +1138,8 @@ private final class CreativitySystemsEngine: Sendable {
     }
 
     func assessCreativitySystems(_ context: CreativitySystemsAssessmentContext) async throws
-    -> CreativitySystemsAssessmentResult {
+        -> CreativitySystemsAssessmentResult
+    {
         // Assess creativity systems
         CreativitySystemsAssessmentResult(
             innovationPotential: 0.88,
@@ -1144,7 +1149,8 @@ private final class CreativitySystemsEngine: Sendable {
     }
 
     func processCreativitySystems(_ context: CreativitySystemsProcessingContext) async throws
-    -> CreativitySystemsProcessingResult {
+        -> CreativitySystemsProcessingResult
+    {
         // Process creativity systems
         CreativitySystemsProcessingResult(
             creativitySystems: 0.93,
@@ -1199,7 +1205,8 @@ private final class InnovationEnhancementCoordinator: Sendable {
     }
 
     func coordinateInnovationEnhancement(_ context: InnovationEnhancementCoordinationContext) async throws
-    -> InnovationEnhancementCoordinationResult {
+        -> InnovationEnhancementCoordinationResult
+    {
         // Coordinate innovation enhancement
         InnovationEnhancementCoordinationResult(
             creativityEnhancement: 0.91,
@@ -1234,7 +1241,8 @@ private final class InnovationEnhancementCoordinator: Sendable {
     }
 
     func analyzeInnovationEnhancementPotential(_ agents: [CreativitySystemsAgent]) async
-    -> InnovationEnhancementAnalysis {
+        -> InnovationEnhancementAnalysis
+    {
         InnovationEnhancementAnalysis(
             creativityPotential: 0.69,
             innovationStrengthPotential: 0.65,
@@ -1251,7 +1259,8 @@ private final class CreativitySystemsNetwork: Sendable {
     }
 
     func synthesizeCreativitySystemsNetwork(_ context: CreativitySystemsNetworkSynthesisContext) async throws
-    -> CreativitySystemsNetworkSynthesisResult {
+        -> CreativitySystemsNetworkSynthesisResult
+    {
         // Synthesize creativity systems network
         CreativitySystemsNetworkSynthesisResult(
             creativeAgents: context.agents,
@@ -1282,7 +1291,8 @@ private final class CreativeSynthesisSynthesizer: Sendable {
     }
 
     func synthesizeCreativeSynthesis(_ context: CreativeSynthesisSynthesisContext) async throws
-    -> CreativeSynthesisSynthesisResult {
+        -> CreativeSynthesisSynthesisResult
+    {
         // Synthesize creative synthesis
         CreativeSynthesisSynthesisResult(
             creativeAgents: context.agents,
@@ -1304,7 +1314,8 @@ private final class QuantumCreativityOrchestrator: Sendable {
     }
 
     func orchestrateQuantumCreativity(_ context: QuantumCreativityOrchestrationContext) async throws
-    -> QuantumCreativityOrchestrationResult {
+        -> QuantumCreativityOrchestrationResult
+    {
         // Orchestrate quantum creativity
         QuantumCreativityOrchestrationResult(
             quantumCreativityAgents: context.agents,

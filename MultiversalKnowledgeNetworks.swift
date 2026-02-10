@@ -475,8 +475,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
 
             // Establish bridges between universes
             var bridges: [KnowledgeBridge] = []
-            for i in 0..<universes.count {
-                for j in (i + 1)..<universes.count {
+            for i in 0 ..< universes.count {
+                for j in (i + 1) ..< universes.count {
                     let bridge = try await bridgeEngine.establishBridge(
                         sourceUniverse: universes[i],
                         targetUniverse: universes[j],
@@ -973,7 +973,7 @@ final class BasicKnowledgeSynchronizationEngine: KnowledgeSynchronizationEngine 
             transferredUnits: transferredUnits,
             conflictsResolved: 0,
             successRate: 0.95,
-            duration: Double.random(in: 1.0...10.0),
+            duration: Double.random(in: 1.0 ... 10.0),
             timestamp: Date()
         )
     }
@@ -1060,7 +1060,7 @@ final class BasicUniversalKnowledgeBridge: UniversalKnowledgeBridgeProtocol {
     {
         // Simulate transfer
         let dataSize = Int64(knowledge.units.count * 1024) // Assume 1KB per unit
-        let latency = Double.random(in: 0.1...1.0)
+        let latency = Double.random(in: 0.1 ... 1.0)
 
         return BridgeTransfer(
             bridgeId: bridge.id,
@@ -1084,11 +1084,11 @@ final class BasicUniversalKnowledgeBridge: UniversalKnowledgeBridgeProtocol {
         BridgeMetrics(
             bridgeId: bridge.id,
             throughput: bridge.throughput,
-            latency: Double.random(in: 0.05...0.5),
+            latency: Double.random(in: 0.05 ... 0.5),
             stability: bridge.stability,
-            errorRate: Double.random(in: 0.001...0.01),
-            utilization: Double.random(in: 0.3...0.8),
-            qualityScore: Double.random(in: 0.85...0.98),
+            errorRate: Double.random(in: 0.001 ... 0.01),
+            utilization: Double.random(in: 0.3 ... 0.8),
+            qualityScore: Double.random(in: 0.85 ... 0.98),
             timestamp: Date()
         )
     }

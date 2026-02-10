@@ -926,7 +926,7 @@ final class AutonomousQuantumCitiesEngine: AutonomousQuantumCitiesProtocol {
             .residential, .commercial, .industrial, .educational, .recreational, .administrative,
         ]
 
-        for i in 0..<districtCount {
+        for i in 0 ..< districtCount {
             let function = districtFunctions[i % districtFunctions.count]
             let district = QuantumCity.CityDistrict(
                 id: UUID(),
@@ -935,18 +935,18 @@ final class AutonomousQuantumCitiesEngine: AutonomousQuantumCitiesProtocol {
                 area: config.area / Double(districtCount),
                 function: function,
                 infrastructure: QuantumCity.CityDistrict.DistrictInfrastructure(
-                    buildings: Int.random(in: 50...200),
-                    roads: Double.random(in: 0.7...0.95),
-                    utilities: Double.random(in: 0.8...0.98),
-                    greenSpaces: Double.random(in: 0.1...0.4),
-                    publicServices: Int.random(in: 5...20)
+                    buildings: Int.random(in: 50 ... 200),
+                    roads: Double.random(in: 0.7 ... 0.95),
+                    utilities: Double.random(in: 0.8 ... 0.98),
+                    greenSpaces: Double.random(in: 0.1 ... 0.4),
+                    publicServices: Int.random(in: 5 ... 20)
                 ),
                 performance: QuantumCity.CityDistrict.DistrictPerformance(
-                    livability: Double.random(in: 0.7...0.95),
-                    efficiency: Double.random(in: 0.75...0.9),
-                    sustainability: Double.random(in: 0.7...0.9),
-                    connectivity: Double.random(in: 0.8...0.95),
-                    innovation: Double.random(in: 0.6...0.85)
+                    livability: Double.random(in: 0.7 ... 0.95),
+                    efficiency: Double.random(in: 0.75 ... 0.9),
+                    sustainability: Double.random(in: 0.7 ... 0.9),
+                    connectivity: Double.random(in: 0.8 ... 0.95),
+                    innovation: Double.random(in: 0.6 ... 0.85)
                 )
             )
             districts.append(district)
@@ -959,15 +959,15 @@ final class AutonomousQuantumCitiesEngine: AutonomousQuantumCitiesProtocol {
         config: CityConfiguration, environment: UrbanEnvironment
     ) async throws -> QuantumCity.CityInfrastructure {
         // Initialize transportation systems
-        let transportation = (0..<3).map { _ in
+        let transportation = (0 ..< 3).map { _ in
             TransportationSystem(
                 id: UUID(),
                 type: TransportationSystem.TransportationType.allCases.randomElement()!,
-                capacity: Double.random(in: 1000...10000),
-                efficiency: Double.random(in: 0.7...0.95),
-                coverage: Double.random(in: 0.8...0.98),
+                capacity: Double.random(in: 1000 ... 10000),
+                efficiency: Double.random(in: 0.7 ... 0.95),
+                coverage: Double.random(in: 0.8 ... 0.98),
                 quantumOptimization: true,
-                autonomousVehicles: Int.random(in: 100...1000)
+                autonomousVehicles: Int.random(in: 100 ... 1000)
             )
         }
 
@@ -982,34 +982,34 @@ final class AutonomousQuantumCitiesEngine: AutonomousQuantumCitiesProtocol {
         )
 
         // Initialize communication networks
-        let communication = (0..<2).map { _ in
+        let communication = (0 ..< 2).map { _ in
             CommunicationNetwork(
                 id: UUID(),
                 type: CommunicationNetwork.NetworkType.allCases.randomElement()!,
-                bandwidth: Double.random(in: 100...1000),
-                coverage: Double.random(in: 0.9...0.99),
+                bandwidth: Double.random(in: 100 ... 1000),
+                coverage: Double.random(in: 0.9 ... 0.99),
                 quantumEncryption: true,
-                latency: Double.random(in: 0.001...0.01)
+                latency: Double.random(in: 0.001 ... 0.01)
             )
         }
 
         // Initialize utilities
         let utilities = UtilitiesNetwork(
-            water: Double.random(in: 0.9...0.98),
-            sewage: Double.random(in: 0.85...0.95),
-            waste: Double.random(in: 0.8...0.95),
-            power: Double.random(in: 0.9...0.98),
-            gas: Double.random(in: 0.7...0.9),
-            digital: Double.random(in: 0.95...0.99)
+            water: Double.random(in: 0.9 ... 0.98),
+            sewage: Double.random(in: 0.85 ... 0.95),
+            waste: Double.random(in: 0.8 ... 0.95),
+            power: Double.random(in: 0.9 ... 0.98),
+            gas: Double.random(in: 0.7 ... 0.9),
+            digital: Double.random(in: 0.95 ... 0.99)
         )
 
         // Initialize security
         let security = SecuritySystem(
-            surveillance: Double.random(in: 0.8...0.95),
-            emergency: Double.random(in: 0.9...0.98),
-            cyber: Double.random(in: 0.85...0.95),
-            physical: Double.random(in: 0.8...0.95),
-            quantum: Double.random(in: 0.9...0.98)
+            surveillance: Double.random(in: 0.8 ... 0.95),
+            emergency: Double.random(in: 0.9 ... 0.98),
+            cyber: Double.random(in: 0.85 ... 0.95),
+            physical: Double.random(in: 0.8 ... 0.95),
+            quantum: Double.random(in: 0.9 ... 0.98)
         )
 
         // Initialize public services
@@ -1018,10 +1018,10 @@ final class AutonomousQuantumCitiesEngine: AutonomousQuantumCitiesProtocol {
         ].map { service in
             PublicService(
                 type: service,
-                capacity: Double.random(in: 0.8...0.98),
-                utilization: Double.random(in: 0.6...0.9),
-                quality: Double.random(in: 0.8...0.95),
-                accessibility: Double.random(in: 0.85...0.98)
+                capacity: Double.random(in: 0.8 ... 0.98),
+                utilization: Double.random(in: 0.6 ... 0.9),
+                quality: Double.random(in: 0.8 ... 0.95),
+                accessibility: Double.random(in: 0.85 ... 0.98)
             )
         }
 
@@ -1057,44 +1057,44 @@ final class AutonomousQuantumCitiesEngine: AutonomousQuantumCitiesProtocol {
         -> QuantumCity.QuantumSystems
     {
         // Initialize quantum computers
-        let quantumComputers = (0..<config.quantumInfrastructure.quantumComputers).map { _ in
+        let quantumComputers = (0 ..< config.quantumInfrastructure.quantumComputers).map { _ in
             QuantumComputer(
                 id: UUID(),
-                qubits: Int.random(in: 100...1000),
-                coherence: Double.random(in: 0.9...0.99),
-                gateFidelity: Double.random(in: 0.95...0.999),
+                qubits: Int.random(in: 100 ... 1000),
+                coherence: Double.random(in: 0.9 ... 0.99),
+                gateFidelity: Double.random(in: 0.95 ... 0.999),
                 applications: ["optimization", "simulation", "cryptography", "ai"]
             )
         }
 
         // Initialize quantum networks
-        let quantumNetworks = (0..<config.quantumInfrastructure.quantumNetworks).map { _ in
+        let quantumNetworks = (0 ..< config.quantumInfrastructure.quantumNetworks).map { _ in
             QuantumNetwork(
                 id: UUID(),
-                nodes: Int.random(in: 10...100),
-                entanglement: Double.random(in: 0.8...0.98),
-                bandwidth: Double.random(in: 1000...10000),
-                security: Double.random(in: 0.95...0.999)
+                nodes: Int.random(in: 10 ... 100),
+                entanglement: Double.random(in: 0.8 ... 0.98),
+                bandwidth: Double.random(in: 1000 ... 10000),
+                security: Double.random(in: 0.95 ... 0.999)
             )
         }
 
         // Initialize quantum sensors
-        let quantumSensors = (0..<10).map { _ in
+        let quantumSensors = (0 ..< 10).map { _ in
             QuantumSensor(
                 id: UUID(),
                 type: ["environmental", "traffic", "energy", "security", "health"].randomElement()!,
-                sensitivity: Double.random(in: 0.9...0.999),
-                accuracy: Double.random(in: 0.95...0.999),
-                range: Double.random(in: 1...100)
+                sensitivity: Double.random(in: 0.9 ... 0.999),
+                accuracy: Double.random(in: 0.95 ... 0.999),
+                range: Double.random(in: 1 ... 100)
             )
         }
 
         // Initialize quantum AI
         let quantumAI = QuantumAI(
             algorithms: ["qml", "quantum_optimization", "quantum_simulation"],
-            learningRate: Double.random(in: 0.1...1.0),
-            predictionAccuracy: Double.random(in: 0.9...0.99),
-            optimizationCapability: Double.random(in: 0.8...0.98)
+            learningRate: Double.random(in: 0.1 ... 1.0),
+            predictionAccuracy: Double.random(in: 0.9 ... 0.99),
+            optimizationCapability: Double.random(in: 0.8 ... 0.98)
         )
 
         return QuantumCity.QuantumSystems(
@@ -1242,7 +1242,7 @@ final class BasicQuantumUrbanGovernance: QuantumUrbanGovernanceProtocol {
             PolicyImplementation(
                 policyId: policy.id,
                 success: Bool.random(),
-                progress: Double.random(in: 0.5...1.0),
+                progress: Double.random(in: 0.5 ... 1.0),
                 challenges: [],
                 outcomes: ["Policy \(policy.name) implemented"],
                 timestamp: Date()
@@ -1264,13 +1264,13 @@ final class BasicQuantumUrbanGovernance: QuantumUrbanGovernanceProtocol {
 
     func monitorGovernanceEffectiveness(city: QuantumCity) async -> GovernanceMetrics {
         GovernanceMetrics(
-            policySuccess: Double.random(in: 0.7...0.95),
+            policySuccess: Double.random(in: 0.7 ... 0.95),
             citizenParticipation: city.governance.citizenParticipation,
-            decisionQuality: Double.random(in: 0.8...0.95),
+            decisionQuality: Double.random(in: 0.8 ... 0.95),
             transparency: city.governance.transparency,
             accountability: city.governance.accountability,
             adaptation: city.governance.adaptationRate,
-            conflictResolution: Double.random(in: 0.75...0.9)
+            conflictResolution: Double.random(in: 0.75 ... 0.9)
         )
     }
 }

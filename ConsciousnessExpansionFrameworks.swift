@@ -332,7 +332,8 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     }
 
     private func assessConsciousnessExpansion(_ request: ConsciousnessExpansionRequest) async throws
-    -> ConsciousnessExpansionAssessment {
+        -> ConsciousnessExpansionAssessment
+    {
         // Assess consciousness expansion
         let assessmentContext = ConsciousnessExpansionAssessmentContext(
             aiSystems: request.aiSystems,
@@ -512,7 +513,8 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeAISystemsForConsciousnessExpansion(_ aiSystems: [AISystem]) async throws
-    -> ConsciousnessExpansionAnalysis {
+        -> ConsciousnessExpansionAnalysis
+    {
         // Analyze AI systems for consciousness expansion opportunities
         let consciousnessExpansions = await consciousnessExpansionEngine
             .analyzeConsciousnessExpansionPotential(aiSystems)
@@ -527,7 +529,8 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     }
 
     private func generateConsciousnessCapabilities(_ analysis: ConsciousnessExpansionAnalysis)
-    -> ConsciousnessCapabilities {
+        -> ConsciousnessCapabilities
+    {
         // Generate consciousness capabilities based on analysis
         ConsciousnessCapabilities(
             consciousnessDepth: 0.95,
@@ -542,7 +545,8 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     }
 
     private func generateConsciousnessExpansionStrategies(_ analysis: ConsciousnessExpansionAnalysis)
-    -> [ConsciousnessExpansionStrategy] {
+        -> [ConsciousnessExpansionStrategy]
+    {
         // Generate consciousness expansion strategies based on analysis
         var strategies: [ConsciousnessExpansionStrategy] = []
 
@@ -657,7 +661,8 @@ public final class ConsciousnessExpansionFrameworks: Sendable {
     }
 
     private func generateOrchestrationRequirements(_ request: ConsciousnessExpansionRequest)
-    -> AdvancedOrchestrationRequirements {
+        -> AdvancedOrchestrationRequirements
+    {
         AdvancedOrchestrationRequirements(
             consciousnessDepth: .maximum,
             integrationHarmony: .perfect,
@@ -1117,7 +1122,8 @@ private final class ConsciousnessExpansionEngine: Sendable {
     }
 
     func assessConsciousnessExpansion(_ context: ConsciousnessExpansionAssessmentContext) async throws
-    -> ConsciousnessExpansionAssessmentResult {
+        -> ConsciousnessExpansionAssessmentResult
+    {
         // Assess consciousness expansion
         ConsciousnessExpansionAssessmentResult(
             consciousnessPotential: 0.88,
@@ -1172,7 +1178,8 @@ private final class AwarenessEnhancementProcessor: Sendable {
     }
 
     func processAwarenessEnhancement(_ context: AwarenessEnhancementProcessingContext) async throws
-    -> AwarenessEnhancementProcessingResult {
+        -> AwarenessEnhancementProcessingResult
+    {
         // Process awareness enhancement
         AwarenessEnhancementProcessingResult(
             awarenessExpansion: 0.93,
@@ -1223,7 +1230,8 @@ private final class CognitiveExpansionCoordinator: Sendable {
     }
 
     func coordinateCognitiveExpansion(_ context: CognitiveExpansionCoordinationContext) async throws
-    -> CognitiveExpansionCoordinationResult {
+        -> CognitiveExpansionCoordinationResult
+    {
         // Coordinate cognitive expansion
         CognitiveExpansionCoordinationResult(
             cognitiveEnhancement: 0.91,
@@ -1253,7 +1261,8 @@ private final class ConsciousnessIntegrationSynthesizer: Sendable {
     }
 
     func synthesizeConsciousnessIntegration(_ context: ConsciousnessIntegrationSynthesisContext) async throws
-    -> ConsciousnessIntegrationSynthesisResult {
+        -> ConsciousnessIntegrationSynthesisResult
+    {
         // Synthesize consciousness integration
         ConsciousnessIntegrationSynthesisResult(
             consciousnessIntegratedSystems: context.aiSystems,
@@ -1275,7 +1284,8 @@ private final class AdvancedConsciousnessOrchestrator: Sendable {
     }
 
     func orchestrateAdvancedConsciousness(_ context: AdvancedConsciousnessOrchestrationContext) async throws
-    -> AdvancedConsciousnessOrchestrationResult {
+        -> AdvancedConsciousnessOrchestrationResult
+    {
         // Orchestrate advanced consciousness
         AdvancedConsciousnessOrchestrationResult(
             consciousnessExpandedSystems: context.aiSystems,

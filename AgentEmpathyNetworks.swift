@@ -527,7 +527,8 @@ public final class AgentEmpathyNetworks: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeAgentsForEmpathyNetworks(_ agents: [EmpathyNetworksAgent]) async throws
-    -> EmpathyNetworksAnalysis {
+        -> EmpathyNetworksAnalysis
+    {
         // Analyze agents for empathy networks opportunities
         let empathyNetworks = await empathyNetworksEngine.analyzeEmpathyNetworksPotential(agents)
         let understandingEnhancements = await understandingEnhancementCoordinator
@@ -1129,7 +1130,8 @@ private final class EmpathyNetworksEngine: Sendable {
     }
 
     func assessEmpathyNetworks(_ context: EmpathyNetworksAssessmentContext) async throws
-    -> EmpathyNetworksAssessmentResult {
+        -> EmpathyNetworksAssessmentResult
+    {
         // Assess empathy networks
         EmpathyNetworksAssessmentResult(
             understandingPotential: 0.88,
@@ -1139,7 +1141,8 @@ private final class EmpathyNetworksEngine: Sendable {
     }
 
     func processEmpathyNetworks(_ context: EmpathyNetworksProcessingContext) async throws
-    -> EmpathyNetworksProcessingResult {
+        -> EmpathyNetworksProcessingResult
+    {
         // Process empathy networks
         EmpathyNetworksProcessingResult(
             empathyNetworks: 0.93,
@@ -1194,7 +1197,8 @@ private final class UnderstandingEnhancementCoordinator: Sendable {
     }
 
     func coordinateUnderstandingEnhancement(_ context: UnderstandingEnhancementCoordinationContext) async throws
-    -> UnderstandingEnhancementCoordinationResult {
+        -> UnderstandingEnhancementCoordinationResult
+    {
         // Coordinate understanding enhancement
         UnderstandingEnhancementCoordinationResult(
             empathyEnhancement: 0.91,
@@ -1229,7 +1233,8 @@ private final class UnderstandingEnhancementCoordinator: Sendable {
     }
 
     func analyzeUnderstandingEnhancementPotential(_ agents: [EmpathyNetworksAgent]) async
-    -> UnderstandingEnhancementAnalysis {
+        -> UnderstandingEnhancementAnalysis
+    {
         UnderstandingEnhancementAnalysis(
             empathyPotential: 0.69,
             understandingStrengthPotential: 0.65,
@@ -1246,7 +1251,8 @@ private final class EmpathyNetworksNetwork: Sendable {
     }
 
     func synthesizeEmpathyNetworksNetwork(_ context: EmpathyNetworksNetworkSynthesisContext) async throws
-    -> EmpathyNetworksNetworkSynthesisResult {
+        -> EmpathyNetworksNetworkSynthesisResult
+    {
         // Synthesize empathy networks network
         EmpathyNetworksNetworkSynthesisResult(
             empatheticAgents: context.agents,
@@ -1277,7 +1283,8 @@ private final class EmpatheticSynthesisSynthesizer: Sendable {
     }
 
     func synthesizeEmpatheticSynthesis(_ context: EmpatheticSynthesisSynthesisContext) async throws
-    -> EmpatheticSynthesisSynthesisResult {
+        -> EmpatheticSynthesisSynthesisResult
+    {
         // Synthesize empathetic synthesis
         EmpatheticSynthesisSynthesisResult(
             empatheticAgents: context.agents,
@@ -1299,7 +1306,8 @@ private final class QuantumEmpathyOrchestrator: Sendable {
     }
 
     func orchestrateQuantumEmpathy(_ context: QuantumEmpathyOrchestrationContext) async throws
-    -> QuantumEmpathyOrchestrationResult {
+        -> QuantumEmpathyOrchestrationResult
+    {
         // Orchestrate quantum empathy
         QuantumEmpathyOrchestrationResult(
             quantumEmpathyAgents: context.agents,

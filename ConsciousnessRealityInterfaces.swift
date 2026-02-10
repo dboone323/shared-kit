@@ -834,10 +834,10 @@ final class ConsciousnessRealityInterfaceEngine: ConsciousnessRealityInterfacePr
                 stabilityId: UUID(),
                 interfaceId: interfaceId,
                 timestamp: Date(),
-                stabilityLevel: interface.stabilityRating + Double.random(in: -0.1...0.1),
-                coherenceLevel: 0.85 + Double.random(in: -0.05...0.05),
-                connectionStrength: interface.connectionStrength + Double.random(in: -0.05...0.05),
-                anomalyCount: Int.random(in: 0...2),
+                stabilityLevel: interface.stabilityRating + Double.random(in: -0.1 ... 0.1),
+                coherenceLevel: 0.85 + Double.random(in: -0.05 ... 0.05),
+                connectionStrength: interface.connectionStrength + Double.random(in: -0.05 ... 0.05),
+                anomalyCount: Int.random(in: 0 ... 2),
                 alerts: []
             )
 

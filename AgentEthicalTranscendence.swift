@@ -325,7 +325,8 @@ public final class AgentEthicalTranscendence: Sendable {
     }
 
     private func assessEthicalTranscendence(_ request: EthicalTranscendenceRequest) async throws
-    -> EthicalTranscendenceAssessment {
+        -> EthicalTranscendenceAssessment
+    {
         // Assess ethical transcendence
         let assessmentContext = EthicalTranscendenceAssessmentContext(
             agents: request.agents,
@@ -527,7 +528,8 @@ public final class AgentEthicalTranscendence: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeAgentsForEthicalTranscendence(_ agents: [EthicalTranscendenceAgent]) async throws
-    -> EthicalTranscendenceAnalysis {
+        -> EthicalTranscendenceAnalysis
+    {
         // Analyze agents for ethical transcendence opportunities
         let ethicalTranscendences = await ethicalTranscendenceEngine.analyzeEthicalTranscendencePotential(agents)
         let universalEthics = await universalEthicsCoordinator.analyzeUniversalEthicsPotential(agents)
@@ -555,7 +557,8 @@ public final class AgentEthicalTranscendence: Sendable {
     }
 
     private func generateEthicalTranscendenceStrategies(_ analysis: EthicalTranscendenceAnalysis)
-    -> [EthicalTranscendenceStrategy] {
+        -> [EthicalTranscendenceStrategy]
+    {
         // Generate ethical transcendence strategies based on analysis
         var strategies: [EthicalTranscendenceStrategy] = []
 
@@ -671,7 +674,8 @@ public final class AgentEthicalTranscendence: Sendable {
     }
 
     private func generateOrchestrationRequirements(_ request: EthicalTranscendenceRequest)
-    -> QuantumEthicalRequirements {
+        -> QuantumEthicalRequirements
+    {
         QuantumEthicalRequirements(
             ethicalDepth: .universal,
             transcendenceHarmony: .perfect,
@@ -1134,7 +1138,8 @@ private final class EthicalTranscendenceEngine: Sendable {
     }
 
     func assessEthicalTranscendence(_ context: EthicalTranscendenceAssessmentContext) async throws
-    -> EthicalTranscendenceAssessmentResult {
+        -> EthicalTranscendenceAssessmentResult
+    {
         // Assess ethical transcendence
         EthicalTranscendenceAssessmentResult(
             ethicalPotential: 0.88,
@@ -1144,7 +1149,8 @@ private final class EthicalTranscendenceEngine: Sendable {
     }
 
     func processEthicalTranscendence(_ context: EthicalTranscendenceProcessingContext) async throws
-    -> EthicalTranscendenceProcessingResult {
+        -> EthicalTranscendenceProcessingResult
+    {
         // Process ethical transcendence
         EthicalTranscendenceProcessingResult(
             ethicalTranscendence: 0.93,
@@ -1183,7 +1189,8 @@ private final class EthicalTranscendenceEngine: Sendable {
     }
 
     func analyzeEthicalTranscendencePotential(_ agents: [EthicalTranscendenceAgent]) async
-    -> EthicalTranscendenceAnalysis {
+        -> EthicalTranscendenceAnalysis
+    {
         EthicalTranscendenceAnalysis(
             transcendencePotential: 0.82,
             ethicalDepthPotential: 0.77,
@@ -1200,7 +1207,8 @@ private final class UniversalEthicsCoordinator: Sendable {
     }
 
     func coordinateUniversalEthics(_ context: UniversalEthicsCoordinationContext) async throws
-    -> UniversalEthicsCoordinationResult {
+        -> UniversalEthicsCoordinationResult
+    {
         // Coordinate universal ethics
         UniversalEthicsCoordinationResult(
             universalEthics: 0.91,
@@ -1251,7 +1259,8 @@ private final class EthicalTranscendenceNetwork: Sendable {
     }
 
     func synthesizeEthicalTranscendenceNetwork(_ context: EthicalTranscendenceNetworkSynthesisContext) async throws
-    -> EthicalTranscendenceNetworkSynthesisResult {
+        -> EthicalTranscendenceNetworkSynthesisResult
+    {
         // Synthesize ethical transcendence network
         EthicalTranscendenceNetworkSynthesisResult(
             ethicallyTranscendedAgents: context.agents,
@@ -1266,7 +1275,8 @@ private final class EthicalTranscendenceNetwork: Sendable {
     }
 
     func analyzeEthicalIntelligencePotential(_ agents: [EthicalTranscendenceAgent]) async
-    -> EthicalIntelligenceAnalysis {
+        -> EthicalIntelligenceAnalysis
+    {
         EthicalIntelligenceAnalysis(
             intelligencePotential: 0.67,
             harmonyPotential: 0.63,
@@ -1283,7 +1293,8 @@ private final class UniversalEthicalIntelligenceSynthesizer: Sendable {
     }
 
     func synthesizeUniversalEthicalIntelligence(_ context: UniversalEthicalIntelligenceSynthesisContext) async throws
-    -> UniversalEthicalIntelligenceSynthesisResult {
+        -> UniversalEthicalIntelligenceSynthesisResult
+    {
         // Synthesize universal ethical intelligence
         UniversalEthicalIntelligenceSynthesisResult(
             ethicallyTranscendedAgents: context.agents,
@@ -1305,7 +1316,8 @@ private final class QuantumEthicalOrchestrator: Sendable {
     }
 
     func orchestrateQuantumEthical(_ context: QuantumEthicalOrchestrationContext) async throws
-    -> QuantumEthicalOrchestrationResult {
+        -> QuantumEthicalOrchestrationResult
+    {
         // Orchestrate quantum ethical
         QuantumEthicalOrchestrationResult(
             quantumEthicalAgents: context.agents,

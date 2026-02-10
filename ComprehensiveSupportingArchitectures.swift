@@ -838,13 +838,13 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
                 let stageExecutionTime = Date().timeIntervalSince(stageStartTime)
                 let averagePerformance =
                     operationResults.map(\.quantumEnhancement).reduce(0, +)
-                    / Double(operationResults.count)
+                        / Double(operationResults.count)
                 let averageQuantumEnhancement =
                     operationResults.map(\.quantumEnhancement).reduce(0, +)
-                    / Double(operationResults.count)
+                        / Double(operationResults.count)
                 let averageConsciousnessAmplification =
                     operationResults.map(\.consciousnessAmplification).reduce(0, +)
-                    / Double(operationResults.count)
+                        / Double(operationResults.count)
 
                 let stageResult = ComprehensiveStageExecutionResult(
                     stageId: stage.stageId,
@@ -870,7 +870,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
                 stageResults.values.map(\.performance).reduce(0, +) / Double(stageResults.count)
             let overallQuantumAchievement =
                 stageResults.values.map(\.quantumEnhancement).reduce(0, +)
-                / Double(stageResults.count)
+                    / Double(stageResults.count)
 
             let workflowResult = ComprehensiveWorkflowExecutionResult(
                 workflowId: workflow.workflowId,
@@ -922,7 +922,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
                 optimizations.map(\.impact).reduce(0, +) / Double(optimizations.count)
             let quantumEnhancement =
                 optimizations.map(\.quantumContribution).reduce(0, +)
-                / Double(optimizations.count)
+                    / Double(optimizations.count)
 
             let optimizedComponent = OptimizedComponent(
                 componentId: component.componentId,
@@ -985,7 +985,7 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
         case "quantum_achievement":
             let averageQuantum =
                 stageResults.values.map(\.quantumEnhancement).reduce(0, +)
-                / Double(stageResults.count)
+                    / Double(stageResults.count)
             return averageQuantum >= criterion.threshold
 
         case "execution_time":

@@ -467,7 +467,7 @@ public final class MoralReasoningFramework: Sendable {
     ) async -> MoralReasoningResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.reasoning * 1_500_000_000))
 
-        let actualGain = step.reasoning * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.reasoning * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.reasoning * 0.90
 
         return MoralReasoningResultItem(
@@ -587,7 +587,7 @@ public final class VirtueAlignmentSystem: Sendable {
     ) async -> VirtueAlignmentResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.alignment * 2_000_000_000))
 
-        let actualGain = step.alignment * (0.8 + Double.random(in: 0...0.4))
+        let actualGain = step.alignment * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualGain >= step.alignment * 0.85
 
         return VirtueAlignmentResultItem(
@@ -641,7 +641,8 @@ public final class JusticeImplementationInterface: Sendable {
 
     /// Assess justice implementation potential
     private func assessJusticeImplementationPotential(_ justice: JusticeImplementable)
-    -> JusticeImplementationAssessment {
+        -> JusticeImplementationAssessment
+    {
         let implementation = justice.justiceMetrics.implementation
         let maintenance = justice.justiceMetrics.maintenance
         let fulfillment = justice.justiceMetrics.fulfillment
@@ -657,7 +658,8 @@ public final class JusticeImplementationInterface: Sendable {
 
     /// Design implementation strategy
     private func designImplementationStrategy(_ assessment: JusticeImplementationAssessment)
-    -> JusticeImplementationStrategy {
+        -> JusticeImplementationStrategy
+    {
         var implementationSteps: [JusticeImplementationStep] = []
 
         if assessment.implementation < 0.85 {
@@ -709,7 +711,7 @@ public final class JusticeImplementationInterface: Sendable {
     ) async -> JusticeImplementationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.implementation * 2_500_000_000))
 
-        let actualPower = step.implementation * (0.75 + Double.random(in: 0...0.5))
+        let actualPower = step.implementation * (0.75 + Double.random(in: 0 ... 0.5))
         let success = actualPower >= step.implementation * 0.80
 
         return JusticeImplementationResultItem(

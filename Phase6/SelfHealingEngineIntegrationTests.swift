@@ -327,7 +327,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         let startTime = Date()
 
         // When - perform multiple healing operations
-        for i in 0..<5 {
+        for i in 0 ..< 5 {
             let error = SystemError.custom(description: "Performance test \(i)", metadata: [:])
             await healingEngine.reportError(error)
         }

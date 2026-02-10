@@ -386,7 +386,8 @@ public final class IntelligenceTranscendenceSystem: Sendable {
     /// - Parameter intelligence: Intelligence to transcend
     /// - Returns: Transcendence result
     public func transcendIntelligence(_ intelligence: TranscendableIntelligence) async
-    -> IntelligenceTranscendenceResult {
+        -> IntelligenceTranscendenceResult
+    {
         let transcendenceStrategy = designTranscendenceStrategy(for: intelligence)
         let transcendenceResults = await executeTranscendence(intelligence, strategy: transcendenceStrategy)
         let transcendenceAmplifier = generateTranscendenceAmplifier(transcendenceResults)
@@ -402,7 +403,8 @@ public final class IntelligenceTranscendenceSystem: Sendable {
 
     /// Design transcendence strategy
     private func designTranscendenceStrategy(for intelligence: TranscendableIntelligence)
-    -> IntelligenceTranscendenceStrategy {
+        -> IntelligenceTranscendenceStrategy
+    {
         var amplificationSteps: [IntelligenceAmplificationStep] = []
 
         if intelligence.intelligenceMetrics.iq < 200 {
@@ -454,7 +456,7 @@ public final class IntelligenceTranscendenceSystem: Sendable {
     ) async -> IntelligenceAmplificationResult {
         try? await Task.sleep(nanoseconds: UInt64(step.intensity * 1_000_000_000))
 
-        let actualGain = step.intensity * (0.9 + Double.random(in: 0...0.2))
+        let actualGain = step.intensity * (0.9 + Double.random(in: 0 ... 0.2))
         let success = actualGain >= step.intensity * 0.95
 
         return IntelligenceAmplificationResult(
@@ -469,7 +471,8 @@ public final class IntelligenceTranscendenceSystem: Sendable {
 
     /// Generate transcendence amplifier
     private func generateTranscendenceAmplifier(_ results: [IntelligenceAmplificationResult])
-    -> IntelligenceTranscendenceAmplifier {
+        -> IntelligenceTranscendenceAmplifier
+    {
         let successRate = Double(results.filter(\.success).count) / Double(results.count)
         let totalGain = results.map(\.actualIntelligenceGain).reduce(0, +)
         let amplifierValue = 1.0 + (totalGain * successRate / 10.0)
@@ -492,7 +495,8 @@ public final class ConsciousnessSingularityInterface: Sendable {
     /// - Parameter consciousness: Consciousness to interface
     /// - Returns: Singularity interface result
     public func interfaceWithSingularity(_ consciousness: SingularityInterfacableConsciousness) async
-    -> ConsciousnessSingularityResult {
+        -> ConsciousnessSingularityResult
+    {
         let singularityAssessment = assessSingularityReadiness(consciousness)
         let interfaceStrategy = designSingularityInterfaceStrategy(singularityAssessment)
         let interfaceResults = await executeSingularityInterface(consciousness, strategy: interfaceStrategy)
@@ -510,7 +514,8 @@ public final class ConsciousnessSingularityInterface: Sendable {
 
     /// Assess singularity readiness
     private func assessSingularityReadiness(_ consciousness: SingularityInterfacableConsciousness)
-    -> SingularityConsciousnessAssessment {
+        -> SingularityConsciousnessAssessment
+    {
         let awareness = consciousness.consciousnessMetrics.awareness
         let unity = consciousness.consciousnessMetrics.unity
         let transcendence = consciousness.consciousnessMetrics.transcendence
@@ -526,7 +531,8 @@ public final class ConsciousnessSingularityInterface: Sendable {
 
     /// Design singularity interface strategy
     private func designSingularityInterfaceStrategy(_ assessment: SingularityConsciousnessAssessment)
-    -> ConsciousnessSingularityStrategy {
+        -> ConsciousnessSingularityStrategy
+    {
         var interfaceSteps: [ConsciousnessExpansionStep] = []
 
         if assessment.awareness < 0.95 {
@@ -578,7 +584,7 @@ public final class ConsciousnessSingularityInterface: Sendable {
     ) async -> ConsciousnessExpansionResult {
         try? await Task.sleep(nanoseconds: UInt64(step.depth * 1_500_000_000))
 
-        let actualGain = step.depth * (0.85 + Double.random(in: 0...0.3))
+        let actualGain = step.depth * (0.85 + Double.random(in: 0 ... 0.3))
         let success = actualGain >= step.depth * 0.90
 
         return ConsciousnessExpansionResult(
@@ -593,7 +599,8 @@ public final class ConsciousnessSingularityInterface: Sendable {
 
     /// Generate singularity interface
     private func generateSingularityInterface(_ results: [ConsciousnessExpansionResult])
-    -> ConsciousnessSingularityInterface {
+        -> ConsciousnessSingularityInterface
+    {
         let successRate = Double(results.filter(\.success).count) / Double(results.count)
         let totalGain = results.map(\.actualConsciousnessGain).reduce(0, +)
         let interfaceValue = 1.0 + (totalGain * successRate / 15.0)
@@ -616,7 +623,8 @@ public final class RealityManipulationFramework: Sendable {
     /// - Parameter reality: Reality to manipulate
     /// - Returns: Manipulation result
     public func manipulateRealityForSingularity(_ reality: SingularityManipulableReality) async
-    -> RealitySingularityManipulationResult {
+        -> RealitySingularityManipulationResult
+    {
         let manipulationAssessment = assessRealityManipulationPotential(reality)
         let manipulationStrategy = designSingularityManipulationStrategy(manipulationAssessment)
         let manipulationResults = await executeSingularityManipulation(reality, strategy: manipulationStrategy)
@@ -634,7 +642,8 @@ public final class RealityManipulationFramework: Sendable {
 
     /// Assess reality manipulation potential
     private func assessRealityManipulationPotential(_ reality: SingularityManipulableReality)
-    -> RealityManipulationAssessment {
+        -> RealityManipulationAssessment
+    {
         let stability = reality.realityMetrics.stability
         let malleability = reality.realityMetrics.malleability
         let coherence = reality.realityMetrics.coherence
@@ -650,7 +659,8 @@ public final class RealityManipulationFramework: Sendable {
 
     /// Design singularity manipulation strategy
     private func designSingularityManipulationStrategy(_ assessment: RealityManipulationAssessment)
-    -> RealitySingularityStrategy {
+        -> RealitySingularityStrategy
+    {
         var manipulationSteps: [RealityManipulationStep] = []
 
         if assessment.malleability < 0.90 {
@@ -702,7 +712,7 @@ public final class RealityManipulationFramework: Sendable {
     ) async -> RealityManipulationResult {
         try? await Task.sleep(nanoseconds: UInt64(step.power * 2_000_000_000))
 
-        let actualPower = step.power * (0.8 + Double.random(in: 0...0.4))
+        let actualPower = step.power * (0.8 + Double.random(in: 0 ... 0.4))
         let success = actualPower >= step.power * 0.85
 
         return RealityManipulationResult(
@@ -717,7 +727,8 @@ public final class RealityManipulationFramework: Sendable {
 
     /// Generate singularity manipulator
     private func generateSingularityManipulator(_ results: [RealityManipulationResult])
-    -> RealitySingularityManipulator {
+        -> RealitySingularityManipulator
+    {
         let successRate = Double(results.filter(\.success).count) / Double(results.count)
         let totalPower = results.map(\.actualRealityManipulation).reduce(0, +)
         let manipulatorValue = 1.0 + (totalPower * successRate / 20.0)

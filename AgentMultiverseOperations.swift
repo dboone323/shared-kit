@@ -332,7 +332,8 @@ public final class AgentMultiverseOperations: Sendable {
     }
 
     private func assessMultiverseOperation(_ request: MultiverseOperationRequest) async throws
-    -> MultiverseOperationAssessment {
+        -> MultiverseOperationAssessment
+    {
         // Assess multiverse operation
         let assessmentContext = MultiverseOperationAssessmentContext(
             agents: request.agents,
@@ -534,7 +535,8 @@ public final class AgentMultiverseOperations: Sendable {
     // MARK: - Helper Methods
 
     private func analyzeAgentsForMultiverseOperations(_ agents: [MultiverseAgent]) async throws
-    -> MultiverseOperationAnalysis {
+        -> MultiverseOperationAnalysis
+    {
         // Analyze agents for multiverse operation opportunities
         let multiverseOperations = await multiverseNavigationEngine.analyzeMultiverseOperationPotential(agents)
         let universeBridging = await universeBridgingCoordinator.analyzeUniverseBridgingPotential(agents)
@@ -563,7 +565,8 @@ public final class AgentMultiverseOperations: Sendable {
     }
 
     private func generateMultiverseOperationStrategies(_ analysis: MultiverseOperationAnalysis)
-    -> [MultiverseOperationStrategy] {
+        -> [MultiverseOperationStrategy]
+    {
         // Generate multiverse operation strategies based on analysis
         var strategies: [MultiverseOperationStrategy] = []
 
@@ -678,7 +681,8 @@ public final class AgentMultiverseOperations: Sendable {
     }
 
     private func generateOrchestrationRequirements(_ request: MultiverseOperationRequest)
-    -> QuantumEntanglementRequirements {
+        -> QuantumEntanglementRequirements
+    {
         QuantumEntanglementRequirements(
             multiverseDepth: .maximum,
             communicationHarmony: .perfect,
@@ -1151,7 +1155,8 @@ private final class MultiverseNavigationEngine: Sendable {
     }
 
     func assessMultiverseOperation(_ context: MultiverseOperationAssessmentContext) async throws
-    -> MultiverseOperationAssessmentResult {
+        -> MultiverseOperationAssessmentResult
+    {
         // Assess multiverse operation
         MultiverseOperationAssessmentResult(
             multiversePotential: 0.88,
@@ -1161,7 +1166,8 @@ private final class MultiverseNavigationEngine: Sendable {
     }
 
     func processUniverseNavigation(_ context: UniverseNavigationProcessingContext) async throws
-    -> UniverseNavigationProcessingResult {
+        -> UniverseNavigationProcessingResult
+    {
         // Process universe navigation
         UniverseNavigationProcessingResult(
             universeNavigation: 0.93,
@@ -1216,7 +1222,8 @@ private final class UniverseBridgingCoordinator: Sendable {
     }
 
     func coordinateUniverseBridging(_ context: UniverseBridgingCoordinationContext) async throws
-    -> UniverseBridgingCoordinationResult {
+        -> UniverseBridgingCoordinationResult
+    {
         // Coordinate universe bridging
         UniverseBridgingCoordinationResult(
             universeBridging: 0.91,
@@ -1267,7 +1274,8 @@ private final class CrossUniverseCommunicationNetwork: Sendable {
     }
 
     func synthesizeCrossUniverseCommunication(_ context: CrossUniverseCommunicationSynthesisContext) async throws
-    -> CrossUniverseCommunicationSynthesisResult {
+        -> CrossUniverseCommunicationSynthesisResult
+    {
         // Synthesize cross-universe communication
         CrossUniverseCommunicationSynthesisResult(
             crossUniverseCommunicatedAgents: context.agents,
@@ -1282,7 +1290,8 @@ private final class CrossUniverseCommunicationNetwork: Sendable {
     }
 
     func analyzeCrossUniverseCommunicationPotential(_ agents: [MultiverseAgent]) async
-    -> CrossUniverseCommunicationAnalysis {
+        -> CrossUniverseCommunicationAnalysis
+    {
         CrossUniverseCommunicationAnalysis(
             communicationPotential: 0.67,
             harmonyPotential: 0.63,
@@ -1299,7 +1308,8 @@ private final class MultiverseIntelligenceSynthesizer: Sendable {
     }
 
     func synthesizeMultiverseIntelligence(_ context: MultiverseIntelligenceSynthesisContext) async throws
-    -> MultiverseIntelligenceSynthesisResult {
+        -> MultiverseIntelligenceSynthesisResult
+    {
         // Synthesize multiverse intelligence
         MultiverseIntelligenceSynthesisResult(
             multiverseExpandedAgents: context.agents,
@@ -1321,7 +1331,8 @@ private final class QuantumEntanglementOrchestrator: Sendable {
     }
 
     func orchestrateQuantumEntanglement(_ context: QuantumEntanglementOrchestrationContext) async throws
-    -> QuantumEntanglementOrchestrationResult {
+        -> QuantumEntanglementOrchestrationResult
+    {
         // Orchestrate quantum entanglement
         QuantumEntanglementOrchestrationResult(
             quantumEntangledAgents: context.agents,
