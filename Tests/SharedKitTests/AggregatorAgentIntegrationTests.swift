@@ -1,5 +1,4 @@
 import XCTest
-
 @testable import SharedKit
 
 /// Integration tests for AggregatorAgent with production enhancements

@@ -89,6 +89,8 @@
 --enable spaceAroundOperators
 --enable redundantProperty
 --enable redundantThrows
+--enable blankLinesBetweenImports
+--enable noForceUnwrapInTests
 
 # Disabled Rules
 --disable andOperator

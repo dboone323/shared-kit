@@ -8,7 +8,6 @@
 
 import Combine
 import XCTest
-
 @testable import Shared
 
 final class SelfHealingEngineIntegrationTests: XCTestCase {
@@ -260,7 +259,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
 
         // Then
         XCTAssertNotNil(exportedData)
-        XCTAssertGreaterThan(exportedData!.count, 0)
+        XCTAssertGreaterThan(try XCTUnwrap(exportedData?.count), 0)
     }
 
     func testHealingHistoryImport() async throws {

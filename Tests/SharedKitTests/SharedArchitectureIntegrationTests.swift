@@ -1,6 +1,5 @@
 import SwiftData
 import XCTest
-
 @testable import SharedTestSupport
 
 /// Integration tests for shared architecture across all projects

@@ -7,7 +7,6 @@
 
 import Combine
 import XCTest
-
 @testable import SharedKit
 
 final class QuantumSpaceEngineeringQENAdapterTests: XCTestCase {

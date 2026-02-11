@@ -1,5 +1,4 @@
 import XCTest
-
 @testable import SharedKit
 
 @available(macOS 11.0, iOS 14.0, *)

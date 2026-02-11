@@ -1,5 +1,4 @@
 import XCTest
-
 @testable import SharedKit
 
 final class PerformanceTests: XCTestCase {

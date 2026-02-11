@@ -1,5 +1,4 @@
 import XCTest
-
 @testable import SharedKit
 
 final class SharedKitIntegrationTests: XCTestCase {
@@ -15,7 +14,7 @@ final class SharedKitIntegrationTests: XCTestCase {
 
         // Mock response
         let secretResponse = "Top Secret AI Response"
-        let encryptedResponse = try await crypto.encrypt(secretResponse.data(using: .utf8)!)
+        let encryptedResponse = try await crypto.encrypt(XCTUnwrap(secretResponse.data(using: .utf8)))
 
         // Note: In a real scenario, the server would return encrypted data.
         // Here we simulate the server returning data that we (client) can decrypt.
@@ -48,7 +47,7 @@ final class SharedKitIntegrationTests: XCTestCase {
         // 3. Encrypt Request Payload
         let prompt = "My Secret Prompt"
         // Skipping validation as 'My Secret Prompt' contains spaces which might fail identifier validation
-        let encryptedPrompt = try await crypto.encrypt(prompt.data(using: .utf8)!)
+        let encryptedPrompt = try await crypto.encrypt(XCTUnwrap(prompt.data(using: .utf8)))
 
         // 4. Send Request (we send base64 of encrypted)
         // We are passing the encrypted string as the prompt to the client

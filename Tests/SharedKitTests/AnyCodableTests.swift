@@ -4,7 +4,6 @@
 //
 
 import XCTest
-
 @testable import SharedKit
 
 final class AnyCodableTests: XCTestCase {
@@ -50,21 +49,21 @@ final class AnyCodableTests: XCTestCase {
 
     func testDecodeString() throws {
         let json = "\"hello\""
-        let data = json.data(using: .utf8)!
+        let data = try XCTUnwrap(json.data(using: .utf8))
         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
         XCTAssertEqual(value.asString(), "hello")
     }
 
     func testDecodeInt() throws {
         let json = "42"
-        let data = json.data(using: .utf8)!
+        let data = try XCTUnwrap(json.data(using: .utf8))
         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
         XCTAssertEqual(value.asInt(), 42)
     }
 
     func testDecodeNull() throws {
         let json = "null"
-        let data = json.data(using: .utf8)!
+        let data = try XCTUnwrap(json.data(using: .utf8))
         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
         // For now, AnyCodable implementation throws or handles null differently.
         // Assuming we want it to be nil or a specific null case.
