@@ -7,6 +7,8 @@
 --swiftversion 6.0
 
 # Indentation and Tabs
+--smarttabs enabled
+
 --indent 4
 --tabwidth 4
 --indentcase false
@@ -26,6 +28,9 @@
 --commas always
 
 # Operators
+--nospaceoperators ..<,...
+--ranges spaced
+
 --operatorfunc spaced
 
 # Semicolons
