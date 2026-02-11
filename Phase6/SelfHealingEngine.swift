@@ -417,7 +417,7 @@ public final class SelfHealingEngine: ObservableObject {
                 do {
                     let (_, response) = try await URLSession.shared.data(from: url, delegate: nil)
                     if let httpResponse = response as? HTTPURLResponse {
-                        if (200 ... 299).contains(httpResponse.statusCode) {
+                        if (200...299).contains(httpResponse.statusCode) {
                             return .healthy
                         }
                     }

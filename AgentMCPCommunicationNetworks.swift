@@ -765,7 +765,7 @@ private final class MCPMessageRouter: Sendable {
         priority: MCPMessagePriority
     ) async throws -> MCPMessageDeliveryResult {
         // Implement message routing logic
-        let deliveryTime = Double.random(in: 0.001 ... 0.1) // Simulated delivery time
+        let deliveryTime = Double.random(in: 0.001...0.1) // Simulated delivery time
         return MCPMessageDeliveryResult(
             messageId: message.messageId,
             success: true,

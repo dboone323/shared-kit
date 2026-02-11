@@ -1203,7 +1203,7 @@ struct IntegrationResult {
             func planEcosystemGrowth(_ ecosystem: QuantumEcosystem, to growthTargets: GrowthTargets)
                 async throws -> GrowthPlan
             {
-                let phases = (0 ..< 5).map { phase in
+                let phases = (0..<5).map { phase in
                     GrowthPlan.GrowthPhase(
                         phase: phase,
                         name: "Phase \(phase + 1)",

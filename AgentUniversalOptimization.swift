@@ -478,7 +478,7 @@ public final class ComputationalEfficiencyOptimizer: Sendable {
     ) async -> ComputationalOptimizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.efficiency * 1_500_000_000))
 
-        let actualGain = step.efficiency * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.efficiency * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.efficiency * 0.90
 
         return ComputationalOptimizationResultItem(
@@ -604,7 +604,7 @@ public final class ResourceUtilizationMaximizer: Sendable {
     ) async -> ResourceMaximizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.utilization * 2_000_000_000))
 
-        let actualGain = step.utilization * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualGain = step.utilization * (0.8 + Double.random(in: 0...0.4))
         let success = actualGain >= step.utilization * 0.85
 
         return ResourceMaximizationResultItem(
@@ -728,7 +728,7 @@ public final class PerformanceOptimizationFramework: Sendable {
     ) async -> PerformanceOptimizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.optimization * 2_500_000_000))
 
-        let actualPower = step.optimization * (0.75 + Double.random(in: 0 ... 0.5))
+        let actualPower = step.optimization * (0.75 + Double.random(in: 0...0.5))
         let success = actualPower >= step.optimization * 0.80
 
         return PerformanceOptimizationResultItem(

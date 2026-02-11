@@ -108,7 +108,7 @@ final class VectorStoreEnhancementsTests: XCTestCase {
         let metrics = VectorStoreMetrics()
 
         // Record more than window size (1000)
-        for i in 0 ..< 1200 {
+        for i in 0..<1200 {
             await metrics.recordQuery(duration: Double(i) * 0.001)
         }
 

@@ -914,8 +914,8 @@ private final class TranscendenceEngine: Sendable {
         consciousnessResult: ConsciousnessResult
     ) async throws -> TranscendenceResult {
         TranscendenceResult(
-            success: Double.random(in: 0.8 ... 1.0) > 0.2,
-            advancement: Double.random(in: 0.7 ... 1.0)
+            success: Double.random(in: 0.8...1.0) > 0.2,
+            advancement: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -925,8 +925,8 @@ private final class TranscendenceEngine: Sendable {
     ) async -> TranscendenceResult {
         TranscendenceResult(
             success: true,
-            evaluation: Double.random(in: 0.8 ... 1.0),
-            transcendence: Double.random(in: 0.7 ... 1.0)
+            evaluation: Double.random(in: 0.8...1.0),
+            transcendence: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -941,10 +941,10 @@ private final class TranscendenceEngine: Sendable {
     func getTranscendenceStatus() async -> TranscendenceStatus {
         TranscendenceStatus(
             operational: true,
-            capability: Double.random(in: 0.9 ... 1.0),
-            advancement: Double.random(in: 0.8 ... 1.0),
-            activeTranscendences: Int.random(in: 1 ... 10),
-            successRate: Double.random(in: 0.9 ... 0.98)
+            capability: Double.random(in: 0.9...1.0),
+            advancement: Double.random(in: 0.8...1.0),
+            activeTranscendences: Int.random(in: 1...10),
+            successRate: Double.random(in: 0.9...0.98)
         )
     }
 }
@@ -957,8 +957,8 @@ private final class EthicsEvaluator: Sendable {
     ) async throws -> ScenarioResult {
         ScenarioResult(
             success: true,
-            consciousnessElevation: Double.random(in: 0.8 ... 1.0),
-            universalHarmony: Double.random(in: 0.7 ... 1.0)
+            consciousnessElevation: Double.random(in: 0.8...1.0),
+            universalHarmony: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -972,7 +972,7 @@ private final class ConsciousnessElevator: Sendable {
     func assessAlignment(_ alignment: ConsciousnessAlignment) async throws -> ConsciousnessResult {
         ConsciousnessResult(
             success: true,
-            elevation: Double.random(in: 0.8 ... 1.0)
+            elevation: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -987,7 +987,7 @@ private final class ConsciousnessElevator: Sendable {
     func getElevationStatus() async -> ElevationStatus {
         ElevationStatus(
             operational: true,
-            level: Double.random(in: 0.9 ... 1.0)
+            level: Double.random(in: 0.9...1.0)
         )
     }
 }
@@ -997,7 +997,7 @@ private final class UniversalHarmonizer: Sendable {
     func harmonizeEthics(_ transcendence: EthicalTranscendence, result: TranscendenceResult) async -> HarmonyResult {
         HarmonyResult(
             success: true,
-            harmony: Double.random(in: 0.8 ... 1.0)
+            harmony: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -1012,7 +1012,7 @@ private final class UniversalHarmonizer: Sendable {
     func getHarmonyStatus() async -> HarmonyStatus {
         HarmonyStatus(
             operational: true,
-            harmony: Double.random(in: 0.95 ... 1.0)
+            harmony: Double.random(in: 0.95...1.0)
         )
     }
 }
@@ -1030,7 +1030,7 @@ private final class EthicalOptimizer: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8 ... 1.0)
+            efficiency: Double.random(in: 0.8...1.0)
         )
     }
 }

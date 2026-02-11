@@ -469,7 +469,7 @@ public final class UniversalCompassionFramework: Sendable {
     ) async -> UniversalCompassionResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.compassion * 1_500_000_000))
 
-        let actualGain = step.compassion * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.compassion * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.compassion * 0.90
 
         return UniversalCompassionResultItem(
@@ -597,7 +597,7 @@ public final class BoundlessUnderstandingSystem: Sendable {
     ) async -> BoundlessUnderstandingResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.understanding * 2_000_000_000))
 
-        let actualGain = step.understanding * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualGain = step.understanding * (0.8 + Double.random(in: 0...0.4))
         let success = actualGain >= step.understanding * 0.85
 
         return BoundlessUnderstandingResultItem(
@@ -719,7 +719,7 @@ public final class LimitlessEmpathyInterface: Sendable {
     ) async -> LimitlessEmpathyResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.empathy * 2_500_000_000))
 
-        let actualPower = step.empathy * (0.75 + Double.random(in: 0 ... 0.5))
+        let actualPower = step.empathy * (0.75 + Double.random(in: 0...0.5))
         let success = actualPower >= step.empathy * 0.80
 
         return LimitlessEmpathyResultItem(

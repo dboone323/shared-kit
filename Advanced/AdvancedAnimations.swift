@@ -238,17 +238,17 @@ public struct AdvancedAnimations {
         }
 
         private func generateParticles() {
-            self.particles = (0 ..< self.particleCount).map { _ in
+            self.particles = (0..<self.particleCount).map { _ in
                 Particle(
                     id: UUID(),
                     position: CGPoint(x: 200, y: 200),
                     velocity: CGPoint(
-                        x: Double.random(in: -50 ... 50),
-                        y: Double.random(in: -50 ... 50)
+                        x: Double.random(in: -50...50),
+                        y: Double.random(in: -50...50)
                     ),
-                    size: Double.random(in: 4 ... 12),
+                    size: Double.random(in: 4...12),
                     color: self.colors.randomElement() ?? .blue,
-                    opacity: Double.random(in: 0.5 ... 1.0)
+                    opacity: Double.random(in: 0.5...1.0)
                 )
             }
         }
@@ -270,12 +270,12 @@ public struct AdvancedAnimations {
                         id: UUID(),
                         position: CGPoint(x: 200, y: 200),
                         velocity: CGPoint(
-                            x: Double.random(in: -50 ... 50),
-                            y: Double.random(in: -50 ... 50)
+                            x: Double.random(in: -50...50),
+                            y: Double.random(in: -50...50)
                         ),
-                        size: Double.random(in: 4 ... 12),
+                        size: Double.random(in: 4...12),
                         color: self.colors.randomElement() ?? .blue,
-                        opacity: Double.random(in: 0.5 ... 1.0)
+                        opacity: Double.random(in: 0.5...1.0)
                     )
                 }
             }

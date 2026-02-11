@@ -1913,10 +1913,10 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
         let activeBridgesList = Array(activeBridges.values)
         let averageStability =
             activeBridgesList.map(\.stabilityIndex).reduce(0, +)
-                / Double(activeBridgesList.count)
+            / Double(activeBridgesList.count)
         let averageConnectionStrength =
             activeBridgesList.map(\.connectionStrength).reduce(0, +)
-                / Double(activeBridgesList.count)
+            / Double(activeBridgesList.count)
         let totalEnergyFlow = activeBridgesList.map(\.energyFlow).reduce(0, +)
         let totalDataTransfer = activeBridgesList.map(\.dataTransferRate).reduce(0, +)
 
@@ -2080,7 +2080,7 @@ final class MultiversalBridgeConstructionEngine: MultiversalBridgeConstructionPr
                 id: UUID(),
                 componentType: componentType,
                 position: [
-                    Double.random(in: 0 ... 1), Double.random(in: 0 ... 1), Double.random(in: 0 ... 1),
+                    Double.random(in: 0...1), Double.random(in: 0...1), Double.random(in: 0...1),
                 ],
                 stability: 0.9,
                 energyConsumption: 50.0,

@@ -440,7 +440,7 @@ public actor BasicWorkflowEvolutionEngine: WorkflowEvolutionEngine {
         let independentSteps = modifiedSteps.filter(\.dependencies.isEmpty)
 
         // Convert sequential independent steps to parallel
-        for i in 0 ..< independentSteps.count {
+        for i in 0..<independentSteps.count {
             if let stepIndex = modifiedSteps.firstIndex(where: { $0.id == independentSteps[i].id }) {
                 modifiedSteps[stepIndex] = MCPWorkflowStep(
                     id: independentSteps[i].id, toolId: independentSteps[i].toolId,
@@ -542,7 +542,7 @@ public extension AutonomousWorkflowEvolutionSystem {
         var bestState = initialState
         var temperature = 1.0
 
-        for step in 0 ..< steps {
+        for step in 0..<steps {
             // Generate neighbor state
             let neighborState = generateNeighborState(currentState)
 
@@ -551,7 +551,7 @@ public extension AutonomousWorkflowEvolutionSystem {
             let acceptanceProb = exp(deltaE / temperature)
 
             // Accept or reject
-            if deltaE > 0 || Double.random(in: 0 ... 1) < acceptanceProb {
+            if deltaE > 0 || Double.random(in: 0...1) < acceptanceProb {
                 currentState = neighborState
                 if currentState.performanceScore > bestState.performanceScore {
                     bestState = currentState
@@ -604,7 +604,7 @@ public extension AutonomousWorkflowEvolutionSystem {
             switch randomKey {
             case "parallelism":
                 if let currentValue = newParameters[randomKey]?.value as? Int {
-                    let newValue = max(1, currentValue + Int.random(in: -1 ... 1))
+                    let newValue = max(1, currentValue + Int.random(in: -1...1))
                     newParameters[randomKey] = AnyCodable(newValue)
                     newScore += Double(newValue - currentValue) * 0.1
                     newResources["cpu"] = min(

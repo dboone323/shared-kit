@@ -524,7 +524,7 @@ private class DomainCoordinator {
 
     func initialize() async throws {}
     func activate() async throws { isActive = true }
-    func assessReadiness() async -> Double { Double.random(in: 0.7 ... 0.95) }
+    func assessReadiness() async -> Double { Double.random(in: 0.7...0.95) }
     func executeBreakthrough(_ breakthrough: IntelligenceBreakthrough) async throws {}
 
     let readinessPublisher = PassthroughSubject<(IntelligenceDomain, Double), Never>()

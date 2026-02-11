@@ -442,7 +442,7 @@ public final class SynchronizationOptimizationSystem: Sendable {
     ) async -> SynchronizationOptimizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.intensity * 1_000_000_000))
 
-        let actualGain = step.intensity * (0.9 + Double.random(in: 0 ... 0.2))
+        let actualGain = step.intensity * (0.9 + Double.random(in: 0...0.2))
         let success = actualGain >= step.intensity * 0.95
 
         return SynchronizationOptimizationResultItem(
@@ -566,7 +566,7 @@ public final class BalanceHarmonizationInterface: Sendable {
     ) async -> BalanceHarmonizationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.depth * 1_500_000_000))
 
-        let actualGain = step.depth * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.depth * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.depth * 0.90
 
         return BalanceHarmonizationResultItem(
@@ -686,7 +686,7 @@ public final class ResonanceFieldGenerator: Sendable {
     ) async -> ResonanceFieldResult {
         try? await Task.sleep(nanoseconds: UInt64(step.power * 2_000_000_000))
 
-        let actualPower = step.power * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualPower = step.power * (0.8 + Double.random(in: 0...0.4))
         let success = actualPower >= step.power * 0.85
 
         return ResonanceFieldResult(

@@ -600,7 +600,7 @@ private class ConsciousnessFieldCoordinator {
 
     func initialize() async throws {}
     func activate() async throws { isActive = true }
-    func assessReadiness() async -> Double { Double.random(in: 0.7 ... 0.95) }
+    func assessReadiness() async -> Double { Double.random(in: 0.7...0.95) }
     func executeBreakthrough(_ breakthrough: ConsciousnessBreakthrough) async throws {}
 
     let readinessPublisher = PassthroughSubject<(ConsciousnessFieldType, Double), Never>()

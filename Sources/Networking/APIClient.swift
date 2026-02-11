@@ -35,7 +35,7 @@ public struct APIClient {
             }
 
             guard let httpResponse = response as? HTTPURLResponse,
-                  (200 ... 299).contains(httpResponse.statusCode)
+                  (200...299).contains(httpResponse.statusCode)
             else {
                 let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
                 completion(.failure(.serverError(statusCode: statusCode)))

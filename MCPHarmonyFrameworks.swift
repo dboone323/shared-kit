@@ -273,9 +273,9 @@ public final class HarmonicSynchronizationEngine: Sendable {
         // Simulate harmonic synchronization
         try? await Task.sleep(nanoseconds: UInt64(phase.estimatedDuration * 1_000_000_000))
 
-        let finalFrequency = phase.targetFrequency * (0.95 + Double.random(in: 0 ... 0.1))
-        let finalPhase = phase.targetPhase + Double.random(in: -0.1 ... 0.1)
-        let finalAmplitude = phase.targetAmplitude * (0.95 + Double.random(in: 0 ... 0.1))
+        let finalFrequency = phase.targetFrequency * (0.95 + Double.random(in: 0...0.1))
+        let finalPhase = phase.targetPhase + Double.random(in: -0.1...0.1)
+        let finalAmplitude = phase.targetAmplitude * (0.95 + Double.random(in: 0...0.1))
 
         return HarmonicSyncResult(
             phaseId: phase.id,
@@ -283,7 +283,7 @@ public final class HarmonicSynchronizationEngine: Sendable {
             finalFrequency: finalFrequency,
             finalPhase: finalPhase,
             finalAmplitude: finalAmplitude,
-            synchronizationQuality: Double.random(in: 0.85 ... 1.0),
+            synchronizationQuality: Double.random(in: 0.85...1.0),
             completedAt: Date()
         )
     }
@@ -306,7 +306,7 @@ public final class HarmonicSynchronizationEngine: Sendable {
 
     /// Generate synchronization waves
     private func generateSynchronizationWaves(_ count: Int) -> [SynchronizationWave] {
-        (0 ..< count).map { index in
+        (0..<count).map { index in
             SynchronizationWave(
                 waveId: UUID(),
                 frequency: 440.0 + Double(index) * 10.0, // Harmonic frequencies
@@ -382,8 +382,8 @@ public final class ResonanceNetworkManager: Sendable {
     private func generateResonanceConnections(_ nodes: [ResonanceNode]) -> [ResonanceConnection] {
         var connections: [ResonanceConnection] = []
 
-        for i in 0 ..< nodes.count {
-            for j in (i + 1) ..< nodes.count {
+        for i in 0..<nodes.count {
+            for j in (i + 1)..<nodes.count {
                 let sourceNode = nodes[i]
                 let targetNode = nodes[j]
 
@@ -435,7 +435,7 @@ public final class ResonanceNetworkManager: Sendable {
         let avgStrength = connections.map(\.resonanceStrength).reduce(0, +) / Double(connections.count)
         let fieldStrength = avgStrength * 0.8
 
-        let harmonicComponents = (1 ... 5).map { harmonic in
+        let harmonicComponents = (1...5).map { harmonic in
             HarmonicComponent(
                 harmonicNumber: harmonic,
                 amplitude: fieldStrength / Double(harmonic),
@@ -568,7 +568,7 @@ public final class EquilibriumEngine: Sendable {
         // Simulate adjustment application
         try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
 
-        let actualEffect = adjustment.estimatedEffect * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualEffect = adjustment.estimatedEffect * (0.8 + Double.random(in: 0...0.4))
         let successRate = min(1.0, actualEffect / adjustment.estimatedEffect)
 
         return EquilibriumCorrection(
@@ -1496,8 +1496,8 @@ public final class SymbioticCoordinator: Sendable {
         return CoordinationResult(
             stepId: step.stepId,
             success: true,
-            symbioticBondStrength: Double.random(in: 0.7 ... 1.0),
-            resourceExchangeRate: Double.random(in: 0.8 ... 1.0),
+            symbioticBondStrength: Double.random(in: 0.7...1.0),
+            resourceExchangeRate: Double.random(in: 0.8...1.0),
             completedAt: Date()
         )
     }
@@ -1557,7 +1557,7 @@ public final class HarmonicIntelligenceProcessor: Sendable {
 
     /// Identify harmonics
     private func identifyHarmonics(_ dataPoints: [IntelligenceDataPoint], fundamental: Double) -> [Harmonic] {
-        (1 ... 5).map { multiplier in
+        (1...5).map { multiplier in
             let harmonicFreq = fundamental * Double(multiplier)
             let amplitude = calculateAmplitudeAtFrequency(dataPoints, frequency: harmonicFreq)
             return Harmonic(
@@ -1626,7 +1626,7 @@ public final class HarmonicIntelligenceProcessor: Sendable {
             AppliedOptimization(
                 opportunityId: opportunity.id,
                 optimizationType: opportunity.type,
-                improvement: opportunity.potentialImprovement * (0.8 + Double.random(in: 0 ... 0.4)),
+                improvement: opportunity.potentialImprovement * (0.8 + Double.random(in: 0...0.4)),
                 appliedAt: Date()
             )
         }
@@ -1790,7 +1790,7 @@ public final class BalanceOptimizer: Sendable {
     ) async -> OptimizationExecutionResult {
         try? await Task.sleep(nanoseconds: UInt64(complexityDuration(optimization.complexity) * 1_000_000_000))
 
-        let actualImprovement = optimization.estimatedImprovement * (0.7 + Double.random(in: 0 ... 0.6))
+        let actualImprovement = optimization.estimatedImprovement * (0.7 + Double.random(in: 0...0.6))
         let success = actualImprovement > optimization.estimatedImprovement * 0.5
 
         return OptimizationExecutionResult(

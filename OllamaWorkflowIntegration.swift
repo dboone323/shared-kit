@@ -311,7 +311,7 @@ public final class OllamaHTTPClient {
         let (data, response) = try await session.data(for: urlRequest)
 
         guard let httpResponse = response as? HTTPURLResponse,
-              (200 ... 299).contains(httpResponse.statusCode)
+              (200...299).contains(httpResponse.statusCode)
         else {
             throw OllamaError.invalidResponse
         }
@@ -335,7 +335,7 @@ public final class OllamaHTTPClient {
                     let (bytes, response) = try await session.bytes(for: urlRequest)
 
                     guard let httpResponse = response as? HTTPURLResponse,
-                          (200 ... 299).contains(httpResponse.statusCode)
+                          (200...299).contains(httpResponse.statusCode)
                     else {
                         throw OllamaError.invalidResponse
                     }

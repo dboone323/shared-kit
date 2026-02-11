@@ -712,10 +712,10 @@ final class QuantumIntuitionEnhancementEngine: QuantumIntuitionEnhancementProtoc
                 monitoringId: UUID(),
                 entityId: amplification.entityId,
                 timestamp: Date(),
-                intuitionLevel: amplification.effectivenessRating + Double.random(in: -0.1 ... 0.1),
-                processingEfficiency: 0.9 + Double.random(in: -0.05 ... 0.05),
-                accuracyRate: 0.85 + Double.random(in: -0.05 ... 0.05),
-                adaptationRate: 0.8 + Double.random(in: -0.05 ... 0.05),
+                intuitionLevel: amplification.effectivenessRating + Double.random(in: -0.1...0.1),
+                processingEfficiency: 0.9 + Double.random(in: -0.05...0.05),
+                accuracyRate: 0.85 + Double.random(in: -0.05...0.05),
+                adaptationRate: 0.8 + Double.random(in: -0.05...0.05),
                 alerts: []
             )
 
@@ -808,9 +808,9 @@ final class QuantumProcessingEngine: QuantumProcessingProtocol {
         let size = entities.count
         var correlationMatrix = [[Double]](repeating: [Double](repeating: 0.0, count: size), count: size)
 
-        for i in 0 ..< size {
-            for j in 0 ..< size {
-                correlationMatrix[i][j] = i == j ? 1.0 : Double.random(in: 0.7 ... 0.9)
+        for i in 0..<size {
+            for j in 0..<size {
+                correlationMatrix[i][j] = i == j ? 1.0 : Double.random(in: 0.7...0.9)
             }
         }
 
@@ -866,7 +866,7 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
             PatternAnalysis.AnalysisResult(
                 patternId: pattern.patternId,
                 complexity: pattern.data.count > 5 ? 0.8 : 0.4,
-                uniqueness: Double.random(in: 0.6 ... 0.9),
+                uniqueness: Double.random(in: 0.6...0.9),
                 predictiveValue: pattern.significance,
                 significance: pattern.significance,
                 interpretation: "Pattern shows \(pattern.patternType) characteristics with significance \(pattern.significance)"
@@ -917,9 +917,9 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
             CorrelationAnalysis.Correlation(
                 correlationId: UUID(),
                 factorId: factor.factorId,
-                correlationCoefficient: Double.random(in: 0.3 ... 0.8),
-                lagTime: Double.random(in: 0 ... 3600),
-                strength: Double.random(in: 0.4 ... 0.9)
+                correlationCoefficient: Double.random(in: 0.3...0.8),
+                lagTime: Double.random(in: 0...3600),
+                strength: Double.random(in: 0.4...0.9)
             )
         }
 

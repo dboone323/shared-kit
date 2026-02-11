@@ -327,7 +327,7 @@ public class PerformanceTest {
     public func run(operation: () throws -> Void) rethrows -> PerformanceTestResult {
         self.results.removeAll()
 
-        for _ in 0 ..< self.iterations {
+        for _ in 0..<self.iterations {
             let startTime = CFAbsoluteTimeGetCurrent()
             try operation()
             let endTime = CFAbsoluteTimeGetCurrent()
@@ -344,7 +344,7 @@ public class PerformanceTest {
     public func runAsync(operation: () async throws -> Void) async rethrows -> PerformanceTestResult {
         self.results.removeAll()
 
-        for _ in 0 ..< self.iterations {
+        for _ in 0..<self.iterations {
             let startTime = CFAbsoluteTimeGetCurrent()
             try await operation()
             let endTime = CFAbsoluteTimeGetCurrent()

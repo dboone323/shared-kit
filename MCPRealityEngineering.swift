@@ -703,9 +703,9 @@ public final class MCPRealityEngineeringCoordinator: MCPRealityEngineering, Send
 private final class RealityManipulator: Sendable {
     func executeManipulation(_ manipulation: RealityManipulation) async throws -> ManipulationResult {
         ManipulationResult(
-            success: Double.random(in: 0.8 ... 1.0) > 0.2,
-            effect: Double.random(in: 0.5 ... 1.0),
-            consciousnessImpact: Double.random(in: 0.1 ... 0.5)
+            success: Double.random(in: 0.8...1.0) > 0.2,
+            effect: Double.random(in: 0.5...1.0),
+            consciousnessImpact: Double.random(in: 0.1...0.5)
         )
     }
 
@@ -720,9 +720,9 @@ private final class RealityManipulator: Sendable {
     func getManipulatorStatus() async -> ManipulatorStatus {
         ManipulatorStatus(
             operational: true,
-            capability: Double.random(in: 0.8 ... 1.0),
-            activeManipulations: Int.random(in: 1 ... 10),
-            successRate: Double.random(in: 0.85 ... 0.95)
+            capability: Double.random(in: 0.8...1.0),
+            activeManipulations: Int.random(in: 1...10),
+            successRate: Double.random(in: 0.85...0.95)
         )
     }
 }
@@ -732,7 +732,7 @@ private final class StabilityGuardian: Sendable {
     func monitorStability(_ manipulation: RealityManipulation, result: ManipulationResult) async -> StabilityResult {
         StabilityResult(
             stable: result.effect < 0.9,
-            stability: Double.random(in: 0.8 ... 1.0)
+            stability: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -747,7 +747,7 @@ private final class StabilityGuardian: Sendable {
     func getStabilityStatus() async -> StabilityStatus {
         StabilityStatus(
             operational: true,
-            stability: Double.random(in: 0.9 ... 1.0)
+            stability: Double.random(in: 0.9...1.0)
         )
     }
 }
@@ -760,7 +760,7 @@ private final class EthicalValidator: Sendable {
     ) async throws -> EthicalResult {
         EthicalResult(
             compliant: result.effect < 0.8,
-            compliance: Double.random(in: 0.9 ... 1.0)
+            compliance: Double.random(in: 0.9...1.0)
         )
     }
 
@@ -775,7 +775,7 @@ private final class EthicalValidator: Sendable {
     func getValidationStatus() async -> ValidationStatus {
         ValidationStatus(
             operational: true,
-            compliance: Double.random(in: 0.95 ... 1.0)
+            compliance: Double.random(in: 0.95...1.0)
         )
     }
 }
@@ -793,7 +793,7 @@ private final class RealityOptimizationEngine: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8 ... 1.0)
+            efficiency: Double.random(in: 0.8...1.0)
         )
     }
 }

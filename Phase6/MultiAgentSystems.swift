@@ -409,7 +409,7 @@ public actor EmergentIntelligenceEngine {
 
     private func calculateSpecializationScore() -> Double {
         // Simplified specialization calculation
-        Double.random(in: 0.3 ... 0.9)
+        Double.random(in: 0.3...0.9)
     }
 }
 
@@ -489,11 +489,11 @@ public actor AgentCommunicationNetwork {
 
     private func deliverMessage(_ message: AgentMessage) async throws {
         // Simulate network latency
-        let latency = Double.random(in: 0.001 ... 0.01) // 1-10ms
+        let latency = Double.random(in: 0.001...0.01) // 1-10ms
         networkMetrics.messageLatency = latency
 
         // Simulate occasional errors
-        if Double.random(in: 0 ... 1) < 0.02 { // 2% error rate
+        if Double.random(in: 0...1) < 0.02 { // 2% error rate
             networkMetrics.errorRate += 0.02
             throw MultiAgentError.messageDeliveryFailed(message.id)
         }

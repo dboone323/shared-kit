@@ -980,12 +980,12 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
         let detectionId = UUID()
 
         // Simplified anomaly detection
-        let anomalies = path.waypoints.filter { _ in Double.random(in: 0 ... 1) < 0.1 }.map { waypoint in
+        let anomalies = path.waypoints.filter { _ in Double.random(in: 0...1) < 0.1 }.map { waypoint in
             AnomalyDetection.DimensionalAnomaly(
                 anomalyId: UUID(),
                 coordinates: waypoint.coordinates,
                 anomalyType: .dimensionalRift,
-                severity: Double.random(in: 0.1 ... 0.5),
+                severity: Double.random(in: 0.1...0.5),
                 description: "Minor dimensional instability detected"
             )
         }
@@ -1006,7 +1006,7 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
         var waypoints: [DimensionalWaypoint] = []
         let steps = Int(1.0 / waypointDensity)
 
-        for i in 1 ... steps {
+        for i in 1...steps {
             let progress = Double(i) / Double(steps)
             let coordinates = zip(path.startCoordinates, path.endCoordinates).map { start, end in
                 start + (end - start) * progress
@@ -1016,7 +1016,7 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
                 waypointId: UUID(),
                 coordinates: coordinates,
                 sequenceNumber: i,
-                stabilityIndex: 0.9 - Double.random(in: 0 ... 0.1),
+                stabilityIndex: 0.9 - Double.random(in: 0...0.1),
                 energyCost: 1.0,
                 navigationHint: "Follow dimensional gradient"
             )

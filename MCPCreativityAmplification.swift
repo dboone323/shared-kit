@@ -782,7 +782,7 @@ private final class InspirationEngine: Sendable {
     func generateInspiration(_ amplification: CreativityAmplification) async throws -> InspirationResult {
         InspirationResult(
             success: true,
-            quality: Double.random(in: 0.8 ... 1.0)
+            quality: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -797,7 +797,7 @@ private final class InspirationEngine: Sendable {
     func getInspirationStatus() async -> InspirationStatus {
         InspirationStatus(
             operational: true,
-            level: Double.random(in: 0.9 ... 1.0)
+            level: Double.random(in: 0.9...1.0)
         )
     }
 }
@@ -809,9 +809,9 @@ private final class CreativityAmplifier: Sendable {
         inspirationResult: InspirationResult
     ) async throws -> AmplificationResult {
         AmplificationResult(
-            success: Double.random(in: 0.8 ... 1.0) > 0.2,
-            amplification: Double.random(in: 0.7 ... 1.0),
-            innovationPotential: Double.random(in: 0.8 ... 1.0)
+            success: Double.random(in: 0.8...1.0) > 0.2,
+            amplification: Double.random(in: 0.7...1.0),
+            innovationPotential: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -821,7 +821,7 @@ private final class CreativityAmplifier: Sendable {
     ) async -> AmplificationResult {
         AmplificationResult(
             success: true,
-            creativityLevel: Double.random(in: 0.8 ... 1.0)
+            creativityLevel: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -836,10 +836,10 @@ private final class CreativityAmplifier: Sendable {
     func getAmplificationStatus() async -> AmplificationStatus {
         AmplificationStatus(
             operational: true,
-            capability: Double.random(in: 0.9 ... 1.0),
-            depth: Double.random(in: 0.9 ... 1.0),
-            activeAmplifications: Int.random(in: 1 ... 20),
-            successRate: Double.random(in: 0.9 ... 0.98)
+            capability: Double.random(in: 0.9...1.0),
+            depth: Double.random(in: 0.9...1.0),
+            activeAmplifications: Int.random(in: 1...20),
+            successRate: Double.random(in: 0.9...0.98)
         )
     }
 }
@@ -848,10 +848,10 @@ private final class CreativityAmplifier: Sendable {
 private final class InnovationGenerator: Sendable {
     func generateInnovation(_ generation: CreativeInnovationGeneration) async throws -> InnovationResult {
         InnovationResult(
-            success: Double.random(in: 0.85 ... 1.0) > 0.15,
-            quality: Double.random(in: 0.8 ... 1.0),
-            novelty: Double.random(in: 0.7 ... 1.0),
-            feasibility: Double.random(in: 0.6 ... 1.0),
+            success: Double.random(in: 0.85...1.0) > 0.15,
+            quality: Double.random(in: 0.8...1.0),
+            novelty: Double.random(in: 0.7...1.0),
+            feasibility: Double.random(in: 0.6...1.0),
             concepts: generateInnovationConcepts(generation)
         )
     }
@@ -867,7 +867,7 @@ private final class InnovationGenerator: Sendable {
     func getGenerationStatus() async -> GenerationStatus {
         GenerationStatus(
             operational: true,
-            potential: Double.random(in: 0.8 ... 1.0)
+            potential: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -961,7 +961,7 @@ private final class CreativeSynthesizer: Sendable {
     func getSynthesisStatus() async -> SynthesisStatus {
         SynthesisStatus(
             operational: true,
-            effectiveness: Double.random(in: 0.8 ... 1.0)
+            effectiveness: Double.random(in: 0.8...1.0)
         )
     }
 }
@@ -979,7 +979,7 @@ private final class CreativityOptimizer: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8 ... 1.0)
+            efficiency: Double.random(in: 0.8...1.0)
         )
     }
 }

@@ -135,13 +135,13 @@ public class QuantumNetworkRouting: ObservableObject {
         let totalRoutes = routingTable.count
         let averageFidelity =
             routingTable.values.map(\.expectedFidelity).reduce(0, +)
-                / Double(max(1, routingTable.count))
+            / Double(max(1, routingTable.count))
         let averageDistance =
             routingTable.values.map(\.totalDistance).reduce(0, +)
-                / Double(max(1, routingTable.count))
+            / Double(max(1, routingTable.count))
         let averageHops =
             routingTable.values.map { Double($0.hops.count) }.reduce(0, +)
-                / Double(max(1, routingTable.count))
+            / Double(max(1, routingTable.count))
 
         let fidelityRanges = Dictionary(
             grouping: routingTable.values, by: { Int($0.expectedFidelity * 10) }
@@ -226,23 +226,23 @@ public class NetworkTopology: ObservableObject {
         let samplePaths = [
             RoutingPath(
                 hops: [source, "intermediate_1", destination],
-                expectedFidelity: Double.random(in: 0.7 ... 0.95),
-                totalDistance: Double.random(in: 100 ... 500),
-                estimatedTime: Double.random(in: 1 ... 5),
+                expectedFidelity: Double.random(in: 0.7...0.95),
+                totalDistance: Double.random(in: 100...500),
+                estimatedTime: Double.random(in: 1...5),
                 channels: []
             ),
             RoutingPath(
                 hops: [source, "intermediate_2", "intermediate_3", destination],
-                expectedFidelity: Double.random(in: 0.6 ... 0.9),
-                totalDistance: Double.random(in: 200 ... 800),
-                estimatedTime: Double.random(in: 2 ... 8),
+                expectedFidelity: Double.random(in: 0.6...0.9),
+                totalDistance: Double.random(in: 200...800),
+                estimatedTime: Double.random(in: 2...8),
                 channels: []
             ),
             RoutingPath(
                 hops: [source, destination],
-                expectedFidelity: Double.random(in: 0.8 ... 0.99),
-                totalDistance: Double.random(in: 50 ... 200),
-                estimatedTime: Double.random(in: 0.5 ... 2),
+                expectedFidelity: Double.random(in: 0.8...0.99),
+                totalDistance: Double.random(in: 50...200),
+                estimatedTime: Double.random(in: 0.5...2),
                 channels: []
             ),
         ]
@@ -288,7 +288,7 @@ public class NetworkTopology: ObservableObject {
             nodes[node] = NetworkNode(
                 id: node,
                 location: Location(
-                    latitude: Double.random(in: -90 ... 90), longitude: Double.random(in: -180 ... 180)
+                    latitude: Double.random(in: -90...90), longitude: Double.random(in: -180...180)
                 ),
                 status: .active,
                 capabilities: [.entanglement, .teleportation, .routing]

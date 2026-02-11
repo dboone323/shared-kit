@@ -281,7 +281,7 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
         let expectation = XCTestExpectation(description: "Error message")
         var errorSet = false
 
-        for _ in 0 ..< Int(timeout * 10) {
+        for _ in 0..<Int(timeout * 10) {
             if viewModel.errorMessage != nil {
                 errorSet = true
                 break

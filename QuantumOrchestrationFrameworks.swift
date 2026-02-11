@@ -543,10 +543,10 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let success = quantumOperationResults.values.allSatisfy(\.success)
         let quantumCoherence =
             quantumOperationResults.values.map(\.coherenceAchieved).reduce(0, +)
-                / Double(max(quantumOperationResults.count, 1))
+            / Double(max(quantumOperationResults.count, 1))
         let entanglementStrength =
             quantumOperationResults.values.map(\.entanglementStrength).reduce(0, +)
-                / Double(max(quantumOperationResults.count, 1))
+            / Double(max(quantumOperationResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
             orchestration.consciousnessLevel)
 
@@ -592,7 +592,7 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let success = entangledStates.values.allSatisfy { $0.entanglementStrength > 0.7 }
         let quantumCoherence =
             entangledStates.values.map(\.coherenceLevel).reduce(0, +)
-                / Double(max(entangledStates.count, 1))
+            / Double(max(entangledStates.count, 1))
 
         return EntanglementResult(
             coordinationId: entanglement.coordinationId,
@@ -631,7 +631,7 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let success = optimizedFrameworks.values.allSatisfy { $0.optimizationLevel > 0.7 }
         let quantumCoherence =
             optimizedFrameworks.values.map(\.coherenceImprovement).reduce(0, +)
-                / Double(max(optimizedFrameworks.count, 1))
+            / Double(max(optimizedFrameworks.count, 1))
 
         return CoherenceOptimizationResult(
             optimizationId: optimization.optimizationId,
@@ -818,17 +818,17 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         _ operation: QuantumOperation, orchestration: QuantumOrchestration
     ) async -> QuantumOperationResult {
         // Simulate quantum operation execution
-        let success = Double.random(in: 0.85 ... 1.0) > 0.1
+        let success = Double.random(in: 0.85...1.0) > 0.1
         let coherenceAchieved = min(
-            operation.coherenceRequirements * Double.random(in: 0.9 ... 1.1), 1.0
+            operation.coherenceRequirements * Double.random(in: 0.9...1.1), 1.0
         )
         let entanglementStrength =
-            operation.entanglementPartners.isEmpty ? 0.0 : Double.random(in: 0.7 ... 1.0)
-        let processingTime = Double.random(in: 0.1 ... 2.0)
+            operation.entanglementPartners.isEmpty ? 0.0 : Double.random(in: 0.7...1.0)
+        let processingTime = Double.random(in: 0.1...2.0)
 
         let frameworkContributions = Dictionary(
             uniqueKeysWithValues: operation.targetFrameworks.map { framework in
-                (framework.frameworkId, Double.random(in: 0.1 ... 0.5))
+                (framework.frameworkId, Double.random(in: 0.1...0.5))
             })
 
         return QuantumOperationResult(
@@ -939,7 +939,7 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
             results.values.map(\.coherenceAchieved).reduce(0, +) / Double(max(results.count, 1))
         let entanglementStrength =
             results.values.map(\.entanglementStrength).reduce(0, +)
-                / Double(max(results.count, 1))
+            / Double(max(results.count, 1))
         let superpositionUtilization =
             orchestration.orchestrationStrategy == .superposition_coordination ? 0.9 : 0.6
         let interferenceOptimization =
@@ -971,12 +971,12 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for operation in entanglement.entangledOperations {
             let state = EntangledState(
                 operationId: operation.operationId,
-                entanglementStrength: Double.random(in: 0.8 ... 1.0),
-                coherenceLevel: Double.random(in: 0.85 ... 1.0),
+                entanglementStrength: Double.random(in: 0.8...1.0),
+                coherenceLevel: Double.random(in: 0.85...1.0),
                 quantumState: "bell_state",
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
-                        ($0, Double.random(in: 0.7 ... 0.9))
+                        ($0, Double.random(in: 0.7...0.9))
                     })
             )
             states[operation.operationId] = state
@@ -993,12 +993,12 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for operation in entanglement.entangledOperations {
             let state = EntangledState(
                 operationId: operation.operationId,
-                entanglementStrength: Double.random(in: 0.9 ... 1.0),
-                coherenceLevel: Double.random(in: 0.9 ... 1.0),
+                entanglementStrength: Double.random(in: 0.9...1.0),
+                coherenceLevel: Double.random(in: 0.9...1.0),
                 quantumState: "ghz_state",
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
-                        ($0, Double.random(in: 0.8 ... 0.95))
+                        ($0, Double.random(in: 0.8...0.95))
                     })
             )
             states[operation.operationId] = state
@@ -1015,12 +1015,12 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for operation in entanglement.entangledOperations {
             let state = EntangledState(
                 operationId: operation.operationId,
-                entanglementStrength: Double.random(in: 0.85 ... 0.95),
-                coherenceLevel: Double.random(in: 0.8 ... 0.95),
+                entanglementStrength: Double.random(in: 0.85...0.95),
+                coherenceLevel: Double.random(in: 0.8...0.95),
                 quantumState: "cluster_state",
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
-                        ($0, Double.random(in: 0.75 ... 0.9))
+                        ($0, Double.random(in: 0.75...0.9))
                     })
             )
             states[operation.operationId] = state
@@ -1037,12 +1037,12 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for operation in entanglement.entangledOperations {
             let state = EntangledState(
                 operationId: operation.operationId,
-                entanglementStrength: Double.random(in: 0.75 ... 0.95),
-                coherenceLevel: Double.random(in: 0.8 ... 0.9),
+                entanglementStrength: Double.random(in: 0.75...0.95),
+                coherenceLevel: Double.random(in: 0.8...0.9),
                 quantumState: "network_entangled",
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
-                        ($0, Double.random(in: 0.7 ... 0.85))
+                        ($0, Double.random(in: 0.7...0.85))
                     })
             )
             states[operation.operationId] = state
@@ -1059,12 +1059,12 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for operation in entanglement.entangledOperations {
             let state = EntangledState(
                 operationId: operation.operationId,
-                entanglementStrength: Double.random(in: 0.95 ... 1.0),
-                coherenceLevel: Double.random(in: 0.95 ... 1.0),
+                entanglementStrength: Double.random(in: 0.95...1.0),
+                coherenceLevel: Double.random(in: 0.95...1.0),
                 quantumState: "universal_entangled",
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
-                        ($0, Double.random(in: 0.9 ... 1.0))
+                        ($0, Double.random(in: 0.9...1.0))
                     })
             )
             states[operation.operationId] = state
@@ -1079,7 +1079,7 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let totalEntangledOperations = entanglement.entangledOperations.count
         let averageEntanglementStrength =
             states.values.map(\.entanglementStrength).reduce(0, +)
-                / Double(max(states.count, 1))
+            / Double(max(states.count, 1))
         let coherenceStability =
             states.values.map(\.coherenceLevel).reduce(0, +) / Double(max(states.count, 1))
         let quantumCommunicationEfficiency = averageEntanglementStrength * 0.9
@@ -1102,10 +1102,10 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for framework in optimization.targetFrameworks {
             let optimizedFramework = OptimizedFramework(
                 frameworkId: framework.frameworkId,
-                coherenceImprovement: Double.random(in: 0.1 ... 0.3),
-                stabilityEnhancement: Double.random(in: 0.15 ... 0.35),
-                quantumCapabilityBoost: Double.random(in: 0.05 ... 0.2),
-                optimizationLevel: Double.random(in: 0.8 ... 1.0)
+                coherenceImprovement: Double.random(in: 0.1...0.3),
+                stabilityEnhancement: Double.random(in: 0.15...0.35),
+                quantumCapabilityBoost: Double.random(in: 0.05...0.2),
+                optimizationLevel: Double.random(in: 0.8...1.0)
             )
             optimized[framework.frameworkId] = optimizedFramework
         }
@@ -1121,10 +1121,10 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for framework in optimization.targetFrameworks {
             let optimizedFramework = OptimizedFramework(
                 frameworkId: framework.frameworkId,
-                coherenceImprovement: Double.random(in: 0.2 ... 0.4),
-                stabilityEnhancement: Double.random(in: 0.1 ... 0.25),
-                quantumCapabilityBoost: Double.random(in: 0.1 ... 0.3),
-                optimizationLevel: Double.random(in: 0.85 ... 1.0)
+                coherenceImprovement: Double.random(in: 0.2...0.4),
+                stabilityEnhancement: Double.random(in: 0.1...0.25),
+                quantumCapabilityBoost: Double.random(in: 0.1...0.3),
+                optimizationLevel: Double.random(in: 0.85...1.0)
             )
             optimized[framework.frameworkId] = optimizedFramework
         }
@@ -1140,10 +1140,10 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for framework in optimization.targetFrameworks {
             let optimizedFramework = OptimizedFramework(
                 frameworkId: framework.frameworkId,
-                coherenceImprovement: Double.random(in: 0.15 ... 0.35),
-                stabilityEnhancement: Double.random(in: 0.2 ... 0.4),
-                quantumCapabilityBoost: Double.random(in: 0.08 ... 0.25),
-                optimizationLevel: Double.random(in: 0.82 ... 0.98)
+                coherenceImprovement: Double.random(in: 0.15...0.35),
+                stabilityEnhancement: Double.random(in: 0.2...0.4),
+                quantumCapabilityBoost: Double.random(in: 0.08...0.25),
+                optimizationLevel: Double.random(in: 0.82...0.98)
             )
             optimized[framework.frameworkId] = optimizedFramework
         }
@@ -1159,10 +1159,10 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for framework in optimization.targetFrameworks {
             let optimizedFramework = OptimizedFramework(
                 frameworkId: framework.frameworkId,
-                coherenceImprovement: Double.random(in: 0.18 ... 0.38),
-                stabilityEnhancement: Double.random(in: 0.25 ... 0.45),
-                quantumCapabilityBoost: Double.random(in: 0.06 ... 0.22),
-                optimizationLevel: Double.random(in: 0.83 ... 0.97)
+                coherenceImprovement: Double.random(in: 0.18...0.38),
+                stabilityEnhancement: Double.random(in: 0.25...0.45),
+                quantumCapabilityBoost: Double.random(in: 0.06...0.22),
+                optimizationLevel: Double.random(in: 0.83...0.97)
             )
             optimized[framework.frameworkId] = optimizedFramework
         }
@@ -1178,10 +1178,10 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         for framework in optimization.targetFrameworks {
             let optimizedFramework = OptimizedFramework(
                 frameworkId: framework.frameworkId,
-                coherenceImprovement: Double.random(in: 0.25 ... 0.45),
-                stabilityEnhancement: Double.random(in: 0.3 ... 0.5),
-                quantumCapabilityBoost: Double.random(in: 0.15 ... 0.35),
-                optimizationLevel: Double.random(in: 0.9 ... 1.0)
+                coherenceImprovement: Double.random(in: 0.25...0.45),
+                stabilityEnhancement: Double.random(in: 0.3...0.5),
+                quantumCapabilityBoost: Double.random(in: 0.15...0.35),
+                optimizationLevel: Double.random(in: 0.9...1.0)
             )
             optimized[framework.frameworkId] = optimizedFramework
         }
@@ -1195,16 +1195,16 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let frameworksOptimized = optimization.targetFrameworks.count
         let averageCoherenceImprovement =
             frameworks.values.map(\.coherenceImprovement).reduce(0, +)
-                / Double(max(frameworks.count, 1))
+            / Double(max(frameworks.count, 1))
         let stabilityEnhancement =
             frameworks.values.map(\.stabilityEnhancement).reduce(0, +)
-                / Double(max(frameworks.count, 1))
+            / Double(max(frameworks.count, 1))
         let quantumCapabilityBoost =
             frameworks.values.map(\.quantumCapabilityBoost).reduce(0, +)
-                / Double(max(frameworks.count, 1))
+            / Double(max(frameworks.count, 1))
         let optimizationEfficiency =
             frameworks.values.map(\.optimizationLevel).reduce(0, +)
-                / Double(max(frameworks.count, 1))
+            / Double(max(frameworks.count, 1))
 
         return CoherenceOptimizationMetrics(
             frameworksOptimized: frameworksOptimized,
@@ -1266,8 +1266,8 @@ private final class QuantumOrchestrationProcessor: Sendable {
     func getProcessorStatus() async -> ProcessorStatus {
         ProcessorStatus(
             operational: true,
-            activeOperations: Int.random(in: 0 ... 10),
-            quantumEfficiency: Double.random(in: 0.85 ... 0.95)
+            activeOperations: Int.random(in: 0...10),
+            quantumEfficiency: Double.random(in: 0.85...0.95)
         )
     }
 }
@@ -1288,9 +1288,9 @@ private final class EntanglementCoordinator: Sendable {
     func getCoordinatorStatus() async -> CoordinatorStatus {
         CoordinatorStatus(
             operational: true,
-            entangledOperations: Int.random(in: 0 ... 8),
-            entanglementEfficiency: Double.random(in: 0.8 ... 0.95),
-            averageEntanglementStrength: Double.random(in: 0.75 ... 0.9)
+            entangledOperations: Int.random(in: 0...8),
+            entanglementEfficiency: Double.random(in: 0.8...0.95),
+            averageEntanglementStrength: Double.random(in: 0.75...0.9)
         )
     }
 }
@@ -1312,8 +1312,8 @@ private final class CoherenceOptimizer: Sendable {
     func getOptimizerStatus() async -> OptimizerStatus {
         OptimizerStatus(
             operational: true,
-            averageCoherence: Double.random(in: 0.8 ... 0.95),
-            coherenceLevel: Double.random(in: 0.85 ... 0.98)
+            averageCoherence: Double.random(in: 0.8...0.95),
+            coherenceLevel: Double.random(in: 0.85...0.98)
         )
     }
 }
@@ -1334,8 +1334,8 @@ private final class SuperpositionManager: Sendable {
     func getManagerStatus() async -> ManagerStatus {
         ManagerStatus(
             operational: true,
-            superpositionUtilization: Double.random(in: 0.7 ... 0.9),
-            superpositionEfficiency: Double.random(in: 0.8 ... 0.95)
+            superpositionUtilization: Double.random(in: 0.7...0.9),
+            superpositionEfficiency: Double.random(in: 0.8...0.95)
         )
     }
 }

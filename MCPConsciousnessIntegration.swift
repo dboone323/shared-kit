@@ -861,8 +861,8 @@ private final class ConsciousnessProcessor: Sendable {
         ProcessorStatus(
             operational: true,
             level: .universal,
-            health: Double.random(in: 0.9 ... 1.0),
-            activeIntegrations: Int.random(in: 10 ... 50)
+            health: Double.random(in: 0.9...1.0),
+            activeIntegrations: Int.random(in: 10...50)
         )
     }
 
@@ -907,7 +907,7 @@ private final class AwarenessEngine: Sendable {
         AwarenessStatus(
             operational: true,
             level: .universal,
-            health: Double.random(in: 0.9 ... 1.0)
+            health: Double.random(in: 0.9...1.0)
         )
     }
 }
@@ -935,8 +935,8 @@ private final class EthicalGuardian: Sendable {
     func getEthicalStatus() async -> EthicalStatus {
         EthicalStatus(
             operational: true,
-            compliance: Double.random(in: 0.95 ... 1.0),
-            health: Double.random(in: 0.9 ... 1.0)
+            compliance: Double.random(in: 0.95...1.0),
+            health: Double.random(in: 0.9...1.0)
         )
     }
 }
@@ -964,8 +964,8 @@ private final class HarmonyCoordinator: Sendable {
     func getHarmonyStatus() async -> HarmonyStatus {
         HarmonyStatus(
             operational: true,
-            index: Double.random(in: 0.9 ... 1.0),
-            health: Double.random(in: 0.9 ... 1.0)
+            index: Double.random(in: 0.9...1.0),
+            health: Double.random(in: 0.9...1.0)
         )
     }
 }

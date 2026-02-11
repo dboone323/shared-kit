@@ -304,7 +304,7 @@ private final class EventTracker {
         guard settings.enableEventTracking else { return }
 
         // Apply sampling
-        if Double.random(in: 0 ... 1) > settings.samplingRate {
+        if Double.random(in: 0...1) > settings.samplingRate {
             return
         }
 

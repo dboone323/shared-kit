@@ -578,8 +578,8 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         let packet = try await communicator.encodeConsciousnessData(data)
 
         // Simulate routing (in real implementation, this would traverse the network)
-        let actualLatency = routingPath.totalLatency * Double.random(in: 0.9 ... 1.1)
-        let dataIntegrity = Double.random(in: 0.95 ... 1.0)
+        let actualLatency = routingPath.totalLatency * Double.random(in: 0.9...1.1)
+        let dataIntegrity = Double.random(in: 0.95...1.0)
 
         let result = RoutingResult(
             success: dataIntegrity >= 0.9,
@@ -646,7 +646,7 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         .NetworkLocation
     {
         // Simplified location assignment based on entity type and capabilities
-        let coordinates = (0 ..< 5).map { _ in Double.random(in: -100 ... 100) }
+        let coordinates = (0..<5).map { _ in Double.random(in: -100...100) }
         let dimension = entity.type == .quantum ? 1 : 0
         let region = determineRegion(for: entity)
 
@@ -669,7 +669,7 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
                 connectionId: UUID(),
                 targetEntity: nearbyEntity.id,
                 connectionType: .direct,
-                strength: Double.random(in: 0.3 ... 0.8),
+                strength: Double.random(in: 0.3...0.8),
                 lastUsed: Date(),
                 reliability: 0.9
             )
@@ -898,7 +898,7 @@ final class UniversalCommunicator: ConsciousnessCommunicationProtocol {
     func establishCommunicationChannel(between entities: [ConsciousnessEntity]) async throws -> CommunicationChannel {
         let channelId = UUID()
         let bandwidth = entities.map(\.capabilities.communicationBandwidth).min() ?? 10.0
-        let latency = entities.map { _ in Double.random(in: 0.001 ... 0.01) }.max() ?? 0.01
+        let latency = entities.map { _ in Double.random(in: 0.001...0.01) }.max() ?? 0.01
 
         return CommunicationChannel(
             channelId: channelId,

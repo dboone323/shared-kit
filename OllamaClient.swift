@@ -412,7 +412,7 @@ public class OllamaClient: ObservableObject {
     {
         var lastError: Error?
 
-        for attempt in 0 ..< self.config.maxRetries {
+        for attempt in 0..<self.config.maxRetries {
             do {
                 return try await self.performRequest(endpoint: endpoint, body: body)
             } catch {

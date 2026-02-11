@@ -363,8 +363,8 @@ public actor QuantumSafeCryptoManager {
 
         // Simulate quantum-safe encryption
         // In real implementation, this would use actual Kyber/Dilithium libraries
-        let ciphertext = Data((0 ..< data.count + 32).map { _ in UInt8.random(in: 0 ... 255) })
-        let ephemeralKey = Data((0 ..< 32).map { _ in UInt8.random(in: 0 ... 255) })
+        let ciphertext = Data((0..<data.count + 32).map { _ in UInt8.random(in: 0...255) })
+        let ephemeralKey = Data((0..<32).map { _ in UInt8.random(in: 0...255) })
 
         return QuantumSafeCiphertext(
             algorithm: algorithm,
@@ -385,13 +385,13 @@ public actor QuantumSafeCryptoManager {
         // Simulate quantum-safe decryption
         // In real implementation, this would use actual Kyber/Dilithium libraries
         return Data(
-            (0 ..< ciphertext.ciphertext.count - 32).map { _ in UInt8.random(in: 0 ... 255) })
+            (0..<ciphertext.ciphertext.count - 32).map { _ in UInt8.random(in: 0...255) })
     }
 
     /// Sign data using quantum-safe signature
     public func signData(_ data: Data, using keyId: String) async throws -> QuantumSafeSignature {
         // Simulate Dilithium signature
-        let signature = Data((0 ..< 64).map { _ in UInt8.random(in: 0 ... 255) })
+        let signature = Data((0..<64).map { _ in UInt8.random(in: 0...255) })
 
         return QuantumSafeSignature(
             algorithm: .dilithium,
@@ -489,8 +489,8 @@ public actor QuantumSafeKeyManager {
 
         // Simulate key generation
         // In real implementation, this would generate actual Kyber/Dilithium keys
-        let publicKeyData = Data((0 ..< keySize.rawValue).map { _ in UInt8.random(in: 0 ... 255) })
-        let privateKeyData = Data((0 ..< keySize.rawValue).map { _ in UInt8.random(in: 0 ... 255) })
+        let publicKeyData = Data((0..<keySize.rawValue).map { _ in UInt8.random(in: 0...255) })
+        let privateKeyData = Data((0..<keySize.rawValue).map { _ in UInt8.random(in: 0...255) })
 
         let publicKey = QuantumSafePublicKey(
             algorithm: algorithm,
@@ -647,7 +647,7 @@ public actor QuantumSafeProtocolManager {
         let channelId = UUID().uuidString
 
         // Simulate key exchange
-        let sharedSecret = Data((0 ..< 32).map { _ in UInt8.random(in: 0 ... 255) })
+        let sharedSecret = Data((0..<32).map { _ in UInt8.random(in: 0...255) })
 
         let channel = QuantumSafeChannel(
             id: channelId,
@@ -767,7 +767,7 @@ public actor QuantumThreatDetector {
         logger.info("📈 Increasing threat monitoring intensity")
 
         // Enhance monitoring capabilities
-        for i in 0 ..< threatPatterns.count {
+        for i in 0..<threatPatterns.count {
             threatPatterns[i].detectionConfidence += 0.1
         }
     }

@@ -1044,7 +1044,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
         // Aggregate metrics for analysis
         _ = try await metricsCollector.aggregateEvolutionMetrics(
             entityId: session.entityId,
-            timeRange: Date().addingTimeInterval(-analysisParameters.timeWindow) ... Date(),
+            timeRange: Date().addingTimeInterval(-analysisParameters.timeWindow)...Date(),
             aggregationType: .average
         )
 
@@ -1120,7 +1120,7 @@ final class ConsciousnessEvolutionMonitoringEngine: ConsciousnessEvolutionMonito
             entityId: session.entityId,
             insightContext: InsightContext(
                 contextType: .general,
-                timeRange: Date().addingTimeInterval(-86400) ... Date(),
+                timeRange: Date().addingTimeInterval(-86400)...Date(),
                 focusAreas: ["evolution_progress", "stability", "patterns"],
                 previousInsights: [],
                 userPreferences: [:]
@@ -1353,10 +1353,10 @@ final class EvolutionMetricsCollector: EvolutionMetricsCollectionProtocol {
                 timestamp: Date(),
                 metricsType: metricsType,
                 quantitativeMetrics: [
-                    "coherence": Double.random(in: 0.7 ... 0.95),
-                    "integration": Double.random(in: 0.75 ... 0.9),
-                    "complexity": Double.random(in: 0.6 ... 0.85),
-                    "stability": Double.random(in: 0.8 ... 0.95),
+                    "coherence": Double.random(in: 0.7...0.95),
+                    "integration": Double.random(in: 0.75...0.9),
+                    "complexity": Double.random(in: 0.6...0.85),
+                    "stability": Double.random(in: 0.8...0.95),
                 ],
                 qualitativeMetrics: [
                     "evolution_stage": "developing",

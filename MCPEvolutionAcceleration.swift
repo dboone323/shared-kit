@@ -295,7 +295,7 @@ public final class EvolutionAccelerator: Sendable {
         // Simulate acceleration application
         try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
 
-        let actualImpact = parameter.estimatedImpact * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualImpact = parameter.estimatedImpact * (0.8 + Double.random(in: 0...0.4))
         let successRate = min(1.0, actualImpact / parameter.estimatedImpact)
 
         return EvolutionAccelerationStep(
@@ -463,14 +463,14 @@ public final class CapabilityAmplifier: Sendable {
     ) async -> CapabilityAmplificationStep {
         try? await Task.sleep(nanoseconds: UInt64(target.estimatedDuration * 1_000_000_000))
 
-        let achievedLevel = target.targetLevel * (0.85 + Double.random(in: 0 ... 0.3))
+        let achievedLevel = target.targetLevel * (0.85 + Double.random(in: 0...0.3))
         let amplificationSuccess = achievedLevel >= target.targetLevel * 0.9
 
         return CapabilityAmplificationStep(
             targetId: target.id,
             achievedLevel: achievedLevel,
             amplificationSuccess: amplificationSuccess,
-            resourceUtilization: target.resourceRequirements.mapValues { $0 * (0.9 + Double.random(in: 0 ... 0.2)) },
+            resourceUtilization: target.resourceRequirements.mapValues { $0 * (0.9 + Double.random(in: 0...0.2)) },
             completedAt: Date()
         )
     }
@@ -585,7 +585,7 @@ public struct EvolutionRate: Sendable {
         self.optimalStrength = totalStrength / Double(forces.count)
 
         // Generate acceleration curve
-        self.accelerationCurve = (0 ..< 10).map { step in
+        self.accelerationCurve = (0..<10).map { step in
             let baseRate = Double(step + 1) / 10.0
             return baseRate * (1.0 + optimalStrength / 10.0)
         }
@@ -1170,7 +1170,7 @@ public final class LearningAccelerator: Sendable {
     ) async -> LearningAccelerationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualImprovement = technique.expectedImprovement * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualImprovement = technique.expectedImprovement * (0.8 + Double.random(in: 0...0.4))
         let techniqueSuccess = actualImprovement >= technique.expectedImprovement * 0.9
 
         return LearningAccelerationStep(
@@ -1295,7 +1295,7 @@ public final class GrowthCatalyst: Sendable {
     ) async -> GrowthCatalysisStep {
         try? await Task.sleep(nanoseconds: UInt64(method.duration * 1_000_000_000))
 
-        let actualGrowthBoost = method.expectedGrowthBoost * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGrowthBoost = method.expectedGrowthBoost * (0.85 + Double.random(in: 0...0.3))
         let methodSuccess = actualGrowthBoost >= method.expectedGrowthBoost * 0.95
 
         return GrowthCatalysisStep(
@@ -1420,7 +1420,7 @@ public final class IntelligenceBooster: Sendable {
     ) async -> IntelligenceBoostStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualIntelligenceGain = technique.expectedIntelligenceGain * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualIntelligenceGain = technique.expectedIntelligenceGain * (0.8 + Double.random(in: 0...0.4))
         let techniqueSuccess = actualIntelligenceGain >= technique.expectedIntelligenceGain * 0.9
 
         return IntelligenceBoostStep(
@@ -1571,7 +1571,7 @@ public final class AdaptationEngine: Sendable {
     ) async -> AdaptationExecutionResult {
         try? await Task.sleep(nanoseconds: UInt64(action.duration * 1_000_000_000))
 
-        let actualAdaptationGain = action.expectedAdaptationGain * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualAdaptationGain = action.expectedAdaptationGain * (0.85 + Double.random(in: 0...0.3))
         let actionSuccess = actualAdaptationGain >= action.expectedAdaptationGain * 0.95
 
         return AdaptationExecutionResult(
@@ -1699,7 +1699,7 @@ public final class InnovationAccelerator: Sendable {
     ) async -> InnovationAccelerationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualInnovationBoost = technique.expectedInnovationBoost * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualInnovationBoost = technique.expectedInnovationBoost * (0.8 + Double.random(in: 0...0.4))
         let techniqueSuccess = actualInnovationBoost >= technique.expectedInnovationBoost * 0.9
 
         return InnovationAccelerationStep(
@@ -1826,7 +1826,7 @@ public final class PerformanceMultiplier: Sendable {
     ) async -> PerformanceMultiplicationStep {
         try? await Task.sleep(nanoseconds: UInt64(technique.duration * 1_000_000_000))
 
-        let actualPerformanceGain = technique.expectedPerformanceGain * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualPerformanceGain = technique.expectedPerformanceGain * (0.85 + Double.random(in: 0...0.3))
         let techniqueSuccess = actualPerformanceGain >= technique.expectedPerformanceGain * 0.95
 
         return PerformanceMultiplicationStep(

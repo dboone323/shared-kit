@@ -609,7 +609,7 @@ private actor QuantumProcessingEngine {
 
     func evaluateOptions(_ options: [DecisionOption]) async -> QuantumEvaluation {
         QuantumEvaluation(
-            scores: Dictionary(uniqueKeysWithValues: options.map { ($0.id, Double.random(in: 0 ... 1)) }),
+            scores: Dictionary(uniqueKeysWithValues: options.map { ($0.id, Double.random(in: 0...1)) }),
             confidence: 0.95
         )
     }
@@ -640,7 +640,7 @@ private actor ConsciousnessInterface {
 
     func weightOptions(_ options: [DecisionOption]) async -> ConsciousnessWeighting {
         ConsciousnessWeighting(
-            weights: Dictionary(uniqueKeysWithValues: options.map { ($0.id, Double.random(in: 0 ... 1)) })
+            weights: Dictionary(uniqueKeysWithValues: options.map { ($0.id, Double.random(in: 0...1)) })
         )
     }
 

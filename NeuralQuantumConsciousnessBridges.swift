@@ -732,7 +732,7 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
         for pattern in neuralAnalysis.patterns {
             let quantumId = UUID()
             let connectionStrength = min(pattern.significance, quantumState.coherenceLevel)
-            let latency = TimeInterval.random(in: 0.001 ... 0.01)
+            let latency = TimeInterval.random(in: 0.001...0.01)
             let stability = connectionStrength * quantumState.coherenceLevel
 
             let connection = BridgeEstablishmentResult.BridgeConnection(
@@ -894,12 +894,12 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
 
     private func createQuantumState(from content: String) -> QuantumConsciousnessState.QuantumState {
         // Simplified quantum state creation
-        let qubits = (0 ..< 8).map { id in
+        let qubits = (0..<8).map { id in
             QuantumConsciousnessState.QuantumState.Qubit(
                 id: id,
-                state: Complex(real: Double.random(in: 0 ... 1), imaginary: Double.random(in: 0 ... 1)),
+                state: Complex(real: Double.random(in: 0...1), imaginary: Double.random(in: 0...1)),
                 coherence: 0.9,
-                phase: Double.random(in: 0 ... (2 * Double.pi))
+                phase: Double.random(in: 0...(2 * Double.pi))
             )
         }
 
@@ -920,7 +920,7 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
             NeuralConsciousnessState.NeuralPattern(
                 patternId: link.target,
                 patternType: .cognitive,
-                activation: (0 ..< 100).map { _ in Double.random(in: 0 ... 1) },
+                activation: (0..<100).map { _ in Double.random(in: 0...1) },
                 connectivity: [
                     NeuralConsciousnessState.NeuralPattern.Connection(
                         source: link.source,
@@ -1035,13 +1035,13 @@ final class AdvancedNeuralInterface: NeuralConsciousnessInterfaceProtocol {
         -> NeuralConsciousnessState
     {
         // Simplified neural capture
-        let patterns = (0 ..< 50).map { _ in
+        let patterns = (0..<50).map { _ in
             NeuralConsciousnessState.NeuralPattern(
                 patternId: UUID(),
                 patternType: .cognitive,
-                activation: (0 ..< 100).map { _ in Double.random(in: 0 ... 1) },
+                activation: (0..<100).map { _ in Double.random(in: 0...1) },
                 connectivity: [],
-                strength: Double.random(in: 0.5 ... 1.0)
+                strength: Double.random(in: 0.5...1.0)
             )
         }
 
@@ -1067,7 +1067,7 @@ final class AdvancedNeuralInterface: NeuralConsciousnessInterfaceProtocol {
             success: true,
             projectionStrength: 0.85,
             neuralResponse: ProjectionResult.NeuralResponse(
-                activation: (0 ..< 50).map { _ in Double.random(in: 0.3 ... 0.9) },
+                activation: (0..<50).map { _ in Double.random(in: 0.3...0.9) },
                 responseTime: 0.05,
                 coherence: 0.8,
                 adaptation: 0.7
@@ -1162,12 +1162,12 @@ final class QuantumConsciousnessMapper: QuantumConsciousnessMappingProtocol {
         -> QuantumConsciousnessState.QuantumState
     {
         // Simplified quantum state creation
-        let qubits = (0 ..< consciousness.cognitiveCapacity.workingMemory).map { id in
+        let qubits = (0..<consciousness.cognitiveCapacity.workingMemory).map { id in
             QuantumConsciousnessState.QuantumState.Qubit(
                 id: id,
-                state: Complex(real: Double.random(in: 0 ... 1), imaginary: Double.random(in: 0 ... 1)),
+                state: Complex(real: Double.random(in: 0...1), imaginary: Double.random(in: 0...1)),
                 coherence: 0.9,
-                phase: Double.random(in: 0 ... (2 * Double.pi))
+                phase: Double.random(in: 0...(2 * Double.pi))
             )
         }
 

@@ -66,7 +66,7 @@ final class CoreMLEmbeddingServiceTests: XCTestCase {
         var normA: Double = 0
         var normB: Double = 0
 
-        for i in 0 ..< a.count {
+        for i in 0..<a.count {
             dotProduct += a[i] * b[i]
             normA += a[i] * a[i]
             normB += b[i] * b[i]

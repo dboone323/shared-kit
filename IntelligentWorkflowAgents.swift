@@ -1064,7 +1064,7 @@ public struct ParallelizationStrategy: WorkflowOptimizationStrategy {
         var optimizedSteps = workflow.steps
 
         // Convert eligible sequential steps to parallel
-        for i in 0 ..< optimizedSteps.count {
+        for i in 0..<optimizedSteps.count {
             if optimizedSteps[i].executionMode == .sequential
                 && optimizedSteps[i].dependencies.count <= 1
             {

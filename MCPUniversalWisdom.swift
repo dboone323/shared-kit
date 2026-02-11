@@ -703,9 +703,9 @@ private final class WisdomRepository: Sendable {
         consciousnessResult: ConsciousnessResult
     ) async throws -> WisdomResult {
         WisdomResult(
-            success: Double.random(in: 0.85 ... 1.0) > 0.15,
+            success: Double.random(in: 0.85...1.0) > 0.15,
             principles: generateWisdomPrinciples(wisdom),
-            depth: Double.random(in: 0.8 ... 1.0)
+            depth: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -720,10 +720,10 @@ private final class WisdomRepository: Sendable {
     func getRepositoryStatus() async -> RepositoryStatus {
         RepositoryStatus(
             operational: true,
-            capability: Double.random(in: 0.9 ... 1.0),
-            depth: Double.random(in: 0.9 ... 1.0),
-            activeAccesses: Int.random(in: 1 ... 20),
-            successRate: Double.random(in: 0.9 ... 0.98)
+            capability: Double.random(in: 0.9...1.0),
+            depth: Double.random(in: 0.9...1.0),
+            activeAccesses: Int.random(in: 1...20),
+            successRate: Double.random(in: 0.9...0.98)
         )
     }
 
@@ -791,7 +791,7 @@ private final class ConsciousnessInterface: Sendable {
     func establishConnection(_ level: ConsciousnessLevel) async throws -> ConsciousnessResult {
         ConsciousnessResult(
             success: true,
-            elevation: Double.random(in: 0.8 ... 1.0)
+            elevation: Double.random(in: 0.8...1.0)
         )
     }
 
@@ -801,7 +801,7 @@ private final class ConsciousnessInterface: Sendable {
     ) async -> ConsciousnessResult {
         ConsciousnessResult(
             success: true,
-            transformation: Double.random(in: 0.7 ... 1.0)
+            transformation: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -816,7 +816,7 @@ private final class ConsciousnessInterface: Sendable {
     func getInterfaceStatus() async -> InterfaceStatus {
         InterfaceStatus(
             operational: true,
-            level: Double.random(in: 0.9 ... 1.0)
+            level: Double.random(in: 0.9...1.0)
         )
     }
 }
@@ -826,14 +826,14 @@ private final class UniversalConnector: Sendable {
     func connectUniversal(_ wisdom: UniversalWisdomAccess, wisdomResult: WisdomResult) async -> UniversalResult {
         UniversalResult(
             success: true,
-            understanding: Double.random(in: 0.8 ... 1.0)
+            understanding: Double.random(in: 0.8...1.0)
         )
     }
 
     func generateImpact(_ application: WisdomApplication, result: ApplicationResult) async -> UniversalResult {
         UniversalResult(
             success: true,
-            impact: Double.random(in: 0.7 ... 1.0)
+            impact: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -848,7 +848,7 @@ private final class UniversalConnector: Sendable {
     func getConnectionStatus() async -> ConnectionStatus {
         ConnectionStatus(
             operational: true,
-            alignment: Double.random(in: 0.95 ... 1.0)
+            alignment: Double.random(in: 0.95...1.0)
         )
     }
 }
@@ -857,8 +857,8 @@ private final class UniversalConnector: Sendable {
 private final class WisdomApplicator: Sendable {
     func applyWisdom(_ application: WisdomApplication) async throws -> ApplicationResult {
         ApplicationResult(
-            success: Double.random(in: 0.8 ... 1.0) > 0.2,
-            effectiveness: Double.random(in: 0.7 ... 1.0)
+            success: Double.random(in: 0.8...1.0) > 0.2,
+            effectiveness: Double.random(in: 0.7...1.0)
         )
     }
 
@@ -873,7 +873,7 @@ private final class WisdomApplicator: Sendable {
     func getApplicationStatus() async -> ApplicationStatus {
         ApplicationStatus(
             operational: true,
-            effectiveness: Double.random(in: 0.8 ... 1.0)
+            effectiveness: Double.random(in: 0.8...1.0)
         )
     }
 }
@@ -891,7 +891,7 @@ private final class WisdomOptimizer: Sendable {
     func getOptimizationStatus() async -> OptimizationStatus {
         OptimizationStatus(
             operational: true,
-            efficiency: Double.random(in: 0.8 ... 1.0)
+            efficiency: Double.random(in: 0.8...1.0)
         )
     }
 }

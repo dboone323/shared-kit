@@ -527,7 +527,7 @@ public final class EmotionalIntelligenceProcessor: Sendable {
         // Simple trigger identification based on state changes
         var triggers: [EmotionalTrigger] = []
 
-        for i in 1 ..< data.count {
+        for i in 1..<data.count {
             let previous = data[i - 1]
             let current = data[i]
 
@@ -1391,7 +1391,7 @@ public final class EmpathyAmplifier: Sendable {
 
         // Update network connections with amplified empathy
         var updatedConnections = network.connections
-        for i in 0 ..< updatedConnections.count {
+        for i in 0..<updatedConnections.count {
             let currentStrength = updatedConnections[i].empathyStrength
             let newStrength = min(1.0, currentStrength * amplificationFactor)
             updatedConnections[i].updateEmotionalState(

@@ -265,7 +265,7 @@ public final class AggregatorAgent: Sendable {
         var lastError: Error?
         var delay: UInt64 = 1_000_000_000 // 1 second in nanoseconds
 
-        for attempt in 0 ..< maxRetries {
+        for attempt in 0..<maxRetries {
             do {
                 return try await runDockerManager(command: command, args: args)
                 // Success - return immediately

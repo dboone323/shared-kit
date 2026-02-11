@@ -1048,7 +1048,7 @@ private struct RealityControlsView: View {
 
             VStack(alignment: .leading) {
                 Text("Intensity: \(Int(intensity * 100))%")
-                Slider(value: $intensity, in: 0.01 ... 0.5)
+                Slider(value: $intensity, in: 0.01...0.5)
             }
 
             Button(action: performManipulation) {

@@ -469,7 +469,7 @@ public final class InfiniteImaginationFramework: Sendable {
     ) async -> InfiniteImaginationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.imagination * 1_500_000_000))
 
-        let actualGain = step.imagination * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.imagination * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.imagination * 0.90
 
         return InfiniteImaginationResultItem(
@@ -591,7 +591,7 @@ public final class BoundlessInnovationSystem: Sendable {
     ) async -> BoundlessInnovationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.innovation * 2_000_000_000))
 
-        let actualGain = step.innovation * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualGain = step.innovation * (0.8 + Double.random(in: 0...0.4))
         let success = actualGain >= step.innovation * 0.85
 
         return BoundlessInnovationResultItem(
@@ -717,7 +717,7 @@ public final class LimitlessInspirationInterface: Sendable {
     ) async -> LimitlessInspirationResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.inspiration * 2_500_000_000))
 
-        let actualPower = step.inspiration * (0.75 + Double.random(in: 0 ... 0.5))
+        let actualPower = step.inspiration * (0.75 + Double.random(in: 0...0.5))
         let success = actualPower >= step.inspiration * 0.80
 
         return LimitlessInspirationResultItem(

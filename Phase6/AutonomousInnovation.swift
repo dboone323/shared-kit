@@ -186,7 +186,7 @@ public actor AutonomousInnovation {
         }
         updatedMetrics.innovationSuccessRate =
             Double(updatedMetrics.successfulImplementations)
-                / Double(max(updatedMetrics.totalInnovations, 1))
+            / Double(max(updatedMetrics.totalInnovations, 1))
         innovationMetrics = updatedMetrics
 
         logger.info(
@@ -238,7 +238,7 @@ public actor AutonomousInnovation {
         updatedMetrics.totalInnovations += innovations.count
         updatedMetrics.innovationSuccessRate =
             Double(updatedMetrics.successfulImplementations)
-                / Double(max(updatedMetrics.totalInnovations, 1))
+            / Double(max(updatedMetrics.totalInnovations, 1))
         updatedMetrics.timestamp = Date()
         innovationMetrics = updatedMetrics
     }
@@ -355,7 +355,7 @@ public actor AutonomousInnovation {
         if innovationAnalysis.successfulInnovations > 0 {
             let successRate =
                 Double(innovationAnalysis.successfulInnovations)
-                    / Double(innovationAnalysis.totalInnovations)
+                / Double(innovationAnalysis.totalInnovations)
 
             insights.append(
                 InnovationInsight(
@@ -403,7 +403,7 @@ public actor InnovationGenerator {
         var innovations: [Innovation] = []
 
         // Generate multiple innovation concepts
-        for i in 0 ..< constraints.maxIdeasPerOpportunity {
+        for i in 0..<constraints.maxIdeasPerOpportunity {
             let innovation = try await generateSingleInnovation(
                 for: opportunity,
                 index: i,
@@ -464,14 +464,14 @@ public actor InnovationGenerator {
         var features: [InnovationFeature] = []
 
         // Generate 3-5 key features
-        let featureCount = Int.random(in: 3 ... 5)
+        let featureCount = Int.random(in: 3...5)
 
-        for i in 0 ..< featureCount {
+        for i in 0..<featureCount {
             let feature = InnovationFeature(
                 name: "Feature \(i + 1)",
                 description: "Advanced capability leveraging \(opportunity.type.rawValue)",
-                technicalComplexity: Double.random(in: 0.3 ... 0.9),
-                userValue: Double.random(in: 0.5 ... 1.0)
+                technicalComplexity: Double.random(in: 0.3...0.9),
+                userValue: Double.random(in: 0.5...1.0)
             )
             features.append(feature)
         }
@@ -497,7 +497,7 @@ public actor InnovationGenerator {
     ) -> Double {
         let opportunityImpact = opportunity.impact
         let featureValue = features.map(\.userValue).reduce(0, +) / Double(features.count)
-        let marketTiming = Double.random(in: 0.7 ... 1.0) // Market readiness
+        let marketTiming = Double.random(in: 0.7...1.0) // Market readiness
 
         return (opportunityImpact + featureValue + marketTiming) / 3.0
     }
@@ -536,11 +536,11 @@ public actor TrendAnalyzer {
                 name: "\(trendType.rawValue.capitalized) \(domain.name) Technology",
                 type: trendType,
                 domain: domain,
-                momentum: Double.random(in: 0.1 ... 1.0),
-                marketSize: Double.random(in: 1_000_000 ... 1_000_000_000),
-                adoptionRate: Double.random(in: 0.05 ... 0.5),
-                timeframe: Double.random(in: 365 ... 3650) * 24 * 3600, // 1-10 years
-                confidence: Double.random(in: 0.6 ... 0.95)
+                momentum: Double.random(in: 0.1...1.0),
+                marketSize: Double.random(in: 1_000_000...1_000_000_000),
+                adoptionRate: Double.random(in: 0.05...0.5),
+                timeframe: Double.random(in: 365...3650) * 24 * 3600, // 1-10 years
+                confidence: Double.random(in: 0.6...0.95)
             )
             trends.append(trend)
         }
@@ -579,9 +579,9 @@ public actor OpportunityPredictor {
 
         for trend in trends {
             // Generate opportunities based on trend characteristics
-            let opportunityCount = Int.random(in: 1 ... 3)
+            let opportunityCount = Int.random(in: 1...3)
 
-            for _ in 0 ..< opportunityCount {
+            for _ in 0..<opportunityCount {
                 let opportunity = try await generateOpportunity(from: trend, in: domain)
                 opportunities.append(opportunity)
             }
@@ -628,14 +628,14 @@ public actor OpportunityPredictor {
         var predictions: [PredictedOpportunity] = []
 
         // Generate 2-4 opportunity predictions per breakthrough
-        let predictionCount = Int.random(in: 2 ... 4)
+        let predictionCount = Int.random(in: 2...4)
 
-        for _ in 0 ..< predictionCount {
+        for _ in 0..<predictionCount {
             let prediction = PredictedOpportunity(
                 title: "Opportunity from \(breakthrough.title)",
                 description: "Leveraging breakthrough in \(breakthrough.description)",
-                likelihood: breakthrough.likelihood * Double.random(in: 0.7 ... 1.0),
-                impact: breakthrough.impact * Double.random(in: 0.5 ... 1.5),
+                likelihood: breakthrough.likelihood * Double.random(in: 0.7...1.0),
+                impact: breakthrough.impact * Double.random(in: 0.5...1.5),
                 timeframe: breakthrough.timeframe,
                 domain: breakthrough.domain,
                 prerequisites: ["\(breakthrough.title) realization"],
@@ -722,7 +722,7 @@ public actor ImplementationSynthesizer {
 
         // Simulate implementation execution
         let success = Bool.random() // Simulate success/failure
-        let executionTime = Double.random(in: 3600 ... 86400) // 1 hour to 1 day
+        let executionTime = Double.random(in: 3600...86400) // 1 hour to 1 day
         let artifacts = try await generateImplementationArtifacts(task)
 
         return ImplementationResult(
@@ -999,8 +999,8 @@ public actor InnovationEvaluator {
         // Evaluate based on domain and features
         let featureValue =
             innovation.features.map(\.userValue).reduce(0, +)
-                / Double(innovation.features.count)
-        return featureValue * Double.random(in: 0.8 ... 1.2)
+            / Double(innovation.features.count)
+        return featureValue * Double.random(in: 0.8...1.2)
     }
 
     private func evaluateImplementationFeasibility(_ innovation: Innovation) -> Double {

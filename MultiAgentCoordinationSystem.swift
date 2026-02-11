@@ -787,8 +787,8 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
         var optimizedSubtasks = task.subtasks
 
         // Mark independent subtasks
-        for i in 0 ..< optimizedSubtasks.count {
-            for j in (i + 1) ..< optimizedSubtasks.count {
+        for i in 0..<optimizedSubtasks.count {
+            for j in (i + 1)..<optimizedSubtasks.count {
                 if !optimizedSubtasks[i].dependencies.contains(optimizedSubtasks[j].id)
                     && !optimizedSubtasks[j].dependencies.contains(optimizedSubtasks[i].id)
                 {

@@ -575,7 +575,7 @@ public final class AutonomousTestingFramework: ObservableObject {
         let (result, output) = await simulateTestExecution(testCase)
 
         let duration = Date().timeIntervalSince(startTime)
-        let coverage = Double.random(in: 0.1 ... 1.0) // Simulated coverage
+        let coverage = Double.random(in: 0.1...1.0) // Simulated coverage
 
         let execution = TestExecution(
             testCaseId: testId,
@@ -592,7 +592,7 @@ public final class AutonomousTestingFramework: ObservableObject {
         let successRate = result == .passed ? 1.0 : 0.0
         testCase.successRate =
             (testCase.successRate * Double(testCase.executionCount - 1) + successRate)
-                / Double(testCase.executionCount)
+            / Double(testCase.executionCount)
         testCase.coverage = coverage
 
         testCases[testId] = testCase
@@ -605,7 +605,7 @@ public final class AutonomousTestingFramework: ObservableObject {
         // Simulate test execution with realistic outcomes
         try? await Task.sleep(nanoseconds: UInt64(testCase.estimatedDuration * 1_000_000_000))
 
-        let random = Double.random(in: 0 ... 1)
+        let random = Double.random(in: 0...1)
 
         // Base success rate depends on test type and priority
         var successRate = 0.85 // 85% base success rate
@@ -699,7 +699,7 @@ public final class AutonomousTestingFramework: ObservableObject {
             let successRate = execution.result == .passed ? 1.0 : 0.0
             testCase.successRate =
                 (testCase.successRate * Double(testCase.executionCount - 1) + successRate)
-                    / Double(testCase.executionCount)
+                / Double(testCase.executionCount)
             testCase.coverage = execution.coverage
 
             testCases[execution.testCaseId] = testCase
@@ -726,13 +726,13 @@ public final class AutonomousTestingFramework: ObservableObject {
 
     private func analyzeComponentCoverage(_ component: String) async -> CoverageAnalysis {
         // Simulate coverage analysis
-        let totalLines = Int.random(in: 100 ... 1000)
-        let coveredLines = Int(Double(totalLines) * Double.random(in: 0.6 ... 0.95))
+        let totalLines = Int.random(in: 100...1000)
+        let coveredLines = Int(Double(totalLines) * Double.random(in: 0.6...0.95))
         let coveragePercentage = Double(coveredLines) / Double(totalLines)
 
         // Identify uncovered lines (simplified)
-        let uncoveredLines = (1 ... totalLines).filter { _ in
-            Double.random(in: 0 ... 1) > coveragePercentage
+        let uncoveredLines = (1...totalLines).filter { _ in
+            Double.random(in: 0...1) > coveragePercentage
         }
 
         // Identify risk areas

@@ -472,7 +472,7 @@ public final class UniversalUnderstandingFramework: Sendable {
     ) async -> UniversalUnderstandingResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.understanding * 1_500_000_000))
 
-        let actualGain = step.understanding * (0.85 + Double.random(in: 0 ... 0.3))
+        let actualGain = step.understanding * (0.85 + Double.random(in: 0...0.3))
         let success = actualGain >= step.understanding * 0.90
 
         return UniversalUnderstandingResultItem(
@@ -592,7 +592,7 @@ public final class CosmicAwarenessSystem: Sendable {
     ) async -> CosmicAwarenessResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.awareness * 2_000_000_000))
 
-        let actualGain = step.awareness * (0.8 + Double.random(in: 0 ... 0.4))
+        let actualGain = step.awareness * (0.8 + Double.random(in: 0...0.4))
         let success = actualGain >= step.awareness * 0.85
 
         return CosmicAwarenessResultItem(
@@ -716,7 +716,7 @@ public final class TranscendentInsightInterface: Sendable {
     ) async -> TranscendentInsightResultItem {
         try? await Task.sleep(nanoseconds: UInt64(step.insight * 2_500_000_000))
 
-        let actualPower = step.insight * (0.75 + Double.random(in: 0 ... 0.5))
+        let actualPower = step.insight * (0.75 + Double.random(in: 0...0.5))
         let success = actualPower >= step.insight * 0.80
 
         return TranscendentInsightResultItem(

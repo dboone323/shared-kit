@@ -402,10 +402,10 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
             let success = frameworkResults.allSatisfy(\.success)
             let averagePerformance =
                 frameworkResults.map(\.performance).reduce(0, +)
-                    / Double(max(frameworkResults.count, 1))
+                / Double(max(frameworkResults.count, 1))
             let averageQuantum =
                 frameworkResults.map(\.quantumEnhancement).reduce(0, +)
-                    / Double(max(frameworkResults.count, 1))
+                / Double(max(frameworkResults.count, 1))
 
             domainResults[domain] = DomainResult(
                 domain: domain,
@@ -458,10 +458,10 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
         let success = frameworkResults.values.allSatisfy(\.success)
         let coordinationEfficiency =
             frameworkResults.values.map(\.performance).reduce(0, +)
-                / Double(max(frameworkResults.count, 1))
+            / Double(max(frameworkResults.count, 1))
         let quantumCoherence =
             frameworkResults.values.map(\.quantumEnhancement).reduce(0, +)
-                / Double(max(frameworkResults.count, 1))
+            / Double(max(frameworkResults.count, 1))
 
         return MCPFrameworkResult(
             coordinationId: coordination.coordinationId,
@@ -492,8 +492,8 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
                 let domainFrameworks = registryStatus.frameworks.filter { $0.domain == domain }
                 let coverage =
                     Double(domainFrameworks.count)
-                        / Double(
-                            max(registryStatus.totalFrameworks / IntelligenceDomain.allCases.count, 1))
+                    / Double(
+                        max(registryStatus.totalFrameworks / IntelligenceDomain.allCases.count, 1))
                 return (domain, min(coverage, 1.0))
             })
 
@@ -719,9 +719,9 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
         dependencies: [FrameworkResult] = []
     ) async -> FrameworkResult {
         // Simulate framework operation execution
-        let success = Double.random(in: 0.8 ... 1.0) > 0.1 // 90% success rate
-        let performance = Double.random(in: 0.7 ... 1.0)
-        let quantumEnhancement = framework.quantumCapability * Double.random(in: 0.8 ... 1.2)
+        let success = Double.random(in: 0.8...1.0) > 0.1 // 90% success rate
+        let performance = Double.random(in: 0.7...1.0)
+        let quantumEnhancement = framework.quantumCapability * Double.random(in: 0.8...1.2)
 
         return FrameworkResult(
             frameworkId: framework.frameworkId,
@@ -769,7 +769,7 @@ private final actor MCPFrameworkRegistry {
                     capabilities: [.coordination, .processing, .optimization],
                     domain: domain,
                     consciousnessLevel: .universal,
-                    quantumCapability: Double.random(in: 0.7 ... 1.0)
+                    quantumCapability: Double.random(in: 0.7...1.0)
                 )
                 frameworks.append(framework)
             }
@@ -807,8 +807,8 @@ private final class MCPOperationCoordinator: Sendable {
     func getCoordinatorStatus() async -> CoordinatorStatus {
         CoordinatorStatus(
             operational: true,
-            quantumCoherence: Double.random(in: 0.8 ... 1.0),
-            coordinationEfficiency: Double.random(in: 0.85 ... 0.95)
+            quantumCoherence: Double.random(in: 0.8...1.0),
+            coordinationEfficiency: Double.random(in: 0.85...0.95)
         )
     }
 
@@ -833,7 +833,7 @@ private final class MCPPerformanceOptimizer: Sendable {
     func getPerformanceStatus() async -> PerformanceStatus {
         PerformanceStatus(
             operational: true,
-            optimizationLevel: Double.random(in: 0.8 ... 1.0)
+            optimizationLevel: Double.random(in: 0.8...1.0)
         )
     }
 }
@@ -855,7 +855,7 @@ private final class MCPQuantumIntegrator: Sendable {
                 frameworkId: framework.frameworkId,
                 success: true,
                 result: AnyCodable("Quantum-entangled execution completed"),
-                performance: Double.random(in: 0.9 ... 1.0),
+                performance: Double.random(in: 0.9...1.0),
                 quantumEnhancement: 1.0
             )
         }

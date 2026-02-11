@@ -740,8 +740,8 @@ final class StabilityController {
         let fluctuations = state.dimensions.map { dimension in
             DimensionalFluctuation(
                 dimensionId: dimension.id,
-                fluctuationMagnitude: Double.random(in: 0.01 ... 0.1),
-                fluctuationFrequency: Double.random(in: 0.1 ... 1.0),
+                fluctuationMagnitude: Double.random(in: 0.01...0.1),
+                fluctuationFrequency: Double.random(in: 0.1...1.0),
                 stability: dimension.stability,
                 timestamp: Date()
             )

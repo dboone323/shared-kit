@@ -11,9 +11,9 @@ final class PerformanceTests: XCTestCase {
     }
 
     func testVectorBatchOperationInitializationPerformance() {
-        let largeContent = (0 ..< 1000).map { "Content \($0)" }
-        let largeVectors = (0 ..< 1000).map { _ in (0 ..< 128).map { _ in Double.random(in: 0 ... 1) } }
-        let largeMetadata = (0 ..< 1000).map { ["id": "\($0)"] }
+        let largeContent = (0..<1000).map { "Content \($0)" }
+        let largeVectors = (0..<1000).map { _ in (0..<128).map { _ in Double.random(in: 0...1) } }
+        let largeMetadata = (0..<1000).map { ["id": "\($0)"] }
 
         measure {
             _ = VectorBatchOperation(
@@ -34,7 +34,7 @@ final class PerformanceTests: XCTestCase {
         measure {
             let exp = expectation(description: "Metrics")
             Task {
-                for _ in 0 ..< 1000 {
+                for _ in 0..<1000 {
                     await metrics.recordQuery(duration: 0.1)
                 }
                 exp.fulfill()

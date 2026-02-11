@@ -391,7 +391,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         let durationMinutes = duration / 60
         self.averageCompletionTime =
             (self.averageCompletionTime * Double(self.totalCompletions - 1) + durationMinutes)
-                / Double(self.totalCompletions)
+            / Double(self.totalCompletions)
     }
 
     private func checkAchievements() {

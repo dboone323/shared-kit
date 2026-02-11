@@ -825,7 +825,7 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
                 DimensionalEnergy(
                     energyId: UUID(),
                     dimension: dimension,
-                    energyLevel: Double.random(in: 0.7 ... 0.95),
+                    energyLevel: Double.random(in: 0.7...0.95),
                     energyType: .harmonic,
                     balance: 0.8
                 )
@@ -839,9 +839,9 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
                 DimensionalFrequency(
                     frequencyId: UUID(),
                     dimension: dimension,
-                    frequency: Double.random(in: 10.0 ... 50.0),
-                    amplitude: Double.random(in: 0.5 ... 1.0),
-                    phase: Double.random(in: 0 ... 2 * .pi),
+                    frequency: Double.random(in: 10.0...50.0),
+                    amplitude: Double.random(in: 0.5...1.0),
+                    phase: Double.random(in: 0...2 * .pi),
                     coherence: 0.85
                 )
             }
@@ -1371,7 +1371,7 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
             detectionTimestamp: Date(),
             detectedFrequencies: detectedFrequencies,
             detectionAccuracy: 0.9,
-            frequencyRange: 10.0 ... 50.0
+            frequencyRange: 10.0...50.0
         )
     }
 
@@ -1478,7 +1478,7 @@ final class AspectIntegrator: AspectIntegrationProtocol {
 
         // Simulate compatibility assessment
         let compatibilityMatrix = aspects.map { _ in
-            aspects.map { _ in Double.random(in: 0.7 ... 0.95) }
+            aspects.map { _ in Double.random(in: 0.7...0.95) }
         }
 
         let conflictPairs = [

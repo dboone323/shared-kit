@@ -374,7 +374,7 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
         do {
             // Create swarm agents
             var agents: [QuantumSwarm.SwarmAgent] = []
-            for i in 0 ..< config.agentCount {
+            for i in 0..<config.agentCount {
                 let agent = try await agentFactory.createAgent(
                     capabilities: config.entanglementTopology == .adaptive
                         ? [.computation, .sensing, .communication, .adaptation, .learning]
@@ -387,7 +387,7 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                     quantumState: agent.quantumState,
                     capabilities: agent.capabilities,
                     position: QuantumPosition(
-                        coordinates: [Double(i), Double.random(in: 0 ... 1)],
+                        coordinates: [Double(i), Double.random(in: 0...1)],
                         dimension: config.quantumDimensions,
                         stability: 1.0,
                         entanglementPotential: 1.0
@@ -742,7 +742,7 @@ final class BasicSwarmAgent: SwarmAgentProtocol {
         // Calculate agent's contribution based on capabilities and quantum state
         let contribution =
             quantumState.coherence * Double(capabilities.count)
-                / Double(AgentCapability.allCases.count)
+            / Double(AgentCapability.allCases.count)
         let confidence = quantumState.entanglement * 0.8 + quantumState.coherence * 0.2
 
         return AgentContribution(
@@ -841,9 +841,9 @@ final class BasicSwarmDecisionEngine: SwarmDecisionEngine {
 
         // Make decision based on problem type
         let decision: SwarmDecision.Decision = switch problem.complexity {
-        case 0 ..< 0.3:
+        case 0..<0.3:
             .binary(totalContribution > Double(agentContributions.count) / 2)
-        case 0.3 ..< 0.7:
+        case 0.3..<0.7:
             .multiChoice(Int(totalContribution) % 3)
         default:
             .continuous(totalContribution / Double(agentContributions.count))
@@ -854,7 +854,7 @@ final class BasicSwarmDecisionEngine: SwarmDecisionEngine {
             decision: decision,
             confidence: averageConfidence,
             consensusLevel: consensusLevel,
-            computationTime: Double.random(in: 0.1 ... timeLimit),
+            computationTime: Double.random(in: 0.1...timeLimit),
             quantumAdvantage: swarm.quantumCoherence * swarm.collectiveIntelligence,
             agentContributions: agentContributions
         )
@@ -867,7 +867,7 @@ final class BasicSwarmDecisionEngine: SwarmDecisionEngine {
         swarm.agents.map { agent in
             AgentContribution(
                 agentId: agent.id,
-                contribution: Double.random(in: 0 ... 1) * agent.performance,
+                contribution: Double.random(in: 0...1) * agent.performance,
                 confidence: agent.quantumState.coherence * agent.adaptationLevel,
                 quantumState: agent.quantumState,
                 reasoning: "Quantum coherence-based contribution",
@@ -929,7 +929,7 @@ final class BasicSwarmMonitoringSystem: SwarmMonitoringSystem {
             communicationEfficiency: swarm.topology.quantumEfficiency,
             synchronizationQuality: swarm.quantumCoherence * 0.9,
             evolutionProgress: Double(swarm.evolutionStage) / 10.0,
-            interferenceLevel: Double.random(in: 0.05 ... 0.15)
+            interferenceLevel: Double.random(in: 0.05...0.15)
         )
     }
 }
@@ -949,8 +949,8 @@ final class BasicSwarmCoordinationEngine: QuantumSwarmCoordinationProtocol {
         switch swarm.configuration.entanglementTopology {
         case .fullyConnected:
             // Connect all agents
-            for i in 0 ..< swarm.agents.count {
-                for j in (i + 1) ..< swarm.agents.count {
+            for i in 0..<swarm.agents.count {
+                for j in (i + 1)..<swarm.agents.count {
                     connections.append(
                         SwarmTopology.SwarmConnection(
                             fromAgent: swarm.agents[i].id,
@@ -963,7 +963,7 @@ final class BasicSwarmCoordinationEngine: QuantumSwarmCoordinationProtocol {
             }
         case .nearestNeighbor:
             // Connect to nearest neighbors
-            for i in 0 ..< swarm.agents.count {
+            for i in 0..<swarm.agents.count {
                 let nextIndex = (i + 1) % swarm.agents.count
                 connections.append(
                     SwarmTopology.SwarmConnection(

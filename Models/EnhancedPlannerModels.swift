@@ -439,7 +439,7 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
 
         self.averageCompletionTime =
             (self.averageCompletionTime * Double(self.completionStreak - 1) + actualDuration)
-                / Double(self.completionStreak)
+            / Double(self.completionStreak)
     }
 
     // MARK: - CloudKit Support
