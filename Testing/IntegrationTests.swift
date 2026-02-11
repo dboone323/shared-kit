@@ -308,7 +308,7 @@
             XCTAssertLessThan(metrics.standardDeviation, 0.2) // Consistent performance
         }
 
-        func testMemoryManagementAcrossComponents() async throws {
+        func testMemoryManagementAcrossComponents() throws {
             // Given - Memory-intensive operations across components
             var managers: [AnyObject] = []
 

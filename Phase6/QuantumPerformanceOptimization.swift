@@ -145,7 +145,8 @@ public actor QuantumPerformanceOptimization {
 
                     // Check for performance anomalies
                     let anomalies = try await self.quantumAnalyzer.detectAnomalies(
-                        metrics: self.systemMetrics)
+                        metrics: self.systemMetrics
+                    )
 
                     if !anomalies.isEmpty {
                         logger.warning("🚨 Detected \(anomalies.count) performance anomalies")
@@ -222,7 +223,8 @@ public actor QuantumPerformanceOptimization {
                     confidence: 0.85,
                     complexity: .medium,
                     estimatedEffort: 4.0
-                ))
+                )
+            )
         }
 
         // Memory optimization opportunities
@@ -236,7 +238,8 @@ public actor QuantumPerformanceOptimization {
                     confidence: 0.9,
                     complexity: .high,
                     estimatedEffort: 6.0
-                ))
+                )
+            )
         }
 
         // I/O optimization opportunities
@@ -250,7 +253,8 @@ public actor QuantumPerformanceOptimization {
                     confidence: 0.8,
                     complexity: .medium,
                     estimatedEffort: 5.0
-                ))
+                )
+            )
         }
 
         // Network optimization opportunities
@@ -264,7 +268,8 @@ public actor QuantumPerformanceOptimization {
                     confidence: 0.75,
                     complexity: .low,
                     estimatedEffort: 2.0
-                ))
+                )
+            )
         }
 
         return opportunities
@@ -328,7 +333,8 @@ public actor QuantumPerformanceAnalyzer {
                     metricValue: metrics.cpuUsage,
                     threshold: 0.95,
                     timestamp: metrics.timestamp
-                ))
+                )
+            )
         }
 
         // Memory anomaly detection
@@ -342,7 +348,8 @@ public actor QuantumPerformanceAnalyzer {
                     metricValue: metrics.memoryUsage,
                     threshold: 0.98,
                     timestamp: metrics.timestamp
-                ))
+                )
+            )
         }
 
         // Response time anomaly detection
@@ -356,7 +363,8 @@ public actor QuantumPerformanceAnalyzer {
                     metricValue: metrics.responseTime,
                     threshold: 1000,
                     timestamp: metrics.timestamp
-                ))
+                )
+            )
         }
 
         // Error rate anomaly detection
@@ -370,7 +378,8 @@ public actor QuantumPerformanceAnalyzer {
                     metricValue: metrics.errorRate,
                     threshold: 0.1,
                     timestamp: metrics.timestamp
-                ))
+                )
+            )
         }
 
         return anomalies
@@ -555,7 +564,8 @@ public actor IntelligentResourceManager {
                     amount: 0.2,
                     reason: "High CPU usage detected",
                     priority: .high
-                ))
+                )
+            )
         }
 
         // Memory recommendations
@@ -567,7 +577,8 @@ public actor IntelligentResourceManager {
                     amount: 0.15,
                     reason: "High memory usage detected",
                     priority: .high
-                ))
+                )
+            )
         }
 
         // Disk recommendations
@@ -579,7 +590,8 @@ public actor IntelligentResourceManager {
                     amount: 0.1,
                     reason: "High disk usage detected",
                     priority: .medium
-                ))
+                )
+            )
         }
 
         return ResourceOptimizationPlan(

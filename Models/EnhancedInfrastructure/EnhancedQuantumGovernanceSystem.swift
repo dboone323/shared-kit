@@ -162,7 +162,8 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
 
         if self.governanceDescription.count > 1000 {
             errors.append(
-                .invalid(field: "governanceDescription", reason: "must be 1000 characters or less"))
+                .invalid(field: "governanceDescription", reason: "must be 1000 characters or less")
+            )
         }
 
         if self.quantumCoherence < 0.0 || self.quantumCoherence > 1.0 {

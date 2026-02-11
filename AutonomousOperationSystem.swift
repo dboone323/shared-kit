@@ -198,7 +198,8 @@ public final class AutonomousOperationSystem: Sendable {
 
         let consciousnessResult =
             try await consciousnessExpansionFrameworks.executeConsciousnessExpansion(
-                consciousnessRequest)
+                consciousnessRequest
+            )
 
         // Apply optimizations based on predictive analytics and consciousness expansion
         for opportunity in optimizationOpportunities.opportunities {
@@ -230,7 +231,8 @@ public final class AutonomousOperationSystem: Sendable {
 
         let consciousnessResult =
             try await consciousnessExpansionFrameworks.executeConsciousnessExpansion(
-                consciousnessRequest)
+                consciousnessRequest
+            )
 
         // Coordinate recovery across all systems
         let coordinationRequest = UniversalCoordinationRequest(
@@ -244,7 +246,8 @@ public final class AutonomousOperationSystem: Sendable {
         )
 
         let coordinationResult = try await agentUniversalCoordination.executeUniversalCoordination(
-            coordinationRequest)
+            coordinationRequest
+        )
 
         // Execute recovery based on coordination result
         try await executeRecovery(
@@ -440,7 +443,8 @@ public final class AutonomousOperationSystem: Sendable {
 
         let consciousnessResult =
             try await consciousnessExpansionFrameworks.executeConsciousnessExpansion(
-                recoveryRequest)
+                recoveryRequest
+            )
 
         // Coordinate recovery across systems
         let coordinationRequest = UniversalCoordinationRequest(
@@ -810,7 +814,8 @@ public extension AutonomousOperationSystem {
                     AutonomousOperationFailure(
                         request: request,
                         error: error.localizedDescription
-                    ))
+                    )
+                )
             }
         }
 

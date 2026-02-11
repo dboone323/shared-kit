@@ -447,7 +447,8 @@ public final class AutonomousTestingFramework: ObservableObject {
                     target: component,
                     priority: .high,
                     tags: ["initialization", "models"]
-                ))
+                )
+            )
             tests.append(
                 TestCase(
                     name: "test\(component)Validation",
@@ -455,7 +456,8 @@ public final class AutonomousTestingFramework: ObservableObject {
                     target: component,
                     priority: .high,
                     tags: ["validation", "models"]
-                ))
+                )
+            )
             tests.append(
                 TestCase(
                     name: "test\(component)Serialization",
@@ -463,7 +465,8 @@ public final class AutonomousTestingFramework: ObservableObject {
                     target: component,
                     priority: .medium,
                     tags: ["serialization", "models"]
-                ))
+                )
+            )
 
         case "Services":
             tests.append(
@@ -473,7 +476,8 @@ public final class AutonomousTestingFramework: ObservableObject {
                     target: component,
                     priority: .high,
                     tags: ["api", "integration"]
-                ))
+                )
+            )
             tests.append(
                 TestCase(
                     name: "test\(component)ErrorHandling",
@@ -481,7 +485,8 @@ public final class AutonomousTestingFramework: ObservableObject {
                     target: component,
                     priority: .medium,
                     tags: ["error", "services"]
-                ))
+                )
+            )
 
         case "Views":
             tests.append(
@@ -491,7 +496,8 @@ public final class AutonomousTestingFramework: ObservableObject {
                     target: component,
                     priority: .medium,
                     tags: ["ui", "rendering"]
-                ))
+                )
+            )
             tests.append(
                 TestCase(
                     name: "test\(component)UserInteraction",
@@ -499,7 +505,8 @@ public final class AutonomousTestingFramework: ObservableObject {
                     target: component,
                     priority: .low,
                     tags: ["ui", "interaction"]
-                ))
+                )
+            )
 
         default:
             tests.append(
@@ -509,7 +516,8 @@ public final class AutonomousTestingFramework: ObservableObject {
                     target: component,
                     priority: .medium,
                     tags: ["basic", component.lowercased()]
-                ))
+                )
+            )
         }
 
         return tests

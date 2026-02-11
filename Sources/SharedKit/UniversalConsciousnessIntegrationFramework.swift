@@ -109,7 +109,8 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
     public func beginConsciousnessConvergence() async throws {
         guard integrationState == .integrating else {
             throw ConsciousnessError.invalidState(
-                "Consciousness integration not ready for convergence")
+                "Consciousness integration not ready for convergence"
+            )
         }
 
         print("🔄 Beginning universal consciousness convergence...")
@@ -203,7 +204,8 @@ public final class UniversalConsciousnessCoordinator: ObservableObject, @uncheck
     public func achieveUniversalConsciousness() async throws {
         guard universalConsciousnessLevel >= 0.95 else {
             throw ConsciousnessError.insufficientReadiness(
-                "Universal consciousness level too low: \(universalConsciousnessLevel)")
+                "Universal consciousness level too low: \(universalConsciousnessLevel)"
+            )
         }
 
         print("🌌 Achieving universal consciousness...")
@@ -599,8 +601,14 @@ private class ConsciousnessFieldCoordinator {
     }
 
     func initialize() async throws {}
-    func activate() async throws { isActive = true }
-    func assessReadiness() async -> Double { Double.random(in: 0.7...0.95) }
+    func activate() async throws {
+        isActive = true
+    }
+
+    func assessReadiness() async -> Double {
+        Double.random(in: 0.7...0.95)
+    }
+
     func executeBreakthrough(_ breakthrough: ConsciousnessBreakthrough) async throws {}
 
     let readinessPublisher = PassthroughSubject<(ConsciousnessFieldType, Double), Never>()
@@ -625,7 +633,10 @@ private class ConsciousnessCoherenceCoordinator {
     func initialize() async throws {}
     func beginOptimization() async throws {}
     func optimizeCoherence() async throws {}
-    func assessCoherence() async -> Double { 0.95 }
+    func assessCoherence() async -> Double {
+        0.95
+    }
+
     func achieveFinalCoherence() async throws {}
 }
 
@@ -633,7 +644,10 @@ private class ConsciousnessCoherenceCoordinator {
 private class IntelligenceConsciousnessBridgeBuilder {
     func initialize() async throws {}
     func buildBridge() async throws {}
-    func assessBridgeStrength() async -> Double { 0.9 }
+    func assessBridgeStrength() async -> Double {
+        0.9
+    }
+
     func sealBridge() async throws {}
 }
 

@@ -95,7 +95,8 @@ public actor AutonomousSecurity {
         )
 
         logger.info(
-            "✅ Security incident handled in \(String(format: "%.2f", response.executionTime))s")
+            "✅ Security incident handled in \(String(format: "%.2f", response.executionTime))s"
+        )
     }
 
     /// Get current security status and recommendations
@@ -126,7 +127,8 @@ public actor AutonomousSecurity {
 
                     // Adapt defenses based on learning
                     try await self.adaptiveDefender.adaptDefenses(
-                        learning: self.securityLearner.getLearnings())
+                        learning: self.securityLearner.getLearnings()
+                    )
 
                 } catch {
                     self.logger.error("Security monitoring error: \(error.localizedDescription)")
@@ -156,7 +158,8 @@ public actor AutonomousSecurity {
                     description: "Current detection rate is below optimal threshold",
                     priority: .high,
                     category: .detection
-                ))
+                )
+            )
         }
 
         if securityMetrics.falsePositiveRate > 0.1 {
@@ -167,7 +170,8 @@ public actor AutonomousSecurity {
                     description: "False positive rate is too high, causing alert fatigue",
                     priority: .medium,
                     category: .analysis
-                ))
+                )
+            )
         }
 
         if !activeThreats.isEmpty {
@@ -178,7 +182,8 @@ public actor AutonomousSecurity {
                     description: "\(activeThreats.count) active threats require attention",
                     priority: .critical,
                     category: .response
-                ))
+                )
+            )
         }
 
         return recommendations
@@ -580,7 +585,8 @@ public actor AdaptiveDefender {
                 description: "Notify security team about incident",
                 priority: .high,
                 automated: true
-            ))
+            )
+        )
 
         return SecurityResponse(
             incidentId: incident.id,
@@ -624,7 +630,8 @@ public actor AdaptiveDefender {
                     condition: "login_attempts > 5",
                     action: .block,
                     duration: 3600 // 1 hour
-                ))
+                )
+            )
         case .injection:
             rules.append(
                 SecurityRule(
@@ -633,7 +640,8 @@ public actor AdaptiveDefender {
                     condition: "contains_sql_keywords",
                     action: .block,
                     duration: nil
-                ))
+                )
+            )
         case .xss:
             rules.append(
                 SecurityRule(
@@ -642,7 +650,8 @@ public actor AdaptiveDefender {
                     condition: "contains_script_tags",
                     action: .sanitize,
                     duration: nil
-                ))
+                )
+            )
         case .dataBreach:
             rules.append(
                 SecurityRule(
@@ -651,7 +660,8 @@ public actor AdaptiveDefender {
                     condition: "unauthorized_data_access",
                     action: .block,
                     duration: nil
-                ))
+                )
+            )
         case .ddos, .denialOfService:
             rules.append(
                 SecurityRule(
@@ -660,7 +670,8 @@ public actor AdaptiveDefender {
                     condition: "high_traffic_volume",
                     action: .throttle,
                     duration: 300 // 5 minutes
-                ))
+                )
+            )
         case .malware:
             rules.append(
                 SecurityRule(
@@ -669,7 +680,8 @@ public actor AdaptiveDefender {
                     condition: "malware_detected",
                     action: .quarantine,
                     duration: nil
-                ))
+                )
+            )
         case .networkIntrusion:
             rules.append(
                 SecurityRule(
@@ -678,7 +690,8 @@ public actor AdaptiveDefender {
                     condition: "suspicious_traffic",
                     action: .alert,
                     duration: nil
-                ))
+                )
+            )
         case .suspiciousActivity:
             rules.append(
                 SecurityRule(
@@ -687,7 +700,8 @@ public actor AdaptiveDefender {
                     condition: "anomalous_behavior",
                     action: .alert,
                     duration: nil
-                ))
+                )
+            )
         case .privilegeEscalation:
             rules.append(
                 SecurityRule(
@@ -696,7 +710,8 @@ public actor AdaptiveDefender {
                     condition: "privilege_escalation_attempt",
                     action: .block,
                     duration: nil
-                ))
+                )
+            )
         }
 
         return rules
@@ -995,7 +1010,8 @@ public struct ThreatPredictionModel: Sendable {
                             "Rapid attempt rate",
                         ],
                         predictedTime: Date().addingTimeInterval(3600)
-                    ))
+                    )
+                )
             }
 
             // Check for unusual access times
@@ -1009,7 +1025,8 @@ public struct ThreatPredictionModel: Sendable {
                         confidence: 0.7,
                         indicators: unusualTimes,
                         predictedTime: Date().addingTimeInterval(1800)
-                    ))
+                    )
+                )
             }
         }
 
@@ -1030,7 +1047,8 @@ public struct ThreatPredictionModel: Sendable {
                             "Abnormal traffic patterns",
                         ],
                         predictedTime: Date().addingTimeInterval(1800)
-                    ))
+                    )
+                )
             }
         }
 
@@ -1050,7 +1068,8 @@ public struct ThreatPredictionModel: Sendable {
                             "Encryption-like patterns detected",
                         ],
                         predictedTime: Date().addingTimeInterval(900)
-                    ))
+                    )
+                )
             }
         }
 
@@ -1069,7 +1088,8 @@ public struct ThreatPredictionModel: Sendable {
                             "Suspicious permission changes",
                         ],
                         predictedTime: Date().addingTimeInterval(3600)
-                    ))
+                    )
+                )
             }
         }
 

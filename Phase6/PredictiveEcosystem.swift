@@ -592,7 +592,8 @@ public actor OptimizationCoordinator {
                         action: .increase,
                         amount: usage > 0.9 ? 50 : 25, // Percentage increase
                         priority: usage > 0.9 ? .high : .medium
-                    ))
+                    )
+                )
             }
         }
 
@@ -718,7 +719,8 @@ public actor AnalyticsProcessor {
                         description: "High CPU utilization detected",
                         threshold: 0.9,
                         currentValue: latest.resourceUtilization
-                    ))
+                    )
+                )
             }
         }
 

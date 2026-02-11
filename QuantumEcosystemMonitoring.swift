@@ -957,7 +957,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
             // Establish monitoring network
             let universes = ecosystems.map(\.universe)
             let network = try await monitoringNetwork.establishMonitoringNetwork(
-                universes: universes)
+                universes: universes
+            )
 
             // Create data processing engine
             _ = try await createDataProcessingEngine(config: config)
@@ -1457,7 +1458,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                         metrics: ["health": component.health, "activity": component.activity],
                         status: .normal,
                         lastUpdate: Date()
-                    ))
+                    )
+                )
             }
 
             for interaction in ecosystem.interactions {
@@ -1469,7 +1471,8 @@ final class QuantumEcosystemMonitoringEngine: QuantumEcosystemMonitoringProtocol
                         ],
                         status: .active,
                         participants: interaction.participants
-                    ))
+                    )
+                )
             }
         }
 

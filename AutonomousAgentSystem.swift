@@ -110,7 +110,8 @@ public final class AutonomousAgentSystem: AutonomousAgent {
                         )
                 },
                 confidence: 0.8
-            ))
+            )
+        )
 
         decisionTree.addPattern(
             DecisionPattern(
@@ -126,7 +127,8 @@ public final class AutonomousAgentSystem: AutonomousAgent {
                         )
                 },
                 confidence: 0.7
-            ))
+            )
+        )
     }
 
     // MARK: - AutonomousAgent Protocol Implementation
@@ -247,7 +249,8 @@ public final class AutonomousAgentSystem: AutonomousAgent {
         // Create evolved version with improvements
         let evolvedCapabilities = await evolveCapabilities(basedOn: performanceAnalysis)
         let evolvedIntelligenceLevel = IntelligenceLevel.fromNumericValue(
-            intelligenceLevel.numericValue + 0.1)
+            intelligenceLevel.numericValue + 0.1
+        )
         let evolvedLearningRate = learningRate * 0.95 // Slightly more conservative
 
         let evolvedAgent = AutonomousAgentSystem(
@@ -728,8 +731,13 @@ private struct PriorityQueue<Element> {
         elements.isEmpty ? nil : elements.removeFirst()
     }
 
-    var isEmpty: Bool { elements.isEmpty }
-    var count: Int { elements.count }
+    var isEmpty: Bool {
+        elements.isEmpty
+    }
+
+    var count: Int {
+        elements.count
+    }
 }
 
 // MARK: - Basic Capability Implementation
@@ -741,8 +749,14 @@ private struct BasicCapability: AgentCapability {
     let domain: AgentDomain
     let complexity: CapabilityComplexity
 
-    var capabilities: [AgentCapability] { [self] }
-    var dependencies: [String] { [] }
+    var capabilities: [AgentCapability] {
+        [self]
+    }
+
+    var dependencies: [String] {
+        []
+    }
+
     var performanceMetrics: CapabilityMetrics {
         CapabilityMetrics(
             accuracy: 0.8,

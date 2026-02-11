@@ -112,11 +112,13 @@ public actor NeuralArchitectureSearch {
 
         guard let finalArchitecture = bestArchitecture else {
             throw ArchitectureSearchError.noValidArchitecture(
-                "No valid architecture found after search")
+                "No valid architecture found after search"
+            )
         }
 
         logger.info(
-            "✅ Architecture search completed - Best score: \(String(format: "%.3f", bestScore))")
+            "✅ Architecture search completed - Best score: \(String(format: "%.3f", bestScore))"
+        )
 
         return finalArchitecture
     }
@@ -312,7 +314,8 @@ public actor NeuralArchitectureSearch {
                 description: "Optimal layer count around \(Int(avgLayerCount))",
                 confidence: 0.8,
                 supportingArchitectures: successfulArchitectures.count
-            ))
+            )
+        )
 
         // Activation function patterns
         let activationFunctions = successfulArchitectures.flatMap {
@@ -327,7 +330,8 @@ public actor NeuralArchitectureSearch {
                     description: "Preferred activation function: \(activation.rawValue)",
                     confidence: 0.7,
                     supportingArchitectures: successfulArchitectures.count
-                ))
+                )
+            )
         }
 
         return patterns
@@ -351,7 +355,8 @@ public actor NeuralArchitectureSearch {
                     description: "Skip connections for gradient flow",
                     prevalence: Double(residualCount) / Double(successfulArchitectures.count),
                     effectiveness: 0.85
-                ))
+                )
+            )
         }
 
         // Attention mechanisms
@@ -366,7 +371,8 @@ public actor NeuralArchitectureSearch {
                     description: "Self-attention for sequence processing",
                     prevalence: Double(attentionCount) / Double(successfulArchitectures.count),
                     effectiveness: 0.9
-                ))
+                )
+            )
         }
 
         return motifs
@@ -387,7 +393,8 @@ public actor NeuralArchitectureSearch {
                     description: pattern.description,
                     confidence: pattern.confidence,
                     impact: .medium
-                ))
+                )
+            )
         }
 
         for motif in motifs {
@@ -398,7 +405,8 @@ public actor NeuralArchitectureSearch {
                     description: motif.description,
                     confidence: motif.prevalence,
                     impact: motif.effectiveness > 0.8 ? .high : .medium
-                ))
+                )
+            )
         }
 
         return insights
@@ -565,7 +573,8 @@ public actor ArchitectureSearchSpace {
                     from: layers[i].id,
                     to: layers[i + 1].id,
                     type: .sequential
-                ))
+                )
+            )
         }
 
         return connections
@@ -1137,7 +1146,8 @@ public actor ArchitectureEvolutionEngine {
         let eliteCount = Int(Double(constraints.populationSize) * 0.1)
         let sortedEvaluations = evaluations.sorted { $0.score > $1.score }
         newPopulation.append(
-            contentsOf: sortedEvaluations.prefix(eliteCount).map(\.architecture))
+            contentsOf: sortedEvaluations.prefix(eliteCount).map(\.architecture)
+        )
 
         // Generate offspring through crossover and mutation
         while newPopulation.count < constraints.populationSize {
@@ -1287,7 +1297,8 @@ public actor ArchitectureEvolutionEngine {
                     from: layers[i].id,
                     to: layers[i + 1].id,
                     type: .sequential
-                ))
+                )
+            )
         }
 
         return connections

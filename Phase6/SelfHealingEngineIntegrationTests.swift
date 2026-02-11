@@ -173,7 +173,8 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
 
         // Memory health should be one of the valid states
         XCTAssertTrue(
-            [ComponentHealth.healthy, .degraded, .critical, .failed].contains(memoryHealth))
+            [ComponentHealth.healthy, .degraded, .critical, .failed].contains(memoryHealth)
+        )
     }
 
     func testDiskHealthCheck() async throws {
@@ -190,7 +191,8 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
 
         // Disk health should be one of the valid states
         XCTAssertTrue(
-            [ComponentHealth.healthy, .degraded, .critical, .failed].contains(diskHealth))
+            [ComponentHealth.healthy, .degraded, .critical, .failed].contains(diskHealth)
+        )
     }
 
     // MARK: - Concurrent Recovery Tests
@@ -250,7 +252,8 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         // Given
         await healingEngine.start()
         await healingEngine.reportError(
-            SystemError.custom(description: "Test export", metadata: [:]))
+            SystemError.custom(description: "Test export", metadata: [:])
+        )
 
         try await Task.sleep(nanoseconds: 2_000_000_000) // Wait for processing
 
@@ -262,7 +265,7 @@ final class SelfHealingEngineIntegrationTests: XCTestCase {
         XCTAssertGreaterThan(try XCTUnwrap(exportedData?.count), 0)
     }
 
-    func testHealingHistoryImport() async throws {
+    func testHealingHistoryImport() throws {
         // Given
         let testHistory = [
             HealingAction(

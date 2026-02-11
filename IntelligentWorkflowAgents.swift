@@ -47,12 +47,14 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
                 condition: WorkflowCondition.always,
                 action: WorkflowAction.monitorWorkflows,
                 children: []
-            ))
+            )
+        )
         self.communicationChannels = []
         self.workflowHistory = []
         self.performanceMetrics = [:]
         self.optimizationStrategies = WorkflowAgentSpecialization.defaultStrategies(
-            for: specialization)
+            for: specialization
+        )
 
         // Initialize capabilities based on specialization
         self.capabilities = WorkflowAgentSpecialization.capabilities(for: specialization)
@@ -323,17 +325,20 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
 
         if metrics.successRate < 0.8 {
             recommendations.append(
-                "Consider adding error handling and retry logic to improve success rate")
+                "Consider adding error handling and retry logic to improve success rate"
+            )
         }
 
         if metrics.averageExecutionTime > 300 { // 5 minutes
             recommendations.append(
-                "Workflow execution is slow; consider parallelization or optimization")
+                "Workflow execution is slow; consider parallelization or optimization"
+            )
         }
 
         if workflow.steps.count > 20 {
             recommendations.append(
-                "Large workflow detected; consider breaking into smaller, manageable workflows")
+                "Large workflow detected; consider breaking into smaller, manageable workflows"
+            )
         }
 
         return recommendations
@@ -370,7 +375,8 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
                         eventType: .completed,
                         timestamp: Date(),
                         data: ["success": result.success]
-                    ))
+                    )
+                )
 
             } catch {
                 coordinationEvents.append(
@@ -379,7 +385,8 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
                         eventType: .failed,
                         timestamp: Date(),
                         data: ["error": error.localizedDescription]
-                    ))
+                    )
+                )
                 throw error
             }
         }
@@ -544,7 +551,8 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
                         type: .performance,
                         severity: .low,
                         description: "Step \(step.id) identified as potential bottleneck"
-                    ))
+                    )
+                )
             }
         }
 
@@ -571,7 +579,8 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
                     type: .parallelization,
                     description: "Convert sequential steps to parallel execution",
                     estimatedBenefit: 0.3
-                ))
+                )
+            )
         }
 
         if metrics.averageExecutionTime > 60 {
@@ -580,7 +589,8 @@ public final class IntelligentWorkflowAgent: AutonomousAgentSystem {
                     type: .caching,
                     description: "Implement caching for repeated operations",
                     estimatedBenefit: 0.2
-                ))
+                )
+            )
         }
 
         return opportunities
@@ -1223,7 +1233,8 @@ public extension IntelligentWorkflowAgent {
                     for: WorkflowAnalysis(
                         workflowId: "", averageExecutionTime: 0, successRate: 0,
                         bottleneckSteps: [], resourceUtilization: [:], optimizationOpportunities: []
-                    ))
+                    )
+                )
             },
             learningProgress: learningModel.performanceScore
         )

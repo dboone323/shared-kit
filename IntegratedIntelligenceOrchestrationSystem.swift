@@ -953,7 +953,8 @@ public extension IntegratedIntelligenceOrchestrationSystem {
                     description: "Improve coordination efficiency through network optimization",
                     priority: .high,
                     expectedBenefit: 0.2
-                ))
+                )
+            )
         }
 
         if status.intelligenceMetrics.averageIntelligenceGain < 0.7 {
@@ -963,7 +964,8 @@ public extension IntegratedIntelligenceOrchestrationSystem {
                     description: "Enhance intelligence amplification systems",
                     priority: .high,
                     expectedBenefit: 0.25
-                ))
+                )
+            )
         }
 
         return recommendations

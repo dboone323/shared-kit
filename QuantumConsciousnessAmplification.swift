@@ -888,7 +888,8 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                     emotionalState: neuralState.emotionalState,
                     cognitiveLoad: neuralState.cognitiveLoad / factor,
                     memoryState: neuralState.memoryState
-                ))
+                )
+            )
         case let .quantum(quantumState):
             .quantum(
                 QuantumConsciousnessState(
@@ -899,7 +900,8 @@ final class QuantumConsciousnessAmplifierEngine: QuantumConsciousnessAmplificati
                     coherenceLevel: min(1.0, quantumState.coherenceLevel * factor),
                     entanglementPattern: quantumState.entanglementPattern,
                     quantumMemory: quantumState.quantumMemory
-                ))
+                )
+            )
         case let .hybrid(neural, quantum):
             .hybrid(
                 neural,

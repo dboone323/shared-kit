@@ -106,7 +106,8 @@ public class HuggingFaceClient: ObservableObject {
         guard circuitBreaker.canExecute(operation: "generate") else {
             metrics.recordRequest(startTime: startTime, success: false, errorType: "circuitBreaker")
             throw HuggingFaceError.apiError(
-                "Circuit breaker open - service temporarily unavailable")
+                "Circuit breaker open - service temporarily unavailable"
+            )
         }
 
         // Check cache first
@@ -187,7 +188,8 @@ public class HuggingFaceClient: ObservableObject {
         default:
             let errorMessage = try? parseErrorResponse(data)
             throw HuggingFaceError.apiError(
-                "HTTP \(httpResponse.statusCode): \(errorMessage ?? "Unknown error")")
+                "HTTP \(httpResponse.statusCode): \(errorMessage ?? "Unknown error")"
+            )
         }
     }
 
@@ -469,7 +471,8 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService,
                 issues.append(
                     CodeIssue(
                         description: line.trimmingCharacters(in: .whitespaces), severity: .medium
-                    ))
+                    )
+                )
             }
         }
 

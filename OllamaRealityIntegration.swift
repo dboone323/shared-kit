@@ -718,10 +718,19 @@ public struct QuantumField: Sendable {
         QuantumManipulationResult(changes: [], stability: 0.9, coherence: 0.85)
     }
 
-    public func observe() async throws -> QuantumState { QuantumState.generate() }
+    public func observe() async throws -> QuantumState {
+        QuantumState.generate()
+    }
+
     public func stabilize() async throws {}
-    public func getStability() async throws -> Double { 0.9 }
-    public func getCoherence() async throws -> Double { 0.85 }
+    public func getStability() async throws -> Double {
+        0.9
+    }
+
+    public func getCoherence() async throws -> Double {
+        0.85
+    }
+
     public func shutdown() async {}
 }
 
@@ -733,10 +742,19 @@ public struct ConsciousnessField: Sendable {
         ConsciousnessManipulationResult(changes: [], stability: 0.88, coherence: 0.82)
     }
 
-    public func observe() async throws -> ConsciousnessState { ConsciousnessState.generate() }
+    public func observe() async throws -> ConsciousnessState {
+        ConsciousnessState.generate()
+    }
+
     public func harmonize() async throws {}
-    public func getCoherence() async throws -> Double { 0.82 }
-    public func getHarmony() async throws -> Double { 0.8 }
+    public func getCoherence() async throws -> Double {
+        0.82
+    }
+
+    public func getHarmony() async throws -> Double {
+        0.8
+    }
+
     public func disconnect() async {}
 }
 
@@ -744,10 +762,19 @@ public struct ConsciousnessField: Sendable {
 @available(iOS 15.0, macOS 12.0, *)
 public struct EthicalFramework: Sendable {
     public func initialize() async throws {}
-    public func analyzeRequest(_ request: RealityManipulationRequest) async throws -> [EthicalViolation] { [] }
+    public func analyzeRequest(_ request: RealityManipulationRequest) async throws -> [EthicalViolation] {
+        []
+    }
+
     public func maintainIntegrity() async throws {}
-    public func getCompliance() async throws -> Double { 0.95 }
-    public func getViolationCount() async throws -> Int { 0 }
+    public func getCompliance() async throws -> Double {
+        0.95
+    }
+
+    public func getViolationCount() async throws -> Int {
+        0
+    }
+
     public func shutdown() async {}
 }
 

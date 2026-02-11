@@ -1520,7 +1520,8 @@ public extension AdvancedWorkflowLearningSystem {
                     description: "Enhance predictive accuracy through advanced pattern recognition",
                     priority: .high,
                     expectedAdvantage: 0.45
-                ))
+                )
+            )
         }
 
         if status.learningMetrics.averageLearningEfficiency < 0.85 {
@@ -1530,7 +1531,8 @@ public extension AdvancedWorkflowLearningSystem {
                     description: "Improve learning efficiency with optimized coordination",
                     priority: .high,
                     expectedAdvantage: 0.39
-                ))
+                )
+            )
         }
 
         return recommendations

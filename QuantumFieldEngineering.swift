@@ -441,7 +441,8 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
                     message: "Manipulation energy budget exceeds field capacity",
                     severity: .critical,
                     suggestion: "Reduce energy budget or increase field energy density"
-                ))
+                )
+            )
         }
 
         // Check coherence threshold
@@ -451,7 +452,8 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
                     message: "Coherence threshold may not be achievable with current field state",
                     severity: .warning,
                     suggestion: "Consider coherence enhancement before manipulation"
-                ))
+                )
+            )
         }
 
         // Check safety constraints
@@ -461,7 +463,8 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
                     message: "Field energy density violates safety constraints",
                     severity: .critical,
                     suggestion: "Adjust safety constraints or field parameters"
-                ))
+                )
+            )
         }
 
         return ValidationResult(
@@ -517,7 +520,8 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
                         interactionType: interactionType,
                         phaseDifference: calculatePhaseDifference(field1, field2),
                         energyTransfer: calculateEnergyTransfer(field1, field2)
-                    ))
+                    )
+                )
             }
         }
 
@@ -590,7 +594,8 @@ final class QuantumFieldEngineeringEngine: QuantumFieldEngineeringProtocol,
                     optimizationGain: optimization.gain,
                     stabilityImprovement: optimization.stabilityImprovement,
                     energyEfficiency: optimization.energyEfficiency
-                ))
+                )
+            )
         }
 
         return optimizedInteractions
@@ -1867,7 +1872,8 @@ func demonstrateQuantumFieldEngineering() async {
             "  - Average coherence: \(String(format: "%.2f", analysis.characteristics.averageCoherence))"
         )
         print(
-            "  - Average stability: \(String(format: "%.2f", analysis.stability.averageStability))")
+            "  - Average stability: \(String(format: "%.2f", analysis.stability.averageStability))"
+        )
         print("  - Total energy: \(String(format: "%.0f", analysis.energy.totalEnergy))")
         print("  - Total interactions: \(analysis.interactions.interactions.count)")
 
@@ -1894,7 +1900,8 @@ func demonstrateQuantumFieldEngineering() async {
         print("  - Type: \(manipulationResult.manipulationType.rawValue)")
         print("  - Energy consumed: \(String(format: "%.0f", manipulationResult.energyConsumed))")
         print(
-            "  - Coherence change: \(String(format: "+%.2f", manipulationResult.coherenceChange))")
+            "  - Coherence change: \(String(format: "+%.2f", manipulationResult.coherenceChange))"
+        )
 
         // Engineer field interactions
         let interactionResult = try await engine.engineerFieldInteractions(activeFields)
@@ -1930,7 +1937,8 @@ func demonstrateQuantumFieldEngineering() async {
             "  - Coherence improvement: \(String(format: "+%.2f", coherenceResult.coherenceImprovement))"
         )
         print(
-            "  - Maintenance energy: \(String(format: "%.0f", coherenceResult.maintenanceEnergy))")
+            "  - Maintenance energy: \(String(format: "%.0f", coherenceResult.maintenanceEnergy))"
+        )
 
         print("\n🔬 Quantum Field Engineering Framework Ready")
         print("Framework provides comprehensive fundamental field manipulation capabilities")

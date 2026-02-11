@@ -257,7 +257,8 @@ public final class QuantumCodeGenerator: ObservableObject {
             }
 
             logger.info(
-                "✅ Quantum code generation completed in \(String(format: "%.2f", generationTime))s")
+                "✅ Quantum code generation completed in \(String(format: "%.2f", generationTime))s"
+            )
             return result
 
         } catch {
@@ -286,7 +287,8 @@ public final class QuantumCodeGenerator: ObservableObject {
     private func setupQuantumEngine() {
         // Initialize quantum-inspired parameters
         logger.info(
-            "🔬 Initializing quantum engine with \(self.superpositionStates) superposition states")
+            "🔬 Initializing quantum engine with \(self.superpositionStates) superposition states"
+        )
     }
 
     private func loadCodeTemplates() {

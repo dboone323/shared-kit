@@ -51,7 +51,8 @@ public actor AutonomousDeployment {
         let healthCheck = try await healthMonitor.performHealthCheck(target: target)
         guard healthCheck.isHealthy else {
             throw DeploymentError.unhealthyTarget(
-                "Target \(target.name) is not healthy for deployment")
+                "Target \(target.name) is not healthy for deployment"
+            )
         }
 
         // Create deployment plan
@@ -72,7 +73,8 @@ public actor AutonomousDeployment {
             try await scalingController.evaluateScalingNeeds(target: target, deployment: result)
         } else {
             logger.error(
-                "❌ Deployment to \(target.name) failed: \(result.errorMessage ?? "Unknown error")")
+                "❌ Deployment to \(target.name) failed: \(result.errorMessage ?? "Unknown error")"
+            )
 
             // Trigger intelligent rollback
             try await rollbackManager.executeRollback(target: target, deployment: result)
@@ -339,7 +341,8 @@ public actor AutonomousDeployment {
                     description: "Improve pre-deployment testing to increase success rate",
                     priority: .high,
                     estimatedImpact: 0.2
-                ))
+                )
+            )
         }
 
         if avgTime > 600 { // 10 minutes
@@ -349,7 +352,8 @@ public actor AutonomousDeployment {
                     description: "Optimize deployment pipeline to reduce deployment time",
                     priority: .medium,
                     estimatedImpact: 0.15
-                ))
+                )
+            )
         }
 
         if rollbackFreq > 0.2 {
@@ -359,7 +363,8 @@ public actor AutonomousDeployment {
                     description: "Enhance post-deployment monitoring to reduce rollback frequency",
                     priority: .high,
                     estimatedImpact: 0.25
-                ))
+                )
+            )
         }
 
         return recommendations
@@ -392,7 +397,8 @@ public actor DeploymentEngine {
                     let healthCheck = try await performStepHealthCheck(plan.target)
                     if !healthCheck {
                         throw DeploymentError.stepFailed(
-                            "Health check failed after \(step.description)")
+                            "Health check failed after \(step.description)"
+                        )
                     }
                 }
             }
@@ -656,7 +662,8 @@ public actor AutomatedScalingController {
         amount: Int
     ) async throws -> ScalingEvent {
         logger.info(
-            "📊 Executing scaling: \(direction.rawValue) \(amount) instances for \(target.name)")
+            "📊 Executing scaling: \(direction.rawValue) \(amount) instances for \(target.name)"
+        )
 
         let startTime = Date()
 
@@ -771,7 +778,8 @@ public actor AutomatedScalingController {
                     description: "Optimize scaling operations to reduce scaling time",
                     priority: .medium,
                     estimatedBenefit: 0.2
-                ))
+                )
+            )
         }
 
         if successRate < 0.9 {
@@ -781,7 +789,8 @@ public actor AutomatedScalingController {
                     description: "Improve scaling reliability to reduce failure rate",
                     priority: .high,
                     estimatedBenefit: 0.15
-                ))
+                )
+            )
         }
 
         if costEfficiency < 0.8 {
@@ -791,7 +800,8 @@ public actor AutomatedScalingController {
                     description: "Optimize resource usage to improve cost efficiency",
                     priority: .medium,
                     estimatedBenefit: 0.1
-                ))
+                )
+            )
         }
 
         return recommendations

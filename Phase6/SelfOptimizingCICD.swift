@@ -371,7 +371,8 @@ public final class SelfOptimizingCICD: ObservableObject {
 
         guard let config = pipelineConfigs[recommendation.pipelineId] else {
             logger.error(
-                "❌ Pipeline config not found for optimization: \(recommendation.pipelineId)")
+                "❌ Pipeline config not found for optimization: \(recommendation.pipelineId)"
+            )
             return
         }
 
@@ -663,7 +664,8 @@ public final class SelfOptimizingCICD: ObservableObject {
                     "Increase parallel jobs from \(config.maxParallelJobs) to \(config.maxParallelJobs + 1)",
                     expectedImprovement: improvement,
                     confidence: 0.8
-                ))
+                )
+            )
         }
 
         // Caching optimization
@@ -675,7 +677,8 @@ public final class SelfOptimizingCICD: ObservableObject {
                     description: "Implement build artifact caching to reduce build time",
                     expectedImprovement: 0.25,
                     confidence: 0.7
-                ))
+                )
+            )
         }
 
         // Predictive scaling
@@ -687,7 +690,8 @@ public final class SelfOptimizingCICD: ObservableObject {
                     description: "Enable predictive resource scaling to prevent failures",
                     expectedImprovement: 0.4,
                     confidence: 0.6
-                ))
+                )
+            )
         }
 
         // Resource pooling
@@ -699,7 +703,8 @@ public final class SelfOptimizingCICD: ObservableObject {
                     description: "Implement resource pooling to reduce infrastructure costs",
                     expectedImprovement: 0.2,
                     confidence: 0.75
-                ))
+                )
+            )
         }
 
         // Add recommendations to the list
@@ -784,7 +789,8 @@ public final class SelfOptimizingCICD: ObservableObject {
         } catch {
             context.status = .failed
             logger.error(
-                "❌ Pipeline execution failed: \(pipelineId) - \(error.localizedDescription)")
+                "❌ Pipeline execution failed: \(pipelineId) - \(error.localizedDescription)"
+            )
         }
 
         // Mark pipeline as completed
@@ -824,7 +830,8 @@ public final class SelfOptimizingCICD: ObservableObject {
         }
 
         logger.info(
-            "✅ Pipeline execution completed: \(pipelineId) - Status: \(context.status.rawValue)")
+            "✅ Pipeline execution completed: \(pipelineId) - Status: \(context.status.rawValue)"
+        )
     }
 
     private func executePipelineStage(_ stage: PipelineStage, in context: PipelineContext)
@@ -867,7 +874,8 @@ public final class SelfOptimizingCICD: ObservableObject {
             status = .failed
             errorCount += 1
             logger.error(
-                "❌ Stage execution failed: \(stage.rawValue) - \(error.localizedDescription)")
+                "❌ Stage execution failed: \(stage.rawValue) - \(error.localizedDescription)"
+            )
         }
 
         let endTime = Date()

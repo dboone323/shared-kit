@@ -285,7 +285,8 @@ final class QuantumRealityManipulationEngine: QuantumRealityManipulationProtocol
                     message: "Electromagnetic field strength exceeds safe limits",
                     severity: .critical,
                     suggestion: "Reduce field strength or implement shielding"
-                ))
+                )
+            )
         }
 
         // Check coherence levels
@@ -295,7 +296,8 @@ final class QuantumRealityManipulationEngine: QuantumRealityManipulationProtocol
                     message: "Unified field coherence below optimal level",
                     severity: .warning,
                     suggestion: "Consider coherence enhancement protocols"
-                ))
+                )
+            )
         }
 
         return ValidationResult(
@@ -319,7 +321,8 @@ final class QuantumRealityManipulationEngine: QuantumRealityManipulationProtocol
                     message: "Transformation energy requirements exceed available capacity",
                     severity: .critical,
                     suggestion: "Reduce transformation scope or increase energy allocation"
-                ))
+                )
+            )
         }
 
         return ValidationResult(
@@ -538,7 +541,8 @@ final class QuantumFieldEngineer {
                     potential: 0.1,
                     complexity: 0.3,
                     risk: 0.2
-                ))
+                )
+            )
         }
 
         if fields.gravitational.strength < 1.0 {
@@ -549,7 +553,8 @@ final class QuantumFieldEngineer {
                     potential: 0.15,
                     complexity: 0.5,
                     risk: 0.4
-                ))
+                )
+            )
         }
 
         return optimizations

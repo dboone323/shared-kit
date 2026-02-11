@@ -560,7 +560,8 @@ final class QuantumSwarmIntelligenceEngine: QuantumSwarmIntelligenceProtocol {
                     "swarm_id": swarm.id.uuidString,
                     "new_stage": String(evolvedSwarm.evolutionStage),
                     "intelligence_gain": String(
-                        evolvedSwarm.collectiveIntelligence - swarm.collectiveIntelligence),
+                        evolvedSwarm.collectiveIntelligence - swarm.collectiveIntelligence
+                    ),
                 ]
             )
 
@@ -958,7 +959,8 @@ final class BasicSwarmCoordinationEngine: QuantumSwarmCoordinationProtocol {
                             entanglementStrength: 0.8,
                             communicationChannel: "quantum",
                             stability: 0.9
-                        ))
+                        )
+                    )
                 }
             }
         case .nearestNeighbor:
@@ -972,7 +974,8 @@ final class BasicSwarmCoordinationEngine: QuantumSwarmCoordinationProtocol {
                         entanglementStrength: 0.9,
                         communicationChannel: "direct",
                         stability: 0.95
-                    ))
+                    )
+                )
             }
         default:
             // Default to minimal connections

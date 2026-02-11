@@ -572,7 +572,8 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
                         nodes: 5
                     ),
                     estimatedEffectiveness: 0.8
-                ))
+                )
+            )
         }
 
         strategies.append(
@@ -586,7 +587,8 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
                     nodes: 3
                 ),
                 estimatedEffectiveness: 0.6
-            ))
+            )
+        )
 
         return strategies
     }
@@ -1388,7 +1390,8 @@ func demonstrateRealityStabilizationNetworks() async {
         let syncResult = try await engine.synchronizeState()
         print("✓ Network synchronization completed:")
         print(
-            "  - Synchronized nodes: \(syncResult.successfulSyncs)/\(syncResult.synchronizedNodes)")
+            "  - Synchronized nodes: \(syncResult.successfulSyncs)/\(syncResult.synchronizedNodes)"
+        )
         print("  - Average latency: \(String(format: "%.3f", syncResult.averageLatency))s")
 
         // Propagate stabilization
@@ -2537,14 +2540,16 @@ func demonstrateMultiversalBridgeConstruction() async {
             "  - Overall compatibility: \(String(format: "%.2f", compatibilityAnalysis.overallCompatibility))"
         )
         print(
-            "  - Recommended bridge type: \(compatibilityAnalysis.recommendedBridgeType.rawValue)")
+            "  - Recommended bridge type: \(compatibilityAnalysis.recommendedBridgeType.rawValue)"
+        )
         print("  - Compatibility issues: \(compatibilityAnalysis.compatibilityIssues.count)")
 
         // Calculate bridge parameters
         let bridgeParameters = await engine.calculateBridgeParameters(compatibilityAnalysis)
         print("✓ Bridge parameters calculated:")
         print(
-            "  - Energy requirement: \(String(format: "%.0f", bridgeParameters.energyRequirement))")
+            "  - Energy requirement: \(String(format: "%.0f", bridgeParameters.energyRequirement))"
+        )
         print(
             "  - Connection strength: \(String(format: "%.2f", bridgeParameters.connectionStrength))"
         )

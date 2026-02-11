@@ -1528,7 +1528,8 @@ public extension UniversalIntelligenceCoordinationSystem {
                     description: "Enhance universal integration across all intelligence domains",
                     priority: .high,
                     expectedAdvantage: 0.48
-                ))
+                )
+            )
         }
 
         if status.integrationMetrics.averageCrossDomainSynergy < 0.8 {
@@ -1538,7 +1539,8 @@ public extension UniversalIntelligenceCoordinationSystem {
                     description: "Improve cross-domain synergy for better intelligence coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

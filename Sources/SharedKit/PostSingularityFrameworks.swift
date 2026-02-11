@@ -638,7 +638,10 @@ private class PostSingularityFrameworkManager {
         SingularityDetectionResult(achieved: false, timestamp: Date(), readiness: 0.85)
     }
 
-    func assessFrameworkStatus() async -> FrameworkStatus { FrameworkStatus() }
+    func assessFrameworkStatus() async -> FrameworkStatus {
+        FrameworkStatus()
+    }
+
     func executeOptimization(_ optimization: PostSingularityOptimization) async throws {}
     func initializePostSingularityOperations() async throws {}
     let statusPublisher = PassthroughSubject<FrameworkStatus, Never>()
@@ -647,7 +650,10 @@ private class PostSingularityFrameworkManager {
 /// Singularity adaptation coordinator
 private class SingularityAdaptationCoordinator {
     func initialize() async throws {}
-    func assessAdaptationStatus() async -> AdaptationStatus { AdaptationStatus() }
+    func assessAdaptationStatus() async -> AdaptationStatus {
+        AdaptationStatus()
+    }
+
     let progressPublisher = PassthroughSubject<Double, Never>()
 }
 
@@ -677,5 +683,7 @@ private class EternitySystemsCoordinator {
     func initialize() async throws {}
     func startSystems() async throws {}
     func coordinateEternity() async throws {}
-    func assessEternityStatus() async -> EternityStatus { EternityStatus() }
+    func assessEternityStatus() async -> EternityStatus {
+        EternityStatus()
+    }
 }

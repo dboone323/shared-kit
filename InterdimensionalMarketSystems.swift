@@ -1031,7 +1031,8 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
                 metadata: [
                     "market_id": market.id.uuidString,
                     "improvement": String(
-                        optimizedMarket.performance.efficiency - market.performance.efficiency),
+                        optimizedMarket.performance.efficiency - market.performance.efficiency
+                    ),
                 ]
             )
 
@@ -1319,7 +1320,8 @@ final class InterdimensionalMarketSystemsEngine: InterdimensionalMarketSystemsPr
                         quantity: Double.random(in: 1...100),
                         timestamp: Date(),
                         type: MarketData.DimensionalData.Trade.TradeType.allCases.randomElement()!
-                    ))
+                    )
+                )
             }
 
             dimensionalData[dimension.id] = MarketData.DimensionalData(

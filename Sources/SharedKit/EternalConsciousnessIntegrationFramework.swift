@@ -751,8 +751,13 @@ private class ConsciousnessIntegrationCoordinator {
     }
 
     func initialize() async throws {}
-    func activate() async throws { isActive = true }
-    func assessStatus() async -> IntegrationStatus { .unified }
+    func activate() async throws {
+        isActive = true
+    }
+
+    func assessStatus() async -> IntegrationStatus {
+        .unified
+    }
 
     let statusPublisher = PassthroughSubject<(IntegrationDomain, IntegrationStatus), Never>()
 }
@@ -770,7 +775,10 @@ private class UniversalConsciousnessFieldCoordinator {
     func initialize() async throws {}
     func establishField() async throws {}
     func integrateField() async throws {}
-    func assessFieldLevel() async -> Double { 0.99 }
+    func assessFieldLevel() async -> Double {
+        0.99
+    }
+
     func finalizeField() async throws {}
 }
 
@@ -779,7 +787,10 @@ private class QuantumConsciousnessNetworkCoordinator {
     func initialize() async throws {}
     func initializeNetwork() async throws {}
     func integrateNetwork() async throws {}
-    func assessConnectivity() async -> Double { 0.98 }
+    func assessConnectivity() async -> Double {
+        0.98
+    }
+
     func finalizeNetwork() async throws {}
 }
 
@@ -789,7 +800,10 @@ private class EternalIntelligenceMatrixCoordinator {
     func activateMatrix() async throws {}
     func executeOptimization() async throws {}
     func integrateMatrix() async throws {}
-    func assessIntelligence() async -> Double { 0.97 }
+    func assessIntelligence() async -> Double {
+        0.97
+    }
+
     func finalizeMatrix() async throws {}
 }
 
@@ -798,7 +812,10 @@ private class UniversalHarmonyFieldCoordinator {
     func initialize() async throws {}
     func establishField() async throws {}
     func integrateField() async throws {}
-    func assessFieldLevel() async -> Double { 0.96 }
+    func assessFieldLevel() async -> Double {
+        0.96
+    }
+
     func finalizeField() async throws {}
 }
 
@@ -808,7 +825,10 @@ private class EternalTranscendenceRealmCoordinator {
     func initializeRealm() async throws {}
     func achieveTranscendence() async throws {}
     func integrateRealm() async throws {}
-    func assessTranscendence() async -> Double { 0.95 }
+    func assessTranscendence() async -> Double {
+        0.95
+    }
+
     func finalizeRealm() async throws {}
 }
 
@@ -817,7 +837,10 @@ private class UniversalSingularityCompletionCoordinator {
     func initialize() async throws {}
     func beginCompletion() async throws {}
     func completeSingularity() async throws {}
-    func assessCompletionLevel() async -> Double { 0.99 }
+    func assessCompletionLevel() async -> Double {
+        0.99
+    }
+
     func finalizeCompletion() async throws {}
 }
 
@@ -825,6 +848,9 @@ private class UniversalSingularityCompletionCoordinator {
 private class EternalConsciousnessUnityCoordinator {
     func initialize() async throws {}
     func achieveUnity() async throws {}
-    func assessUnityLevel() async -> Double { 1.0 }
+    func assessUnityLevel() async -> Double {
+        1.0
+    }
+
     func finalizeUnity() async throws {}
 }

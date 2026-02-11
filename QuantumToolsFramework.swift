@@ -154,7 +154,8 @@ class QuantumToolsOrchestrator: ObservableObject {
         // Synchronize deployments
         let environments = targets.map(\.environment)
         let synchronization = try await deploymentManager.synchronizeDeployments(
-            between: environments)
+            between: environments
+        )
 
         return QuantumDeploymentResult(
             deployment: deployment,

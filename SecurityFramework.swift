@@ -28,7 +28,8 @@ public enum SecurityFramework {
             _ input: String,
             maxLength: Int = 1000,
             allowedCharacters: CharacterSet = .alphanumerics.union(.whitespacesAndNewlines).union(
-                CharacterSet(charactersIn: "!@#$%^&*()_+-=[]{}|;:,.<>?"))
+                CharacterSet(charactersIn: "!@#$%^&*()_+-=[]{}|;:,.<>?")
+            )
         ) -> ValidationResult {
             // Check for nil or empty
             guard !input.isEmpty else {
@@ -273,7 +274,8 @@ public enum SecurityFramework {
                                 description: "Potential SQL injection vulnerability detected",
                                 line: findLineNumber(code: code, pattern: pattern),
                                 recommendation: "Use parameterized queries or prepared statements"
-                            ))
+                            )
+                        )
                     }
                 }
             }
@@ -291,7 +293,8 @@ public enum SecurityFramework {
                                 line: findLineNumber(code: code, pattern: pattern),
                                 recommendation:
                                 "Use safe DOM manipulation methods or sanitize input"
-                            ))
+                            )
+                        )
                     }
                 }
             }
@@ -310,7 +313,8 @@ public enum SecurityFramework {
                             line: findLineNumber(code: code, pattern: pattern),
                             recommendation:
                             "Move secrets to environment variables or secure storage"
-                        ))
+                        )
+                    )
                 }
             }
 

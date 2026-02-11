@@ -935,13 +935,23 @@ public enum MCPError: Error {
 // MARK: - Extensions
 
 public extension MCPToolResult {
-    var isSuccessful: Bool { success }
-    var hasError: Bool { error != nil }
+    var isSuccessful: Bool {
+        success
+    }
+
+    var hasError: Bool {
+        error != nil
+    }
 }
 
 public extension MCPWorkflow {
-    var stepCount: Int { steps.count }
-    var hasDependencies: Bool { steps.contains { !$0.dependencies.isEmpty } }
+    var stepCount: Int {
+        steps.count
+    }
+
+    var hasDependencies: Bool {
+        steps.contains { !$0.dependencies.isEmpty }
+    }
 }
 
 public extension MCPPrincipal {

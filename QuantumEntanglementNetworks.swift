@@ -710,7 +710,8 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 
         if averageStrength < 0.7 {
             recommendations.append(
-                "Increase entanglement strength through quantum error correction")
+                "Increase entanglement strength through quantum error correction"
+            )
         }
 
         if decoherenceEvents.values.flatMap(\.self).count > 5 {

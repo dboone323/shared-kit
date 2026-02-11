@@ -126,7 +126,8 @@ final class RAGIntegrationTests: XCTestCase {
             let exp = expectation(description: "Embedding completed")
             Task {
                 _ = try await embeddingService.embed(
-                    "This is a test query for performance measurement")
+                    "This is a test query for performance measurement"
+                )
                 exp.fulfill()
             }
             wait(for: [exp], timeout: 5.0)

@@ -13,7 +13,7 @@ final class AggregatorAgentIntegrationTests: XCTestCase {
     }
 
     /// Test context window optimization
-    func testContextWindowOptimization() async {
+    func testContextWindowOptimization() {
         // Verify context manager optimizes message history
         XCTAssertNotNil(agent)
 
@@ -24,7 +24,7 @@ final class AggregatorAgentIntegrationTests: XCTestCase {
     }
 
     /// Test tool result caching
-    func testToolResultCaching() async {
+    func testToolResultCaching() {
         // Verify repeated tools use cached results
         XCTAssertNotNil(agent)
 
@@ -35,7 +35,7 @@ final class AggregatorAgentIntegrationTests: XCTestCase {
     }
 
     /// Test parallel tool execution
-    func testParallelToolExecution() async {
+    func testParallelToolExecution() {
         // Verify independent tools run in parallel
         XCTAssertNotNil(agent)
 
@@ -46,7 +46,7 @@ final class AggregatorAgentIntegrationTests: XCTestCase {
     }
 
     /// Test tool execution timeout
-    func testToolExecutionTimeout() async {
+    func testToolExecutionTimeout() {
         // Verify long-running tools timeout
         XCTAssertNotNil(agent)
 
@@ -57,7 +57,7 @@ final class AggregatorAgentIntegrationTests: XCTestCase {
     }
 
     /// Test learning system recommendations
-    func testLearningSystemRecommendations() async {
+    func testLearningSystemRecommendations() {
         // Verify learning system tracks tool success
         XCTAssertNotNil(agent)
 
@@ -68,7 +68,7 @@ final class AggregatorAgentIntegrationTests: XCTestCase {
     }
 
     /// Test end-to-end agent workflow
-    func testEndToEndWorkflow() async {
+    func testEndToEndWorkflow() {
         // Full integration test
         XCTAssertNotNil(agent)
 

@@ -4,7 +4,7 @@ import Foundation
 
 // MARK: - Global Quantum Communication Network Demonstration
 
-// Demonstration of the Global Quantum Communication Network (Task 146)
+/// Demonstration of the Global Quantum Communication Network (Task 146)
 func demonstrateGlobalQuantumCommunicationNetwork() async {
     print("🚀 PHASE 8D - TASK 146: GLOBAL QUANTUM COMMUNICATION NETWORKS")
     print("============================================================")

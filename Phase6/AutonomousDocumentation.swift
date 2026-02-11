@@ -625,7 +625,8 @@ public final class AutonomousDocumentation: ObservableObject {
                         title: content.title,
                         context: content.metadata,
                         generationStrategy: .hybrid
-                    ))
+                    )
+                )
             }
         }
 
@@ -935,7 +936,8 @@ public final class AutonomousDocumentation: ObservableObject {
             _ = try await generateContent(request)
         } catch {
             logger.error(
-                "Failed to generate changelog for code change: \(error.localizedDescription)")
+                "Failed to generate changelog for code change: \(error.localizedDescription)"
+            )
         }
     }
 
@@ -1001,7 +1003,8 @@ public final class AutonomousDocumentation: ObservableObject {
             _ = try await generateContent(request)
         } catch {
             logger.error(
-                "Failed to generate dependency update documentation: \(error.localizedDescription)")
+                "Failed to generate dependency update documentation: \(error.localizedDescription)"
+            )
         }
     }
 

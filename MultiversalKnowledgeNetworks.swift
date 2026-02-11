@@ -470,7 +470,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                         processingCapacity: universe.knowledgeCapacity,
                         trustRating: 0.8,
                         lastUpdate: Date()
-                    ))
+                    )
+                )
             }
 
             // Establish bridges between universes
@@ -718,7 +719,8 @@ final class MultiversalKnowledgeNetworksEngine: MultiversalKnowledgeNetworksProt
                     "network_id": network.id.uuidString,
                     "new_health": String(evolvedNetwork.networkHealth),
                     "evolution_progress": String(
-                        evolvedNetwork.synchronizationStatus.overallHealth),
+                        evolvedNetwork.synchronizationStatus.overallHealth
+                    ),
                 ]
             )
 

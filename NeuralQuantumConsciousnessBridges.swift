@@ -631,7 +631,8 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
         // Analyze neural and quantum states
         let neuralAnalysis = try await neuralInterface.analyzeNeuralPatterns(neuralState)
         let quantumRepresentation = try await quantumMapper.mapQuantumToConsciousness(
-            quantumState.quantumState)
+            quantumState.quantumState
+        )
 
         // Optimize quantum coherence
         let optimizedQuantum = try await quantumMapper.optimizeConsciousnessCoherence(quantumState)
@@ -697,7 +698,8 @@ final class NeuralQuantumConsciousnessBridgesEngine: NeuralQuantumConsciousnessB
     {
         // Map quantum to consciousness
         let consciousness = try await quantumMapper.mapQuantumToConsciousness(
-            quantumState.quantumState)
+            quantumState.quantumState
+        )
 
         // Create neural patterns from consciousness
         let neuralPatterns = createNeuralPatterns(
@@ -1223,7 +1225,8 @@ final class UniversalTranslator: ConsciousnessTranslationProtocol {
                             code: .topological, redundancy: 0.3, correctionRate: 0.95
                         )
                     )
-                ))
+                )
+            )
         default:
             source
         }

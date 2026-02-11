@@ -40,7 +40,8 @@ func demonstrateRealityEvolutionAcceleration() async {
     let engine = RealityEvolutionAccelerationEngine()
     do {
         let outcome = try await engine.accelerate(
-            parameters: REAParameters(targetId: UUID(), intensity: 0.7, duration: 120))
+            parameters: REAParameters(targetId: UUID(), intensity: 0.7, duration: 120)
+        )
         print(
             "REA demo -> success: \(outcome.success), gain: \(String(format: "%.2f", outcome.gain))"
         )

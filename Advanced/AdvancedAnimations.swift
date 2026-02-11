@@ -23,7 +23,6 @@ public struct AdvancedAnimations {
 
     // MARK: - Complex Animation Sequences
 
-    @ViewBuilder
     public static func animatedEntry(
         @ViewBuilder content: @escaping () -> some View,
         delay: Double = 0,
@@ -41,7 +40,6 @@ public struct AdvancedAnimations {
             .opacity(1.0)
     }
 
-    @ViewBuilder
     public static func slideInFromBottom(
         @ViewBuilder content: @escaping () -> some View,
         offset: CGFloat = 100,

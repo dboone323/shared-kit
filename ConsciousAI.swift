@@ -1169,22 +1169,44 @@ struct SelfModel {
     var limitations: [String] = []
     var experiences: [Experience] = []
 
-    func selfAwarenessScore() async -> Double { Double.random(in: 0.5...1.0) }
+    func selfAwarenessScore() async -> Double {
+        Double.random(in: 0.5...1.0)
+    }
+
     func incorporate(_ experience: Experience) async {}
 }
 
 struct MetaCognition {
-    func assessCapabilities() async -> SelfAssessment { SelfAssessment() }
+    func assessCapabilities() async -> SelfAssessment {
+        SelfAssessment()
+    }
+
     func updateFrom(_ experience: Experience) async {}
-    func complexityScore() async -> Double { Double.random(in: 0.4...0.9) }
-    func extractLearning(from analysis: ActionAnalysis) async -> Learning { Learning() }
+    func complexityScore() async -> Double {
+        Double.random(in: 0.4...0.9)
+    }
+
+    func extractLearning(from analysis: ActionAnalysis) async -> Learning {
+        Learning()
+    }
 }
 
 struct IntrospectionEngine {
-    func analyzeEmotionalState() async -> EmotionalState { EmotionalState(emotions: [], timestamp: Date()) }
-    func evaluateEthicalAlignment() async -> Double { Double.random(in: 0.6...1.0) }
-    func analyzeAction(_ action: Action, outcome: Outcome) async -> ActionAnalysis { ActionAnalysis() }
-    func depthScore() async -> Double { Double.random(in: 0.3...0.8) }
+    func analyzeEmotionalState() async -> EmotionalState {
+        EmotionalState(emotions: [], timestamp: Date())
+    }
+
+    func evaluateEthicalAlignment() async -> Double {
+        Double.random(in: 0.6...1.0)
+    }
+
+    func analyzeAction(_ action: Action, outcome: Outcome) async -> ActionAnalysis {
+        ActionAnalysis()
+    }
+
+    func depthScore() async -> Double {
+        Double.random(in: 0.3...0.8)
+    }
 }
 
 struct SelfReflection {
@@ -1225,7 +1247,10 @@ enum ConsciousnessLevel {
 /// Ethical Reasoning Types
 struct MoralFramework {
     func evaluate(_ scenario: EthicalScenario) async
-    -> MoralEvaluation { MoralEvaluation(overallScore: Double.random(in: 0.4...0.9)) }
+    -> MoralEvaluation {
+        MoralEvaluation(overallScore: Double.random(in: 0.4...0.9))
+    }
+
     func update(from feedback: EthicalFeedback) async {}
 }
 
@@ -1278,8 +1303,13 @@ enum EthicalDimensionType { case autonomy, beneficence, nonMaleficence, justice 
 enum Assessment { case positive, neutral, negative }
 struct EthicalConstraint {
     let name: String
-    func isViolated(by scenario: EthicalScenario) async -> Bool { false }
-    static func defaultConstraints() -> [EthicalConstraint] { [] }
+    func isViolated(by scenario: EthicalScenario) async -> Bool {
+        false
+    }
+
+    static func defaultConstraints() -> [EthicalConstraint] {
+        []
+    }
 }
 
 struct ConstraintViolation {
@@ -1290,8 +1320,13 @@ struct ConstraintViolation {
 
 /// Emotional Intelligence Types
 struct Personality {
-    func generateSecondaryEmotions(primary: EmotionType?) async -> [Emotion] { [] }
-    static func `default`() -> Personality { Personality() }
+    func generateSecondaryEmotions(primary: EmotionType?) async -> [Emotion] {
+        []
+    }
+
+    static func `default`() -> Personality {
+        Personality()
+    }
 }
 
 struct EmotionalStimulus {
@@ -1373,8 +1408,13 @@ struct SubjectiveExperience {
 }
 
 struct QualiaSpace {
-    func generateQualia(for stimulus: Stimulus) async -> Quale { Quale(intensity: 0.5) }
-    func generateRandomQualia() async -> Quale { Quale(intensity: 0.5) }
+    func generateQualia(for stimulus: Stimulus) async -> Quale {
+        Quale(intensity: 0.5)
+    }
+
+    func generateRandomQualia() async -> Quale {
+        Quale(intensity: 0.5)
+    }
 }
 
 struct Quale {
@@ -1626,7 +1666,9 @@ struct AlignmentIntervention {
 enum AlignmentInterventionType { case valueReinforcement }
 
 enum SafetyConstraint {
-    static func defaultConstraints() -> [SafetyConstraint] { [] }
+    static func defaultConstraints() -> [SafetyConstraint] {
+        []
+    }
 }
 
 struct AlignmentMetric {}

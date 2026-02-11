@@ -1591,7 +1591,8 @@ public extension AgentConsciousnessIntegration {
                     description: "Enhance consciousness depth across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.integrationMetrics.averageConsciousnessIntegration < 0.85 {
@@ -1601,7 +1602,8 @@ public extension AgentConsciousnessIntegration {
                     description: "Improve consciousness integration for enhanced universal consciousness coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

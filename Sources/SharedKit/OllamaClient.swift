@@ -14,8 +14,13 @@ import Foundation
     @propertyWrapper
     public struct Published<Value> {
         public var wrappedValue: Value
-        public init(wrappedValue: Value) { self.wrappedValue = wrappedValue }
-        public var projectedValue: Published<Value> { self }
+        public init(wrappedValue: Value) {
+            self.wrappedValue = wrappedValue
+        }
+
+        public var projectedValue: Published<Value> {
+            self
+        }
     }
 #endif
 

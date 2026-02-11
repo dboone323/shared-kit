@@ -986,7 +986,8 @@ final class AutonomousMultiverseGovernanceEngine: AutonomousMultiverseGovernance
                         result: .success,
                         timestamp: Date()
                     )
-                })
+                }
+            )
         }
 
         let result = PolicyEnforcementResult(

@@ -242,17 +242,20 @@ public class HybridNetworkIntegration: ObservableObject {
 
         if classicalStats.utilization > 0.8 {
             bottlenecks.append(
-                NetworkBottleneck(type: .capacity, network: .classical, severity: .high))
+                NetworkBottleneck(type: .capacity, network: .classical, severity: .high)
+            )
         }
 
         if quantumStats.averageLatency > 10.0 {
             bottlenecks.append(
-                NetworkBottleneck(type: .latency, network: .quantum, severity: .medium))
+                NetworkBottleneck(type: .latency, network: .quantum, severity: .medium)
+            )
         }
 
         if quantumStats.errorRate > 0.05 {
             bottlenecks.append(
-                NetworkBottleneck(type: .reliability, network: .quantum, severity: .high))
+                NetworkBottleneck(type: .reliability, network: .quantum, severity: .high)
+            )
         }
 
         return bottlenecks
@@ -269,13 +272,16 @@ public class HybridNetworkIntegration: ObservableObject {
                 optimizations.append(
                     NetworkOptimization(
                         type: .loadBalancing, description: "Implement load balancing"
-                    ))
+                    )
+                )
             case .latency:
                 optimizations.append(
-                    NetworkOptimization(type: .caching, description: "Add edge caching"))
+                    NetworkOptimization(type: .caching, description: "Add edge caching")
+                )
             case .reliability:
                 optimizations.append(
-                    NetworkOptimization(type: .redundancy, description: "Increase redundancy"))
+                    NetworkOptimization(type: .redundancy, description: "Increase redundancy")
+                )
             }
         }
 

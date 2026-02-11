@@ -595,7 +595,8 @@ public final class MultiAgentCoordinatorSystem: MultiAgentCoordinator {
                                 type: .task,
                                 data: ["description": subtask.description],
                                 context: AgentContext(
-                                    environment: AgentEnvironment(type: .distributed))
+                                    environment: AgentEnvironment(type: .distributed)
+                                )
                             )
                             let output = try await agent.process(input)
                             return (subtask.id, output)
@@ -998,10 +999,21 @@ enum CoordinationError: Error {
 // MARK: - Extensions
 
 public extension CoordinationSession {
-    var completionPercentage: Double { progress * 100 }
-    var isCompleted: Bool { status == .completed }
-    var hasConflicts: Bool { !conflicts.isEmpty }
-    var duration: TimeInterval { Date().timeIntervalSince(startTime) }
+    var completionPercentage: Double {
+        progress * 100
+    }
+
+    var isCompleted: Bool {
+        status == .completed
+    }
+
+    var hasConflicts: Bool {
+        !conflicts.isEmpty
+    }
+
+    var duration: TimeInterval {
+        Date().timeIntervalSince(startTime)
+    }
 }
 
 public extension CoordinationTask {
@@ -1021,6 +1033,11 @@ public extension CoordinationTask {
 }
 
 public extension CoordinationResult {
-    var efficiency: Double { performanceMetrics.efficiency }
-    var isSuccessful: Bool { success }
+    var efficiency: Double {
+        performanceMetrics.efficiency
+    }
+
+    var isSuccessful: Bool {
+        success
+    }
 }

@@ -283,7 +283,8 @@ public final class AutonomousWorkflowEvolutionSystem: ObservableObject {
                     type: evolutionType,
                     success: true,
                     improvements: ["performance": 0.15, "efficiency": 0.10]
-                ))
+                )
+            )
             activeEvolutions[sessionId] = updatedSession
 
             evolutionHistory.append(contentsOf: updatedSession.results)
@@ -298,7 +299,8 @@ public final class AutonomousWorkflowEvolutionSystem: ObservableObject {
                 EvolutionResult(
                     type: evolutionType,
                     success: false
-                ))
+                )
+            )
             activeEvolutions[sessionId] = updatedSession
 
             throw error
@@ -325,7 +327,8 @@ public final class AutonomousWorkflowEvolutionSystem: ObservableObject {
         let parallelSteps = workflow.steps.count(where: { $0.executionMode == .parallel })
         if parallelSteps == 0 && stepCount > 3 {
             recommendations.append(
-                "No parallel execution detected - consider concurrency optimization")
+                "No parallel execution detected - consider concurrency optimization"
+            )
         }
 
         return recommendations
@@ -462,7 +465,8 @@ public actor BasicWorkflowEvolutionEngine: WorkflowEvolutionEngine {
         // Store optimization metadata
         var metadata = modifiedWorkflow.metadata ?? [:]
         metadata["dependency_optimization"] = AnyCodable(
-            "Applied quantum-inspired dependency analysis")
+            "Applied quantum-inspired dependency analysis"
+        )
         metadata["optimization_timestamp"] = AnyCodable(Date())
         modifiedWorkflow.metadata = metadata
 
@@ -475,7 +479,8 @@ public actor BasicWorkflowEvolutionEngine: WorkflowEvolutionEngine {
         // Store resource optimization metadata
         var metadata = modifiedWorkflow.metadata ?? [:]
         metadata["resource_optimization"] = AnyCodable(
-            "Applied quantum annealing for resource allocation")
+            "Applied quantum annealing for resource allocation"
+        )
         metadata["optimization_timestamp"] = AnyCodable(Date())
         modifiedWorkflow.metadata = metadata
 

@@ -809,7 +809,8 @@ final class AutonomousQuantumCitiesEngine: AutonomousQuantumCitiesProtocol {
                 metadata: [
                     "city_id": city.id.uuidString,
                     "improvement": String(
-                        optimizedCity.performance.efficiency - city.performance.efficiency),
+                        optimizedCity.performance.efficiency - city.performance.efficiency
+                    ),
                 ]
             )
 
@@ -1331,7 +1332,8 @@ final class BasicResourceManagementEngine: ResourceManagementEngine {
                         recipient: demand.requester,
                         priority: demand.urgency,
                         justification: demand.justification
-                    ))
+                    )
+                )
             }
         }
 

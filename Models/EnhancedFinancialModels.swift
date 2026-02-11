@@ -415,7 +415,8 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
 
         if self.date > Date().addingTimeInterval(86400) { // Allow 1 day in future
             errors.append(
-                .invalid(field: "date", reason: "cannot be more than 1 day in the future"))
+                .invalid(field: "date", reason: "cannot be more than 1 day in the future")
+            )
         }
 
         if let exchangeRate, exchangeRate <= 0 {
@@ -673,7 +674,8 @@ public final class EnhancedBudget: Validatable, Trackable {
         }
 
         print(
-            "Tracking event: \(event) for budget: \(self.name) with parameters: \(eventParameters)")
+            "Tracking event: \(event) for budget: \(self.name) with parameters: \(eventParameters)"
+        )
     }
 }
 
@@ -818,7 +820,9 @@ public enum AccountType: String, CaseIterable, Codable {
     case retirement = "Retirement"
     case other = "Other"
 
-    public var displayName: String { rawValue }
+    public var displayName: String {
+        rawValue
+    }
 
     public var iconName: String {
         switch self {
@@ -839,7 +843,9 @@ public enum TransactionType: String, CaseIterable, Codable {
     case expense = "Expense"
     case transfer = "Transfer"
 
-    public var displayName: String { rawValue }
+    public var displayName: String {
+        rawValue
+    }
 }
 
 public enum DatePeriod {

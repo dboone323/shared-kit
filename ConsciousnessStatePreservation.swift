@@ -483,7 +483,8 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
 
         // Compress for efficient storage
         let compressed = try await serializer.compressConsciousnessData(
-            createConsciousnessData(from: serialized))
+            createConsciousnessData(from: serialized)
+        )
 
         // Determine quantum memory type based on preservation level
         let memoryType = determineMemoryType(for: preservationLevel)
@@ -511,7 +512,8 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
 
         // Create backup
         let backupResult = try await integrityVerifier.generatePreservationBackup(
-            preservationId: preservationId)
+            preservationId: preservationId
+        )
 
         let result = PreservationResult(
             preservationId: preservationId,
@@ -544,14 +546,16 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
 
         // Verify integrity before retrieval
         let integrityCheck = try await integrityVerifier.verifyPreservationIntegrity(
-            preservationId: preservationId)
+            preservationId: preservationId
+        )
         guard integrityCheck.isIntact else {
             throw ConsciousnessPreservationError.integrityCompromised
         }
 
         // Retrieve from quantum memory
         let memoryResult = try await quantumMemory.retrieveFromQuantumMemory(
-            memoryId: preservation.storageLocation.quantumMemoryId)
+            memoryId: preservation.storageLocation.quantumMemoryId
+        )
 
         // Decompress data
         let compressedData = CompressedConsciousness(
@@ -696,7 +700,8 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
                         workingMemory: [], longTermMemory: [], episodicMemory: [],
                         semanticMemory: []
                     )
-                )),
+                )
+            ),
             serializedData: data.content.rawData,
             serializationFormat: SerializedConsciousness.SerializationFormat.compressed,
             compressionRatio: 0.8,
@@ -727,11 +732,13 @@ final class ConsciousnessStatePreservationEngine: ConsciousnessStatePreservation
         for preservationId in activePreservations.keys {
             do {
                 let integrity = try await integrityVerifier.verifyPreservationIntegrity(
-                    preservationId: preservationId)
+                    preservationId: preservationId
+                )
                 if !integrity.isIntact {
                     // Attempt automatic correction
                     try await integrityVerifier.detectAndCorrectCorruption(
-                        preservationId: preservationId)
+                        preservationId: preservationId
+                    )
                 }
             } catch {
                 // Log integrity check failure
@@ -881,7 +888,8 @@ final class ConsciousnessSerializer: ConsciousnessSerializationProtocol {
                 memoryState: NeuralConsciousnessState.MemoryState(
                     workingMemory: [], longTermMemory: [], episodicMemory: [], semanticMemory: []
                 )
-            ))
+            )
+        )
     }
 
     func compressConsciousnessData(_ data: ConsciousnessData) async throws

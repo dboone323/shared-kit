@@ -293,7 +293,8 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
         // Update user satisfaction
         if let satisfaction = userSatisfaction {
             let totalSessionsWithRating = Double(
-                self.computationSessions.count(where: { $0.userSatisfaction != nil }))
+                self.computationSessions.count(where: { $0.userSatisfaction != nil })
+            )
             if totalSessionsWithRating > 0 {
                 self.averageUserSatisfaction =
                     (self.averageUserSatisfaction * (totalSessionsWithRating - 1) + satisfaction)

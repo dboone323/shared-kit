@@ -1562,7 +1562,8 @@ public extension AgentEthicalTranscendence {
                     description: "Enhance ethical depth across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.transcendenceMetrics.averageEthicalTranscendence < 0.85 {
@@ -1572,7 +1573,8 @@ public extension AgentEthicalTranscendence {
                     description: "Improve ethical transcendence for enhanced universal ethics coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

@@ -1552,7 +1552,8 @@ public extension AgentEmpathyNetworks {
                     description: "Enhance understanding level across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.empathyMetrics.averageEmpathyEnhancement < 0.85 {
@@ -1562,7 +1563,8 @@ public extension AgentEmpathyNetworks {
                     description: "Improve empathy enhancement for amplified understanding coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

@@ -165,14 +165,14 @@ class AIServiceTestUtilities {
 
         // MARK: - AI Service Testing Helpers
 
-        func testAIServiceCall<T>(
+        func testAIServiceCall<T: Equatable & Sendable>(
             method: String,
             operation: @escaping () async throws -> T,
             expectedResult: T,
             timeout: TimeInterval = 5.0,
             file: StaticString = #filePath,
             line: UInt = #line
-        ) async throws where T: Equatable & Sendable {
+        ) async throws {
             let result = try await waitForAsync(timeout: timeout, operation: operation)
 
             XCTAssertEqual(result, expectedResult, file: file, line: line)

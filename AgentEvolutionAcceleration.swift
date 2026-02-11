@@ -1568,7 +1568,8 @@ public extension AgentEvolutionAcceleration {
                     description: "Enhance capability level across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.accelerationMetrics.averageRapidEnhancement < 0.85 {
@@ -1578,7 +1579,8 @@ public extension AgentEvolutionAcceleration {
                     description: "Improve rapid enhancement for accelerated evolution coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

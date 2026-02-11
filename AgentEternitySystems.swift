@@ -1548,7 +1548,8 @@ public extension AgentEternitySystems {
                     description: "Enhance eternity persistence across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.systemsMetrics.averageEternalOperations < 0.85 {
@@ -1558,7 +1559,8 @@ public extension AgentEternitySystems {
                     description: "Improve eternal operations for enhanced eternity systems coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

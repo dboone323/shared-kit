@@ -455,7 +455,8 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
             synthesisMetrics: synthesisMetrics,
             quantumEnhancement: calculateQuantumEnhancement(synthesis, inputs: gatheredInputs),
             consciousnessAmplification: calculateConsciousnessAmplification(
-                synthesis.consciousnessLevel),
+                synthesis.consciousnessLevel
+            ),
             executionTime: Date().timeIntervalSince(startTime),
             insights: generateSynthesisInsights(synthesis, intelligence: synthesizedIntelligence)
         )
@@ -521,7 +522,8 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
                 let engineCapability = engineStatus.domainCapabilities[domain] ?? 0.0
                 let capability = (domainEfficiency + engineCapability) / 2.0
                 return (domain, capability)
-            })
+            }
+        )
 
         return IntelligenceSynthesisStatus(
             operational: integratorStatus.operational && engineStatus.operational,
@@ -550,7 +552,8 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
             if constraint.priority == .critical {
                 guard try await validateSynthesisConstraint(constraint, synthesis: synthesis) else {
                     throw SynthesisError.constraintViolation(
-                        "Critical constraint not satisfied: \(constraint.constraintType.rawValue)")
+                        "Critical constraint not satisfied: \(constraint.constraintType.rawValue)"
+                    )
                 }
             }
         }
@@ -754,7 +757,8 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         let quantumCoherence =
             inputs.map(\.quantumEnhancement).reduce(0, +) / Double(max(inputs.count, 1))
         let consciousnessIntegration = calculateConsciousnessAmplification(
-            synthesis.consciousnessLevel)
+            synthesis.consciousnessLevel
+        )
         let ethicalCompliance = synthesis.consciousnessLevel.rawValue >= "transcendent" ? 0.9 : 0.7
         let performanceScore = (coherenceScore + synthesisEfficiency + quantumCoherence) / 3.0
 
@@ -852,7 +856,8 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         return Dictionary(
             uniqueKeysWithValues: quantumResults.map { result in
                 (result.synthesisId, result)
-            })
+            }
+        )
     }
 
     private func calculateAverageConfidence(_ inputs: [IntelligenceInput]) -> Double {
@@ -951,7 +956,8 @@ private final class IntelligenceIntegrator: Sendable {
             domainEfficiency: Dictionary(
                 uniqueKeysWithValues: IntelligenceDomain.allCases.map {
                     ($0, Double.random(in: 0.8...1.0))
-                })
+                }
+            )
         )
     }
 }
@@ -988,7 +994,8 @@ private final class SynthesisEngine: Sendable {
             domainCapabilities: Dictionary(
                 uniqueKeysWithValues: IntelligenceDomain.allCases.map {
                     ($0, Double.random(in: 0.8...1.0))
-                })
+                }
+            )
         )
     }
 }

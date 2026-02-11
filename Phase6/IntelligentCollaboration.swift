@@ -154,7 +154,8 @@ public actor IntelligentCollaboration {
                     actions: [
                         "Schedule regular sync meetings", "Implement better communication tools",
                     ]
-                ))
+                )
+            )
         }
 
         if !analysis.knowledgeGaps.isEmpty {
@@ -165,7 +166,8 @@ public actor IntelligentCollaboration {
                     description: "Fill identified knowledge gaps through training or mentoring",
                     priority: .medium,
                     actions: ["Organize knowledge sharing sessions", "Create learning resources"]
-                ))
+                )
+            )
         }
 
         if analysis.productivityGain < 0.8 {
@@ -179,7 +181,8 @@ public actor IntelligentCollaboration {
                         "Streamline workflows", "Reduce meeting overhead",
                         "Improve tool integration",
                     ]
-                ))
+                )
+            )
         }
 
         return recommendations
@@ -471,7 +474,8 @@ public actor CollaborationAnalyzer {
                     description: "Many sessions are taking longer than expected",
                     impact: .medium,
                     suggestions: ["Break down large tasks", "Improve meeting efficiency"]
-                ))
+                )
+            )
         }
 
         // Analyze participation levels
@@ -487,7 +491,8 @@ public actor CollaborationAnalyzer {
                         description: "Low participation in session: \(session.title)",
                         impact: .high,
                         suggestions: ["Encourage more involvement", "Reassess session objectives"]
-                    ))
+                    )
+                )
             }
         }
 

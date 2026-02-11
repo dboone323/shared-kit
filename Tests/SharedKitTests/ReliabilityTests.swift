@@ -116,5 +116,7 @@ final class ReliabilityTests: XCTestCase {
 
 private actor Counter {
     var count = 0
-    func increment() { count += 1 }
+    func increment() {
+        count += 1
+    }
 }

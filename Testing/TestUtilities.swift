@@ -224,14 +224,14 @@ class BaseViewModelTestCase<ViewModelType: BaseViewModel>: XCTestCase {
     }
 
     /// Helper to test error handling
-    func assertErrorThrown<T>(
+    func assertErrorThrown<T: Error & Equatable>(
         action: ViewModelType.Action,
         expectedError: T,
         keyPath: KeyPath<ViewModelType, String?>,
         timeout: TimeInterval = 5.0,
         file: StaticString = #file,
         line: UInt = #line
-    ) async where T: Error & Equatable {
+    ) async {
         do {
             await viewModel.handle(action)
             XCTFail("Expected error but action completed successfully", file: file, line: line)
@@ -325,13 +325,13 @@ extension XCTestCase {
     }
 
     /// Assert async operation throws specific error
-    func assertAsyncThrows<E>(
+    func assertAsyncThrows<E: Error & Equatable>(
         _ operation: @escaping () async throws -> some Any,
         expectedError: E,
         timeout: TimeInterval = 5.0,
         file: StaticString = #file,
         line: UInt = #line
-    ) async where E: Error & Equatable {
+    ) async {
         let expectation = XCTestExpectation(description: "Async operation error")
 
         do {

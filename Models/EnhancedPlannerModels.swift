@@ -317,7 +317,8 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
         }
 
         print(
-            "Tracking event: \(event) for task: \(self.title) with parameters: \(eventParameters)")
+            "Tracking event: \(event) for task: \(self.title) with parameters: \(eventParameters)"
+        )
     }
 
     // MARK: - Business Logic Methods
@@ -663,7 +664,8 @@ public final class EnhancedGoal: Validatable, Trackable, CrossProjectRelatable {
         }
 
         print(
-            "Tracking event: \(event) for goal: \(self.title) with parameters: \(eventParameters)")
+            "Tracking event: \(event) for goal: \(self.title) with parameters: \(eventParameters)"
+        )
     }
 
     // MARK: - Business Logic Methods

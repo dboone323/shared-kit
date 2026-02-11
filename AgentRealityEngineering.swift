@@ -1560,7 +1560,8 @@ public extension AgentRealityEngineering {
                     description: "Enhance reality depth across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.manipulationMetrics.averageRealityManipulation < 0.85 {
@@ -1570,7 +1571,8 @@ public extension AgentRealityEngineering {
                     description: "Improve reality manipulation for enhanced engineering coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

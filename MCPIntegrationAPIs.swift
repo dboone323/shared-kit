@@ -635,7 +635,8 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
                         serviceId: serviceId,
                         issue: "High error rate: \(String(format: "%.1f%%", errorRate * 100))",
                         severity: .error
-                    ))
+                    )
+                )
             } else if errorRate > 0.1 {
                 serviceHealth[serviceId] = .degraded
                 issues.append(
@@ -643,7 +644,8 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
                         serviceId: serviceId,
                         issue: "Elevated error rate: \(String(format: "%.1f%%", errorRate * 100))",
                         severity: .warning
-                    ))
+                    )
+                )
             } else {
                 serviceHealth[serviceId] = .healthy
             }
@@ -705,7 +707,8 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
                     min: minimum,
                     max: maximum,
                     count: values.count
-                ))
+                )
+            )
         }
 
         // Identify bottlenecks (simplified)
@@ -718,7 +721,8 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
                     severity: .warning,
                     description:
                     "High variance in \(summary.name): max \(String(format: "%.2f", summary.max ?? 0)) vs avg \(String(format: "%.2f", summary.average))"
-                ))
+                )
+            )
         }
 
         // Generate recommendations
@@ -809,7 +813,8 @@ public final class MCPIntegrationManager: Sendable {
                 type: .serviceRegistered,
                 source: "MCPIntegrationManager",
                 data: ["service_id": AnyCodable(serviceInfo.id)]
-            ))
+            )
+        )
     }
 
     /// Execute a tool by ID
@@ -829,7 +834,8 @@ public final class MCPIntegrationManager: Sendable {
                     name: "execution_time",
                     value: executionTime,
                     unit: "seconds"
-                ))
+                )
+            )
 
             await metricsSystem.recordMetric(
                 MCPMetric(
@@ -837,7 +843,8 @@ public final class MCPIntegrationManager: Sendable {
                     name: "execution_success",
                     value: 1.0,
                     unit: "count"
-                ))
+                )
+            )
 
             // Publish execution event
             await eventSystem.publish(
@@ -849,7 +856,8 @@ public final class MCPIntegrationManager: Sendable {
                         "success": AnyCodable(result.success),
                         "execution_time": AnyCodable(executionTime),
                     ]
-                ))
+                )
+            )
 
             return result
 
@@ -863,7 +871,8 @@ public final class MCPIntegrationManager: Sendable {
                     name: "execution_error",
                     value: 1.0,
                     unit: "count"
-                ))
+                )
+            )
 
             // Publish error event
             await eventSystem.publish(
@@ -876,7 +885,8 @@ public final class MCPIntegrationManager: Sendable {
                         "execution_time": AnyCodable(executionTime),
                     ],
                     severity: .error
-                ))
+                )
+            )
 
             throw error
         }

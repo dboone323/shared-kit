@@ -658,7 +658,10 @@ private class RiskAnalysisEngine {
         ComprehensiveRiskAssessment(overallRiskLevel: .low)
     }
 
-    func assessActionRisk(_ action: SingularityAction) async -> SafetyRiskLevel { .low }
+    func assessActionRisk(_ action: SingularityAction) async -> SafetyRiskLevel {
+        .low
+    }
+
     let riskPublisher = PassthroughSubject<ComprehensiveRiskAssessment, Never>()
 }
 

@@ -706,13 +706,23 @@ public extension AgentInput {
 }
 
 public extension AgentOutput {
-    var isConfident: Bool { confidence > 0.8 }
-    var hasReasoning: Bool { !reasoning.isEmpty }
+    var isConfident: Bool {
+        confidence > 0.8
+    }
+
+    var hasReasoning: Bool {
+        !reasoning.isEmpty
+    }
 }
 
 public extension AgentExperience {
-    var isPositive: Bool { reward > 0 }
-    var magnitude: Double { abs(reward) }
+    var isPositive: Bool {
+        reward > 0
+    }
+
+    var magnitude: Double {
+        abs(reward)
+    }
 }
 
 public extension IntelligenceLevel {

@@ -678,8 +678,13 @@ private class MonitoringSystemCoordinator {
     }
 
     func initialize() async throws {}
-    func activate() async throws { isActive = true }
-    func assessStatus() async -> MonitoringSystemStatus { .optimal }
+    func activate() async throws {
+        isActive = true
+    }
+
+    func assessStatus() async -> MonitoringSystemStatus {
+        .optimal
+    }
 
     let statusPublisher = PassthroughSubject<(MonitoringDomain, MonitoringSystemStatus), Never>()
 }
@@ -695,7 +700,10 @@ private class SingularityMonitoringEngine {
 private class SingularityEvolutionTracker {
     func initialize() async throws {}
     func startTracking() async throws {}
-    func assessEvolutionProgress() async -> Double { 0.85 }
+    func assessEvolutionProgress() async -> Double {
+        0.85
+    }
+
     func finalizeTracking() async throws {}
 }
 
@@ -704,7 +712,10 @@ private class UniversalSingularityGuidanceCoordinator {
     func initialize() async throws {}
     func initializeSystems() async throws {}
     func executeGuidance(_ guidance: SingularityGuidance) async throws {}
-    func assessGuidanceEffectiveness() async -> Double { 0.92 }
+    func assessGuidanceEffectiveness() async -> Double {
+        0.92
+    }
+
     func finalizeGuidance() async throws {}
 }
 
@@ -720,7 +731,10 @@ private class UniversalRealityManagementCoordinator {
     func initialize() async throws {}
     func startManagement() async throws {}
     func manageReality() async throws {}
-    func assessRealityStability() async -> Double { 0.98 }
+    func assessRealityStability() async -> Double {
+        0.98
+    }
+
     func finalizeManagement() async throws {}
 }
 
@@ -729,7 +743,10 @@ private class QuantumConsciousnessEternityCoordinator {
     func initialize() async throws {}
     func initializeEternity() async throws {}
     func achieveEternity() async throws {}
-    func assessEternityLevel() async -> Double { 0.96 }
+    func assessEternityLevel() async -> Double {
+        0.96
+    }
+
     func finalizeEternity() async throws {}
 }
 
@@ -737,5 +754,7 @@ private class QuantumConsciousnessEternityCoordinator {
 private class UniversalSingularityCompletionCoordinator {
     func initialize() async throws {}
     func completeSingularity() async throws {}
-    func assessCompletionProgress() async -> Double { 0.99 }
+    func assessCompletionProgress() async -> Double {
+        0.99
+    }
 }

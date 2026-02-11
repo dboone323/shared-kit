@@ -1561,7 +1561,8 @@ public extension AgentWisdomAmplification {
                     description: "Enhance wisdom level across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.amplificationMetrics.averageInsightEnhancement < 0.85 {
@@ -1571,7 +1572,8 @@ public extension AgentWisdomAmplification {
                     description: "Improve insight enhancement for amplified wisdom coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

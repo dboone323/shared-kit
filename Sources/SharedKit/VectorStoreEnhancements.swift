@@ -136,7 +136,8 @@ public actor HybridSearchEngine {
                     content: result.content,
                     score: combined,
                     source: "hybrid"
-                ))
+                )
+            )
         }
 
         // Re-sort

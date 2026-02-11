@@ -578,7 +578,8 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
                         nodes: 5
                     ),
                     estimatedEffectiveness: 0.8
-                ))
+                )
+            )
         }
 
         strategies.append(
@@ -592,7 +593,8 @@ final class RealityStabilizationNetworkEngine: RealityStabilizationNetworkProtoc
                     nodes: 3
                 ),
                 estimatedEffectiveness: 0.6
-            ))
+            )
+        )
 
         return strategies
     }
@@ -1400,7 +1402,8 @@ func demonstrateRealityStabilizationNetworks() async {
         let syncResult = try await engine.synchronizeState()
         print("✓ Network synchronization completed:")
         print(
-            "  - Synchronized nodes: \(syncResult.successfulSyncs)/\(syncResult.synchronizedNodes)")
+            "  - Synchronized nodes: \(syncResult.successfulSyncs)/\(syncResult.synchronizedNodes)"
+        )
         print("  - Average latency: \(String(format: "%.3f", syncResult.averageLatency))s")
 
         // Propagate stabilization

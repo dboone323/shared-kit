@@ -88,7 +88,8 @@ public actor QuantumComputingIntegration {
         activeCircuits.append(optimizedCircuit)
 
         logger.info(
-            "✅ Quantum optimization completed - Advantage: \(String(format: "%.2f", advantage))x")
+            "✅ Quantum optimization completed - Advantage: \(String(format: "%.2f", advantage))x"
+        )
 
         return optimizationResult
     }
@@ -190,7 +191,8 @@ public actor QuantumComputingIntegration {
 
                 } catch {
                     self.logger.error(
-                        "Quantum health monitoring error: \(error.localizedDescription)")
+                        "Quantum health monitoring error: \(error.localizedDescription)"
+                    )
                 }
 
                 // Monitor every 30 seconds
@@ -512,7 +514,8 @@ public actor QuantumCircuitBuilder {
                     qubits: [qubit.id],
                     parameters: [],
                     duration: 50
-                ))
+                )
+            )
         }
 
         // Add problem-specific gates
@@ -535,7 +538,8 @@ public actor QuantumCircuitBuilder {
                     qubits: [qubit.id],
                     parameters: [],
                     duration: 100
-                ))
+                )
+            )
         }
 
         return gates
@@ -552,7 +556,8 @@ public actor QuantumCircuitBuilder {
                     qubits: [i, i + 1],
                     parameters: [],
                     duration: 200
-                ))
+                )
+            )
         }
 
         // Add rotation gates
@@ -563,7 +568,8 @@ public actor QuantumCircuitBuilder {
                     qubits: [qubit.id],
                     parameters: [Double.random(in: 0..<2 * .pi)],
                     duration: 100
-                ))
+                )
+            )
         }
 
         return gates
@@ -581,7 +587,8 @@ public actor QuantumCircuitBuilder {
                         qubits: [i, j],
                         parameters: [],
                         duration: 300
-                    ))
+                    )
+                )
             }
         }
 
@@ -608,7 +615,8 @@ public actor QuantumCircuitBuilder {
                     qubits: [qubit.id],
                     parameters: [],
                     duration: 50
-                ))
+                )
+            )
         }
 
         return gates

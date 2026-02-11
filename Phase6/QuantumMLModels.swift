@@ -133,7 +133,8 @@ public actor QAOAOptimizer {
                     if paramIdx + 2 < parameters.count {
                         circuitOutput =
                             circuitOutput * parameters[paramIdx] + sin(
-                                circuitOutput + parameters[paramIdx + 1]) * parameters[paramIdx + 2]
+                                circuitOutput + parameters[paramIdx + 1]
+                            ) * parameters[paramIdx + 2]
                     }
                 }
             }
@@ -261,7 +262,8 @@ public actor VariationalQuantumClassifier {
                 if paramIdx + 2 < parameters.count {
                     circuitOutput =
                         circuitOutput * parameters[paramIdx] + sin(
-                            circuitOutput + parameters[paramIdx + 1]) * parameters[paramIdx + 2]
+                            circuitOutput + parameters[paramIdx + 1]
+                        ) * parameters[paramIdx + 2]
                 }
             }
         }
@@ -316,7 +318,8 @@ public actor QuantumSVM {
             .map(\.0)
 
         logger.info(
-            "✅ Quantum SVM training completed with \(self.supportVectors.count) support vectors")
+            "✅ Quantum SVM training completed with \(self.supportVectors.count) support vectors"
+        )
     }
 
     public func predict(_ input: [Double]) async throws -> Int {
@@ -527,7 +530,8 @@ public actor QuantumNeuralNetwork {
             for neuron in 0..<weights[layer].count {
                 for weight in 0..<weights[layer][neuron].count {
                     weights[layer][neuron][weight] += Double.random(
-                        in: -learningRate..<learningRate)
+                        in: -learningRate..<learningRate
+                    )
                 }
             }
         }

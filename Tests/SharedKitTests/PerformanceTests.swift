@@ -23,7 +23,7 @@ final class PerformanceTests: XCTestCase {
     }
 
     @available(macOS 12.0, iOS 15.0, *)
-    func testHybridSearchCalculationPerformance() async {
+    func testHybridSearchCalculationPerformance() {
         // We can't easily init HybridSearchEngine without a PostgresVectorStore,
         // but we can benchmark the calculation logic if we could access it.
         // However, it's private.

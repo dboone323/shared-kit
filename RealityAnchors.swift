@@ -295,7 +295,8 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
                     message: "Anchor energy budget exceeds available capacity",
                     severity: .critical,
                     suggestion: "Reduce energy requirements or increase energy allocation"
-                ))
+                )
+            )
         }
 
         // Check dimensional span
@@ -305,7 +306,8 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
                     message: "Dimensional span exceeds maximum supported dimensions",
                     severity: .critical,
                     suggestion: "Reduce dimensional span to 11 or fewer dimensions"
-                ))
+                )
+            )
         }
 
         // Check stability requirements
@@ -315,7 +317,8 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
                     message: "Very high stability requirements may limit anchor flexibility",
                     severity: .warning,
                     suggestion: "Consider balancing stability with operational requirements"
-                ))
+                )
+            )
         }
 
         return ValidationResult(
@@ -339,7 +342,8 @@ final class RealityAnchorsEngine: RealityAnchorsProtocol, AnchorStabilizationPro
                     message: "Reinforcement energy injection exceeds safe limits",
                     severity: .critical,
                     suggestion: "Reduce energy injection or implement gradual reinforcement"
-                ))
+                )
+            )
         }
 
         return ValidationResult(

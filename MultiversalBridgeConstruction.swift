@@ -992,14 +992,16 @@ func demonstrateMultiversalBridgeConstruction() async {
             "  - Overall compatibility: \(String(format: "%.2f", compatibilityAnalysis.overallCompatibility))"
         )
         print(
-            "  - Recommended bridge type: \(compatibilityAnalysis.recommendedBridgeType.rawValue)")
+            "  - Recommended bridge type: \(compatibilityAnalysis.recommendedBridgeType.rawValue)"
+        )
         print("  - Compatibility issues: \(compatibilityAnalysis.compatibilityIssues.count)")
 
         // Calculate bridge parameters
         let bridgeParameters = await engine.calculateBridgeParameters(compatibilityAnalysis)
         print("✓ Bridge parameters calculated:")
         print(
-            "  - Energy requirement: \(String(format: "%.0f", bridgeParameters.energyRequirement))")
+            "  - Energy requirement: \(String(format: "%.0f", bridgeParameters.energyRequirement))"
+        )
         print(
             "  - Connection strength: \(String(format: "%.2f", bridgeParameters.connectionStrength))"
         )

@@ -249,7 +249,8 @@ public final class PredictiveMaintenanceSystem: ObservableObject {
         }
 
         logger.info(
-            "🔧 Executing maintenance: \(schedule.action.rawValue) for \(schedule.component)")
+            "🔧 Executing maintenance: \(schedule.action.rawValue) for \(schedule.component)"
+        )
 
         await MainActor.run {
             updateMaintenanceStatus(scheduleId, status: .inProgress)

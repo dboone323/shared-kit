@@ -529,7 +529,8 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
             try await executeSuperpositionOrchestration(orchestration)
         case .quantum_interference_orchestration:
             try await executeQuantumInterferenceOrchestration(
-                orchestration)
+                orchestration
+            )
         case .coherence_driven_orchestration:
             try await executeCoherenceDrivenOrchestration(orchestration)
         case .universal_quantum_orchestration:
@@ -548,7 +549,8 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
             quantumOperationResults.values.map(\.entanglementStrength).reduce(0, +)
             / Double(max(quantumOperationResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
-            orchestration.consciousnessLevel)
+            orchestration.consciousnessLevel
+        )
 
         return QuantumOrchestrationResult(
             orchestrationId: orchestration.orchestrationId,
@@ -829,13 +831,15 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let frameworkContributions = Dictionary(
             uniqueKeysWithValues: operation.targetFrameworks.map { framework in
                 (framework.frameworkId, Double.random(in: 0.1...0.5))
-            })
+            }
+        )
 
         return QuantumOperationResult(
             operationId: operation.operationId,
             success: success,
             quantumResult: AnyCodable(
-                "Quantum operation \(operation.operationType.rawValue) completed"),
+                "Quantum operation \(operation.operationType.rawValue) completed"
+            ),
             coherenceAchieved: coherenceAchieved,
             entanglementStrength: entanglementStrength,
             quantumProcessingTime: processingTime,
@@ -977,7 +981,8 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
                         ($0, Double.random(in: 0.7...0.9))
-                    })
+                    }
+                )
             )
             states[operation.operationId] = state
         }
@@ -999,7 +1004,8 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
                         ($0, Double.random(in: 0.8...0.95))
-                    })
+                    }
+                )
             )
             states[operation.operationId] = state
         }
@@ -1021,7 +1027,8 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
                         ($0, Double.random(in: 0.75...0.9))
-                    })
+                    }
+                )
             )
             states[operation.operationId] = state
         }
@@ -1043,7 +1050,8 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
                         ($0, Double.random(in: 0.7...0.85))
-                    })
+                    }
+                )
             )
             states[operation.operationId] = state
         }
@@ -1065,7 +1073,8 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
                 partnerStates: Dictionary(
                     uniqueKeysWithValues: operation.entanglementPartners.map {
                         ($0, Double.random(in: 0.9...1.0))
-                    })
+                    }
+                )
             )
             states[operation.operationId] = state
         }

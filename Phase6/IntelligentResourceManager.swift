@@ -937,7 +937,8 @@ public final class IntelligentResourceManager: ObservableObject {
         }
 
         logger.info(
-            "🎯 Cross-resource optimization score: \(String(format: "%.3f", optimizationScore))")
+            "🎯 Cross-resource optimization score: \(String(format: "%.3f", optimizationScore))"
+        )
     }
 
     private func updateOptimizationScore() async {

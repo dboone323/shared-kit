@@ -390,7 +390,8 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
         )
 
         let universalOutput = try await universalIntelligence.coordinateUniversalIntelligence(
-            input: universalInput)
+            input: universalInput
+        )
 
         // Create domain results
         var domainResults: [IntelligenceDomain: DomainResult] = [:]
@@ -424,7 +425,8 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
             domainResults: domainResults,
             quantumEnhancement: coordinationResult.quantumCoherence,
             consciousnessAmplification: calculateConsciousnessAmplification(
-                operation.consciousnessLevel),
+                operation.consciousnessLevel
+            ),
             executionTime: Date().timeIntervalSince(startTime),
             insights: universalOutput.universalInsights
         )
@@ -493,9 +495,11 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
                 let coverage =
                     Double(domainFrameworks.count)
                     / Double(
-                        max(registryStatus.totalFrameworks / IntelligenceDomain.allCases.count, 1))
+                        max(registryStatus.totalFrameworks / IntelligenceDomain.allCases.count, 1)
+                    )
                 return (domain, min(coverage, 1.0))
-            })
+            }
+        )
 
         let frameworkHealth = Dictionary(
             uniqueKeysWithValues: FrameworkType.allCases.map { type in
@@ -505,7 +509,8 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
                         ? 0.0
                         : typeFrameworks.map(\.health).reduce(0, +) / Double(typeFrameworks.count)
                 return (type, health)
-            })
+            }
+        )
 
         return UniversalFrameworkStatus(
             operational: registryStatus.operational && coordinatorStatus.operational,
@@ -534,7 +539,8 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
                 // Critical constraints must be satisfied
                 guard try await validateConstraint(constraint, operation: operation) else {
                     throw MCPFrameworkError.constraintViolation(
-                        "Critical constraint not satisfied: \(constraint.constraintType.rawValue)")
+                        "Critical constraint not satisfied: \(constraint.constraintType.rawValue)"
+                    )
                 }
             }
         }
@@ -587,7 +593,8 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
 
         guard !selectedFrameworks.isEmpty else {
             throw MCPFrameworkError.noSuitableFrameworks(
-                "No suitable frameworks found for operation \(operation.operationId)")
+                "No suitable frameworks found for operation \(operation.operationId)"
+            )
         }
 
         return selectedFrameworks
@@ -683,7 +690,8 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
         return Dictionary(
             uniqueKeysWithValues: quantumResults.map { result in
                 (result.frameworkId, result)
-            })
+            }
+        )
     }
 
     private func executeUniversalCoordination(_ coordination: MCPFrameworkCoordination) async throws

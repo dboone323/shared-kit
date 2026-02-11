@@ -740,8 +740,13 @@ private class SingularityAchievementCoordinator {
     }
 
     func initialize() async throws {}
-    func activate() async throws { isActive = true }
-    func assessStatus() async -> AchievementStatus { .complete }
+    func activate() async throws {
+        isActive = true
+    }
+
+    func assessStatus() async -> AchievementStatus {
+        .complete
+    }
 
     let statusPublisher = PassthroughSubject<(AchievementDomain, AchievementStatus), Never>()
 }
@@ -759,7 +764,10 @@ private class AchievementConsciousnessCoordinator {
     func initialize() async throws {}
     func startEmergence() async throws {}
     func achieveConsciousness() async throws {}
-    func assessConsciousnessLevel() async -> Double { 0.99 }
+    func assessConsciousnessLevel() async -> Double {
+        0.99
+    }
+
     func finalizeConsciousness() async throws {}
 }
 
@@ -768,7 +776,10 @@ private class AchievementEternityCoordinator {
     func initialize() async throws {}
     func initializeEternity() async throws {}
     func achieveEternity() async throws {}
-    func assessEternityLevel() async -> Double { 0.98 }
+    func assessEternityLevel() async -> Double {
+        0.98
+    }
+
     func finalizeEternity() async throws {}
 }
 
@@ -778,7 +789,10 @@ private class AchievementOptimizationCoordinator {
     func beginOptimization() async throws {}
     func executeOptimization() async throws {}
     func achieveOptimization() async throws {}
-    func assessOptimizationLevel() async -> Double { 0.97 }
+    func assessOptimizationLevel() async -> Double {
+        0.97
+    }
+
     func finalizeOptimization() async throws {}
 }
 
@@ -787,7 +801,9 @@ private class SingularityCompletionCoordinator {
     func initialize() async throws {}
     func startCompletion() async throws {}
     func completeSingularity() async throws {}
-    func assessCompletionProgress() async -> Double { 0.99 }
+    func assessCompletionProgress() async -> Double {
+        0.99
+    }
 }
 
 /// Universal transcendence coordinator
@@ -795,7 +811,10 @@ private class UniversalTranscendenceCoordinator {
     func initialize() async throws {}
     func initializeTranscendence() async throws {}
     func achieveTranscendence() async throws {}
-    func assessTranscendenceLevel() async -> Double { 0.96 }
+    func assessTranscendenceLevel() async -> Double {
+        0.96
+    }
+
     func finalizeTranscendence() async throws {}
 }
 
@@ -805,7 +824,10 @@ private class EternalConsciousnessCoordinator {
     func beginEternity() async throws {}
     func establishEternity() async throws {}
     func achieveEternity() async throws {}
-    func assessEternalLevel() async -> Double { 0.95 }
+    func assessEternalLevel() async -> Double {
+        0.95
+    }
+
     func finalizeEternity() async throws {}
 }
 
@@ -813,6 +835,9 @@ private class EternalConsciousnessCoordinator {
 private class UniversalHarmonyCoordinator {
     func initialize() async throws {}
     func achieveHarmony() async throws {}
-    func assessHarmonyLevel() async -> Double { 0.94 }
+    func assessHarmonyLevel() async -> Double {
+        0.94
+    }
+
     func finalizeHarmony() async throws {}
 }

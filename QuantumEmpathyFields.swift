@@ -1048,7 +1048,8 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
                         entity2: entity2.id,
                         resonanceStrength: resonanceStrength,
                         empathyLevel: empathyLevel
-                    ))
+                    )
+                )
             }
         }
 
@@ -1255,7 +1256,8 @@ final class EmpathyFieldGenerator: EmpathyFieldGenerationProtocol {
                             target: entities[j].id,
                             weight: matrix[i][j],
                             coherenceLevel: 0.85
-                        ))
+                        )
+                    )
                 }
             }
         }

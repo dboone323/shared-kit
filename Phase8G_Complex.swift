@@ -22,8 +22,13 @@ public struct Complex: Sendable, Codable, Equatable {
         )
     }
 
-    public var magnitude: Double { sqrt(real * real + imaginary * imaginary) }
-    public var phase: Double { atan2(imaginary, real) }
+    public var magnitude: Double {
+        sqrt(real * real + imaginary * imaginary)
+    }
+
+    public var phase: Double {
+        atan2(imaginary, real)
+    }
 }
 
 // For this demo target, use Complex directly; other files may refer to ComplexNumber via a local alias.

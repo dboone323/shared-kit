@@ -182,7 +182,9 @@ public class NaturalLanguageProcessor: ObservableObject {
                     contentsOf: Bundle.main.url(
                         forResource: "SentimentPolarity",
                         withExtension: "mlmodelc"
-                    ) ?? URL(fileURLWithPath: "")))
+                    ) ?? URL(fileURLWithPath: "")
+                )
+            )
         } catch {
             // Fallback if model loading fails
             return nil
@@ -549,7 +551,8 @@ public class ComputerVisionProcessor: ObservableObject {
                             text: topCandidate.string,
                             boundingBox: observation.boundingBox,
                             confidence: Double(topCandidate.confidence)
-                        ))
+                        )
+                    )
                 }
 
                 let recognizedText = recognizedTextParts.joined(separator: "\n")
@@ -767,22 +770,26 @@ public class PredictiveAnalyticsEngine: ObservableObject {
         if prediction < 0.5 {
             if features.timeConsistency < 0.6 {
                 recommendations.append(
-                    "Try to perform this habit at the same time each day to build consistency")
+                    "Try to perform this habit at the same time each day to build consistency"
+                )
             }
 
             if features.currentStreak == 0 {
                 recommendations.append(
-                    "Start with a small version of this habit to rebuild momentum")
+                    "Start with a small version of this habit to rebuild momentum"
+                )
             }
 
             if features.difficulty > 0.7 {
                 recommendations.append(
-                    "Consider reducing the difficulty to increase success likelihood")
+                    "Consider reducing the difficulty to increase success likelihood"
+                )
             }
         } else if prediction > 0.8 {
             if features.difficulty < 0.5 {
                 recommendations.append(
-                    "You're doing great! Consider increasing the challenge slightly")
+                    "You're doing great! Consider increasing the challenge slightly"
+                )
             }
             recommendations.append("Keep up the excellent consistency!")
         }
@@ -806,7 +813,8 @@ public class PredictiveAnalyticsEngine: ObservableObject {
                 weight: 0.4,
                 description:
                 "Based on your past completion rate of \(Int(features.completionRate * 100))%"
-            ))
+            )
+        )
 
         factors.append(
             PredictionFactor(
@@ -816,7 +824,8 @@ public class PredictiveAnalyticsEngine: ObservableObject {
                     : features.currentStreak == 0 ? .negative : .neutral,
                 weight: 0.2,
                 description: "Your current streak is \(features.currentStreak) days"
-            ))
+            )
+        )
 
         factors.append(
             PredictionFactor(
@@ -826,7 +835,8 @@ public class PredictiveAnalyticsEngine: ObservableObject {
                     : features.timeConsistency < 0.4 ? .negative : .neutral,
                 weight: 0.15,
                 description: "You perform this habit consistently at similar times"
-            ))
+            )
+        )
 
         return factors
     }

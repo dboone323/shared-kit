@@ -1560,7 +1560,8 @@ public extension AgentCreativitySystems {
                     description: "Enhance innovation level across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.creativityMetrics.averageCreativityEnhancement < 0.85 {
@@ -1570,7 +1571,8 @@ public extension AgentCreativitySystems {
                     description: "Improve creativity enhancement for amplified innovation coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

@@ -711,7 +711,8 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                 MCPWorkflowValidationError(
                     message: "Workflow must contain at least one step",
                     severity: .error
-                ))
+                )
+            )
         }
 
         // Check for duplicate step IDs
@@ -722,7 +723,8 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                 MCPWorkflowValidationError(
                     message: "Workflow contains duplicate step IDs",
                     severity: .error
-                ))
+                )
+            )
         }
 
         // Check for missing dependencies
@@ -734,7 +736,8 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                             stepId: step.id,
                             message: "Step depends on non-existent step: \(dependency)",
                             severity: .error
-                        ))
+                        )
+                    )
                 }
             }
         }
@@ -745,7 +748,8 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                 MCPWorkflowValidationError(
                     message: "Workflow contains circular dependencies",
                     severity: .error
-                ))
+                )
+            )
         }
 
         // Check for unreachable steps
@@ -756,14 +760,16 @@ public final class AdvancedMCPWorkflowOrchestrator: MCPWorkflowOrchestrator {
                     MCPWorkflowValidationWarning(
                         stepId: step.id,
                         message: "Step is unreachable and will never execute"
-                    ))
+                    )
+                )
             }
         }
 
         // Performance suggestions
         if workflow.steps.count > 10 {
             suggestions.append(
-                "Consider breaking large workflows into smaller, reusable components")
+                "Consider breaking large workflows into smaller, reusable components"
+            )
         }
 
         let parallelSteps = workflow.steps.filter { $0.executionMode == .parallel }
@@ -1237,7 +1243,8 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                     description:
                     "Converted \(parallelizableSteps.count) steps to parallel execution",
                     impact: 0.3
-                ))
+                )
+            )
         }
 
         // Suggest caching for repeated operations
@@ -1249,7 +1256,8 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                     description:
                     "Consider caching results for \(repeatedTools.count) repeated tool calls",
                     impact: 0.2
-                ))
+                )
+            )
         }
 
         // Consolidate similar steps
@@ -1262,7 +1270,8 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                     description:
                     "Consolidated \(workflow.steps.count - consolidatedSteps.count) similar steps",
                     impact: 0.15
-                ))
+                )
+            )
         }
 
         let optimizedWorkflow = MCPWorkflow(
@@ -1320,14 +1329,16 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                         start: sortedExecutions.first!.startTime,
                         end: sortedExecutions.last!.startTime
                     )
-                ))
+                )
+            )
         }
 
         // Identify failure patterns
         let failedExecutions = executions.filter { $0.state == .failed }
         if Double(failedExecutions.count) / Double(executions.count) > 0.1 {
             recommendations.append(
-                "High failure rate detected - review error handling and retry policies")
+                "High failure rate detected - review error handling and retry policies"
+            )
         }
 
         return MCPWorkflowAnalysis(
@@ -1350,7 +1361,8 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                     description: "Consider parallelizing \(sequentialSteps.count) sequential steps",
                     priority: .medium,
                     estimatedBenefit: 0.25
-                ))
+                )
+            )
         }
 
         // Check for missing retry logic
@@ -1363,7 +1375,8 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                     "Add retry logic to \(stepsWithoutRetry.count) steps without error handling",
                     priority: .high,
                     estimatedBenefit: 0.15
-                ))
+                )
+            )
         }
 
         // Check for long-running steps
@@ -1375,7 +1388,8 @@ public final class BasicMCPWorkflowOptimizer: MCPWorkflowOptimizer, Sendable {
                     description: "Review timeouts for \(longRunningSteps.count) long-running steps",
                     priority: .medium,
                     estimatedBenefit: 0.1
-                ))
+                )
+            )
         }
 
         return suggestions

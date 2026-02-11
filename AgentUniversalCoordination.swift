@@ -1573,7 +1573,8 @@ public extension AgentUniversalCoordination {
                     description: "Enhance unification level across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.universalCoordinationMetrics.averageUniversalCoordinationEnhancement < 0.85 {
@@ -1583,7 +1584,8 @@ public extension AgentUniversalCoordination {
                     description: "Improve universal coordination enhancement for amplified unified operation coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

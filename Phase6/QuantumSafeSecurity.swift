@@ -275,7 +275,8 @@ public actor QuantumSafeSecurity {
                     title: "Upgrade Cryptographic Algorithms",
                     description: "Current encryption strength is below recommended levels",
                     action: "Migrate to stronger post-quantum algorithms"
-                ))
+                )
+            )
         }
 
         if key.score < 0.7 {
@@ -285,7 +286,8 @@ public actor QuantumSafeSecurity {
                     title: "Key Health Issues",
                     description: "Key rotation and health checks need attention",
                     action: "Perform immediate key rotation and health assessment"
-                ))
+                )
+            )
         }
 
         if threat.score < 0.6 {
@@ -295,7 +297,8 @@ public actor QuantumSafeSecurity {
                     title: "Threat Detection Gap",
                     description: "Threat detection capabilities need enhancement",
                     action: "Implement advanced quantum threat monitoring"
-                ))
+                )
+            )
         }
 
         if compliance.score < 0.8 {
@@ -305,7 +308,8 @@ public actor QuantumSafeSecurity {
                     title: "Compliance Improvements",
                     description: "Security compliance needs attention",
                     action: "Review and update security policies"
-                ))
+                )
+            )
         }
 
         return recommendations
@@ -385,7 +389,8 @@ public actor QuantumSafeCryptoManager {
         // Simulate quantum-safe decryption
         // In real implementation, this would use actual Kyber/Dilithium libraries
         return Data(
-            (0..<ciphertext.ciphertext.count - 32).map { _ in UInt8.random(in: 0...255) })
+            (0..<ciphertext.ciphertext.count - 32).map { _ in UInt8.random(in: 0...255) }
+        )
     }
 
     /// Sign data using quantum-safe signature
@@ -431,7 +436,8 @@ public actor QuantumSafeCryptoManager {
                     securityLevel: state.performanceMetrics.securityLevel,
                     performanceScore: score,
                     isActive: state.isActive
-                ))
+                )
+            )
         }
 
         let averageScore = totalScore / Double(activeAlgorithms.count)
@@ -917,7 +923,9 @@ public struct CryptographicAssessment: Sendable {
     public let quantumResistance: QuantumResistance
     public let assessmentDate: Date
 
-    public var score: Double { overallScore }
+    public var score: Double {
+        overallScore
+    }
 }
 
 /// Algorithm assessment
@@ -958,7 +966,9 @@ public struct KeyHealthAssessment: Sendable {
     public let recommendations: [String]
     public let assessmentDate: Date
 
-    public var score: Double { overallScore }
+    public var score: Double {
+        overallScore
+    }
 }
 
 /// Key metadata
@@ -980,7 +990,9 @@ public struct ThreatAssessment: Sendable {
     public let threatPatterns: [ThreatPattern]
     public let assessmentDate: Date
 
-    public var score: Double { overallScore }
+    public var score: Double {
+        overallScore
+    }
 }
 
 /// Threat pattern
@@ -1020,7 +1032,9 @@ public struct ComplianceAssessment: Sendable {
     public let violations: [ComplianceStandard]
     public let assessmentDate: Date
 
-    public var score: Double { overallScore }
+    public var score: Double {
+        overallScore
+    }
 }
 
 /// Compliance standard

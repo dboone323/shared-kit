@@ -398,7 +398,7 @@ private final class ThreatDetector {
         #else
             let fileManager = FileManager.default
 
-            /// Check for common jailbreak files
+            // Check for common jailbreak files
             let jailbreakPaths = [
                 "/Applications/Cydia.app",
                 "/Library/MobileSubstrate/MobileSubstrate.dylib",
@@ -413,7 +413,7 @@ private final class ThreatDetector {
                 }
             }
 
-            /// Check if we can write to system directories
+            // Check if we can write to system directories
             let testPath = "/private/test"
             do {
                 try "test".write(toFile: testPath, atomically: true, encoding: .utf8)

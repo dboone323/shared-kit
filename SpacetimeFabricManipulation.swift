@@ -319,7 +319,8 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
                     message: "Fabric elasticity outside safe operating range",
                     severity: .critical,
                     suggestion: "Adjust elasticity to range 0.1-10.0"
-                ))
+                )
+            )
         }
 
         // Check tensile strength
@@ -329,7 +330,8 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
                     message: "Tensile strength below recommended threshold",
                     severity: .warning,
                     suggestion: "Consider increasing tensile strength for stability"
-                ))
+                )
+            )
         }
 
         // Check quantum coherence
@@ -339,7 +341,8 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
                     message: "Quantum coherence below optimal level",
                     severity: .warning,
                     suggestion: "Implement coherence enhancement protocols"
-                ))
+                )
+            )
         }
 
         return ValidationResult(
@@ -363,7 +366,8 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
                     message: "Distortion energy requirement exceeds available capacity",
                     severity: .critical,
                     suggestion: "Reduce distortion intensity or increase energy allocation"
-                ))
+                )
+            )
         }
 
         // Check causality preservation
@@ -375,7 +379,8 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
                     message: "Causality violation without preservation constraints",
                     severity: .critical,
                     suggestion: "Enable causality preservation or change distortion type"
-                ))
+                )
+            )
         }
 
         // Check curvature limits
@@ -385,7 +390,8 @@ final class SpacetimeFabricManipulationEngine: SpacetimeFabricManipulationProtoc
                     message: "Distortion intensity exceeds maximum curvature limit",
                     severity: .critical,
                     suggestion: "Reduce distortion intensity or increase curvature limit"
-                ))
+                )
+            )
         }
 
         return ValidationResult(
@@ -1296,7 +1302,8 @@ func demonstrateSpacetimeFabricManipulation() async {
         )
         print("  - Energy density: \(String(format: "%.2f", analysis.energyAnalysis.totalEnergy))")
         print(
-            "  - Stability: \(String(format: "%.2f", analysis.stabilityAnalysis.overallStability))")
+            "  - Stability: \(String(format: "%.2f", analysis.stabilityAnalysis.overallStability))"
+        )
         print("  - Quantum fluctuations: \(analysis.fluctuationAnalysis.fluctuationCount)")
 
         // Create a spacetime distortion

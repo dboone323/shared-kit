@@ -552,7 +552,8 @@ final class RealitySynchronizationEngineImpl: RealitySynchronizationProtocol,
     private func executeOperation(_ operation: SynchronizationOperation) async throws -> OpResult {
         // Simulate operation execution
         try await Task.sleep(
-            nanoseconds: UInt64(operation.priority == .critical ? 500_000_000 : 1_000_000_000))
+            nanoseconds: UInt64(operation.priority == .critical ? 500_000_000 : 1_000_000_000)
+        )
 
         return OpResult(
             operationId: operation.id,

@@ -1623,7 +1623,8 @@ public extension MCPWorkflowAutomationSystem {
                     description: "Optimize automation efficiency through better tool orchestration",
                     priority: .high,
                     expectedBenefit: 0.2
-                ))
+                )
+            )
         }
 
         if status.executionMetrics.successRate < 0.9 {
@@ -1633,7 +1634,8 @@ public extension MCPWorkflowAutomationSystem {
                     description: "Improve automation reliability through better error handling",
                     priority: .high,
                     expectedBenefit: 0.15
-                ))
+                )
+            )
         }
 
         return recommendations

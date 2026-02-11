@@ -1597,7 +1597,8 @@ public extension AgentWorkflowOptimizationSystem {
                     description: "Enhance workflow performance through targeted optimizations",
                     priority: .high,
                     expectedBenefit: 0.25
-                ))
+                )
+            )
         }
 
         if status.intelligenceMetrics.averageUtilizationIncrease < 0.25 {
@@ -1607,7 +1608,8 @@ public extension AgentWorkflowOptimizationSystem {
                     description: "Maximize intelligence utilization across agents and workflows",
                     priority: .high,
                     expectedBenefit: 0.3
-                ))
+                )
+            )
         }
 
         return recommendations

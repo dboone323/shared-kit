@@ -553,7 +553,8 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
                 targetValue: constraints.stabilityThreshold,
                 tolerance: 0.05,
                 measurement: .maximize
-            ))
+            )
+        )
 
         // Consciousness objective
         objectives.append(
@@ -566,7 +567,8 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
                     + constraints.consciousnessLimits.upperBound) / 2,
                 tolerance: 0.1,
                 measurement: .target
-            ))
+            )
+        )
 
         // Energy efficiency objective
         objectives.append(
@@ -579,7 +581,8 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
                     + constraints.energyBoundaries.upperBound) / 2,
                 tolerance: 0.15,
                 measurement: .target
-            ))
+            )
+        )
 
         // Ethical objectives
         for constraint in constraints.ethicalBoundaries {
@@ -593,7 +596,8 @@ final class AutonomousRealityOptimizationEngine: AutonomousRealityOptimizationPr
                         + constraint.boundaries.upperBound) / 2,
                     tolerance: 0.05,
                     measurement: .range
-                ))
+                )
+            )
         }
 
         return objectives
@@ -695,7 +699,8 @@ final class AdaptiveOptimizationAlgorithm: AdaptiveOptimizationAlgorithmProtocol
                                     adaptationRate: self.algorithmParameters.adaptationRate,
                                     convergenceSpeed: Double(iteration),
                                     issueResolution: 1.0 - Double(feedback.issues.count) / 10.0
-                                ))
+                                )
+                            )
                         }
                     }
 
@@ -717,7 +722,8 @@ final class AdaptiveOptimizationAlgorithm: AdaptiveOptimizationAlgorithmProtocol
 
                         // Check convergence
                         let improvement = await abs(
-                            bestScore - self.evaluateParameters(currentParameters))
+                            bestScore - self.evaluateParameters(currentParameters)
+                        )
                         convergence = improvement < self.algorithmParameters.convergenceThreshold
 
                         currentParameters = bestParameters
@@ -1131,7 +1137,8 @@ final class BasicParameterValidationEngine: ParameterValidationEngine {
                     issue: "Structural integrity too low",
                     severity: 0.8,
                     suggestion: "Increase structural integrity parameters"
-                ))
+                )
+            )
             score -= 0.2
         }
 
@@ -1143,7 +1150,8 @@ final class BasicParameterValidationEngine: ParameterValidationEngine {
                     issue: "Awareness level exceeds maximum",
                     severity: 0.6,
                     suggestion: "Reduce consciousness amplification"
-                ))
+                )
+            )
             score -= 0.1
         }
 
@@ -1155,7 +1163,8 @@ final class BasicParameterValidationEngine: ParameterValidationEngine {
                     issue: "Quantum coherence too low",
                     severity: 0.7,
                     suggestion: "Improve quantum stability parameters"
-                ))
+                )
+            )
             score -= 0.15
         }
 

@@ -526,7 +526,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
             operationResults.values.map(\.quantumEnhancement).reduce(0, +)
             / Double(max(operationResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
-            coordination.consciousnessLevel)
+            coordination.consciousnessLevel
+        )
 
         return CoordinationResult(
             coordinationId: coordination.coordinationId,
@@ -570,7 +571,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
             stageResults.values.map(\.stageMetrics.quantumContribution).reduce(0, +)
             / Double(max(stageResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
-            workflow.consciousnessLevel)
+            workflow.consciousnessLevel
+        )
 
         return WorkflowResult(
             workflowId: workflow.workflowId,
@@ -666,7 +668,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                     try await validateCoordinationConstraint(constraint, coordination: coordination)
                 else {
                     throw CoordinationError.constraintViolation(
-                        "Critical constraint not satisfied: \(constraint.constraintType.rawValue)")
+                        "Critical constraint not satisfied: \(constraint.constraintType.rawValue)"
+                    )
                 }
             }
         }
@@ -771,7 +774,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 result: AnyCodable("Quantum-entangled coordination completed"),
                 quantumEnhancement: 1.0,
                 consciousnessAmplification: calculateConsciousnessAmplification(
-                    operation.consciousnessLevel),
+                    operation.consciousnessLevel
+                ),
                 executionTime: Double.random(in: 0.1...1.0),
                 insights: []
             )
@@ -794,7 +798,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
                 result: AnyCodable("Consciousness-driven coordination completed"),
                 quantumEnhancement: 0.9,
                 consciousnessAmplification: calculateConsciousnessAmplification(
-                    operation.consciousnessLevel) * 1.2,
+                    operation.consciousnessLevel
+                ) * 1.2,
                 executionTime: Double.random(in: 0.2...1.5),
                 insights: []
             )
@@ -815,7 +820,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
             results.values.map(\.quantumEnhancement).reduce(0, +)
             / Double(max(results.count, 1))
         let consciousnessIntegration = calculateConsciousnessAmplification(
-            coordination.consciousnessLevel)
+            coordination.consciousnessLevel
+        )
         let ethicalCompliance =
             coordination.consciousnessLevel.rawValue >= "transcendent" ? 0.9 : 0.7
         let performanceScore =
@@ -841,7 +847,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
             for dependency in stage.dependencies {
                 guard stageIds.contains(dependency) else {
                     throw CoordinationError.invalidDependency(
-                        "Stage \(stage.stageId) depends on non-existent stage \(dependency)")
+                        "Stage \(stage.stageId) depends on non-existent stage \(dependency)"
+                    )
                 }
             }
         }
@@ -853,7 +860,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         for dependency in stage.dependencies {
             guard completedStages.contains(dependency) else {
                 throw CoordinationError.dependencyNotSatisfied(
-                    "Dependency \(dependency) not satisfied for stage \(stage.stageId)")
+                    "Dependency \(dependency) not satisfied for stage \(stage.stageId)"
+                )
             }
         }
     }
@@ -917,7 +925,8 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
             stageResults.values.map(\.stageMetrics.quantumContribution).reduce(0, +)
             / Double(max(stageResults.count, 1))
         let consciousnessIntegration = calculateConsciousnessAmplification(
-            workflow.consciousnessLevel)
+            workflow.consciousnessLevel
+        )
         let ethicalCompliance = workflow.consciousnessLevel.rawValue >= "transcendent" ? 0.9 : 0.7
         let performanceScore = (workflowEfficiency + stageSynchronization + quantumCoherence) / 3.0
 

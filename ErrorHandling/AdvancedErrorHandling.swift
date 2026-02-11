@@ -256,11 +256,25 @@ public struct ValidationError: AppErrorProtocol, Sendable {
     public let providedValue: Any?
     public let expectedFormat: String?
 
-    public var errorDescription: String? { self.userMessage }
-    public var failureReason: String? { self.technicalDetails }
-    public var recoverySuggestion: String? { self.recoverySuggestions.first }
-    public var helpAnchor: String? { "validation_help_\(self.field)" }
-    public var description: String { "Validation Error: \(self.userMessage)" }
+    public var errorDescription: String? {
+        self.userMessage
+    }
+
+    public var failureReason: String? {
+        self.technicalDetails
+    }
+
+    public var recoverySuggestion: String? {
+        self.recoverySuggestions.first
+    }
+
+    public var helpAnchor: String? {
+        "validation_help_\(self.field)"
+    }
+
+    public var description: String {
+        "Validation Error: \(self.userMessage)"
+    }
 
     public init(
         field: String,
@@ -355,11 +369,25 @@ public struct NetworkError: AppErrorProtocol, Sendable {
     public let httpMethod: String?
     public let responseData: Data?
 
-    public var errorDescription: String? { self.userMessage }
-    public var failureReason: String? { self.technicalDetails }
-    public var recoverySuggestion: String? { self.recoverySuggestions.first }
-    public var helpAnchor: String? { "network_help" }
-    public var description: String { "Network Error: \(self.userMessage)" }
+    public var errorDescription: String? {
+        self.userMessage
+    }
+
+    public var failureReason: String? {
+        self.technicalDetails
+    }
+
+    public var recoverySuggestion: String? {
+        self.recoverySuggestions.first
+    }
+
+    public var helpAnchor: String? {
+        "network_help"
+    }
+
+    public var description: String {
+        "Network Error: \(self.userMessage)"
+    }
 
     public init(
         statusCode: Int? = nil,
@@ -540,11 +568,25 @@ public struct BusinessError: AppErrorProtocol, Sendable {
     public let violatedConstraint: String
     public let affectedEntity: String?
 
-    public var errorDescription: String? { self.userMessage }
-    public var failureReason: String? { self.technicalDetails }
-    public var recoverySuggestion: String? { self.recoverySuggestions.first }
-    public var helpAnchor: String? { "business_help_\(self.businessRule)" }
-    public var description: String { "Business Error: \(self.userMessage)" }
+    public var errorDescription: String? {
+        self.userMessage
+    }
+
+    public var failureReason: String? {
+        self.technicalDetails
+    }
+
+    public var recoverySuggestion: String? {
+        self.recoverySuggestions.first
+    }
+
+    public var helpAnchor: String? {
+        "business_help_\(self.businessRule)"
+    }
+
+    public var description: String {
+        "Business Error: \(self.userMessage)"
+    }
 
     public init(
         businessRule: String,

@@ -1059,7 +1059,8 @@ public class BatteryOptimizer: ObservableObject {
         // Calculate battery drain rate
         let recentReadings = self.batteryHistory.suffix(10)
         let timeSpan = recentReadings.last!.timestamp.timeIntervalSince(
-            recentReadings.first!.timestamp)
+            recentReadings.first!.timestamp
+        )
         let levelDrop = recentReadings.first!.level - recentReadings.last!.level
 
         if timeSpan > 0, levelDrop > 0 {
@@ -1161,8 +1162,10 @@ public extension Notification.Name {
     static let performanceMemoryWarning = Notification.Name("PerformanceMemoryWarning")
     static let performanceMemoryCleanup = Notification.Name("PerformanceMemoryCleanup")
     static let performanceOptimizationChanged = Notification.Name(
-        "PerformanceOptimizationChanged")
+        "PerformanceOptimizationChanged"
+    )
     static let performanceNetworkChanged = Notification.Name("PerformanceNetworkChanged")
     static let performanceBatteryModeChanged = Notification.Name(
-        "PerformanceBatteryModeChanged")
+        "PerformanceBatteryModeChanged"
+    )
 }

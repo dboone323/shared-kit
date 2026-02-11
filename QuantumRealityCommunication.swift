@@ -45,17 +45,24 @@ final class QuantumRealityCommunicationEngine: QRCProtocol {
         return QRCResult(messageId: message.id, delivered: delivered, latency: Double.random(in: 0.001...0.02))
     }
 
-    func close(_ channel: QRCChannel) async { channels.removeValue(forKey: channel.id) }
+    func close(_ channel: QRCChannel) async {
+        channels.removeValue(forKey: channel.id)
+    }
 }
 
 enum QRCFactory {
-    static func engine() -> QuantumRealityCommunicationEngine { QuantumRealityCommunicationEngine() }
-    static func message() -> QRCMessage { QRCMessage(
-        id: UUID(),
-        payload: Data([0xAA]),
-        tags: ["sync"],
-        createdAt: Date()
-    ) }
+    static func engine() -> QuantumRealityCommunicationEngine {
+        QuantumRealityCommunicationEngine()
+    }
+
+    static func message() -> QRCMessage {
+        QRCMessage(
+            id: UUID(),
+            payload: Data([0xAA]),
+            tags: ["sync"],
+            createdAt: Date()
+        )
+    }
 }
 
 func demonstrateQuantumRealityCommunication() async {

@@ -40,7 +40,7 @@ final class OllamaEnhancementsTests: XCTestCase {
     // MARK: - ModelHealthTracker Tests
 
     @MainActor
-    func testHealthTrackerSuccess() async {
+    func testHealthTrackerSuccess() {
         let tracker = ModelHealthTracker()
 
         // New model should start healthy
@@ -54,7 +54,7 @@ final class OllamaEnhancementsTests: XCTestCase {
     }
 
     @MainActor
-    func testHealthTrackerFailure() async {
+    func testHealthTrackerFailure() {
         let tracker = ModelHealthTracker()
 
         // Multiple failures should degrade health
@@ -67,7 +67,7 @@ final class OllamaEnhancementsTests: XCTestCase {
     }
 
     @MainActor
-    func testHealthTrackerHealthiestModel() async {
+    func testHealthTrackerHealthiestModel() {
         let tracker = ModelHealthTracker()
 
         // Setup different health scores

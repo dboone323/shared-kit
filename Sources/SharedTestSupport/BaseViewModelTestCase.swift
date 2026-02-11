@@ -76,13 +76,13 @@ open class SharedViewModelTestCase: XCTestCase {
     }
 
     /// Assert async operation throws specific error
-    public func assertAsyncThrows<E>(
+    public func assertAsyncThrows<E: Error & Equatable>(
         _ operation: @escaping () async throws -> some Sendable,
         expectedError: E,
         timeout: TimeInterval = 5.0,
         file: StaticString = #file,
         line: UInt = #line
-    ) async where E: Error & Equatable {
+    ) async {
         do {
             _ = try await waitForAsync(timeout: timeout, operation: operation)
             XCTFail("Expected error but operation completed successfully", file: file, line: line)

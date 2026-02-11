@@ -296,7 +296,8 @@ public actor QuantumCompiler {
                 compilationTime: compiled.compilationTime,
                 gateCount: gateCount,
                 timestamp: Date()
-            ))
+            )
+        )
 
         return compiled
     }

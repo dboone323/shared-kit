@@ -1401,7 +1401,8 @@ public extension QuantumWorkflowIntelligenceSystem {
                     description: "Enhance quantum capabilities for superior workflow intelligence",
                     priority: .high,
                     expectedAdvantage: 0.35
-                ))
+                )
+            )
         }
 
         if status.coherenceMetrics.averageCoherenceLevel < 0.75 {
@@ -1411,7 +1412,8 @@ public extension QuantumWorkflowIntelligenceSystem {
                     description: "Optimize quantum coherence for better stability and performance",
                     priority: .high,
                     expectedAdvantage: 0.28
-                ))
+                )
+            )
         }
 
         return recommendations

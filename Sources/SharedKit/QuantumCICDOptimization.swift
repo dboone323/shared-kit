@@ -430,7 +430,8 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
             bottlenecks.append(
                 CICDBottleneck(
                     type: .buildTime, severity: .high, description: "Build time exceeds 5 minutes"
-                ))
+                )
+            )
         }
 
         if testMetrics.averageTestTime > 180.0 {
@@ -438,7 +439,8 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
                 CICDBottleneck(
                     type: .testTime, severity: .medium,
                     description: "Test execution exceeds 3 minutes"
-                ))
+                )
+            )
         }
 
         if buildMetrics.cacheHitRate < 0.5 {

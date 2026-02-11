@@ -23,8 +23,14 @@ public final class AdvancedTextProcessingTool: EnhancedMCPTool {
         self.ollamaManager = ollamaManager
     }
 
-    public func id() async -> String { "advanced_text_processor" }
-    public func name() async -> String { "Advanced Text Processor" }
+    public func id() async -> String {
+        "advanced_text_processor"
+    }
+
+    public func name() async -> String {
+        "Advanced Text Processor"
+    }
+
     public func description() async -> String {
         "Advanced text processing with AI analysis, summarization, and transformation capabilities"
     }
@@ -245,8 +251,14 @@ public final class AdvancedDataAnalysisTool: EnhancedMCPTool {
         self.ollamaManager = ollamaManager
     }
 
-    public func id() async -> String { "advanced_data_analyzer" }
-    public func name() async -> String { "Advanced Data Analyzer" }
+    public func id() async -> String {
+        "advanced_data_analyzer"
+    }
+
+    public func name() async -> String {
+        "Advanced Data Analyzer"
+    }
+
     public func description() async -> String {
         "Advanced data analysis with statistical modeling, pattern recognition, and predictive analytics"
     }
@@ -492,8 +504,14 @@ public final class AdvancedFileOperationsTool: EnhancedMCPTool {
     public let dependencies: [String] = []
     public var performanceMetrics: MCPToolMetrics = .init()
 
-    public func id() async -> String { "advanced_file_processor" }
-    public func name() async -> String { "Advanced File Processor" }
+    public func id() async -> String {
+        "advanced_file_processor"
+    }
+
+    public func name() async -> String {
+        "Advanced File Processor"
+    }
+
     public func description() async -> String {
         "Advanced file operations with intelligent processing, analysis, and transformation capabilities"
     }
@@ -935,8 +953,14 @@ public final class AdvancedWorkflowOrchestrationTool: EnhancedMCPTool {
         self.orchestrator = orchestrator
     }
 
-    public func id() async -> String { "advanced_workflow_orchestrator" }
-    public func name() async -> String { "Advanced Workflow Orchestrator" }
+    public func id() async -> String {
+        "advanced_workflow_orchestrator"
+    }
+
+    public func name() async -> String {
+        "Advanced Workflow Orchestrator"
+    }
+
     public func description() async -> String {
         "Advanced workflow orchestration with intelligent scheduling, optimization, and monitoring"
     }

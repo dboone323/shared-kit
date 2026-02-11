@@ -1540,7 +1540,8 @@ public extension AgentHarmonyNetworks {
                     description: "Enhance harmony depth across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.networksMetrics.averageUniversalHarmony < 0.85 {
@@ -1550,7 +1551,8 @@ public extension AgentHarmonyNetworks {
                     description: "Improve universal harmony for enhanced harmony networks coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

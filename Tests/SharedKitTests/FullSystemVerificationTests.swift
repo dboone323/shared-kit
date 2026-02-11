@@ -48,7 +48,7 @@ final class FullSystemVerificationTests: XCTestCase {
 
     // MARK: - Phase 4: Reliability Verification
 
-    func testReliabilityModule() async {
+    func testReliabilityModule() async throws {
         print("🛡️ Verifying Reliability Module (Steps 36-40)...")
         let reliability = Reliability.shared
 
@@ -79,7 +79,7 @@ final class FullSystemVerificationTests: XCTestCase {
             "deduped"
         }
 
-        let (res1, res2) = try! await (r1, r2)
+        let (res1, res2) = try await (r1, r2)
         XCTAssertEqual(res1, "deduped")
         XCTAssertEqual(res2, "deduped")
 

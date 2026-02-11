@@ -9,12 +9,29 @@ import Foundation
 
     private struct PlatformLogger {
         let category: String
-        init(subsystem: String, category: String) { self.category = category }
-        func debug(_ msg: String) { print("[\(category)] [DEBUG] \(msg)") }
-        func info(_ msg: String) { print("[\(category)] [INFO] \(msg)") }
-        func notice(_ msg: String) { print("[\(category)] [NOTICE] \(msg)") }
-        func error(_ msg: String) { print("[\(category)] [ERROR] \(msg)") }
-        func fault(_ msg: String) { print("[\(category)] [FAULT] \(msg)") }
+        init(subsystem: String, category: String) {
+            self.category = category
+        }
+
+        func debug(_ msg: String) {
+            print("[\(category)] [DEBUG] \(msg)")
+        }
+
+        func info(_ msg: String) {
+            print("[\(category)] [INFO] \(msg)")
+        }
+
+        func notice(_ msg: String) {
+            print("[\(category)] [NOTICE] \(msg)")
+        }
+
+        func error(_ msg: String) {
+            print("[\(category)] [ERROR] \(msg)")
+        }
+
+        func fault(_ msg: String) {
+            print("[\(category)] [FAULT] \(msg)")
+        }
     }
 #endif
 
@@ -102,7 +119,8 @@ public final class SecureLogger {
         _ operation: String, duration: TimeInterval, category: Category = .performance
     ) {
         logger(for: category).notice(
-            "⏱️ \(operation) completed in \(String(format: "%.3f", duration))s")
+            "⏱️ \(operation) completed in \(String(format: "%.3f", duration))s"
+        )
     }
 
     /// Log network request
@@ -113,7 +131,8 @@ public final class SecureLogger {
     /// Log network response
     public static func networkResponse(_ statusCode: Int, url: String, duration: TimeInterval) {
         logger(for: .network).info(
-            "← \(statusCode) \(redactURL(url)) (\(String(format: "%.2f", duration))s)")
+            "← \(statusCode) \(redactURL(url)) (\(String(format: "%.2f", duration))s)"
+        )
     }
 
     /// Log database query (redacted)

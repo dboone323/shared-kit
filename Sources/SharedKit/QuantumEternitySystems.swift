@@ -462,7 +462,8 @@ public final class QuantumEternityCoordinator: ObservableObject, @unchecked Send
                     cycleNumber: 1,
                     startTime: Date(),
                     progress: status.cycleProgress
-                ))
+                )
+            )
         } else {
             evolutionCycles[evolutionCycles.count - 1].progress = status.cycleProgress
         }
@@ -738,7 +739,10 @@ private class QuantumImmortalityCoordinator {
     func initialize() async throws {}
     func initializeImmortality() async throws {}
     func achieveImmortality() async throws {}
-    func assessImmortalityStatus() async -> ImmortalityStatus { ImmortalityStatus() }
+    func assessImmortalityStatus() async -> ImmortalityStatus {
+        ImmortalityStatus()
+    }
+
     let immortalityPublisher = PassthroughSubject<QuantumImmortalitySystems, Never>()
 }
 
@@ -747,7 +751,9 @@ private class UniversalKnowledgeIntegrator {
     func initialize() async throws {}
     func beginIntegration() async throws {}
     func integrateUniversally() async throws {}
-    func assessIntegrationStatus() async -> KnowledgeStatus { KnowledgeStatus() }
+    func assessIntegrationStatus() async -> KnowledgeStatus {
+        KnowledgeStatus()
+    }
 }
 
 /// Eternity evolution manager
@@ -771,5 +777,7 @@ private class UniversalRealityManager {
     func initialize() async throws {}
     func initializeManagement() async throws {}
     func manageUniversally() async throws {}
-    func assessManagementStatus() async -> EternityRealityStatus { EternityRealityStatus() }
+    func assessManagementStatus() async -> EternityRealityStatus {
+        EternityRealityStatus()
+    }
 }

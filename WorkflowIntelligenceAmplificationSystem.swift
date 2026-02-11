@@ -263,7 +263,8 @@ actor IntelligenceAmplificationEngine {
             let validationSteps = Double(
                 workflow.steps.count(where: {
                     $0.toolId.contains("validation") || $0.toolId.contains("error")
-                }))
+                })
+            )
             let reliabilityScore = validationSteps / max(stepCount, 1.0)
             expectedOutcome = 0.6 + reliabilityScore * 0.3
             confidence = 0.8 + reliabilityScore * 0.15
@@ -332,7 +333,8 @@ actor IntelligenceAmplificationEngine {
                             targetKnowledge: target,
                             entanglementStrength: entanglementStrength,
                             correlationFactor: correlationFactor
-                        ))
+                        )
+                    )
                 }
             }
         }
@@ -608,7 +610,8 @@ public final class WorkflowIntelligenceAmplificationSystem: ObservableObject {
         let startTime = Date()
 
         statusSubject.send(
-            "Starting intelligence amplification (Level: \(amplificationLevel.rawValue))")
+            "Starting intelligence amplification (Level: \(amplificationLevel.rawValue))"
+        )
 
         // Phase 1: Generate decision superposition
         statusSubject.send("Phase 1: Generating decision superposition...")

@@ -518,7 +518,8 @@ public final class UnifiedAgentWorkflowOrchestrator {
                                 dependencies: []
                             ),
                         ]
-                    ))
+                    )
+                )
 
                 if let toolResult = result.stepResults.first?.output as? MCPToolResult {
                     await results[tool.id()] = toolResult
@@ -545,7 +546,8 @@ public final class UnifiedAgentWorkflowOrchestrator {
             } catch {
                 context.executionHistory.append(.ruleExecuted(ruleId: rule.id, success: false))
                 context.executionHistory.append(
-                    .errorOccurred(error: error, component: .integrationRule))
+                    .errorOccurred(error: error, component: .integrationRule)
+                )
             }
         }
     }
@@ -643,7 +645,8 @@ public final class UnifiedAgentWorkflowOrchestrator {
                             dependencies: []
                         ),
                     ]
-                ))
+                )
+            )
 
         case let .updateWorkflowStep(stepId, stepAction):
             // Update workflow step (would need workflow modification capabilities)

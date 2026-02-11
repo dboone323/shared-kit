@@ -30,7 +30,8 @@ public class NeuromorphicRetina {
 
         public func processPixel(intensity: Double, at position: (x: Int, y: Int)) -> Double {
             let distance = sqrt(
-                pow(Double(position.x - center.x), 2) + pow(Double(position.y - center.y), 2))
+                pow(Double(position.x - center.x), 2) + pow(Double(position.y - center.y), 2)
+            )
 
             if distance <= Double(radius) {
                 let gaussian = exp(-pow(distance, 2) / (2 * pow(Double(radius) / 3, 2)))
@@ -220,7 +221,8 @@ public class V1Cortex {
 
         public func respondToMotion(orientation: Double, speed: Double, direction: Double) -> Double {
             let orientationMatch = exp(
-                -pow(orientation - preferredOrientation, 2) / (2 * pow(.pi / 6, 2)))
+                -pow(orientation - preferredOrientation, 2) / (2 * pow(.pi / 6, 2))
+            )
             let speedMatch = exp(-pow(speed - preferredSpeed, 2) / (2 * pow(preferredSpeed / 2, 2)))
             return orientationMatch * speedMatch
         }
@@ -242,7 +244,8 @@ public class V1Cortex {
 
         public func respondToLine(length: Double, orientation: Double) -> Double {
             let orientationMatch = exp(
-                -pow(orientation - preferredOrientation, 2) / (2 * pow(.pi / 8, 2)))
+                -pow(orientation - preferredOrientation, 2) / (2 * pow(.pi / 8, 2))
+            )
             let lengthInhibition = 1.0 / (1.0 + exp(length - endStopLength))
             return orientationMatch * lengthInhibition
         }
@@ -266,7 +269,8 @@ public class V1Cortex {
 
             // Hypercomplex cells
             hypercomplexCells.append(
-                HypercomplexCell(orientation: orientation, endStopLength: 20.0))
+                HypercomplexCell(orientation: orientation, endStopLength: 20.0)
+            )
         }
     }
 
@@ -482,7 +486,8 @@ public class NeuromorphicVisionSystem {
             "retina_cells": Double(retina.ganglionCells.count),
             "lgn_cells": Double(
                 lgn.magnocellularCells.count + lgn.parvocellularCells.count
-                    + lgn.koniocellularCells.count),
+                    + lgn.koniocellularCells.count
+            ),
             "v1_simple_cells": Double(v1.simpleCells.count),
             "v1_complex_cells": Double(v1.complexCells.count),
             "it_templates": Double(it.objectTemplates.count),
@@ -554,7 +559,8 @@ public class MotionPathway {
             for vector in motionVectors {
                 let direction = atan2(vector.dy, vector.dx)
                 let directionMatch = exp(
-                    -pow(direction - cell.preferredDirection, 2) / (2 * pow(.pi / 6, 2)))
+                    -pow(direction - cell.preferredDirection, 2) / (2 * pow(.pi / 6, 2))
+                )
                 let speed = sqrt(vector.dx * vector.dx + vector.dy * vector.dy)
 
                 cellResponse += directionMatch * speed
@@ -628,7 +634,8 @@ public class VisualAttentionSystem {
         for y in 0..<saliencyMap.count {
             for x in 0..<saliencyMap[y].count {
                 let distanceFromCenter = sqrt(
-                    pow(Double(x - centerX), 2) + pow(Double(y - centerY), 2))
+                    pow(Double(x - centerX), 2) + pow(Double(y - centerY), 2)
+                )
                 let bias = exp(-distanceFromCenter / 50.0) // Gaussian falloff
                 saliencyMap[y][x] *= (0.5 + 0.5 * bias)
             }

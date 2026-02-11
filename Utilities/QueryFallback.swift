@@ -17,5 +17,7 @@ public struct Query<Value> {
         set { self.value = newValue }
     }
 
-    public var projectedValue: Query<Value> { self }
+    public var projectedValue: Query<Value> {
+        self
+    }
 }

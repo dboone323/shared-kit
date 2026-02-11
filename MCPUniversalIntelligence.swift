@@ -310,7 +310,8 @@ public final class IntelligenceSynthesisEngine: Sendable {
                 domain: source.domainType,
                 success: true,
                 synthesizedContent: AnyCodable(
-                    "Domain synthesis for \(source.domainType.rawValue)"),
+                    "Domain synthesis for \(source.domainType.rawValue)"
+                ),
                 contribution: source.capability,
                 coherence: source.capability,
                 processingTime: Double.random(in: 0.1...1.0)
@@ -417,7 +418,8 @@ public final class IntelligenceSynthesisEngine: Sendable {
                     intensity: 2.0,
                     duration: 15.0,
                     expectedSynthesisGain: analysis.capabilityVariance * 1.2
-                ))
+                )
+            )
         }
 
         if analysis.diversityIndex < 0.7 {
@@ -427,7 +429,8 @@ public final class IntelligenceSynthesisEngine: Sendable {
                     intensity: 1.8,
                     duration: 12.0,
                     expectedSynthesisGain: (0.8 - analysis.diversityIndex) * 1.1
-                ))
+                )
+            )
         }
 
         if analysis.synthesisPotential < 0.6 {
@@ -437,7 +440,8 @@ public final class IntelligenceSynthesisEngine: Sendable {
                     intensity: 2.5,
                     duration: 20.0,
                     expectedSynthesisGain: (0.7 - analysis.synthesisPotential) * 1.4
-                ))
+                )
+            )
         }
 
         return IntelligenceSynthesisStrategy(
@@ -652,7 +656,8 @@ public final class KnowledgeIntegrationNetwork: Sendable {
                             connectionStrength: connectionStrength,
                             connectionType: .knowledgeFlow,
                             bandwidth: connectionStrength * 100.0
-                        ))
+                        )
+                    )
                 }
             }
         }
@@ -667,7 +672,8 @@ public final class KnowledgeIntegrationNetwork: Sendable {
     ) -> Double {
         let distance = sqrt(
             pow(node1.position.x - node2.position.x, 2)
-                + pow(node1.position.y - node2.position.y, 2))
+                + pow(node1.position.y - node2.position.y, 2)
+        )
         let distanceFactor = max(0.1, 1.0 - distance / 10.0)
 
         let qualityFactor = (source1.qualityScore + source2.qualityScore) / 2.0
@@ -1266,7 +1272,8 @@ public final actor MCPUniversalIntelligenceCoordinator: Sendable {
     {
         // Process the universal intelligence coordination
         let result = AnyCodable(
-            "Universal intelligence coordination completed for query: \(input.query)")
+            "Universal intelligence coordination completed for query: \(input.query)"
+        )
 
         // Generate insights based on domains and constraints
         var insights: [UniversalInsight] = []
@@ -1353,7 +1360,8 @@ public final class WisdomAmplificationSystem: Sendable {
                     intensity: 2.3,
                     duration: 18.0,
                     expectedWisdomGain: (0.8 - assessment.depth) * 1.4
-                ))
+                )
+            )
         }
 
         if assessment.breadth < 0.7 {
@@ -1363,7 +1371,8 @@ public final class WisdomAmplificationSystem: Sendable {
                     intensity: 2.1,
                     duration: 15.0,
                     expectedWisdomGain: (0.75 - assessment.breadth) * 1.2
-                ))
+                )
+            )
         }
 
         return WisdomAmplificationStrategy(
@@ -1490,7 +1499,8 @@ public final class ConsciousnessExpansionInterface: Sendable {
                     intensity: 2.4,
                     duration: 20.0,
                     expectedConsciousnessGain: (0.85 - assessment.awareness) * 1.5
-                ))
+                )
+            )
         }
 
         if assessment.transcendence < 0.7 {
@@ -1500,7 +1510,8 @@ public final class ConsciousnessExpansionInterface: Sendable {
                     intensity: 2.6,
                     duration: 25.0,
                     expectedConsciousnessGain: (0.75 - assessment.transcendence) * 1.6
-                ))
+                )
+            )
         }
 
         return ConsciousnessExpansionStrategy(
@@ -1629,7 +1640,8 @@ public final class QuantumIntelligenceProcessor: Sendable {
                     intensity: 2.5,
                     duration: 22.0,
                     expectedQuantumGain: (0.8 - assessment.superposition) * 1.6
-                ))
+                )
+            )
         }
 
         if assessment.entanglement < 0.7 {
@@ -1639,7 +1651,8 @@ public final class QuantumIntelligenceProcessor: Sendable {
                     intensity: 2.7,
                     duration: 25.0,
                     expectedQuantumGain: (0.75 - assessment.entanglement) * 1.7
-                ))
+                )
+            )
         }
 
         return QuantumProcessingStrategy(
@@ -1771,7 +1784,8 @@ public final class MultiversalIntelligenceNetwork: Sendable {
                     intensity: 2.6,
                     duration: 28.0,
                     expectedMultiversalGain: (0.8 - assessment.averageInterconnectivity) * 1.8
-                ))
+                )
+            )
         }
 
         if assessment.averageSynchronization < 0.7 {
@@ -1781,7 +1795,8 @@ public final class MultiversalIntelligenceNetwork: Sendable {
                     intensity: 2.8,
                     duration: 30.0,
                     expectedMultiversalGain: (0.75 - assessment.averageSynchronization) * 1.9
-                ))
+                )
+            )
         }
 
         return MultiversalCoordinationStrategy(
@@ -1909,7 +1924,8 @@ public final class EthicalIntelligenceFramework: Sendable {
                     intensity: 2.4,
                     duration: 20.0,
                     expectedEthicalGain: (0.85 - assessment.moralReasoning) * 1.5
-                ))
+                )
+            )
         }
 
         if assessment.valueAlignment < 0.75 {
@@ -1919,7 +1935,8 @@ public final class EthicalIntelligenceFramework: Sendable {
                     intensity: 2.2,
                     duration: 18.0,
                     expectedEthicalGain: (0.8 - assessment.valueAlignment) * 1.3
-                ))
+                )
+            )
         }
 
         return EthicalFrameworkStrategy(
@@ -2046,7 +2063,8 @@ public final class CreativeIntelligenceAmplifier: Sendable {
                     intensity: 2.3,
                     duration: 16.0,
                     expectedCreativeGain: (0.8 - assessment.originality) * 1.4
-                ))
+                )
+            )
         }
 
         if assessment.fluency < 0.7 {
@@ -2056,7 +2074,8 @@ public final class CreativeIntelligenceAmplifier: Sendable {
                     intensity: 2.1,
                     duration: 14.0,
                     expectedCreativeGain: (0.75 - assessment.fluency) * 1.2
-                ))
+                )
+            )
         }
 
         return CreativeAmplificationStrategy(
@@ -2183,7 +2202,8 @@ public final class EmpathyDrivenIntelligence: Sendable {
                     intensity: 2.2,
                     duration: 15.0,
                     expectedEmpathyGain: (0.85 - assessment.emotionalRecognition) * 1.3
-                ))
+                )
+            )
         }
 
         if assessment.perspectiveTaking < 0.75 {
@@ -2193,7 +2213,8 @@ public final class EmpathyDrivenIntelligence: Sendable {
                     intensity: 2.4,
                     duration: 18.0,
                     expectedEmpathyGain: (0.8 - assessment.perspectiveTaking) * 1.5
-                ))
+                )
+            )
         }
 
         return EmpathyDrivingStrategy(

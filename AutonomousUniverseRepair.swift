@@ -789,7 +789,8 @@ final class BasicUniverseDiagnosticSystem: UniverseDiagnosticProtocol {
                     severity: 1.0 - universe.stability.coherence,
                     affectedSystems: ["Quantum Processing", "Entanglement Networks"],
                     immediateActions: ["Initiate coherence stabilization"]
-                ))
+                )
+            )
         }
 
         if universe.stability.entropy > 0.7 {
@@ -800,7 +801,8 @@ final class BasicUniverseDiagnosticSystem: UniverseDiagnosticProtocol {
                     severity: universe.stability.entropy,
                     affectedSystems: ["Information Systems", "Timeline Stability"],
                     immediateActions: ["Execute entropy reduction algorithm"]
-                ))
+                )
+            )
         }
 
         return issues

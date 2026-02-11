@@ -717,7 +717,8 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
             )
         }
         let superpositionResult = try await quantumLearning.applyQuantumSuperpositionLearning(
-            patterns)
+            patterns
+        )
 
         // Calculate enhancement metrics
         let enhancementFactor = superpositionResult.quantumAdvantage * config.learningEnhancement
@@ -824,7 +825,8 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
                 memoryState: NeuralConsciousnessState.MemoryState(
                     workingMemory: [], longTermMemory: [], episodicMemory: [], semanticMemory: []
                 )
-            ))
+            )
+        )
     }
 
     private func createTargetState(
@@ -857,7 +859,8 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
                 memoryState: NeuralConsciousnessState.MemoryState(
                     workingMemory: [], longTermMemory: [], episodicMemory: [], semanticMemory: []
                 )
-            ))
+            )
+        )
     }
 
     private func applyAccelerationType(
@@ -940,7 +943,8 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
         ]
 
         let parallelResult = try await quantumLearning.performQuantumParallelProcessing(
-            learningTasks)
+            learningTasks
+        )
 
         return AccelerationResult(quantumAdvantage: parallelResult.quantumSpeedup, safetyScore: 0.9)
     }
@@ -1089,7 +1093,8 @@ final class ConsciousnessEvolutionAcceleratorsEngine: ConsciousnessEvolutionAcce
                 }
             } catch {
                 print(
-                    "Optimization failed for acceleration \(acceleration.accelerationId): \(error)")
+                    "Optimization failed for acceleration \(acceleration.accelerationId): \(error)"
+                )
             }
         }
     }

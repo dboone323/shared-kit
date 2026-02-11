@@ -264,7 +264,8 @@ public actor AutonomousInnovation {
                 description: "Innovation distribution across domains",
                 data: domainDict,
                 confidence: 0.9
-            ))
+            )
+        )
 
         // Success rate by complexity
         let complexitySuccess = Dictionary(grouping: successful, by: { $0.complexity })
@@ -284,7 +285,8 @@ public actor AutonomousInnovation {
                 description: "Success rates by innovation complexity",
                 data: complexityDict,
                 confidence: 0.8
-            ))
+            )
+        )
 
         return InnovationAnalysis(
             totalInnovations: innovationHistory.count,
@@ -316,7 +318,8 @@ public actor AutonomousInnovation {
                 description: "Distribution of opportunity types",
                 data: typeDict,
                 confidence: 0.85
-            ))
+            )
+        )
 
         // Timeline analysis
         let timelineOpportunities = opportunities.filter { $0.timeframe < 365 * 24 * 3600 } // Next year
@@ -334,7 +337,8 @@ public actor AutonomousInnovation {
                 description: "Opportunities by timeline",
                 data: timelineDict,
                 confidence: 0.75
-            ))
+            )
+        )
 
         return OpportunityAnalysis(
             totalOpportunities: opportunities.count,
@@ -367,7 +371,8 @@ public actor AutonomousInnovation {
                     recommendation: successRate > 0.7
                         ? "Continue current innovation strategy"
                         : "Review and improve innovation evaluation criteria"
-                ))
+                )
+            )
         }
 
         if opportunityAnalysis.nearTermOpportunities > 5 {
@@ -380,7 +385,8 @@ public actor AutonomousInnovation {
                     confidence: 0.8,
                     recommendation:
                     "Prioritize implementation of high-impact near-term opportunities"
-                ))
+                )
+            )
         }
 
         return insights
@@ -552,7 +558,8 @@ public actor TrendAnalyzer {
     public func identifyEmergingTrends() async throws -> [TechnologyTrend] {
         // Identify trends with high momentum and low current adoption
         let allTrends = try await analyzeTrends(
-            in: InnovationDomain(name: "General", description: "All domains"))
+            in: InnovationDomain(name: "General", description: "All domains")
+        )
 
         return allTrends.filter { trend in
             trend.type == .emerging && trend.momentum > 0.7 && trend.adoptionRate < 0.2
@@ -750,7 +757,8 @@ public actor ImplementationSynthesizer {
                 effort: 8 * 3600, // 8 hours
                 dependencies: [],
                 deliverables: ["System Architecture Document", "API Specifications"]
-            ))
+            )
+        )
 
         // Implementation phase
         for (index, feature) in innovation.features.enumerated() {
@@ -762,7 +770,8 @@ public actor ImplementationSynthesizer {
                     effort: 16 * 3600, // 16 hours
                     dependencies: index > 0 ? [steps[index - 1].id] : [],
                     deliverables: ["\(feature.name) Implementation"]
-                ))
+                )
+            )
         }
 
         // Testing phase
@@ -774,7 +783,8 @@ public actor ImplementationSynthesizer {
                 effort: 12 * 3600, // 12 hours
                 dependencies: steps.map(\.id),
                 deliverables: ["Test Results", "Validation Report"]
-            ))
+            )
+        )
 
         return steps
     }
@@ -1410,7 +1420,8 @@ public func predictInnovationOpportunities(timeHorizon: TimeInterval = 365 * 24 
     -> [PredictedOpportunity]
 {
     try await globalAutonomousInnovation.predictInnovationOpportunities(
-        timeHorizon: timeHorizon)
+        timeHorizon: timeHorizon
+    )
 }
 
 /// Synthesize implementation plan

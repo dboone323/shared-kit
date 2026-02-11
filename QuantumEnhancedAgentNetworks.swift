@@ -1498,7 +1498,8 @@ public extension QuantumEnhancedAgentNetworks {
                     description: "Enhance quantum connectivity across all agent networks",
                     priority: .high,
                     expectedAdvantage: 0.49
-                ))
+                )
+            )
         }
 
         if status.networkMetrics.averageCoordinationEfficiency < 0.85 {
@@ -1508,7 +1509,8 @@ public extension QuantumEnhancedAgentNetworks {
                     description: "Improve network synergy through quantum-enhanced coordination",
                     priority: .high,
                     expectedAdvantage: 0.41
-                ))
+                )
+            )
         }
 
         return recommendations

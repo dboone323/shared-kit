@@ -829,7 +829,8 @@ public actor ComprehensiveSupportingArchitecturesCoordinator:
                 for operation in stage.operations {
                     guard let coordinator = universalCoordinator else {
                         throw ComprehensiveArchitectureError.coordinatorNotInitialized(
-                            "Universal coordinator not initialized")
+                            "Universal coordinator not initialized"
+                        )
                     }
                     let result = try await coordinator.executeUniversalOperation(operation)
                     operationResults.append(result)

@@ -1577,7 +1577,8 @@ public extension AgentMultiverseOperations {
                     description: "Enhance multiverse depth across all agents",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.navigationMetrics.averageUniverseNavigation < 0.85 {
@@ -1587,7 +1588,8 @@ public extension AgentMultiverseOperations {
                     description: "Improve universe navigation for enhanced multiverse coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

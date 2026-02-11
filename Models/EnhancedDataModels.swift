@@ -267,7 +267,8 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
 
         if self.habitDescription.count > 500 {
             errors.append(
-                .invalid(field: "habitDescription", reason: "must be 500 characters or less"))
+                .invalid(field: "habitDescription", reason: "must be 500 characters or less")
+            )
         }
 
         if self.xpValue < 1 || self.xpValue > 100 {
@@ -316,7 +317,8 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
 
         // Implementation would integrate with analytics service
         print(
-            "Tracking event: \(event) for habit: \(self.name) with parameters: \(eventParameters)")
+            "Tracking event: \(event) for habit: \(self.name) with parameters: \(eventParameters)"
+        )
     }
 
     // MARK: - Business Logic Methods

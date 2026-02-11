@@ -110,7 +110,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
         if !modelsAvailable {
             recommendations.append(
-                "Pull required models: 'ollama pull llama2' and 'ollama pull codellama'")
+                "Pull required models: 'ollama pull llama2' and 'ollama pull codellama'"
+            )
         }
 
         if status.modelCount == 0 {
@@ -490,7 +491,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 issues.append(
                     CodeIssue(
                         description: line.trimmingCharacters(in: .whitespaces), severity: .medium
-                    ))
+                    )
+                )
             }
         }
 

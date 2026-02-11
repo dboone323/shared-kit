@@ -6,7 +6,7 @@ import Foundation
 print("🧪 Testing Quantum Internet Implementation")
 print("==========================================")
 
-// Create quantum internet instance
+/// Create quantum internet instance
 let quantumInternet = QuantumInternet()
 
 // Run initialization

@@ -292,7 +292,8 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
                 componentId: "system",
                 message: "MCP System initialized successfully",
                 data: ["version": .init("9.0.0")]
-            ))
+            )
+        )
     }
 
     public func shutdownSystem() async throws {
@@ -322,7 +323,8 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
                 type: .systemStopped,
                 componentId: "system",
                 message: "MCP System shut down successfully"
-            ))
+            )
+        )
     }
 
     public func getSystemStatus() async -> MCPSystemStatus {
@@ -352,7 +354,8 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
                 componentId: component.id,
                 message: "Component \(component.name) registered successfully",
                 data: ["type": .init(component.type.rawValue)]
-            ))
+            )
+        )
     }
 
     public func unregisterComponent(_ componentId: String) async throws {
@@ -368,7 +371,8 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
                 type: .componentUnregistered,
                 componentId: componentId,
                 message: "Component \(component.name) unregistered successfully"
-            ))
+            )
+        )
     }
 
     public func getComponent(_ componentId: String) async -> MCPSystemComponent? {
@@ -410,7 +414,8 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
 
                     // Wait for next monitoring interval
                     try await Task.sleep(
-                        nanoseconds: UInt64(configuration.monitoringInterval * 1_000_000_000))
+                        nanoseconds: UInt64(configuration.monitoringInterval * 1_000_000_000)
+                    )
                 } catch {
                     if !Task.isCancelled {
                         await publishSystemEvent(
@@ -419,7 +424,8 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
                                 componentId: "system",
                                 message: "Monitoring error: \(error.localizedDescription)",
                                 severity: .error
-                            ))
+                            )
+                        )
                     }
                 }
             }
@@ -443,7 +449,8 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
                             message: "Component health changed to \(health.status)",
                             data: ["previous_status": .init(previousStatus.rawValue)],
                             severity: health.status == .unhealthy ? .error : .warning
-                        ))
+                        )
+                    )
                 }
 
                 // Update component status
@@ -456,7 +463,8 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
                         componentId: component.id,
                         message: "Health check failed: \(error.localizedDescription)",
                         severity: .error
-                    ))
+                    )
+                )
             }
         }
     }
@@ -518,7 +526,8 @@ public actor MCPCompleteSystemIntegration: MCPSystemIntegration {
                 source: event.componentId,
                 data: event.data ?? [:],
                 severity: event.severity
-            ))
+            )
+        )
     }
 }
 

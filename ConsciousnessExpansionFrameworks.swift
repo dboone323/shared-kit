@@ -1513,7 +1513,8 @@ public extension ConsciousnessExpansionFrameworks {
                     description: "Enhance consciousness depth across all AI systems",
                     priority: .high,
                     expectedAdvantage: 0.50
-                ))
+                )
+            )
         }
 
         if status.expansionMetrics.averageAwarenessExpansion < 0.85 {
@@ -1523,7 +1524,8 @@ public extension ConsciousnessExpansionFrameworks {
                     description: "Improve awareness integration for enhanced consciousness coordination",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         return recommendations

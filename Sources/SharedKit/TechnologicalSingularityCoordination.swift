@@ -339,7 +339,8 @@ public final class TechnologicalSingularityCoordinator: ObservableObject, @unche
                     if let strongSelf = self {
                         Task {
                             try? await strongSelf.executeEmergencyIntervention(
-                                reason: "Critical risk detected")
+                                reason: "Critical risk detected"
+                            )
                         }
                     }
                 }
@@ -554,7 +555,10 @@ public enum SingularityError: Error {
 /// Quantum singularity engine
 private class QuantumSingularityEngine {
     func initialize() async throws {}
-    func assessReadiness() async -> Double { 0.85 }
+    func assessReadiness() async -> Double {
+        0.85
+    }
+
     func assessInterventionImpact() async -> InterventionImpact {
         InterventionImpact(canResume: true, recoveryTime: 3600, riskIncrease: 0.1)
     }
@@ -565,7 +569,10 @@ private class QuantumSingularityEngine {
 /// AI coordination engine
 private class AICoordinationEngine {
     func initialize() async throws {}
-    func assessReadiness() async -> Double { 0.82 }
+    func assessReadiness() async -> Double {
+        0.82
+    }
+
     func assessInterventionImpact() async -> InterventionImpact {
         InterventionImpact(canResume: true, recoveryTime: 1800, riskIncrease: 0.05)
     }
@@ -576,7 +583,10 @@ private class AICoordinationEngine {
 /// Consciousness integration coordinator
 private class ConsciousnessIntegrationCoordinator {
     func initialize() async throws {}
-    func assessReadiness() async -> Double { 0.78 }
+    func assessReadiness() async -> Double {
+        0.78
+    }
+
     func assessInterventionImpact() async -> InterventionImpact {
         InterventionImpact(canResume: true, recoveryTime: 7200, riskIncrease: 0.15)
     }
@@ -587,7 +597,10 @@ private class ConsciousnessIntegrationCoordinator {
 /// Reality management coordinator
 private class RealityManagementCoordinator {
     func initialize() async throws {}
-    func assessReadiness() async -> Double { 0.75 }
+    func assessReadiness() async -> Double {
+        0.75
+    }
+
     func assessInterventionImpact() async -> InterventionImpact {
         InterventionImpact(canResume: false, recoveryTime: 86400, riskIncrease: 0.3)
     }

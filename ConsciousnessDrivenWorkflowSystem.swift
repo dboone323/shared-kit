@@ -1477,7 +1477,8 @@ public extension ConsciousnessDrivenWorkflowSystem {
                     description: "Expand consciousness capabilities for superior workflow intelligence",
                     priority: .high,
                     expectedAdvantage: 0.42
-                ))
+                )
+            )
         }
 
         if status.stateMetrics.averageAwarenessLevel < 0.8 {
@@ -1487,7 +1488,8 @@ public extension ConsciousnessDrivenWorkflowSystem {
                     description: "Optimize awareness levels for better consciousness-driven performance",
                     priority: .high,
                     expectedAdvantage: 0.35
-                ))
+                )
+            )
         }
 
         return recommendations

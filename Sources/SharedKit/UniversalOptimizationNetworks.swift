@@ -206,7 +206,8 @@ public final class UniversalOptimizationCoordinator: ObservableObject, @unchecke
     public func completeUniversalSingularity() async throws {
         guard universalOptimizationLevel >= 0.99 else {
             throw OptimizationError.insufficientOptimization(
-                "Universal optimization level too low: \(universalOptimizationLevel)")
+                "Universal optimization level too low: \(universalOptimizationLevel)"
+            )
         }
 
         print("✨ Completing universal singularity...")
@@ -443,7 +444,8 @@ public final class UniversalOptimizationCoordinator: ObservableObject, @unchecke
                     cycleNumber: 1,
                     startTime: Date(),
                     progress: progress.overallReadiness
-                ))
+                )
+            )
         } else {
             evolutionCycles[evolutionCycles.count - 1].progress = progress.overallReadiness
         }
@@ -660,8 +662,13 @@ private class OptimizationNetworkCoordinator {
     }
 
     func initialize() async throws {}
-    func activate() async throws { isActive = true }
-    func assessReadiness() async -> Double { Double.random(in: 0.8...0.98) }
+    func activate() async throws {
+        isActive = true
+    }
+
+    func assessReadiness() async -> Double {
+        Double.random(in: 0.8...0.98)
+    }
 
     let readinessPublisher = PassthroughSubject<(OptimizationDomain, Double), Never>()
 }
@@ -678,7 +685,10 @@ private class UniversalOptimizationEngine {
 private class OptimizationConvergenceManager {
     func initialize() async throws {}
     func establishProtocols() async throws {}
-    func assessConvergence() async -> Double { 0.95 }
+    func assessConvergence() async -> Double {
+        0.95
+    }
+
     func finalizeConvergence() async throws {}
 }
 
@@ -688,7 +698,9 @@ private class OptimizationSingularityMonitoringCoordinator {
     func beginMonitoring() async throws {}
     func monitorSystems() async throws {}
     func completeMonitoring() async throws {}
-    func assessMonitoringLevel() async -> Double { 0.97 }
+    func assessMonitoringLevel() async -> Double {
+        0.97
+    }
 }
 
 /// Universal harmony coordinator
@@ -697,7 +709,9 @@ private class UniversalHarmonyCoordinator {
     func startAchievement() async throws {}
     func achieveHarmony() async throws {}
     func finalizeHarmony() async throws {}
-    func assessHarmony() async -> Double { 0.96 }
+    func assessHarmony() async -> Double {
+        0.96
+    }
 }
 
 /// Optimization evolution manager
@@ -711,5 +725,7 @@ private class SingularityCompletionCoordinator {
     func initialize() async throws {}
     func initializeCoordination() async throws {}
     func completeSingularity() async throws {}
-    func assessCompletion() async -> Double { 0.99 }
+    func assessCompletion() async -> Double {
+        0.99
+    }
 }

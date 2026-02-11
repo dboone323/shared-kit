@@ -63,7 +63,7 @@ class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
 
     // MARK: - Performance Testing
 
-    func testSharedArchitecturePerformance() async {
+    func testSharedArchitecturePerformance() {
         // Test performance of mock data generation
         let startTime = Date()
         let result = MockDataGenerator.generateHabits(count: 100)
