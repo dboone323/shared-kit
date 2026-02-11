@@ -1247,7 +1247,8 @@ enum ConsciousnessLevel {
 /// Ethical Reasoning Types
 struct MoralFramework {
     func evaluate(_ scenario: EthicalScenario) async
-    -> MoralEvaluation {
+        -> MoralEvaluation
+    {
         MoralEvaluation(overallScore: Double.random(in: 0.4...0.9))
     }
 

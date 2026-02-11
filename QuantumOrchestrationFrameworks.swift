@@ -544,10 +544,10 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let success = quantumOperationResults.values.allSatisfy(\.success)
         let quantumCoherence =
             quantumOperationResults.values.map(\.coherenceAchieved).reduce(0, +)
-            / Double(max(quantumOperationResults.count, 1))
+                / Double(max(quantumOperationResults.count, 1))
         let entanglementStrength =
             quantumOperationResults.values.map(\.entanglementStrength).reduce(0, +)
-            / Double(max(quantumOperationResults.count, 1))
+                / Double(max(quantumOperationResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
             orchestration.consciousnessLevel
         )
@@ -594,7 +594,7 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let success = entangledStates.values.allSatisfy { $0.entanglementStrength > 0.7 }
         let quantumCoherence =
             entangledStates.values.map(\.coherenceLevel).reduce(0, +)
-            / Double(max(entangledStates.count, 1))
+                / Double(max(entangledStates.count, 1))
 
         return EntanglementResult(
             coordinationId: entanglement.coordinationId,
@@ -633,7 +633,7 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let success = optimizedFrameworks.values.allSatisfy { $0.optimizationLevel > 0.7 }
         let quantumCoherence =
             optimizedFrameworks.values.map(\.coherenceImprovement).reduce(0, +)
-            / Double(max(optimizedFrameworks.count, 1))
+                / Double(max(optimizedFrameworks.count, 1))
 
         return CoherenceOptimizationResult(
             optimizationId: optimization.optimizationId,
@@ -943,7 +943,7 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
             results.values.map(\.coherenceAchieved).reduce(0, +) / Double(max(results.count, 1))
         let entanglementStrength =
             results.values.map(\.entanglementStrength).reduce(0, +)
-            / Double(max(results.count, 1))
+                / Double(max(results.count, 1))
         let superpositionUtilization =
             orchestration.orchestrationStrategy == .superposition_coordination ? 0.9 : 0.6
         let interferenceOptimization =
@@ -1088,7 +1088,7 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let totalEntangledOperations = entanglement.entangledOperations.count
         let averageEntanglementStrength =
             states.values.map(\.entanglementStrength).reduce(0, +)
-            / Double(max(states.count, 1))
+                / Double(max(states.count, 1))
         let coherenceStability =
             states.values.map(\.coherenceLevel).reduce(0, +) / Double(max(states.count, 1))
         let quantumCommunicationEfficiency = averageEntanglementStrength * 0.9
@@ -1204,16 +1204,16 @@ public actor QuantumOrchestrationFrameworksCoordinator: QuantumOrchestrationFram
         let frameworksOptimized = optimization.targetFrameworks.count
         let averageCoherenceImprovement =
             frameworks.values.map(\.coherenceImprovement).reduce(0, +)
-            / Double(max(frameworks.count, 1))
+                / Double(max(frameworks.count, 1))
         let stabilityEnhancement =
             frameworks.values.map(\.stabilityEnhancement).reduce(0, +)
-            / Double(max(frameworks.count, 1))
+                / Double(max(frameworks.count, 1))
         let quantumCapabilityBoost =
             frameworks.values.map(\.quantumCapabilityBoost).reduce(0, +)
-            / Double(max(frameworks.count, 1))
+                / Double(max(frameworks.count, 1))
         let optimizationEfficiency =
             frameworks.values.map(\.optimizationLevel).reduce(0, +)
-            / Double(max(frameworks.count, 1))
+                / Double(max(frameworks.count, 1))
 
         return CoherenceOptimizationMetrics(
             frameworksOptimized: frameworksOptimized,

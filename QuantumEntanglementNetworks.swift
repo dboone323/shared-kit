@@ -348,10 +348,10 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 
         let successRate =
             Double(propagationResults.filter(\.success).count)
-            / Double(propagationResults.count)
+                / Double(propagationResults.count)
         let averageStrength =
             propagationResults.map(\.finalStrength).reduce(0, +)
-            / Double(propagationResults.count)
+                / Double(propagationResults.count)
 
         return EntanglementPropagationResult(
             networkId: network.networkId,
@@ -696,7 +696,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
         // Simplified network coherence calculation
         let averageStrength =
             entanglementPairs.values.map(\.strength).reduce(0, +)
-            / Double(max(1, entanglementPairs.count))
+                / Double(max(1, entanglementPairs.count))
         return averageStrength
             * (1.0 - Double(decoherenceEvents.values.flatMap(\.self).count) * 0.01)
     }
@@ -706,7 +706,7 @@ final class QuantumEntanglementNetworkEngine: QuantumEntanglementNetworkProtocol
 
         let averageStrength =
             entanglementPairs.values.map(\.strength).reduce(0, +)
-            / Double(max(1, entanglementPairs.count))
+                / Double(max(1, entanglementPairs.count))
 
         if averageStrength < 0.7 {
             recommendations.append(

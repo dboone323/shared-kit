@@ -154,10 +154,10 @@ public class QuantumTeleportation: ObservableObject {
         let successfulTeleports = activeTeleports.values.filter(\.success).count
         let averageFidelity =
             activeTeleports.values.map(\.fidelity).reduce(0, +)
-            / Double(max(1, activeTeleports.count))
+                / Double(max(1, activeTeleports.count))
         let averageClassicalBits =
             activeTeleports.values.map { Double($0.classicalBitsTransmitted) }.reduce(0, +)
-            / Double(max(1, activeTeleports.count))
+                / Double(max(1, activeTeleports.count))
 
         let fidelityDistribution = Dictionary(
             grouping: activeTeleports.values, by: { Int($0.fidelity * 10) }

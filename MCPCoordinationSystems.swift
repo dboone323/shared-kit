@@ -524,7 +524,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let success = operationResults.values.allSatisfy(\.success)
         let quantumCoherence =
             operationResults.values.map(\.quantumEnhancement).reduce(0, +)
-            / Double(max(operationResults.count, 1))
+                / Double(max(operationResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
             coordination.consciousnessLevel
         )
@@ -569,7 +569,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let success = stageResults.values.allSatisfy(\.success)
         let quantumCoherence =
             stageResults.values.map(\.stageMetrics.quantumContribution).reduce(0, +)
-            / Double(max(stageResults.count, 1))
+                / Double(max(stageResults.count, 1))
         let consciousnessAmplification = calculateConsciousnessAmplification(
             workflow.consciousnessLevel
         )
@@ -613,7 +613,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let success = frameworkStates.values.allSatisfy(\.operational)
         let quantumCoherence =
             frameworkStates.values.map(\.quantumCoherence).reduce(0, +)
-            / Double(max(frameworkStates.count, 1))
+                / Double(max(frameworkStates.count, 1))
 
         return SynchronizationResult(
             synchronizationId: synchronization.synchronizationId,
@@ -818,7 +818,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let dependencySatisfaction = 1.0 // Simplified
         let quantumCoherence =
             results.values.map(\.quantumEnhancement).reduce(0, +)
-            / Double(max(results.count, 1))
+                / Double(max(results.count, 1))
         let consciousnessIntegration = calculateConsciousnessAmplification(
             coordination.consciousnessLevel
         )
@@ -902,7 +902,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let dependencySatisfaction = 1.0 // Simplified
         let quantumContribution =
             results.values.map(\.quantumEnhancement).reduce(0, +)
-            / Double(max(results.count, 1))
+                / Double(max(results.count, 1))
 
         return StageMetrics(
             operationCount: operationCount,
@@ -923,7 +923,7 @@ public final class MCPCoordinationSystemsCoordinator: MCPCoordinationSystem, Sen
         let dependencyResolution = 1.0 // Simplified
         let quantumCoherence =
             stageResults.values.map(\.stageMetrics.quantumContribution).reduce(0, +)
-            / Double(max(stageResults.count, 1))
+                / Double(max(stageResults.count, 1))
         let consciousnessIntegration = calculateConsciousnessAmplification(
             workflow.consciousnessLevel
         )

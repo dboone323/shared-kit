@@ -298,7 +298,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
             if totalSessionsWithRating > 0 {
                 self.averageUserSatisfaction =
                     (self.averageUserSatisfaction * (totalSessionsWithRating - 1) + satisfaction)
-                    / totalSessionsWithRating
+                        / totalSessionsWithRating
             } else {
                 self.averageUserSatisfaction = satisfaction
             }

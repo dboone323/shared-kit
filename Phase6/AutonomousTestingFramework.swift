@@ -600,7 +600,7 @@ public final class AutonomousTestingFramework: ObservableObject {
         let successRate = result == .passed ? 1.0 : 0.0
         testCase.successRate =
             (testCase.successRate * Double(testCase.executionCount - 1) + successRate)
-            / Double(testCase.executionCount)
+                / Double(testCase.executionCount)
         testCase.coverage = coverage
 
         testCases[testId] = testCase
@@ -707,7 +707,7 @@ public final class AutonomousTestingFramework: ObservableObject {
             let successRate = execution.result == .passed ? 1.0 : 0.0
             testCase.successRate =
                 (testCase.successRate * Double(testCase.executionCount - 1) + successRate)
-                / Double(testCase.executionCount)
+                    / Double(testCase.executionCount)
             testCase.coverage = execution.coverage
 
             testCases[execution.testCaseId] = testCase

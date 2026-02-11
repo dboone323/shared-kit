@@ -743,7 +743,7 @@ final class BasicSwarmAgent: SwarmAgentProtocol {
         // Calculate agent's contribution based on capabilities and quantum state
         let contribution =
             quantumState.coherence * Double(capabilities.count)
-            / Double(AgentCapability.allCases.count)
+                / Double(AgentCapability.allCases.count)
         let confidence = quantumState.entanglement * 0.8 + quantumState.coherence * 0.2
 
         return AgentContribution(

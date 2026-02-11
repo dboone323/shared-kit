@@ -186,7 +186,7 @@ public actor AutonomousInnovation {
         }
         updatedMetrics.innovationSuccessRate =
             Double(updatedMetrics.successfulImplementations)
-            / Double(max(updatedMetrics.totalInnovations, 1))
+                / Double(max(updatedMetrics.totalInnovations, 1))
         innovationMetrics = updatedMetrics
 
         logger.info(
@@ -238,7 +238,7 @@ public actor AutonomousInnovation {
         updatedMetrics.totalInnovations += innovations.count
         updatedMetrics.innovationSuccessRate =
             Double(updatedMetrics.successfulImplementations)
-            / Double(max(updatedMetrics.totalInnovations, 1))
+                / Double(max(updatedMetrics.totalInnovations, 1))
         updatedMetrics.timestamp = Date()
         innovationMetrics = updatedMetrics
     }
@@ -359,7 +359,7 @@ public actor AutonomousInnovation {
         if innovationAnalysis.successfulInnovations > 0 {
             let successRate =
                 Double(innovationAnalysis.successfulInnovations)
-                / Double(innovationAnalysis.totalInnovations)
+                    / Double(innovationAnalysis.totalInnovations)
 
             insights.append(
                 InnovationInsight(
@@ -1009,7 +1009,7 @@ public actor InnovationEvaluator {
         // Evaluate based on domain and features
         let featureValue =
             innovation.features.map(\.userValue).reduce(0, +)
-            / Double(innovation.features.count)
+                / Double(innovation.features.count)
         return featureValue * Double.random(in: 0.8...1.2)
     }
 

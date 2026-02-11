@@ -486,10 +486,10 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         let success = synthesisResults.values.allSatisfy(\.success)
         let coordinationEfficiency =
             synthesisResults.values.map(\.synthesisMetrics.performanceScore).reduce(0, +)
-            / Double(max(synthesisResults.count, 1))
+                / Double(max(synthesisResults.count, 1))
         let quantumCoherence =
             synthesisResults.values.map(\.quantumEnhancement).reduce(0, +)
-            / Double(max(synthesisResults.count, 1))
+                / Double(max(synthesisResults.count, 1))
 
         return SynthesisCoordinationResult(
             coordinationId: coordination.coordinationId,
@@ -869,7 +869,7 @@ public final class MCPIntelligenceSynthesisCoordinator: MCPIntelligenceSynthesis
         let averageConfidence = calculateAverageConfidence(inputs)
         let variance =
             inputs.map { pow($0.confidence - averageConfidence, 2) }.reduce(0, +)
-            / Double(max(inputs.count, 1))
+                / Double(max(inputs.count, 1))
         return max(0, 1.0 - variance)
     }
 

@@ -647,7 +647,7 @@ public final class SelfOptimizingCICD: ObservableObject {
             recentMetrics.compactMap(\.duration).reduce(0, +) / Double(recentMetrics.count)
         let failureRate =
             Double(recentMetrics.count(where: { $0.status == .failed }))
-            / Double(recentMetrics.count)
+                / Double(recentMetrics.count)
         let averageCost = recentMetrics.map(\.cost).reduce(0, +) / Double(recentMetrics.count)
 
         // Generate optimization recommendations
@@ -1013,10 +1013,10 @@ public extension SelfOptimizingCICD {
         let appliedRecommendations = optimizationHistory.count
         let averageConfidence =
             optimizationRecommendations.map(\.confidence).reduce(0, +)
-            / Double(max(1, optimizationRecommendations.count))
+                / Double(max(1, optimizationRecommendations.count))
         let averageImprovement =
             optimizationRecommendations.map(\.expectedImprovement).reduce(0, +)
-            / Double(max(1, optimizationRecommendations.count))
+                / Double(max(1, optimizationRecommendations.count))
 
         return [
             "totalRecommendations": totalRecommendations,

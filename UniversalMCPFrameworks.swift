@@ -403,10 +403,10 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
             let success = frameworkResults.allSatisfy(\.success)
             let averagePerformance =
                 frameworkResults.map(\.performance).reduce(0, +)
-                / Double(max(frameworkResults.count, 1))
+                    / Double(max(frameworkResults.count, 1))
             let averageQuantum =
                 frameworkResults.map(\.quantumEnhancement).reduce(0, +)
-                / Double(max(frameworkResults.count, 1))
+                    / Double(max(frameworkResults.count, 1))
 
             domainResults[domain] = DomainResult(
                 domain: domain,
@@ -460,10 +460,10 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
         let success = frameworkResults.values.allSatisfy(\.success)
         let coordinationEfficiency =
             frameworkResults.values.map(\.performance).reduce(0, +)
-            / Double(max(frameworkResults.count, 1))
+                / Double(max(frameworkResults.count, 1))
         let quantumCoherence =
             frameworkResults.values.map(\.quantumEnhancement).reduce(0, +)
-            / Double(max(frameworkResults.count, 1))
+                / Double(max(frameworkResults.count, 1))
 
         return MCPFrameworkResult(
             coordinationId: coordination.coordinationId,
@@ -494,9 +494,9 @@ public actor UniversalMCPFrameworksCoordinator: UniversalMCPFramework {
                 let domainFrameworks = registryStatus.frameworks.filter { $0.domain == domain }
                 let coverage =
                     Double(domainFrameworks.count)
-                    / Double(
-                        max(registryStatus.totalFrameworks / IntelligenceDomain.allCases.count, 1)
-                    )
+                        / Double(
+                            max(registryStatus.totalFrameworks / IntelligenceDomain.allCases.count, 1)
+                        )
                 return (domain, min(coverage, 1.0))
             }
         )

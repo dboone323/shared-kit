@@ -466,7 +466,7 @@ public final class UniversalOptimizationCoordinator: ObservableObject, @unchecke
         // Weighted combination with exponential optimization emergence
         let combinedFactor =
             (readinessFactor * 0.25) + (convergenceFactor * 0.25) + (harmonyFactor * 0.25)
-            + (completionFactor * 0.25)
+                + (completionFactor * 0.25)
         return min(pow(combinedFactor, 1.2), 1.0)
     }
 

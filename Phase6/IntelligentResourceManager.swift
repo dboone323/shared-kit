@@ -926,11 +926,11 @@ public final class IntelligentResourceManager: ObservableObject {
         let totalCost = resourceMetrics.values.compactMap(\.costPerUnit).reduce(0, +)
         let averagePerformance =
             resourceMetrics.values.map(\.performanceScore).reduce(0, +)
-            / Double(resourceMetrics.count)
+                / Double(resourceMetrics.count)
 
         let optimizationScore =
             (performanceOptimizationWeight * averagePerformance)
-            - (costOptimizationWeight * min(totalCost / 100.0, 1.0))
+                - (costOptimizationWeight * min(totalCost / 100.0, 1.0))
 
         await MainActor.run {
             self.optimizationScore = optimizationScore

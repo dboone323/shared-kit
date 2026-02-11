@@ -653,10 +653,10 @@ public actor MCPInMemoryMetricsSystem: MCPMetricsSystem {
 
         let overallHealth =
             serviceHealth.values.contains(MCPHealthState.unhealthy)
-            ? MCPHealthState.unhealthy
-            : serviceHealth.values.contains(MCPHealthState.degraded)
-                ? MCPHealthState.degraded
-                : MCPHealthState.healthy
+                ? MCPHealthState.unhealthy
+                : serviceHealth.values.contains(MCPHealthState.degraded)
+                    ? MCPHealthState.degraded
+                    : MCPHealthState.healthy
 
         return MCPHealthStatus(
             overall: overallHealth,

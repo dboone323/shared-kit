@@ -114,7 +114,7 @@ public actor PredictiveEcosystem {
 
         let overallHealth =
             (systemStatuses.values.map(\.healthScore).reduce(0, +)
-                / Double(systemStatuses.count) + predictionAccuracy + optimizationImpact) / 3.0
+                    / Double(systemStatuses.count) + predictionAccuracy + optimizationImpact) / 3.0
 
         return EcosystemHealth(
             overallScore: overallHealth,

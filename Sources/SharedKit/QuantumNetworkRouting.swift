@@ -135,13 +135,13 @@ public class QuantumNetworkRouting: ObservableObject {
         let totalRoutes = routingTable.count
         let averageFidelity =
             routingTable.values.map(\.expectedFidelity).reduce(0, +)
-            / Double(max(1, routingTable.count))
+                / Double(max(1, routingTable.count))
         let averageDistance =
             routingTable.values.map(\.totalDistance).reduce(0, +)
-            / Double(max(1, routingTable.count))
+                / Double(max(1, routingTable.count))
         let averageHops =
             routingTable.values.map { Double($0.hops.count) }.reduce(0, +)
-            / Double(max(1, routingTable.count))
+                / Double(max(1, routingTable.count))
 
         let fidelityRanges = Dictionary(
             grouping: routingTable.values, by: { Int($0.expectedFidelity * 10) }

@@ -189,11 +189,11 @@ public class EntanglementNetwork: ObservableObject {
         let activePairs = entanglementPairs.count(where: { !$0.isExpired })
         let averageFidelity =
             entanglementPairs.map(\.currentFidelity).reduce(0, +)
-            / Double(max(1, entanglementPairs.count))
+                / Double(max(1, entanglementPairs.count))
         let totalNodes = nodes.count
         let averageConnectivity =
             Double(networkTopology.values.map(\.count).reduce(0, +))
-            / Double(max(1, networkTopology.count))
+                / Double(max(1, networkTopology.count))
 
         return EntanglementNetworkStatistics(
             totalPairs: totalPairs,

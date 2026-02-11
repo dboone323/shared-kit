@@ -430,7 +430,7 @@ public final class AutonomousDocumentation: ObservableObject {
         let totalContent = documentationContent.count
         let averageQuality =
             documentationContent.values.map(\.quality.overallScore).reduce(0, +)
-            / Double(max(1, totalContent))
+                / Double(max(1, totalContent))
         let contentByType = Dictionary(grouping: documentationContent.values) { $0.type.rawValue }
             .mapValues { $0.count }
         let generationRate = generationHistory.values.flatMap(\.self).count(where: {
@@ -595,10 +595,10 @@ public final class AutonomousDocumentation: ObservableObject {
 
         let averageQuality =
             documentationContent.values.map(\.quality.overallScore).reduce(0, +)
-            / Double(totalContent)
+                / Double(totalContent)
         let averageFreshness =
             documentationContent.values.map { freshnessScore(for: $0) }.reduce(0, +)
-            / Double(totalContent)
+                / Double(totalContent)
 
         let health = (averageQuality + averageFreshness) / 2.0
 
@@ -1062,7 +1062,7 @@ public extension AutonomousDocumentation {
             .mapValues { $0.count }
         let averageQuality =
             documentationContent.values.map(\.quality.overallScore).reduce(0, +)
-            / Double(max(1, totalContent))
+                / Double(max(1, totalContent))
         let totalTags = Set(documentationContent.values.flatMap(\.tags)).count
 
         return [

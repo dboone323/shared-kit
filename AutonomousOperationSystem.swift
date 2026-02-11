@@ -528,7 +528,7 @@ public final class AutonomousOperationSystem: Sendable {
                 (self.autonomousOperationMetrics.averageExecutionTime + result.executionTime) / 2
             self.autonomousOperationMetrics.averageAutonomousLevel =
                 (self.autonomousOperationMetrics.averageAutonomousLevel + result.autonomousLevel)
-                / 2
+                    / 2
             self.autonomousOperationMetrics.lastOperationTime = result.completedAt
         }
     }

@@ -1440,7 +1440,7 @@ final class QuantumConsciousnessDatabase {
 
         let averageCoherence =
             consciousnessStorage.values.map(\.coherenceLevel).reduce(0, +)
-            / Double(max(totalStorage, 1))
+                / Double(max(totalStorage, 1))
 
         return StorageMetrics(
             totalUnits: totalStorage,

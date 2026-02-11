@@ -275,8 +275,8 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         self.totalPoliciesOptimized += 1
         self.averageOptimizationImprovement =
             (self.averageOptimizationImprovement * Double(self.totalPoliciesOptimized - 1)
-                + improvement)
-            / Double(self.totalPoliciesOptimized)
+                    + improvement)
+                / Double(self.totalPoliciesOptimized)
 
         self.trackEvent(
             "policy_optimized",
@@ -357,7 +357,7 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         let decisionTime = Date().timeIntervalSince(decision.timestamp)
         self.averageDecisionTime =
             (self.averageDecisionTime * Double(self.totalDecisionsMade - 1) + decisionTime)
-            / Double(self.totalDecisionsMade)
+                / Double(self.totalDecisionsMade)
     }
 
     private func updatePerformanceMetrics() {

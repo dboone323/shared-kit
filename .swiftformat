@@ -1,7 +1,7 @@
 # Unified SwiftFormat Configuration
-# Version: 0.53+
+# Version: 0.59.1
 # Swift: 6.0
-# Updated: February 10, 2026
+# Updated: February 11, 2026
 
 # Swift version
 --swiftversion 6.0
@@ -10,12 +10,7 @@
 --indent 4
 --indentcase false
 --tabwidth 4
-
 --smarttabs enabled
-
---indent 4
---tabwidth 4
---indentcase false
 
 # Line Breaks
 --linebreaks lf
@@ -34,7 +29,6 @@
 # Operators
 --nospaceoperators ..<,...
 --ranges spaced
-
 --operatorfunc spaced
 
 # Semicolons
@@ -80,67 +74,30 @@
 # Organize Types
 --organizetypes actor,class,enum,struct
 
-# Enabled Rules
+# EXPLICIT RULES (Exhaustive list to ensure local/CI parity)
 --enable isEmpty
 --enable indent
-
 --enable hoistPatternLet
---enable indent
-
 --enable wrapMultilineStatementBraces
---enable indent
-
 --enable blankLinesBetweenScopes
---enable indent
-
 --enable consecutiveSpaces
---enable indent
-
 --enable duplicateImports
---enable indent
-
 --enable sortImports
---enable indent
-
 --enable unusedArguments
---enable indent
-
 --enable void
---enable indent
-
 --enable trailingCommas
---enable indent
-
 --enable strongifiedSelf
---enable indent
-
 --enable docComments
---enable indent
-
 --enable redundantReturn
---enable indent
-
 --enable redundantType
---enable indent
-
 --enable spaceAroundOperators
---enable indent
-
 --enable redundantProperty
---enable indent
-
 --enable redundantThrows
---enable indent
-
 --enable blankLinesBetweenImports
---enable indent
-
 --enable noForceUnwrapInTests
---enable indent
-
 --enable wrap
---enable indent
-
+--enable wrapFunctionBodies
+--enable trailingSpace
 
 # Disabled Rules
 --disable andOperator
@@ -149,6 +106,4 @@
 --disable redundantSelf
 
 # Exclusions
---exclude .build,Package.swift,node_modules,.swiftpm,Tools--enable wrapFunctionBodies
---enable indent
-
+--exclude .build,Package.swift,node_modules,.swiftpm,Tools

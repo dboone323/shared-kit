@@ -179,7 +179,7 @@ public actor QuantumComputingIntegration {
                     // Update metrics
                     let errorRate =
                         hardwareHealth.map(\.errorRate).reduce(0, +)
-                        / Double(hardwareHealth.count)
+                            / Double(hardwareHealth.count)
                     self.quantumMetrics = QuantumMetrics(
                         totalCircuitsExecuted: self.quantumMetrics.totalCircuitsExecuted,
                         averageExecutionTime: self.quantumMetrics.averageExecutionTime,

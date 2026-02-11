@@ -352,7 +352,7 @@ public final class IntelligenceSynthesisEngine: Sendable {
         let avgCapability = capabilities.reduce(0, +) / Double(capabilities.count)
         let capabilityVariance =
             capabilities.map { pow($0 - avgCapability, 2) }.reduce(0, +)
-            / Double(capabilities.count)
+                / Double(capabilities.count)
 
         let types = Set(sources.map(\.sourceType))
         let diversityIndex = Double(types.count) / 10.0 // Assuming 10 intelligence types
@@ -1754,7 +1754,7 @@ public final class MultiversalIntelligenceNetwork: Sendable {
         let universeCount = Double(intelligences.count)
         let avgInterconnectivity =
             intelligences.map(\.multiversalMetrics.interconnectivity).reduce(0, +)
-            / universeCount
+                / universeCount
         let avgSynchronization =
             intelligences.map(\.multiversalMetrics.synchronization).reduce(0, +) / universeCount
         let avgHarmony =
