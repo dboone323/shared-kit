@@ -120,8 +120,10 @@ protocol MergedConsciousnessManagementProtocol {
     /// - Parameter mergedConsciousness: Consciousness to enhance
     /// - Parameter enhancementType: Type of enhancement
     /// - Returns: Enhancement result
-    func enhanceMergedCapabilities(_ mergedConsciousness: MergedConsciousness,
-                                   enhancementType: EnhancementType) async throws -> EnhancementResult
+    func enhanceMergedCapabilities(
+        _ mergedConsciousness: MergedConsciousness,
+        enhancementType: EnhancementType
+    ) async throws -> EnhancementResult
 
     /// Preserve individual consciousness identities
     /// - Parameter mergedConsciousness: Merged consciousness
@@ -614,9 +616,10 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
         setupMonitoring()
     }
 
-    func mergeConsciousnessEntities(_ entities: [ConsciousnessEntity],
-                                    mergeType: MergeType) async throws -> MergedConsciousness
-    {
+    func mergeConsciousnessEntities(
+        _ entities: [ConsciousnessEntity],
+        mergeType: MergeType
+    ) async throws -> MergedConsciousness {
         let mergeId = UUID()
 
         // Safety assessment first
@@ -663,9 +666,10 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
         return mergedConsciousness
     }
 
-    func establishIntegrationProtocols(_ entities: [ConsciousnessEntity],
-                                       protocolType: ProtocolType) async throws -> IntegrationProtocol
-    {
+    func establishIntegrationProtocols(
+        _ entities: [ConsciousnessEntity],
+        protocolType: ProtocolType
+    ) async throws -> IntegrationProtocol {
         let protocolId = UUID()
 
         // Create integration matrix
@@ -786,9 +790,11 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
 
     // MARK: - Private Methods
 
-    private func createMergedEntity(from entities: [ConsciousnessEntity], mergeType: MergeType,
-                                    integrationLevel: Double) -> ConsciousnessEntity
-    {
+    private func createMergedEntity(
+        from entities: [ConsciousnessEntity],
+        mergeType: MergeType,
+        integrationLevel: Double
+    ) -> ConsciousnessEntity {
         let mergedId = UUID()
         let averageEmpathy = entities.map(\.empathyCapacity).reduce(0, +) / Double(entities.count)
         let averageFrequency = entities.map(\.resonanceFrequency).reduce(0, +) / Double(entities.count)
@@ -808,9 +814,10 @@ final class UniversalMindMergingEngine: UniversalMindMergingProtocol {
         )
     }
 
-    private func generateMergedCapabilities(entities: [ConsciousnessEntity],
-                                            mergeType: MergeType) -> [MergedConsciousness.MergedCapability]
-    {
+    private func generateMergedCapabilities(
+        entities: [ConsciousnessEntity],
+        mergeType: MergeType
+    ) -> [MergedConsciousness.MergedCapability] {
         let baseCapabilities = [
             "cognitive_processing",
             "emotional_intelligence",
@@ -1006,9 +1013,10 @@ final class ConsciousnessIntegrationSystem: ConsciousnessIntegrationProtocol {
         )
     }
 
-    func harmonizeConsciousnessFrequencies(_ entities: [ConsciousnessEntity],
-                                           targetFrequency: Double) async throws -> HarmonizationResult
-    {
+    func harmonizeConsciousnessFrequencies(
+        _ entities: [ConsciousnessEntity],
+        targetFrequency: Double
+    ) async throws -> HarmonizationResult {
         let harmonizationId = UUID()
 
         // Calculate harmonization metrics
@@ -1146,9 +1154,10 @@ final class MergedConsciousnessManager: MergedConsciousnessManagementProtocol {
         )
     }
 
-    func enhanceMergedCapabilities(_ mergedConsciousness: MergedConsciousness,
-                                   enhancementType: EnhancementType) async throws -> EnhancementResult
-    {
+    func enhanceMergedCapabilities(
+        _ mergedConsciousness: MergedConsciousness,
+        enhancementType: EnhancementType
+    ) async throws -> EnhancementResult {
         let enhancementId = UUID()
 
         // Calculate enhancement factor based on type
@@ -1236,9 +1245,10 @@ final class MergedConsciousnessManager: MergedConsciousnessManagementProtocol {
 /// Mind merging safety system implementation
 final class MindMergingSafetySystem: MindMergingSafetyProtocol {
     private var cancellables = Set<AnyCancellable>()
-    func assessMergingSafetyRisks(_ entities: [ConsciousnessEntity],
-                                  mergeType: MergeType) async throws -> SafetyAssessment
-    {
+    func assessMergingSafetyRisks(
+        _ entities: [ConsciousnessEntity],
+        mergeType: MergeType
+    ) async throws -> SafetyAssessment {
         let assessmentId = UUID()
 
         // Calculate risk factors

@@ -342,8 +342,10 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         }
 
         self
-            .globalCoverage = min(1.0,
-                                  Double(self.globalParticipationCount) / 8_000_000_000.0) // Target: 8 billion people
+            .globalCoverage = min(
+                1.0,
+                Double(self.globalParticipationCount) / 8_000_000_000.0
+            ) // Target: 8 billion people
         self.policyOptimizationRate = self.averageOptimizationImprovement
 
         // Update performance metrics

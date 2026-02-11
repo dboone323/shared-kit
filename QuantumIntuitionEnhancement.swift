@@ -906,9 +906,10 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
         )
     }
 
-    func correlateWithExternalFactors(intuitionData: ConsciousnessData,
-                                      externalFactors: [ExternalFactor]) async throws -> CorrelationAnalysis
-    {
+    func correlateWithExternalFactors(
+        intuitionData: ConsciousnessData,
+        externalFactors: [ExternalFactor]
+    ) async throws -> CorrelationAnalysis {
         let analysisId = UUID()
 
         // Calculate correlations
@@ -932,9 +933,10 @@ final class IntuitionPatternAnalyzer: IntuitionPatternAnalysisProtocol {
         )
     }
 
-    func validateIntuitionAccuracy(predictions: [Prediction],
-                                   actualOutcomes: [Outcome]) async throws -> AccuracyValidation
-    {
+    func validateIntuitionAccuracy(
+        predictions: [Prediction],
+        actualOutcomes: [Outcome]
+    ) async throws -> AccuracyValidation {
         let validationId = UUID()
 
         // Calculate accuracy metrics
@@ -1041,9 +1043,10 @@ final class PredictiveModelingEngine: PredictiveModelingProtocol {
         return updatedModel
     }
 
-    func evaluateModelPerformance(model: PredictiveModel,
-                                  testData: [ConsciousnessData]) async throws -> PerformanceEvaluation
-    {
+    func evaluateModelPerformance(
+        model: PredictiveModel,
+        testData: [ConsciousnessData]
+    ) async throws -> PerformanceEvaluation {
         let evaluationId = UUID()
 
         // Evaluate model performance

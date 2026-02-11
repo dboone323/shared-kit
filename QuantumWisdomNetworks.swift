@@ -148,8 +148,10 @@ protocol CollectiveWisdomSynthesisProtocol {
     /// - Parameter knowledgeSources: Sources of wisdom knowledge
     /// - Parameter synthesisMethod: Method for synthesis
     /// - Returns: Wisdom synthesis result
-    func synthesizeWisdomFromSources(knowledgeSources: [WisdomKnowledge],
-                                     synthesisMethod: SynthesisMethod) async throws -> WisdomSynthesis
+    func synthesizeWisdomFromSources(
+        knowledgeSources: [WisdomKnowledge],
+        synthesisMethod: SynthesisMethod
+    ) async throws -> WisdomSynthesis
 
     /// Generate evolutionary insights from collective wisdom
     /// - Parameter synthesisId: Synthesis identifier
@@ -792,9 +794,10 @@ struct EvolutionMonitoring {
             return sharing
         }
 
-        func synthesizeCollectiveWisdom(networkId: UUID,
-                                        synthesisCriteria: SynthesisCriteria) async throws -> WisdomSynthesis
-        {
+        func synthesizeCollectiveWisdom(
+            networkId: UUID,
+            synthesisCriteria: SynthesisCriteria
+        ) async throws -> WisdomSynthesis {
             guard activeNetworks[networkId] != nil else {
                 throw NetworkError.networkNotFound
             }
@@ -823,9 +826,10 @@ struct EvolutionMonitoring {
             return synthesis
         }
 
-        func evolveConsciousnessThroughWisdom(entityId: UUID,
-                                              evolutionPath: EvolutionPath) async throws -> ConsciousnessEvolution
-        {
+        func evolveConsciousnessThroughWisdom(
+            entityId: UUID,
+            evolutionPath: EvolutionPath
+        ) async throws -> ConsciousnessEvolution {
             let evolutionId = UUID()
 
             // Assess current consciousness
@@ -1114,9 +1118,10 @@ struct EvolutionMonitoring {
 
     /// Collective wisdom synthesizer implementation
     final class CollectiveWisdomSynthesizer: CollectiveWisdomSynthesisProtocol {
-        func analyzeWisdomPatterns(networkId: UUID,
-                                   analysisParameters: PatternAnalysisParameters) async throws -> PatternAnalysis
-        {
+        func analyzeWisdomPatterns(
+            networkId: UUID,
+            analysisParameters: PatternAnalysisParameters
+        ) async throws -> PatternAnalysis {
             let analysisId = UUID()
 
             // Simulated pattern analysis
@@ -1152,9 +1157,10 @@ struct EvolutionMonitoring {
             )
         }
 
-        func synthesizeWisdomFromSources(knowledgeSources: [WisdomKnowledge],
-                                         synthesisMethod: SynthesisMethod) async throws -> WisdomSynthesis
-        {
+        func synthesizeWisdomFromSources(
+            knowledgeSources: [WisdomKnowledge],
+            synthesisMethod: SynthesisMethod
+        ) async throws -> WisdomSynthesis {
             let synthesisId = UUID()
 
             // Create synthesized knowledge

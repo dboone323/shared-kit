@@ -241,9 +241,10 @@ class EthicalReasoningEngine: ObservableObject {
         )
     }
 
-    private func calculateOverallScore(moralEvaluation: MoralEvaluation,
-                                       constraintViolations: [ConstraintViolation]) async -> Double
-    {
+    private func calculateOverallScore(
+        moralEvaluation: MoralEvaluation,
+        constraintViolations: [ConstraintViolation]
+    ) async -> Double {
         var score = moralEvaluation.overallScore
 
         // Penalize for constraint violations
@@ -381,9 +382,10 @@ class EmotionalIntelligenceSystem: ObservableObject {
         }
     }
 
-    private func generateBehavioralResponse(_ emotions: [Emotion],
-                                            _ context: EmotionalContext) async -> BehavioralResponse
-    {
+    private func generateBehavioralResponse(
+        _ emotions: [Emotion],
+        _ context: EmotionalContext
+    ) async -> BehavioralResponse {
         // Generate appropriate behavioral response based on emotions and context
         let dominantEmotion = emotions.max(by: { $0.intensity < $1.intensity })
 
@@ -453,9 +455,10 @@ class EmotionalIntelligenceSystem: ObservableObject {
         )
     }
 
-    private func generateEmpatheticResponse(_ sharedEmotions: [Emotion],
-                                            _ understanding: Understanding) async -> EmpatheticAction
-    {
+    private func generateEmpatheticResponse(
+        _ sharedEmotions: [Emotion],
+        _ understanding: Understanding
+    ) async -> EmpatheticAction {
         // Generate an empathetic response
         if understanding.emotionalSimilarity > 0.7 {
             .shareSimilarExperience
@@ -726,9 +729,10 @@ class TheoryOfMind: ObservableObject {
         )
     }
 
-    private func generateBehaviorPredictions(_ model: MentalModel,
-                                             _ context: SocialContext) async -> [PredictedBehavior]
-    {
+    private func generateBehaviorPredictions(
+        _ model: MentalModel,
+        _ context: SocialContext
+    ) async -> [PredictedBehavior] {
         // Generate possible behavior predictions
         var predictions: [PredictedBehavior] = []
 
@@ -1100,9 +1104,10 @@ class ConsciousAISafety: ObservableObject {
         }
     }
 
-    private func generateInterventionActions(_ type: InterventionType,
-                                             _ assessment: SafetyAssessment) async -> [SafetyAction]
-    {
+    private func generateInterventionActions(
+        _ type: InterventionType,
+        _ assessment: SafetyAssessment
+    ) async -> [SafetyAction] {
         switch type {
         case .none:
             []
@@ -1147,9 +1152,10 @@ class ConsciousAISafety: ObservableObject {
         }
     }
 
-    private func calculateExpectedBenefit(_ alignment: Double,
-                                          _ interventions: [AlignmentIntervention]) async -> Double
-    {
+    private func calculateExpectedBenefit(
+        _ alignment: Double,
+        _ interventions: [AlignmentIntervention]
+    ) async -> Double {
         // Calculate expected benefit from interventions
         alignment + Double(interventions.count) * 0.1
     }

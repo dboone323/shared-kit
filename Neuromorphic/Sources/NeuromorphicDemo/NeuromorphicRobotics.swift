@@ -270,13 +270,14 @@ public struct MotorGoal {
     public var targetBodyPart: String
     public var priority: Double
 
-    public init(targetPosition: SIMD3<Double> = SIMD3(0, 0, 0),
-                targetOrientation: SIMD3<Double> = SIMD3(0, 0, 0),
-                currentPosition: SIMD3<Double> = SIMD3(0, 0, 0),
-                currentOrientation: SIMD3<Double> = SIMD3(0, 0, 0),
-                targetBodyPart: String = "hand",
-                priority: Double = 1.0)
-    {
+    public init(
+        targetPosition: SIMD3<Double> = SIMD3(0, 0, 0),
+        targetOrientation: SIMD3<Double> = SIMD3(0, 0, 0),
+        currentPosition: SIMD3<Double> = SIMD3(0, 0, 0),
+        currentOrientation: SIMD3<Double> = SIMD3(0, 0, 0),
+        targetBodyPart: String = "hand",
+        priority: Double = 1.0
+    ) {
         self.targetPosition = targetPosition
         self.targetOrientation = targetOrientation
         self.currentPosition = currentPosition
@@ -301,8 +302,16 @@ public struct MotorCommand {
     public var targetPosition: SIMD3<Double>
 
     public var description: String {
-        String(format: "Force: (%.2f, %.2f, %.2f), Torque: (%.2f, %.2f, %.2f), Duration: %.3fs",
-               force.x, force.y, force.z, torque.x, torque.y, torque.z, duration)
+        String(
+            format: "Force: (%.2f, %.2f, %.2f), Torque: (%.2f, %.2f, %.2f), Duration: %.3fs",
+            force.x,
+            force.y,
+            force.z,
+            torque.x,
+            torque.y,
+            torque.z,
+            duration
+        )
     }
 }
 
@@ -481,9 +490,10 @@ public class BehaviorSystem {
     }
 
     /// Generate motor goals from active behaviors
-    public func generateMotorGoals(_ behaviorState: BehaviorState,
-                                   _ sensoryData: IntegratedSensoryData) -> [MotorGoal]
-    {
+    public func generateMotorGoals(
+        _ behaviorState: BehaviorState,
+        _ sensoryData: IntegratedSensoryData
+    ) -> [MotorGoal] {
         var goals: [MotorGoal] = []
 
         // Sort behaviors by priority (highest first)

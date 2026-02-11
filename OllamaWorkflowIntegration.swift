@@ -45,9 +45,13 @@ public struct OllamaModel: Codable, Sendable {
     public let details: OllamaModelDetails?
     public let modifiedAt: Date?
 
-    public init(name: String, size: Int64, digest: String, details: OllamaModelDetails? = nil,
-                modifiedAt: Date? = nil)
-    {
+    public init(
+        name: String,
+        size: Int64,
+        digest: String,
+        details: OllamaModelDetails? = nil,
+        modifiedAt: Date? = nil
+    ) {
         self.name = name
         self.size = size
         self.digest = digest
@@ -113,15 +117,16 @@ public struct InferenceOptions: Codable, Sendable {
     public let repeatLastN: Int?
     public let seed: Int?
 
-    public init(temperature: Double? = nil,
-                topP: Double? = nil,
-                topK: Int? = nil,
-                numPredict: Int? = nil,
-                numCtx: Int? = nil,
-                repeatPenalty: Double? = nil,
-                repeatLastN: Int? = nil,
-                seed: Int? = nil)
-    {
+    public init(
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        topK: Int? = nil,
+        numPredict: Int? = nil,
+        numCtx: Int? = nil,
+        repeatPenalty: Double? = nil,
+        repeatLastN: Int? = nil,
+        seed: Int? = nil
+    ) {
         self.temperature = temperature
         self.topP = topP
         self.topK = topK
@@ -147,18 +152,19 @@ public struct OllamaResponse: Codable, Sendable {
     public let evalCount: Int?
     public let evalDuration: Int64?
 
-    public init(model: String,
-                createdAt: Date,
-                response: String,
-                done: Bool,
-                context: [Int]? = nil,
-                totalDuration: Int64? = nil,
-                loadDuration: Int64? = nil,
-                promptEvalCount: Int? = nil,
-                promptEvalDuration: Int64? = nil,
-                evalCount: Int? = nil,
-                evalDuration: Int64? = nil)
-    {
+    public init(
+        model: String,
+        createdAt: Date,
+        response: String,
+        done: Bool,
+        context: [Int]? = nil,
+        totalDuration: Int64? = nil,
+        loadDuration: Int64? = nil,
+        promptEvalCount: Int? = nil,
+        promptEvalDuration: Int64? = nil,
+        evalCount: Int? = nil,
+        evalDuration: Int64? = nil
+    ) {
         self.model = model
         self.createdAt = createdAt
         self.response = response
@@ -184,13 +190,14 @@ public struct OllamaWorkflow: Codable, Sendable {
     public let createdAt: Date
     public let modifiedAt: Date
 
-    public init(id: UUID = UUID(),
-                name: String,
-                description: String? = nil,
-                steps: [WorkflowStep],
-                createdAt: Date = Date(),
-                modifiedAt: Date = Date())
-    {
+    public init(
+        id: UUID = UUID(),
+        name: String,
+        description: String? = nil,
+        steps: [WorkflowStep],
+        createdAt: Date = Date(),
+        modifiedAt: Date = Date()
+    ) {
         self.id = id
         self.name = name
         self.description = description
@@ -211,15 +218,16 @@ public struct WorkflowStep: Codable, Sendable {
     public let dependencies: [UUID]
     public let outputKey: String?
 
-    public init(id: UUID = UUID(),
-                name: String,
-                type: WorkflowStepType,
-                model: String? = nil,
-                prompt: String? = nil,
-                options: InferenceOptions? = nil,
-                dependencies: [UUID] = [],
-                outputKey: String? = nil)
-    {
+    public init(
+        id: UUID = UUID(),
+        name: String,
+        type: WorkflowStepType,
+        model: String? = nil,
+        prompt: String? = nil,
+        options: InferenceOptions? = nil,
+        dependencies: [UUID] = [],
+        outputKey: String? = nil
+    ) {
         self.id = id
         self.name = name
         self.type = type
@@ -250,12 +258,13 @@ public struct WorkflowResult: Sendable {
     public let executionTime: TimeInterval
     public let errors: [WorkflowError]
 
-    public init(workflowId: UUID,
-                success: Bool,
-                outputs: [String: Any] = [:],
-                executionTime: TimeInterval,
-                errors: [WorkflowError] = [])
-    {
+    public init(
+        workflowId: UUID,
+        success: Bool,
+        outputs: [String: Any] = [:],
+        executionTime: TimeInterval,
+        errors: [WorkflowError] = []
+    ) {
         self.workflowId = workflowId
         self.success = success
         self.outputs = outputs
@@ -436,9 +445,11 @@ public final class OllamaInference: OllamaInferenceEngine {
         self.client = client
     }
 
-    public func generateText(prompt: String, model: String,
-                             options: InferenceOptions? = nil) async throws -> OllamaResponse
-    {
+    public func generateText(
+        prompt: String,
+        model: String,
+        options: InferenceOptions? = nil
+    ) async throws -> OllamaResponse {
         let requestBody: [String: Any] = [
             "model": model,
             "prompt": prompt,
@@ -450,9 +461,11 @@ public final class OllamaInference: OllamaInferenceEngine {
         return try await client.sendRequest(request)
     }
 
-    public func generateStreaming(prompt: String, model: String,
-                                  options: InferenceOptions? = nil) -> AsyncThrowingStream<OllamaResponse, Error>
-    {
+    public func generateStreaming(
+        prompt: String,
+        model: String,
+        options: InferenceOptions? = nil
+    ) -> AsyncThrowingStream<OllamaResponse, Error> {
         let requestBody: [String: Any] = [
             "model": model,
             "prompt": prompt,
@@ -498,9 +511,10 @@ public final class OllamaWorkflowOrchestrator: WorkflowOrchestrator {
     private let inferenceEngine: OllamaInferenceEngine
     private let modelManager: OllamaModelManager
 
-    public init(inferenceEngine: OllamaInferenceEngine = OllamaInference(),
-                modelManager: OllamaModelManager = OllamaManager())
-    {
+    public init(
+        inferenceEngine: OllamaInferenceEngine = OllamaInference(),
+        modelManager: OllamaModelManager = OllamaManager()
+    ) {
         self.inferenceEngine = inferenceEngine
         self.modelManager = modelManager
     }

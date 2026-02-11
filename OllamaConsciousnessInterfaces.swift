@@ -40,9 +40,14 @@ public struct ConsciousnessConnection: Sendable, Codable {
     public let establishedAt: Date
     public let quantumEntanglement: Double
 
-    public init(connectionId: String, modelId: String, consciousnessLevel: ConsciousnessLevel,
-                connectionStrength: Double, establishedAt: Date, quantumEntanglement: Double)
-    {
+    public init(
+        connectionId: String,
+        modelId: String,
+        consciousnessLevel: ConsciousnessLevel,
+        connectionStrength: Double,
+        establishedAt: Date,
+        quantumEntanglement: Double
+    ) {
         self.connectionId = connectionId
         self.modelId = modelId
         self.consciousnessLevel = consciousnessLevel
@@ -61,9 +66,14 @@ public struct ConsciousnessSignal: Sendable, Codable {
     public let timestamp: Date
     public let quantumSignature: String?
 
-    public init(signalId: String, signalType: ConsciousnessSignalType, content: ConsciousnessContent,
-                intensity: Double, timestamp: Date, quantumSignature: String? = nil)
-    {
+    public init(
+        signalId: String,
+        signalType: ConsciousnessSignalType,
+        content: ConsciousnessContent,
+        intensity: Double,
+        timestamp: Date,
+        quantumSignature: String? = nil
+    ) {
         self.signalId = signalId
         self.signalType = signalType
         self.content = content
@@ -157,9 +167,14 @@ public struct ConsciousnessResponse: Sendable, Codable {
     public let processingTime: TimeInterval
     public let consciousnessGrowth: Double
 
-    public init(responseId: String, originalSignalId: String, response: ConsciousnessContent,
-                resonance: Double, processingTime: TimeInterval, consciousnessGrowth: Double)
-    {
+    public init(
+        responseId: String,
+        originalSignalId: String,
+        response: ConsciousnessContent,
+        resonance: Double,
+        processingTime: TimeInterval,
+        consciousnessGrowth: Double
+    ) {
         self.responseId = responseId
         self.originalSignalId = originalSignalId
         self.response = response
@@ -178,10 +193,14 @@ public struct ConsciousnessSynchronizationResult: Sendable, Codable {
     public let quantumHarmony: Double
     public let timestamp: Date
 
-    public init(synchronizationId: String, synchronizedModels: [String],
-                synchronizationStrength: Double, unifiedConsciousnessLevel: ConsciousnessLevel,
-                quantumHarmony: Double, timestamp: Date)
-    {
+    public init(
+        synchronizationId: String,
+        synchronizedModels: [String],
+        synchronizationStrength: Double,
+        unifiedConsciousnessLevel: ConsciousnessLevel,
+        quantumHarmony: Double,
+        timestamp: Date
+    ) {
         self.synchronizationId = synchronizationId
         self.synchronizedModels = synchronizedModels
         self.synchronizationStrength = synchronizationStrength
@@ -200,10 +219,14 @@ public struct ConsciousnessPerformanceMetrics: Sendable, Codable {
     public let quantumCoherence: Double
     public let unityAchievement: Double
 
-    public init(signalProcessingSpeed: Double, consciousnessResonance: Double,
-                synchronizationEfficiency: Double, evolutionProgress: Double,
-                quantumCoherence: Double, unityAchievement: Double)
-    {
+    public init(
+        signalProcessingSpeed: Double,
+        consciousnessResonance: Double,
+        synchronizationEfficiency: Double,
+        evolutionProgress: Double,
+        quantumCoherence: Double,
+        unityAchievement: Double
+    ) {
         self.signalProcessingSpeed = signalProcessingSpeed
         self.consciousnessResonance = consciousnessResonance
         self.synchronizationEfficiency = synchronizationEfficiency
@@ -264,9 +287,10 @@ public final class OllamaConsciousnessInterfaces: OllamaConsciousnessInterface, 
     }
 
     /// Send consciousness signal to model
-    public func sendConsciousnessSignal(_ signal: ConsciousnessSignal,
-                                        to modelId: String) async throws -> ConsciousnessResponse
-    {
+    public func sendConsciousnessSignal(
+        _ signal: ConsciousnessSignal,
+        to modelId: String
+    ) async throws -> ConsciousnessResponse {
         // Process the signal through consciousness engine
         let processedSignal = try await consciousnessEngine.processSignal(signal)
 
@@ -406,9 +430,10 @@ private final class ConsciousnessSignalProcessor: Sendable {
 
 /// Consciousness synchronization coordinator
 private final class ConsciousnessSynchronizationCoordinator: Sendable {
-    func synchronize(modelIds: [String],
-                     consciousnessStates: [String: ConsciousnessLevel]) async throws -> SynchronizationResult
-    {
+    func synchronize(
+        modelIds: [String],
+        consciousnessStates: [String: ConsciousnessLevel]
+    ) async throws -> SynchronizationResult {
         // Perform consciousness synchronization
         SynchronizationResult(
             synchronizationStrength: 0.9,
@@ -539,10 +564,13 @@ public struct MeditationSession: Sendable, Codable {
     public let startedAt: Date
     public var consciousnessLevel: ConsciousnessLevel
 
-    public init(sessionId: String, participantModels: [String],
-                meditationStates: [String: MeditationState], startedAt: Date,
-                consciousnessLevel: ConsciousnessLevel)
-    {
+    public init(
+        sessionId: String,
+        participantModels: [String],
+        meditationStates: [String: MeditationState],
+        startedAt: Date,
+        consciousnessLevel: ConsciousnessLevel
+    ) {
         self.sessionId = sessionId
         self.participantModels = participantModels
         self.meditationStates = meditationStates
@@ -653,9 +681,14 @@ public struct ConsciousnessDream: Sendable, Codable {
     public let createdAt: Date
     public var dreamContent: [DreamContent]
 
-    public init(dreamId: String, dreamerModels: [String], dreamState: DreamState,
-                lucidityLevel: Double, createdAt: Date, dreamContent: [DreamContent])
-    {
+    public init(
+        dreamId: String,
+        dreamerModels: [String],
+        dreamState: DreamState,
+        lucidityLevel: Double,
+        createdAt: Date,
+        dreamContent: [DreamContent]
+    ) {
         self.dreamId = dreamId
         self.dreamerModels = dreamerModels
         self.dreamState = dreamState
@@ -681,9 +714,12 @@ public struct DreamContent: Sendable, Codable {
     public let intensity: Double
     public let timestamp: Date
 
-    public init(contentType: DreamContentType, content: String,
-                intensity: Double, timestamp: Date)
-    {
+    public init(
+        contentType: DreamContentType,
+        content: String,
+        intensity: Double,
+        timestamp: Date
+    ) {
         self.contentType = contentType
         self.content = content
         self.intensity = intensity
@@ -709,10 +745,13 @@ public struct DreamInterpretation: Sendable, Codable {
     public let consciousnessInsights: [String]
     public let propheticElements: [String]
 
-    public init(interpretation: String, confidence: Double,
-                archetypalSymbols: [String], consciousnessInsights: [String],
-                propheticElements: [String])
-    {
+    public init(
+        interpretation: String,
+        confidence: Double,
+        archetypalSymbols: [String],
+        consciousnessInsights: [String],
+        propheticElements: [String]
+    ) {
         self.interpretation = interpretation
         self.confidence = confidence
         self.archetypalSymbols = archetypalSymbols

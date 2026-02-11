@@ -390,9 +390,10 @@ public class MockPlannerService: PlannerServiceProtocol {
         )
     }
 
-    public func getProductivityInsights(for userId: String,
-                                        timeRange: DateInterval) async throws -> ProductivityInsights
-    {
+    public func getProductivityInsights(
+        for userId: String,
+        timeRange: DateInterval
+    ) async throws -> ProductivityInsights {
         ProductivityInsights(
             userId: userId,
             timeRange: timeRange,

@@ -108,15 +108,16 @@ public struct SyncOperation {
     public let priority: Priority
     public let requiresNetwork: Bool
 
-    public init(id: String = UUID().uuidString,
-                type: OperationType,
-                entityType: String,
-                entityId: String,
-                data: [String: Any],
-                timestamp: Date = Date(),
-                priority: Priority = .normal,
-                requiresNetwork: Bool = true)
-    {
+    public init(
+        id: String = UUID().uuidString,
+        type: OperationType,
+        entityType: String,
+        entityId: String,
+        data: [String: Any],
+        timestamp: Date = Date(),
+        priority: Priority = .normal,
+        requiresNetwork: Bool = true
+    ) {
         self.id = id
         self.type = type
         self.entityType = entityType
@@ -178,10 +179,11 @@ public struct SyncSettings {
     public let network: NetworkSettings
     public let storage: StorageSettings
 
-    public init(queue: QueueSettings = QueueSettings(),
-                network: NetworkSettings = NetworkSettings(),
-                storage: StorageSettings = StorageSettings())
-    {
+    public init(
+        queue: QueueSettings = QueueSettings(),
+        network: NetworkSettings = NetworkSettings(),
+        storage: StorageSettings = StorageSettings()
+    ) {
         self.queue = queue
         self.network = network
         self.storage = storage
@@ -194,11 +196,12 @@ public struct QueueSettings {
     public let batchSize: Int
     public let maxQueueSize: Int
 
-    public init(maxRetries: Int = 3,
-                retryDelay: TimeInterval = 60,
-                batchSize: Int = 50,
-                maxQueueSize: Int = 1000)
-    {
+    public init(
+        maxRetries: Int = 3,
+        retryDelay: TimeInterval = 60,
+        batchSize: Int = 50,
+        maxQueueSize: Int = 1000
+    ) {
         self.maxRetries = maxRetries
         self.retryDelay = retryDelay
         self.batchSize = batchSize
@@ -212,11 +215,12 @@ public struct NetworkSettings {
     public let backgroundSync: Bool
     public let syncInterval: TimeInterval
 
-    public init(syncOnCellular: Bool = true,
-                syncOnExpensive: Bool = false,
-                backgroundSync: Bool = true,
-                syncInterval: TimeInterval = 300)
-    { // 5 minutes
+    public init(
+        syncOnCellular: Bool = true,
+        syncOnExpensive: Bool = false,
+        backgroundSync: Bool = true,
+        syncInterval: TimeInterval = 300
+    ) { // 5 minutes
         self.syncOnCellular = syncOnCellular
         self.syncOnExpensive = syncOnExpensive
         self.backgroundSync = backgroundSync
@@ -230,11 +234,12 @@ public struct StorageSettings {
     public let encryptionEnabled: Bool
     public let cleanupInterval: TimeInterval
 
-    public init(maxOfflineDataSize: Int64 = 100 * 1024 * 1024, // 100MB
-                compressionEnabled: Bool = true,
-                encryptionEnabled: Bool = true,
-                cleanupInterval: TimeInterval = 86400)
-    { // 24 hours
+    public init(
+        maxOfflineDataSize: Int64 = 100 * 1024 * 1024, // 100MB
+        compressionEnabled: Bool = true,
+        encryptionEnabled: Bool = true,
+        cleanupInterval: TimeInterval = 86400
+    ) { // 24 hours
         self.maxOfflineDataSize = maxOfflineDataSize
         self.compressionEnabled = compressionEnabled
         self.encryptionEnabled = encryptionEnabled

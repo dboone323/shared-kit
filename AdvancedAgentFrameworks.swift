@@ -70,12 +70,13 @@ public struct AgentExperience: Codable, Sendable {
     public let reward: Double
     public let context: [String: AnyCodable]
 
-    public init(timestamp: Date = Date(),
-                action: String,
-                outcome: String,
-                reward: Double,
-                context: [String: AnyCodable] = [:])
-    {
+    public init(
+        timestamp: Date = Date(),
+        action: String,
+        outcome: String,
+        reward: Double,
+        context: [String: AnyCodable] = [:]
+    ) {
         self.timestamp = timestamp
         self.action = action
         self.outcome = outcome
@@ -91,11 +92,12 @@ public struct AgentEnvironment: Codable, Sendable {
     public let opportunities: [String: AnyCodable]
     public let threats: [String: AnyCodable]
 
-    public init(parameters: [String: AnyCodable] = [:],
-                constraints: [String: AnyCodable] = [:],
-                opportunities: [String: AnyCodable] = [:],
-                threats: [String: AnyCodable] = [:])
-    {
+    public init(
+        parameters: [String: AnyCodable] = [:],
+        constraints: [String: AnyCodable] = [:],
+        opportunities: [String: AnyCodable] = [:],
+        threats: [String: AnyCodable] = [:]
+    ) {
         self.parameters = parameters
         self.constraints = constraints
         self.opportunities = opportunities
@@ -112,13 +114,14 @@ public struct AgentIntelligenceMetrics: Codable, Sendable {
     public let creativityIndex: Double
     public let ethicalAlignment: Double
 
-    public init(processingSpeed: Double = 1.0,
-                learningEfficiency: Double = 1.0,
-                adaptationRate: Double = 1.0,
-                decisionAccuracy: Double = 1.0,
-                creativityIndex: Double = 1.0,
-                ethicalAlignment: Double = 1.0)
-    {
+    public init(
+        processingSpeed: Double = 1.0,
+        learningEfficiency: Double = 1.0,
+        adaptationRate: Double = 1.0,
+        decisionAccuracy: Double = 1.0,
+        creativityIndex: Double = 1.0,
+        ethicalAlignment: Double = 1.0
+    ) {
         self.processingSpeed = processingSpeed
         self.learningEfficiency = learningEfficiency
         self.adaptationRate = adaptationRate
@@ -132,8 +135,10 @@ public struct AgentIntelligenceMetrics: Codable, Sendable {
 
 /// Base implementation of advanced autonomous agent
 @MainActor
-open class BaseAdvancedAgent<State: Codable & Sendable,
-    Action: Codable & Sendable>: AdvancedAutonomousAgent,
+open class BaseAdvancedAgent<
+    State: Codable & Sendable,
+    Action: Codable & Sendable
+>: AdvancedAutonomousAgent,
     IntelligenceAmplifiable,
     SelfLearningAgent
 {
@@ -158,11 +163,12 @@ open class BaseAdvancedAgent<State: Codable & Sendable,
 
     private var cancellables = Set<AnyCancellable>()
 
-    public init(id: UUID = UUID(),
-                name: String,
-                initialState: State,
-                intelligenceLevel: AgentIntelligenceLevel = .standard)
-    {
+    public init(
+        id: UUID = UUID(),
+        name: String,
+        initialState: State,
+        intelligenceLevel: AgentIntelligenceLevel = .standard
+    ) {
         self.id = id
         self.name = name
         self.state = initialState
@@ -182,8 +188,10 @@ open class BaseAdvancedAgent<State: Codable & Sendable,
             action: String(describing: action),
             outcome: String(describing: processedAction),
             reward: calculateReward(for: processedAction),
-            context: ["intelligence_level": .init(intelligenceLevel.rawValue),
-                      "amplified_intelligence": .init(amplifiedIntelligence)]
+            context: [
+                "intelligence_level": .init(intelligenceLevel.rawValue),
+                "amplified_intelligence": .init(amplifiedIntelligence),
+            ]
         )
 
         await collectExperience(experience)

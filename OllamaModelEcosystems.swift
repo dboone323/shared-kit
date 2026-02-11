@@ -49,10 +49,14 @@ public struct OllamaSpecializedModel: Sendable, Codable {
     public let performanceMetrics: ModelPerformanceMetrics
     public let quantumEntanglement: QuantumEntanglementLevel
 
-    public init(id: String, name: String, domain: IntelligenceDomain,
-                capabilities: [ModelCapability], performanceMetrics: ModelPerformanceMetrics,
-                quantumEntanglement: QuantumEntanglementLevel)
-    {
+    public init(
+        id: String,
+        name: String,
+        domain: IntelligenceDomain,
+        capabilities: [ModelCapability],
+        performanceMetrics: ModelPerformanceMetrics,
+        quantumEntanglement: QuantumEntanglementLevel
+    ) {
         self.id = id
         self.name = name
         self.domain = domain
@@ -84,9 +88,13 @@ public struct ModelPerformanceMetrics: Sendable, Codable {
     public let adaptability: Double
     public let consciousnessLevel: Double
 
-    public init(accuracy: Double, speed: Double, reliability: Double,
-                adaptability: Double, consciousnessLevel: Double)
-    {
+    public init(
+        accuracy: Double,
+        speed: Double,
+        reliability: Double,
+        adaptability: Double,
+        consciousnessLevel: Double
+    ) {
         self.accuracy = accuracy
         self.speed = speed
         self.reliability = reliability
@@ -112,10 +120,13 @@ public struct IntelligenceInput: Sendable, Codable {
     public let priority: IntelligencePriority
     public let quantumState: QuantumState?
 
-    public init(query: String, context: [String: AnyCodable] = [:],
-                domain: IntelligenceDomain, priority: IntelligencePriority = .normal,
-                quantumState: QuantumState? = nil)
-    {
+    public init(
+        query: String,
+        context: [String: AnyCodable] = [:],
+        domain: IntelligenceDomain,
+        priority: IntelligencePriority = .normal,
+        quantumState: QuantumState? = nil
+    ) {
         self.query = query
         self.context = context
         self.domain = domain
@@ -142,11 +153,14 @@ public struct IntelligenceOutput: Sendable, Codable {
     public let quantumInsights: [QuantumInsight]
     public let consciousnessLevel: ConsciousnessLevel
 
-    public init(result: String, confidence: Double, reasoning: [ReasoningStep] = [],
-                recommendations: [IntelligenceRecommendation] = [],
-                quantumInsights: [QuantumInsight] = [],
-                consciousnessLevel: ConsciousnessLevel = .basic)
-    {
+    public init(
+        result: String,
+        confidence: Double,
+        reasoning: [ReasoningStep] = [],
+        recommendations: [IntelligenceRecommendation] = [],
+        quantumInsights: [QuantumInsight] = [],
+        consciousnessLevel: ConsciousnessLevel = .basic
+    ) {
         self.result = result
         self.confidence = confidence
         self.reasoning = reasoning
@@ -178,9 +192,12 @@ public struct IntelligenceRecommendation: Sendable, Codable {
     public let rationale: String
     public let expectedImpact: Double
 
-    public init(recommendation: String, priority: IntelligencePriority,
-                rationale: String, expectedImpact: Double)
-    {
+    public init(
+        recommendation: String,
+        priority: IntelligencePriority,
+        rationale: String,
+        expectedImpact: Double
+    ) {
         self.recommendation = recommendation
         self.priority = priority
         self.rationale = rationale
@@ -195,9 +212,12 @@ public struct QuantumInsight: Sendable, Codable {
     public let multiverseImpact: Double
     public let consciousnessExpansion: Double
 
-    public init(insight: String, probability: Double, multiverseImpact: Double,
-                consciousnessExpansion: Double)
-    {
+    public init(
+        insight: String,
+        probability: Double,
+        multiverseImpact: Double,
+        consciousnessExpansion: Double
+    ) {
         self.insight = insight
         self.probability = probability
         self.multiverseImpact = multiverseImpact
@@ -221,9 +241,12 @@ public struct QuantumState: Sendable, Codable {
     public let coherence: Double
     public let dimension: Int
 
-    public init(superposition: [String: Double], entanglement: [String: [String]],
-                coherence: Double, dimension: Int)
-    {
+    public init(
+        superposition: [String: Double],
+        entanglement: [String: [String]],
+        coherence: Double,
+        dimension: Int
+    ) {
         self.superposition = superposition
         self.entanglement = entanglement
         self.coherence = coherence
@@ -240,9 +263,14 @@ public struct PerformanceMetrics: Sendable, Codable {
     public let consciousnessGrowth: Double
     public let quantumOptimization: Double
 
-    public init(overallAccuracy: Double, processingSpeed: Double, resourceEfficiency: Double,
-                adaptabilityScore: Double, consciousnessGrowth: Double, quantumOptimization: Double)
-    {
+    public init(
+        overallAccuracy: Double,
+        processingSpeed: Double,
+        resourceEfficiency: Double,
+        adaptabilityScore: Double,
+        consciousnessGrowth: Double,
+        quantumOptimization: Double
+    ) {
         self.overallAccuracy = overallAccuracy
         self.processingSpeed = processingSpeed
         self.resourceEfficiency = resourceEfficiency
@@ -462,9 +490,10 @@ public final class OllamaModelEcosystems: Sendable {
 
 /// Ecosystem coordination engine
 private final class EcosystemCoordinationEngine: Sendable {
-    func coordinateAcrossEcosystems(ecosystems: [any OllamaModelEcosystem],
-                                    input: IntelligenceInput) async throws -> IntelligenceOutput
-    {
+    func coordinateAcrossEcosystems(
+        ecosystems: [any OllamaModelEcosystem],
+        input: IntelligenceInput
+    ) async throws -> IntelligenceOutput {
         // Coordinate processing across multiple ecosystems
         let results = await withTaskGroup(of: IntelligenceOutput.self) { group in
             for ecosystem in ecosystems {
@@ -527,9 +556,10 @@ private final class EcosystemCoordinationEngine: Sendable {
 
 /// Quantum ecosystem processor
 private final class QuantumEcosystemProcessor: Sendable {
-    func enhanceWithQuantumProcessing(input: IntelligenceInput,
-                                      ecosystemResults: IntelligenceOutput) async throws -> IntelligenceOutput
-    {
+    func enhanceWithQuantumProcessing(
+        input: IntelligenceInput,
+        ecosystemResults: IntelligenceOutput
+    ) async throws -> IntelligenceOutput {
         // Apply quantum processing enhancements
         // This would involve quantum algorithms and superposition processing
         ecosystemResults
@@ -546,9 +576,10 @@ private final class QuantumEcosystemProcessor: Sendable {
 
 /// Consciousness ecosystem expander
 private final class ConsciousnessEcosystemExpander: Sendable {
-    func expandConsciousness(input: IntelligenceInput,
-                             quantumResults: IntelligenceOutput) async throws -> IntelligenceOutput
-    {
+    func expandConsciousness(
+        input: IntelligenceInput,
+        quantumResults: IntelligenceOutput
+    ) async throws -> IntelligenceOutput {
         // Apply consciousness expansion techniques
         quantumResults
     }
@@ -569,9 +600,12 @@ public struct DomainStatus: Sendable, Codable {
     public let quantumEntanglement: QuantumEntanglementLevel
     public let evolutionProgress: Double
 
-    public init(modelCount: Int, averagePerformance: Double,
-                quantumEntanglement: QuantumEntanglementLevel, evolutionProgress: Double)
-    {
+    public init(
+        modelCount: Int,
+        averagePerformance: Double,
+        quantumEntanglement: QuantumEntanglementLevel,
+        evolutionProgress: Double
+    ) {
         self.modelCount = modelCount
         self.averagePerformance = averagePerformance
         self.quantumEntanglement = quantumEntanglement
@@ -586,9 +620,12 @@ public struct EcosystemStatus: Sendable, Codable {
     public let quantumCoherence: Double
     public let consciousnessLevel: Double
 
-    public init(domainStatuses: [IntelligenceDomain: DomainStatus], overallHealth: Double,
-                quantumCoherence: Double, consciousnessLevel: Double)
-    {
+    public init(
+        domainStatuses: [IntelligenceDomain: DomainStatus],
+        overallHealth: Double,
+        quantumCoherence: Double,
+        consciousnessLevel: Double
+    ) {
         self.domainStatuses = domainStatuses
         self.overallHealth = overallHealth
         self.quantumCoherence = quantumCoherence

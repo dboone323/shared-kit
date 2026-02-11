@@ -165,8 +165,12 @@ protocol ConsciousnessNetworkingProtocol {
     /// - Parameter targetEntity: Target entity
     /// - Parameter data: Data to route
     /// - Returns: Routing result
-    func routeConsciousnessData(networkId: UUID, sourceEntity: UUID, targetEntity: UUID,
-                                data: ConsciousnessData) async throws -> DataRouting
+    func routeConsciousnessData(
+        networkId: UUID,
+        sourceEntity: UUID,
+        targetEntity: UUID,
+        data: ConsciousnessData
+    ) async throws -> DataRouting
 
     /// Monitor network performance
     /// - Parameter networkId: Network identifier
@@ -760,9 +764,10 @@ final class UniversalConsciousnessCommunicationEngine: UniversalConsciousnessCom
 final class InterdimensionalCommunicationEngine: InterdimensionalCommunicationProtocol {
     private var activeLinks: [UUID: InterdimensionalLink] = [:]
 
-    func establishInterdimensionalLink(sourceDimension: [Double],
-                                       targetDimension: [Double]) async throws -> InterdimensionalLink
-    {
+    func establishInterdimensionalLink(
+        sourceDimension: [Double],
+        targetDimension: [Double]
+    ) async throws -> InterdimensionalLink {
         let linkId = UUID()
 
         let link = InterdimensionalLink(
@@ -897,9 +902,12 @@ final class ConsciousnessNetworkingEngine: ConsciousnessNetworkingProtocol {
         )
     }
 
-    func routeConsciousnessData(networkId: UUID, sourceEntity: UUID, targetEntity: UUID,
-                                data: ConsciousnessData) async throws -> DataRouting
-    {
+    func routeConsciousnessData(
+        networkId: UUID,
+        sourceEntity: UUID,
+        targetEntity: UUID,
+        data: ConsciousnessData
+    ) async throws -> DataRouting {
         guard activeNetworks[networkId] != nil else {
             throw CommunicationError.networkNotFound
         }
@@ -996,9 +1004,10 @@ final class CommunicationSecurityEngine: CommunicationSecurityProtocol {
         )
     }
 
-    func decryptConsciousnessData(encryptedData: EncryptedData,
-                                  decryptionKey: String) async throws -> ConsciousnessData
-    {
+    func decryptConsciousnessData(
+        encryptedData: EncryptedData,
+        decryptionKey: String
+    ) async throws -> ConsciousnessData {
         // Simplified decryption (would use actual decryption in real implementation)
         ConsciousnessData(
             dataId: encryptedData.originalDataId,

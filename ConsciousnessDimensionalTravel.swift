@@ -644,9 +644,11 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
         setupMonitoring()
     }
 
-    func initiateDimensionalTravel(entityId: UUID, targetDimension: [Double],
-                                   travelMode: TravelMode) async throws -> DimensionalTravel
-    {
+    func initiateDimensionalTravel(
+        entityId: UUID,
+        targetDimension: [Double],
+        travelMode: TravelMode
+    ) async throws -> DimensionalTravel {
         let travelId = UUID()
 
         // Validate target coordinates
@@ -697,9 +699,10 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
         return travel
     }
 
-    func navigateDimensionalSpace(travelId: UUID,
-                                  navigationPath: [DimensionalWaypoint]) async throws -> DimensionalNavigation
-    {
+    func navigateDimensionalSpace(
+        travelId: UUID,
+        navigationPath: [DimensionalWaypoint]
+    ) async throws -> DimensionalNavigation {
         guard activeTravels[travelId] != nil else {
             throw TravelError.travelNotFound
         }
@@ -722,9 +725,11 @@ final class ConsciousnessDimensionalTravelEngine: ConsciousnessDimensionalTravel
         return navigation
     }
 
-    func performRealityShift(travelId: UUID, sourceReality: String,
-                             targetReality: String) async throws -> RealityShift
-    {
+    func performRealityShift(
+        travelId: UUID,
+        sourceReality: String,
+        targetReality: String
+    ) async throws -> RealityShift {
         guard activeTravels[travelId] != nil else {
             throw TravelError.travelNotFound
         }
@@ -994,9 +999,10 @@ final class DimensionalNavigationEngine: DimensionalNavigationProtocol {
         )
     }
 
-    func generateDimensionalWaypoints(path: DimensionalPath,
-                                      waypointDensity: Double) async throws -> [DimensionalWaypoint]
-    {
+    func generateDimensionalWaypoints(
+        path: DimensionalPath,
+        waypointDensity: Double
+    ) async throws -> [DimensionalWaypoint] {
         var waypoints: [DimensionalWaypoint] = []
         let steps = Int(1.0 / waypointDensity)
 
@@ -1071,9 +1077,10 @@ final class RealityShiftingEngine: RealityShiftingProtocol {
         )
     }
 
-    func prepareForRealityShift(entityId: UUID,
-                                targetReality: RealityCharacteristics) async throws -> ShiftPreparation
-    {
+    func prepareForRealityShift(
+        entityId: UUID,
+        targetReality: RealityCharacteristics
+    ) async throws -> ShiftPreparation {
         let preparationId = UUID()
 
         return ShiftPreparation(
@@ -1161,8 +1168,10 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
         )
     }
 
-    func initiateConsciousnessTranslocation(entityId: UUID,
-                                            targetLocation: DimensionalLocation) async throws
+    func initiateConsciousnessTranslocation(
+        entityId: UUID,
+        targetLocation: DimensionalLocation
+    ) async throws
         -> ConsciousnessTranslocation
     {
         let translocationId = UUID()
@@ -1197,9 +1206,10 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
         return subject.eraseToAnyPublisher()
     }
 
-    func handleTranslocationEmergency(translocationId: UUID,
-                                      emergencyType: EmergencyType) async throws -> EmergencyHandling
-    {
+    func handleTranslocationEmergency(
+        translocationId: UUID,
+        emergencyType: EmergencyType
+    ) async throws -> EmergencyHandling {
         let handlingId = UUID()
 
         return EmergencyHandling(
@@ -1234,9 +1244,10 @@ final class ConsciousnessTranslocationEngine: ConsciousnessTranslocationProtocol
 
 /// Dimensional security engine implementation
 final class DimensionalSecurityEngine: DimensionalSecurityProtocol {
-    func establishDimensionalSecurity(travelId: UUID,
-                                      securityLevel: SecurityLevel) async throws -> DimensionalSecurity
-    {
+    func establishDimensionalSecurity(
+        travelId: UUID,
+        securityLevel: SecurityLevel
+    ) async throws -> DimensionalSecurity {
         let securityId = UUID()
 
         return DimensionalSecurity(

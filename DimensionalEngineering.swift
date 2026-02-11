@@ -273,9 +273,10 @@ final class DimensionalEngineeringEngine: DimensionalEngineeringProtocol, Dimens
         )
     }
 
-    func manipulateDimension(_ dimension: Dimension,
-                             with operation: DimensionalOperation) async throws -> ManipulationResult
-    {
+    func manipulateDimension(
+        _ dimension: Dimension,
+        with operation: DimensionalOperation
+    ) async throws -> ManipulationResult {
         let validation = try await validateOperation(operation)
         guard validation.isValid else {
             throw DimensionalError.operationFailed(validation.errors)
@@ -461,9 +462,11 @@ final class DimensionManager {
         )
     }
 
-    func performOperation(_ operation: DimensionalOperation, on dimension: Dimension,
-                          in state: DimensionalState) async throws -> ManipulationResult
-    {
+    func performOperation(
+        _ operation: DimensionalOperation,
+        on dimension: Dimension,
+        in state: DimensionalState
+    ) async throws -> ManipulationResult {
         var newState = state
         var targetDimension = dimension
 
@@ -512,9 +515,10 @@ final class DimensionManager {
         )
     }
 
-    func modifyProperties(_ properties: DimensionalProperties,
-                          in state: DimensionalState) async throws -> ModificationResult
-    {
+    func modifyProperties(
+        _ properties: DimensionalProperties,
+        in state: DimensionalState
+    ) async throws -> ModificationResult {
         // Modify dimensional properties across the state
         var newState = state
         // Apply property modifications
@@ -560,9 +564,10 @@ final class DimensionManager {
         )
     }
 
-    func collapseStructure(_ structure: DimensionalStructure,
-                           in state: DimensionalState) async throws -> CollapseResult
-    {
+    func collapseStructure(
+        _ structure: DimensionalStructure,
+        in state: DimensionalState
+    ) async throws -> CollapseResult {
         // Collapse dimensional structure
         var newState = state
         // Remove structure from state
@@ -587,9 +592,10 @@ final class DimensionManager {
         )
     }
 
-    private func applyModification(_ operation: DimensionalOperation,
-                                   to dimension: Dimension) async throws -> Dimension
-    {
+    private func applyModification(
+        _ operation: DimensionalOperation,
+        to dimension: Dimension
+    ) async throws -> Dimension {
         var modifiedDimension = dimension
 
         // Apply modifications based on parameters
@@ -637,9 +643,10 @@ final class ConstructBuilder {
         )
     }
 
-    func buildConstruct(_ specification: DimensionalSpecification,
-                        in state: DimensionalState) async throws -> DimensionalConstruct
-    {
+    func buildConstruct(
+        _ specification: DimensionalSpecification,
+        in state: DimensionalState
+    ) async throws -> DimensionalConstruct {
         DimensionalConstruct(
             id: UUID(),
             name: specification.name,
@@ -699,9 +706,10 @@ final class StabilityController {
         )
     }
 
-    func stabilizeConstruct(_ construct: DimensionalConstruct,
-                            in state: DimensionalState) async throws -> StabilizationResult
-    {
+    func stabilizeConstruct(
+        _ construct: DimensionalConstruct,
+        in state: DimensionalState
+    ) async throws -> StabilizationResult {
         var stabilizedConstruct = construct
         stabilizedConstruct.stability += 0.1
 

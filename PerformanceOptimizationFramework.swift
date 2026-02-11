@@ -522,11 +522,12 @@ public struct PerformanceSettings {
     public let profiling: ProfilingSettings
     public let caching: CachingSettings
 
-    public init(optimization: OptimizationSettings = OptimizationSettings(),
-                scaling: ScalingSettings = ScalingSettings(),
-                profiling: ProfilingSettings = ProfilingSettings(),
-                caching: CachingSettings = CachingSettings())
-    {
+    public init(
+        optimization: OptimizationSettings = OptimizationSettings(),
+        scaling: ScalingSettings = ScalingSettings(),
+        profiling: ProfilingSettings = ProfilingSettings(),
+        caching: CachingSettings = CachingSettings()
+    ) {
         self.optimization = optimization
         self.scaling = scaling
         self.profiling = profiling
@@ -541,12 +542,13 @@ public struct OptimizationSettings {
     public let networkOptimizationEnabled: Bool
     public let optimizationInterval: TimeInterval
 
-    public init(memoryOptimizationEnabled: Bool = true,
-                cpuOptimizationEnabled: Bool = true,
-                ioOptimizationEnabled: Bool = true,
-                networkOptimizationEnabled: Bool = true,
-                optimizationInterval: TimeInterval = 300)
-    { // 5 minutes
+    public init(
+        memoryOptimizationEnabled: Bool = true,
+        cpuOptimizationEnabled: Bool = true,
+        ioOptimizationEnabled: Bool = true,
+        networkOptimizationEnabled: Bool = true,
+        optimizationInterval: TimeInterval = 300
+    ) { // 5 minutes
         self.memoryOptimizationEnabled = memoryOptimizationEnabled
         self.cpuOptimizationEnabled = cpuOptimizationEnabled
         self.ioOptimizationEnabled = ioOptimizationEnabled
@@ -566,16 +568,17 @@ public struct ScalingSettings {
     public let scaleSensitivity: Double
     public let resourceSensitivity: Double
 
-    public init(cpuScaleUpThreshold: Double = 0.8,
-                cpuScaleDownThreshold: Double = 0.3,
-                memoryScaleUpThreshold: Double = 0.85,
-                requestScaleUpThreshold: Double = 1000,
-                targetCpuUsage: Double = 0.7,
-                targetMemoryUsage: Double = 0.8,
-                targetRequestRate: Double = 500,
-                scaleSensitivity: Double = 0.1,
-                resourceSensitivity: Double = 0.1)
-    {
+    public init(
+        cpuScaleUpThreshold: Double = 0.8,
+        cpuScaleDownThreshold: Double = 0.3,
+        memoryScaleUpThreshold: Double = 0.85,
+        requestScaleUpThreshold: Double = 1000,
+        targetCpuUsage: Double = 0.7,
+        targetMemoryUsage: Double = 0.8,
+        targetRequestRate: Double = 500,
+        scaleSensitivity: Double = 0.1,
+        resourceSensitivity: Double = 0.1
+    ) {
         self.cpuScaleUpThreshold = cpuScaleUpThreshold
         self.cpuScaleDownThreshold = cpuScaleDownThreshold
         self.memoryScaleUpThreshold = memoryScaleUpThreshold
@@ -594,11 +597,12 @@ public struct ProfilingSettings {
     public let historySize: Int
     public let samplingRate: Double
 
-    public init(enabled: Bool = true,
-                maxSamples: Int = 1000,
-                historySize: Int = 100,
-                samplingRate: Double = 1.0)
-    {
+    public init(
+        enabled: Bool = true,
+        maxSamples: Int = 1000,
+        historySize: Int = 100,
+        samplingRate: Double = 1.0
+    ) {
         self.enabled = enabled
         self.maxSamples = maxSamples
         self.historySize = historySize
@@ -612,11 +616,12 @@ public struct CachingSettings {
     public let maxAge: TimeInterval
     public let compressionEnabled: Bool
 
-    public init(enabled: Bool = true,
-                maxItems: Int = 1000,
-                maxAge: TimeInterval = 3600, // 1 hour
-                compressionEnabled: Bool = true)
-    {
+    public init(
+        enabled: Bool = true,
+        maxItems: Int = 1000,
+        maxAge: TimeInterval = 3600, // 1 hour
+        compressionEnabled: Bool = true
+    ) {
         self.enabled = enabled
         self.maxItems = maxItems
         self.maxAge = maxAge

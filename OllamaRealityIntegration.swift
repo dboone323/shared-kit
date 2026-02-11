@@ -103,13 +103,14 @@ public struct RealityParameters: Sendable, Codable {
     public let quantumEntanglement: QuantumEntanglement
     public let consciousnessAmplification: Double
 
-    public init(intensity: Double = 0.1,
-                scope: RealityScope = .local,
-                duration: TimeInterval = 60.0,
-                ethicalConstraints: [EthicalConstraint] = [],
-                quantumEntanglement: QuantumEntanglement = .minimal,
-                consciousnessAmplification: Double = 1.0)
-    {
+    public init(
+        intensity: Double = 0.1,
+        scope: RealityScope = .local,
+        duration: TimeInterval = 60.0,
+        ethicalConstraints: [EthicalConstraint] = [],
+        quantumEntanglement: QuantumEntanglement = .minimal,
+        consciousnessAmplification: Double = 1.0
+    ) {
         self.intensity = intensity
         self.scope = scope
         self.duration = duration
@@ -267,11 +268,12 @@ public final class OllamaRealityIntegrationCoordinator: ObservableObject, Sendab
     private var observationTask: Task<Void, Never>?
     private var maintenanceTask: Task<Void, Never>?
 
-    public init(ollamaClient: OllamaClient = OllamaClient(),
-                quantumProcessor: QuantumRealityProcessor = QuantumRealityProcessor(),
-                consciousnessBridge: ConsciousnessRealityBridge = ConsciousnessRealityBridge(),
-                ethicalGuardian: EthicalRealityGuardian = EthicalRealityGuardian())
-    {
+    public init(
+        ollamaClient: OllamaClient = OllamaClient(),
+        quantumProcessor: QuantumRealityProcessor = QuantumRealityProcessor(),
+        consciousnessBridge: ConsciousnessRealityBridge = ConsciousnessRealityBridge(),
+        ethicalGuardian: EthicalRealityGuardian = EthicalRealityGuardian()
+    ) {
         self.ollamaClient = ollamaClient
         self.quantumProcessor = quantumProcessor
         self.consciousnessBridge = consciousnessBridge
@@ -417,9 +419,10 @@ public final class OllamaRealityIntegrationCoordinator: ObservableObject, Sendab
         try await ethicalGuardian.performEthicalMaintenance()
     }
 
-    private func detectAnomalies(quantumState: QuantumState,
-                                 consciousnessState: ConsciousnessState) -> [RealityAnomaly]
-    {
+    private func detectAnomalies(
+        quantumState: QuantumState,
+        consciousnessState: ConsciousnessState
+    ) -> [RealityAnomaly] {
         var anomalies: [RealityAnomaly] = []
 
         // Quantum anomalies

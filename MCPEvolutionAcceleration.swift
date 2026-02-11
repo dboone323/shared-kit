@@ -288,9 +288,10 @@ public final class EvolutionAccelerator: Sendable {
     }
 
     /// Apply acceleration parameter
-    private func applyAccelerationParameter(_ parameter: AccelerationParameter,
-                                            to process: EvolutionaryProcess) async -> EvolutionAccelerationStep
-    {
+    private func applyAccelerationParameter(
+        _ parameter: AccelerationParameter,
+        to process: EvolutionaryProcess
+    ) async -> EvolutionAccelerationStep {
         // Simulate acceleration application
         try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
 
@@ -456,9 +457,10 @@ public final class CapabilityAmplifier: Sendable {
     }
 
     /// Execute amplification target
-    private func executeAmplificationTarget(_ target: AmplificationTarget,
-                                            for system: AmplifiableSystem) async -> CapabilityAmplificationStep
-    {
+    private func executeAmplificationTarget(
+        _ target: AmplificationTarget,
+        for system: AmplifiableSystem
+    ) async -> CapabilityAmplificationStep {
         try? await Task.sleep(nanoseconds: UInt64(target.estimatedDuration * 1_000_000_000))
 
         let achievedLevel = target.targetLevel * (0.85 + Double.random(in: 0 ... 0.3))
@@ -1049,9 +1051,10 @@ public final class MCPEvolutionAccelerationCoordinator: Sendable {
     /// - Parameter system: System to adapt
     /// - Parameter environment: Environment to adapt to
     /// - Returns: Adaptation result
-    public func adaptSystem(_ system: AdaptableSystem,
-                            to environment: AdaptiveEnvironment) async -> SystemAdaptationResult?
-    {
+    public func adaptSystem(
+        _ system: AdaptableSystem,
+        to environment: AdaptiveEnvironment
+    ) async -> SystemAdaptationResult? {
         await adaptationEngine.adaptSystem(system, to: environment)
     }
 
@@ -1286,9 +1289,10 @@ public final class GrowthCatalyst: Sendable {
     }
 
     /// Execute catalysis method
-    private func executeCatalysisMethod(_ method: GrowthCatalysisMethod,
-                                        for system: GrowableSystem) async -> GrowthCatalysisStep
-    {
+    private func executeCatalysisMethod(
+        _ method: GrowthCatalysisMethod,
+        for system: GrowableSystem
+    ) async -> GrowthCatalysisStep {
         try? await Task.sleep(nanoseconds: UInt64(method.duration * 1_000_000_000))
 
         let actualGrowthBoost = method.expectedGrowthBoost * (0.85 + Double.random(in: 0 ... 0.3))
@@ -1453,9 +1457,10 @@ public final class AdaptationEngine: Sendable {
     ///   - system: System to adapt
     ///   - environment: Environment to adapt to
     /// - Returns: Adaptation result
-    public func adaptSystem(_ system: AdaptableSystem,
-                            to environment: AdaptiveEnvironment) async -> SystemAdaptationResult
-    {
+    public func adaptSystem(
+        _ system: AdaptableSystem,
+        to environment: AdaptiveEnvironment
+    ) async -> SystemAdaptationResult {
         let adaptationAnalysis = analyzeAdaptationRequirements(system, environment)
         let adaptationStrategy = designAdaptationStrategy(adaptationAnalysis)
         let adaptationResults = await executeSystemAdaptation(system, strategy: adaptationStrategy)
@@ -1473,9 +1478,10 @@ public final class AdaptationEngine: Sendable {
     }
 
     /// Analyze adaptation requirements
-    private func analyzeAdaptationRequirements(_ system: AdaptableSystem,
-                                               _ environment: AdaptiveEnvironment) -> AdaptationAnalysis
-    {
+    private func analyzeAdaptationRequirements(
+        _ system: AdaptableSystem,
+        _ environment: AdaptiveEnvironment
+    ) -> AdaptationAnalysis {
         let systemCapabilities = system.adaptationCapabilities
         let environmentalDemands = environment.environmentalDemands
         let adaptationGaps = calculateAdaptationGaps(systemCapabilities, environmentalDemands)
@@ -1492,9 +1498,10 @@ public final class AdaptationEngine: Sendable {
     }
 
     /// Calculate adaptation gaps
-    private func calculateAdaptationGaps(_ capabilities: [AdaptationCapability],
-                                         _ demands: [EnvironmentalDemand]) -> [AdaptationGap]
-    {
+    private func calculateAdaptationGaps(
+        _ capabilities: [AdaptationCapability],
+        _ demands: [EnvironmentalDemand]
+    ) -> [AdaptationGap] {
         capabilities.flatMap { capability in
             demands.compactMap { demand in
                 let gap = abs(capability.level - demand.requirementLevel)
@@ -1558,9 +1565,10 @@ public final class AdaptationEngine: Sendable {
     }
 
     /// Execute adaptation action
-    private func executeAdaptationAction(_ action: AdaptationAction,
-                                         for system: AdaptableSystem) async -> AdaptationExecutionResult
-    {
+    private func executeAdaptationAction(
+        _ action: AdaptationAction,
+        for system: AdaptableSystem
+    ) async -> AdaptationExecutionResult {
         try? await Task.sleep(nanoseconds: UInt64(action.duration * 1_000_000_000))
 
         let actualAdaptationGain = action.expectedAdaptationGain * (0.85 + Double.random(in: 0 ... 0.3))

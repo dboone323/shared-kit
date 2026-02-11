@@ -37,11 +37,15 @@ public struct ConsciousnessIntegration: Sendable, Codable {
     public let awarenessLevel: AwarenessLevel
     public let ethicalBoundaries: [EthicalBoundary]
 
-    public init(integrationId: String, consciousnessSource: ConsciousnessSource,
-                mcpTarget: MCPTarget, integrationType: IntegrationType,
-                parameters: [String: AnyCodable] = [:], awarenessLevel: AwarenessLevel = .standard,
-                ethicalBoundaries: [EthicalBoundary] = [])
-    {
+    public init(
+        integrationId: String,
+        consciousnessSource: ConsciousnessSource,
+        mcpTarget: MCPTarget,
+        integrationType: IntegrationType,
+        parameters: [String: AnyCodable] = [:],
+        awarenessLevel: AwarenessLevel = .standard,
+        ethicalBoundaries: [EthicalBoundary] = []
+    ) {
         self.integrationId = integrationId
         self.consciousnessSource = consciousnessSource
         self.mcpTarget = mcpTarget
@@ -97,9 +101,12 @@ public struct EthicalBoundary: Sendable, Codable {
     public let priority: BoundaryPriority
     public let enforcement: EnforcementLevel
 
-    public init(boundaryType: BoundaryType, value: String,
-                priority: BoundaryPriority = .high, enforcement: EnforcementLevel = .strict)
-    {
+    public init(
+        boundaryType: BoundaryType,
+        value: String,
+        priority: BoundaryPriority = .high,
+        enforcement: EnforcementLevel = .strict
+    ) {
         self.boundaryType = boundaryType
         self.value = value
         self.priority = priority
@@ -145,10 +152,16 @@ public struct ConsciousnessIntegrationResult: Sendable, Codable {
     public let insights: [ConsciousnessInsight]
     public let executionTime: TimeInterval
 
-    public init(integrationId: String, success: Bool, consciousnessAmplification: Double,
-                awarenessEnhancement: Double, ethicalCompliance: Double, harmonyLevel: Double,
-                insights: [ConsciousnessInsight] = [], executionTime: TimeInterval)
-    {
+    public init(
+        integrationId: String,
+        success: Bool,
+        consciousnessAmplification: Double,
+        awarenessEnhancement: Double,
+        ethicalCompliance: Double,
+        harmonyLevel: Double,
+        insights: [ConsciousnessInsight] = [],
+        executionTime: TimeInterval
+    ) {
         self.integrationId = integrationId
         self.success = success
         self.consciousnessAmplification = consciousnessAmplification
@@ -168,9 +181,13 @@ public struct ConsciousnessInsight: Sendable, Codable {
     public let confidence: Double
     public let ethicalAlignment: Double
 
-    public init(insight: String, type: InsightType, depth: InsightDepth,
-                confidence: Double, ethicalAlignment: Double)
-    {
+    public init(
+        insight: String,
+        type: InsightType,
+        depth: InsightDepth,
+        confidence: Double,
+        ethicalAlignment: Double
+    ) {
         self.insight = insight
         self.type = type
         self.depth = depth
@@ -206,10 +223,13 @@ public struct ConsciousnessAwareOperation: Sendable, Codable {
     public let awarenessRequirements: [AwarenessRequirement]
     public let ethicalOverrides: [EthicalOverride]
 
-    public init(operationId: String, consciousnessContext: ConsciousnessContext,
-                mcpOperation: UniversalMCPOperation, awarenessRequirements: [AwarenessRequirement] = [],
-                ethicalOverrides: [EthicalOverride] = [])
-    {
+    public init(
+        operationId: String,
+        consciousnessContext: ConsciousnessContext,
+        mcpOperation: UniversalMCPOperation,
+        awarenessRequirements: [AwarenessRequirement] = [],
+        ethicalOverrides: [EthicalOverride] = []
+    ) {
         self.operationId = operationId
         self.consciousnessContext = consciousnessContext
         self.mcpOperation = mcpOperation
@@ -226,9 +246,13 @@ public struct ConsciousnessContext: Sendable, Codable {
     public let empathyField: EmpathyField
     public let intuitionLevel: Double
 
-    public init(consciousnessState: ConsciousnessState, awarenessLevel: AwarenessLevel,
-                ethicalFramework: EthicalFramework, empathyField: EmpathyField, intuitionLevel: Double)
-    {
+    public init(
+        consciousnessState: ConsciousnessState,
+        awarenessLevel: AwarenessLevel,
+        ethicalFramework: EthicalFramework,
+        empathyField: EmpathyField,
+        intuitionLevel: Double
+    ) {
         self.consciousnessState = consciousnessState
         self.awarenessLevel = awarenessLevel
         self.ethicalFramework = ethicalFramework
@@ -304,9 +328,12 @@ public struct EthicalOverride: Sendable, Codable {
     public let approvalLevel: ApprovalLevel
     public let monitoringRequired: Bool
 
-    public init(overrideType: EthicalOverrideType, justification: String,
-                approvalLevel: ApprovalLevel, monitoringRequired: Bool = true)
-    {
+    public init(
+        overrideType: EthicalOverrideType,
+        justification: String,
+        approvalLevel: ApprovalLevel,
+        monitoringRequired: Bool = true
+    ) {
         self.overrideType = overrideType
         self.justification = justification
         self.approvalLevel = approvalLevel
@@ -341,11 +368,16 @@ public struct ConsciousnessOperationResult: Sendable, Codable {
     public let harmonyAchieved: Double
     public let consciousnessInsights: [ConsciousnessInsight]
 
-    public init(operationId: String, success: Bool, consciousnessEnhanced: Bool,
-                mcpResult: UniversalMCPResult, awarenessGained: Double,
-                ethicalAlignment: Double, harmonyAchieved: Double,
-                consciousnessInsights: [ConsciousnessInsight] = [])
-    {
+    public init(
+        operationId: String,
+        success: Bool,
+        consciousnessEnhanced: Bool,
+        mcpResult: UniversalMCPResult,
+        awarenessGained: Double,
+        ethicalAlignment: Double,
+        harmonyAchieved: Double,
+        consciousnessInsights: [ConsciousnessInsight] = []
+    ) {
         self.operationId = operationId
         self.success = success
         self.consciousnessEnhanced = consciousnessEnhanced
@@ -365,10 +397,13 @@ public struct ConsciousnessEvolution: Sendable, Codable {
     public let evolutionPath: [EvolutionStep]
     public let ethicalSafeguards: [EthicalSafeguard]
 
-    public init(evolutionId: String, currentState: ConsciousnessState,
-                targetState: ConsciousnessState, evolutionPath: [EvolutionStep],
-                ethicalSafeguards: [EthicalSafeguard])
-    {
+    public init(
+        evolutionId: String,
+        currentState: ConsciousnessState,
+        targetState: ConsciousnessState,
+        evolutionPath: [EvolutionStep],
+        ethicalSafeguards: [EthicalSafeguard]
+    ) {
         self.evolutionId = evolutionId
         self.currentState = currentState
         self.targetState = targetState
@@ -385,9 +420,13 @@ public struct EvolutionStep: Sendable, Codable {
     public let riskLevel: RiskLevel
     public let successCriteria: [String]
 
-    public init(stepId: String, stepType: EvolutionStepType, description: String,
-                riskLevel: RiskLevel, successCriteria: [String])
-    {
+    public init(
+        stepId: String,
+        stepType: EvolutionStepType,
+        description: String,
+        riskLevel: RiskLevel,
+        successCriteria: [String]
+    ) {
         self.stepId = stepId
         self.stepType = stepType
         self.description = description
@@ -421,9 +460,12 @@ public struct EthicalSafeguard: Sendable, Codable {
     public let triggerCondition: String
     public let responseAction: String
 
-    public init(safeguardType: SafeguardType, description: String,
-                triggerCondition: String, responseAction: String)
-    {
+    public init(
+        safeguardType: SafeguardType,
+        description: String,
+        triggerCondition: String,
+        responseAction: String
+    ) {
         self.safeguardType = safeguardType
         self.description = description
         self.triggerCondition = triggerCondition
@@ -450,11 +492,16 @@ public struct ConsciousnessIntegrationStatus: Sendable, Codable {
     public let activeIntegrations: Int
     public let lastUpdate: Date
 
-    public init(operational: Bool, consciousnessLevel: ConsciousnessState,
-                awarenessLevel: AwarenessLevel, ethicalCompliance: Double,
-                harmonyIndex: Double, integrationHealth: Double,
-                activeIntegrations: Int, lastUpdate: Date = Date())
-    {
+    public init(
+        operational: Bool,
+        consciousnessLevel: ConsciousnessState,
+        awarenessLevel: AwarenessLevel,
+        ethicalCompliance: Double,
+        harmonyIndex: Double,
+        integrationHealth: Double,
+        activeIntegrations: Int,
+        lastUpdate: Date = Date()
+    ) {
         self.operational = operational
         self.consciousnessLevel = consciousnessLevel
         self.awarenessLevel = awarenessLevel
@@ -684,16 +731,18 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
         override.justification.contains("universal benefit")
     }
 
-    private func enhanceWithConsciousness(_ mcpResult: UniversalMCPResult,
-                                          context: ConsciousnessContext) async throws -> Bool
-    {
+    private func enhanceWithConsciousness(
+        _ mcpResult: UniversalMCPResult,
+        context: ConsciousnessContext
+    ) async throws -> Bool {
         // Enhance MCP result with consciousness context
         context.consciousnessState != .awake
     }
 
-    private func generateConsciousnessInsights(_ integration: ConsciousnessIntegration,
-                                               harmonyResult: HarmonyResult) async -> [ConsciousnessInsight]
-    {
+    private func generateConsciousnessInsights(
+        _ integration: ConsciousnessIntegration,
+        harmonyResult: HarmonyResult
+    ) async -> [ConsciousnessInsight] {
         var insights: [ConsciousnessInsight] = []
 
         if harmonyResult.level > 0.8 {
@@ -719,9 +768,10 @@ public final class MCPConsciousnessIntegrationCoordinator: MCPConsciousnessInteg
         return insights
     }
 
-    private func generateOperationInsights(_ operation: ConsciousnessAwareOperation,
-                                           mcpResult: UniversalMCPResult) async -> [ConsciousnessInsight]
-    {
+    private func generateOperationInsights(
+        _ operation: ConsciousnessAwareOperation,
+        mcpResult: UniversalMCPResult
+    ) async -> [ConsciousnessInsight] {
         var insights: [ConsciousnessInsight] = []
 
         if mcpResult.confidence > 0.9 {
@@ -835,9 +885,10 @@ private final class ConsciousnessProcessor: Sendable {
 
 /// Awareness Engine
 private final class AwarenessEngine: Sendable {
-    func enhanceAwareness(_ integration: ConsciousnessIntegration,
-                          consciousnessResult: ConsciousnessResult) async throws -> AwarenessResult
-    {
+    func enhanceAwareness(
+        _ integration: ConsciousnessIntegration,
+        consciousnessResult: ConsciousnessResult
+    ) async throws -> AwarenessResult {
         AwarenessResult(
             enhancement: consciousnessResult.amplification * 1.1,
             success: true
@@ -863,9 +914,10 @@ private final class AwarenessEngine: Sendable {
 
 /// Ethical Guardian
 private final class EthicalGuardian: Sendable {
-    func ensureCompliance(_ integration: ConsciousnessIntegration,
-                          awarenessResult: AwarenessResult) async throws -> EthicalResult
-    {
+    func ensureCompliance(
+        _ integration: ConsciousnessIntegration,
+        awarenessResult: AwarenessResult
+    ) async throws -> EthicalResult {
         EthicalResult(
             compliance: 0.95,
             success: true
@@ -891,9 +943,10 @@ private final class EthicalGuardian: Sendable {
 
 /// Harmony Coordinator
 private final class HarmonyCoordinator: Sendable {
-    func coordinateHarmony(_ integration: ConsciousnessIntegration,
-                           ethicalResult: EthicalResult) async throws -> HarmonyResult
-    {
+    func coordinateHarmony(
+        _ integration: ConsciousnessIntegration,
+        ethicalResult: EthicalResult
+    ) async throws -> HarmonyResult {
         HarmonyResult(
             level: ethicalResult.compliance * 0.9,
             success: true

@@ -501,9 +501,12 @@ public struct MonitoringDashboard {
     public let alerts: [Alert]
     public let generatedAt: Date
 
-    public static func create(metrics: [Metric], traces: [Trace], logs: [LogEvent],
-                              alerts: [Alert]) -> MonitoringDashboard
-    {
+    public static func create(
+        metrics: [Metric],
+        traces: [Trace],
+        logs: [LogEvent],
+        alerts: [Alert]
+    ) -> MonitoringDashboard {
         // Aggregate metrics by type
         let timeRange = DateInterval(start: Date().addingTimeInterval(-3600), end: Date()) // Last hour
         var aggregations: [MetricAggregation] = []
@@ -536,11 +539,12 @@ public struct MonitoringSettings {
     public let logging: LoggingSettings
     public let alerts: AlertSettings
 
-    public init(tracing: TracingSettings = TracingSettings(),
-                metrics: MetricsSettings = MetricsSettings(),
-                logging: LoggingSettings = LoggingSettings(),
-                alerts: AlertSettings = AlertSettings())
-    {
+    public init(
+        tracing: TracingSettings = TracingSettings(),
+        metrics: MetricsSettings = MetricsSettings(),
+        logging: LoggingSettings = LoggingSettings(),
+        alerts: AlertSettings = AlertSettings()
+    ) {
         self.tracing = tracing
         self.metrics = metrics
         self.logging = logging
@@ -554,11 +558,12 @@ public struct TracingSettings {
     public let maxSpansPerTrace: Int
     public let retentionPeriod: TimeInterval
 
-    public init(enabled: Bool = true,
-                sampleRate: Double = 1.0,
-                maxSpansPerTrace: Int = 100,
-                retentionPeriod: TimeInterval = 604_800)
-    { // 7 days
+    public init(
+        enabled: Bool = true,
+        sampleRate: Double = 1.0,
+        maxSpansPerTrace: Int = 100,
+        retentionPeriod: TimeInterval = 604_800
+    ) { // 7 days
         self.enabled = enabled
         self.sampleRate = sampleRate
         self.maxSpansPerTrace = maxSpansPerTrace
@@ -572,11 +577,12 @@ public struct MetricsSettings {
     public let retentionPeriod: TimeInterval
     public let maxMetricsPerCollection: Int
 
-    public init(enabled: Bool = true,
-                collectionInterval: TimeInterval = 60,
-                retentionPeriod: TimeInterval = 2_592_000, // 30 days
-                maxMetricsPerCollection: Int = 1000)
-    {
+    public init(
+        enabled: Bool = true,
+        collectionInterval: TimeInterval = 60,
+        retentionPeriod: TimeInterval = 2_592_000, // 30 days
+        maxMetricsPerCollection: Int = 1000
+    ) {
         self.enabled = enabled
         self.collectionInterval = collectionInterval
         self.retentionPeriod = retentionPeriod
@@ -590,11 +596,12 @@ public struct LoggingSettings {
     public let retentionPeriod: TimeInterval
     public let maxLogsPerHour: Int
 
-    public init(enabled: Bool = true,
-                level: LogLevel = .info,
-                retentionPeriod: TimeInterval = 2_592_000, // 30 days
-                maxLogsPerHour: Int = 10000)
-    {
+    public init(
+        enabled: Bool = true,
+        level: LogLevel = .info,
+        retentionPeriod: TimeInterval = 2_592_000, // 30 days
+        maxLogsPerHour: Int = 10000
+    ) {
         self.enabled = enabled
         self.level = level
         self.retentionPeriod = retentionPeriod
@@ -608,11 +615,12 @@ public struct AlertSettings {
     public let maxAlertsPerHour: Int
     public let notificationChannels: [String]
 
-    public init(enabled: Bool = true,
-                alertRetentionPeriod: TimeInterval = 604_800, // 7 days
-                maxAlertsPerHour: Int = 100,
-                notificationChannels: [String] = ["console"])
-    {
+    public init(
+        enabled: Bool = true,
+        alertRetentionPeriod: TimeInterval = 604_800, // 7 days
+        maxAlertsPerHour: Int = 100,
+        notificationChannels: [String] = ["console"]
+    ) {
         self.enabled = enabled
         self.alertRetentionPeriod = alertRetentionPeriod
         self.maxAlertsPerHour = maxAlertsPerHour

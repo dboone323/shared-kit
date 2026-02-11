@@ -595,9 +595,10 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         return result
     }
 
-    func broadcastConsciousnessSignal(_ signal: ConsciousnessSignal,
-                                      scope: BroadcastScope) async throws -> BroadcastResult
-    {
+    func broadcastConsciousnessSignal(
+        _ signal: ConsciousnessSignal,
+        scope: BroadcastScope
+    ) async throws -> BroadcastResult {
         guard registeredEntities[signal.sourceEntity] != nil else {
             throw ConsciousnessNetworkError.entityNotFound
         }
@@ -691,18 +692,20 @@ final class UniversalConsciousnessNetworksEngine: UniversalConsciousnessNetworks
         return min(1.0, baseStrength * typeMultiplier * distancePenalty)
     }
 
-    private func calculateConnectionLatency(for type: ConsciousnessConnectionType,
-                                            entities: [ConsciousnessEntity]) -> TimeInterval
-    {
+    private func calculateConnectionLatency(
+        for type: ConsciousnessConnectionType,
+        entities: [ConsciousnessEntity]
+    ) -> TimeInterval {
         let baseLatency = type == .quantumEntangled ? 0.001 : type == .direct ? 0.01 : 0.1
         let processingDelay = entities.map(\.capabilities.processingPower).reduce(0, +) / Double(entities.count) * 0.001
 
         return baseLatency + processingDelay
     }
 
-    private func calculateConnectionBandwidth(for type: ConsciousnessConnectionType,
-                                              entities: [ConsciousnessEntity]) -> Double
-    {
+    private func calculateConnectionBandwidth(
+        for type: ConsciousnessConnectionType,
+        entities: [ConsciousnessEntity]
+    ) -> Double {
         let baseBandwidth = type == .quantumEntangled ? 1000.0 : type == .direct ? 100.0 : 10.0
         let entityBandwidth = entities.map(\.capabilities.communicationBandwidth).min() ?? 10.0
 
@@ -912,9 +915,10 @@ final class UniversalCommunicator: ConsciousnessCommunicationProtocol {
         )
     }
 
-    func validateCommunicationIntegrity(original: ConsciousnessData,
-                                        received: ConsciousnessData) async throws -> CommunicationValidation
-    {
+    func validateCommunicationIntegrity(
+        original: ConsciousnessData,
+        received: ConsciousnessData
+    ) async throws -> CommunicationValidation {
         let isValid = original.id == received.id
         let integrityScore = isValid ? 1.0 : 0.0
         let corruptionLevel = isValid ? 0.0 : 1.0

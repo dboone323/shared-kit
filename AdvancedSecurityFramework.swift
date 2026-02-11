@@ -152,10 +152,11 @@ public struct BiometricSettings {
     public let requireBiometricForSensitive: Bool
     public let biometricTimeout: TimeInterval
 
-    public init(allowBiometricFallback: Bool = true,
-                requireBiometricForSensitive: Bool = true,
-                biometricTimeout: TimeInterval = 300)
-    { // 5 minutes
+    public init(
+        allowBiometricFallback: Bool = true,
+        requireBiometricForSensitive: Bool = true,
+        biometricTimeout: TimeInterval = 300
+    ) { // 5 minutes
         self.allowBiometricFallback = allowBiometricFallback
         self.requireBiometricForSensitive = requireBiometricForSensitive
         self.biometricTimeout = biometricTimeout
@@ -256,11 +257,12 @@ public struct KeyManagementSettings {
     public let maxKeyAge: TimeInterval
     public let enableBackup: Bool
 
-    public init(autoRotateKeys: Bool = true,
-                keyRotationInterval: TimeInterval = 30 * 24 * 60 * 60, // 30 days
-                maxKeyAge: TimeInterval = 365 * 24 * 60 * 60, // 1 year
-                enableBackup: Bool = true)
-    {
+    public init(
+        autoRotateKeys: Bool = true,
+        keyRotationInterval: TimeInterval = 30 * 24 * 60 * 60, // 30 days
+        maxKeyAge: TimeInterval = 365 * 24 * 60 * 60, // 1 year
+        enableBackup: Bool = true
+    ) {
         self.autoRotateKeys = autoRotateKeys
         self.keyRotationInterval = keyRotationInterval
         self.maxKeyAge = maxKeyAge
@@ -458,12 +460,13 @@ public struct ThreatDetectionSettings {
     public let anomalyDetection: Bool
     public let alertThreshold: ThreatSeverity
 
-    public init(detectJailbreak: Bool = true,
-                detectDebugger: Bool = true,
-                monitorNetwork: Bool = true,
-                anomalyDetection: Bool = true,
-                alertThreshold: ThreatSeverity = .medium)
-    {
+    public init(
+        detectJailbreak: Bool = true,
+        detectDebugger: Bool = true,
+        monitorNetwork: Bool = true,
+        anomalyDetection: Bool = true,
+        alertThreshold: ThreatSeverity = .medium
+    ) {
         self.detectJailbreak = detectJailbreak
         self.detectDebugger = detectDebugger
         self.monitorNetwork = monitorNetwork
@@ -479,10 +482,11 @@ public struct SecuritySettings {
     public let keyManagement: KeyManagementSettings
     public let threatDetection: ThreatDetectionSettings
 
-    public init(biometric: BiometricSettings = BiometricSettings(),
-                keyManagement: KeyManagementSettings = KeyManagementSettings(),
-                threatDetection: ThreatDetectionSettings = ThreatDetectionSettings())
-    {
+    public init(
+        biometric: BiometricSettings = BiometricSettings(),
+        keyManagement: KeyManagementSettings = KeyManagementSettings(),
+        threatDetection: ThreatDetectionSettings = ThreatDetectionSettings()
+    ) {
         self.biometric = biometric
         self.keyManagement = keyManagement
         self.threatDetection = threatDetection

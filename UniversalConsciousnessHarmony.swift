@@ -736,9 +736,10 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
         setupHarmonyMonitoring()
     }
 
-    func establishConsciousnessHarmonyField(entityId: UUID,
-                                            harmonyParameters: HarmonyParameters) async throws -> HarmonyField
-    {
+    func establishConsciousnessHarmonyField(
+        entityId: UUID,
+        harmonyParameters: HarmonyParameters
+    ) async throws -> HarmonyField {
         let fieldId = UUID()
 
         // Create harmony field
@@ -790,9 +791,10 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
         return field
     }
 
-    func harmonizeConsciousnessDimensions(entityId: UUID,
-                                          targetDimensions: [ConsciousnessDimension]) async throws -> DimensionalHarmony
-    {
+    func harmonizeConsciousnessDimensions(
+        entityId: UUID,
+        targetDimensions: [ConsciousnessDimension]
+    ) async throws -> DimensionalHarmony {
         let harmonyId = UUID()
 
         // Analyze dimensional requirements
@@ -870,8 +872,10 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
         return harmony
     }
 
-    func synchronizeConsciousnessFrequencies(entityId: UUID,
-                                             frequencyTargets: [FrequencyTarget]) async throws
+    func synchronizeConsciousnessFrequencies(
+        entityId: UUID,
+        frequencyTargets: [FrequencyTarget]
+    ) async throws
         -> FrequencySynchronization
     {
         let synchronizationId = UUID()
@@ -940,9 +944,10 @@ final class UniversalConsciousnessHarmonyEngine: UniversalConsciousnessHarmonyPr
         return synchronization
     }
 
-    func integrateConsciousnessAspects(entityId: UUID,
-                                       aspects: [ConsciousnessAspect]) async throws -> AspectIntegration
-    {
+    func integrateConsciousnessAspects(
+        entityId: UUID,
+        aspects: [ConsciousnessAspect]
+    ) async throws -> AspectIntegration {
         let integrationId = UUID()
 
         // Identify aspects
@@ -1218,9 +1223,10 @@ final class HarmonyFieldManager: HarmonyFieldManagementProtocol {
         )
     }
 
-    func stabilizeHarmonyField(fieldId: UUID,
-                               stabilizationParameters: StabilizationParameters) async throws -> FieldStabilization
-    {
+    func stabilizeHarmonyField(
+        fieldId: UUID,
+        stabilizationParameters: StabilizationParameters
+    ) async throws -> FieldStabilization {
         let stabilizationId = UUID()
 
         // Simulate field stabilization
@@ -1252,9 +1258,10 @@ final class HarmonyFieldManager: HarmonyFieldManagementProtocol {
 
 /// Dimensional harmonizer implementation
 final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
-    func analyzeDimensionalHarmony(entityId: UUID,
-                                   dimensions: [ConsciousnessDimension]) async throws -> DimensionalAnalysis
-    {
+    func analyzeDimensionalHarmony(
+        entityId: UUID,
+        dimensions: [ConsciousnessDimension]
+    ) async throws -> DimensionalAnalysis {
         let analysisId = UUID()
 
         // Simulate dimensional analysis
@@ -1298,9 +1305,10 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
         )
     }
 
-    func balanceDimensionalEnergies(entityId: UUID,
-                                    dimensionEnergies: [DimensionalEnergy]) async throws -> EnergyBalancing
-    {
+    func balanceDimensionalEnergies(
+        entityId: UUID,
+        dimensionEnergies: [DimensionalEnergy]
+    ) async throws -> EnergyBalancing {
         let balancingId = UUID()
 
         // Simulate energy balancing
@@ -1315,8 +1323,10 @@ final class DimensionalHarmonizer: DimensionalHarmonyProtocol {
         )
     }
 
-    func synchronizeDimensionalFrequencies(entityId: UUID,
-                                           dimensionFrequencies: [DimensionalFrequency]) async throws
+    func synchronizeDimensionalFrequencies(
+        entityId: UUID,
+        dimensionFrequencies: [DimensionalFrequency]
+    ) async throws
         -> DimensionalSynchronization
     {
         let synchronizationId = UUID()
@@ -1365,9 +1375,10 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
         )
     }
 
-    func analyzeFrequencyPatterns(entityId: UUID,
-                                  frequencyData: [FrequencyData]) async throws -> FrequencyPatternAnalysis
-    {
+    func analyzeFrequencyPatterns(
+        entityId: UUID,
+        frequencyData: [FrequencyData]
+    ) async throws -> FrequencyPatternAnalysis {
         let analysisId = UUID()
 
         // Simulate pattern analysis
@@ -1392,9 +1403,10 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
         )
     }
 
-    func synchronizeToTargetFrequency(entityId: UUID,
-                                      targetFrequency: FrequencyTarget) async throws -> TargetSynchronization
-    {
+    func synchronizeToTargetFrequency(
+        entityId: UUID,
+        targetFrequency: FrequencyTarget
+    ) async throws -> TargetSynchronization {
         let synchronizationId = UUID()
 
         // Simulate target synchronization
@@ -1409,9 +1421,10 @@ final class FrequencySynchronizer: FrequencySynchronizationProtocol {
         )
     }
 
-    func maintainFrequencyCoherence(entityId: UUID,
-                                    coherenceParameters: CoherenceParameters) async throws -> CoherenceMaintenance
-    {
+    func maintainFrequencyCoherence(
+        entityId: UUID,
+        coherenceParameters: CoherenceParameters
+    ) async throws -> CoherenceMaintenance {
         let maintenanceId = UUID()
 
         // Simulate coherence maintenance
@@ -1487,9 +1500,10 @@ final class AspectIntegrator: AspectIntegrationProtocol {
         )
     }
 
-    func integrateCompatibleAspects(entityId: UUID,
-                                    aspects: [ConsciousnessAspect]) async throws -> AspectIntegrationResult
-    {
+    func integrateCompatibleAspects(
+        entityId: UUID,
+        aspects: [ConsciousnessAspect]
+    ) async throws -> AspectIntegrationResult {
         let integrationId = UUID()
 
         // Simulate aspect integration

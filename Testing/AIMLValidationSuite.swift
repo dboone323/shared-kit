@@ -808,9 +808,11 @@ class AIMLValidationSuite: XCTestCase {
         results.map(\.processingTime).reduce(0, +) / Double(results.count)
     }
 
-    private func calculatePredictionAccuracy(predictions: [MLPrediction], expected: [Double],
-                                             tolerance: Double) -> Double
-    {
+    private func calculatePredictionAccuracy(
+        predictions: [MLPrediction],
+        expected: [Double],
+        tolerance: Double
+    ) -> Double {
         let predictedValues = predictions.compactMap(\.value)
         let minCount = min(predictedValues.count, expected.count)
 

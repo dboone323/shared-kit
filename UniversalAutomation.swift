@@ -381,9 +381,10 @@ public final class UniversalAutomation: ObservableObject {
         ))
     }
 
-    private func executeOptimizationPlan(_ plan: OptimizationPlan,
-                                         for project: String) async throws -> [OptimizationResult]
-    {
+    private func executeOptimizationPlan(
+        _ plan: OptimizationPlan,
+        for project: String
+    ) async throws -> [OptimizationResult] {
         var results: [OptimizationResult] = []
 
         for optimization in plan.optimizations {
@@ -816,9 +817,10 @@ private class QuantumOptimizer {
 
 private class AIDecisionEngine {
     func initialize() async throws {}
-    func generateOptimizationPlan(qualityResult: QualityAssessment,
-                                  architectureAnalysis: ArchitectureAnalysis) async throws -> OptimizationPlan
-    {
+    func generateOptimizationPlan(
+        qualityResult: QualityAssessment,
+        architectureAnalysis: ArchitectureAnalysis
+    ) async throws -> OptimizationPlan {
         OptimizationPlan(optimizations: [])
     }
 
@@ -839,9 +841,10 @@ private class WorkflowOrchestrator {
         DeploymentReadiness(ready: true, blockers: [])
     }
 
-    func evolveArchitecture(for project: String,
-                            strategy: ArchitectureEvolutionStrategy) async throws -> ArchitectureEvolutionResult
-    {
+    func evolveArchitecture(
+        for project: String,
+        strategy: ArchitectureEvolutionStrategy
+    ) async throws -> ArchitectureEvolutionResult {
         ArchitectureEvolutionResult(changes: [], qualityImprovement: 0.1, maintainabilityScore: 0.8)
     }
 

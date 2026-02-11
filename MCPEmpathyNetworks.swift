@@ -546,9 +546,10 @@ public final class EmotionalIntelligenceProcessor: Sendable {
     }
 
     /// Generate emotional insights
-    private func generateEmotionalInsights(from patterns: [EmotionalPattern],
-                                           triggers: [EmotionalTrigger]) -> [EmotionalInsight]
-    {
+    private func generateEmotionalInsights(
+        from patterns: [EmotionalPattern],
+        triggers: [EmotionalTrigger]
+    ) -> [EmotionalInsight] {
         var insights: [EmotionalInsight] = []
 
         // Insight: Most common emotional state
@@ -622,9 +623,10 @@ public final class SocialCoordinator: Sendable {
     }
 
     /// Analyze empathy context for an interaction
-    private func analyzeEmpathyContext(for interaction: SocialInteraction,
-                                       in network: EmpathyNetwork) -> EmpathyContext
-    {
+    private func analyzeEmpathyContext(
+        for interaction: SocialInteraction,
+        in network: EmpathyNetwork
+    ) -> EmpathyContext {
         let sourceConnections = network.connectionsForEntity(interaction.sourceEntityId)
         let targetConnections = network.connectionsForEntity(interaction.targetEntityId)
 
@@ -651,9 +653,10 @@ public final class SocialCoordinator: Sendable {
     }
 
     /// Generate coordinated response
-    private func generateCoordinatedResponse(for interaction: SocialInteraction,
-                                             with context: EmpathyContext) -> SocialResponse
-    {
+    private func generateCoordinatedResponse(
+        for interaction: SocialInteraction,
+        with context: EmpathyContext
+    ) -> SocialResponse {
         // Base response on empathy strengths and emotional states
         let empathyFactor = (context.sourceEmpathyStrength + context.targetEmpathyStrength + context
             .directEmpathyStrength) / 3.0
@@ -1473,9 +1476,10 @@ public final class CompassionFramework: Sendable {
     ///   - framework: Framework type
     ///   - network: Empathy network
     /// - Returns: Framework application result
-    public func applyFramework(_ framework: CompassionFrameworkType,
-                               to network: EmpathyNetwork) async -> CompassionFrameworkResult
-    {
+    public func applyFramework(
+        _ framework: CompassionFrameworkType,
+        to network: EmpathyNetwork
+    ) async -> CompassionFrameworkResult {
         let frameworkPrinciples = getFrameworkPrinciples(for: framework)
         let applicabilityScore = calculateApplicability(of: frameworkPrinciples, to: network)
 
@@ -1538,9 +1542,10 @@ public final class CompassionFramework: Sendable {
     }
 
     /// Generate compassionate actions
-    private func generateCompassionateActions(from principles: [CompassionPrinciple],
-                                              for network: EmpathyNetwork) -> [CompassionateAction]
-    {
+    private func generateCompassionateActions(
+        from principles: [CompassionPrinciple],
+        for network: EmpathyNetwork
+    ) -> [CompassionateAction] {
         principles.map { principle in
             CompassionateAction(
                 principle: principle,
@@ -1625,9 +1630,11 @@ public final class EmpathyLearner: Sendable {
     }
 
     /// Determine pattern type
-    private func determinePatternType(for connection: EmpathyConnection, trend: EmotionalTrend,
-                                      successRate: Double) -> InteractionPatternType
-    {
+    private func determinePatternType(
+        for connection: EmpathyConnection,
+        trend: EmotionalTrend,
+        successRate: Double
+    ) -> InteractionPatternType {
         if successRate > 0.8 && trend.stable {
             .highlySuccessful
         } else if successRate > 0.6 {
@@ -1656,9 +1663,10 @@ public final class EmpathyLearner: Sendable {
     }
 
     /// Generate learning insights
-    private func generateLearningInsights(from strategies: [EmpathyStrategy],
-                                          patterns: [InteractionPattern]) -> [EmpathyInsight]
-    {
+    private func generateLearningInsights(
+        from strategies: [EmpathyStrategy],
+        patterns: [InteractionPattern]
+    ) -> [EmpathyInsight] {
         var insights: [EmpathyInsight] = []
 
         let averageSuccessRate = strategies.map(\.successRate).reduce(0, +) / Double(max(1, strategies.count))

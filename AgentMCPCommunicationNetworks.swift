@@ -424,9 +424,10 @@ public final class AgentMCPCommunicationNetworks: Sendable {
         }
     }
 
-    private func validateMessage(_ message: MCPCommunicationMessage,
-                                 for channel: MCPCommunicationChannel) async throws
-    {
+    private func validateMessage(
+        _ message: MCPCommunicationMessage,
+        for channel: MCPCommunicationChannel
+    ) async throws {
         // Validate message size
         let messageSize = try await messageRouter.calculateMessageSize(message)
         guard messageSize <= channel.configuration.maxMessageSize else {

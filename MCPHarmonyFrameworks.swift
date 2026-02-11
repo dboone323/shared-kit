@@ -266,9 +266,10 @@ public final class HarmonicSynchronizationEngine: Sendable {
     }
 
     /// Execute synchronization phase
-    private func executeSyncPhase(_ phase: HarmonicSyncPhase,
-                                  systems: [SynchronizableSystem]) async -> HarmonicSyncResult
-    {
+    private func executeSyncPhase(
+        _ phase: HarmonicSyncPhase,
+        systems: [SynchronizableSystem]
+    ) async -> HarmonicSyncResult {
         // Simulate harmonic synchronization
         try? await Task.sleep(nanoseconds: UInt64(phase.estimatedDuration * 1_000_000_000))
 
@@ -426,9 +427,10 @@ public final class ResonanceNetworkManager: Sendable {
     }
 
     /// Calculate resonance field
-    private func calculateResonanceField(_ nodes: [ResonanceNode],
-                                         connections: [ResonanceConnection]) -> ResonanceField
-    {
+    private func calculateResonanceField(
+        _ nodes: [ResonanceNode],
+        connections: [ResonanceConnection]
+    ) -> ResonanceField {
         let avgFrequency = nodes.map(\.naturalFrequency).reduce(0, +) / Double(nodes.count)
         let avgStrength = connections.map(\.resonanceStrength).reduce(0, +) / Double(connections.count)
         let fieldStrength = avgStrength * 0.8
@@ -559,9 +561,10 @@ public final class EquilibriumEngine: Sendable {
     }
 
     /// Apply individual adjustment
-    private func applyAdjustment(_ adjustment: EquilibriumAdjustment,
-                                 to system: EquilibratableSystem) async -> EquilibriumCorrection
-    {
+    private func applyAdjustment(
+        _ adjustment: EquilibriumAdjustment,
+        to system: EquilibratableSystem
+    ) async -> EquilibriumCorrection {
         // Simulate adjustment application
         try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
 
@@ -1308,9 +1311,10 @@ public final class UniversalBalanceSystem: Sendable {
     }
 
     /// Apply balance adjustments
-    private func applyBalanceAdjustments(_ adjustments: [BalanceAdjustment],
-                                         to balance: UniversalBalance) async -> [AppliedBalanceAdjustment]
-    {
+    private func applyBalanceAdjustments(
+        _ adjustments: [BalanceAdjustment],
+        to balance: UniversalBalance
+    ) async -> [AppliedBalanceAdjustment] {
         await withTaskGroup(of: AppliedBalanceAdjustment.self) { group in
             for adjustment in adjustments {
                 group.addTask {
@@ -1327,9 +1331,10 @@ public final class UniversalBalanceSystem: Sendable {
     }
 
     /// Apply individual adjustment
-    private func applyAdjustment(_ adjustment: BalanceAdjustment,
-                                 to balance: UniversalBalance) async -> AppliedBalanceAdjustment
-    {
+    private func applyAdjustment(
+        _ adjustment: BalanceAdjustment,
+        to balance: UniversalBalance
+    ) async -> AppliedBalanceAdjustment {
         balance.updateForceStrength(forceId: adjustment.forceId, newStrength: adjustment.targetStrength)
         return AppliedBalanceAdjustment(
             adjustmentId: adjustment.id,
@@ -1705,9 +1710,10 @@ public final class BalanceOptimizer: Sendable {
     }
 
     /// Create optimization plan
-    private func createOptimizationPlan(for balance: UniversalBalance,
-                                        metrics: BalanceMetrics) -> BalanceOptimizationPlan
-    {
+    private func createOptimizationPlan(
+        for balance: UniversalBalance,
+        metrics: BalanceMetrics
+    ) -> BalanceOptimizationPlan {
         var optimizations: [BalanceOptimization] = []
 
         if metrics.quality < 0.8 {
@@ -1758,9 +1764,10 @@ public final class BalanceOptimizer: Sendable {
     }
 
     /// Execute optimization plan
-    private func executeOptimizationPlan(_ plan: BalanceOptimizationPlan,
-                                         balance: UniversalBalance) async -> [OptimizationExecutionResult]
-    {
+    private func executeOptimizationPlan(
+        _ plan: BalanceOptimizationPlan,
+        balance: UniversalBalance
+    ) async -> [OptimizationExecutionResult] {
         await withTaskGroup(of: OptimizationExecutionResult.self) { group in
             for optimization in plan.optimizations {
                 group.addTask {
@@ -1777,9 +1784,10 @@ public final class BalanceOptimizer: Sendable {
     }
 
     /// Execute optimization
-    private func executeOptimization(_ optimization: BalanceOptimization,
-                                     balance: UniversalBalance) async -> OptimizationExecutionResult
-    {
+    private func executeOptimization(
+        _ optimization: BalanceOptimization,
+        balance: UniversalBalance
+    ) async -> OptimizationExecutionResult {
         try? await Task.sleep(nanoseconds: UInt64(complexityDuration(optimization.complexity) * 1_000_000_000))
 
         let actualImprovement = optimization.estimatedImprovement * (0.7 + Double.random(in: 0 ... 0.6))

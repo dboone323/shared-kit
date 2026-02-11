@@ -36,11 +36,15 @@ public struct CreativityAmplification: Sendable, Codable {
     public let creativityLevel: CreativityLevel
     public let innovationScope: InnovationScope
 
-    public init(amplificationId: String, creativeDomain: CreativeDomain,
-                amplificationType: AmplificationType, parameters: [String: AnyCodable] = [:],
-                inspirationSources: [InspirationSource] = [], creativityLevel: CreativityLevel = .transcendent,
-                innovationScope: InnovationScope = .universal)
-    {
+    public init(
+        amplificationId: String,
+        creativeDomain: CreativeDomain,
+        amplificationType: AmplificationType,
+        parameters: [String: AnyCodable] = [:],
+        inspirationSources: [InspirationSource] = [],
+        creativityLevel: CreativityLevel = .transcendent,
+        innovationScope: InnovationScope = .universal
+    ) {
         self.amplificationId = amplificationId
         self.creativeDomain = creativeDomain
         self.amplificationType = amplificationType
@@ -80,10 +84,13 @@ public struct InspirationSource: Sendable, Codable {
     public let creativityPotential: Double
     public let universalAlignment: Double
 
-    public init(sourceId: String, sourceType: InspirationSourceType,
-                relevance: Double = 0.8, creativityPotential: Double = 0.9,
-                universalAlignment: Double = 0.95)
-    {
+    public init(
+        sourceId: String,
+        sourceType: InspirationSourceType,
+        relevance: Double = 0.8,
+        creativityPotential: Double = 0.9,
+        universalAlignment: Double = 0.95
+    ) {
         self.sourceId = sourceId
         self.sourceType = sourceType
         self.relevance = relevance
@@ -132,11 +139,16 @@ public struct CreativityAmplificationResult: Sendable, Codable {
     public let creativeOutcomes: [CreativeOutcome]
     public let executionTime: TimeInterval
 
-    public init(amplificationId: String, success: Bool, creativityAmplification: Double,
-                innovationPotential: Double, inspirationQuality: Double,
-                creativeInsights: [CreativeInsight] = [], creativeOutcomes: [CreativeOutcome] = [],
-                executionTime: TimeInterval)
-    {
+    public init(
+        amplificationId: String,
+        success: Bool,
+        creativityAmplification: Double,
+        innovationPotential: Double,
+        inspirationQuality: Double,
+        creativeInsights: [CreativeInsight] = [],
+        creativeOutcomes: [CreativeOutcome] = [],
+        executionTime: TimeInterval
+    ) {
         self.amplificationId = amplificationId
         self.success = success
         self.creativityAmplification = creativityAmplification
@@ -156,9 +168,13 @@ public struct CreativeInsight: Sendable, Codable {
     public let confidence: Double
     public let innovationPotential: Double
 
-    public init(insight: String, type: CreativeInsightType, creativityDepth: CreativityDepth,
-                confidence: Double, innovationPotential: Double)
-    {
+    public init(
+        insight: String,
+        type: CreativeInsightType,
+        creativityDepth: CreativityDepth,
+        confidence: Double,
+        innovationPotential: Double
+    ) {
         self.insight = insight
         self.type = type
         self.creativityDepth = creativityDepth
@@ -195,10 +211,14 @@ public struct CreativeOutcome: Sendable, Codable {
     public let universalSignificance: Double
     public let sustainability: Double
 
-    public init(outcomeId: String, description: String, creativityValue: Double = 0.9,
-                innovationImpact: Double = 0.85, universalSignificance: Double = 0.95,
-                sustainability: Double = 0.9)
-    {
+    public init(
+        outcomeId: String,
+        description: String,
+        creativityValue: Double = 0.9,
+        innovationImpact: Double = 0.85,
+        universalSignificance: Double = 0.95,
+        sustainability: Double = 0.9
+    ) {
         self.outcomeId = outcomeId
         self.description = description
         self.creativityValue = creativityValue
@@ -217,11 +237,14 @@ public struct CreativeInnovationGeneration: Sendable, Codable {
     public let inspirationParameters: InspirationParameters
     public let innovationGoals: [InnovationGoal]
 
-    public init(generationId: String, innovationDomain: InnovationDomain,
-                generationCriteria: [GenerationCriterion] = [], creativityConstraints: [CreativityConstraint] = [],
-                inspirationParameters: InspirationParameters = InspirationParameters(),
-                innovationGoals: [InnovationGoal] = [])
-    {
+    public init(
+        generationId: String,
+        innovationDomain: InnovationDomain,
+        generationCriteria: [GenerationCriterion] = [],
+        creativityConstraints: [CreativityConstraint] = [],
+        inspirationParameters: InspirationParameters = InspirationParameters(),
+        innovationGoals: [InnovationGoal] = []
+    ) {
         self.generationId = generationId
         self.innovationDomain = innovationDomain
         self.generationCriteria = generationCriteria
@@ -249,9 +272,12 @@ public struct GenerationCriterion: Sendable, Codable {
     public let threshold: Double
     public let creativityEnhancement: Bool
 
-    public init(criterionType: GenerationCriterionType, weight: Double = 1.0,
-                threshold: Double = 0.5, creativityEnhancement: Bool = true)
-    {
+    public init(
+        criterionType: GenerationCriterionType,
+        weight: Double = 1.0,
+        threshold: Double = 0.5,
+        creativityEnhancement: Bool = true
+    ) {
         self.criterionType = criterionType
         self.weight = weight
         self.threshold = threshold
@@ -276,9 +302,12 @@ public struct CreativityConstraint: Sendable, Codable {
     public let flexibility: Double
     public let enforcement: EnforcementLevel
 
-    public init(constraintType: CreativityConstraintType, value: Double,
-                flexibility: Double = 0.2, enforcement: EnforcementLevel = .moderate)
-    {
+    public init(
+        constraintType: CreativityConstraintType,
+        value: Double,
+        flexibility: Double = 0.2,
+        enforcement: EnforcementLevel = .moderate
+    ) {
         self.constraintType = constraintType
         self.value = value
         self.flexibility = flexibility
@@ -303,9 +332,12 @@ public struct InspirationParameters: Sendable, Codable {
     public let persistence: Double
     public let universality: Double
 
-    public init(diversity: Double = 0.8, intensity: Double = 0.9,
-                persistence: Double = 0.7, universality: Double = 0.95)
-    {
+    public init(
+        diversity: Double = 0.8,
+        intensity: Double = 0.9,
+        persistence: Double = 0.7,
+        universality: Double = 0.95
+    ) {
         self.diversity = diversity
         self.intensity = intensity
         self.persistence = persistence
@@ -320,9 +352,12 @@ public struct InnovationGoal: Sendable, Codable {
     public let priority: GoalPriority
     public let creativityAmplification: Bool
 
-    public init(goalType: InnovationGoalType, targetValue: Double,
-                priority: GoalPriority = .high, creativityAmplification: Bool = true)
-    {
+    public init(
+        goalType: InnovationGoalType,
+        targetValue: Double,
+        priority: GoalPriority = .high,
+        creativityAmplification: Bool = true
+    ) {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -352,11 +387,17 @@ public struct CreativeInnovationResult: Sendable, Codable {
     public let creativityInsights: [CreativeInsight]
     public let executionTime: TimeInterval
 
-    public init(generationId: String, success: Bool, innovationQuality: Double,
-                creativityLevel: Double, noveltyIndex: Double, feasibilityScore: Double,
-                innovationConcepts: [InnovationConcept] = [], creativityInsights: [CreativeInsight] = [],
-                executionTime: TimeInterval)
-    {
+    public init(
+        generationId: String,
+        success: Bool,
+        innovationQuality: Double,
+        creativityLevel: Double,
+        noveltyIndex: Double,
+        feasibilityScore: Double,
+        innovationConcepts: [InnovationConcept] = [],
+        creativityInsights: [CreativeInsight] = [],
+        executionTime: TimeInterval
+    ) {
         self.generationId = generationId
         self.success = success
         self.innovationQuality = innovationQuality
@@ -380,11 +421,16 @@ public struct InnovationConcept: Sendable, Codable {
     public let feasibilityRating: Double
     public let universalImpact: Double
 
-    public init(conceptId: String, title: String, description: String,
-                domain: InnovationDomain, creativityRating: Double = 0.9,
-                innovationPotential: Double = 0.85, feasibilityRating: Double = 0.8,
-                universalImpact: Double = 0.95)
-    {
+    public init(
+        conceptId: String,
+        title: String,
+        description: String,
+        domain: InnovationDomain,
+        creativityRating: Double = 0.9,
+        innovationPotential: Double = 0.85,
+        feasibilityRating: Double = 0.8,
+        universalImpact: Double = 0.95
+    ) {
         self.conceptId = conceptId
         self.title = title
         self.description = description
@@ -406,11 +452,15 @@ public struct CreativityOptimization: Sendable, Codable {
     public let innovationBudget: Double
     public let timeHorizon: TimeInterval
 
-    public init(optimizationId: String, targetCreativity: CreativityTarget,
-                optimizationGoals: [CreativityGoal], creativityConstraints: [CreativityConstraint] = [],
-                inspirationBudget: Double = 1.0, innovationBudget: Double = 1.0,
-                timeHorizon: TimeInterval = 3600)
-    {
+    public init(
+        optimizationId: String,
+        targetCreativity: CreativityTarget,
+        optimizationGoals: [CreativityGoal],
+        creativityConstraints: [CreativityConstraint] = [],
+        inspirationBudget: Double = 1.0,
+        innovationBudget: Double = 1.0,
+        timeHorizon: TimeInterval = 3600
+    ) {
         self.optimizationId = optimizationId
         self.targetCreativity = targetCreativity
         self.optimizationGoals = optimizationGoals
@@ -434,9 +484,12 @@ public struct CreativityGoal: Sendable, Codable {
     public let priority: GoalPriority
     public let innovationEnhancement: Bool
 
-    public init(goalType: CreativityGoalType, targetValue: Double,
-                priority: GoalPriority = .high, innovationEnhancement: Bool = true)
-    {
+    public init(
+        goalType: CreativityGoalType,
+        targetValue: Double,
+        priority: GoalPriority = .high,
+        innovationEnhancement: Bool = true
+    ) {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -481,10 +534,16 @@ public struct CreativityAmplificationStatus: Sendable, Codable {
     public let successRate: Double
     public let lastUpdate: Date
 
-    public init(operational: Bool, creativityCapability: Double, inspirationLevel: Double,
-                innovationPotential: Double, creativityDepth: Double,
-                activeAmplifications: Int, successRate: Double, lastUpdate: Date = Date())
-    {
+    public init(
+        operational: Bool,
+        creativityCapability: Double,
+        inspirationLevel: Double,
+        innovationPotential: Double,
+        creativityDepth: Double,
+        activeAmplifications: Int,
+        successRate: Double,
+        lastUpdate: Date = Date()
+    ) {
         self.operational = operational
         self.creativityCapability = creativityCapability
         self.inspirationLevel = inspirationLevel
@@ -649,9 +708,10 @@ public final class MCPCreativityAmplificationCoordinator: MCPCreativityAmplifica
         }
     }
 
-    private func generateCreativeInsights(_ amplification: CreativityAmplification,
-                                          result: AmplificationResult) async -> [CreativeInsight]
-    {
+    private func generateCreativeInsights(
+        _ amplification: CreativityAmplification,
+        result: AmplificationResult
+    ) async -> [CreativeInsight] {
         var insights: [CreativeInsight] = []
 
         if result.amplification > 0.9 {
@@ -677,9 +737,10 @@ public final class MCPCreativityAmplificationCoordinator: MCPCreativityAmplifica
         return insights
     }
 
-    private func generateCreativeOutcomes(_ amplification: CreativityAmplification,
-                                          result: AmplificationResult) async -> [CreativeOutcome]
-    {
+    private func generateCreativeOutcomes(
+        _ amplification: CreativityAmplification,
+        result: AmplificationResult
+    ) async -> [CreativeOutcome] {
         var outcomes: [CreativeOutcome] = []
 
         if result.success {
@@ -696,9 +757,10 @@ public final class MCPCreativityAmplificationCoordinator: MCPCreativityAmplifica
         return outcomes
     }
 
-    private func generateCreativityInsights(_ generation: CreativeInnovationGeneration,
-                                            result: InnovationResult) async -> [CreativeInsight]
-    {
+    private func generateCreativityInsights(
+        _ generation: CreativeInnovationGeneration,
+        result: InnovationResult
+    ) async -> [CreativeInsight] {
         var insights: [CreativeInsight] = []
 
         if result.novelty > 0.9 {
@@ -742,9 +804,10 @@ private final class InspirationEngine: Sendable {
 
 /// Creativity Amplifier
 private final class CreativityAmplifier: Sendable {
-    func amplifyCreativity(_ amplification: CreativityAmplification,
-                           inspirationResult: InspirationResult) async throws -> AmplificationResult
-    {
+    func amplifyCreativity(
+        _ amplification: CreativityAmplification,
+        inspirationResult: InspirationResult
+    ) async throws -> AmplificationResult {
         AmplificationResult(
             success: Double.random(in: 0.8 ... 1.0) > 0.2,
             amplification: Double.random(in: 0.7 ... 1.0),
@@ -752,9 +815,10 @@ private final class CreativityAmplifier: Sendable {
         )
     }
 
-    func amplifyInnovation(_ generation: CreativeInnovationGeneration,
-                           result: InnovationResult) async -> AmplificationResult
-    {
+    func amplifyInnovation(
+        _ generation: CreativeInnovationGeneration,
+        result: InnovationResult
+    ) async -> AmplificationResult {
         AmplificationResult(
             success: true,
             creativityLevel: Double.random(in: 0.8 ... 1.0)
@@ -868,17 +932,19 @@ private final class InnovationGenerator: Sendable {
 
 /// Creative Synthesizer
 private final class CreativeSynthesizer: Sendable {
-    func synthesizeCreativity(_ amplification: CreativityAmplification,
-                              result: AmplificationResult) async -> SynthesisResult
-    {
+    func synthesizeCreativity(
+        _ amplification: CreativityAmplification,
+        result: AmplificationResult
+    ) async -> SynthesisResult {
         SynthesisResult(
             success: true
         )
     }
 
-    func synthesizeInnovation(_ generation: CreativeInnovationGeneration,
-                              result: InnovationResult) async -> SynthesisResult
-    {
+    func synthesizeInnovation(
+        _ generation: CreativeInnovationGeneration,
+        result: InnovationResult
+    ) async -> SynthesisResult {
         SynthesisResult(
             success: true
         )

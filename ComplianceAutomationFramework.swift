@@ -634,12 +634,13 @@ public struct ComplianceSettings {
     public let pci: PCISettings
     public let audit: AuditSettings
 
-    public init(gdpr: GDPRSettings = GDPRSettings(),
-                hipaa: HIPAAsettings = HIPAAsettings(),
-                soc2: SOC2Settings = SOC2Settings(),
-                pci: PCISettings = PCISettings(),
-                audit: AuditSettings = AuditSettings())
-    {
+    public init(
+        gdpr: GDPRSettings = GDPRSettings(),
+        hipaa: HIPAAsettings = HIPAAsettings(),
+        soc2: SOC2Settings = SOC2Settings(),
+        pci: PCISettings = PCISettings(),
+        audit: AuditSettings = AuditSettings()
+    ) {
         self.gdpr = gdpr
         self.hipaa = hipaa
         self.soc2 = soc2
@@ -654,11 +655,12 @@ public struct GDPRSettings {
     public let consentRequired: Bool
     public let automatedDeletion: Bool
 
-    public init(enabled: Bool = true,
-                dataRetentionPeriod: TimeInterval = 2555 * 24 * 60 * 60, // 7 years
-                consentRequired: Bool = true,
-                automatedDeletion: Bool = true)
-    {
+    public init(
+        enabled: Bool = true,
+        dataRetentionPeriod: TimeInterval = 2555 * 24 * 60 * 60, // 7 years
+        consentRequired: Bool = true,
+        automatedDeletion: Bool = true
+    ) {
         self.enabled = enabled
         self.dataRetentionPeriod = dataRetentionPeriod
         self.consentRequired = consentRequired
@@ -672,11 +674,12 @@ public struct HIPAAsettings {
     public let encryptionRequired: Bool
     public let breachNotificationEnabled: Bool
 
-    public init(enabled: Bool = false,
-                auditLoggingEnabled: Bool = true,
-                encryptionRequired: Bool = true,
-                breachNotificationEnabled: Bool = true)
-    {
+    public init(
+        enabled: Bool = false,
+        auditLoggingEnabled: Bool = true,
+        encryptionRequired: Bool = true,
+        breachNotificationEnabled: Bool = true
+    ) {
         self.enabled = enabled
         self.auditLoggingEnabled = auditLoggingEnabled
         self.encryptionRequired = encryptionRequired
@@ -690,11 +693,12 @@ public struct SOC2Settings {
     public let accessControlsEnabled: Bool
     public let incidentResponseEnabled: Bool
 
-    public init(enabled: Bool = false,
-                monitoringEnabled: Bool = true,
-                accessControlsEnabled: Bool = true,
-                incidentResponseEnabled: Bool = true)
-    {
+    public init(
+        enabled: Bool = false,
+        monitoringEnabled: Bool = true,
+        accessControlsEnabled: Bool = true,
+        incidentResponseEnabled: Bool = true
+    ) {
         self.enabled = enabled
         self.monitoringEnabled = monitoringEnabled
         self.accessControlsEnabled = accessControlsEnabled
@@ -708,11 +712,12 @@ public struct PCISettings {
     public let tokenizationEnabled: Bool
     public let networkSegmentationEnabled: Bool
 
-    public init(enabled: Bool = false,
-                encryptionEnabled: Bool = true,
-                tokenizationEnabled: Bool = true,
-                networkSegmentationEnabled: Bool = true)
-    {
+    public init(
+        enabled: Bool = false,
+        encryptionEnabled: Bool = true,
+        tokenizationEnabled: Bool = true,
+        networkSegmentationEnabled: Bool = true
+    ) {
         self.enabled = enabled
         self.encryptionEnabled = encryptionEnabled
         self.tokenizationEnabled = tokenizationEnabled
@@ -726,11 +731,12 @@ public struct AuditSettings {
     public let logLevel: AuditLogLevel
     public let secureStorage: Bool
 
-    public init(enabled: Bool = true,
-                retentionPeriod: TimeInterval = 2555 * 24 * 60 * 60, // 7 years
-                logLevel: AuditLogLevel = .detailed,
-                secureStorage: Bool = true)
-    {
+    public init(
+        enabled: Bool = true,
+        retentionPeriod: TimeInterval = 2555 * 24 * 60 * 60, // 7 years
+        logLevel: AuditLogLevel = .detailed,
+        secureStorage: Bool = true
+    ) {
         self.enabled = enabled
         self.retentionPeriod = retentionPeriod
         self.logLevel = logLevel

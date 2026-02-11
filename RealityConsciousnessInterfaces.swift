@@ -170,8 +170,10 @@ final class RealityConsciousnessInterfaceEngine: RCIInterfaceProtocol {
             phaseDrift: phaseDrift,
             syncDuration: duration,
             validation: ValidationResult(
-                isValid: phaseDrift<0.02,
-                    warnings: phaseDrift> = 0.015
+                isValid: phaseDrift<
+                    0.02,
+                    warnings: phaseDrift
+                > = 0.015
                     ? [
                         ValidationWarning(
                             message: "Phase drift elevated", severity: .warning,

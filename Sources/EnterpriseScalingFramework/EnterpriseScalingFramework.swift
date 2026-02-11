@@ -495,11 +495,12 @@ public struct EnterpriseSettings {
     public let compliance: ComplianceSettings
     public let scaling: ScalingSettings
 
-    public init(tenant: TenantSettings = TenantSettings(),
-                resource: ResourceSettings = ResourceSettings(),
-                compliance: ComplianceSettings = ComplianceSettings(),
-                scaling: ScalingSettings = ScalingSettings())
-    {
+    public init(
+        tenant: TenantSettings = TenantSettings(),
+        resource: ResourceSettings = ResourceSettings(),
+        compliance: ComplianceSettings = ComplianceSettings(),
+        scaling: ScalingSettings = ScalingSettings()
+    ) {
         self.tenant = tenant
         self.resource = resource
         self.compliance = compliance
@@ -512,10 +513,11 @@ public struct TenantSettings {
     public let maxTenantsPerUser: Int
     public let tenantIsolationLevel: IsolationLevel
 
-    public init(allowTenantSwitching: Bool = true,
-                maxTenantsPerUser: Int = 5,
-                tenantIsolationLevel: IsolationLevel = .logical)
-    {
+    public init(
+        allowTenantSwitching: Bool = true,
+        maxTenantsPerUser: Int = 5,
+        tenantIsolationLevel: IsolationLevel = .logical
+    ) {
         self.allowTenantSwitching = allowTenantSwitching
         self.maxTenantsPerUser = maxTenantsPerUser
         self.tenantIsolationLevel = tenantIsolationLevel
@@ -531,10 +533,11 @@ public struct ResourceSettings {
     public let resourceMonitoringInterval: TimeInterval
     public let overagePolicy: OveragePolicy
 
-    public init(autoScalingEnabled: Bool = true,
-                resourceMonitoringInterval: TimeInterval = 300,
-                overagePolicy: OveragePolicy = .throttle)
-    {
+    public init(
+        autoScalingEnabled: Bool = true,
+        resourceMonitoringInterval: TimeInterval = 300,
+        overagePolicy: OveragePolicy = .throttle
+    ) {
         self.autoScalingEnabled = autoScalingEnabled
         self.resourceMonitoringInterval = resourceMonitoringInterval
         self.overagePolicy = overagePolicy
@@ -550,10 +553,11 @@ public struct ComplianceSettings {
     public let complianceCheckInterval: TimeInterval
     public let autoRemediationEnabled: Bool
 
-    public init(auditLogRetention: TimeInterval = 2555 * 24 * 60 * 60, // 7 years
-                complianceCheckInterval: TimeInterval = 86400, // daily
-                autoRemediationEnabled: Bool = false)
-    {
+    public init(
+        auditLogRetention: TimeInterval = 2555 * 24 * 60 * 60, // 7 years
+        complianceCheckInterval: TimeInterval = 86400, // daily
+        autoRemediationEnabled: Bool = false
+    ) {
         self.auditLogRetention = auditLogRetention
         self.complianceCheckInterval = complianceCheckInterval
         self.autoRemediationEnabled = autoRemediationEnabled
@@ -566,11 +570,12 @@ public struct ScalingSettings {
     public let scaleUpCooldown: TimeInterval
     public let scaleDownCooldown: TimeInterval
 
-    public init(minLoadThreshold: Double = 0.3,
-                maxLoadThreshold: Double = 0.8,
-                scaleUpCooldown: TimeInterval = 300,
-                scaleDownCooldown: TimeInterval = 600)
-    {
+    public init(
+        minLoadThreshold: Double = 0.3,
+        maxLoadThreshold: Double = 0.8,
+        scaleUpCooldown: TimeInterval = 300,
+        scaleDownCooldown: TimeInterval = 600
+    ) {
         self.minLoadThreshold = minLoadThreshold
         self.maxLoadThreshold = maxLoadThreshold
         self.scaleUpCooldown = scaleUpCooldown

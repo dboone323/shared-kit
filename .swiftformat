@@ -16,9 +16,9 @@
 
 # Spacing and Wrapping
 --maxwidth 120
---wraparguments preserve
---wrapparameters preserve
---wrapcollections preserve
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
 --closingparen balanced
 --wrapternary before-operators
 
@@ -91,6 +91,7 @@
 --enable redundantThrows
 --enable blankLinesBetweenImports
 --enable noForceUnwrapInTests
+--enable wrap
 
 # Disabled Rules
 --disable andOperator

@@ -77,15 +77,16 @@ public struct AnalyticsEvent {
     public let deviceInfo: DeviceInfo
     public let context: EventContext?
 
-    public init(id: String = UUID().uuidString,
-                userId: String,
-                type: EventType,
-                properties: [String: Any] = [:],
-                timestamp: Date = Date(),
-                sessionId: String,
-                deviceInfo: DeviceInfo,
-                context: EventContext? = nil)
-    {
+    public init(
+        id: String = UUID().uuidString,
+        userId: String,
+        type: EventType,
+        properties: [String: Any] = [:],
+        timestamp: Date = Date(),
+        sessionId: String,
+        deviceInfo: DeviceInfo,
+        context: EventContext? = nil
+    ) {
         self.id = id
         self.userId = userId
         self.type = type
@@ -251,11 +252,12 @@ public struct PrivacySettings {
     public let dataRetentionDays: Int
     public let requireConsent: Bool
 
-    public init(allowPersonalization: Bool = true,
-                allowThirdPartySharing: Bool = false,
-                dataRetentionDays: Int = 365,
-                requireConsent: Bool = true)
-    {
+    public init(
+        allowPersonalization: Bool = true,
+        allowThirdPartySharing: Bool = false,
+        dataRetentionDays: Int = 365,
+        requireConsent: Bool = true
+    ) {
         self.allowPersonalization = allowPersonalization
         self.allowThirdPartySharing = allowThirdPartySharing
         self.dataRetentionDays = dataRetentionDays
@@ -270,12 +272,13 @@ public struct TrackingSettings {
     public let samplingRate: Double
     public let batchSize: Int
 
-    public init(enableEventTracking: Bool = true,
-                enableBehaviorAnalysis: Bool = true,
-                enablePerformanceMonitoring: Bool = true,
-                samplingRate: Double = 1.0,
-                batchSize: Int = 50)
-    {
+    public init(
+        enableEventTracking: Bool = true,
+        enableBehaviorAnalysis: Bool = true,
+        enablePerformanceMonitoring: Bool = true,
+        samplingRate: Double = 1.0,
+        batchSize: Int = 50
+    ) {
         self.enableEventTracking = enableEventTracking
         self.enableBehaviorAnalysis = enableBehaviorAnalysis
         self.enablePerformanceMonitoring = enablePerformanceMonitoring

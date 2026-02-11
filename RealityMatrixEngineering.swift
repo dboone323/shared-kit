@@ -882,9 +882,10 @@ final class MatrixAnalyzer {
 
 /// Matrix manipulator
 final class MatrixManipulator {
-    func applyModification(_ modification: RealityMatrixModification,
-                           toMatrix matrix: RealityMatrix) async throws -> RealityMatrixEngineeringResult
-    {
+    func applyModification(
+        _ modification: RealityMatrixModification,
+        toMatrix matrix: RealityMatrix
+    ) async throws -> RealityMatrixEngineeringResult {
         var workingMatrix = matrix
 
         // Apply the modification based on type
@@ -960,9 +961,10 @@ final class MatrixManipulator {
         matrix.coherenceLevel += 0.02
     }
 
-    func manipulateParameters(_ parameters: RealityParameters,
-                              inMatrix matrix: RealityMatrix) async throws -> ManipulationResult
-    {
+    func manipulateParameters(
+        _ parameters: RealityParameters,
+        inMatrix matrix: RealityMatrix
+    ) async throws -> ManipulationResult {
         var workingMatrix = matrix
         // Apply parameter changes
         workingMatrix.parameters = parameters
@@ -988,9 +990,10 @@ final class MatrixManipulator {
         )
     }
 
-    func applyTransformation(_ transformation: MatrixTransformation,
-                             toMatrix matrix: RealityMatrix) async throws -> TransformationResult
-    {
+    func applyTransformation(
+        _ transformation: MatrixTransformation,
+        toMatrix matrix: RealityMatrix
+    ) async throws -> TransformationResult {
         // Apply matrix transformation
         // This is a simplified implementation
 
@@ -1011,9 +1014,10 @@ final class MatrixManipulator {
         )
     }
 
-    func synchronizeChanges(_ changes: MatrixChanges,
-                            inMatrix matrix: RealityMatrix) async throws -> SynchronizationResult
-    {
+    func synchronizeChanges(
+        _ changes: MatrixChanges,
+        inMatrix matrix: RealityMatrix
+    ) async throws -> SynchronizationResult {
         // Synchronize changes across dimensions
         let synchronizedTargets = changes.synchronizationTargets.count
         let failedTargets = 0

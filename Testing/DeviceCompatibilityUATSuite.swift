@@ -62,9 +62,10 @@ class CompatibilityManager {
     static let shared = CompatibilityManager()
     private init() {}
 
-    func testPerformanceOnDevice(_ capability: DeviceCapability,
-                                 completion: @escaping (PerformanceTestResult) -> Void)
-    {
+    func testPerformanceOnDevice(
+        _ capability: DeviceCapability,
+        completion: @escaping (PerformanceTestResult) -> Void
+    ) {
         DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 2.0 ... 4.0)) {
             let baseScore = Double.random(in: 65 ... 90)
             let capabilityMultiplier = self.getCapabilityMultiplier(capability)
@@ -404,9 +405,10 @@ class DeviceCompatibilityUATSuite {
 
     // MARK: - Helper Methods
 
-    private func testDeviceCompatibility(device: DeviceSpec,
-                                         completion: @escaping (DeviceCompatibilityResult) -> Void)
-    {
+    private func testDeviceCompatibility(
+        device: DeviceSpec,
+        completion: @escaping (DeviceCompatibilityResult) -> Void
+    ) {
         // Simulate device compatibility testing
         DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0 ... 3.0)) {
             let result = DeviceCompatibilityResult(

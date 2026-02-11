@@ -204,9 +204,10 @@ public class GlobalQuantumCommunicationNetwork: ObservableObject {
         }
     }
 
-    private func establishIntercontinentalLink(from continentA: String,
-                                               to continentB: String) async -> IntercontinentalLinkResult
-    {
+    private func establishIntercontinentalLink(
+        from continentA: String,
+        to continentB: String
+    ) async -> IntercontinentalLinkResult {
         // Simulate intercontinental quantum link establishment
         let distance = Double.random(in: 5000 ... 15000)
         let latency = distance / 200_000.0 * 1000 // Speed of light in fiber ~200,000 km/s

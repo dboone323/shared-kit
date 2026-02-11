@@ -36,11 +36,15 @@ public struct RealityEngineering: Sendable, Codable {
     public let ethicalConstraints: [RealityConstraint]
     public let consciousnessAlignment: ConsciousnessAlignment
 
-    public init(engineeringId: String, realityTarget: RealityTarget,
-                engineeringType: EngineeringType, parameters: [String: AnyCodable] = [:],
-                scope: EngineeringScope = .local, ethicalConstraints: [RealityConstraint] = [],
-                consciousnessAlignment: ConsciousnessAlignment = .standard)
-    {
+    public init(
+        engineeringId: String,
+        realityTarget: RealityTarget,
+        engineeringType: EngineeringType,
+        parameters: [String: AnyCodable] = [:],
+        scope: EngineeringScope = .local,
+        ethicalConstraints: [RealityConstraint] = [],
+        consciousnessAlignment: ConsciousnessAlignment = .standard
+    ) {
         self.engineeringId = engineeringId
         self.realityTarget = realityTarget
         self.engineeringType = engineeringType
@@ -86,9 +90,12 @@ public struct RealityConstraint: Sendable, Codable {
     public let priority: ConstraintPriority
     public let enforcement: EnforcementLevel
 
-    public init(constraintType: RealityConstraintType, value: String,
-                priority: ConstraintPriority = .high, enforcement: EnforcementLevel = .strict)
-    {
+    public init(
+        constraintType: RealityConstraintType,
+        value: String,
+        priority: ConstraintPriority = .high,
+        enforcement: EnforcementLevel = .strict
+    ) {
         self.constraintType = constraintType
         self.value = value
         self.priority = priority
@@ -126,10 +133,16 @@ public struct RealityEngineeringResult: Sendable, Codable {
     public let engineeringInsights: [RealityInsight]
     public let executionTime: TimeInterval
 
-    public init(engineeringId: String, success: Bool, realityImpact: Double,
-                stabilityIndex: Double, consciousnessEffect: Double, ethicalCompliance: Double,
-                engineeringInsights: [RealityInsight] = [], executionTime: TimeInterval)
-    {
+    public init(
+        engineeringId: String,
+        success: Bool,
+        realityImpact: Double,
+        stabilityIndex: Double,
+        consciousnessEffect: Double,
+        ethicalCompliance: Double,
+        engineeringInsights: [RealityInsight] = [],
+        executionTime: TimeInterval
+    ) {
         self.engineeringId = engineeringId
         self.success = success
         self.realityImpact = realityImpact
@@ -149,9 +162,13 @@ public struct RealityInsight: Sendable, Codable {
     public let confidence: Double
     public let realityAlignment: Double
 
-    public init(insight: String, type: RealityInsightType, depth: InsightDepth,
-                confidence: Double, realityAlignment: Double)
-    {
+    public init(
+        insight: String,
+        type: RealityInsightType,
+        depth: InsightDepth,
+        confidence: Double,
+        realityAlignment: Double
+    ) {
         self.insight = insight
         self.type = type
         self.depth = depth
@@ -180,11 +197,15 @@ public struct RealityManipulation: Sendable, Codable {
     public let duration: TimeInterval
     public let reversibility: ReversibilityLevel
 
-    public init(manipulationId: String, targetReality: RealityTarget,
-                manipulationType: ManipulationType, parameters: [String: AnyCodable] = [:],
-                intensity: ManipulationIntensity = .moderate, duration: TimeInterval = 0,
-                reversibility: ReversibilityLevel = .full)
-    {
+    public init(
+        manipulationId: String,
+        targetReality: RealityTarget,
+        manipulationType: ManipulationType,
+        parameters: [String: AnyCodable] = [:],
+        intensity: ManipulationIntensity = .moderate,
+        duration: TimeInterval = 0,
+        reversibility: ReversibilityLevel = .full
+    ) {
         self.manipulationId = manipulationId
         self.targetReality = targetReality
         self.manipulationType = manipulationType
@@ -235,11 +256,16 @@ public struct RealityManipulationResult: Sendable, Codable {
     public let consciousnessImpact: Double
     public let manipulationInsights: [RealityInsight]
 
-    public init(manipulationId: String, success: Bool, manipulationEffect: Double,
-                realityStability: Double, sideEffects: [RealitySideEffect] = [],
-                reversibilityAchieved: Double, consciousnessImpact: Double,
-                manipulationInsights: [RealityInsight] = [])
-    {
+    public init(
+        manipulationId: String,
+        success: Bool,
+        manipulationEffect: Double,
+        realityStability: Double,
+        sideEffects: [RealitySideEffect] = [],
+        reversibilityAchieved: Double,
+        consciousnessImpact: Double,
+        manipulationInsights: [RealityInsight] = []
+    ) {
         self.manipulationId = manipulationId
         self.success = success
         self.manipulationEffect = manipulationEffect
@@ -258,9 +284,12 @@ public struct RealitySideEffect: Sendable, Codable {
     public let description: String
     public let mitigationStrategy: String
 
-    public init(effectType: SideEffectType, severity: SeverityLevel,
-                description: String, mitigationStrategy: String)
-    {
+    public init(
+        effectType: SideEffectType,
+        severity: SeverityLevel,
+        description: String,
+        mitigationStrategy: String
+    ) {
         self.effectType = effectType
         self.severity = severity
         self.description = description
@@ -296,10 +325,14 @@ public struct RealityOptimization: Sendable, Codable {
     public let timeHorizon: TimeInterval
     public let riskTolerance: RiskTolerance
 
-    public init(optimizationId: String, targetReality: RealityTarget,
-                optimizationGoals: [OptimizationGoal], constraints: [RealityConstraint] = [],
-                timeHorizon: TimeInterval = 3600, riskTolerance: RiskTolerance = .moderate)
-    {
+    public init(
+        optimizationId: String,
+        targetReality: RealityTarget,
+        optimizationGoals: [OptimizationGoal],
+        constraints: [RealityConstraint] = [],
+        timeHorizon: TimeInterval = 3600,
+        riskTolerance: RiskTolerance = .moderate
+    ) {
         self.optimizationId = optimizationId
         self.targetReality = targetReality
         self.optimizationGoals = optimizationGoals
@@ -316,9 +349,12 @@ public struct OptimizationGoal: Sendable, Codable {
     public let priority: GoalPriority
     public let measurement: String
 
-    public init(goalType: GoalType, targetValue: Double,
-                priority: GoalPriority = .medium, measurement: String)
-    {
+    public init(
+        goalType: GoalType,
+        targetValue: Double,
+        priority: GoalPriority = .medium,
+        measurement: String
+    ) {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -363,10 +399,16 @@ public struct RealityEngineeringStatus: Sendable, Codable {
     public let ethicalCompliance: Double
     public let lastUpdate: Date
 
-    public init(operational: Bool, engineeringCapability: Double, realityStability: Double,
-                consciousnessAlignment: Double, activeEngineering: Int, manipulationSuccess: Double,
-                ethicalCompliance: Double, lastUpdate: Date = Date())
-    {
+    public init(
+        operational: Bool,
+        engineeringCapability: Double,
+        realityStability: Double,
+        consciousnessAlignment: Double,
+        activeEngineering: Int,
+        manipulationSuccess: Double,
+        ethicalCompliance: Double,
+        lastUpdate: Date = Date()
+    ) {
         self.operational = operational
         self.engineeringCapability = engineeringCapability
         self.realityStability = realityStability
@@ -595,9 +637,10 @@ public final class MCPRealityEngineeringCoordinator: MCPRealityEngineering, Send
         return insights
     }
 
-    private func analyzeSideEffects(_ manipulation: RealityManipulation,
-                                    result: ManipulationResult) async -> [RealitySideEffect]
-    {
+    private func analyzeSideEffects(
+        _ manipulation: RealityManipulation,
+        result: ManipulationResult
+    ) async -> [RealitySideEffect] {
         var sideEffects: [RealitySideEffect] = []
 
         if result.effect > 0.8 {
@@ -617,9 +660,10 @@ public final class MCPRealityEngineeringCoordinator: MCPRealityEngineering, Send
         return baseValue * stability
     }
 
-    private func generateManipulationInsights(_ manipulation: RealityManipulation,
-                                              result: ManipulationResult) async -> [RealityInsight]
-    {
+    private func generateManipulationInsights(
+        _ manipulation: RealityManipulation,
+        result: ManipulationResult
+    ) async -> [RealityInsight] {
         var insights: [RealityInsight] = []
 
         if result.success && result.effect > 0.7 {
@@ -710,9 +754,10 @@ private final class StabilityGuardian: Sendable {
 
 /// Ethical Validator
 private final class EthicalValidator: Sendable {
-    func validateEthicalImpact(_ manipulation: RealityManipulation,
-                               result: ManipulationResult) async throws -> EthicalResult
-    {
+    func validateEthicalImpact(
+        _ manipulation: RealityManipulation,
+        result: ManipulationResult
+    ) async throws -> EthicalResult {
         EthicalResult(
             compliant: result.effect < 0.8,
             compliance: Double.random(in: 0.9 ... 1.0)

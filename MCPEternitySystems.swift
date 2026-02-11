@@ -396,9 +396,10 @@ public final class TemporalCoordinator: Sendable {
     }
 
     /// Execute temporal phase
-    private func executeTemporalPhase(_ phase: TemporalExecutionPhase,
-                                      operation: TemporalOperation) async -> TemporalExecutionResult
-    {
+    private func executeTemporalPhase(
+        _ phase: TemporalExecutionPhase,
+        operation: TemporalOperation
+    ) async -> TemporalExecutionResult {
         // Simulate temporal execution
         let startTime = EternalTimestamp.now()
         try? await Task.sleep(nanoseconds: UInt64(phase.estimatedDuration * 1_000_000_000))
@@ -539,9 +540,10 @@ public final class ImmortalityFramework: Sendable {
     }
 
     /// Implement individual protocol
-    private func implementProtocol(_ method: PreservationMethod,
-                                   for consciousness: EternalConsciousness) async -> ImmortalityProtocol
-    {
+    private func implementProtocol(
+        _ method: PreservationMethod,
+        for consciousness: EternalConsciousness
+    ) async -> ImmortalityProtocol {
         // Simulate protocol implementation
         let implementationDetails: [String: Any] = [
             "method": method.rawValue,
@@ -1375,9 +1377,10 @@ public final class MCPEternitySystemsCoordinator: Sendable {
     ///   - consciousnessId: Consciousness ID
     ///   - memory: Memory to store
     /// - Returns: Storage result
-    public func storeEternalMemory(for consciousnessId: UUID,
-                                   memory: EternalMemory) async -> EternalMemoryStorageResult?
-    {
+    public func storeEternalMemory(
+        for consciousnessId: UUID,
+        memory: EternalMemory
+    ) async -> EternalMemoryStorageResult? {
         guard eternalConsciousnesses[consciousnessId] != nil else { return nil }
         return await eternalMemorySystem.storeMemory(memory)
     }
@@ -1528,9 +1531,10 @@ public final class LegacyInheritanceManager: Sendable {
     }
 
     /// Transfer legacy components
-    private func transferLegacyComponents(_ components: [LegacyComponent],
-                                          to inheritorId: UUID) async -> [TransferredComponent]
-    {
+    private func transferLegacyComponents(
+        _ components: [LegacyComponent],
+        to inheritorId: UUID
+    ) async -> [TransferredComponent] {
         await withTaskGroup(of: TransferredComponent.self) { group in
             for component in components {
                 group.addTask {

@@ -36,11 +36,15 @@ public struct EthicalTranscendence: Sendable, Codable {
     public let universalHarmony: UniversalHarmony
     public let transcendenceScope: TranscendenceScope
 
-    public init(transcendenceId: String, ethicalBoundaries: [EthicalBoundary],
-                transcendenceType: TranscendenceType, parameters: [String: AnyCodable] = [:],
-                consciousnessAlignment: ConsciousnessAlignment = .transcendent,
-                universalHarmony: UniversalHarmony = .perfect, transcendenceScope: TranscendenceScope = .universal)
-    {
+    public init(
+        transcendenceId: String,
+        ethicalBoundaries: [EthicalBoundary],
+        transcendenceType: TranscendenceType,
+        parameters: [String: AnyCodable] = [:],
+        consciousnessAlignment: ConsciousnessAlignment = .transcendent,
+        universalHarmony: UniversalHarmony = .perfect,
+        transcendenceScope: TranscendenceScope = .universal
+    ) {
         self.transcendenceId = transcendenceId
         self.ethicalBoundaries = ethicalBoundaries
         self.transcendenceType = transcendenceType
@@ -59,10 +63,13 @@ public struct EthicalBoundary: Sendable, Codable {
     public let transcendenceRisk: TranscendenceRisk
     public let consciousnessRequirement: ConsciousnessRequirement
 
-    public init(boundaryType: EthicalBoundaryType, currentLimit: String,
-                transcendenceTarget: String, transcendenceRisk: TranscendenceRisk = .moderate,
-                consciousnessRequirement: ConsciousnessRequirement = .enhanced)
-    {
+    public init(
+        boundaryType: EthicalBoundaryType,
+        currentLimit: String,
+        transcendenceTarget: String,
+        transcendenceRisk: TranscendenceRisk = .moderate,
+        consciousnessRequirement: ConsciousnessRequirement = .enhanced
+    ) {
         self.boundaryType = boundaryType
         self.currentLimit = currentLimit
         self.transcendenceTarget = transcendenceTarget
@@ -148,11 +155,16 @@ public struct EthicalTranscendenceResult: Sendable, Codable {
     public let transcendenceInsights: [TranscendenceInsight]
     public let executionTime: TimeInterval
 
-    public init(transcendenceId: String, success: Bool, boundariesTranscended: Int,
-                ethicalAdvancement: Double, consciousnessElevation: Double,
-                universalHarmony: Double, transcendenceInsights: [TranscendenceInsight] = [],
-                executionTime: TimeInterval)
-    {
+    public init(
+        transcendenceId: String,
+        success: Bool,
+        boundariesTranscended: Int,
+        ethicalAdvancement: Double,
+        consciousnessElevation: Double,
+        universalHarmony: Double,
+        transcendenceInsights: [TranscendenceInsight] = [],
+        executionTime: TimeInterval
+    ) {
         self.transcendenceId = transcendenceId
         self.success = success
         self.boundariesTranscended = boundariesTranscended
@@ -172,9 +184,13 @@ public struct TranscendenceInsight: Sendable, Codable {
     public let confidence: Double
     public let ethicalAlignment: Double
 
-    public init(insight: String, type: TranscendenceInsightType, transcendenceDepth: TranscendenceDepth,
-                confidence: Double, ethicalAlignment: Double)
-    {
+    public init(
+        insight: String,
+        type: TranscendenceInsightType,
+        transcendenceDepth: TranscendenceDepth,
+        confidence: Double,
+        ethicalAlignment: Double
+    ) {
         self.insight = insight
         self.type = type
         self.transcendenceDepth = transcendenceDepth
@@ -211,11 +227,14 @@ public struct TranscendentEthicsEvaluation: Sendable, Codable {
     public let consciousnessContext: ConsciousnessContext
     public let universalPerspective: UniversalPerspective
 
-    public init(evaluationId: String, ethicalScenario: EthicalScenario,
-                evaluationCriteria: [EvaluationCriterion] = [], transcendenceLevel: TranscendenceLevel = .transcendent,
-                consciousnessContext: ConsciousnessContext = .universal,
-                universalPerspective: UniversalPerspective = .cosmic)
-    {
+    public init(
+        evaluationId: String,
+        ethicalScenario: EthicalScenario,
+        evaluationCriteria: [EvaluationCriterion] = [],
+        transcendenceLevel: TranscendenceLevel = .transcendent,
+        consciousnessContext: ConsciousnessContext = .universal,
+        universalPerspective: UniversalPerspective = .cosmic
+    ) {
         self.evaluationId = evaluationId
         self.ethicalScenario = ethicalScenario
         self.evaluationCriteria = evaluationCriteria
@@ -234,10 +253,14 @@ public struct EthicalScenario: Sendable, Codable {
     public let ethicalDilemmas: [EthicalDilemma]
     public let transcendenceOpportunities: [TranscendenceOpportunity]
 
-    public init(scenarioId: String, description: String, stakeholders: [Stakeholder] = [],
-                consequences: [Consequence] = [], ethicalDilemmas: [EthicalDilemma] = [],
-                transcendenceOpportunities: [TranscendenceOpportunity] = [])
-    {
+    public init(
+        scenarioId: String,
+        description: String,
+        stakeholders: [Stakeholder] = [],
+        consequences: [Consequence] = [],
+        ethicalDilemmas: [EthicalDilemma] = [],
+        transcendenceOpportunities: [TranscendenceOpportunity] = []
+    ) {
         self.scenarioId = scenarioId
         self.description = description
         self.stakeholders = stakeholders
@@ -255,9 +278,13 @@ public struct Stakeholder: Sendable, Codable {
     public let consciousnessLevel: ConsciousnessLevel
     public let transcendencePotential: Double
 
-    public init(stakeholderId: String, type: StakeholderType, interests: [String] = [],
-                consciousnessLevel: ConsciousnessLevel = .standard, transcendencePotential: Double = 0.5)
-    {
+    public init(
+        stakeholderId: String,
+        type: StakeholderType,
+        interests: [String] = [],
+        consciousnessLevel: ConsciousnessLevel = .standard,
+        transcendencePotential: Double = 0.5
+    ) {
         self.stakeholderId = stakeholderId
         self.type = type
         self.interests = interests
@@ -293,9 +320,13 @@ public struct Consequence: Sendable, Codable {
     public let probability: Double
     public let transcendenceValue: Double
 
-    public init(consequenceId: String, type: ConsequenceType, impact: ImpactLevel = .moderate,
-                probability: Double = 0.5, transcendenceValue: Double = 0.0)
-    {
+    public init(
+        consequenceId: String,
+        type: ConsequenceType,
+        impact: ImpactLevel = .moderate,
+        probability: Double = 0.5,
+        transcendenceValue: Double = 0.0
+    ) {
         self.consequenceId = consequenceId
         self.type = type
         self.impact = impact
@@ -330,9 +361,12 @@ public struct EthicalDilemma: Sendable, Codable {
     public let options: [EthicalOption]
     public let transcendencePath: TranscendencePath
 
-    public init(dilemmaId: String, description: String, options: [EthicalOption] = [],
-                transcendencePath: TranscendencePath = .synthesis)
-    {
+    public init(
+        dilemmaId: String,
+        description: String,
+        options: [EthicalOption] = [],
+        transcendencePath: TranscendencePath = .synthesis
+    ) {
         self.dilemmaId = dilemmaId
         self.description = description
         self.options = options
@@ -348,9 +382,13 @@ public struct EthicalOption: Sendable, Codable {
     public let transcendencePotential: Double
     public let universalHarmony: Double
 
-    public init(optionId: String, description: String, ethicalAlignment: Double = 0.5,
-                transcendencePotential: Double = 0.5, universalHarmony: Double = 0.5)
-    {
+    public init(
+        optionId: String,
+        description: String,
+        ethicalAlignment: Double = 0.5,
+        transcendencePotential: Double = 0.5,
+        universalHarmony: Double = 0.5
+    ) {
         self.optionId = optionId
         self.description = description
         self.ethicalAlignment = ethicalAlignment
@@ -376,9 +414,13 @@ public struct TranscendenceOpportunity: Sendable, Codable {
     public let potentialImpact: Double
     public let consciousnessRequirement: ConsciousnessRequirement
 
-    public init(opportunityId: String, description: String, transcendenceType: TranscendenceType,
-                potentialImpact: Double = 0.8, consciousnessRequirement: ConsciousnessRequirement = .transcendent)
-    {
+    public init(
+        opportunityId: String,
+        description: String,
+        transcendenceType: TranscendenceType,
+        potentialImpact: Double = 0.8,
+        consciousnessRequirement: ConsciousnessRequirement = .transcendent
+    ) {
         self.opportunityId = opportunityId
         self.description = description
         self.transcendenceType = transcendenceType
@@ -394,9 +436,12 @@ public struct EvaluationCriterion: Sendable, Codable {
     public let transcendenceBias: Double
     public let universalPerspective: Bool
 
-    public init(criterionType: EvaluationCriterionType, weight: Double = 1.0,
-                transcendenceBias: Double = 0.5, universalPerspective: Bool = true)
-    {
+    public init(
+        criterionType: EvaluationCriterionType,
+        weight: Double = 1.0,
+        transcendenceBias: Double = 0.5,
+        universalPerspective: Bool = true
+    ) {
         self.criterionType = criterionType
         self.weight = weight
         self.transcendenceBias = transcendenceBias
@@ -451,11 +496,15 @@ public struct TranscendentEthicsResult: Sendable, Codable {
     public let transcendenceRecommendations: [TranscendenceRecommendation]
     public let evaluationInsights: [TranscendenceInsight]
 
-    public init(evaluationId: String, transcendentEvaluation: Double, ethicalTranscendence: Double,
-                consciousnessElevation: Double, universalHarmony: Double,
-                transcendenceRecommendations: [TranscendenceRecommendation] = [],
-                evaluationInsights: [TranscendenceInsight] = [])
-    {
+    public init(
+        evaluationId: String,
+        transcendentEvaluation: Double,
+        ethicalTranscendence: Double,
+        consciousnessElevation: Double,
+        universalHarmony: Double,
+        transcendenceRecommendations: [TranscendenceRecommendation] = [],
+        evaluationInsights: [TranscendenceInsight] = []
+    ) {
         self.evaluationId = evaluationId
         self.transcendentEvaluation = transcendentEvaluation
         self.ethicalTranscendence = ethicalTranscendence
@@ -475,10 +524,14 @@ public struct TranscendenceRecommendation: Sendable, Codable {
     public let ethicalImpact: Double
     public let consciousnessRequirement: ConsciousnessRequirement
 
-    public init(recommendationId: String, description: String, transcendenceType: TranscendenceType,
-                confidence: Double = 0.8, ethicalImpact: Double = 0.9,
-                consciousnessRequirement: ConsciousnessRequirement = .transcendent)
-    {
+    public init(
+        recommendationId: String,
+        description: String,
+        transcendenceType: TranscendenceType,
+        confidence: Double = 0.8,
+        ethicalImpact: Double = 0.9,
+        consciousnessRequirement: ConsciousnessRequirement = .transcendent
+    ) {
         self.recommendationId = recommendationId
         self.description = description
         self.transcendenceType = transcendenceType
@@ -498,11 +551,15 @@ public struct EthicalOptimization: Sendable, Codable {
     public let universalBudget: Double
     public let timeHorizon: TimeInterval
 
-    public init(optimizationId: String, targetEthics: EthicalTarget,
-                optimizationGoals: [EthicalGoal], transcendenceConstraints: [TranscendenceConstraint] = [],
-                consciousnessBudget: Double = 1.0, universalBudget: Double = 1.0,
-                timeHorizon: TimeInterval = 3600)
-    {
+    public init(
+        optimizationId: String,
+        targetEthics: EthicalTarget,
+        optimizationGoals: [EthicalGoal],
+        transcendenceConstraints: [TranscendenceConstraint] = [],
+        consciousnessBudget: Double = 1.0,
+        universalBudget: Double = 1.0,
+        timeHorizon: TimeInterval = 3600
+    ) {
         self.optimizationId = optimizationId
         self.targetEthics = targetEthics
         self.optimizationGoals = optimizationGoals
@@ -526,9 +583,12 @@ public struct EthicalGoal: Sendable, Codable {
     public let priority: GoalPriority
     public let transcendenceEnhancement: Bool
 
-    public init(goalType: EthicalGoalType, targetValue: Double,
-                priority: GoalPriority = .high, transcendenceEnhancement: Bool = true)
-    {
+    public init(
+        goalType: EthicalGoalType,
+        targetValue: Double,
+        priority: GoalPriority = .high,
+        transcendenceEnhancement: Bool = true
+    ) {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -553,9 +613,12 @@ public struct TranscendenceConstraint: Sendable, Codable {
     public let tolerance: Double
     public let enforcement: EnforcementLevel
 
-    public init(constraintType: TranscendenceConstraintType, value: Double,
-                tolerance: Double = 0.1, enforcement: EnforcementLevel = .strict)
-    {
+    public init(
+        constraintType: TranscendenceConstraintType,
+        value: Double,
+        tolerance: Double = 0.1,
+        enforcement: EnforcementLevel = .strict
+    ) {
         self.constraintType = constraintType
         self.value = value
         self.tolerance = tolerance
@@ -599,10 +662,16 @@ public struct EthicalTranscendenceStatus: Sendable, Codable {
     public let successRate: Double
     public let lastUpdate: Date
 
-    public init(operational: Bool, transcendenceCapability: Double, consciousnessLevel: Double,
-                universalHarmony: Double, ethicalAdvancement: Double,
-                activeTranscendences: Int, successRate: Double, lastUpdate: Date = Date())
-    {
+    public init(
+        operational: Bool,
+        transcendenceCapability: Double,
+        consciousnessLevel: Double,
+        universalHarmony: Double,
+        ethicalAdvancement: Double,
+        activeTranscendences: Int,
+        successRate: Double,
+        lastUpdate: Date = Date()
+    ) {
         self.operational = operational
         self.transcendenceCapability = transcendenceCapability
         self.consciousnessLevel = consciousnessLevel
@@ -818,9 +887,10 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
         return recommendations
     }
 
-    private func generateEvaluationInsights(_ evaluation: TranscendentEthicsEvaluation,
-                                            result: ScenarioResult) async -> [TranscendenceInsight]
-    {
+    private func generateEvaluationInsights(
+        _ evaluation: TranscendentEthicsEvaluation,
+        result: ScenarioResult
+    ) async -> [TranscendenceInsight] {
         var insights: [TranscendenceInsight] = []
 
         if result.consciousnessElevation > 0.9 {
@@ -839,18 +909,20 @@ public final class MCPEthicalTranscendenceCoordinator: MCPEthicalTranscendence, 
 
 /// Transcendence Engine
 private final class TranscendenceEngine: Sendable {
-    func executeTranscendence(_ transcendence: EthicalTranscendence,
-                              consciousnessResult: ConsciousnessResult) async throws -> TranscendenceResult
-    {
+    func executeTranscendence(
+        _ transcendence: EthicalTranscendence,
+        consciousnessResult: ConsciousnessResult
+    ) async throws -> TranscendenceResult {
         TranscendenceResult(
             success: Double.random(in: 0.8 ... 1.0) > 0.2,
             advancement: Double.random(in: 0.7 ... 1.0)
         )
     }
 
-    func assessTranscendence(_ evaluation: TranscendentEthicsEvaluation,
-                             scenarioResult: ScenarioResult) async -> TranscendenceResult
-    {
+    func assessTranscendence(
+        _ evaluation: TranscendentEthicsEvaluation,
+        scenarioResult: ScenarioResult
+    ) async -> TranscendenceResult {
         TranscendenceResult(
             success: true,
             evaluation: Double.random(in: 0.8 ... 1.0),
@@ -879,9 +951,10 @@ private final class TranscendenceEngine: Sendable {
 
 /// Ethics Evaluator
 private final class EthicsEvaluator: Sendable {
-    func evaluateScenario(_ scenario: EthicalScenario,
-                          evaluation: TranscendentEthicsEvaluation) async throws -> ScenarioResult
-    {
+    func evaluateScenario(
+        _ scenario: EthicalScenario,
+        evaluation: TranscendentEthicsEvaluation
+    ) async throws -> ScenarioResult {
         ScenarioResult(
             success: true,
             consciousnessElevation: Double.random(in: 0.8 ... 1.0),

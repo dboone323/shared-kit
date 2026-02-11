@@ -33,12 +33,14 @@ public struct DistributedIntelligenceInput: Sendable, Codable {
     public let priority: IntelligencePriority
     public let quantumState: QuantumState?
 
-    public init(query: String, context: [String: AnyCodable] = [:],
-                intelligenceDomains: [IntelligenceDomain] = IntelligenceDomain.allCases,
-                distributionStrategy: DistributionStrategy = .adaptive,
-                priority: IntelligencePriority = .normal,
-                quantumState: QuantumState? = nil)
-    {
+    public init(
+        query: String,
+        context: [String: AnyCodable] = [:],
+        intelligenceDomains: [IntelligenceDomain] = IntelligenceDomain.allCases,
+        distributionStrategy: DistributionStrategy = .adaptive,
+        priority: IntelligencePriority = .normal,
+        quantumState: QuantumState? = nil
+    ) {
         self.query = query
         self.context = context
         self.intelligenceDomains = intelligenceDomains
@@ -66,12 +68,14 @@ public struct DistributedIntelligenceOutput: Sendable, Codable {
     public let distributionEfficiency: Double
     public let emergenceLevel: EmergenceLevel
 
-    public init(synthesizedResult: String, confidence: Double,
-                contributingModels: [ModelContribution] = [],
-                collectiveInsights: [CollectiveInsight] = [],
-                distributionEfficiency: Double = 0.0,
-                emergenceLevel: EmergenceLevel = .individual)
-    {
+    public init(
+        synthesizedResult: String,
+        confidence: Double,
+        contributingModels: [ModelContribution] = [],
+        collectiveInsights: [CollectiveInsight] = [],
+        distributionEfficiency: Double = 0.0,
+        emergenceLevel: EmergenceLevel = .individual
+    ) {
         self.synthesizedResult = synthesizedResult
         self.confidence = confidence
         self.contributingModels = contributingModels
@@ -90,9 +94,14 @@ public struct ModelContribution: Sendable, Codable {
     public let processingTime: TimeInterval
     public let quantumContribution: Double
 
-    public init(modelId: String, domain: IntelligenceDomain, contribution: String,
-                confidence: Double, processingTime: TimeInterval, quantumContribution: Double)
-    {
+    public init(
+        modelId: String,
+        domain: IntelligenceDomain,
+        contribution: String,
+        confidence: Double,
+        processingTime: TimeInterval,
+        quantumContribution: Double
+    ) {
         self.modelId = modelId
         self.domain = domain
         self.contribution = contribution
@@ -110,9 +119,13 @@ public struct CollectiveInsight: Sendable, Codable {
     public let participatingModels: [String]
     public let quantumAmplification: Double
 
-    public init(insight: String, emergenceType: EmergenceType, confidence: Double,
-                participatingModels: [String], quantumAmplification: Double)
-    {
+    public init(
+        insight: String,
+        emergenceType: EmergenceType,
+        confidence: Double,
+        participatingModels: [String],
+        quantumAmplification: Double
+    ) {
         self.insight = insight
         self.emergenceType = emergenceType
         self.confidence = confidence
@@ -148,10 +161,14 @@ public struct DistributionPerformanceMetrics: Sendable, Codable {
     public let resourceUtilization: Double
     public let quantumCoherence: Double
 
-    public init(totalProcessingTime: TimeInterval, averageConfidence: Double,
-                distributionEfficiency: Double, emergenceQuality: Double,
-                resourceUtilization: Double, quantumCoherence: Double)
-    {
+    public init(
+        totalProcessingTime: TimeInterval,
+        averageConfidence: Double,
+        distributionEfficiency: Double,
+        emergenceQuality: Double,
+        resourceUtilization: Double,
+        quantumCoherence: Double
+    ) {
         self.totalProcessingTime = totalProcessingTime
         self.averageConfidence = averageConfidence
         self.distributionEfficiency = distributionEfficiency
@@ -170,10 +187,14 @@ public struct DistributionStatus: Sendable, Codable {
     public let quantumEntanglement: Double
     public let lastOptimization: Date
 
-    public init(activeModels: Int, distributionStrategy: DistributionStrategy,
-                currentLoad: Double, emergenceLevel: EmergenceLevel,
-                quantumEntanglement: Double, lastOptimization: Date)
-    {
+    public init(
+        activeModels: Int,
+        distributionStrategy: DistributionStrategy,
+        currentLoad: Double,
+        emergenceLevel: EmergenceLevel,
+        quantumEntanglement: Double,
+        lastOptimization: Date
+    ) {
         self.activeModels = activeModels
         self.distributionStrategy = distributionStrategy
         self.currentLoad = currentLoad
@@ -596,9 +617,10 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         return [maxEntangled, highEntangled, otherModels].filter { !$0.isEmpty }
     }
 
-    private func processEntangledGroup(group: [OllamaSpecializedModel],
-                                       input: DistributedIntelligenceInput) async -> [ModelContribution]
-    {
+    private func processEntangledGroup(
+        group: [OllamaSpecializedModel],
+        input: DistributedIntelligenceInput
+    ) async -> [ModelContribution] {
         // Process models in entangled group with quantum coordination
         var contributions = [ModelContribution]()
 
@@ -686,16 +708,18 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         )
     }
 
-    private func calculateDistributionEfficiency(_ contributions: [ModelContribution],
-                                                 _ totalTime: TimeInterval) -> Double
-    {
+    private func calculateDistributionEfficiency(
+        _ contributions: [ModelContribution],
+        _ totalTime: TimeInterval
+    ) -> Double {
         let totalModelTime = contributions.reduce(0.0) { $0 + $1.processingTime }
         return totalModelTime > 0 ? totalTime / totalModelTime : 1.0
     }
 
-    private func determineEmergenceLevel(_ emergence: EmergenceDetectionResults,
-                                         _ quantum: QuantumCoordinationResults) -> EmergenceLevel
-    {
+    private func determineEmergenceLevel(
+        _ emergence: EmergenceDetectionResults,
+        _ quantum: QuantumCoordinationResults
+    ) -> EmergenceLevel {
         if quantum.quantumCoherence > 0.9 && emergence.emergenceDetected {
             .universal
         } else if emergence.emergenceDetected {
@@ -707,9 +731,10 @@ public final class DistributedOllamaIntelligence: DistributedIntelligenceCoordin
         }
     }
 
-    private func createCollectiveInsights(_ emergence: EmergenceDetectionResults,
-                                          _ contributions: [ModelContribution]) -> [CollectiveInsight]
-    {
+    private func createCollectiveInsights(
+        _ emergence: EmergenceDetectionResults,
+        _ contributions: [ModelContribution]
+    ) -> [CollectiveInsight] {
         var insights = [CollectiveInsight]()
 
         if emergence.emergenceDetected {
@@ -758,9 +783,10 @@ private final class IntelligenceDistributionEngine: Sendable {
 
 /// Emergence detection engine
 private final class EmergenceDetectionEngine: Sendable {
-    func detectEmergence(individualResults: [ModelContribution],
-                         input: DistributedIntelligenceInput) async -> EmergenceDetectionResults
-    {
+    func detectEmergence(
+        individualResults: [ModelContribution],
+        input: DistributedIntelligenceInput
+    ) async -> EmergenceDetectionResults {
         // Analyze results for emergent phenomena
         let averageConfidence = individualResults.reduce(0.0) { $0 + $1.confidence } / Double(individualResults.count)
         let emergenceDetected = averageConfidence > 0.8 && individualResults.count > 3

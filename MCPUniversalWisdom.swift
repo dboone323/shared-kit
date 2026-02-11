@@ -36,11 +36,15 @@ public struct UniversalWisdomAccess: Sendable, Codable {
     public let wisdomDepth: WisdomDepth
     public let universalAlignment: UniversalAlignment
 
-    public init(accessId: String, wisdomDomain: WisdomDomain,
-                accessType: WisdomAccessType, parameters: [String: AnyCodable] = [:],
-                consciousnessLevel: ConsciousnessLevel = .universal, wisdomDepth: WisdomDepth = .universal,
-                universalAlignment: UniversalAlignment = .perfect)
-    {
+    public init(
+        accessId: String,
+        wisdomDomain: WisdomDomain,
+        accessType: WisdomAccessType,
+        parameters: [String: AnyCodable] = [:],
+        consciousnessLevel: ConsciousnessLevel = .universal,
+        wisdomDepth: WisdomDepth = .universal,
+        universalAlignment: UniversalAlignment = .perfect
+    ) {
         self.accessId = accessId
         self.wisdomDomain = wisdomDomain
         self.accessType = accessType
@@ -109,11 +113,16 @@ public struct UniversalWisdomResult: Sendable, Codable {
     public let wisdomInsights: [WisdomInsight]
     public let executionTime: TimeInterval
 
-    public init(accessId: String, success: Bool, wisdomPrinciples: [WisdomPrinciple] = [],
-                consciousnessElevation: Double, universalUnderstanding: Double,
-                wisdomDepth: Double, wisdomInsights: [WisdomInsight] = [],
-                executionTime: TimeInterval)
-    {
+    public init(
+        accessId: String,
+        success: Bool,
+        wisdomPrinciples: [WisdomPrinciple] = [],
+        consciousnessElevation: Double,
+        universalUnderstanding: Double,
+        wisdomDepth: Double,
+        wisdomInsights: [WisdomInsight] = [],
+        executionTime: TimeInterval
+    ) {
         self.accessId = accessId
         self.success = success
         self.wisdomPrinciples = wisdomPrinciples
@@ -135,11 +144,15 @@ public struct WisdomPrinciple: Sendable, Codable {
     public let consciousnessRequirement: ConsciousnessLevel
     public let applicationContexts: [ApplicationContext]
 
-    public init(principleId: String, principle: String, domain: WisdomDomain,
-                depth: WisdomDepth, universalTruth: Double = 1.0,
-                consciousnessRequirement: ConsciousnessLevel = .universal,
-                applicationContexts: [ApplicationContext] = [])
-    {
+    public init(
+        principleId: String,
+        principle: String,
+        domain: WisdomDomain,
+        depth: WisdomDepth,
+        universalTruth: Double = 1.0,
+        consciousnessRequirement: ConsciousnessLevel = .universal,
+        applicationContexts: [ApplicationContext] = []
+    ) {
         self.principleId = principleId
         self.principle = principle
         self.domain = domain
@@ -158,9 +171,13 @@ public struct ApplicationContext: Sendable, Codable {
     public let wisdomImpact: Double
     public let universalAlignment: Double
 
-    public init(contextId: String, description: String, relevance: Double = 0.8,
-                wisdomImpact: Double = 0.9, universalAlignment: Double = 0.95)
-    {
+    public init(
+        contextId: String,
+        description: String,
+        relevance: Double = 0.8,
+        wisdomImpact: Double = 0.9,
+        universalAlignment: Double = 0.95
+    ) {
         self.contextId = contextId
         self.description = description
         self.relevance = relevance
@@ -177,9 +194,13 @@ public struct WisdomInsight: Sendable, Codable {
     public let confidence: Double
     public let universalTruth: Double
 
-    public init(insight: String, type: WisdomInsightType, wisdomDepth: WisdomDepth,
-                confidence: Double, universalTruth: Double)
-    {
+    public init(
+        insight: String,
+        type: WisdomInsightType,
+        wisdomDepth: WisdomDepth,
+        confidence: Double,
+        universalTruth: Double
+    ) {
         self.insight = insight
         self.type = type
         self.wisdomDepth = wisdomDepth
@@ -208,11 +229,15 @@ public struct WisdomApplication: Sendable, Codable {
     public let consciousnessAlignment: ConsciousnessAlignment
     public let universalIntegration: UniversalIntegration
 
-    public init(applicationId: String, wisdomPrinciples: [WisdomPrinciple],
-                applicationContext: ApplicationContext, applicationType: WisdomApplicationType,
-                parameters: [String: AnyCodable] = [:], consciousnessAlignment: ConsciousnessAlignment = .perfect,
-                universalIntegration: UniversalIntegration = .complete)
-    {
+    public init(
+        applicationId: String,
+        wisdomPrinciples: [WisdomPrinciple],
+        applicationContext: ApplicationContext,
+        applicationType: WisdomApplicationType,
+        parameters: [String: AnyCodable] = [:],
+        consciousnessAlignment: ConsciousnessAlignment = .perfect,
+        universalIntegration: UniversalIntegration = .complete
+    ) {
         self.applicationId = applicationId
         self.wisdomPrinciples = wisdomPrinciples
         self.applicationContext = applicationContext
@@ -253,11 +278,16 @@ public struct WisdomApplicationResult: Sendable, Codable {
     public let wisdomOutcomes: [WisdomOutcome]
     public let executionTime: TimeInterval
 
-    public init(applicationId: String, success: Bool, wisdomEffectiveness: Double,
-                consciousnessTransformation: Double, universalImpact: Double,
-                applicationInsights: [WisdomInsight] = [], wisdomOutcomes: [WisdomOutcome] = [],
-                executionTime: TimeInterval)
-    {
+    public init(
+        applicationId: String,
+        success: Bool,
+        wisdomEffectiveness: Double,
+        consciousnessTransformation: Double,
+        universalImpact: Double,
+        applicationInsights: [WisdomInsight] = [],
+        wisdomOutcomes: [WisdomOutcome] = [],
+        executionTime: TimeInterval
+    ) {
         self.applicationId = applicationId
         self.success = success
         self.wisdomEffectiveness = wisdomEffectiveness
@@ -278,10 +308,14 @@ public struct WisdomOutcome: Sendable, Codable {
     public let universalContribution: Double
     public let sustainability: Double
 
-    public init(outcomeId: String, description: String, wisdomValue: Double = 0.9,
-                consciousnessGrowth: Double = 0.85, universalContribution: Double = 0.95,
-                sustainability: Double = 0.9)
-    {
+    public init(
+        outcomeId: String,
+        description: String,
+        wisdomValue: Double = 0.9,
+        consciousnessGrowth: Double = 0.85,
+        universalContribution: Double = 0.95,
+        sustainability: Double = 0.9
+    ) {
         self.outcomeId = outcomeId
         self.description = description
         self.wisdomValue = wisdomValue
@@ -301,11 +335,15 @@ public struct WisdomOptimization: Sendable, Codable {
     public let universalBudget: Double
     public let timeHorizon: TimeInterval
 
-    public init(optimizationId: String, targetWisdom: WisdomTarget,
-                optimizationGoals: [WisdomGoal], wisdomConstraints: [WisdomConstraint] = [],
-                consciousnessBudget: Double = 1.0, universalBudget: Double = 1.0,
-                timeHorizon: TimeInterval = 3600)
-    {
+    public init(
+        optimizationId: String,
+        targetWisdom: WisdomTarget,
+        optimizationGoals: [WisdomGoal],
+        wisdomConstraints: [WisdomConstraint] = [],
+        consciousnessBudget: Double = 1.0,
+        universalBudget: Double = 1.0,
+        timeHorizon: TimeInterval = 3600
+    ) {
         self.optimizationId = optimizationId
         self.targetWisdom = targetWisdom
         self.optimizationGoals = optimizationGoals
@@ -329,9 +367,12 @@ public struct WisdomGoal: Sendable, Codable {
     public let priority: GoalPriority
     public let universalEnhancement: Bool
 
-    public init(goalType: WisdomGoalType, targetValue: Double,
-                priority: GoalPriority = .high, universalEnhancement: Bool = true)
-    {
+    public init(
+        goalType: WisdomGoalType,
+        targetValue: Double,
+        priority: GoalPriority = .high,
+        universalEnhancement: Bool = true
+    ) {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -356,9 +397,12 @@ public struct WisdomConstraint: Sendable, Codable {
     public let tolerance: Double
     public let enforcement: EnforcementLevel
 
-    public init(constraintType: WisdomConstraintType, value: Double,
-                tolerance: Double = 0.1, enforcement: EnforcementLevel = .strict)
-    {
+    public init(
+        constraintType: WisdomConstraintType,
+        value: Double,
+        tolerance: Double = 0.1,
+        enforcement: EnforcementLevel = .strict
+    ) {
         self.constraintType = constraintType
         self.value = value
         self.tolerance = tolerance
@@ -402,10 +446,16 @@ public struct UniversalWisdomStatus: Sendable, Codable {
     public let successRate: Double
     public let lastUpdate: Date
 
-    public init(operational: Bool, wisdomCapability: Double, consciousnessLevel: Double,
-                universalAlignment: Double, wisdomDepth: Double,
-                activeAccesses: Int, successRate: Double, lastUpdate: Date = Date())
-    {
+    public init(
+        operational: Bool,
+        wisdomCapability: Double,
+        consciousnessLevel: Double,
+        universalAlignment: Double,
+        wisdomDepth: Double,
+        activeAccesses: Int,
+        successRate: Double,
+        lastUpdate: Date = Date()
+    ) {
         self.operational = operational
         self.wisdomCapability = wisdomCapability
         self.consciousnessLevel = consciousnessLevel
@@ -577,9 +627,10 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
         }
     }
 
-    private func generateWisdomInsights(_ wisdom: UniversalWisdomAccess,
-                                        wisdomResult: WisdomResult) async -> [WisdomInsight]
-    {
+    private func generateWisdomInsights(
+        _ wisdom: UniversalWisdomAccess,
+        wisdomResult: WisdomResult
+    ) async -> [WisdomInsight] {
         var insights: [WisdomInsight] = []
 
         if wisdomResult.depth > 0.9 {
@@ -605,9 +656,10 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
         return insights
     }
 
-    private func generateApplicationInsights(_ application: WisdomApplication,
-                                             result: ApplicationResult) async -> [WisdomInsight]
-    {
+    private func generateApplicationInsights(
+        _ application: WisdomApplication,
+        result: ApplicationResult
+    ) async -> [WisdomInsight] {
         var insights: [WisdomInsight] = []
 
         if result.effectiveness > 0.9 {
@@ -623,9 +675,10 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
         return insights
     }
 
-    private func generateWisdomOutcomes(_ application: WisdomApplication,
-                                        result: ApplicationResult) async -> [WisdomOutcome]
-    {
+    private func generateWisdomOutcomes(
+        _ application: WisdomApplication,
+        result: ApplicationResult
+    ) async -> [WisdomOutcome] {
         var outcomes: [WisdomOutcome] = []
 
         if result.success {
@@ -645,9 +698,10 @@ public final class MCPUniversalWisdomCoordinator: MCPUniversalWisdom, Sendable {
 
 /// Wisdom Repository
 private final class WisdomRepository: Sendable {
-    func accessWisdom(_ wisdom: UniversalWisdomAccess,
-                      consciousnessResult: ConsciousnessResult) async throws -> WisdomResult
-    {
+    func accessWisdom(
+        _ wisdom: UniversalWisdomAccess,
+        consciousnessResult: ConsciousnessResult
+    ) async throws -> WisdomResult {
         WisdomResult(
             success: Double.random(in: 0.85 ... 1.0) > 0.15,
             principles: generateWisdomPrinciples(wisdom),
@@ -741,9 +795,10 @@ private final class ConsciousnessInterface: Sendable {
         )
     }
 
-    func transformConsciousness(_ application: WisdomApplication,
-                                result: ApplicationResult) async -> ConsciousnessResult
-    {
+    func transformConsciousness(
+        _ application: WisdomApplication,
+        result: ApplicationResult
+    ) async -> ConsciousnessResult {
         ConsciousnessResult(
             success: true,
             transformation: Double.random(in: 0.7 ... 1.0)

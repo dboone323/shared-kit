@@ -630,9 +630,12 @@ public extension View {
         }
     }
 
-    func slideTransitionAdvanced(isPresented: Bool, edge: Edge, distance: CGFloat = 300,
-                                 overshoot: CGFloat = 50) -> some View
-    {
+    func slideTransitionAdvanced(
+        isPresented: Bool,
+        edge: Edge,
+        distance: CGFloat = 300,
+        overshoot: CGFloat = 50
+    ) -> some View {
         modifier(SlideTransitionAdvanced(
             isPresented: isPresented,
             edge: edge,

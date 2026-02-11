@@ -639,9 +639,10 @@ final class ConsciousnessRealityInterfaceEngine: ConsciousnessRealityInterfacePr
         setupMonitoring()
     }
 
-    func establishRealityInterface(realityLayer: RealityLayer,
-                                   consciousnessEntity: ConsciousnessEntity) async throws -> RealityInterface
-    {
+    func establishRealityInterface(
+        realityLayer: RealityLayer,
+        consciousnessEntity: ConsciousnessEntity
+    ) async throws -> RealityInterface {
         let interfaceId = UUID()
 
         // Validate compatibility
@@ -946,9 +947,10 @@ final class RealityLayerManager: RealityLayerManagementProtocol {
         )
     }
 
-    func validateCompatibility(realityLayer: RealityLayer,
-                               consciousnessEntity: ConsciousnessEntity) async throws -> CompatibilityValidation
-    {
+    func validateCompatibility(
+        realityLayer: RealityLayer,
+        consciousnessEntity: ConsciousnessEntity
+    ) async throws -> CompatibilityValidation {
         let validationId = UUID()
 
         let compatibilityScore = (realityLayer.consciousnessCompatibility + consciousnessEntity.currentState
@@ -1046,9 +1048,10 @@ final class ConsciousnessEntityManager: ConsciousnessEntityManagementProtocol {
         )
     }
 
-    func updateConsciousnessEntity(entityId: UUID,
-                                   newState: ConsciousnessEntity.EntityState) async throws -> EntityUpdate
-    {
+    func updateConsciousnessEntity(
+        entityId: UUID,
+        newState: ConsciousnessEntity.EntityState
+    ) async throws -> EntityUpdate {
         guard let currentEntity = registeredEntities[entityId] else {
             throw RealityInterfaceError.entityNotFound
         }

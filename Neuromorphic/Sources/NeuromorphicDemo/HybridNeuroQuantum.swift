@@ -266,8 +266,11 @@ public struct HybridResult {
     public let confidence: Double
 
     public var description: String {
-        String(format: "Mode: \(processingMode), Time: %.3fs, Confidence: %.3f",
-               processingTime, confidence)
+        String(
+            format: "Mode: \(processingMode), Time: %.3fs, Confidence: %.3f",
+            processingTime,
+            confidence
+        )
     }
 }
 
@@ -607,7 +610,10 @@ public struct TaskResult {
     public let confidence: Double
 
     public var description: String {
-        String(format: "Task: \(taskType), Time: %.3fs, Confidence: %.3f, Output size: \(output.count)",
-               processingTime, confidence)
+        String(
+            format: "Task: \(taskType), Time: %.3fs, Confidence: %.3f, Output size: \(output.count)",
+            processingTime,
+            confidence
+        )
     }
 }

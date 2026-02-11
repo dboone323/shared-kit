@@ -368,9 +368,10 @@ private class BudgetAnalysisEngine {
 }
 
 private class CashOptimizationEngine {
-    func identifyOptimizationOpportunities(transactions _: [Any],
-                                           accounts _: [Any]) async -> [CashOptimizationOpportunity]
-    {
+    func identifyOptimizationOpportunities(
+        transactions _: [Any],
+        accounts _: [Any]
+    ) async -> [CashOptimizationOpportunity] {
         []
     }
 }

@@ -36,11 +36,15 @@ public struct MultiverseCoordination: Sendable, Codable {
     public let entanglementScope: EntanglementScope
     public let causalityConstraints: [CausalityConstraint]
 
-    public init(coordinationId: String, targetUniverses: [UniverseTarget],
-                coordinationType: CoordinationType, parameters: [String: AnyCodable] = [:],
-                synchronizationLevel: SynchronizationLevel = .high, entanglementScope: EntanglementScope = .universal,
-                causalityConstraints: [CausalityConstraint] = [])
-    {
+    public init(
+        coordinationId: String,
+        targetUniverses: [UniverseTarget],
+        coordinationType: CoordinationType,
+        parameters: [String: AnyCodable] = [:],
+        synchronizationLevel: SynchronizationLevel = .high,
+        entanglementScope: EntanglementScope = .universal,
+        causalityConstraints: [CausalityConstraint] = []
+    ) {
         self.coordinationId = coordinationId
         self.targetUniverses = targetUniverses
         self.coordinationType = coordinationType
@@ -94,9 +98,12 @@ public struct CausalityConstraint: Sendable, Codable {
     public let priority: ConstraintPriority
     public let enforcement: EnforcementLevel
 
-    public init(constraintType: CausalityConstraintType, value: String,
-                priority: ConstraintPriority = .high, enforcement: EnforcementLevel = .strict)
-    {
+    public init(
+        constraintType: CausalityConstraintType,
+        value: String,
+        priority: ConstraintPriority = .high,
+        enforcement: EnforcementLevel = .strict
+    ) {
         self.constraintType = constraintType
         self.value = value
         self.priority = priority
@@ -140,11 +147,16 @@ public struct MultiverseCoordinationResult: Sendable, Codable {
     public let multiverseInsights: [MultiverseInsight]
     public let executionTime: TimeInterval
 
-    public init(coordinationId: String, success: Bool, universesCoordinated: Int,
-                synchronizationAchieved: Double, entanglementStrength: Double,
-                causalityPreserved: Double, multiverseInsights: [MultiverseInsight] = [],
-                executionTime: TimeInterval)
-    {
+    public init(
+        coordinationId: String,
+        success: Bool,
+        universesCoordinated: Int,
+        synchronizationAchieved: Double,
+        entanglementStrength: Double,
+        causalityPreserved: Double,
+        multiverseInsights: [MultiverseInsight] = [],
+        executionTime: TimeInterval
+    ) {
         self.coordinationId = coordinationId
         self.success = success
         self.universesCoordinated = universesCoordinated
@@ -164,9 +176,13 @@ public struct MultiverseInsight: Sendable, Codable {
     public let confidence: Double
     public let universalAlignment: Double
 
-    public init(insight: String, type: MultiverseInsightType, multiverseDepth: MultiverseDepth,
-                confidence: Double, universalAlignment: Double)
-    {
+    public init(
+        insight: String,
+        type: MultiverseInsightType,
+        multiverseDepth: MultiverseDepth,
+        confidence: Double,
+        universalAlignment: Double
+    ) {
         self.insight = insight
         self.type = type
         self.multiverseDepth = multiverseDepth
@@ -205,12 +221,16 @@ public struct UniverseSynchronization: Sendable, Codable {
     public let causalityPreservation: CausalityPreservation
     public let entanglementTransfer: EntanglementTransfer
 
-    public init(synchronizationId: String, sourceUniverse: UniverseTarget,
-                targetUniverses: [UniverseTarget], synchronizationType: SynchronizationType,
-                parameters: [String: AnyCodable] = [:], bidirectional: Bool = true,
-                causalityPreservation: CausalityPreservation = .strict,
-                entanglementTransfer: EntanglementTransfer = .full)
-    {
+    public init(
+        synchronizationId: String,
+        sourceUniverse: UniverseTarget,
+        targetUniverses: [UniverseTarget],
+        synchronizationType: SynchronizationType,
+        parameters: [String: AnyCodable] = [:],
+        bidirectional: Bool = true,
+        causalityPreservation: CausalityPreservation = .strict,
+        entanglementTransfer: EntanglementTransfer = .full
+    ) {
         self.synchronizationId = synchronizationId
         self.sourceUniverse = sourceUniverse
         self.targetUniverses = targetUniverses
@@ -260,11 +280,16 @@ public struct UniverseSynchronizationResult: Sendable, Codable {
     public let synchronizationInsights: [MultiverseInsight]
     public let executionTime: TimeInterval
 
-    public init(synchronizationId: String, success: Bool, universesSynchronized: Int,
-                synchronizationQuality: Double, causalityIntegrity: Double,
-                entanglementTransferred: Double, synchronizationInsights: [MultiverseInsight] = [],
-                executionTime: TimeInterval)
-    {
+    public init(
+        synchronizationId: String,
+        success: Bool,
+        universesSynchronized: Int,
+        synchronizationQuality: Double,
+        causalityIntegrity: Double,
+        entanglementTransferred: Double,
+        synchronizationInsights: [MultiverseInsight] = [],
+        executionTime: TimeInterval
+    ) {
         self.synchronizationId = synchronizationId
         self.success = success
         self.universesSynchronized = universesSynchronized
@@ -285,10 +310,14 @@ public struct MultiverseOptimization: Sendable, Codable {
     public let timeHorizon: TimeInterval
     public let riskTolerance: RiskTolerance
 
-    public init(optimizationId: String, targetMultiverse: MultiverseTarget,
-                optimizationGoals: [MultiverseGoal], constraints: [MultiverseConstraint] = [],
-                timeHorizon: TimeInterval = 3600, riskTolerance: RiskTolerance = .moderate)
-    {
+    public init(
+        optimizationId: String,
+        targetMultiverse: MultiverseTarget,
+        optimizationGoals: [MultiverseGoal],
+        constraints: [MultiverseConstraint] = [],
+        timeHorizon: TimeInterval = 3600,
+        riskTolerance: RiskTolerance = .moderate
+    ) {
         self.optimizationId = optimizationId
         self.targetMultiverse = targetMultiverse
         self.optimizationGoals = optimizationGoals
@@ -312,9 +341,12 @@ public struct MultiverseGoal: Sendable, Codable {
     public let priority: GoalPriority
     public let measurement: String
 
-    public init(goalType: MultiverseGoalType, targetValue: Double,
-                priority: GoalPriority = .high, measurement: String)
-    {
+    public init(
+        goalType: MultiverseGoalType,
+        targetValue: Double,
+        priority: GoalPriority = .high,
+        measurement: String
+    ) {
         self.goalType = goalType
         self.targetValue = targetValue
         self.priority = priority
@@ -339,9 +371,12 @@ public struct MultiverseConstraint: Sendable, Codable {
     public let tolerance: Double
     public let enforcement: EnforcementLevel
 
-    public init(constraintType: MultiverseConstraintType, value: Double,
-                tolerance: Double = 0.1, enforcement: EnforcementLevel = .strict)
-    {
+    public init(
+        constraintType: MultiverseConstraintType,
+        value: Double,
+        tolerance: Double = 0.1,
+        enforcement: EnforcementLevel = .strict
+    ) {
         self.constraintType = constraintType
         self.value = value
         self.tolerance = tolerance
@@ -385,10 +420,16 @@ public struct MultiverseCoordinationStatus: Sendable, Codable {
     public let successRate: Double
     public let lastUpdate: Date
 
-    public init(operational: Bool, universesAccessible: Int, synchronizationLevel: Double,
-                entanglementStrength: Double, causalityIntegrity: Double,
-                activeCoordinations: Int, successRate: Double, lastUpdate: Date = Date())
-    {
+    public init(
+        operational: Bool,
+        universesAccessible: Int,
+        synchronizationLevel: Double,
+        entanglementStrength: Double,
+        causalityIntegrity: Double,
+        activeCoordinations: Int,
+        successRate: Double,
+        lastUpdate: Date = Date()
+    ) {
         self.operational = operational
         self.universesAccessible = universesAccessible
         self.synchronizationLevel = synchronizationLevel
@@ -655,9 +696,10 @@ private final class UniverseManager: Sendable {
 
 /// Synchronization Engine
 private final class SynchronizationEngine: Sendable {
-    func executeCoordination(_ coordination: MultiverseCoordination,
-                             universeAccess: UniverseAccess) async throws -> CoordinationResult
-    {
+    func executeCoordination(
+        _ coordination: MultiverseCoordination,
+        universeAccess: UniverseAccess
+    ) async throws -> CoordinationResult {
         CoordinationResult(
             success: Double.random(in: 0.8 ... 1.0) > 0.2,
             synchronizationLevel: Double.random(in: 0.7 ... 1.0)
@@ -695,18 +737,20 @@ private final class SynchronizationEngine: Sendable {
 
 /// Entanglement Coordinator
 private final class EntanglementCoordinator: Sendable {
-    func processEntanglement(_ coordination: MultiverseCoordination,
-                             result: CoordinationResult) async -> EntanglementResult
-    {
+    func processEntanglement(
+        _ coordination: MultiverseCoordination,
+        result: CoordinationResult
+    ) async -> EntanglementResult {
         EntanglementResult(
             success: true,
             entanglementStrength: Double.random(in: 0.8 ... 1.0)
         )
     }
 
-    func transferEntanglement(_ synchronization: UniverseSynchronization,
-                              result: SynchronizationResult) async -> EntanglementResult
-    {
+    func transferEntanglement(
+        _ synchronization: UniverseSynchronization,
+        result: SynchronizationResult
+    ) async -> EntanglementResult {
         EntanglementResult(
             success: true,
             transferred: Double.random(in: 0.7 ... 1.0)
@@ -731,18 +775,20 @@ private final class EntanglementCoordinator: Sendable {
 
 /// Causality Guardian
 private final class CausalityGuardian: Sendable {
-    func preserveCausality(_ coordination: MultiverseCoordination,
-                           result: CoordinationResult) async -> CausalityResult
-    {
+    func preserveCausality(
+        _ coordination: MultiverseCoordination,
+        result: CoordinationResult
+    ) async -> CausalityResult {
         CausalityResult(
             success: true,
             causalityIntegrity: Double.random(in: 0.85 ... 1.0)
         )
     }
 
-    func preserveSynchronizationCausality(_ synchronization: UniverseSynchronization,
-                                          result: SynchronizationResult) async -> CausalityResult
-    {
+    func preserveSynchronizationCausality(
+        _ synchronization: UniverseSynchronization,
+        result: SynchronizationResult
+    ) async -> CausalityResult {
         CausalityResult(
             success: true,
             integrity: Double.random(in: 0.9 ... 1.0)
