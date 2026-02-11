@@ -75,7 +75,7 @@
 --enable isEmpty
 --enable hoistPatternLet
 # --enable wrapMultilineStatementBraces
---enable blankLinesBetweenScopes
+# --enable blankLinesBetweenScopes
 --enable consecutiveSpaces
 --enable duplicateImports
 --enable sortImports
@@ -86,7 +86,7 @@
 --enable docComments
 --enable redundantReturn
 --enable redundantType
---enable spaceAroundOperators
+# --enable spaceAroundOperators
 --enable redundantProperty
 --enable redundantThrows
 --enable blankLinesBetweenImports
@@ -101,4 +101,7 @@
 --disable wrapEnumCases
 
 # Exclusions
---exclude .build,Package.swift,node_modules,.swiftpm,Tools
+--exclude .build,Package.swift,node_modules,.swiftpm,Tools--disable wrapFunctionBodies
+--disable wrap
+--disable blankLinesBetweenScopes
+--disable spaceAroundOperators
