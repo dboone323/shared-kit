@@ -87,7 +87,6 @@
 --enable void
 --enable trailingCommas
 --enable strongifiedSelf
---enable docComments
 --enable redundantReturn
 --enable redundantType
 --enable spaceAroundOperators
@@ -104,6 +103,7 @@
 --disable blankLinesAtStartOfScope
 --disable blankLinesAtEndOfScope
 --disable redundantSelf
+--disable docComments
 
 # Exclusions
 --exclude .build,Package.swift,node_modules,.swiftpm,Tools
