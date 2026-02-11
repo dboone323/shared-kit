@@ -7,6 +7,10 @@
 --swiftversion 6.0
 
 # Indentation and Tabs
+--indent 4
+--indentcase false
+--tabwidth 4
+
 --smarttabs enabled
 
 --indent 4
@@ -78,25 +82,65 @@
 
 # Enabled Rules
 --enable isEmpty
+--enable indent
+
 --enable hoistPatternLet
+--enable indent
+
 --enable wrapMultilineStatementBraces
+--enable indent
+
 --enable blankLinesBetweenScopes
+--enable indent
+
 --enable consecutiveSpaces
+--enable indent
+
 --enable duplicateImports
+--enable indent
+
 --enable sortImports
+--enable indent
+
 --enable unusedArguments
+--enable indent
+
 --enable void
+--enable indent
+
 --enable trailingCommas
+--enable indent
+
 --enable strongifiedSelf
+--enable indent
+
 --enable docComments
+--enable indent
+
 --enable redundantReturn
+--enable indent
+
 --enable redundantType
+--enable indent
+
 --enable spaceAroundOperators
+--enable indent
+
 --enable redundantProperty
+--enable indent
+
 --enable redundantThrows
+--enable indent
+
 --enable blankLinesBetweenImports
+--enable indent
+
 --enable noForceUnwrapInTests
+--enable indent
+
 --enable wrap
+--enable indent
+
 
 # Disabled Rules
 --disable andOperator
@@ -106,3 +150,5 @@
 
 # Exclusions
 --exclude .build,Package.swift,node_modules,.swiftpm,Tools--enable wrapFunctionBodies
+--enable indent
+
