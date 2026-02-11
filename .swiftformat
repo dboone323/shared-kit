@@ -74,7 +74,7 @@
 # Enabled Rules
 --enable isEmpty
 --enable hoistPatternLet
---enable wrapMultilineStatementBraces
+# --enable wrapMultilineStatementBraces
 --enable blankLinesBetweenScopes
 --enable consecutiveSpaces
 --enable duplicateImports
@@ -91,7 +91,7 @@
 --enable redundantThrows
 --enable blankLinesBetweenImports
 --enable noForceUnwrapInTests
---enable wrap
+# --enable wrap
 
 # Disabled Rules
 --disable andOperator
