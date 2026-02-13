@@ -26,7 +26,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
     @Published public private(set) var metrics: CICDMetrics = .init()
 
     /// Quantum optimization engine
-    private let quantumEngine: QuantumOptimizationEngine
+    private let quantumEngine: CICDQuantumOptimizationEngine
 
     /// AI decision engine for CI/CD
     private let aiDecisionEngine: AIDecisionEngine
@@ -49,7 +49,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
     // MARK: - Initialization
 
     private init() {
-        self.quantumEngine = QuantumOptimizationEngine()
+        self.quantumEngine = CICDQuantumOptimizationEngine()
         self.aiDecisionEngine = AIDecisionEngine()
         self.predictiveAnalytics = PredictiveAnalytics()
         self.workflowEvolution = WorkflowEvolutionManager()
@@ -89,7 +89,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
     /// Optimize CI/CD pipeline for a project
     public func optimizePipeline(
         for project: String,
-        optimizationLevel: OptimizationLevel = .comprehensive
+        optimizationLevel: CICDOptimizationLevel = .comprehensive
     ) async throws -> PipelineOptimizationResult {
         let optimization = CICDOptimization(
             id: UUID(),
@@ -149,7 +149,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
     /// Predict pipeline failures
     public func predictPipelineFailures(
         for project: String,
-        timeWindow: TimeInterval = 3600 // 1 hour
+        timeWindow: TimeInterval = 3600  // 1 hour
     ) async throws -> FailurePredictionResult {
         let historicalData = try await gatherHistoricalData(for: project)
 
@@ -231,7 +231,7 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
         Task {
             while !Task.isCancelled {
                 await performAutonomousOptimization()
-                try? await Task.sleep(nanoseconds: 60_000_000_000) // 60 seconds
+                try? await Task.sleep(nanoseconds: 60_000_000_000)  // 60 seconds
             }
         }
     }
@@ -370,10 +370,10 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
         print("✅ Optimization task completed: \(task.type)")
     }
 
-    private func assessSystemHealth() async -> SystemHealth {
+    private func assessSystemHealth() async -> CICDSystemHealth {
         // Simplified health assessment
         let score = Double.random(in: 0.8...0.95)
-        return SystemHealth(
+        return CICDSystemHealth(
             overallScore: score,
             subsystemHealth: [:]
         )
@@ -471,15 +471,16 @@ public final class QuantumCICDOptimization: @unchecked Sendable, ObservableObjec
         )
     }
 
-    private func gatherHistoricalData(for project: String) async throws -> [HistoricalPipelineData] {
+    private func gatherHistoricalData(for project: String) async throws -> [HistoricalPipelineData]
+    {
         // Gather historical pipeline data
         // This would query CI/CD system history
         []
     }
 
-    private func analyzeCurrentWorkflow(for project: String) async throws -> Workflow {
+    private func analyzeCurrentWorkflow(for project: String) async throws -> CICDWorkflow {
         // Analyze current GitHub Actions or CI/CD workflow
-        Workflow(
+        CICDWorkflow(
             id: UUID().uuidString,
             name: "CI/CD Pipeline",
             description: "Main CI/CD pipeline",
@@ -564,7 +565,7 @@ public enum OptimizationState: Equatable {
 public struct CICDOptimization: Identifiable {
     public let id: UUID
     public let project: String
-    public let level: OptimizationLevel
+    public let level: CICDOptimizationLevel
     public let startTime: Date
     public let type: CICDOptimizationType
     public let target: String
@@ -572,7 +573,7 @@ public struct CICDOptimization: Identifiable {
 }
 
 /// Optimization levels
-public enum OptimizationLevel {
+public enum CICDOptimizationLevel {
     case basic
     case standard
     case comprehensive
@@ -706,14 +707,14 @@ public struct FailurePredictions {
 
 /// Predicted failure
 public struct PredictedFailure {
-    public let type: FailureType
+    public let type: CICDFailureType
     public let probability: Double
     public let estimatedTime: Date
     public let description: String
 }
 
 /// Failure types
-public enum FailureType {
+public enum CICDFailureType {
     case build
     case test
     case deployment
@@ -723,20 +724,20 @@ public enum FailureType {
 /// Workflow evolution result
 public struct WorkflowEvolutionResult {
     public let project: String
-    public let originalWorkflow: Workflow
+    public let originalWorkflow: CICDWorkflow
     public let appliedChanges: [WorkflowChange]
     public let performanceImprovement: Double
 }
 
 /// Workflow change
 public struct WorkflowChange {
-    public let type: ChangeType
+    public let type: CICDChangeType
     public let description: String
     public let impact: Double
 }
 
 /// Change types
-public enum ChangeType {
+public enum CICDChangeType {
     case addition
     case removal
     case modification
@@ -748,7 +749,7 @@ public struct OptimizationStatus {
     public let state: OptimizationState
     public let activeOptimizations: [CICDOptimization]
     public let metrics: CICDMetrics
-    public let systemHealth: SystemHealth
+    public let systemHealth: CICDSystemHealth
 }
 
 /// Pipeline test metrics
@@ -781,7 +782,7 @@ public enum WorkflowEvolutionStrategy {
 }
 
 /// Workflow structure
-public struct Workflow {
+public struct CICDWorkflow {
     public let id: String
     public let name: String
     public let description: String
@@ -818,15 +819,32 @@ private class CICDPerformanceMonitor: @unchecked Sendable {
 }
 
 /// System Health
-public struct SystemHealth {
+public struct CICDSystemHealth {
     public let overallScore: Double
     public let subsystemHealth: [String: Double]
 }
 
 /// Automation Task
 public struct AutomationTask {
-    public let type: String
+    public let type: AICodeAnalysisType
     public let id: String
+    public let description: String
+    public let language: String?
+    public let code: String?
+
+    public init(
+        type: AICodeAnalysisType,
+        id: String = UUID().uuidString,
+        description: String = "",
+        language: String? = nil,
+        code: String? = nil
+    ) {
+        self.type = type
+        self.id = id
+        self.description = description
+        self.language = language
+        self.code = code
+    }
 }
 
 /// Risk Level
@@ -834,17 +852,17 @@ public enum CICDRiskLevel {
     case low, medium, high, critical
 }
 
-private class QuantumOptimizationEngine: @unchecked Sendable {
+private class CICDQuantumOptimizationEngine: @unchecked Sendable {
     func initialize() async throws {}
     func establishBaseline() async throws {}
-    func generateOptimizations(basedOn analysis: PipelineAnalysis, level: OptimizationLevel)
+    func generateOptimizations(basedOn analysis: PipelineAnalysis, level: CICDOptimizationLevel)
         async throws -> [CICDOptimization]
     {
         [
             CICDOptimization(
                 id: UUID(), project: analysis.project, level: level, startTime: Date(),
                 type: .parallelBuilds, target: "build", parameters: [:]
-            ),
+            )
         ]
     }
 }
@@ -860,7 +878,8 @@ private class PredictiveAnalytics: @unchecked Sendable {
 
 private class WorkflowEvolutionManager: @unchecked Sendable {
     func initialize() async throws {}
-    func generateEvolution(for workflow: Workflow, strategy: WorkflowEvolutionStrategy) async throws
+    func generateEvolution(for workflow: CICDWorkflow, strategy: WorkflowEvolutionStrategy)
+        async throws
         -> WorkflowEvolutionResult
     {
         WorkflowEvolutionResult(

@@ -24,7 +24,7 @@ public enum ViewModelError: Error, Equatable {
             return "Data error occurred"
         case .unknownError:
             return "Unknown error occurred"
-        case let .customError(message):
+        case .customError(let message):
             return message
         }
     }
@@ -36,14 +36,14 @@ public enum OperationResult<T> {
     case failure(ViewModelError)
 
     public var value: T? {
-        if case let .success(value) = self {
+        if case .success(let value) = self {
             return value
         }
         return nil
     }
 
     public var error: ViewModelError? {
-        if case let .failure(error) = self {
+        if case .failure(let error) = self {
             return error
         }
         return nil
@@ -192,9 +192,9 @@ class BaseFormViewModel<StateType, ActionType>: ObservableObject {
 
 // MARK: - Performance Monitoring
 
-/// Shared performance monitoring
+/// Shared performance monitoring for tasks
 @MainActor
-class PerformanceMonitor: ObservableObject {
+class TaskPerformanceMonitor: ObservableObject {
     @Published var metrics: [PerformanceMetric] = []
 
     struct PerformanceMetric {
@@ -287,18 +287,18 @@ extension Date {
 
 extension Double {
     var currencyFormatted: String {
-        let formatter = NumberFormatter()
+        let formatter = Foundation.NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
-        return formatter.string(from: NSNumber(value: self)) ?? "$\(self)"
+        return formatter.string(from: Foundation.NSNumber(value: self)) ?? "$\(self)"
     }
 
     var percentageFormatted: String {
-        let formatter = NumberFormatter()
+        let formatter = Foundation.NumberFormatter()
         formatter.numberStyle = .percent
         formatter.minimumFractionDigits = 1
         formatter.maximumFractionDigits = 1
-        return formatter.string(from: NSNumber(value: self)) ?? "\(self * 100)%"
+        return formatter.string(from: Foundation.NSNumber(value: self)) ?? "\(self * 100)%"
     }
 }
 
@@ -367,7 +367,7 @@ extension String {
             case "primary": return .primary
             case "secondary": return .secondary
             case "accent": return .accentColor
-            default: return .blue // Default fallback color
+            default: return .blue  // Default fallback color
             }
         }
     #endif
@@ -389,18 +389,24 @@ extension String {
             let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
             var int: UInt64 = 0
 
-            Scanner(string: hex).scanHexInt64(&int)
+            if #available(iOS 13.0, macOS 10.15, *) {
+                if let hexValue = Scanner(string: hex).scanHexInt64() {
+                    int = hexValue
+                }
+            } else {
+                Scanner(string: hex).scanHexInt64(&int)
+            }
 
             let a: UInt64
             let r: UInt64
             let g: UInt64
             let b: UInt64
             switch hex.count {
-            case 3: // RGB (12-bit)
+            case 3:  // RGB (12-bit)
                 (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-            case 6: // RGB (24-bit)
+            case 6:  // RGB (24-bit)
                 (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-            case 8: // ARGB (32-bit)
+            case 8:  // ARGB (32-bit)
                 (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
             default:
                 (a, r, g, b) = (255, 0, 0, 0)

@@ -3,9 +3,9 @@
 import Foundation
 
 /// Quantum state representation
-public struct QuantumState {
-    public let alpha: Double // |0⟩ amplitude
-    public let beta: Double // |1⟩ amplitude
+public struct InternetQuantumState {
+    public let alpha: Double  // |0⟩ amplitude
+    public let beta: Double  // |1⟩ amplitude
     public let amplitude: Double
     public let phase: Double
     public let polarization: Polarization
@@ -15,7 +15,7 @@ public struct QuantumState {
         self.beta = beta
         self.amplitude = sqrt(alpha * alpha + beta * beta)
         self.phase = atan2(beta, alpha)
-        self.polarization = .horizontal // Default
+        self.polarization = .horizontal  // Default
     }
 
     public init(amplitude: Double, phase: Double, polarization: Polarization) {
@@ -58,7 +58,7 @@ public struct EntanglementPair {
         self.decoherenceRate = decoherenceRate
         self.distance = distance
         self.createdAt = Date()
-        self.expiresAt = Date().addingTimeInterval(3600) // 1 hour lifetime
+        self.expiresAt = Date().addingTimeInterval(3600)  // 1 hour lifetime
     }
 
     public var isExpired: Bool {
@@ -73,11 +73,11 @@ public struct EntanglementPair {
 
 /// Quantum bit (qubit) representation
 public struct Qubit {
-    public let state: QuantumState
+    public let state: InternetQuantumState
     public let polarization: Double
     public let phase: Double
 
-    public init(state: QuantumState, polarization: Double = 0.0, phase: Double = 0.0) {
+    public init(state: InternetQuantumState, polarization: Double = 0.0, phase: Double = 0.0) {
         self.state = state
         self.polarization = polarization
         self.phase = phase
@@ -88,7 +88,7 @@ public struct Qubit {
 public struct QuantumChannel {
     public let lossRate: Double
     public let noiseLevel: Double
-    public let capacity: Double // qubits per second
+    public let capacity: Double  // qubits per second
     public let maxDistance: Double
 
     public init(lossRate: Double, noiseLevel: Double, capacity: Double, maxDistance: Double) {
@@ -104,25 +104,25 @@ public struct RoutingConstraints {
     public let minFidelity: Double
     public let maxLatency: Double
     public let maxHops: Int
-    public let requiredSecurity: SecurityLevel
+    public let requiredSecurity: QuantumInternetSecurityLevel
     public let maxDistance: Double
     public let priority: RoutingPriority
 
     public init(
         minFidelity: Double, maxLatency: Double, maxHops: Int = 10,
-        requiredSecurity: SecurityLevel = .high
+        requiredSecurity: QuantumInternetSecurityLevel = .high
     ) {
         self.minFidelity = minFidelity
         self.maxLatency = maxLatency
         self.maxHops = maxHops
         self.requiredSecurity = requiredSecurity
-        self.maxDistance = 1000.0 // Default max distance
-        self.priority = .fidelity // Default priority
+        self.maxDistance = 1000.0  // Default max distance
+        self.priority = .fidelity  // Default priority
     }
 
     public init(minFidelity: Double, maxDistance: Double, maxHops: Int, priority: RoutingPriority) {
         self.minFidelity = minFidelity
-        self.maxLatency = 100.0 // Default latency
+        self.maxLatency = 100.0  // Default latency
         self.maxHops = maxHops
         self.requiredSecurity = .high
         self.maxDistance = maxDistance
@@ -136,7 +136,7 @@ public enum RoutingPriority {
 }
 
 /// Security levels for quantum communication
-public enum SecurityLevel: String {
+public enum QuantumInternetSecurityLevel: String {
     case low, medium, high, quantum, standard
 }
 
@@ -146,11 +146,11 @@ public struct QuantumRoute {
     public let totalFidelity: Double
     public let estimatedLatency: Double
     public let repeatersUsed: Int
-    public let securityLevel: SecurityLevel
+    public let securityLevel: QuantumInternetSecurityLevel
 
     public init(
         path: [String], totalFidelity: Double, estimatedLatency: Double, repeatersUsed: Int,
-        securityLevel: SecurityLevel
+        securityLevel: QuantumInternetSecurityLevel
     ) {
         self.path = path
         self.totalFidelity = totalFidelity
@@ -163,13 +163,14 @@ public struct QuantumRoute {
 /// Quantum key distribution result
 public struct QKDResult {
     public let keyLength: Int
-    public let securityLevel: SecurityLevel
+    public let securityLevel: QuantumInternetSecurityLevel
     public let errorRate: Double
     public let siftedKeyRate: Double
     public let finalKey: [UInt8]
 
     public init(
-        keyLength: Int, securityLevel: SecurityLevel, errorRate: Double, siftedKeyRate: Double,
+        keyLength: Int, securityLevel: QuantumInternetSecurityLevel, errorRate: Double,
+        siftedKeyRate: Double,
         finalKey: [UInt8]
     ) {
         self.keyLength = keyLength
@@ -185,8 +186,8 @@ public struct TeleportationResult {
     public let teleportId: String
     public let source: String
     public let destination: String
-    public let originalState: QuantumState
-    public let teleportedState: QuantumState
+    public let originalState: InternetQuantumState
+    public let teleportedState: InternetQuantumState
     public let fidelity: Double
     public let success: Bool
     public let successRate: Double
@@ -200,8 +201,8 @@ public struct TeleportationResult {
         teleportId: String,
         source: String,
         destination: String,
-        originalState: QuantumState,
-        teleportedState: QuantumState,
+        originalState: InternetQuantumState,
+        teleportedState: InternetQuantumState,
         fidelity: Double,
         success: Bool,
         successRate: Double,
@@ -232,12 +233,13 @@ public struct HybridCommunicationResult {
     public let messageSize: Int
     public let encryptionType: String
     public let latency: Double
-    public let securityLevel: SecurityLevel
+    public let securityLevel: QuantumInternetSecurityLevel
     public let quantumChannelUsed: Bool
     public let classicalChannelUsed: Bool
 
     public init(
-        messageSize: Int, encryptionType: String, latency: Double, securityLevel: SecurityLevel,
+        messageSize: Int, encryptionType: String, latency: Double,
+        securityLevel: QuantumInternetSecurityLevel,
         quantumChannelUsed: Bool, classicalChannelUsed: Bool
     ) {
         self.messageSize = messageSize

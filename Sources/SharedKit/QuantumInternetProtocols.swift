@@ -93,7 +93,9 @@ public class QuantumInternetProtocols: ObservableObject {
     }
 
     /// Transmit quantum data using established protocol
-    public func transmitData(sessionId: String, data: [QuantumState]) async -> TransmissionResult {
+    public func transmitData(sessionId: String, data: [InternetQuantumState]) async
+        -> TransmissionResult
+    {
         guard var session = activeProtocols[sessionId], session.status == .active else {
             return TransmissionResult(
                 success: false,
@@ -202,7 +204,8 @@ public class QuantumInternetProtocols: ObservableObject {
         )
     }
 
-    private func performProtocolTransmission(session: ProtocolSession, data: [QuantumState]) async
+    private func performProtocolTransmission(session: ProtocolSession, data: [InternetQuantumState])
+        async
         -> RawTransmissionResult
     {
         // Simulate protocol-specific transmission
@@ -215,16 +218,16 @@ public class QuantumInternetProtocols: ObservableObject {
 
         switch session.protocolType {
         case .quantumTCP:
-            adjustedErrorRate = baseErrorRate * 0.8 // Better error handling
+            adjustedErrorRate = baseErrorRate * 0.8  // Better error handling
             success = Bool.random(withProbability: 0.95)
         case .quantumUDP:
-            adjustedErrorRate = baseErrorRate * 1.2 // Less reliable
+            adjustedErrorRate = baseErrorRate * 1.2  // Less reliable
             success = Bool.random(withProbability: 0.85)
         case .entanglementProtocol:
-            adjustedErrorRate = baseErrorRate * 0.5 // Very reliable
+            adjustedErrorRate = baseErrorRate * 0.5  // Very reliable
             success = Bool.random(withProbability: 0.98)
         case .teleportationProtocol:
-            adjustedErrorRate = baseErrorRate * 0.7 // Good reliability
+            adjustedErrorRate = baseErrorRate * 0.7  // Good reliability
             success = Bool.random(withProbability: 0.92)
         }
 
@@ -238,7 +241,7 @@ public class QuantumInternetProtocols: ObservableObject {
 
     private func performProtocolTeardown(session: ProtocolSession) async {
         // Simulate protocol teardown
-        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+        try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
     }
 }
 
@@ -267,8 +270,8 @@ public class ErrorCorrectionEngine: ObservableObject {
         return true
     }
 
-    public func correctErrors(in data: [QuantumState], for sessionId: String) async
-        -> [QuantumState]
+    public func correctErrors(in data: [InternetQuantumState], for sessionId: String) async
+        -> [InternetQuantumState]
     {
         guard var session = correctionSessions[sessionId] else { return data }
 
@@ -300,20 +303,21 @@ public class ErrorCorrectionEngine: ObservableObject {
         let totalSessions = correctionSessions.count
 
         // Efficiency based on corrections per session
-        return Double(totalCorrections) / Double(max(1, totalSessions * 100)) // Normalize
+        return Double(totalCorrections) / Double(max(1, totalSessions * 100))  // Normalize
     }
 
     private func shouldApplyCorrection() -> Bool {
         // Simulate error detection
-        Double.random(in: 0...1) < 0.1 // 10% error rate
+        Double.random(in: 0...1) < 0.1  // 10% error rate
     }
 
-    private func applyErrorCorrection(to state: QuantumState) async -> QuantumState {
+    private func applyErrorCorrection(to state: InternetQuantumState) async -> InternetQuantumState
+    {
         // Apply simplified error correction
         let correctedAmplitude = min(1.0, state.amplitude + Double.random(in: -0.02...0.02))
         let correctedPhase = state.phase + Double.random(in: -.pi / 20...(.pi / 20))
 
-        return QuantumState(
+        return InternetQuantumState(
             amplitude: correctedAmplitude,
             phase: correctedPhase,
             polarization: state.polarization
@@ -482,7 +486,7 @@ public struct HandshakeResult {
 
 public struct RawTransmissionResult {
     public let success: Bool
-    public let rawData: [QuantumState]
+    public let rawData: [InternetQuantumState]
     public let errorRate: Double
     public let latency: Double
 }

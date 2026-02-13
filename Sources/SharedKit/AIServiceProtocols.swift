@@ -34,7 +34,7 @@ public protocol AICodeAnalysisService {
     ///   - language: Programming language
     ///   - analysisType: Type of analysis to perform
     /// - Returns: Analysis results
-    func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws
+    func analyzeCode(code: String, language: String, analysisType: AICodeAnalysisType) async throws
         -> CodeAnalysisResult
 
     /// Generate documentation for code
@@ -81,7 +81,7 @@ public protocol AICachingService {
     ///   - response: Response to cache
     ///   - metadata: Additional metadata
     @MainActor
-    func cacheResponse(key: String, response: String, metadata: [String: Any]?) async
+    func cacheResponse(key: String, response: String, metadata: [String: AnyCodable]?) async
 
     /// Retrieve cached response
     /// - Parameter key: Cache key
@@ -108,12 +108,12 @@ public protocol AIPerformanceMonitoring {
     ///   - metadata: Additional metadata
     @MainActor
     func recordOperation(
-        operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?
+        operation: String, duration: TimeInterval, success: Bool, metadata: [String: AnyCodable]?
     ) async
 
     /// Get performance metrics
     @MainActor
-    func getPerformanceMetrics() async -> PerformanceMetrics
+    func getPerformanceMetrics() async -> AIPerformanceMetrics
 
     /// Reset performance metrics
     @MainActor
@@ -130,7 +130,7 @@ public protocol AIServiceCoordinator {
     ///   - operation: The operation to perform
     ///   - context: Operation context
     /// - Returns: Operation result
-    func executeOperation(operation: AIOperation, context: [String: Any]) async throws
+    func executeOperation(operation: AIOperation, context: [String: AnyCodable]) async throws
         -> AIOperationResult
 
     /// Get service health overview
@@ -189,18 +189,18 @@ public struct ServiceHealth: Codable, Sendable {
 /// Code analysis result
 public struct CodeAnalysisResult: Codable, Sendable {
     public let analysis: String
-    public let issues: [CodeIssue]
+    public let issues: [AICodeIssue]
     public let suggestions: [String]
     public let language: String
-    public let analysisType: AnalysisType
+    public let analysisType: AICodeAnalysisType
     public let timestamp: Date
 
     public init(
         analysis: String,
-        issues: [CodeIssue] = [],
+        issues: [AICodeIssue] = [],
         suggestions: [String] = [],
         language: String,
-        analysisType: AnalysisType,
+        analysisType: AICodeAnalysisType,
         timestamp: Date = Date()
     ) {
         self.analysis = analysis
@@ -213,15 +213,15 @@ public struct CodeAnalysisResult: Codable, Sendable {
 }
 
 /// Code issue information
-public struct CodeIssue: Codable, Sendable {
+public struct AICodeIssue: Codable, Sendable {
     public let description: String
-    public let severity: IssueSeverity
+    public let severity: AIIssueSeverity
     public let lineNumber: Int?
     public let category: String
 
     public init(
         description: String,
-        severity: IssueSeverity = .medium,
+        severity: AIIssueSeverity = .medium,
         lineNumber: Int? = nil,
         category: String = "general"
     ) {
@@ -233,7 +233,7 @@ public struct CodeIssue: Codable, Sendable {
 }
 
 /// Issue severity levels
-public enum IssueSeverity: String, Codable, Sendable {
+public enum AIIssueSeverity: String, Codable, Sendable {
     case low
     case medium
     case high
@@ -241,7 +241,7 @@ public enum IssueSeverity: String, Codable, Sendable {
 }
 
 /// Analysis types
-public enum AnalysisType: String, Codable, Sendable {
+public enum AICodeAnalysisType: String, Codable, Sendable {
     case bugs
     case performance
     case security
@@ -253,14 +253,14 @@ public struct CodeGenerationResult: Codable, Sendable {
     public let code: String
     public let analysis: String
     public let language: String
-    public let complexity: CodeComplexity
+    public let complexity: AICodeComplexity
     public let timestamp: Date
 
     public init(
         code: String,
         analysis: String = "",
         language: String,
-        complexity: CodeComplexity = .standard,
+        complexity: AICodeComplexity = .standard,
         timestamp: Date = Date()
     ) {
         self.code = code
@@ -272,7 +272,7 @@ public struct CodeGenerationResult: Codable, Sendable {
 }
 
 /// Code complexity levels
-public enum CodeComplexity: String, Codable, Sendable {
+public enum AICodeComplexity: String, Codable, Sendable {
     case simple
     case standard
     case advanced
@@ -302,7 +302,7 @@ public struct CacheStats: Codable, Sendable {
 }
 
 /// Performance metrics
-public struct PerformanceMetrics: Codable, Sendable {
+public struct AIPerformanceMetrics: Codable, Sendable {
     public let totalOperations: Int
     public let successRate: Double
     public let averageResponseTime: TimeInterval
@@ -324,6 +324,34 @@ public struct PerformanceMetrics: Codable, Sendable {
         self.errorBreakdown = errorBreakdown
         self.peakConcurrentOperations = peakConcurrentOperations
         self.uptime = uptime
+    }
+}
+
+/// Documentation generation result
+public struct DocumentationResult: Codable, Sendable {
+    public let documentation: String
+    public let language: String
+    public let includesExamples: Bool
+
+    public init(documentation: String, language: String, includesExamples: Bool) {
+        self.documentation = documentation
+        self.language = language
+        self.includesExamples = includesExamples
+    }
+}
+
+/// Test generation result
+public struct TestGenerationResult: Codable, Sendable {
+    public let testCode: String
+    public let language: String
+    public let testFramework: String
+    public let coverage: Double
+
+    public init(testCode: String, language: String, testFramework: String, coverage: Double) {
+        self.testCode = testCode
+        self.language = language
+        self.testFramework = testFramework
+        self.coverage = coverage
     }
 }
 
@@ -516,27 +544,27 @@ public struct RateLimit: Codable, Sendable {
 
 // MARK: - Default Implementations
 
-public extension AITextGenerationService {
-    func isAvailable() async -> Bool {
+extension AITextGenerationService {
+    public func isAvailable() async -> Bool {
         let health = await getHealthStatus()
         return health.isRunning
     }
 }
 
-public extension AICodeAnalysisService {
-    func generateDocumentation(code: String, language: String) async throws -> String {
+extension AICodeAnalysisService {
+    public func generateDocumentation(code: String, language: String) async throws -> String {
         // Default implementation - should be overridden
         throw AIError.serviceNotImplemented("Documentation generation not implemented")
     }
 
-    func generateTests(code: String, language: String) async throws -> String {
+    public func generateTests(code: String, language: String) async throws -> String {
         // Default implementation - should be overridden
         throw AIError.serviceNotImplemented("Test generation not implemented")
     }
 }
 
-public extension AICodeGenerationService {
-    func generateCodeWithFallback(description: String, language: String, context: String?)
+extension AICodeGenerationService {
+    public func generateCodeWithFallback(description: String, language: String, context: String?)
         async throws -> CodeGenerationResult
     {
         // Default implementation - just call regular generateCode
@@ -557,19 +585,19 @@ public enum AIError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case let .serviceNotImplemented(service):
+        case .serviceNotImplemented(let service):
             "AI service not implemented: \(service)"
-        case let .serviceUnavailable(service):
+        case .serviceUnavailable(let service):
             "AI service unavailable: \(service)"
-        case let .invalidConfiguration(details):
+        case .invalidConfiguration(let details):
             "Invalid AI service configuration: \(details)"
-        case let .operationFailed(details):
+        case .operationFailed(let details):
             "AI operation failed: \(details)"
         case .rateLimitExceeded:
             "AI service rate limit exceeded"
         case .authenticationFailed:
             "AI service authentication failed"
-        case let .networkError(details):
+        case .networkError(let details):
             "AI service network error: \(details)"
         }
     }

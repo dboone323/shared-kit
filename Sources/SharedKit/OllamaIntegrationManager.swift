@@ -16,7 +16,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
     private let logger = IntegrationLogger()
     private let cache = AIResponseCache()
     private let performanceMonitor = AIOperationMonitor()
-    private let healthMonitor = AIHealthMonitor()
+    private let healthMonitor = AIHealthMonitor.shared
     private let retryManager = RetryManager()
 
     public init(config: OllamaConfig = .default) {
@@ -40,7 +40,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateText",
                 duration: Date().timeIntervalSince(startTime),
                 success: true,
-                metadata: ["cached": true, "cacheKey": cacheKey]
+                metadata: ["cached": AnyCodable(true), "cacheKey": AnyCodable(cacheKey)]
             )
             return cachedResponse
         }
@@ -59,10 +59,10 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         await cache.cacheResponse(
             key: cacheKey, response: result,
             metadata: [
-                "operation": "generateText",
-                "model": "llama2",
-                "maxTokens": maxTokens,
-                "temperature": temperature,
+                "operation": AnyCodable("generateText"),
+                "model": AnyCodable("llama2"),
+                "maxTokens": AnyCodable(maxTokens),
+                "temperature": AnyCodable(temperature),
             ]
         )
 
@@ -70,7 +70,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             operation: "generateText",
             duration: Date().timeIntervalSince(startTime),
             success: true,
-            metadata: ["cached": false, "cacheKey": cacheKey]
+            metadata: ["cached": AnyCodable(false), "cacheKey": AnyCodable(cacheKey)]
         )
 
         return result
@@ -124,7 +124,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
     // MARK: - AICodeAnalysisService Protocol
 
-    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws
+    public func analyzeCode(code: String, language: String, analysisType: AICodeAnalysisType)
+        async throws
         -> CodeAnalysisResult
     {
         let startTime = Date()
@@ -139,7 +140,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 duration: Date().timeIntervalSince(startTime),
                 success: true,
                 metadata: [
-                    "cached": true, "language": language, "analysisType": analysisType.rawValue,
+                    "cached": AnyCodable(true), "language": AnyCodable(language),
+                    "analysisType": AnyCodable(analysisType.rawValue),
                 ]
             )
             // Parse cached response back to CodeAnalysisResult
@@ -161,9 +163,9 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         await cache.cacheResponse(
             key: cacheKey, response: jsonString,
             metadata: [
-                "operation": "analyzeCode",
-                "language": language,
-                "analysisType": analysisType.rawValue,
+                "operation": AnyCodable("analyzeCode"),
+                "language": AnyCodable(language),
+                "analysisType": AnyCodable(analysisType.rawValue),
             ]
         )
 
@@ -172,7 +174,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             duration: Date().timeIntervalSince(startTime),
             success: true,
             metadata: [
-                "cached": false, "language": language, "analysisType": analysisType.rawValue,
+                "cached": AnyCodable(false), "language": AnyCodable(language),
+                "analysisType": AnyCodable(analysisType.rawValue),
             ]
         )
 
@@ -188,7 +191,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateDocumentation",
                 duration: Date().timeIntervalSince(startTime),
                 success: true,
-                metadata: ["cached": true, "language": language]
+                metadata: ["cached": AnyCodable(true), "language": AnyCodable(language)]
             )
             return cachedResponse
         }
@@ -200,8 +203,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             await cache.cacheResponse(
                 key: cacheKey, response: result,
                 metadata: [
-                    "operation": "generateDocumentation",
-                    "language": language,
+                    "operation": AnyCodable("generateDocumentation"),
+                    "language": AnyCodable(language),
                 ]
             )
 
@@ -209,7 +212,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateDocumentation",
                 duration: Date().timeIntervalSince(startTime),
                 success: true,
-                metadata: ["cached": false, "language": language]
+                metadata: ["cached": AnyCodable(false), "language": AnyCodable(language)]
             )
 
             return result
@@ -218,7 +221,10 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateDocumentation",
                 duration: Date().timeIntervalSince(startTime),
                 success: false,
-                metadata: ["error": error.localizedDescription, "language": language]
+                metadata: [
+                    "error": AnyCodable(error.localizedDescription),
+                    "language": AnyCodable(language),
+                ]
             )
             throw error
         }
@@ -233,7 +239,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateTests",
                 duration: Date().timeIntervalSince(startTime),
                 success: true,
-                metadata: ["cached": true, "language": language]
+                metadata: ["cached": AnyCodable(true), "language": AnyCodable(language)]
             )
             return cachedResponse
         }
@@ -244,8 +250,8 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             await cache.cacheResponse(
                 key: cacheKey, response: result,
                 metadata: [
-                    "operation": "generateTests",
-                    "language": language,
+                    "operation": AnyCodable("generateTests"),
+                    "language": AnyCodable(language),
                 ]
             )
 
@@ -253,7 +259,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateTests",
                 duration: Date().timeIntervalSince(startTime),
                 success: true,
-                metadata: ["cached": false, "language": language]
+                metadata: ["cached": AnyCodable(false), "language": AnyCodable(language)]
             )
 
             return result
@@ -262,7 +268,10 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateTests",
                 duration: Date().timeIntervalSince(startTime),
                 success: false,
-                metadata: ["error": error.localizedDescription, "language": language]
+                metadata: [
+                    "error": AnyCodable(error.localizedDescription),
+                    "language": AnyCodable(language),
+                ]
             )
             throw error
         }
@@ -281,7 +290,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateCode",
                 duration: Date().timeIntervalSince(startTime),
                 success: true,
-                metadata: ["cached": true, "language": language]
+                metadata: ["cached": AnyCodable(true), "language": AnyCodable(language)]
             )
             return try parseCodeGenerationResult(from: cachedResponse, language: language)
         }
@@ -300,9 +309,9 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             await cache.cacheResponse(
                 key: cacheKey, response: jsonString,
                 metadata: [
-                    "operation": "generateCode",
-                    "language": language,
-                    "context": context ?? "",
+                    "operation": AnyCodable("generateCode"),
+                    "language": AnyCodable(language),
+                    "context": AnyCodable(context ?? ""),
                 ]
             )
 
@@ -310,7 +319,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateCode",
                 duration: Date().timeIntervalSince(startTime),
                 success: true,
-                metadata: ["cached": false, "language": language]
+                metadata: ["cached": AnyCodable(false), "language": AnyCodable(language)]
             )
 
             return result
@@ -319,7 +328,10 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 operation: "generateCode",
                 duration: Date().timeIntervalSince(startTime),
                 success: false,
-                metadata: ["error": error.localizedDescription, "language": language]
+                metadata: [
+                    "error": AnyCodable(error.localizedDescription),
+                    "language": AnyCodable(language),
+                ]
             )
             throw error
         }
@@ -370,7 +382,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
             - Include proper error handling
             - Add meaningful comments
             - Follow naming conventions
-            """,
+            """
         ]
 
         if let context {
@@ -391,15 +403,15 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
     private func analyzeGeneratedCode(_ code: String, _ language: String) async throws -> String {
         let prompt = """
-        Analyze this generated \(language) code for quality and correctness:
+            Analyze this generated \(language) code for quality and correctness:
 
-        \(code)
+            \(code)
 
-        Provide a brief assessment covering:
-        1. Code correctness
-        2. Best practices compliance
-        3. Potential improvements
-        """
+            Provide a brief assessment covering:
+            1. Code correctness
+            2. Best practices compliance
+            3. Potential improvements
+            """
 
         return try await self.client.generate(model: "codellama", prompt: prompt, temperature: 0.2)
     }
@@ -409,7 +421,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
     public func analyzeCodebase(
         code: String,
         language: String,
-        analysisType: AnalysisType = .comprehensive
+        analysisType: AICodeAnalysisType = .comprehensive
     ) async throws -> CodeAnalysisResult {
         let prompt = self.buildAnalysisPrompt(code, language, analysisType)
         let analysis = try await client.generate(
@@ -431,7 +443,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         )
     }
 
-    private func buildAnalysisPrompt(_ code: String, _ language: String, _ type: AnalysisType)
+    private func buildAnalysisPrompt(_ code: String, _ language: String, _ type: AICodeAnalysisType)
         -> String
     {
         let basePrompt = "Analyze this \(language) code:"
@@ -439,44 +451,44 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         switch type {
         case .bugs:
             return """
-            \(basePrompt)
-            Focus on identifying potential bugs, logic errors, and runtime issues.
+                \(basePrompt)
+                Focus on identifying potential bugs, logic errors, and runtime issues.
 
-            Code:
-            \(code)
+                Code:
+                \(code)
 
-            List specific issues with line numbers and severity levels.
-            """
+                List specific issues with line numbers and severity levels.
+                """
         case .performance:
             return """
-            \(basePrompt)
-            Focus on performance optimization opportunities.
+                \(basePrompt)
+                Focus on performance optimization opportunities.
 
-            Code:
-            \(code)
+                Code:
+                \(code)
 
-            Identify bottlenecks, inefficient algorithms, and optimization suggestions.
-            """
+                Identify bottlenecks, inefficient algorithms, and optimization suggestions.
+                """
         case .security:
             return """
-            \(basePrompt)
-            Focus on security vulnerabilities and best practices.
+                \(basePrompt)
+                Focus on security vulnerabilities and best practices.
 
-            Code:
-            \(code)
+                Code:
+                \(code)
 
-            Identify security risks and provide mitigation recommendations.
-            """
+                Identify security risks and provide mitigation recommendations.
+                """
         case .comprehensive:
             return """
-            \(basePrompt)
-            Provide comprehensive analysis covering bugs, performance, security, and best practices.
+                \(basePrompt)
+                Provide comprehensive analysis covering bugs, performance, security, and best practices.
 
-            Code:
-            \(code)
+                Code:
+                \(code)
 
-            Structure your response with clear sections for each analysis category.
-            """
+                Structure your response with clear sections for each analysis category.
+                """
         }
     }
 
@@ -490,7 +502,7 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 || line.lowercased().contains("issue") || line.lowercased().contains("problem")
             {
                 issues.append(
-                    CodeIssue(
+                    AICodeIssue(
                         description: line.trimmingCharacters(in: .whitespaces), severity: .medium
                     ))
             }
@@ -515,20 +527,20 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         includeExamples: Bool = true
     ) async throws -> DocumentationResult {
         let prompt = """
-        Generate comprehensive documentation for this \(language) code:
+            Generate comprehensive documentation for this \(language) code:
 
-        Code:
-        \(code)
+            Code:
+            \(code)
 
-        Include:
-        1. Overview and purpose
-        2. Function/method descriptions with parameters and return values
-        3. Usage examples
-        4. Important notes and considerations
-        \(includeExamples ? "5. Code examples showing common use cases" : "")
+            Include:
+            1. Overview and purpose
+            2. Function/method descriptions with parameters and return values
+            3. Usage examples
+            4. Important notes and considerations
+            \(includeExamples ? "5. Code examples showing common use cases" : "")
 
-        Format as clean, readable documentation with proper markdown formatting.
-        """
+            Format as clean, readable documentation with proper markdown formatting.
+            """
 
         let documentation = try await client.generate(
             model: "llama2",
@@ -552,21 +564,21 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         testFramework: String = "XCTest"
     ) async throws -> TestGenerationResult {
         let prompt = """
-        Generate comprehensive \(testFramework) unit tests for this \(language) code:
+            Generate comprehensive \(testFramework) unit tests for this \(language) code:
 
-        Code to test:
-        \(code)
+            Code to test:
+            \(code)
 
-        Requirements:
-        1. Test all public methods and functions
-        2. Include edge cases and error conditions
-        3. Test both success and failure scenarios
-        4. Use descriptive test method names
-        5. Include setup and teardown methods where appropriate
-        6. Add comments explaining what each test validates
+            Requirements:
+            1. Test all public methods and functions
+            2. Include edge cases and error conditions
+            3. Test both success and failure scenarios
+            4. Use descriptive test method names
+            5. Include setup and teardown methods where appropriate
+            6. Add comments explaining what each test validates
 
-        Generate the complete test file with proper structure and imports.
-        """
+            Generate the complete test file with proper structure and imports.
+            """
 
         let testCode = try await client.generate(
             model: "codellama",
@@ -592,8 +604,11 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
 
     // MARK: - Batch Processing
 
-    public func processBatchTasks(_ tasks: [AutomationTask]) async throws -> [TaskResult] {
-        var results: [TaskResult] = []
+    @Published public var activeTasks: Set<String> = []
+    @Published public var taskResults: [String: OllamaTaskResult] = [:]
+
+    public func processBatchTasks(_ tasks: [AutomationTask]) async throws -> [OllamaTaskResult] {
+        var results: [OllamaTaskResult] = []
 
         for task in tasks {
             self.logger.log("Processing task: \(task.description)")
@@ -603,44 +618,21 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
                 results.append(result)
             } catch {
                 self.logger.log("Task failed: \(task.description) - \(error.localizedDescription)")
-                results.append(TaskResult(task: task, success: false, error: error))
+                results.append(OllamaTaskResult(success: false, error: error))
             }
         }
 
         return results
     }
 
-    private func processTask(_ task: AutomationTask) async throws -> TaskResult {
+    private func processTask(_ task: AutomationTask) async throws -> OllamaTaskResult {
         switch task.type {
-        case .codeGeneration:
-            let result = try await generateCode(
-                description: task.description,
-                language: task.language ?? "Swift"
-            )
-            return TaskResult(task: task, success: true, codeGenerationResult: result)
-
-        case .codeAnalysis:
+        case .comprehensive, .bugs, .performance, .security:  // Using existing analysis types
             guard let code = task.code else {
-                throw IntegrationError.missingRequiredData("code")
+                throw AIError.invalidConfiguration("Missing code for analysis task")
             }
             let result = try await analyzeCodebase(code: code, language: task.language ?? "Swift")
-            return TaskResult(task: task, success: true, analysisResult: result)
-
-        case .documentation:
-            guard let code = task.code else {
-                throw IntegrationError.missingRequiredData("code")
-            }
-            let result = try await generateDocumentation(
-                code: code, language: task.language ?? "Swift"
-            )
-            return TaskResult(task: task, success: true, documentationResult: result)
-
-        case .testing:
-            guard let code = task.code else {
-                throw IntegrationError.missingRequiredData("code")
-            }
-            let result = try await generateTests(code: code, language: task.language ?? "Swift")
-            return TaskResult(task: task, success: true, testResult: result)
+            return OllamaTaskResult(task: task, success: true, analysisResult: result)
         }
     }
 }
@@ -656,15 +648,24 @@ private class IntegrationLogger {
 
 // MARK: - Additional Protocol Conformances & Utilities
 
-extension OllamaIntegrationManager: AICachingService, AIPerformanceMonitoring {
+extension OllamaIntegrationManager {
     // MARK: - AICachingService Protocol
 
-    public func cacheResponse(key: String, response: String, metadata: [String: Any]?) async {
+    public func cacheResponse(key: String, response: String, metadata: [String: AnyCodable]?) async
+    {
         await cache.cacheResponse(key: key, response: response, metadata: metadata)
     }
 
     public func getCachedResponse(key: String) async -> String? {
         await cache.getCachedResponse(key: key)
+    }
+
+    public func isTaskActive(_ identifier: String) -> Bool {
+        self.activeTasks.contains(identifier)
+    }
+
+    public func getTaskResult(_ identifier: String) -> OllamaTaskResult? {
+        self.taskResults[identifier]
     }
 
     public func clearCache() async {
@@ -678,14 +679,15 @@ extension OllamaIntegrationManager: AICachingService, AIPerformanceMonitoring {
     // MARK: - AIPerformanceMonitoring Protocol
 
     public func recordOperation(
-        operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?
+        operation: String, duration: TimeInterval, success: Bool, metadata: [String: AnyCodable]?
     ) async {
         await performanceMonitor.recordOperation(
             operation: operation, duration: duration, success: success, metadata: metadata
         )
     }
 
-    public func getPerformanceMetrics() async -> PerformanceMetrics {
+    @MainActor
+    public func getPerformanceMetrics() async -> AIPerformanceMetrics {
         await performanceMonitor.getPerformanceMetrics()
     }
 
@@ -727,7 +729,7 @@ extension OllamaIntegrationManager: AICachingService, AIPerformanceMonitoring {
     func analyzeCodeWithFallback(
         code: String,
         language: String,
-        analysisType: AnalysisType = .comprehensive
+        analysisType: AICodeAnalysisType = .comprehensive
     ) async throws -> String {
         do {
             // Try Ollama first
@@ -794,7 +796,7 @@ extension OllamaIntegrationManager: AICachingService, AIPerformanceMonitoring {
 /// Health monitoring for AI services
 
 /// Health monitoring for AI services
-public class AIHealthMonitor {
+public class AIHealthMonitor: @unchecked Sendable {
     public static let shared = AIHealthMonitor()
 
     private var ollamaHealthHistory: [Date: Bool] = [:]
@@ -884,7 +886,7 @@ private actor RetryManager {
     private let maxRetries = 3
     private let baseDelay: TimeInterval = 1.0
     private let circuitBreakerThreshold = 5
-    private let circuitBreakerTimeout: TimeInterval = 60.0 // 1 minute
+    private let circuitBreakerTimeout: TimeInterval = 60.0  // 1 minute
 
     func retry<T>(
         operation: String = "unknown",
@@ -946,12 +948,12 @@ private actor RetryManager {
     private func calculateDelay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt - 1))
         let jitter = Double.random(in: 0...0.1) * exponentialDelay
-        return min(exponentialDelay + jitter, 30.0) // Cap at 30 seconds
+        return min(exponentialDelay + jitter, 30.0)  // Cap at 30 seconds
     }
 
     private func isCircuitBreakerOpen(for key: String) -> Bool {
         guard let failureCount = failureCounts[key],
-              let lastFailure = lastFailureTimes[key]
+            let lastFailure = lastFailureTimes[key]
         else {
             return false
         }
@@ -980,23 +982,23 @@ private actor RetryManager {
 /// Enhanced AI response caching with TTL and metadata support
 private actor AIResponseCache {
     private var cache: [String: CachedResponse] = [:]
-    private var accessOrder: [String] = [] // For LRU eviction
+    private var accessOrder: [String] = []  // For LRU eviction
     private let maxCacheSize = 200
-    private let defaultExpiration: TimeInterval = 1800 // 30 minutes
+    private let defaultExpiration: TimeInterval = 1800  // 30 minutes
     private var accessCounts: [String: Int] = [:]
     private var hitCount = 0
     private var missCount = 0
 
     struct CachedResponse {
         let response: String
-        let metadata: [String: Any]?
+        let metadata: [String: AnyCodable]?
         let timestamp: Date
         let expirationDate: Date
         let accessCount: Int
-        let size: Int // Response size in bytes
+        let size: Int  // Response size in bytes
     }
 
-    func generateKey(
+    nonisolated func generateKey(
         for prompt: String, model: String, maxTokens: Int? = nil, temperature: Double? = nil,
         analysisType: String? = nil, context: String? = nil, operation: String? = nil
     ) -> String {
@@ -1010,7 +1012,7 @@ private actor AIResponseCache {
     }
 
     func cacheResponse(
-        key: String, response: String, metadata: [String: Any]? = nil,
+        key: String, response: String, metadata: [String: AnyCodable]? = nil,
         expiration: TimeInterval? = nil
     ) {
         let expirationDate = Date().addingTimeInterval(expiration ?? defaultExpiration)
@@ -1040,7 +1042,7 @@ private actor AIResponseCache {
         }
 
         cache[key] = cachedResponse
-        accessOrder.append(key) // Most recently used
+        accessOrder.append(key)  // Most recently used
         accessCounts[key, default: 0] += 1
     }
 
@@ -1121,6 +1123,59 @@ private actor AIResponseCache {
     }
 }
 
+public struct OllamaTaskResult {
+    public let identifier: String?
+    public let duration: TimeInterval
+    public let success: Bool
+    public let completedAt: Date
+    public let error: String?
+
+    // Additional fields for processTask
+    public var task: AutomationTask?
+    public var codeGenerationResult: CodeGenerationResult?
+    public var analysisResult: CodeAnalysisResult?
+    public var documentationResult: DocumentationResult?
+    public var testResult: TestGenerationResult?
+
+    public init(
+        identifier: String? = nil, duration: TimeInterval = 0, success: Bool,
+        completedAt: Date = Date(), error: Error? = nil
+    ) {
+        self.identifier = identifier
+        self.duration = duration
+        self.success = success
+        self.completedAt = completedAt
+        self.error = error?.localizedDescription
+    }
+
+    public init(
+        identifier: String? = nil, duration: TimeInterval = 0, success: Bool,
+        completedAt: Date = Date(), error: String? = nil
+    ) {
+        self.identifier = identifier
+        self.duration = duration
+        self.success = success
+        self.completedAt = completedAt
+        self.error = error
+    }
+
+    public init(
+        task: AutomationTask, success: Bool, codeGenerationResult: CodeGenerationResult? = nil,
+        analysisResult: CodeAnalysisResult? = nil, documentationResult: DocumentationResult? = nil,
+        testResult: TestGenerationResult? = nil, error: Error? = nil
+    ) {
+        self.task = task
+        self.success = success
+        self.codeGenerationResult = codeGenerationResult
+        self.analysisResult = analysisResult
+        self.documentationResult = documentationResult
+        self.testResult = testResult
+        self.error = error?.localizedDescription
+        self.identifier = nil
+        self.duration = 0
+        self.completedAt = Date()
+    }
+}
 /// Performance monitoring for AI operations
 private actor AIOperationMonitor {
     private var operations: [String: [OperationRecord]] = [:]
@@ -1131,11 +1186,12 @@ private actor AIOperationMonitor {
         let duration: TimeInterval
         let success: Bool
         let timestamp: Date
-        let metadata: [String: Any]?
+        let metadata: [String: AnyCodable]?
     }
 
     func recordOperation(
-        operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]? = nil
+        operation: String, duration: TimeInterval, success: Bool,
+        metadata: [String: AnyCodable]? = nil
     ) {
         let record = OperationRecord(
             duration: duration,
@@ -1152,7 +1208,7 @@ private actor AIOperationMonitor {
         }
     }
 
-    func getPerformanceMetrics() -> PerformanceMetrics {
+    func getPerformanceMetrics() -> AIPerformanceMetrics {
         let allRecords = operations.values.flatMap { $0 }
         let totalOperations = allRecords.count
         let successfulOperations = allRecords.filter(\.success).count
@@ -1167,9 +1223,9 @@ private actor AIOperationMonitor {
             records.filter { !$0.success }.count
         }
 
-        let peakConcurrent = 1 // Simplified - would need more sophisticated tracking
+        let peakConcurrent = 1  // Simplified - would need more sophisticated tracking
 
-        return PerformanceMetrics(
+        return AIPerformanceMetrics(
             totalOperations: totalOperations,
             successRate: successRate,
             averageResponseTime: averageResponseTime,
@@ -1195,7 +1251,7 @@ private actor AIOperationMonitor {
 
 extension OllamaIntegrationManager {
     private func parseAnalysisResult(
-        from jsonString: String, language: String, analysisType: AnalysisType
+        from jsonString: String, language: String, analysisType: AICodeAnalysisType
     ) throws -> CodeAnalysisResult {
         let jsonData = jsonString.data(using: .utf8) ?? Data()
         return try JSONDecoder().decode(CodeAnalysisResult.self, from: jsonData)

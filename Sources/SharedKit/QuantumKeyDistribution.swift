@@ -29,7 +29,9 @@ public class QuantumKeyDistribution: ObservableObject {
     }
 
     /// Distribute key using BB84 protocol
-    public func distributeKeyBB84(between alice: String, and bob: String, keyLength: Int) async -> QKDResult {
+    public func distributeKeyBB84(between alice: String, and bob: String, keyLength: Int) async
+        -> QKDResult
+    {
         print("🔑 Distributing key using BB84 protocol between \(alice) and \(bob)")
 
         let result = await bb84Protocol.distributeKey(alice: alice, bob: bob, keyLength: keyLength)
@@ -46,7 +48,9 @@ public class QuantumKeyDistribution: ObservableObject {
     }
 
     /// Distribute key using E91 protocol
-    public func distributeKeyE91(between alice: String, and bob: String, keyLength: Int) async -> QKDResult {
+    public func distributeKeyE91(between alice: String, and bob: String, keyLength: Int) async
+        -> QKDResult
+    {
         print("🔑 Distributing key using E91 protocol between \(alice) and \(bob)")
 
         let result = await e91Protocol.distributeKey(alice: alice, bob: bob, keyLength: keyLength)
@@ -65,7 +69,8 @@ public class QuantumKeyDistribution: ObservableObject {
     /// Verify key security and integrity
     public func verifyKeySecurity(keyId: String) async -> SecurityVerificationResult {
         guard let keyResult = activeKeys[keyId] else {
-            return SecurityVerificationResult(isSecure: false, threatLevel: .high, recommendations: ["Key not found"])
+            return SecurityVerificationResult(
+                isSecure: false, threatLevel: .high, recommendations: ["Key not found"])
         }
 
         return await securityMonitor.verifyKeySecurity(keyResult)
@@ -84,12 +89,17 @@ public class QuantumKeyDistribution: ObservableObject {
     /// Get QKD network statistics
     public func getQKDStatistics() async -> QKDNetworkStatistics {
         let totalKeys = activeKeys.count
-        let averageKeyLength = activeKeys.values.map { Double($0.keyLength) }.reduce(0, +) / Double(max(
-            1,
-            activeKeys.count
-        ))
-        let averageErrorRate = activeKeys.values.map(\.errorRate).reduce(0, +) / Double(max(1, activeKeys.count))
-        let averageSiftedRate = activeKeys.values.map(\.siftedKeyRate).reduce(0, +) / Double(max(1, activeKeys.count))
+        let averageKeyLength =
+            activeKeys.values.map { Double($0.keyLength) }.reduce(0, +)
+            / Double(
+                max(
+                    1,
+                    activeKeys.count
+                ))
+        let averageErrorRate =
+            activeKeys.values.map(\.errorRate).reduce(0, +) / Double(max(1, activeKeys.count))
+        let averageSiftedRate =
+            activeKeys.values.map(\.siftedKeyRate).reduce(0, +) / Double(max(1, activeKeys.count))
 
         let securityLevels = Dictionary(grouping: activeKeys.values, by: { $0.securityLevel })
             .mapValues { $0.count }
@@ -123,7 +133,7 @@ public class BB84Protocol: ObservableObject {
         let sessionId = "\(alice)_\(bob)_\(UUID().uuidString)"
 
         // Phase 1: Quantum bit transmission
-        let rawKey = await transmitQuantumBits(alice: alice, bob: bob, length: keyLength * 4) // 4x for sifting
+        let rawKey = await transmitQuantumBits(alice: alice, bob: bob, length: keyLength * 4)  // 4x for sifting
 
         // Phase 2: Basis reconciliation
         let siftedKey = await performBasisReconciliation(rawKey: rawKey)
@@ -138,7 +148,7 @@ public class BB84Protocol: ObservableObject {
         let finalKey = await performPrivacyAmplification(correctedKey: correctedKey)
 
         let result = QKDResult(
-            keyLength: finalKey.count * 8, // Convert to bits
+            keyLength: finalKey.count * 8,  // Convert to bits
             securityLevel: errorRate < 0.05 ? .quantum : .high,
             errorRate: errorRate,
             siftedKeyRate: Double(siftedKey.count) / Double(rawKey.count),
@@ -222,7 +232,8 @@ public class E91Protocol: ObservableObject {
         let errorRate = await estimateErrorsFromBellInequalities(bellResults)
 
         // Key distillation
-        let finalKey = await distillKey(aliceMeasurements: aliceMeasurements, bobMeasurements: bobMeasurements)
+        let finalKey = await distillKey(
+            aliceMeasurements: aliceMeasurements, bobMeasurements: bobMeasurements)
 
         let result = QKDResult(
             keyLength: finalKey.count * 8,
@@ -257,12 +268,16 @@ public class E91Protocol: ObservableObject {
         }
     }
 
-    private func measureParticles(_ pairs: [EntanglementPair], by participant: String) async -> [UInt8] {
+    private func measureParticles(_ pairs: [EntanglementPair], by participant: String) async
+        -> [UInt8]
+    {
         // Simulate quantum measurements
         pairs.map { _ in UInt8.random(in: 0...1) }
     }
 
-    private func analyzeBellStates(aliceMeasurements: [UInt8], bobMeasurements: [UInt8]) async -> [Double] {
+    private func analyzeBellStates(aliceMeasurements: [UInt8], bobMeasurements: [UInt8]) async
+        -> [Double]
+    {
         // Simulate Bell state analysis
         (0..<aliceMeasurements.count).map { _ in Double.random(in: 0.7...0.95) }
     }
@@ -270,7 +285,7 @@ public class E91Protocol: ObservableObject {
     private func estimateErrorsFromBellInequalities(_ bellResults: [Double]) async -> Double {
         // Estimate errors using Bell inequalities violation
         let averageBellValue = bellResults.reduce(0, +) / Double(bellResults.count)
-        return max(0.0, 1.0 - averageBellValue) // Lower Bell value indicates more errors
+        return max(0.0, 1.0 - averageBellValue)  // Lower Bell value indicates more errors
     }
 
     private func distillKey(aliceMeasurements: [UInt8], bobMeasurements: [UInt8]) async -> [UInt8] {
@@ -299,11 +314,12 @@ public class QKDSecurityMonitor: ObservableObject {
 
     public func verifyKeySecurity(_ keyResult: QKDResult) async -> SecurityVerificationResult {
         var threats: [String] = []
-        var threatLevel: SecurityLevel = .quantum
+        var threatLevel: QuantumInternetSecurityLevel = .quantum
 
         // Check error rate
-        if keyResult.errorRate > 0.11 { // Threshold for secure key
-            threats.append("High error rate detected: \(String(format: "%.3f", keyResult.errorRate))")
+        if keyResult.errorRate > 0.11 {  // Threshold for secure key
+            threats.append(
+                "High error rate detected: \(String(format: "%.3f", keyResult.errorRate))")
             threatLevel = .low
         }
 
@@ -328,7 +344,7 @@ public class QKDSecurityMonitor: ObservableObject {
 
     private func detectEavesdroppingPatterns(_ keyResult: QKDResult) async -> Bool {
         // Simulate eavesdropping detection
-        Double.random(in: 0...1) < 0.05 // 5% chance of false positive
+        Double.random(in: 0...1) < 0.05  // 5% chance of false positive
     }
 
     public func revokeKey(_ keyId: String) async {
@@ -365,7 +381,7 @@ public struct E91Session {
 /// Security verification result
 public struct SecurityVerificationResult {
     public let isSecure: Bool
-    public let threatLevel: SecurityLevel
+    public let threatLevel: QuantumInternetSecurityLevel
     public let recommendations: [String]
 }
 
@@ -373,13 +389,13 @@ public struct SecurityVerificationResult {
 public struct SecurityAlert {
     public let id: String
     public let keyId: String
-    public let threatType: ThreatType
-    public let severity: SecurityLevel
+    public let threatType: QKDThreatType
+    public let severity: QuantumInternetSecurityLevel
     public let timestamp: Date
     public let description: String
 }
 
-public enum ThreatType {
+public enum QKDThreatType {
     case eavesdropping, keyCompromise, manInTheMiddle, interception
 }
 
@@ -389,7 +405,7 @@ public struct QKDNetworkStatistics {
     public let averageKeyLength: Double
     public let averageErrorRate: Double
     public let averageSiftedRate: Double
-    public let securityLevelDistribution: [SecurityLevel: Int]
+    public let securityLevelDistribution: [QuantumInternetSecurityLevel: Int]
     public let bb84Keys: Int
     public let e91Keys: Int
 }
