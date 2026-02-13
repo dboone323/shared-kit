@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+if command -v swiftformat >/dev/null 2>&1 && [ -f .swiftformat ]; then
+  swiftformat . --config .swiftformat --lint
+fi
+
+if command -v swiftlint >/dev/null 2>&1 && [ -f .swiftlint.yml ]; then
+  swiftlint --strict
+fi

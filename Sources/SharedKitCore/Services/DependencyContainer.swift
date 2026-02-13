@@ -300,7 +300,7 @@ public final class ServiceManager: @unchecked Sendable {
             await plannerService.cleanup()
         }
 
-        _ = self.withInitializedServicesLock {
+        self.withInitializedServicesLock {
             self.initializedServices.removeAll()
         }
     }

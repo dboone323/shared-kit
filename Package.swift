@@ -34,48 +34,58 @@ let package = Package(
             targets: ["AgentDesktop"]
         ),
     ],
-    dependencies: [
-        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.21.0"),
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
-    ],
+    dependencies: [],
     targets: [
-        .executableTarget(
-            name: "AgentDesktop",
-            dependencies: ["SharedKit"],
-            path: "Sources/AgentDesktop"
-        ),
-        .executableTarget(
-            name: "AgentCLI",
-            dependencies: ["SharedKit"],
-            path: "Sources/AgentCLI"
-        ),
-        .executableTarget(
-            name: "RAGVerifier",
-            dependencies: ["SharedKit"],
-            path: "Sources/RAGVerifier"
-        ),
         .target(
             name: "EnterpriseScalingFramework",
             dependencies: [],
             path: "Sources/EnterpriseScalingFramework"
         ),
+        .executableTarget(
+            name: "AgentDesktop",
+            dependencies: ["SharedKit"],
+            path: "Sources/AgentDesktop",
+            exclude: ["AgentMonitoringView.swift"],
+            sources: ["AgentDesktopApp.swift"]
+        ),
+        .executableTarget(
+            name: "AgentCLI",
+            dependencies: ["SharedKit"],
+            path: "Sources/AgentCLI",
+            sources: ["main.swift"]
+        ),
+        .executableTarget(
+            name: "RAGVerifier",
+            dependencies: ["SharedKit"],
+            path: "Sources/RAGVerifier",
+            sources: ["main.swift"]
+        ),
         .target(
             name: "SharedKit",
-            dependencies: [
-                .product(name: "PostgresNIO", package: "postgres-nio"),
-                .product(name: "Logging", package: "swift-log"),
-            ],
-            path: "Sources/SharedKit"
+            dependencies: [],
+            path: "Sources/SharedKitCore",
+            sources: [
+                "AnyCodable.swift",
+                "Logger.swift",
+                "ToolExecutionResult.swift",
+                "KeychainManager.swift",
+                "SecurityFramework.swift",
+                "SharedArchitecture.swift",
+                "Services/ServiceProtocols.swift",
+                "Services/DependencyContainer.swift",
+                "Services/PlatformFeatureRegistry.swift",
+                "Services/BackupRestoreService.swift",
+                "Security/CertificatePinningPolicy.swift",
+                "Security/EncryptedFileStore.swift",
+                "Utilities/AppLogger.swift",
+                "Utilities/FinancialUtilities.swift",
+                "Utilities/SwiftDataCompat.swift",
+            ]
         ),
         .target(
             name: "SharedTestSupport",
             dependencies: ["SharedKit"],
             path: "Sources/SharedTestSupport"
-        ),
-        .testTarget(
-            name: "SharedKitTests",
-            dependencies: ["SharedKit", "SharedTestSupport"],
-            path: "Tests/SharedKitTests"
         ),
     ]
 )

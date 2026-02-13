@@ -192,7 +192,6 @@ private final class ResourceManager: @unchecked Sendable {
     func checkResourceUsage(for tenantId: String) async -> ResourceUsage {
         return await withCheckedContinuation { continuation in
             resourceQueue.async {
-                let allocation = self.resourceAllocations[tenantId]
                 // In a real implementation, this would check actual usage
                 let usage = ResourceUsage(
                     tenantId: tenantId,

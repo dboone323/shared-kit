@@ -66,7 +66,7 @@ open class SharedViewModelTestCase: XCTestCase {
         _ operation: @escaping () async throws -> some Sendable,
         timeout: TimeInterval = 5.0,
         message: String = "Async operation failed",
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         do {
@@ -81,7 +81,7 @@ open class SharedViewModelTestCase: XCTestCase {
         _ operation: @escaping () async throws -> some Sendable,
         expectedError: E,
         timeout: TimeInterval = 5.0,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async where E: Error & Equatable {
         do {
@@ -100,7 +100,7 @@ open class SharedViewModelTestCase: XCTestCase {
         operation: @escaping () async throws -> T,
         timeout: TimeInterval = 2.0,
         message: String = "State did not change",
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async throws {
         let finalState = try await waitForAsync(timeout: timeout, operation: operation)
@@ -113,7 +113,7 @@ open class SharedViewModelTestCase: XCTestCase {
         operation: @escaping () async throws -> T,
         timeout: TimeInterval = 2.0,
         message: String = "State did not match expected value",
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async throws {
         let finalState = try await waitForAsync(timeout: timeout, operation: operation)
@@ -127,7 +127,7 @@ open class SharedViewModelTestCase: XCTestCase {
         operation: String,
         expectedDuration: TimeInterval,
         _ block: @escaping () async throws -> some Sendable,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         let startTime = Date()
@@ -167,7 +167,7 @@ open class SharedViewModelTestCase: XCTestCase {
     public func assertNoMemoryLeaks(
         in operation: @escaping () async throws -> some Sendable,
         timeout: TimeInterval = 5.0,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         // Simple memory leak detection by checking if operation completes without issues
@@ -216,7 +216,7 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
         _ action: ViewModelType.Action,
         expectedLoadingStates: [Bool] = [true, false],
         timeout: TimeInterval = 5.0,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         XCTAssertFalse(
@@ -256,7 +256,7 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
 
     /// Test view model state validation
     public func testViewModelValidation(
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) {
         let isValid = viewModel.validateState()
@@ -268,7 +268,7 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
         action: ViewModelType.Action,
         expectedErrorMessage: String,
         timeout: TimeInterval = 5.0,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         XCTAssertNil(
@@ -279,7 +279,6 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
         await viewModel.handle(action)
 
         // Wait for error to be set
-        let expectation = XCTestExpectation(description: "Error message")
         var errorSet = false
 
         for _ in 0..<Int(timeout * 10) {
