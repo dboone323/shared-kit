@@ -59,9 +59,9 @@ Tools/Automation/Imported_Tools_snapshot-*/
 Tools/Automation/IMPORTS/
 
 # Project-specific caches and outputs
-Projects/**/build_output*.txt
-Projects/**/lint_results.json
-Projects/**/quality_gates_results.json
+**/build_output*.txt
+**/lint_results.json
+**/quality_gates_results.json
 node_modules/
 
 # Node.js
