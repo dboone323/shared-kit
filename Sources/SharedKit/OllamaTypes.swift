@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Core Ollama Configuration & Types
 
-public struct OllamaConfig: Sendable {
+public struct OllamaConfig {
     public let baseURL: String
     public let defaultModel: String
     public let timeout: TimeInterval
@@ -19,13 +19,8 @@ public struct OllamaConfig: Sendable {
     public let cloudEndpoint: String
     public let preferCloudModels: Bool
 
-    /// Default Ollama endpoint - reads from OLLAMA_ENDPOINT env var, falls back to localhost
-    public static var defaultEndpoint: String {
-        ProcessInfo.processInfo.environment["OLLAMA_ENDPOINT"] ?? "http://localhost:11434"
-    }
-
     public init(
-        baseURL: String = OllamaConfig.defaultEndpoint,
+        baseURL: String = "http://127.0.0.1:11434",
         defaultModel: String = "llama2",
         timeout: TimeInterval = 60.0,
         maxRetries: Int = 3,
@@ -99,9 +94,7 @@ public struct OllamaConfig: Sendable {
         defaultModel: "deepseek-v3.1:671b-cloud",
         temperature: 0.3,
         maxTokens: 16384,
-        fallbackModels: [
-            "deepseek-v3.1:671b-cloud", "gpt-oss:120b-cloud", "qwen3-coder:480b-cloud",
-        ],
+        fallbackModels: ["deepseek-v3.1:671b-cloud", "gpt-oss:120b-cloud", "qwen3-coder:480b-cloud"],
         enableCloudModels: true,
         preferCloudModels: true
     )
@@ -116,7 +109,7 @@ public struct OllamaConfig: Sendable {
     )
 }
 
-public struct OllamaMessage: Codable, Sendable {
+public struct OllamaMessage: Codable {
     public let role: String
     public let content: String
 
@@ -126,7 +119,7 @@ public struct OllamaMessage: Codable, Sendable {
     }
 }
 
-public struct OllamaGenerateResponse: Codable, Sendable {
+public struct OllamaGenerateResponse: Codable {
     public let model: String
     public let created_at: String
     public let response: String
@@ -140,27 +133,20 @@ public struct OllamaGenerateResponse: Codable, Sendable {
     public let eval_duration: Int?
 }
 
-public struct OllamaServerStatus: Sendable {
+public struct OllamaServerStatus {
     public let running: Bool
     public let modelCount: Int
     public let models: [String]
 }
 
-public enum OllamaError: LocalizedError, Sendable {
+public enum OllamaError: LocalizedError {
     case invalidURL
     case invalidResponse
     case invalidResponseFormat
     case httpError(Int)
-    case apiError(String)
-    case connectionFailed
-    case modelNotFound(String)
-    case serverError(String)
-    case unknownError(String)
-    case modelNotAvailable(String)
-
-    // Legacy/Migration aliases if needed, or re-add them if they differ semantically
     case modelPullFailed
     case serverNotRunning
+    case modelNotAvailable(String)
     case networkTimeout
     case rateLimitExceeded
     case cacheError
@@ -169,71 +155,169 @@ public enum OllamaError: LocalizedError, Sendable {
     case authenticationFailed
     case serverOverloaded
 
-    case invalidConfiguration(String)
-
     public var errorDescription: String? {
         switch self {
-        case let .invalidConfiguration(details):
-            return "Invalid configuration: \(details)"
         case .invalidURL:
-            return "Invalid Ollama server URL"
+            "Invalid Ollama server URL"
         case .invalidResponse:
-            return "Invalid response from Ollama server"
+            "Invalid response from Ollama server"
         case let .httpError(code):
-            return "HTTP error: \(code)"
+            "HTTP error: \(code)"
         case .invalidResponseFormat:
-            return "Invalid response format from Ollama"
+            "Invalid response format from Ollama"
         case .modelPullFailed:
-            return "Failed to pull model from Ollama"
+            "Failed to pull model from Ollama"
         case .serverNotRunning:
-            return "Ollama server is not running"
+            "Ollama server is not running"
         case let .modelNotAvailable(model):
-            return "Model '\(model)' is not available"
+            "Model '\(model)' is not available"
         case .networkTimeout:
-            return "Network request timed out"
+            "Network request timed out"
         case .rateLimitExceeded:
-            return "Rate limit exceeded"
+            "Rate limit exceeded"
         case .cacheError:
-            return "Cache operation failed"
+            "Cache operation failed"
         case let .modelLoadFailed(model):
-            return "Failed to load model: \(model)"
+            "Failed to load model: \(model)"
         case .contextWindowExceeded:
-            return "Input exceeds model's context window"
+            "Input exceeds model's context window"
         case .authenticationFailed:
-            return "Authentication failed"
+            "Authentication failed"
         case .serverOverloaded:
-            return "Server is overloaded"
-        case let .apiError(msg):
-            return "API Error: \(msg)"
-        case .connectionFailed:
-            return "Failed to connect to Ollama server"
-        case let .modelNotFound(model):
-            return "Model not found: \(model)"
-        case let .serverError(msg):
-            return "Server error: \(msg)"
-        case let .unknownError(msg):
-            return "Unknown error: \(msg)"
+            "Server is overloaded"
         }
     }
 
     public var recoveryStrategy: String {
         switch self {
         case .serverNotRunning:
-            return "Start the Ollama server using 'ollama serve'"
+            "Start the Ollama server using 'ollama serve'"
         case .modelNotAvailable:
-            return "Install the model using 'ollama pull [model-name]'"
+            "Install the model using 'ollama pull [model-name]'"
         case .networkTimeout:
-            return "Check the network connection and consider increasing timeout"
+            "Check the network connection and consider increasing timeout"
         case .rateLimitExceeded:
-            return "Wait before retrying to respect rate limits"
+            "Wait before retrying to respect rate limits"
         case .contextWindowExceeded:
-            return "Reduce input length or split into smaller chunks"
+            "Reduce input length or split into smaller chunks"
         default:
-            return "Check Ollama server status and configuration"
+            "Check Ollama server status and configuration"
         }
     }
 }
 
 // MARK: - Integration Result Models
 
-// Other integration models like ServiceHealth, CodeComplexity, etc. are defined in AIServiceProtocols.swift
+public struct OllamaServiceHealth {
+    public let ollamaRunning: Bool
+    public let modelsAvailable: Bool
+    public let modelCount: Int
+    public let recommendedActions: [String]
+}
+
+public enum CodeComplexity {
+    case simple
+    case standard
+    case advanced
+
+    public var temperature: Double {
+        switch self {
+        case .simple: 0.1
+        case .standard: 0.3
+        case .advanced: 0.5
+        }
+    }
+
+    public var maxTokens: Int {
+        switch self {
+        case .simple: 1000
+        case .standard: 2000
+        case .advanced: 4000
+        }
+    }
+}
+
+public enum AnalysisType {
+    case bugs
+    case performance
+    case security
+    case comprehensive
+}
+
+public struct AutomationTask {
+    public let id: String
+    public let type: TaskType
+    public let description: String
+    public let language: String?
+    public let code: String?
+
+    public init(
+        id: String,
+        type: TaskType,
+        description: String,
+        language: String? = nil,
+        code: String? = nil
+    ) {
+        self.id = id
+        self.type = type
+        self.description = description
+        self.language = language
+        self.code = code
+    }
+
+    public enum TaskType {
+        case codeGeneration
+        case codeAnalysis
+        case documentation
+        case testing
+    }
+}
+
+public struct OllamaTaskResult {
+    public let task: AutomationTask
+    public let success: Bool
+    public let error: Error?
+    public let codeGenerationResult: CodeGenerationResult?
+    public let analysisResult: CodeAnalysisResult?
+    public let documentationResult: DocumentationResult?
+    public let testResult: TestGenerationResult?
+
+    public init(
+        task: AutomationTask,
+        success: Bool,
+        error: Error? = nil,
+        codeGenerationResult: CodeGenerationResult? = nil,
+        analysisResult: CodeAnalysisResult? = nil,
+        documentationResult: DocumentationResult? = nil,
+        testResult: TestGenerationResult? = nil
+    ) {
+        self.task = task
+        self.success = success
+        self.error = error
+        self.codeGenerationResult = codeGenerationResult
+        self.analysisResult = analysisResult
+        self.documentationResult = documentationResult
+        self.testResult = testResult
+    }
+}
+
+public enum IntegrationError: Error {
+    case missingRequiredData(String)
+    case serviceUnavailable
+    case invalidConfiguration
+}
+
+// MARK: - Health Monitoring Models
+
+public struct HealthStats {
+    public let ollamaUptime: Double
+    public let huggingFaceUptime: Double
+    public let lastOllamaCheck: Date?
+    public let lastHuggingFaceCheck: Date?
+}
+
+public struct CurrentHealth {
+    public let ollamaHealthy: Bool
+    public let huggingFaceHealthy: Bool
+    public let anyServiceAvailable: Bool
+}

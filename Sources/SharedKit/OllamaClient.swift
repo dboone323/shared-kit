@@ -1,23 +1,6 @@
+import Combine
 import Foundation
-
-#if canImport(OSLog)
-    import OSLog
-#endif
-
-#if canImport(Combine)
-    import Combine
-#else
-    import Foundation
-
-    public protocol ObservableObject: AnyObject {}
-
-    @propertyWrapper
-    public struct Published<Value> {
-        public var wrappedValue: Value
-        public init(wrappedValue: Value) { self.wrappedValue = wrappedValue }
-        public var projectedValue: Published<Value> { self }
-    }
-#endif
+import OSLog
 
 // MARK: - Cloud Fallback Policy (Shared-Kit)
 
@@ -56,17 +39,14 @@ private struct CloudFallbackPolicy {
         guard enabled else { return }
         var tracker = Self.readJSON(path: quotaTrackerPath) ?? [:]
         var cb = (tracker["circuit_breaker"] as? [String: Any]) ?? [:]
-        var pcb =
-            (cb[priority] as? [String: Any]) ?? [
-                "state": "closed", "failure_count": 0, "last_failure": NSNull(),
-                "opened_at": NSNull(),
-            ]
+        var pcb = (cb[priority] as? [String: Any]) ?? [
+            "state": "closed", "failure_count": 0, "last_failure": NSNull(), "opened_at": NSNull(),
+        ]
         let now = Self.iso8601Now()
         let failures = ((pcb["failure_count"] as? Int) ?? 0) + 1
         pcb["failure_count"] = failures
         pcb["last_failure"] = now
-        let threshold =
-            ((config["circuit_breaker"] as? [String: Any])?["failure_threshold"] as? Int) ?? 3
+        let threshold = ((config["circuit_breaker"] as? [String: Any])?["failure_threshold"] as? Int) ?? 3
         if failures >= threshold {
             pcb["state"] = "open"
             pcb["opened_at"] = now
@@ -102,9 +82,7 @@ private struct CloudFallbackPolicy {
         return dailyUsed < dailyLimit && hourlyUsed < hourlyLimit
     }
 
-    func logEscalation(
-        task: String, priority: String, reason: String, modelAttempted: String, provider: String
-    ) {
+    func logEscalation(task: String, priority: String, reason: String, modelAttempted: String, provider: String) {
         guard enabled else { return }
         let now = Self.iso8601Now()
         let line: [String: Any] = [
@@ -161,37 +139,30 @@ private struct CloudFallbackPolicy {
 public class OllamaClient: ObservableObject {
     private let config: OllamaConfig
     private let session: URLSession
-
+    private let logger: Logger
     private let cache: OllamaCache
     private let metrics: OllamaMetrics
     private var lastRequestTime: Date = .distantPast
     private var policy = CloudFallbackPolicy()
-
-    // Production enhancements
-    private let connectionPool = OllamaConnectionPool.shared
-    private let healthTracker = ModelHealthTracker()
-    private let requestQueue = OllamaRequestQueue()
-    private let retryConfig = RetryConfig(maxRetries: 3, baseDelay: 1.0)
 
     @Published public var isConnected = false
     @Published public var availableModels: [String] = []
     @Published public var currentModel: String = ""
     @Published public var serverStatus: OllamaServerStatus?
 
-    public init(config: OllamaConfig = .default, session: URLSession? = nil) {
+    public init(config: OllamaConfig = .default) {
         self.config = config
 
         // Enhanced URLSession configuration
-        if let session {
-            self.session = session
-        } else {
-            let configuration = URLSessionConfiguration.default
-            configuration.timeoutIntervalForRequest = config.timeout
-            configuration.timeoutIntervalForResource = config.timeout * 2
-            configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-            configuration.httpMaximumConnectionsPerHost = 4
-            self.session = URLSession(configuration: configuration)
-        }
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = config.timeout
+        configuration.timeoutIntervalForResource = config.timeout * 2
+        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        configuration.httpMaximumConnectionsPerHost = 4
+        self.session = URLSession(configuration: configuration)
+
+        // Enhanced logging
+        self.logger = Logger(subsystem: "OllamaClient", category: "AI")
 
         // Cache and metrics
         self.cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)
@@ -213,27 +184,23 @@ public class OllamaClient: ObservableObject {
                 let models = try await listModels()
                 self.availableModels = models
                 self.serverStatus = await self.getServerStatus()
-                Logger.logInfo("Connected to Ollama server with \(models.count) models")
+                self.logger.info("Connected to Ollama server with \(models.count) models")
             }
         } catch {
-            Logger.logError(error, context: "Failed to initialize connection")
+            self.logger.error("Failed to initialize connection: \(error.localizedDescription)")
         }
     }
 
     private func ensureModelAvailable(_ model: String) async throws {
-        // Refresh model list if potentially stale (not yet initialized)
-        if self.availableModels.isEmpty {
-            self.availableModels = try await self.listModels()
-        }
         if !self.availableModels.contains(model), self.config.enableAutoModelDownload {
-            Logger.logInfo("Auto-downloading model: \(model)")
+            self.logger.info("Auto-downloading model: \(model)")
             try await self.pullModel(model)
             self.availableModels = try await self.listModels()
         } else if !self.availableModels.contains(model) {
             // Try fallback models
             for fallback in self.config.fallbackModels {
                 if self.availableModels.contains(fallback) {
-                    Logger.logInfo("Using fallback model: \(fallback) instead of \(model)")
+                    self.logger.info("Using fallback model: \(fallback) instead of \(model)")
                     return
                 }
             }
@@ -265,9 +232,8 @@ public class OllamaClient: ObservableObject {
                 // Gate cloud by policy; default priority medium (shared-kit)
                 let priority = "medium"
                 if policy
-                    .enabled == false
-                    || (policy.allowed(priority: priority) && policy.checkQuota(priority: priority)
-                        && policy
+                    .enabled == false ||
+                    (policy.allowed(priority: priority) && policy.checkQuota(priority: priority) && policy
                         .checkCircuit(priority: priority))
                 {
                     // Cloud disabled in config by default; log and fall back to local
@@ -348,7 +314,7 @@ public class OllamaClient: ObservableObject {
             "stream": false,
         ]
 
-        Logger.logInfo("Generating with model: \(requestModel), prompt length: \(prompt.count)")
+        self.logger.info("Generating with model: \(requestModel), prompt length: \(prompt.count)")
 
         do {
             let response = try await performRequestWithRetry(
@@ -371,6 +337,7 @@ public class OllamaClient: ObservableObject {
             )
 
             return result
+
         } catch {
             self.metrics.recordError(error: error)
             throw error
@@ -471,77 +438,16 @@ public class OllamaClient: ObservableObject {
 
     // MARK: - Core Generation Methods
 
-    public func generate(
+    public func generateAdvanced(
         model: String,
         prompt: String,
-        systemPrompt: String? = nil,
-        temperature: Double = 0.7,
-        stream: Bool = false
-    ) async throws -> String {
-        // Use health tracker to select best model
-        let selectedModel = await chooseHealthyModel(preferred: model)
-
-        // Retry with exponential backoff
-        var lastError: Error?
-        for attempt in 0..<retryConfig.maxRetries {
-            do {
-                let result = try await executeGenerate(
-                    model: selectedModel,
-                    prompt: prompt,
-                    systemPrompt: systemPrompt,
-                    temperature: temperature,
-                    stream: stream
-                )
-
-                // Record success
-                healthTracker.recordSuccess(for: selectedModel)
-                return result
-            } catch {
-                lastError = error
-                healthTracker.recordFailure(for: selectedModel)
-
-                if attempt < retryConfig.maxRetries - 1 {
-                    let delay = pow(2.0, Double(attempt)) * retryConfig.baseDelay
-                    try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-                }
-            }
-        }
-
-        throw lastError ?? OllamaError.serverError("Failed after \(retryConfig.maxRetries) retries")
-    }
-
-    /// Choose healthy model with fallback
-    private func chooseHealthyModel(preferred: String) async -> String {
-        // Check if preferred model is healthy
-        if healthTracker.isHealthy(preferred) {
-            return preferred
-        }
-
-        // Try fallback models
-        let allModels = [preferred] + config.fallbackModels
-        if let healthy = healthTracker.healthiestModel(from: allModels) {
-            SecureLogger.info(
-                "Switching from \(preferred) to healthier model \(healthy)",
-                category: .ai
-            )
-            return healthy
-        }
-
-        return preferred // Use preferred even if unhealthy
-    }
-
-    /// Execute generation (original logic)
-    private func executeGenerate(
-        model: String,
-        prompt: String,
-        systemPrompt: String? = nil,
+        system: String? = nil,
         temperature: Double = 0.7,
         topP: Double = 0.9,
         topK: Int = 40,
         maxTokens: Int = 500,
-        context: [Int]? = nil,
-        stream: Bool = false
-    ) async throws -> String {
+        context: [Int]? = nil
+    ) async throws -> OllamaGenerateResponse {
         var requestBody: [String: Any] = [
             "model": model,
             "prompt": prompt,
@@ -552,8 +458,8 @@ public class OllamaClient: ObservableObject {
             "stream": false,
         ]
 
-        if let systemPrompt {
-            requestBody["system"] = systemPrompt
+        if let system {
+            requestBody["system"] = system
         }
 
         if let context {
@@ -562,8 +468,7 @@ public class OllamaClient: ObservableObject {
 
         let response = try await performRequest(endpoint: "api/generate", body: requestBody)
         let data = try JSONSerialization.data(withJSONObject: response)
-        let decoded = try JSONDecoder().decode(OllamaGenerateResponse.self, from: data)
-        return decoded.response
+        return try JSONDecoder().decode(OllamaGenerateResponse.self, from: data)
     }
 
     public func chat(
@@ -586,13 +491,13 @@ public class OllamaClient: ObservableObject {
             throw OllamaError.invalidResponseFormat
         }
 
-        return content.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        return content.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     // MARK: - Model Management
 
     public func listModels() async throws -> [String] {
-        let response = try await performGetRequest(endpoint: "api/tags")
+        let response = try await performRequest(endpoint: "api/tags", body: [:])
         let models = response["models"] as? [[String: Any]] ?? []
         return models.compactMap { $0["name"] as? String }
     }
@@ -619,16 +524,16 @@ public class OllamaClient: ObservableObject {
 
     public func isServerRunning() async -> Bool {
         do {
-            _ = try await performGetRequest(endpoint: "api/tags")
+            _ = try await performRequest(endpoint: "api/tags", body: [:])
             return true
         } catch {
-            return healthTracker.isHealthy("unknown")
+            return false
         }
     }
 
     public func getServerStatus() async -> OllamaServerStatus {
         do {
-            let response = try await performGetRequest(endpoint: "api/tags")
+            let response = try await performRequest(endpoint: "api/tags", body: [:])
             let models = response["models"] as? [[String: Any]] ?? []
             return OllamaServerStatus(
                 running: true, modelCount: models.count,
@@ -639,54 +544,19 @@ public class OllamaClient: ObservableObject {
         }
     }
 
-    // MARK: - Private Request Methods
-
-    private func getEffectiveBaseURL() async -> String {
-        if config.baseURL == OllamaConfig.defaultEndpoint {
-            return await SecretsManager.shared.getOllamaEndpoint()
-        }
-        return config.baseURL
-    }
+    // MARK: - Private Methods
 
     private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any] {
-        let baseUrl = await getEffectiveBaseURL()
-        guard let url = URL(string: "\(baseUrl)/\(endpoint)") else {
-            throw OllamaError.invalidURL
+        // Validate URL construction for security
+        let urlString = "\(config.baseURL)/\(endpoint)"
+        guard let url = URL(string: urlString), url.scheme?.hasPrefix("http") == true else {
+            throw OllamaError.invalidConfiguration("Invalid URL: \(urlString)")
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
-
-        SecureLogger.debug("OllamaClient requesting: \(url.absoluteString)", category: .network)
-
-        let (data, response) = try await session.data(for: request)
-
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw OllamaError.connectionFailed
-        }
-
-        guard httpResponse.statusCode == 200 else {
-            throw OllamaError.serverError("Status code: \(httpResponse.statusCode)")
-        }
-
-        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            throw OllamaError.invalidResponseFormat
-        }
-
-        return json
-    }
-
-    private func performGetRequest(endpoint: String) async throws -> [String: Any] {
-        let baseUrl = await getEffectiveBaseURL()
-        let urlString = "\(baseUrl)/\(endpoint)"
-        guard let url = URL(string: urlString), url.scheme?.hasPrefix("http") == true else {
-            throw OllamaError.invalidConfiguration("Invalid URL: \(urlString)")
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
 
         let (data, response) = try await session.data(for: request)
 
@@ -708,7 +578,7 @@ public class OllamaClient: ObservableObject {
 
 // MARK: - Enhanced Cache System
 
-private class OllamaCache: @unchecked Sendable {
+private class OllamaCache {
     private var cache: [String: CacheEntry] = [:]
     private let enabled: Bool
     private let expiryTime: TimeInterval

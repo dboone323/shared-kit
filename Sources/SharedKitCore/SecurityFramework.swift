@@ -69,31 +69,25 @@ public enum InputType: Sendable {
     case habitDescription
 }
 
-enum ValidationError: Error {
-    case invalidFormat(String)
-    case unsafeContent
-    case tooLong
-}
-
 actor InputValidator {
     func validate(_ input: String, type: InputType) throws {
         // Length check
-        if input.count > 10000 { throw ValidationError.tooLong }
+        if input.count > 10000 { throw ValidationError.inputTooLong(maxLength: 10000) }
 
         switch type {
         case .email:
             let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
             let predicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
             if !predicate.evaluate(with: input) {
-                throw ValidationError.invalidFormat("Invalid email format")
+                throw ValidationError.invalidEmail
             }
         case .url:
             guard let url = URL(string: input), url.scheme != nil, url.host != nil else {
-                throw ValidationError.invalidFormat("Invalid URL")
+                throw ValidationError.invalidURL
             }
         case .identifier:
             if input.range(of: "^[a-zA-Z0-9_]+$", options: .regularExpression) == nil {
-                throw ValidationError.invalidFormat("Invalid identifier (alphanumeric only)")
+                throw ValidationError.invalidFormat(description: "Invalid identifier (alphanumeric only)")
             }
         case .text:
             // Check for obvious XSS tags
@@ -102,10 +96,10 @@ actor InputValidator {
             }
         case .habitName:
             let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
-            if trimmed.isEmpty { throw ValidationError.invalidFormat("Habit name cannot be empty") }
-            if trimmed.count > 50 { throw ValidationError.tooLong }
+            if trimmed.isEmpty { throw ValidationError.emptyInput }
+            if trimmed.count > 50 { throw ValidationError.inputTooLong(maxLength: 50) }
         case .habitDescription:
-            if input.count > 200 { throw ValidationError.tooLong }
+            if input.count > 200 { throw ValidationError.inputTooLong(maxLength: 200) }
         }
     }
 

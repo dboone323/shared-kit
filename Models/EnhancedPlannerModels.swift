@@ -7,6 +7,7 @@
 
 import CloudKit
 import Foundation
+import SharedKitCore
 import SwiftData
 
 // MARK: - Enhanced Core Data Protocols (from EnhancedDataModels)
@@ -49,26 +50,6 @@ public protocol CrossProjectRelatable {
 }
 
 // MARK: - Supporting Types
-
-public enum ValidationError: Error, LocalizedError {
-    case required(field: String)
-    case invalid(field: String, reason: String)
-    case outOfRange(field: String, min: Any?, max: Any?)
-    case custom(message: String)
-
-    public var errorDescription: String? {
-        switch self {
-        case let .required(field):
-            "\(field) is required"
-        case let .invalid(field, reason):
-            "\(field) is invalid: \(reason)"
-        case let .outOfRange(field, min, max):
-            "\(field) is out of range (\(min ?? "nil") - \(max ?? "nil"))"
-        case let .custom(message):
-            message
-        }
-    }
-}
 
 public enum ProjectContext: String, CaseIterable, Codable {
     case habitQuest

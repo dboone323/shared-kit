@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SharedKitCore
 #if canImport(SwiftData)
     @_exported import SwiftData
 #endif

@@ -1,0 +1,8 @@
+=== PRACTICAL FILES TO KEEP ===
+
+Core Architecture:
+Sources/Architecture/SharedArchitecture.swift
+
+Networking:
+Sources/Networking/APIClient.swift
+Sources/Networking/NetworkMonitor.swift

@@ -1,60 +1,8 @@
 import Foundation
+import SharedKitCore
 
 /// Comprehensive input validation and sanitization utilities
 /// Provides secure validation for user inputs across all Quantum Workspace projects
-
-public enum ValidationError: LocalizedError {
-    case emptyInput
-    case invalidLength(min: Int, max: Int)
-    case invalidFormat(description: String)
-    case containsInvalidCharacters(characters: String)
-    case exceedsMaximumLength(max: Int)
-    case belowMinimumLength(min: Int)
-    case invalidEmail
-    case invalidURL
-    case invalidPhoneNumber
-    case containsSQLInjection
-    case containsXSS
-    case containsPathTraversal
-    case invalidNumericValue
-    case invalidDate
-    case custom(message: String)
-
-    public var errorDescription: String? {
-        switch self {
-        case .emptyInput:
-            "Input cannot be empty"
-        case let .invalidLength(min, max):
-            "Input must be between \(min) and \(max) characters"
-        case let .invalidFormat(description):
-            "Invalid format: \(description)"
-        case let .containsInvalidCharacters(characters):
-            "Input contains invalid characters: \(characters)"
-        case let .exceedsMaximumLength(max):
-            "Input exceeds maximum length of \(max) characters"
-        case let .belowMinimumLength(min):
-            "Input must be at least \(min) characters"
-        case .invalidEmail:
-            "Invalid email address format"
-        case .invalidURL:
-            "Invalid URL format"
-        case .invalidPhoneNumber:
-            "Invalid phone number format"
-        case .containsSQLInjection:
-            "Input contains potentially malicious SQL content"
-        case .containsXSS:
-            "Input contains potentially malicious script content"
-        case .containsPathTraversal:
-            "Input contains path traversal attempts"
-        case .invalidNumericValue:
-            "Invalid numeric value"
-        case .invalidDate:
-            "Invalid date format"
-        case let .custom(message):
-            message
-        }
-    }
-}
 
 /// Input validation rules and sanitization
 public enum InputValidator {
@@ -359,7 +307,7 @@ public enum ValidationType {
     case numeric
 }
 
-public struct ValidationOptions {
+public struct ValidationOptions: Sendable {
     public let maxLength: Int
     public let minValue: Double?
     public let maxValue: Double?

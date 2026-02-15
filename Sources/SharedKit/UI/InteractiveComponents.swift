@@ -33,7 +33,7 @@ public struct NeumorphicButton<Label: View>: View {
 
     public init(
         action: @escaping () -> Void,
-        backgroundColor: Color = Color(.systemGray6),
+        backgroundColor: Color = Color.gray.opacity(0.6),
         shadowColor: Color = Color.black.opacity(0.2),
         isPressed: Bool = false,
         @ViewBuilder label: () -> Label
@@ -213,7 +213,7 @@ public struct InteractiveCard<Content: View>: View {
     @State private var dragOffset: CGSize = .zero
 
     public init(
-        backgroundColor: Color = Color(.systemBackground),
+        backgroundColor: Color = Color.primary.opacity(0.05),
         cornerRadius: CGFloat = 16,
         shadowRadius: CGFloat = 8,
         onTap: (() -> Void)? = nil,
@@ -394,7 +394,7 @@ public struct InteractiveProgressBar: View {
     public init(
         progress: Binding<Double>,
         height: CGFloat = 8,
-        backgroundColor: Color = Color(.systemGray5),
+        backgroundColor: Color = Color.gray.opacity(0.8),
         foregroundColor: Color = .blue,
         isInteractive: Bool = false
     ) {
@@ -463,7 +463,7 @@ public struct RadialProgressIndicator: View {
         progress: Double,
         size: CGFloat = 100,
         lineWidth: CGFloat = 8,
-        backgroundColor: Color = Color(.systemGray5),
+        backgroundColor: Color = Color.gray.opacity(0.8),
         foregroundColor: Color = .blue,
         showPercentage: Bool = true
     ) {
@@ -533,7 +533,7 @@ public struct InteractiveSlider: View {
         step: Double = 0.01,
         trackHeight: CGFloat = 6,
         thumbSize: CGFloat = 24,
-        trackColor: Color = Color(.systemGray4),
+        trackColor: Color = Color.gray.opacity(0.9),
         thumbColor: Color = .white,
         fillColor: Color = .blue
     ) {
@@ -622,7 +622,7 @@ public struct InteractiveToggle: View {
         isOn: Binding<Bool>,
         size: CGSize = CGSize(width: 50, height: 30),
         onColor: Color = .green,
-        offColor: Color = Color(.systemGray4),
+        offColor: Color = Color.gray.opacity(0.9),
         thumbColor: Color = .white
     ) {
         _isOn = isOn
@@ -732,7 +732,7 @@ public struct InteractiveTabBar: View {
     public init(
         items: [TabBarItemData],
         selectedIndex: Binding<Int>,
-        backgroundColor: Color = Color(.systemBackground),
+        backgroundColor: Color = Color.primary.opacity(0.05),
         shadowColor: Color = Color.black.opacity(0.1)
     ) {
         self.items = items
@@ -784,7 +784,7 @@ public struct TabBarItemData {
 
 extension View {
     public func interactiveCard(
-        backgroundColor: Color = Color(.systemBackground),
+        backgroundColor: Color = Color.primary.opacity(0.05),
         cornerRadius: CGFloat = 16,
         shadowRadius: CGFloat = 8,
         onTap: (() -> Void)? = nil,

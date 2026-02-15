@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import SwiftData
 import SwiftUI
+import SharedKitCore
 
 // MARK: - Type Definitions
 // Note: Shared models and protocols are now centrally defined in ServiceProtocols.swift
@@ -331,7 +332,7 @@ public protocol StateManagerProtocol: ObservableObject {
 }
 
 /// State health status enumeration
-public enum StateHealthStatus {
+public enum StateHealthStatus: Sendable {
     case healthy
     case warning(String)
     case error(Error)
@@ -371,7 +372,7 @@ public protocol StateSynchronizable {
 // MARK: - State Change Models
 
 /// Represents a state change event
-public struct StateChange {
+public struct StateChange: Sendable {
     public let id: UUID = .init()
     public let timestamp: Date = .init()
     public let sourceProject: ProjectType

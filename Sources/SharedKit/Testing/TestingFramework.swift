@@ -183,8 +183,8 @@ import SwiftUI
             name: String = "Test Account",
             balance: Double = 1000.0,
             accountType: AccountType = .checking
-        ) -> FinancialAccount {
-            FinancialAccount(
+        ) -> TestFinancialAccount {
+            TestFinancialAccount(
                 id: id,
                 name: name,
                 balance: balance,
@@ -314,7 +314,7 @@ import SwiftUI
         public static func measureAsync(
             iterations: Int = 100,
             operation: @escaping () async throws -> some Any
-        ) async throws -> PerformanceMetrics {
+        ) async throws -> TestPerformanceMetrics {
             var executionTimes: [TimeInterval] = []
             var errors: [Error] = []
 
@@ -330,7 +330,7 @@ import SwiftUI
                 }
             }
 
-            return PerformanceMetrics(
+            return TestPerformanceMetrics(
                 iterations: iterations,
                 executionTimes: executionTimes,
                 errors: errors
@@ -374,7 +374,7 @@ import SwiftUI
         }
     }
 
-    public struct PerformanceMetrics {
+    public struct TestPerformanceMetrics {
         public let iterations: Int
         public let executionTimes: [TimeInterval]
         public let errors: [Error]
@@ -522,29 +522,29 @@ import SwiftUI
         _ expression1: @autoclosure @escaping () async throws -> T,
         _ expression2: @autoclosure @escaping () async throws -> T,
         _ message: @autoclosure () -> String = "",
-        file: StaticString = #file,
+        filePath: StaticString = #filePath,
         line: UInt = #line
     ) async {
         do {
             let value1 = try await expression1()
             let value2 = try await expression2()
-            XCTAssertEqual(value1, value2, message(), file: file, line: line)
+            XCTAssertEqual(value1, value2, message(), file: filePath, line: line)
         } catch {
-            XCTFail("Async assertion failed with error: \(error)", file: file, line: line)
+            XCTFail("Async assertion failed with error: \(error)", file: filePath, line: line)
         }
     }
 
     public func XCTAssertNotNilAsync(
         _ expression: @autoclosure @escaping () async throws -> (some Any)?,
         _ message: @autoclosure () -> String = "",
-        file: StaticString = #file,
+        filePath: StaticString = #filePath,
         line: UInt = #line
     ) async {
         do {
             let value = try await expression()
-            XCTAssertNotNil(value, message(), file: file, line: line)
+            XCTAssertNotNil(value, message(), file: filePath, line: line)
         } catch {
-            XCTFail("Async assertion failed with error: \(error)", file: file, line: line)
+            XCTFail("Async assertion failed with error: \(error)", file: filePath, line: line)
         }
     }
 
@@ -665,7 +665,7 @@ import SwiftUI
         public let failedTests: Int
         public let skippedTests: Int
         public let totalDuration: TimeInterval
-        public let results: [TestResult]
+        public let results: [UnitTestResult]
 
         public var successRate: Double {
             guard self.totalTests > 0 else { return 0 }
@@ -774,7 +774,7 @@ import SwiftUI
         case daily, weekly, monthly
     }
 
-    public struct FinancialAccount: Codable, Equatable {
+    public struct TestFinancialAccount: Codable, Equatable {
         public let id: UUID
         public let name: String
         public let balance: Double

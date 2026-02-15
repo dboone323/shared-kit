@@ -16,7 +16,7 @@ import SwiftUI
 public class PerformanceMonitor: ObservableObject {
     public static let shared = PerformanceMonitor()
 
-    @Published public var currentMetrics = PerformanceMetrics()
+    @Published public var currentMetrics = SystemPerformanceMetrics()
     @Published public var isMonitoring = false
 
     private var monitoringTimer: Timer?
@@ -58,7 +58,7 @@ public class PerformanceMonitor: ObservableObject {
 
     private func updateMetrics() {
         Task { @MainActor in
-            self.currentMetrics = PerformanceMetrics(
+            self.currentMetrics = SystemPerformanceMetrics(
                 memoryUsage: self.getCurrentMemoryUsage(),
                 cpuUsage: self.getCurrentCPUUsage(),
                 batteryLevel: self.getCurrentBatteryLevel(),
@@ -225,9 +225,9 @@ public class PerformanceMonitor: ObservableObject {
     }
 }
 
-// MARK: - Performance Metrics
+// MARK: - System Performance Metrics
 
-public struct PerformanceMetrics {
+public struct SystemPerformanceMetrics: Codable, Sendable {
     public let memoryUsage: MemoryUsage
     public let cpuUsage: CPUUsage
     public let batteryLevel: BatteryStatus

@@ -377,9 +377,9 @@ public class HuggingFaceClient: ObservableObject {
     }
 
     /// Get internal performance metrics
-    private func internalMetrics() -> PerformanceMetrics {
+    private func internalMetrics() -> AIPerformanceMetrics {
         let metrics = self.metrics.getMetrics()
-        return PerformanceMetrics(
+        return AIPerformanceMetrics(
             totalOperations: metrics.totalRequests,
             successRate: metrics.successRate,
             averageResponseTime: metrics.averageResponseTime,
@@ -608,9 +608,9 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService,
         )
     }
 
-    public func getPerformanceMetrics() async -> PerformanceMetrics {
+    public func getPerformanceMetrics() async -> AIPerformanceMetrics {
         let metricsData = internalMetrics()
-        return PerformanceMetrics(
+        return AIPerformanceMetrics(
             totalOperations: metricsData.totalOperations,
             successRate: metricsData.successRate,
             averageResponseTime: metricsData.averageResponseTime,

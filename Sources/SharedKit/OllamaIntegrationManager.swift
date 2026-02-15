@@ -81,14 +81,14 @@ public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisSe
         return health.isRunning
     }
 
-    public func getHealthStatus() async -> ServiceHealth {
+    public func getHealthStatus() async -> OllamaServiceHealth {
         let startTime = Date()
         let serverStatus = await client.getServerStatus()
         let llama2Available = await client.checkModelAvailability("llama2")
         let codellamaAvailable = await client.checkModelAvailability("codellama")
         let availableModels = llama2Available && codellamaAvailable
 
-        let health = await ServiceHealth(
+        let health = OllamaServiceHealth(
             serviceName: "Ollama",
             isRunning: serverStatus.running,
             modelsAvailable: availableModels,

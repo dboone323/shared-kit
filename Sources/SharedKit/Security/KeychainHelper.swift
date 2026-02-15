@@ -15,7 +15,7 @@ public final class KeychainHelper {
     // MARK: - Singleton
 
     /// Shared instance for convenience
-    public static let shared = KeychainHelper()
+    @MainActor public static let shared = KeychainHelper()
 
     // MARK: - Private Properties
 

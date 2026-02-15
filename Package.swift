@@ -34,7 +34,10 @@ let package = Package(
             targets: ["AgentDesktop"]
         ),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-nio.git", from: "2.0.0"),
+        .package(url: "https://github.com/apple/swift-atomics.git", from: "1.0.0"),
+    ],
     targets: [
         .target(
             name: "EnterpriseScalingFramework",
@@ -61,31 +64,29 @@ let package = Package(
             sources: ["main.swift"]
         ),
         .target(
-            name: "SharedKit",
+            name: "SharedKitCore",
             dependencies: [],
-            path: "Sources/SharedKitCore",
-            sources: [
-                "AnyCodable.swift",
-                "Logger.swift",
-                "ToolExecutionResult.swift",
-                "KeychainManager.swift",
-                "SecurityFramework.swift",
-                "SharedArchitecture.swift",
-                "Services/ServiceProtocols.swift",
-                "Services/DependencyContainer.swift",
-                "Services/PlatformFeatureRegistry.swift",
-                "Services/BackupRestoreService.swift",
-                "Security/CertificatePinningPolicy.swift",
-                "Security/EncryptedFileStore.swift",
-                "Utilities/AppLogger.swift",
-                "Utilities/FinancialUtilities.swift",
-                "Utilities/SwiftDataCompat.swift",
-            ]
+            path: "Sources/SharedKitCore"
+        ),
+        .target(
+            name: "SharedKit",
+            dependencies: [
+                "SharedKitCore",
+                .product(name: "Atomics", package: "swift-atomics"),
+                .product(name: "NIOCore", package: "swift-nio"),
+                .product(name: "NIOFoundationCompat", package: "swift-nio"),
+            ],
+            path: "Sources/SharedKit"
         ),
         .target(
             name: "SharedTestSupport",
             dependencies: ["SharedKit"],
             path: "Sources/SharedTestSupport"
+        ),
+        .testTarget(
+            name: "SharedKitTests",
+            dependencies: ["SharedKit", "SharedTestSupport"],
+            path: "Tests/SharedKitTests"
         ),
     ]
 )

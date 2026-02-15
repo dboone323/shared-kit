@@ -916,13 +916,13 @@ struct SecurityTestResult {
 }
 
 struct SecurityVulnerability {
-    let type: VulnerabilityType
+    let type: AuditingVulnerabilityType
     let severity: Severity
     let description: String
     let recommendation: String
 }
 
-enum VulnerabilityType: String {
+enum AuditingVulnerabilityType: String {
     case sqlInjection = "SQL Injection"
     case crossSiteScripting = "Cross-Site Scripting"
     case insecureDataStorage = "Insecure Data Storage"

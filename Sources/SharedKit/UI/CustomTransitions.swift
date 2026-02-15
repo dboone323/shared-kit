@@ -455,7 +455,7 @@ public struct MorphTransition<StartShape: Shape, EndShape: Shape>: ViewModifier 
     public func body(content: Content) -> some View {
         content
             .clipShape(
-                MorphingShape(
+                MorphingTransitionShape(
                     startShape: self.startShape,
                     endShape: self.endShape,
                     progress: self.morphProgress
@@ -474,7 +474,7 @@ public struct MorphTransition<StartShape: Shape, EndShape: Shape>: ViewModifier 
     }
 }
 
-private struct MorphingShape<StartShape: Shape, EndShape: Shape>: Shape {
+private struct MorphingTransitionShape<StartShape: Shape, EndShape: Shape>: Shape {
     let startShape: StartShape
     let endShape: EndShape
     var progress: CGFloat
@@ -524,7 +524,7 @@ public struct PageCurlTransition: ViewModifier {
     }
 }
 
-public enum CurlDirection {
+public enum CurlDirection: Sendable {
     case topLeft, topRight, bottomLeft, bottomRight
 }
 
@@ -579,6 +579,7 @@ private struct PageCurlShape: Shape {
 
 // MARK: - Transition Manager
 
+@MainActor
 public class TransitionManager: ObservableObject {
     @Published public var currentTransition: TransitionType = .slide(edge: .trailing)
     @Published public var isAnimating = false
