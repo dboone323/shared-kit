@@ -264,7 +264,7 @@ private class QuantumAnalysisProcessor {
     }
 }
 
-private class QuantumForecastEngine {
+private class QuantumForecastEngine: @unchecked Sendable {
     static let shared = QuantumForecastEngine()
 
     func generatePredictions(

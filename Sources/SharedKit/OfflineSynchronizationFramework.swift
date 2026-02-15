@@ -167,8 +167,34 @@ public enum ConflictType {
     case versionMismatch, dataConflict, deletionConflict
 }
 
-public enum ConflictResolution {
-    case useServer, useLocal, merge, custom([String: Any])
+public enum ConflictResolution: Codable {
+    case useServer, useLocal, merge, custom([String: String])
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(String.self)
+
+        switch value {
+        case "useServer": self = .useServer
+        case "useLocal": self = .useLocal
+        case "merge": self = .merge
+        default:
+            // For custom, we'd need a more complex decoding
+            // For now, default to merge
+            self = .merge
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case .useServer: try container.encode("useServer")
+        case .useLocal: try container.encode("useLocal")
+        case .merge: try container.encode("merge")
+        case .custom: try container.encode("custom")
+        }
+    }
 }
 
 // MARK: - Sync Settings
@@ -287,10 +313,9 @@ private final class SyncManager {
 // MARK: - Sync Queue Manager
 
 @available(iOS 17.0, macOS 14.0, *)
-private final class SyncQueueManager {
+private actor SyncQueueManager {
     private var operationQueue: [SyncOperation] = []
     private var failedOperations: [SyncOperation] = []
-    private let queue = DispatchQueue(label: "com.tools-automation.sync.queue")
     private var settings: QueueSettings = QueueSettings()
 
     func configure(_ settings: QueueSettings) {
@@ -298,56 +323,38 @@ private final class SyncQueueManager {
     }
 
     func add(_ operation: SyncOperation) async {
-        await withCheckedContinuation { continuation in
-            queue.async {
-                // Check queue size limit
-                if self.operationQueue.count >= self.settings.maxQueueSize {
-                    // Remove oldest low-priority operations
-                    self.operationQueue.removeAll { $0.priority == .low }
-                }
-
-                self.operationQueue.append(operation)
-                self.operationQueue.sort { $0.priority.rawValue > $1.priority.rawValue }
-
-                continuation.resume()
-            }
+        // Check queue size limit
+        if operationQueue.count >= settings.maxQueueSize {
+            // Remove oldest low-priority operations
+            operationQueue.removeAll { $0.priority == .low }
         }
+
+        operationQueue.append(operation)
+        operationQueue.sort { $0.priority.rawValue > $1.priority.rawValue }
     }
 
     func getStatus() async -> SyncStatus {
-        return await withCheckedContinuation { continuation in
-            queue.async {
-                let status = SyncStatus(
-                    isOnline: true, // Would check actual network status
-                    lastSyncDate: Date(), // Would get from persistent storage
-                    pendingOperations: self.operationQueue.count,
-                    failedOperations: self.failedOperations.count,
-                    networkStatus: .connected, // Would get from network monitor
-                    storageUsed: 0, // Would calculate actual storage used
-                    estimatedSyncTime: TimeInterval(self.operationQueue.count * 2) // Rough estimate
-                )
-                continuation.resume(returning: status)
-            }
-        }
+        let status = SyncStatus(
+            isOnline: true, // Would check actual network status
+            lastSyncDate: Date(), // Would get from persistent storage
+            pendingOperations: operationQueue.count,
+            failedOperations: failedOperations.count,
+            networkStatus: .connected, // Would get from network monitor
+            storageUsed: 0, // Would calculate actual storage used
+            estimatedSyncTime: TimeInterval(operationQueue.count * 2) // Rough estimate
+        )
+        return status
     }
 
     func getPendingCount() async -> Int {
-        return await withCheckedContinuation { continuation in
-            queue.async {
-                continuation.resume(returning: self.operationQueue.count)
-            }
-        }
+        return operationQueue.count
     }
 
     func processNextBatch() async -> [SyncOperation] {
-        return await withCheckedContinuation { continuation in
-            queue.async {
-                let batchSize = min(self.settings.batchSize, self.operationQueue.count)
-                let batch = Array(self.operationQueue.prefix(batchSize))
-                self.operationQueue.removeFirst(batchSize)
-                continuation.resume(returning: batch)
-            }
-        }
+        let batchSize = min(settings.batchSize, operationQueue.count)
+        let batch = Array(operationQueue.prefix(batchSize))
+        operationQueue.removeFirst(batchSize)
+        return batch
     }
 }
 
@@ -479,7 +486,6 @@ extension SyncStatus: Codable {}
 extension SynchronizationNetworkStatus: Codable {}
 extension SyncConflict: Codable {}
 extension ConflictType: Codable {}
-extension ConflictResolution: Codable {}
 extension SyncSettings: Codable {}
 extension QueueSettings: Codable {}
 extension NetworkSettings: Codable {}

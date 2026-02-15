@@ -10,7 +10,7 @@ func exampleCodeGeneration() async {
 
     do {
         // Check if Ollama is running and models are available
-        let health = await manager.checkServiceHealth()
+        let health = await manager.getHealthStatus()
         print(
             "Ollama Status: running=\(health.ollamaRunning), modelsAvailable=\(health.modelsAvailable), modelCount=\(health.modelCount)"
         )
@@ -29,7 +29,7 @@ func exampleCodeGeneration() async {
             description:
             "Create a Swift class for a basic calculator with add, subtract, multiply, and divide operations",
             language: "Swift",
-            complexity: .standard
+            context: nil
         )
 
         print("Generated Code:")
@@ -169,21 +169,23 @@ func exampleQuickOperations() async {
 
     do {
         // Quick code generation
-        let code = try await manager.quickCodeGeneration(
+        let codeResult = try await manager.generateCode(
             description: "Swift function to check if a string is palindrome",
-            language: "Swift"
+            language: "Swift",
+            context: nil
         )
         print("Quick Generated Code:")
-        print(code)
+        print(codeResult.code)
 
         // Quick analysis
-        let analysis = try await manager.quickAnalysis(
+        let analysis = try await manager.analyzeCode(
             code: "func test() { print('hello') }",
-            language: "Swift"
+            language: "Swift",
+            analysisType: .basic
         )
         print("\nQuick Analysis:")
-        let preview = String(analysis.prefix(200))
-        let suffix = analysis.count > 200 ? "..." : ""
+        let preview = String(analysis.analysis.prefix(200))
+        let suffix = analysis.analysis.count > 200 ? "..." : ""
         print(preview + suffix)
 
     } catch {

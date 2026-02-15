@@ -273,34 +273,6 @@ public struct AutomationTask {
     }
 }
 
-public struct OllamaTaskResult {
-    public let task: AutomationTask
-    public let success: Bool
-    public let error: Error?
-    public let codeGenerationResult: CodeGenerationResult?
-    public let analysisResult: CodeAnalysisResult?
-    public let documentationResult: DocumentationResult?
-    public let testResult: TestGenerationResult?
-
-    public init(
-        task: AutomationTask,
-        success: Bool,
-        error: Error? = nil,
-        codeGenerationResult: CodeGenerationResult? = nil,
-        analysisResult: CodeAnalysisResult? = nil,
-        documentationResult: DocumentationResult? = nil,
-        testResult: TestGenerationResult? = nil
-    ) {
-        self.task = task
-        self.success = success
-        self.error = error
-        self.codeGenerationResult = codeGenerationResult
-        self.analysisResult = analysisResult
-        self.documentationResult = documentationResult
-        self.testResult = testResult
-    }
-}
-
 public enum IntegrationError: Error {
     case missingRequiredData(String)
     case serviceUnavailable

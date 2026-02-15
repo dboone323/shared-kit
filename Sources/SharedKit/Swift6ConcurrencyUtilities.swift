@@ -99,13 +99,11 @@ extension Collection {
     /// Thread-safe isEmpty check that works across actor boundaries
     /// Note: In most cases, standard isEmpty should work fine
     /// This is provided for consistency in actor-isolated contexts
-    @Sendable
     public var sendableIsEmpty: Bool {
         isEmpty
     }
 
     /// Thread-safe count check
-    @Sendable
     public var sendableCount: Int {
         count
     }

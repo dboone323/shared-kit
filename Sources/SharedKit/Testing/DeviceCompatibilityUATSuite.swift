@@ -58,19 +58,20 @@ struct TestResult {
 
 // MARK: - Mock Support Classes
 
-class CompatibilityManager {
+actor CompatibilityManager {
     static let shared = CompatibilityManager()
     private init() {}
 
     func testPerformanceOnDevice(_ capability: DeviceCapability,
-                                 completion: @escaping (PerformanceTestResult) -> Void)
+                                 completion: @escaping (DevicePerformanceTestResult) -> Void)
     {
-        DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 2.0...4.0)) {
+        Task {
+            try? await Task.sleep(for: .seconds(Double.random(in: 2.0...4.0)))
             let baseScore = Double.random(in: 65...90)
-            let capabilityMultiplier = self.getCapabilityMultiplier(capability)
+            let capabilityMultiplier = await self.getCapabilityMultiplier(capability)
             let finalScore = min(100, baseScore * capabilityMultiplier)
 
-            let result = PerformanceTestResult(
+            let result = DevicePerformanceTestResult(
                 deviceCapability: capability,
                 performanceScore: finalScore,
                 memoryUsage: Double.random(in: 50...Double(capability.ram) * 0.25),
@@ -177,7 +178,7 @@ struct UXTestResult {
     let totalSteps: Int
 }
 
-struct PerformanceTestResult {
+struct DevicePerformanceTestResult {
     let deviceCapability: DeviceCapability
     let performanceScore: Double
     let memoryUsage: Double // MB
