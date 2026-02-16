@@ -1,10 +1,10 @@
-name: 🔒 Security Scan
+name: Security Scan
 
 on:
     push:
-        branches: [main]
+        branches: [main, develop, 'fix/*', 'feature/*']
     pull_request:
-        branches: [main]
+        branches: [main, develop]
     schedule:
         # Run daily at 2 AM UTC
         - cron: "0 2 * * *"
