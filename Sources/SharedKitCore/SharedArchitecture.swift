@@ -204,9 +204,9 @@ class TaskPerformanceMonitor: ObservableObject {
         let additionalInfo: [String: Any]
     }
 
-    func measureAsync<T>(
+    func measureAsync<T: Sendable>(
         operation: String,
-        task: () async throws -> T
+        task: @Sendable () async throws -> T
     ) async rethrows -> T {
         let startTime = Date()
         let result = try await task()
