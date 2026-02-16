@@ -1,13 +1,14 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop, 'fix/*', 'feature/*']
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
   build-and-test:
+    name: Build and Test
     runs-on: macos-15
     timeout-minutes: 30
     
