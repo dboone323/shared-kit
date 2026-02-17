@@ -337,7 +337,6 @@ public class OllamaClient: ObservableObject {
             )
 
             return result
-
         } catch {
             self.metrics.recordError(error: error)
             throw error

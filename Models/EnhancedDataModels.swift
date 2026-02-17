@@ -644,7 +644,7 @@ public enum HabitDifficulty: String, CaseIterable, Codable {
         }
     }
 
-    nonisolated public var xpMultiplier: Int {
+    public nonisolated var xpMultiplier: Int {
         switch self {
         case .trivial: 1
         case .easy: 2

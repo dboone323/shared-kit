@@ -7,12 +7,6 @@ import XCTest
 class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
     var testContainer: ModelContainer!
 
-    override func setupTestEnvironment() {
-        super.setupTestEnvironment()
-        // Skip test container creation for now since we don't have specific models to test
-        // self.testContainer = try TestUtilities.createTestContainer(for: [])
-    }
-
     override func cleanupTestEnvironment() {
         self.testContainer = nil
         super.cleanupTestEnvironment()

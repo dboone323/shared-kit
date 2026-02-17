@@ -36,7 +36,6 @@ func exampleCodeGeneration() async {
         print(result.code)
         print("\nAnalysis:")
         print(result.analysis)
-
     } catch {
         print("Error: \(error.localizedDescription)")
     }
@@ -77,7 +76,6 @@ func exampleCodeAnalysis() async {
         for suggestion in result.suggestions {
             print("- \(suggestion)")
         }
-
     } catch {
         print("Error: \(error.localizedDescription)")
     }
@@ -116,7 +114,6 @@ func exampleDocumentation() async {
 
         print("Generated Documentation:")
         print(result.documentation)
-
     } catch {
         print("Error: \(error.localizedDescription)")
     }
@@ -155,7 +152,6 @@ func exampleBatchProcessing() async {
                 print("Error: \(error.localizedDescription)")
             }
         }
-
     } catch {
         print("Error: \(error.localizedDescription)")
     }
@@ -187,7 +183,6 @@ func exampleQuickOperations() async {
         let preview = String(analysis.analysis.prefix(200))
         let suffix = analysis.analysis.count > 200 ? "..." : ""
         print(preview + suffix)
-
     } catch {
         print("Error: \(error.localizedDescription)")
     }

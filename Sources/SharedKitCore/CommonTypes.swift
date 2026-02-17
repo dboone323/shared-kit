@@ -245,14 +245,14 @@ public enum ValidationError: Error, LocalizedError {
     case inputTooLong(maxLength: Int)
     case belowMinimumLength(min: Int)
     case exceedsMaximumLength(max: Int)
-    
+
     // Content validation errors
     case invalidFormat(description: String)
     case invalidCharacters
     case containsInvalidCharacters(characters: String)
     case maliciousContent
     case unsafeContent
-    
+
     // Specific type validation errors
     case invalidEmail
     case invalidURL
@@ -261,25 +261,25 @@ public enum ValidationError: Error, LocalizedError {
     case invalidPhoneNumber
     case invalidNumericValue
     case invalidDate
-    
+
     // Security validation errors
     case containsSQLInjection
     case containsXSS
     case containsPathTraversal
-    
+
     // Value range errors
     case valueTooLow(minimum: String)
     case valueTooHigh(maximum: String)
-    
+
     // Model validation errors
     case required(field: String)
     case invalid(field: String, reason: String)
     case outOfRange(field: String, min: String?, max: String?)
-    
+
     // Custom errors
     case custom(message: String)
     case tooLong
-    
+
     public var errorDescription: String? {
         switch self {
         case .emptyInput:

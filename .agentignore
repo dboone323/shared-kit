@@ -1,0 +1,44 @@
+# .agentignore
+# Files to exclude from AI Context / Analysis
+
+# Version Control
+.git/
+.gitignore
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+build/
+.build/
+dist/
+target/
+
+# System
+.DS_Store
+
+# Large Files / Locks
+package-lock.json
+yarn.lock
+checkouts/
+*.resolved
+*.lock
+*.log
+*.sqlite
+*.db
+
+# Documentation Assets
+docs/images/
+assets/
+images/
+screenshots/
+
+# IDE
+.idea/
+.vscode/
+
+# Build Artifacts
+*.o
+*.a
+*.so
+*.dylib

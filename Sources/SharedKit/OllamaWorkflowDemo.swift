@@ -80,7 +80,6 @@ public final class OllamaWorkflowDemo {
             print("Prompt: \(prompt)")
             print("Response: \(response.prefix(150))...")
             print("✅ Generation successful")
-
         } catch {
             print("❌ Generation failed: \(error.localizedDescription)")
         }
@@ -321,7 +320,6 @@ public func runOllamaWorkflowDemo() async {
 
 /// Example usage patterns for the Ollama Workflow Integration
 public enum OllamaWorkflowExamples {
-
     /// Basic text generation example
     public static func basicGenerationExample() async throws -> String {
         let manager = OllamaIntegrationManager()

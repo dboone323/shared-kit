@@ -39,7 +39,7 @@ public struct PostgresConnection {
     public static func connect(on eventLoop: Any, configuration: Any, id: Int, logger: Any) async throws -> PostgresConnection {
         throw NSError(domain: "PostgresConnection", code: -1, userInfo: [NSLocalizedDescriptionKey: "Postgres dependencies not available"])
     }
-    
+
     public func close() async throws {
         // Stub
     }

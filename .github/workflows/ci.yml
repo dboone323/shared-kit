@@ -2,23 +2,110 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main, develop, 'fix/*', 'feature/*']
+    branches: [main, develop, "fix/*", "feature/*"]
+    paths-ignore: ["**.md", "docs/**"]
   pull_request:
     branches: [main, develop]
+    paths-ignore: ["**.md", "docs/**"]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  # 1. Code Quality & Linting
+  quality-checks:
+    name: 🔍 Code Quality
+    runs-on: macos-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.0"
+
+      - name: 📦 Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: 🔍 SwiftLint
+        run: |
+          if command -v swiftlint >/dev/null 2>&1; then
+            swiftlint --strict --reporter github-actions-logging
+          else
+            echo "⚠️ SwiftLint check skipped (not installed)"
+          fi
+
+  # 2. Build & Test (Swift Package)
   build-and-test:
-    name: Build and Test
+    name: 🏗️ Build & Test
     runs-on: macos-latest
     timeout-minutes: 30
-    
+    needs: quality-checks
+
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Code
         uses: actions/checkout@v4
-        
-      - name: Build
-        run: swift build
-            
-      - name: Test
-        run: swift test
+
+      - name: 🔧 Setup Swift
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.0"
+
+      - name: 📦 Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: 🔨 Resolve Dependencies
+        run: swift package resolve
+
+      - name: 🏗️ Build
+        run: swift build -v
+
+      - name: 🧪 Run Tests
+        run: swift test -v --enable-code-coverage
+
+  # 3. Security Scanning
+  security-scan:
+    name: 🔒 Security Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🛡️ Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+          ignore-unfixed: true
+
+      - name: 📤 Upload Trivy Results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"

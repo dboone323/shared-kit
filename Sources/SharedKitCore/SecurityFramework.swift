@@ -20,7 +20,7 @@ public actor SecurityFramework {
     public init() {}
 
     /// Step 42: Get secure headers
-    nonisolated public func getSecureHeaders() -> [String: String] {
+    public nonisolated func getSecureHeaders() -> [String: String] {
         [
             "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
             "Content-Security-Policy": "default-src 'self'",
