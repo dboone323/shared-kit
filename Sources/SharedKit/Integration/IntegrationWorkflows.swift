@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import SharedKitCore
 import SwiftUI
 
 // MARK: - Integration Workflow Manager
@@ -18,17 +19,16 @@ public final class IntegrationWorkflowManager: ObservableObject {
     public static let shared = IntegrationWorkflowManager()
 
     @Published public private(set) var activeWorkflows: [IntegrationWorkflow] = []
-    @Published public private(set) var workflowResults: [UUID: WorkflowResult] = [:]
+    @Published public private(set) var workflowResults: [UUID: IntegrationWorkflowResult] = [:]
     @Published public private(set) var isProcessing = false
 
     private let integrator = CrossProjectIntegrator.shared
     private var cancellables = Set<AnyCancellable>()
     private let workflowQueue = DispatchQueue(label: "WorkflowManager", qos: .utility)
 
-    @MockInjected private var analyticsService: AnalyticsServiceProtocol
+    @Injected private var analyticsService: AnalyticsServiceProtocol
 
     private init() {
-        _analyticsService = MockInjected(wrappedValue: MockAnalyticsService())
         self.setupWorkflowObservation()
         self.registerDefaultWorkflows()
     }
@@ -37,7 +37,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
 
     public func startWorkflow(_ workflow: IntegrationWorkflow) async throws {
         guard !self.activeWorkflows.contains(where: { $0.id == workflow.id }) else {
-            throw WorkflowError.alreadyRunning
+            throw IntegrationWorkflowError.alreadyRunning
         }
 
         self.activeWorkflows.append(workflow)
@@ -50,14 +50,14 @@ public final class IntegrationWorkflowManager: ObservableObject {
             await self.analyticsService.track(
                 event: "workflow_completed",
                 properties: [
-                    "workflow_id": workflow.id.uuidString,
-                    "workflow_type": workflow.type.rawValue,
-                    "success": result.success,
+                    "workflow_id": AnyCodable(workflow.id.uuidString),
+                    "workflow_type": AnyCodable(workflow.type.rawValue),
+                    "success": AnyCodable(result.success),
                 ],
                 userId: nil
             )
         } catch {
-            let errorResult = WorkflowResult(
+            let errorResult = IntegrationWorkflowResult(
                 workflowId: workflow.id,
                 success: false,
                 error: error,
@@ -69,8 +69,8 @@ public final class IntegrationWorkflowManager: ObservableObject {
             await self.analyticsService.track(
                 event: "workflow_failed",
                 properties: [
-                    "workflow_id": workflow.id.uuidString,
-                    "error": error.localizedDescription,
+                    "workflow_id": AnyCodable(workflow.id.uuidString),
+                    "error": AnyCodable(error.localizedDescription),
                 ],
                 userId: nil
             )
@@ -86,12 +86,12 @@ public final class IntegrationWorkflowManager: ObservableObject {
 
         await self.analyticsService.track(
             event: "workflow_stopped",
-            properties: ["workflow_id": workflowId.uuidString],
+            properties: ["workflow_id": AnyCodable(workflowId.uuidString)],
             userId: nil
         )
     }
 
-    public func getWorkflowResult(_ workflowId: UUID) -> WorkflowResult? {
+    public func getWorkflowResult(_ workflowId: UUID) -> IntegrationWorkflowResult? {
         self.workflowResults[workflowId]
     }
 
@@ -123,7 +123,9 @@ public final class IntegrationWorkflowManager: ObservableObject {
         }
     }
 
-    private func executeWorkflow(_ workflow: IntegrationWorkflow) async throws -> WorkflowResult {
+    private func executeWorkflow(_ workflow: IntegrationWorkflow) async throws
+        -> IntegrationWorkflowResult
+    {
         switch workflow.type {
         case .habitFinanceIntegration:
             try await self.executeHabitFinanceIntegration(workflow)
@@ -142,7 +144,9 @@ public final class IntegrationWorkflowManager: ObservableObject {
 
     // MARK: - Workflow Implementations
 
-    private func executeHabitFinanceIntegration(_ workflow: IntegrationWorkflow) async throws -> WorkflowResult {
+    private func executeHabitFinanceIntegration(_ workflow: IntegrationWorkflow) async throws
+        -> IntegrationWorkflowResult
+    {
         var resultData: [String: Any] = [:]
 
         // Step 1: Analyze spending habits
@@ -160,7 +164,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
         // Step 4: Set up tracking correlations
         await self.setupFinancialHabitTracking()
 
-        return WorkflowResult(
+        return IntegrationWorkflowResult(
             workflowId: workflow.id,
             success: true,
             error: nil,
@@ -169,7 +173,9 @@ public final class IntegrationWorkflowManager: ObservableObject {
         )
     }
 
-    private func executeProductivityOptimization(_ workflow: IntegrationWorkflow) async throws -> WorkflowResult {
+    private func executeProductivityOptimization(_ workflow: IntegrationWorkflow) async throws
+        -> IntegrationWorkflowResult
+    {
         var resultData: [String: Any] = [:]
 
         // Step 1: Analyze productivity patterns
@@ -187,7 +193,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
         // Step 4: Set up energy tracking
         await self.setupEnergyProductivityTracking()
 
-        return WorkflowResult(
+        return IntegrationWorkflowResult(
             workflowId: workflow.id,
             success: true,
             error: nil,
@@ -196,7 +202,9 @@ public final class IntegrationWorkflowManager: ObservableObject {
         )
     }
 
-    private func executeWellnessIntegration(_ workflow: IntegrationWorkflow) async throws -> WorkflowResult {
+    private func executeWellnessIntegration(_ workflow: IntegrationWorkflow) async throws
+        -> IntegrationWorkflowResult
+    {
         var resultData: [String: Any] = [:]
 
         // Step 1: Analyze wellness habits
@@ -212,7 +220,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
         resultData["wellness_tasks"] = wellnessPlan.tasks.count
         resultData["wellness_habits"] = wellnessPlan.habits.count
 
-        return WorkflowResult(
+        return IntegrationWorkflowResult(
             workflowId: workflow.id,
             success: true,
             error: nil,
@@ -221,7 +229,9 @@ public final class IntegrationWorkflowManager: ObservableObject {
         )
     }
 
-    private func executeGamification(_ workflow: IntegrationWorkflow) async throws -> WorkflowResult {
+    private func executeGamification(_ workflow: IntegrationWorkflow) async throws
+        -> IntegrationWorkflowResult
+    {
         var resultData: [String: Any] = [:]
 
         // Step 1: Set up achievement system
@@ -236,7 +246,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
         let pointSystems = await setupPointSystems()
         resultData["point_systems"] = pointSystems.count
 
-        return WorkflowResult(
+        return IntegrationWorkflowResult(
             workflowId: workflow.id,
             success: true,
             error: nil,
@@ -245,7 +255,9 @@ public final class IntegrationWorkflowManager: ObservableObject {
         )
     }
 
-    private func executeDataSync(_ workflow: IntegrationWorkflow) async throws -> WorkflowResult {
+    private func executeDataSync(_ workflow: IntegrationWorkflow) async throws
+        -> IntegrationWorkflowResult
+    {
         var resultData: [String: Any] = [:]
 
         // Step 1: Sync all project data
@@ -256,7 +268,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
         resultData["synced_projects"] = self.integrator.connectedProjects.count
         resultData["sync_timestamp"] = Date().timeIntervalSince1970
 
-        return WorkflowResult(
+        return IntegrationWorkflowResult(
             workflowId: workflow.id,
             success: true,
             error: nil,
@@ -265,14 +277,16 @@ public final class IntegrationWorkflowManager: ObservableObject {
         )
     }
 
-    private func executeCustomAnalytics(_ workflow: IntegrationWorkflow) async throws -> WorkflowResult {
+    private func executeCustomAnalytics(_ workflow: IntegrationWorkflow) async throws
+        -> IntegrationWorkflowResult
+    {
         var resultData: [String: Any] = [:]
 
         // Custom analytics implementation based on workflow parameters
         let analyticsData = await generateCustomAnalytics(workflow.parameters)
         resultData["analytics_data"] = analyticsData
 
-        return WorkflowResult(
+        return IntegrationWorkflowResult(
             workflowId: workflow.id,
             success: true,
             error: nil,
@@ -315,7 +329,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
             type: .wellnessIntegration,
             title: "Wellness Integration",
             description: "Integrate wellness tracking across all projects",
-            requiredProjects: [.habitQuest, .plannerApp, .avoidObstaclesGame],
+            requiredProjects: [.habitQuest, .plannerApp, .avoidObstacles],
             parameters: [:],
             schedule: .weekly,
             createdAt: Date()
@@ -328,7 +342,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
             type: .gamification,
             title: "Gamification System",
             description: "Add game elements to all projects",
-            requiredProjects: [.habitQuest, .plannerApp, .momentumFinance, .avoidObstaclesGame],
+            requiredProjects: [.habitQuest, .plannerApp, .momentumFinance, .avoidObstacles],
             parameters: [:],
             schedule: .weekly,
             createdAt: Date()
@@ -397,7 +411,15 @@ public final class IntegrationWorkflowManager: ObservableObject {
     }
 
     private func correlateWellnessWithProductivity() async -> Double {
-        0.65 // Mock correlation value
+        let wellness = await self.analyzeWellnessHabits()
+        let productivity = await self.analyzeProductivityPatterns()
+
+        // Simple correlation logic: higher wellness and higher productivity score
+        // leading to a positive correlation.
+        let wellnessFactor = wellness.overallScore / 100.0
+        let productivityFactor = productivity.score / 100.0
+
+        return (wellnessFactor + productivityFactor) / 2.0
     }
 
     private func createIntegratedWellnessPlan() async -> WellnessPlan {
@@ -456,14 +478,16 @@ public struct IntegrationWorkflow: Identifiable {
 }
 
 /// Workflow execution result
-public struct WorkflowResult {
+public struct IntegrationWorkflowResult {
     public let workflowId: UUID
     public let success: Bool
     public let error: Error?
     public let data: [String: Any]
     public let completedAt: Date
 
-    public init(workflowId: UUID, success: Bool, error: Error?, data: [String: Any], completedAt: Date) {
+    public init(
+        workflowId: UUID, success: Bool, error: Error?, data: [String: Any], completedAt: Date
+    ) {
         self.workflowId = workflowId
         self.success = success
         self.error = error
@@ -493,7 +517,7 @@ public enum WorkflowSchedule {
 }
 
 /// Workflow errors
-public enum WorkflowError: Error, LocalizedError {
+public enum IntegrationWorkflowError: Error, LocalizedError {
     case alreadyRunning
     case missingRequiredProjects
     case invalidParameters
@@ -507,7 +531,7 @@ public enum WorkflowError: Error, LocalizedError {
             "Required projects are not connected"
         case .invalidParameters:
             "Invalid workflow parameters"
-        case let .executionFailed(reason):
+        case .executionFailed(let reason):
             "Workflow execution failed: \(reason)"
         }
     }

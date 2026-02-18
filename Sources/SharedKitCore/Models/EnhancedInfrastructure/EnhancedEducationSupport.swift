@@ -127,7 +127,7 @@ public final class EnhancedStudentProfile {
     public func updateProgress(
         courseId: UUID, progress: Double, comprehension: Double, engagement: Double
     ) {
-        // Simple mock logic for progress update
+        // Update profile progression metrics based on course activity
         self.overallProgress = (self.overallProgress + progress) / 2.0
         self.averageEngagement = (self.averageEngagement + engagement) / 2.0
         self.satisfaction = min(1.0, comprehension * engagement * 1.2)

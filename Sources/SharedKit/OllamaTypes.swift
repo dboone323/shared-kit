@@ -228,7 +228,7 @@ public struct OllamaServiceHealth: Sendable {
     public let recommendedActions: [String]
 }
 
-public enum CodeComplexity {
+public enum CodeComplexity: String {
     case simple
     case standard
     case advanced
@@ -250,7 +250,7 @@ public enum CodeComplexity {
     }
 }
 
-public enum AnalysisType {
+public enum AnalysisType: String {
     case bugs
     case performance
     case security

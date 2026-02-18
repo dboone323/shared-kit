@@ -4,10 +4,6 @@ import SharedKitCore
 import SwiftData
 import SwiftUI
 
-#if canImport(XCTest)
-    import XCTest
-#endif
-
 // MARK: - Integration Types
 
 // Note: StateValue, StateChangeType, ProjectType and MockInjected are now

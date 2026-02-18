@@ -93,9 +93,11 @@ final class RAGIntegrationTests: XCTestCase {
         // In a real scenario, we'd mock docker-manager to simulate failures
 
         do {
-            _ = try await agent.process(query: "Check status")
+            let response = try await agent.process(query: "Check status")
             // If docker-manager is available, this succeeds
-            XCTAssertTrue(true)
+            XCTAssertFalse(
+                response.isEmpty,
+                "Agent should return a response even on successful tool execution.")
         } catch {
             // If docker-manager fails after retries, we expect error
             XCTAssertNotNil(error)

@@ -17,7 +17,9 @@ import Foundation
 
 /// Enhanced version of the Habit model with advanced features
 @Model
-public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable {
+public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable,
+    EnhancedHabitProtocol, @unchecked Sendable
+{
     // Core Properties
     public var id: UUID
     public var name: String

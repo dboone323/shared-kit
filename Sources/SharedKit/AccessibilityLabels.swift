@@ -143,6 +143,7 @@ enum AccessibilityLabels {
 
 // MARK: - VoiceOver Announcements
 
+@MainActor
 enum AccessibilityAnnouncer {
     /// Announces a message to VoiceOver users.
     static func announce(_ message: String) {

@@ -17,12 +17,12 @@ jobs:
   # 1. Code Quality & Linting
   quality-checks:
     name: 🔍 Code Quality
-    runs-on: macos-latest
+    runs-on: macos-15
     timeout-minutes: 15
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🔧 Setup Swift
         uses: swift-actions/setup-swift@v2
@@ -30,7 +30,7 @@ jobs:
           swift-version: "6.0"
 
       - name: 📦 Cache Dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .build
@@ -50,13 +50,13 @@ jobs:
   # 2. Build & Test (Swift Package)
   build-and-test:
     name: 🏗️ Build & Test
-    runs-on: macos-latest
+    runs-on: macos-15
     timeout-minutes: 30
     needs: quality-checks
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🔧 Setup Swift
         uses: swift-actions/setup-swift@v2
@@ -64,7 +64,7 @@ jobs:
           swift-version: "6.0"
 
       - name: 📦 Cache Dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             .build
@@ -93,7 +93,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🛡️ Run Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@master

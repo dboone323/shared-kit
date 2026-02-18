@@ -1,5 +1,6 @@
 import Combine
 import SwiftUI
+
 #if canImport(UIKit)
     import UIKit
 #endif
@@ -39,6 +40,7 @@ public enum AnimationTiming {
 
 // MARK: - Animated Values
 
+@MainActor
 @propertyWrapper
 public struct AnimatedValue<T: VectorArithmetic>: DynamicProperty {
     @State private var value: T
@@ -74,13 +76,15 @@ public struct AnimatedValue<T: VectorArithmetic>: DynamicProperty {
 
 public enum GestureAnimations {
     // Haptic feedback integration
+    @MainActor
     public static func hapticFeedback(style: Int = 1) {
         #if canImport(UIKit)
-            let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = switch style {
-            case 0: .light
-            case 2: .heavy
-            default: .medium
-            }
+            let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle =
+                switch style {
+                case 0: .light
+                case 2: .heavy
+                default: .medium
+                }
             let impactFeedback = UIImpactFeedbackGenerator(style: feedbackStyle)
             impactFeedback.impactOccurred()
         #endif
@@ -200,8 +204,9 @@ public struct SlideTransition: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .offset(
-                x: self.edge == .leading || self
-                    .edge == .trailing
+                x: self.edge == .leading
+                    || self
+                        .edge == .trailing
                     ? (self.isPresented ? 0 : (self.edge == .leading ? -self.offset : self.offset))
                     : 0,
                 y: self.edge == .top || self.edge == .bottom
@@ -248,7 +253,9 @@ public class AnimationSequence: ObservableObject {
 
     public init() {}
 
-    public func addStep(delay: TimeInterval = 0, animation: @escaping () -> Void) -> AnimationSequence {
+    public func addStep(delay: TimeInterval = 0, animation: @escaping () -> Void)
+        -> AnimationSequence
+    {
         self.steps.append((delay: delay, animation: animation))
         return self
     }
@@ -476,20 +483,22 @@ public struct ParticleSystem: View {
 
     private func startEmission(in bounds: CGRect) {
         Timer.scheduledTimer(withTimeInterval: self.emissionRate, repeats: true) { _ in
-            if self.particles.count < self.particleCount {
-                let newParticle = Particle(
-                    position: CGPoint(
-                        x: CGFloat.random(in: 0...bounds.width),
-                        y: bounds.height
-                    ),
-                    velocity: CGPoint(
-                        x: CGFloat.random(in: -50...50),
-                        y: CGFloat.random(in: -100 ... -50)
+            Task { @MainActor in
+                if self.particles.count < self.particleCount {
+                    let newParticle = Particle(
+                        position: CGPoint(
+                            x: CGFloat.random(in: 0...bounds.width),
+                            y: bounds.height
+                        ),
+                        velocity: CGPoint(
+                            x: CGFloat.random(in: -50...50),
+                            y: CGFloat.random(in: -100 ... -50)
+                        )
                     )
-                )
 
-                self.particles.append(newParticle)
-                self.animateParticle(newParticle, in: bounds)
+                    self.particles.append(newParticle)
+                    self.animateParticle(newParticle, in: bounds)
+                }
             }
         }
     }
@@ -497,14 +506,17 @@ public struct ParticleSystem: View {
     private func animateParticle(_ particle: Particle, in _: CGRect) {
         withAnimation(Animation.linear(duration: self.particleLifetime)) {
             if let index = particles.firstIndex(where: { $0.id == particle.id }) {
-                self.particles[index].position.x += particle.velocity.x * CGFloat(self.particleLifetime)
-                self.particles[index].position.y += particle.velocity.y * CGFloat(self.particleLifetime)
+                self.particles[index].position.x +=
+                    particle.velocity.x * CGFloat(self.particleLifetime)
+                self.particles[index].position.y +=
+                    particle.velocity.y * CGFloat(self.particleLifetime)
                 self.particles[index].opacity = 0
                 self.particles[index].scale = 0.1
             }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + self.particleLifetime) {
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(self.particleLifetime * 1_000_000_000))
             self.particles.removeAll { $0.id == particle.id }
         }
     }
@@ -661,32 +673,37 @@ public struct AnimatedGradient: View {
 
 // MARK: - View Extensions for Easy Animation
 
-public extension View {
-    func shimmer() -> some View {
+extension View {
+    public func shimmer() -> some View {
         modifier(ShimmerEffect())
     }
 
-    func pulse(scale: CGFloat = 1.1, opacity: Double = 0.6, duration: Double = 1.0) -> some View {
+    public func pulse(scale: CGFloat = 1.1, opacity: Double = 0.6, duration: Double = 1.0)
+        -> some View
+    {
         modifier(PulseEffect(scale: scale, opacity: opacity, duration: duration))
     }
 
-    func breathing() -> some View {
+    public func breathing() -> some View {
         modifier(BreathingEffect())
     }
 
-    func slideTransition(isPresented: Bool, from edge: Edge, offset: CGFloat = 300) -> some View {
+    public func slideTransition(isPresented: Bool, from edge: Edge, offset: CGFloat = 300)
+        -> some View
+    {
         modifier(SlideTransition(isPresented: isPresented, edge: edge, offset: offset))
     }
 
-    func scaleTransition(isPresented: Bool, scale: CGFloat = 0.5) -> some View {
+    public func scaleTransition(isPresented: Bool, scale: CGFloat = 0.5) -> some View {
         modifier(ScaleTransition(isPresented: isPresented, scale: scale))
     }
 
-    func rotationTransition(isPresented: Bool, degrees: Double = 180) -> some View {
+    public func rotationTransition(isPresented: Bool, degrees: Double = 180) -> some View {
         modifier(RotationTransition(isPresented: isPresented, degrees: degrees))
     }
 
-    func dragToReveal(threshold: CGFloat = 100, onReveal: @escaping () -> Void) -> some View {
+    public func dragToReveal(threshold: CGFloat = 100, onReveal: @escaping () -> Void) -> some View
+    {
         modifier(DragToRevealModifier(threshold: threshold, onReveal: onReveal))
     }
 }
@@ -744,8 +761,8 @@ public struct PerformanceOptimizedView<Content: View>: View {
 
 // MARK: - Accessibility Support
 
-public extension View {
-    func accessibleAnimation(reducedMotion: Bool = false) -> some View {
+extension View {
+    public func accessibleAnimation(reducedMotion: Bool = false) -> some View {
         #if canImport(UIKit)
             let isReducedMotionEnabled = UIAccessibility.isReduceMotionEnabled
         #else

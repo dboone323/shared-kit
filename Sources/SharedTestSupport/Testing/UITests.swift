@@ -611,7 +611,7 @@
 
             // Then - Verify slider value changed
             let newValue = interactiveSlider.value
-            XCTAssertNotEqual(initialValue, newValue)
+            XCTAssertNotEqual(initialValue as? String, newValue as? String)
 
             // When - Test interactive toggle
             let interactiveToggle = app.switches["interactiveToggle"]

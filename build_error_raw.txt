@@ -1,0 +1,570 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -scheme SharedKit -destination "platform=iOS Simulator,name=iPhone 17" build
+
+Resolve Package Graph
+2026-02-18 09:38:41.391 xcodebuild[73137:2130811] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+
+
+Resolved source packages:
+  shared-kit: /Users/danielstevens/github-projects/shared-kit
+  swift-nio: https://github.com/apple/swift-nio.git @ 2.94.1
+  swift-system: https://github.com/apple/swift-system.git @ 1.6.4
+  swift-atomics: https://github.com/apple/swift-atomics.git @ 1.3.0
+  swift-collections: https://github.com/apple/swift-collections.git @ 1.3.0
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (27 targets)
+    Target 'SharedKit' in project 'shared-kit'
+        ➜ Explicit dependency on target 'SharedKit' in project 'shared-kit'
+        ➜ Explicit dependency on target 'SharedKitCore' in project 'shared-kit'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+        ➜ Explicit dependency on target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOFoundationCompat' in project 'swift-nio'
+    Target 'SharedKit' in project 'shared-kit'
+        ➜ Explicit dependency on target 'SharedKitCore' in project 'shared-kit'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+        ➜ Explicit dependency on target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOFoundationCompat' in project 'swift-nio'
+    Target 'NIOFoundationCompat' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOFoundationCompat' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIOBase64' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOOpenBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIODarwin' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOLinux' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWindows' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWASI' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIODataStructures' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOEmbedded' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOPosix' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOPosix' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIO' in project 'swift-nio'
+        ➜ Explicit dependency on target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+    Target 'NIOFoundationCompat' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIOBase64' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOOpenBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIODarwin' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOLinux' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWindows' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWASI' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIODataStructures' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOEmbedded' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOPosix' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOPosix' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIO' in project 'swift-nio'
+        ➜ Explicit dependency on target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+    Target 'NIO' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIOBase64' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOOpenBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIODarwin' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOLinux' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWindows' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWASI' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIODataStructures' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOEmbedded' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOPosix' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOPosix' in project 'swift-nio'
+        ➜ Explicit dependency on target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+    Target 'NIOPosix' in project 'swift-nio'
+        ➜ Explicit dependency on target 'swift-nio_NIOPosix' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOOpenBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOLinux' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIODarwin' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWindows' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIOBase64' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWASI' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIODataStructures' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOPosix' in project 'swift-nio'
+        ➜ Explicit dependency on target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+    Target 'swift-nio_NIOPosix' in project 'swift-nio' (no dependencies)
+    Target 'CNIOPosix' in project 'swift-nio' (no dependencies)
+    Target 'NIOEmbedded' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIOBase64' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOOpenBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIODarwin' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOLinux' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWindows' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWASI' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIODataStructures' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+    Target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIOBase64' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOOpenBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIODarwin' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOLinux' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWindows' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWASI' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIODataStructures' in project 'swift-nio'
+        ➜ Explicit dependency on target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+    Target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIOBase64' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOOpenBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIODarwin' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOLinux' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWindows' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWASI' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIODataStructures' in project 'swift-nio'
+        ➜ Explicit dependency on target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+    Target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'InternalCollectionsUtilities' in project 'swift-collections'
+    Target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'InternalCollectionsUtilities' in project 'swift-collections'
+    Target 'InternalCollectionsUtilities' in project 'swift-collections' (no dependencies)
+    Target '_NIODataStructures' in project 'swift-nio' (no dependencies)
+    Target 'CNIOWASI' in project 'swift-nio' (no dependencies)
+    Target 'CNIOWindows' in project 'swift-nio' (no dependencies)
+    Target 'CNIOLinux' in project 'swift-nio' (no dependencies)
+    Target 'CNIODarwin' in project 'swift-nio' (no dependencies)
+    Target 'CNIOOpenBSD' in project 'swift-nio' (no dependencies)
+    Target '_NIOBase64' in project 'swift-nio' (no dependencies)
+    Target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+    Target 'CNIOAtomics' in project 'swift-nio' (no dependencies)
+    Target 'Atomics' in project 'swift-atomics'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+        ➜ Explicit dependency on target '_AtomicsShims' in project 'swift-atomics'
+    Target 'Atomics' in project 'swift-atomics'
+        ➜ Explicit dependency on target '_AtomicsShims' in project 'swift-atomics'
+    Target '_AtomicsShims' in project 'swift-atomics' (no dependencies)
+    Target 'SharedKitCore' in project 'shared-kit' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.2-23C57-e8867d0c40613ffc63e0238af232dc507d00a8b37fbd7999ea79df8ebc024bf0.sdkstatcache
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.2-23C57-e8867d0c40613ffc63e0238af232dc507d00a8b37fbd7999ea79df8ebc024bf0.sdkstatcache
+
+SwiftDriver SharedKit normal arm64 com.apple.xcode.tools.swift.compiler (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name SharedKit -Onone -enforce-exclusivity\=checked @/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOPosix.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOWASI.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOLinux.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIODarwin.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOOpenBSD.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOAtomics.modulemap -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk -target arm64-apple-ios18.0-simulator -g -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk/Developer/Library/Frameworks -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.2-23C57-e8867d0c40613ffc63e0238af232dc507d00a8b37fbd7999ea79df8ebc024bf0.sdkstatcache -output-file-map /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -package-name shared_kit -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit_const_extract_protocols.json -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-atomics/Sources/_AtomicsShims/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOPosix/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOWASI/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOWindows/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOLinux/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIODarwin/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOOpenBSD/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOAtomics/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/DerivedSources-normal/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/DerivedSources/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit-Swift.h -working-directory /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal arm64 Compiling\ FinancialAccount.swift,\ FinancialTransaction.swift,\ OfflineSynchronizationFramework.swift,\ OllamaClient.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Models/FinancialAccount.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Models/FinancialTransaction.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OfflineSynchronizationFramework.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaClient.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Models/FinancialAccount.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Models/FinancialTransaction.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OfflineSynchronizationFramework.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaClient.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ AdvancedAnimations.swift,\ CustomTransitions.swift,\ InteractiveComponents.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/AdvancedAnimations.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/InteractiveComponents.swift (in target 'SharedKit' from project 'shared-kit')
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/AdvancedAnimations.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift:184:14: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: self.isPresented) { newValue in
+             ^
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift:246:14: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: self.isPresented) { newValue in
+             ^
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift:314:14: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: self.isPresented) { newValue in
+             ^
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift:392:14: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: self.isPresented) { newValue in
+             ^
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift:469:14: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: self.isPresented) { newValue in
+             ^
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift:519:14: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: self.isPresented) { newValue in
+             ^
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/InteractiveComponents.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/InteractiveComponents.swift:507:10: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+        .onChange(of: self.progress) { newProgress in
+         ^
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ SharedKit (in target 'SharedKit' from project 'shared-kit')
+
+EmitSwiftModule normal arm64 (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ PerformanceOptimization.swift,\ PerformanceTelemetry.swift,\ PerformanceUI.swift,\ PostgresConnectionPool.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceOptimization.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceTelemetry.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceUI.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/PostgresConnectionPool.swift (in target 'SharedKit' from project 'shared-kit')
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceOptimization.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceOptimization.swift:193:23: warning: call to main actor-isolated instance method 'handleMemoryWarning()' in a synchronous nonisolated context
+                self?.handleMemoryWarning()
+                      ^
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceOptimization.swift:215:18: note: calls to instance method 'handleMemoryWarning()' from outside of its actor context are implicitly asynchronous
+    private func handleMemoryWarning() {
+                 ^
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceTelemetry.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceUI.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/PostgresConnectionPool.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ CloudModelDemo.swift,\ KeychainManager.swift,\ Logger.swift,\ ExpenseCategory.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/CloudModelDemo.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/KeychainManager.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Logger.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Models/ExpenseCategory.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/CloudModelDemo.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/KeychainManager.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Logger.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Models/ExpenseCategory.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ CertificatePinningPolicy.swift,\ EncryptedFileStore.swift,\ InputValidator.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/CertificatePinningPolicy.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/EncryptedFileStore.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/InputValidator.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/CertificatePinningPolicy.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/EncryptedFileStore.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/InputValidator.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ AICoordinator.swift,\ AIServiceProtocols.swift,\ AITaskPrioritizationService.swift,\ AccessibilityLabels.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/AICoordinator.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/AIServiceProtocols.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/AITaskPrioritizationService.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/AccessibilityLabels.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/AICoordinator.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/AIServiceProtocols.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/AITaskPrioritizationService.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/AccessibilityLabels.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ MicroInteractions.swift,\ AppLogger.swift,\ FinancialUtilities.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/MicroInteractions.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Utilities/AppLogger.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Utilities/FinancialUtilities.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/MicroInteractions.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Utilities/AppLogger.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Utilities/FinancialUtilities.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ OllamaTypes.swift,\ OllamaWorkflowDemo.swift,\ OllamaWorkflowIntegration.swift,\ NetworkRequestMonitor.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaTypes.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaWorkflowDemo.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaWorkflowIntegration.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/NetworkRequestMonitor.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaTypes.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaWorkflowDemo.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaWorkflowIntegration.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/NetworkRequestMonitor.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ KeychainHelper.swift,\ StateManagement.swift,\ ToolExecutionResult.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/KeychainHelper.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/StateManagement/StateManagement.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/KeychainHelper.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/StateManagement/StateManagement.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ OllamaEnhancements.swift,\ OllamaExampleUsage.swift,\ OllamaIntegrationFramework.swift,\ OllamaIntegrationManager.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaEnhancements.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaExampleUsage.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaIntegrationFramework.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaIntegrationManager.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaEnhancements.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaExampleUsage.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaIntegrationFramework.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/OllamaIntegrationManager.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling CertificatePinningPolicy.swift, EncryptedFileStore.swift, InputValidator.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling CloudModelDemo.swift, KeychainManager.swift, Logger.swift, ExpenseCategory.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling MicroInteractions.swift, AppLogger.swift, FinancialUtilities.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ SharedArchitecture.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ Swift6ConcurrencyUtilities.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Swift6ConcurrencyUtilities.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Swift6ConcurrencyUtilities.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ PerformanceUtilities.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceUtilities.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Performance/PerformanceUtilities.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling AICoordinator.swift, AIServiceProtocols.swift, AITaskPrioritizationService.swift, AccessibilityLabels.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ HuggingFaceClient.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/HuggingFaceClient.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/HuggingFaceClient.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling OllamaTypes.swift, OllamaWorkflowDemo.swift, OllamaWorkflowIntegration.swift, NetworkRequestMonitor.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ Reliability.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Reliability.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Reliability.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Reliability.swift:189:24: warning: no 'async' operations occur within 'await' expression
+                Task { await self.remove(id: id) }
+                       ^
+
+SwiftDriverJobDiscovery normal arm64 Compiling OllamaEnhancements.swift, OllamaExampleUsage.swift, OllamaIntegrationFramework.swift, OllamaIntegrationManager.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ SharedTypes.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedTypes.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedTypes.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling Swift6ConcurrencyUtilities.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ CircuitBreaker.swift,\ Intelligence.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/CircuitBreaker.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Intelligence.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/CircuitBreaker.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/CircuitBreaker.swift:51:13: warning: no 'async' operations occur within 'await' expression
+            await recordSuccess()
+            ^
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/CircuitBreaker.swift:54:13: warning: no 'async' operations occur within 'await' expression
+            await recordFailure()
+            ^
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Intelligence.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for SharedKit (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriver\ Compilation\ Requirements SharedKit normal arm64 com.apple.xcode.tools.swift.compiler (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name SharedKit -Onone -enforce-exclusivity\=checked @/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOPosix.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOWASI.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOLinux.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIODarwin.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOOpenBSD.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOAtomics.modulemap -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk -target arm64-apple-ios18.0-simulator -g -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk/Developer/Library/Frameworks -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.2-23C57-e8867d0c40613ffc63e0238af232dc507d00a8b37fbd7999ea79df8ebc024bf0.sdkstatcache -output-file-map /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -package-name shared_kit -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit_const_extract_protocols.json -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-atomics/Sources/_AtomicsShims/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOPosix/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOWASI/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOWindows/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOLinux/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIODarwin/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOOpenBSD/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOAtomics/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/DerivedSources-normal/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/DerivedSources/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit-Swift.h -working-directory /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling Reliability.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ SecretsManager.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SecretsManager.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SecretsManager.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftMergeGeneratedHeaders /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/SharedKit-Swift.h /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit-Swift.h (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit
+    builtin-swiftHeaderTool -arch arm64 /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit-Swift.h -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/SharedKit-Swift.h
+
+SwiftDriverJobDiscovery normal arm64 Compiling SharedTypes.swift (in target 'SharedKit' from project 'shared-kit')
+
+Copy /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.swiftmodule/arm64-apple-ios-simulator.swiftmodule /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftmodule (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftmodule /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.swiftmodule/arm64-apple-ios-simulator.swiftmodule
+
+Copy /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.swiftmodule/arm64-apple-ios-simulator.swiftdoc /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftdoc (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftdoc /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.swiftmodule/arm64-apple-ios-simulator.swiftdoc
+
+Copy /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.swiftmodule/arm64-apple-ios-simulator.abi.json /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.abi.json (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.abi.json /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.swiftmodule/arm64-apple-ios-simulator.abi.json
+
+Copy /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftsourceinfo (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftsourceinfo /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo
+
+SwiftCompile normal arm64 Compiling\ BackupRestoreService.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Services/BackupRestoreService.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Services/BackupRestoreService.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 Compiling\ SecureLogger.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SecureLogger.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SecureLogger.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling SharedArchitecture.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ BaseAgent.swift,\ DecisionEngine.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Agents/BaseAgent.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Agents/DecisionEngine.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Agents/BaseAgent.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Agents/DecisionEngine.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling HuggingFaceClient.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ FinancialIntelligenceAnalysis.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Intelligence/FinancialIntelligenceAnalysis.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Intelligence/FinancialIntelligenceAnalysis.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling PerformanceUtilities.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ SecurityFramework.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SecurityFramework.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SecurityFramework.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling KeychainHelper.swift, StateManagement.swift, ToolExecutionResult.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 Compiling\ PlatformFeatureRegistry.swift /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Services/PlatformFeatureRegistry.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftCompile normal arm64 /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Services/PlatformFeatureRegistry.swift (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling SecretsManager.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling BackupRestoreService.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling BaseAgent.swift, DecisionEngine.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling FinancialAccount.swift, FinancialTransaction.swift, OfflineSynchronizationFramework.swift, OllamaClient.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling CircuitBreaker.swift, Intelligence.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PlatformFeatureRegistry.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SecureLogger.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SecurityFramework.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling FinancialIntelligenceAnalysis.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling AdvancedAnimations.swift, CustomTransitions.swift, InteractiveComponents.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriverJobDiscovery normal arm64 Compiling PerformanceOptimization.swift, PerformanceTelemetry.swift, PerformanceUI.swift, PostgresConnectionPool.swift (in target 'SharedKit' from project 'shared-kit')
+
+SwiftDriver\ Compilation SharedKit normal arm64 com.apple.xcode.tools.swift.compiler (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name SharedKit -Onone -enforce-exclusivity\=checked @/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.SwiftFileList -DSWIFT_PACKAGE -DDEBUG -DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOPosix.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOWASI.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOLinux.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIODarwin.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOOpenBSD.modulemap -Xcc -fmodule-map-file\=/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/GeneratedModuleMaps-iphonesimulator/CNIOAtomics.modulemap -DXcode -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk -target arm64-apple-ios18.0-simulator -g -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 6 -I /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -F /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk/Developer/Library/Frameworks -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/danielstevens/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.2-23C57-e8867d0c40613ffc63e0238af232dc507d00a8b37fbd7999ea79df8ebc024bf0.sdkstatcache -output-file-map /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -package-name shared_kit -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit_const_extract_protocols.json -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-atomics/Sources/_AtomicsShims/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOPosix/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOWASI/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOWindows/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOLinux/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIODarwin/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOOpenBSD/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/SourcePackages/checkouts/swift-nio/Sources/CNIOAtomics/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/DerivedSources-normal/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/DerivedSources/arm64 -Xcc -I/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/DerivedSources -Xcc -DSWIFT_PACKAGE -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit-Swift.h -working-directory /Users/danielstevens/github-projects/shared-kit/.swiftpm/xcode -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.o normal (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios18.0-simulator -r -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk -O0 -L/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator -L/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/PackageFrameworks -F/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk/Developer/Library/Frameworks -filelist /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.LinkFileList -nostdlib -Xlinker -object_path_lto -Xlinker /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.swiftmodule @/Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit-linker-args.resp -o /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.o
+
+ExtractAppIntentsMetadata (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.3.519.0.qjXzeI/Metal.xctoolchain --module-name SharedKit --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk --xcode-version 17C519 --platform-family iOS --deployment-target 18.0 --bundle-identifier shared-kit.SharedKit --output /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.appintents --target-triple arm64-apple-ios18.0-simulator --binary-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.o --dependency-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit_dependency_info.dat --stringsdata-file /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.SwiftFileList --metadata-file-list /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/SharedKit.DependencyMetadataFileList --static-metadata-file-list /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/SharedKit.DependencyStaticMetadataFileList --swift-const-vals-list /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Intermediates.noindex/shared-kit.build/Debug-iphonesimulator/SharedKit.build/Objects-normal/arm64/SharedKit.SwiftConstValuesFileList --force --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-02-18 09:38:46.253 appintentsmetadataprocessor[73186:2131183] Starting appintentsmetadataprocessor export
+2026-02-18 09:38:46.356 appintentsmetadataprocessor[73186:2131183] Extracted no relevant App Intents symbols, skipping writing output
+
+RegisterExecutionPolicyException /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.o (in target 'SharedKit' from project 'shared-kit')
+    cd /Users/danielstevens/github-projects/shared-kit
+    builtin-RegisterExecutionPolicyException /Users/danielstevens/Library/Developer/Xcode/DerivedData/shared-kit-bxtqnspfrjzosqfhyubimsoeodiq/Build/Products/Debug-iphonesimulator/SharedKit.o
+
+** BUILD SUCCEEDED **
+

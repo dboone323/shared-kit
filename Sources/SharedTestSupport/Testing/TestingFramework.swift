@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import SharedKit
 import SwiftUI
 
 #if canImport(XCTest)
@@ -782,7 +783,7 @@ import SwiftUI
         public let id: UUID
         public let name: String
         public let balance: Double
-        public let accountType: AccountType
+        public let accountType: SharedKit.AccountType
         public let createdAt: Date
         public let updatedAt: Date
 
@@ -790,7 +791,7 @@ import SwiftUI
             id: UUID,
             name: String,
             balance: Double,
-            accountType: AccountType,
+            accountType: SharedKit.AccountType,
             createdAt: Date,
             updatedAt: Date
         ) {
@@ -801,10 +802,6 @@ import SwiftUI
             self.createdAt = createdAt
             self.updatedAt = updatedAt
         }
-    }
-
-    public enum AccountType: String, Codable, CaseIterable {
-        case checking, savings, credit, investment
     }
 
     public struct UnitTestTask: Codable, Equatable {

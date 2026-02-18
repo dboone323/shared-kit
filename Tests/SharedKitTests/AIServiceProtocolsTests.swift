@@ -44,19 +44,19 @@ struct AIServiceProtocolsTests {
         #expect(decoded.isRunning == true)
     }
 
-    // MARK: - CodeIssue Tests
+    // MARK: - AICodeIssue Tests
 
-    @Test("CodeIssue Default Initialization")
+    @Test("AICodeIssue Default Initialization")
     func codeIssueDefaultInit() {
-        let issue = CodeIssue(description: "Test issue")
+        let issue = AICodeIssue(description: "Test issue")
         #expect(issue.severity == .medium)
         #expect(issue.lineNumber == nil)
         #expect(issue.category == "general")
     }
 
-    @Test("CodeIssue Custom Initialization")
+    @Test("AICodeIssue Custom Initialization")
     func codeIssueCustomInit() {
-        let issue = CodeIssue(
+        let issue = AICodeIssue(
             description: "Critical bug",
             severity: .critical,
             lineNumber: 42,
@@ -68,24 +68,24 @@ struct AIServiceProtocolsTests {
         #expect(issue.category == "security")
     }
 
-    // MARK: - IssueSeverity Tests
+    // MARK: - AIIssueSeverity Tests
 
-    @Test("IssueSeverity Raw Values")
+    @Test("AIIssueSeverity Raw Values")
     func issueSeverityRawValues() {
-        #expect(IssueSeverity.low.rawValue == "low")
-        #expect(IssueSeverity.medium.rawValue == "medium")
-        #expect(IssueSeverity.high.rawValue == "high")
-        #expect(IssueSeverity.critical.rawValue == "critical")
+        #expect(AIIssueSeverity.low.rawValue == "low")
+        #expect(AIIssueSeverity.medium.rawValue == "medium")
+        #expect(AIIssueSeverity.high.rawValue == "high")
+        #expect(AIIssueSeverity.critical.rawValue == "critical")
     }
 
-    // MARK: - AnalysisType Tests
+    // MARK: - AICodeAnalysisType Tests
 
-    @Test("AnalysisType Raw Values")
+    @Test("AICodeAnalysisType Raw Values")
     func analysisTypeRawValues() {
-        #expect(AnalysisType.bugs.rawValue == "bugs")
-        #expect(AnalysisType.performance.rawValue == "performance")
-        #expect(AnalysisType.security.rawValue == "security")
-        #expect(AnalysisType.comprehensive.rawValue == "comprehensive")
+        #expect(AICodeAnalysisType.bugs.rawValue == "bugs")
+        #expect(AICodeAnalysisType.performance.rawValue == "performance")
+        #expect(AICodeAnalysisType.security.rawValue == "security")
+        #expect(AICodeAnalysisType.comprehensive.rawValue == "comprehensive")
     }
 
     // MARK: - CodeAnalysisResult Tests
@@ -106,8 +106,8 @@ struct AIServiceProtocolsTests {
     @Test("CodeAnalysisResult with Issues")
     func codeAnalysisResultWithIssues() {
         let issues = [
-            CodeIssue(description: "Issue 1"),
-            CodeIssue(description: "Issue 2"),
+            AICodeIssue(description: "Issue 1"),
+            AICodeIssue(description: "Issue 2"),
         ]
         let result = CodeAnalysisResult(
             analysis: "Found issues",
@@ -130,11 +130,11 @@ struct AIServiceProtocolsTests {
         #expect(result.complexity == .standard)
     }
 
-    @Test("CodeComplexity Raw Values")
+    @Test("AICodeComplexity Raw Values")
     func codeComplexityRawValues() {
-        #expect(CodeComplexity.simple.rawValue == "simple")
-        #expect(CodeComplexity.standard.rawValue == "standard")
-        #expect(CodeComplexity.advanced.rawValue == "advanced")
+        #expect(AICodeComplexity.simple.rawValue == "simple")
+        #expect(AICodeComplexity.standard.rawValue == "standard")
+        #expect(AICodeComplexity.advanced.rawValue == "advanced")
     }
 
     // MARK: - CacheStats Tests

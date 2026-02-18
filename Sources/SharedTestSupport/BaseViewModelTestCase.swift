@@ -34,9 +34,9 @@ open class SharedViewModelTestCase: XCTestCase {
     // MARK: - Async Testing Helpers
 
     /// Wait for async operation with timeout
-    public func waitForAsync<T: Sendable>(
+    public func waitForAsyncOperation<T: Sendable>(
         timeout: TimeInterval = 5.0,
-        operation: @escaping () async throws -> T
+        operation: @escaping @Sendable () async throws -> T
     ) async throws -> T {
         // Simple timeout implementation without TaskGroup to avoid data races
         let startTime = Date()
@@ -54,7 +54,7 @@ open class SharedViewModelTestCase: XCTestCase {
                 // Task is still running, continue waiting
             }
 
-            try await Task.sleep(nanoseconds: 100_000_000) // 0.1s
+            try await Task.sleep(nanoseconds: 100_000_000)  // 0.1s
         }
 
         operationTask.cancel()
@@ -62,30 +62,30 @@ open class SharedViewModelTestCase: XCTestCase {
     }
 
     /// Assert async operation completes successfully
-    public func assertAsyncCompletes(
-        _ operation: @escaping () async throws -> some Sendable,
+    public func assertAsyncOperationCompletes(
+        _ operation: @escaping @Sendable () async throws -> some Sendable,
         timeout: TimeInterval = 5.0,
         message: String = "Async operation failed",
         file: StaticString = #filePath,
         line: UInt = #line
     ) async {
         do {
-            _ = try await waitForAsync(timeout: timeout, operation: operation)
+            _ = try await waitForAsyncOperation(timeout: timeout, operation: operation)
         } catch {
             XCTFail("\(message): \(error)", file: file, line: line)
         }
     }
 
     /// Assert async operation throws specific error
-    public func assertAsyncThrows<E>(
-        _ operation: @escaping () async throws -> some Sendable,
+    public func assertAsyncOperationThrows<E>(
+        _ operation: @escaping @Sendable () async throws -> some Sendable,
         expectedError: E,
         timeout: TimeInterval = 5.0,
         file: StaticString = #filePath,
         line: UInt = #line
     ) async where E: Error & Equatable {
         do {
-            _ = try await waitForAsync(timeout: timeout, operation: operation)
+            _ = try await waitForAsyncOperation(timeout: timeout, operation: operation)
             XCTFail("Expected error but operation completed successfully", file: file, line: line)
         } catch {
             XCTAssertEqual(error as? E, expectedError, file: file, line: line)
@@ -97,26 +97,26 @@ open class SharedViewModelTestCase: XCTestCase {
     /// Assert state changes after operation
     public func assertStateChange<T: Equatable & Sendable>(
         initialState: T,
-        operation: @escaping () async throws -> T,
+        operation: @escaping @Sendable () async throws -> T,
         timeout: TimeInterval = 2.0,
         message: String = "State did not change",
         file: StaticString = #filePath,
         line: UInt = #line
     ) async throws {
-        let finalState = try await waitForAsync(timeout: timeout, operation: operation)
+        let finalState = try await waitForAsyncOperation(timeout: timeout, operation: operation)
         XCTAssertNotEqual(initialState, finalState, message, file: file, line: line)
     }
 
     /// Assert state becomes expected value
     public func assertStateBecomes<T: Equatable & Sendable>(
         _ expectedState: T,
-        operation: @escaping () async throws -> T,
+        operation: @escaping @Sendable () async throws -> T,
         timeout: TimeInterval = 2.0,
         message: String = "State did not match expected value",
         file: StaticString = #filePath,
         line: UInt = #line
     ) async throws {
-        let finalState = try await waitForAsync(timeout: timeout, operation: operation)
+        let finalState = try await waitForAsyncOperation(timeout: timeout, operation: operation)
         XCTAssertEqual(finalState, expectedState, message, file: file, line: line)
     }
 
@@ -126,7 +126,7 @@ open class SharedViewModelTestCase: XCTestCase {
     public func assertPerformance(
         operation: String,
         expectedDuration: TimeInterval,
-        _ block: @escaping () async throws -> some Sendable,
+        _ block: @escaping @Sendable () async throws -> some Sendable,
         file: StaticString = #filePath,
         line: UInt = #line
     ) async {
@@ -165,7 +165,7 @@ open class SharedViewModelTestCase: XCTestCase {
 
     /// Assert no memory leaks in async operations
     public func assertNoMemoryLeaks(
-        in operation: @escaping () async throws -> some Sendable,
+        in operation: @escaping @Sendable () async throws -> some Sendable,
         timeout: TimeInterval = 5.0,
         file: StaticString = #filePath,
         line: UInt = #line
@@ -173,7 +173,7 @@ open class SharedViewModelTestCase: XCTestCase {
         // Simple memory leak detection by checking if operation completes without issues
         // In a more sophisticated implementation, this could use Instruments-like memory tracking
         do {
-            _ = try await waitForAsync(timeout: timeout, operation: operation)
+            _ = try await waitForAsyncOperation(timeout: timeout, operation: operation)
         } catch {
             XCTFail("Memory leak detected or operation failed: \(error)", file: file, line: line)
         }
@@ -230,7 +230,7 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
         let monitoringTask = Task {
             while !Task.isCancelled {
                 loadingStates.append(viewModel.isLoading)
-                try? await Task.sleep(nanoseconds: 50_000_000) // 0.05s
+                try? await Task.sleep(nanoseconds: 50_000_000)  // 0.05s
             }
         }
 
@@ -286,7 +286,7 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
                 errorSet = true
                 break
             }
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
+            try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1s
         }
 
         XCTAssertTrue(errorSet, "Error message was not set", file: file, line: line)

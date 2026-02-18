@@ -213,6 +213,7 @@ private struct PerformanceAwareModifier: ViewModifier {
 
 public enum ImageOptimizer {
     #if canImport(UIKit)
+        @MainActor
         public static func optimizeForNetwork(_ image: UIImage) -> UIImage? {
             let networkMonitor = NetworkMonitor.shared
             let quality = networkMonitor.recommendedImageQuality()

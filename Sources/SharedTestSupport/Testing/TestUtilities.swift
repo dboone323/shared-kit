@@ -76,165 +76,15 @@ class TestUtilities {
     }
 }
 
-// MARK: - BaseViewModel Testing Utilities
-
-/// Base test case for view model testing
-@MainActor
-class BaseViewModelTestCase<ViewModelType: BaseViewModel>: XCTestCase {
-    var viewModel: ViewModelType!
-    var cancellables = Set<AnyCancellable>()
-
-    override func setUp() async throws {
-        try await super.setUp()
-        await MainActor.run {
-            self.cancellables = Set<AnyCancellable>()
-            self.setupViewModel()
-        }
-    }
-
-    override func tearDown() async throws {
-        await MainActor.run {
-            self.cancellables.forEach { $0.cancel() }
-            self.cancellables.removeAll()
-            self.viewModel = nil
-        }
-        try await super.tearDown()
-    }
-
-    /// Override in subclasses to set up the view model
-    func setupViewModel() {
-        fatalError("Subclasses must implement setupViewModel()")
-    }
-
-    /// Helper to test state changes after action
-    func assertStateChange<T: Equatable>(
-        action: ViewModelType.Action,
-        expectedState: T,
-        keyPath: KeyPath<ViewModelType.State, T>,
-        timeout: TimeInterval = 2.0,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) async {
-        let initialState = viewModel.state[keyPath: keyPath]
-
-        await viewModel.handle(action)
-
-        // Wait for state to change
-        let expectation = XCTestExpectation(description: "State change")
-        var stateChanged = false
-
-        // Use a simple polling approach for state changes
-        for _ in 0..<Int(timeout * 10) {
-            if viewModel.state[keyPath: keyPath] != initialState {
-                stateChanged = true
-                break
-            }
-            try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
-        }
-
-        XCTAssertTrue(stateChanged, "State did not change after action", file: file, line: line)
-        XCTAssertEqual(viewModel.state[keyPath: keyPath], expectedState, file: file, line: line)
-    }
-
-    /// Helper to test async actions complete successfully
-    func assertActionCompletes(
-        action: ViewModelType.Action,
-        timeout: TimeInterval = 5.0,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) async {
-        let expectation = XCTestExpectation(description: "Action completion")
-
-        do {
-            await viewModel.handle(action)
-            expectation.fulfill()
-        } catch {
-            XCTFail("Action failed with error: \(error)", file: file, line: line)
-        }
-
-        await fulfillment(of: [expectation], timeout: timeout)
-    }
-
-    /// Helper to test loading states during actions
-    func assertLoadingStateDuringAction(
-        action: ViewModelType.Action,
-        timeout: TimeInterval = 5.0,
-        file: StaticString = #file,
-        line: UInt = #line
-    ) async {
-        XCTAssertFalse(
-            viewModel.isLoading, "View model should not be loading initially", file: file,
-            line: line
-        )
-
-        let loadingExpectation = XCTestExpectation(description: "Loading state")
-        let completionExpectation = XCTestExpectation(description: "Action completion")
-
-        let state = CompletionState()
-
-        // Monitor loading state changes
-        var loadingStates: [Bool] = []
-
-        Task {
-            while await !state.check() {
-                loadingStates.append(viewModel.isLoading)
-                try? await Task.sleep(nanoseconds: 50_000_000)  // 0.05 seconds
-            }
-        }
-
-        Task {
-            await viewModel.handle(action)
-            await state.finish()
-            completionExpectation.fulfill()
-        }
-
-        await fulfillment(of: [completionExpectation], timeout: timeout)
-
-        // Verify loading state was set to true at some point
-        XCTAssertTrue(
-            loadingStates.contains(true), "Loading state was never set to true", file: file,
-            line: line
-        )
-        XCTAssertFalse(
-            viewModel.isLoading, "Loading state should be false after completion", file: file,
-            line: line
-        )
-    }
-
-    /// Helper to test error handling
-    func assertErrorThrown<T>(
-        action: ViewModelType.Action,
-        expectedError: T,
-        keyPath: KeyPath<ViewModelType, String?>,
-        timeout: TimeInterval = 5.0,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) async where T: Error & Equatable {
-        do {
-            await viewModel.handle(action)
-            XCTFail("Expected error but action completed successfully", file: file, line: line)
-        } catch {
-            XCTAssertEqual(error as? T, expectedError, file: file, line: line)
-
-            // Force unwrap view model for keypath access
-            let vm: ViewModelType = viewModel!
-            // _ = vm[keyPath: keyPath]  // Access to verify type but ignore assert for now
-            // XCTAssertNotNil(
-            //    vm[keyPath: keyPath], "Error message should be set", file: file, line: line
-            // )
-        }
-    }
-}
-
 /// Mock BaseViewModel for testing
 @MainActor
-class MockBaseViewModel<StateType, ActionType>: BaseViewModel {
+class MockBaseViewModel<StateType, ActionType>: SharedKit.BaseViewModel {
     typealias State = StateType
     typealias Action = ActionType
 
-    var state: StateType
-    var isLoading = false
-    var errorMessage: String?
+    @Published var state: StateType
+    @Published var isLoading = false
+    @Published var errorMessage: String?
 
     var handledActions: [ActionType] = []
     var shouldFailAction: Bool = false
@@ -252,7 +102,7 @@ class MockBaseViewModel<StateType, ActionType>: BaseViewModel {
         try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
 
         if shouldFailAction, let error = mockError {
-            setError(error)
+            self.errorMessage = error.localizedDescription
         }
 
         isLoading = false
@@ -264,6 +114,14 @@ class MockBaseViewModel<StateType, ActionType>: BaseViewModel {
         mockError = nil
         errorMessage = nil
         isLoading = false
+    }
+
+    func resetError() {
+        errorMessage = nil
+    }
+
+    func validateState() -> Bool {
+        return true
     }
 }
 
@@ -574,12 +432,14 @@ enum MockDataGenerator {
 /// Test data builder for creating mock objects
 enum UnitTestDataBuilder {
     static func createTestHabit(name: String = "Test Habit", streak: Int = 0)
-        -> EnhancedHabit
+        -> [String: Any]
     {
-        EnhancedHabit(
-            name: name,
-            streak: streak
-        )
+        [
+            "name": name,
+            "streak": streak,
+            "id": UUID().uuidString,
+            "isActive": true,
+        ]
     }
 
     static func createTestTask(priority: TestTaskPriority = .medium, isCompleted: Bool = false)
@@ -598,7 +458,7 @@ enum UnitTestDataBuilder {
 
     static func createTestFinancialAccount(
         balance: Double = 1000.0,
-        accountType: AccountType = .checking
+        accountType: SharedKit.AccountType = .checking
     ) -> FinancialAccount {
         FinancialAccount(
             id: UUID(),

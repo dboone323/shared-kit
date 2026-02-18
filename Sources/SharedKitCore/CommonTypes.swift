@@ -198,8 +198,11 @@ public struct MockInjected<T: Sendable>: Sendable {
     public var wrappedValue: T
 
     public init() {
-        // This is a mock implementation - in production, this would resolve from DependencyContainer
-        fatalError("Mock injection not implemented for type \(T.self)")
+        // This is a placeholder for dependencies that must be registered in DependencyContainer.
+        // It should only be used in test environments or for baseline defaults.
+        fatalError(
+            "Dependency of type \(T.self) was not injected. Ensure it is registered in DependencyContainer before use."
+        )
     }
 
     public init(wrappedValue: T) {
@@ -431,16 +434,19 @@ public struct PerformanceMetrics: Codable, Sendable {
     public let successRate: Double
     public let averageResponseTime: TimeInterval
     public let errorRate: Double
+    public let errorBreakdown: [String: Int]
     public let lastUpdated: Date
 
     public init(
         totalOperations: Int = 0, successRate: Double = 0.0,
-        averageResponseTime: TimeInterval = 0.0, errorRate: Double = 0.0, lastUpdated: Date = Date()
+        averageResponseTime: TimeInterval = 0.0, errorRate: Double = 0.0,
+        errorBreakdown: [String: Int] = [:], lastUpdated: Date = Date()
     ) {
         self.totalOperations = totalOperations
         self.successRate = successRate
         self.averageResponseTime = averageResponseTime
         self.errorRate = errorRate
+        self.errorBreakdown = errorBreakdown
         self.lastUpdated = lastUpdated
     }
 }

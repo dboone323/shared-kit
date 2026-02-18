@@ -1,6 +1,7 @@
 import XCTest
 
 @testable import SharedKit
+@testable import SharedKitCore
 
 final class SharedKitIntegrationTests: XCTestCase {
     @MainActor
@@ -41,7 +42,7 @@ final class SharedKitIntegrationTests: XCTestCase {
         }
 
         let client = OllamaClient(
-            config: OllamaConfig(baseURL: OllamaConfig.defaultEndpoint), session: session)
+            config: OllamaConfig(baseURL: "http://127.0.0.1:11434"), session: session)
 
         // 3. Encrypt Request Payload
         let prompt = "My Secret Prompt"

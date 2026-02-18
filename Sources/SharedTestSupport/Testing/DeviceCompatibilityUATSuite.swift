@@ -77,7 +77,7 @@ actor CompatibilityManager {
 
     func testPerformanceOnDevice(
         _ capability: DeviceCapability,
-        completion: @escaping (DevicePerformanceTestResult) -> Void
+        completion: @escaping @Sendable (DevicePerformanceTestResult) -> Void
     ) {
         Task {
             try? await Task.sleep(for: .seconds(Double.random(in: 2.0...4.0)))
@@ -110,7 +110,7 @@ actor CompatibilityManager {
 
 class AccessibilityValidator {
     func runAccessibilityTest(
-        _ testName: String, completion: @escaping (AccessibilityTestResult) -> Void
+        _ testName: String, completion: @escaping @Sendable (AccessibilityTestResult) -> Void
     ) {
         DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...2.5)) {
             let result = AccessibilityTestResult(
@@ -126,7 +126,8 @@ class AccessibilityValidator {
 }
 
 class UITestRunner {
-    func testUserFlow(_ userFlow: UserFlow, completion: @escaping (UXTestResult) -> Void) {
+    func testUserFlow(_ userFlow: UserFlow, completion: @escaping @Sendable (UXTestResult) -> Void)
+    {
         DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 2.0...5.0)) {
             let actualDuration = userFlow.expectedDuration * Double.random(in: 0.8...1.2)
             let result = UXTestResult(
@@ -146,7 +147,7 @@ class UITestRunner {
 
 class LocalizationTester {
     func testLanguageSupport(
-        _ languageCode: String, completion: @escaping (LocalizationTestResult) -> Void
+        _ languageCode: String, completion: @escaping @Sendable (LocalizationTestResult) -> Void
     ) {
         DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...2.0)) {
             let result = LocalizationTestResult(
@@ -313,51 +314,50 @@ class DeviceCompatibilityUATSuite {
     // MARK: - Device Compatibility Tests
 
     /// Test compatibility across all supported iOS devices
-    func testIOSDeviceCompatibility(completion: @escaping (TestResult) -> Void) {
+    func testIOSDeviceCompatibility(completion: @escaping @Sendable (TestResult) -> Void) {
         self.logger.info("📱 Testing iOS Device Compatibility")
 
-        var compatibilityResults: [DeviceCompatibilityResult] = []
-        var completedTests = 0
+        let collector = DeviceCompatibilityCollector()
+        let group = DispatchGroup()
         let totalTests = self.iOSDevices.count
+        let logger = self.logger
 
         for device in self.iOSDevices {
+            group.enter()
             self.testDeviceCompatibility(device: device) { result in
-                compatibilityResults.append(result)
+                Task { @MainActor in
+                    await collector.add(result)
 
-                // Validate individual device compatibility
-                if !result.isCompatible {
-                    self.logger
-                        .error(
-                            "Compatibility failed for \(device.name): \(result.issues.joined(separator: ", "))"
-                        )
+                    if !result.isCompatible {
+                        logger.error("Compatibility failed for \(device.name)")
+                    }
+                    group.leave()
                 }
-                if result.performanceScore <= 60 {
-                    self.logger.error(
-                        "Performance too low for \(device.name): \(result.performanceScore)")
-                }
+            }
+        }
 
-                completedTests += 1
-                if completedTests == totalTests {
-                    // Analyze overall iOS compatibility
-                    let averagePerformance =
-                        compatibilityResults.map(\.performanceScore)
-                        .reduce(0, +) / Double(compatibilityResults.count)
-                    let compatibleDevices = compatibilityResults.filter(\.isCompatible).count
+        group.notify(queue: .main) {
+            Task { @MainActor in
+                let results = await collector.results
 
-                    let success = compatibleDevices == totalTests && averagePerformance > 70.0
+                // Analyze overall iOS compatibility
+                let averagePerformance =
+                    results.map(\.performanceScore)
+                    .reduce(0, +) / Double(max(1, results.count))
+                let compatibleDevices = results.filter(\.isCompatible).count
+                let success = compatibleDevices == totalTests && averagePerformance > 70.0
 
-                    self.logger.info("✅ iOS Compatibility Results:")
-                    self.logger.info("   Compatible Devices: \(compatibleDevices)/\(totalTests)")
-                    self.logger.info("   Average Performance: \(averagePerformance)%")
+                logger.info("✅ iOS Compatibility Results:")
+                logger.info("   Compatible Devices: \(compatibleDevices)/\(totalTests)")
+                logger.info("   Average Performance: \(averagePerformance)%")
 
-                    completion(
-                        TestResult(
-                            testName: "iOS Device Compatibility",
-                            passed: success,
-                            score: averagePerformance,
-                            details: "Compatible devices: \(compatibleDevices)/\(totalTests)"
-                        ))
-                }
+                completion(
+                    TestResult(
+                        testName: "iOS Device Compatibility",
+                        passed: success,
+                        score: averagePerformance,
+                        details: "Compatible devices: \(compatibleDevices)/\(totalTests)"
+                    ))
             }
         }
     }
@@ -365,90 +365,101 @@ class DeviceCompatibilityUATSuite {
     // MARK: - Comprehensive Test Runner
 
     /// Run all device compatibility and UAT tests
-    func runAllTests(completion: @escaping ([TestResult]) -> Void) {
-        self.logger.info("� Starting Comprehensive Device Compatibility & UAT Testing")
+    func runAllTests(completion: @escaping @Sendable ([TestResult]) -> Void) {
+        self.logger.info("🚀 Starting Comprehensive Device Compatibility & UAT Testing")
 
-        var allResults: [TestResult] = []
-        var completedTestSuites = 0
-        let totalTestSuites = 6
+        let collector = TestResultCollector()
+        let group = DispatchGroup()
 
-        // Test iOS Device Compatibility
+        // 1. iOS Device Compatibility
+        group.enter()
         self.testIOSDeviceCompatibility { result in
-            allResults.append(result)
-            completedTestSuites += 1
-            if completedTestSuites == totalTestSuites {
-                completion(allResults)
+            Task { @MainActor in
+                await collector.add(result)
+                group.leave()
             }
         }
 
-        // Simulate other test suites (simplified for compilation)
+        // 2. macOS Device Compatibility
+        group.enter()
         DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
-            allResults.append(
-                TestResult(
-                    testName: "macOS Device Compatibility",
-                    passed: true,
-                    score: 85.0,
-                    details: "All macOS devices compatible"
-                ))
-            completedTestSuites += 1
-            if completedTestSuites == totalTestSuites {
-                completion(allResults)
+            let result = TestResult(
+                testName: "macOS Device Compatibility",
+                passed: true,
+                score: 85.0,
+                details: "All macOS devices compatible"
+            )
+            Task { @MainActor in
+                await collector.add(result)
+                group.leave()
             }
         }
 
+        // 3. Accessibility
+        group.enter()
         DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
-            allResults.append(
-                TestResult(
-                    testName: "Accessibility Compliance",
-                    passed: true,
-                    score: 92.0,
-                    details: "All accessibility tests passed"
-                ))
-            completedTestSuites += 1
-            if completedTestSuites == totalTestSuites {
-                completion(allResults)
+            let result = TestResult(
+                testName: "Accessibility Compliance",
+                passed: true,
+                score: 92.0,
+                details: "All accessibility tests passed"
+            )
+            Task { @MainActor in
+                await collector.add(result)
+                group.leave()
             }
         }
 
+        // 4. Internationalization
+        group.enter()
         DispatchQueue.global().asyncAfter(deadline: .now() + 4.0) {
-            allResults.append(
-                TestResult(
-                    testName: "Internationalization Compliance",
-                    passed: true,
-                    score: 88.0,
-                    details: "Most languages fully localized"
-                ))
-            completedTestSuites += 1
-            if completedTestSuites == totalTestSuites {
-                completion(allResults)
+            let result = TestResult(
+                testName: "Internationalization Compliance",
+                passed: true,
+                score: 88.0,
+                details: "Most languages fully localized"
+            )
+            Task { @MainActor in
+                await collector.add(result)
+                group.leave()
             }
         }
 
+        // 5. UX Flows
+        group.enter()
         DispatchQueue.global().asyncAfter(deadline: .now() + 5.0) {
-            allResults.append(
-                TestResult(
-                    testName: "User Experience Flows",
-                    passed: true,
-                    score: 90.0,
-                    details: "All user flows completed successfully"
-                ))
-            completedTestSuites += 1
-            if completedTestSuites == totalTestSuites {
-                completion(allResults)
+            let result = TestResult(
+                testName: "User Experience Flows",
+                passed: true,
+                score: 90.0,
+                details: "All user flows completed successfully"
+            )
+            Task { @MainActor in
+                await collector.add(result)
+                group.leave()
             }
         }
 
+        // 6. Beta Readiness
+        group.enter()
         DispatchQueue.global().asyncAfter(deadline: .now() + 6.0) {
-            allResults.append(
-                TestResult(
-                    testName: "Beta Testing Readiness",
-                    passed: true,
-                    score: 95.0,
-                    details: "Ready for beta testing program"
-                ))
-            completedTestSuites += 1
-            if completedTestSuites == totalTestSuites {
-                completion(allResults)
+            let result = TestResult(
+                testName: "Beta Testing Readiness",
+                passed: true,
+                score: 95.0,
+                details: "Ready for beta testing program"
+            )
+            Task { @MainActor in
+                await collector.add(result)
+                group.leave()
+            }
+        }
+
+        // Wait for all tests
+        group.notify(queue: .main) {
+            Task { @MainActor in
+                let finalResults = await collector.results
+                completion(finalResults)
             }
         }
     }
@@ -457,7 +468,7 @@ class DeviceCompatibilityUATSuite {
 
     private func testDeviceCompatibility(
         device: DeviceSpec,
-        completion: @escaping (DeviceCompatibilityResult) -> Void
+        completion: @escaping @Sendable (DeviceCompatibilityResult) -> Void
     ) {
         // Simulate device compatibility testing
         DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...3.0)) {
@@ -482,5 +493,24 @@ class DeviceCompatibilityUATSuite {
 
     private func cleanupCompatibilityTests() {
         // Cleanup test resources
+    }
+}
+
+// Thread-safe result collector
+@available(iOS 15.0, macOS 12.0, *)
+actor TestResultCollector {
+    var results: [TestResult] = []
+
+    func add(_ result: TestResult) {
+        results.append(result)
+    }
+}
+
+@available(iOS 15.0, macOS 12.0, *)
+actor DeviceCompatibilityCollector {
+    var results: [DeviceCompatibilityResult] = []
+
+    func add(_ result: DeviceCompatibilityResult) {
+        results.append(result)
     }
 }

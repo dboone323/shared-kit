@@ -156,16 +156,20 @@ public class OllamaClient: ObservableObject {
     @Published public var currentModel: String = ""
     @Published public var serverStatus: OllamaServerStatus?
 
-    public init(config: OllamaConfig = .default) {
+    public init(config: OllamaConfig = .default, session: URLSession? = nil) {
         self.config = config
 
-        // Enhanced URLSession configuration
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = config.timeout
-        configuration.timeoutIntervalForResource = config.timeout * 2
-        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-        configuration.httpMaximumConnectionsPerHost = 4
-        self.session = URLSession(configuration: configuration)
+        if let session = session {
+            self.session = session
+        } else {
+            // Enhanced URLSession configuration
+            let configuration = URLSessionConfiguration.default
+            configuration.timeoutIntervalForRequest = config.timeout
+            configuration.timeoutIntervalForResource = config.timeout * 2
+            configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+            configuration.httpMaximumConnectionsPerHost = 4
+            self.session = URLSession(configuration: configuration)
+        }
 
         // self.logger calls removed
 

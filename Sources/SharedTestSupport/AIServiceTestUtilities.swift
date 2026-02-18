@@ -114,7 +114,7 @@ class AIServiceTestUtilities {
 
             // Default mock response
             return CodeOptimization(
-                optimizedCode: code, // Return original for simplicity
+                optimizedCode: code,  // Return original for simplicity
                 improvements: ["Code is already optimized"],
                 performanceGain: 0.1,
                 explanation: "No significant optimizations needed"
@@ -167,7 +167,7 @@ class AIServiceTestUtilities {
 
         func testAIServiceCall<T>(
             method: String,
-            operation: @escaping () async throws -> T,
+            operation: @escaping @Sendable () async throws -> T,
             expectedResult: T,
             timeout: TimeInterval = 5.0,
             file: StaticString = #filePath,
@@ -184,7 +184,7 @@ class AIServiceTestUtilities {
 
         func testAIServiceError(
             method: String,
-            operation: @escaping () async throws -> some Sendable,
+            operation: @escaping @Sendable () async throws -> some Sendable,
             expectedError: Error,
             timeout: TimeInterval = 5.0,
             file: StaticString = #filePath,
@@ -208,7 +208,7 @@ class AIServiceTestUtilities {
 
         func testAIServicePerformance(
             method: String,
-            operation: @escaping () async throws -> some Sendable,
+            operation: @escaping @Sendable () async throws -> some Sendable,
             maxDuration: TimeInterval = 2.0,
             file: StaticString = #filePath,
             line: UInt = #line
@@ -302,7 +302,7 @@ extension SharedViewModelTestCase {
         await viewModel.handle(aiAction)
 
         // Wait for AI operations to complete
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+        try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
 
         let finalCallCount = mockService.callHistory.count
         XCTAssertGreaterThan(
@@ -338,7 +338,7 @@ extension SharedViewModelTestCase {
         await viewModel.handle(aiAction)
 
         // Wait for error handling
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+        try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5 seconds
 
         XCTAssertNotNil(
             viewModel.errorMessage, "Error message should be set after AI error", file: file,

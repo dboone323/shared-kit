@@ -62,15 +62,15 @@ public enum HabitDifficulty: String, CaseIterable, Codable, Sendable {
     }
 }
 
-public enum BudgetCategory: String, CaseIterable, Sendable {
+public enum BudgetCategory: String, CaseIterable, Codable, Sendable {
     case housing, food, transportation, healthcare, entertainment, savings, other
 }
 
-public enum ServiceTaskPriority: String, CaseIterable, Sendable {
+public enum ServiceTaskPriority: String, CaseIterable, Codable, Sendable {
     case low, medium, high, urgent
 }
 
-public enum TransactionCategory: String, CaseIterable, Sendable {
+public enum TransactionCategory: String, CaseIterable, Codable, Sendable {
     case income, expense, transfer, investment
 }
 
@@ -406,7 +406,7 @@ public protocol CrossProjectServiceProtocol: ServiceProtocol, Sendable {
 }
 
 /// Cross-project reference model
-public struct CrossProjectReference: Sendable {
+public struct CrossProjectReference: Codable, Sendable {
     public let id: UUID
     public let sourceProject: ProjectType
     public let sourceEntityId: UUID
@@ -442,7 +442,7 @@ public struct CrossProjectReference: Sendable {
 }
 
 /// Cross-project relationship model
-public struct CrossProjectRelationship: Sendable {
+public struct CrossProjectRelationship: Codable, Sendable {
     public let id: UUID
     public let type: RelationshipType
     public let entities: [ProjectEntity]
@@ -461,7 +461,7 @@ public struct CrossProjectRelationship: Sendable {
 }
 
 /// Relationship type enumeration
-public enum RelationshipType: String, Sendable {
+public enum RelationshipType: String, Codable, Sendable {
     case oneToOne = "one_to_one"
     case oneToMany = "one_to_many"
     case manyToMany = "many_to_many"
@@ -471,7 +471,7 @@ public enum RelationshipType: String, Sendable {
 }
 
 /// Project entity reference
-public struct ProjectEntity: Sendable {
+public struct ProjectEntity: Codable, Sendable {
     public let project: ProjectType
     public let entityId: UUID
     public let entityType: String
@@ -491,7 +491,7 @@ public struct ProjectEntity: Sendable {
 // MARK: - Supporting Models
 
 /// Habit insights model
-public struct HabitInsights: Sendable {
+public struct HabitInsights: Codable, Sendable {
     public let habitId: UUID
     public let timeRange: DateInterval
     public let completionRate: Double
@@ -518,7 +518,7 @@ public struct HabitInsights: Sendable {
 }
 
 /// Habit recommendation model
-public struct HabitRecommendation: Sendable {
+public struct HabitRecommendation: Codable, Sendable {
     public let id: UUID = .init()
     public let title: String
     public let description: String
@@ -548,7 +548,7 @@ public struct HabitRecommendation: Sendable {
 }
 
 /// Budget insights model
-public struct BudgetInsights: Sendable {
+public struct BudgetInsights: Codable, Sendable {
     public let budgetId: UUID
     public let timeRange: DateInterval
     public let utilizationRate: Double
@@ -577,7 +577,7 @@ public struct BudgetInsights: Sendable {
 }
 
 /// Net worth summary model
-public struct NetWorthSummary: Sendable {
+public struct NetWorthSummary: Codable, Sendable {
     public let userId: String
     public let asOfDate: Date
     public let totalAssets: Double
@@ -610,7 +610,7 @@ public struct NetWorthSummary: Sendable {
 }
 
 /// Net worth breakdown model
-public struct NetWorthBreakdown: Sendable {
+public struct NetWorthBreakdown: Codable, Sendable {
     public let cashAndEquivalents: Double
     public let investments: Double
     public let realEstate: Double
@@ -639,7 +639,7 @@ public struct NetWorthBreakdown: Sendable {
 }
 
 /// Financial recommendation model
-public struct FinancialRecommendation: Sendable {
+public struct FinancialRecommendation: Codable, Sendable {
     public let id: UUID = .init()
     public let type: RecommendationType
     public let title: String
@@ -672,7 +672,7 @@ public struct FinancialRecommendation: Sendable {
 }
 
 /// Recommendation type enumeration
-public enum RecommendationType: Sendable {
+public enum RecommendationType: String, Codable, Sendable {
     case budgetOptimization
     case debtReduction
     case investmentStrategy
@@ -682,7 +682,7 @@ public enum RecommendationType: Sendable {
 }
 
 /// Recommendation priority enumeration
-public enum RecommendationPriority: Int, CaseIterable, Sendable {
+public enum RecommendationPriority: Int, CaseIterable, Codable, Sendable {
     case low = 1
     case medium = 2
     case high = 3
@@ -718,7 +718,7 @@ public enum TrendDirection: String, Codable, Sendable {
 }
 
 /// Budget alert model
-public struct BudgetAlert: Sendable {
+public struct BudgetAlert: Codable, Sendable {
     public let id: UUID = .init()
     public let type: AlertType
     public let severity: AlertSeverity
@@ -740,7 +740,7 @@ public struct BudgetAlert: Sendable {
 }
 
 /// Alert type enumeration
-public enum AlertType: Sendable {
+public enum AlertType: String, Codable, Sendable {
     case budgetExceeded
     case budgetWarning
     case unusualSpending
@@ -750,7 +750,7 @@ public enum AlertType: Sendable {
 }
 
 /// Alert severity enumeration
-public enum AlertSeverity: Int, CaseIterable, Sendable {
+public enum AlertSeverity: Int, CaseIterable, Codable, Sendable {
     case info = 1
     case warning = 2
     case error = 3
@@ -767,7 +767,7 @@ public enum AlertSeverity: Int, CaseIterable, Sendable {
 }
 
 /// Goal progress model
-public struct GoalProgress: Sendable {
+public struct GoalProgress: Codable, Sendable {
     public let goalId: UUID
     public let currentProgress: Double
     public let targetValue: Double
@@ -787,7 +787,7 @@ public struct GoalProgress: Sendable {
 }
 
 /// Goal milestone model
-public struct GoalMilestone: Sendable {
+public struct GoalMilestone: Codable, Sendable {
     public let id: UUID = .init()
     public let title: String
     public let targetValue: Double
@@ -811,7 +811,7 @@ public struct GoalMilestone: Sendable {
 }
 
 /// Task recommendation model
-public struct TaskRecommendation: Sendable {
+public struct TaskRecommendation: Codable, Sendable {
     public let taskId: UUID?
     public let type: String
     public let message: String
@@ -831,7 +831,7 @@ public struct TaskRecommendation: Sendable {
 }
 
 /// Planning context model
-public struct PlanningContext: Sendable {
+public struct PlanningContext: Codable, Sendable {
     public let userId: String
     public let currentTime: Date
     public let availableTime: Int
@@ -860,7 +860,7 @@ public struct PlanningContext: Sendable {
 }
 
 /// Schedule optimization model
-public struct ScheduleOptimization: Sendable {
+public struct ScheduleOptimization: Codable, Sendable {
     public let userId: String
     public let timeRange: DateInterval
     public let optimizedTasks: [String]
@@ -880,7 +880,7 @@ public struct ScheduleOptimization: Sendable {
 }
 
 /// Optimized task schedule model
-public struct OptimizedTaskSchedule: Sendable {
+public struct OptimizedTaskSchedule: Codable, Sendable {
     public let taskId: UUID
     public let title: String
     public let scheduledStart: Date
@@ -906,7 +906,7 @@ public struct OptimizedTaskSchedule: Sendable {
 }
 
 /// Productivity insights model
-public struct ProductivityInsights: Sendable {
+public struct ProductivityInsights: Codable, Sendable {
     public let userId: String
     public let timeRange: DateInterval
     public let completionRate: Double
@@ -934,7 +934,7 @@ public struct ProductivityInsights: Sendable {
 }
 
 /// Unified user insights model
-public struct UnifiedUserInsights: Sendable {
+public struct UnifiedUserInsights: Codable, Sendable {
     public let userId: String
     public let timeRange: DateInterval
     public let habitInsights: [HabitInsights]
@@ -966,7 +966,7 @@ public struct UnifiedUserInsights: Sendable {
 }
 
 /// Cross-project correlation model
-public struct CrossProjectCorrelation: Sendable {
+public struct CrossProjectCorrelation: Codable, Sendable {
     public let project1: ProjectType
     public let project2: ProjectType
     public let correlation: Double
@@ -989,7 +989,7 @@ public struct CrossProjectCorrelation: Sendable {
 }
 
 /// Unified recommendation model
-public struct UnifiedRecommendation: Sendable {
+public struct UnifiedRecommendation: Codable, Sendable {
     public let id: UUID = .init()
     public let type: UnifiedRecommendationType
     public let title: String
@@ -1019,7 +1019,7 @@ public struct UnifiedRecommendation: Sendable {
 }
 
 /// Unified recommendation type enumeration
-public enum UnifiedRecommendationType: String, Sendable {
+public enum UnifiedRecommendationType: String, Codable, Sendable {
     case habitFinanceIntegration
     case productivityHabitAlignment
     case financialGoalTask

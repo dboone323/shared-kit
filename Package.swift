@@ -76,12 +76,20 @@ let package = Package(
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOFoundationCompat", package: "swift-nio"),
             ],
-            path: "Sources/SharedKit"
+            path: "Sources/SharedKit",
+            exclude: [
+                "UI/UI_UX_IMPLEMENTATION_GUIDE.md",
+                "Services/SERVICE_LAYER_INTEGRATION_GUIDE.md",
+                "StateManagement/STATE_MANAGEMENT_INTEGRATION_GUIDE.md",
+            ]
         ),
         .target(
             name: "SharedTestSupport",
             dependencies: ["SharedKit"],
-            path: "Sources/SharedTestSupport"
+            path: "Sources/SharedTestSupport",
+            exclude: [
+                "Testing/TESTING_FRAMEWORK_GUIDE.md"
+            ]
         ),
         .testTarget(
             name: "SharedKitTests",

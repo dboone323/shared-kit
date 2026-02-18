@@ -349,7 +349,9 @@ final class DefaultAnalyticsService: AnalyticsServiceProtocol {
 
     func initialize() async throws {
         // Initialize analytics tracking
-        print("Analytics service initialized")
+        NSLog(
+            "[DefaultAnalyticsService] WARNING: Non-persistent analytics initialized. Real backend integration required for production."
+        )
     }
 
     func cleanup() async {
@@ -413,7 +415,9 @@ final class DefaultCrossProjectService: CrossProjectServiceProtocol {
     let version = "1.0.0"
 
     func initialize() async throws {
-        print("Cross-project service initialized")
+        NSLog(
+            "[DefaultCrossProjectService] WARNING: Limited synchronization initialized. Full sync requires a registered CrossProjectService."
+        )
     }
 
     func cleanup() async {
@@ -479,7 +483,9 @@ final class DefaultHabitService: HabitServiceProtocol {
     let version = "1.0.0"
 
     func initialize() async throws {
-        print("Habit service initialized")
+        NSLog(
+            "[DefaultHabitService] WARNING: Volatile habit tracking initialized. Data persistence requires a registered database driver."
+        )
     }
 
     func cleanup() async {
@@ -502,26 +508,11 @@ final class DefaultHabitService: HabitServiceProtocol {
         _ habitId: UUID, value: Double?, mood: SharedKitCore.MoodRating?,
         notes: String?
     ) async throws -> EnhancedHabitLog {
-        // Default implementation returns a mock log
-        struct DefaultHabitLog: SharedKitCore.EnhancedHabitLogProtocol {
-            let id: UUID
-            var habitId: UUID
-            var timestamp: Date
-            var value: Double?
-            var mood: SharedKitCore.MoodRating?
-            var notes: String?
-
-            var trackingId: String { "habit_log_\(id.uuidString)" }
-            var analyticsMetadata: [String: Any] { [:] }
-            var isValid: Bool { true }
-
-            func validate() throws {}
-            func trackEvent(_ event: String, parameters: [String: Any]?) {}
-        }
-        // Use a real model or a different mock if needed, but for now we need EnhancedHabitLog (class)
-        // Since EnhancedHabitLog is a @Model class, we can't easily instantiate it here without a container.
-        // I will update ServiceProtocols to use protocols instead of classes for return types to allow mocks.
-        fatalError("DefaultHabitService.logHabitCompletion not implemented")
+        print(
+            "ERROR: DefaultHabitService.logHabitCompletion called. Real HabitService not registered."
+        )
+        throw DependencyError.serviceNotFound(
+            "Real HabitService not registered - cannot persist log for habit \(habitId)")
     }
 
     func calculateStreak(for _: UUID) async throws -> Int {
@@ -559,7 +550,9 @@ final class DefaultFinancialService: FinancialServiceProtocol {
     let version = "1.0.0"
 
     func initialize() async throws {
-        print("Financial service initialized")
+        NSLog(
+            "[DefaultFinancialService] WARNING: Temporary financial state initialized. Secure ledger persistence required for production."
+        )
     }
 
     func cleanup() async {
@@ -633,7 +626,9 @@ final class DefaultPlannerService: PlannerServiceProtocol {
     let version = "1.0.0"
 
     func initialize() async throws {
-        print("Planner service initialized")
+        NSLog(
+            "[DefaultPlannerService] WARNING: In-memory task management initialized. Persistent scheduling required for production."
+        )
     }
 
     func cleanup() async {
@@ -652,8 +647,11 @@ final class DefaultPlannerService: PlannerServiceProtocol {
     }
 
     func updateTaskProgress(_ taskId: UUID, progress: Double) async throws -> EnhancedTask {
-        print("Updating task progress: \(taskId) to \(progress)")
-        fatalError("DefaultPlannerService.updateTaskProgress not implemented")
+        print(
+            "ERROR: DefaultPlannerService.updateTaskProgress called. Real PlannerService not registered."
+        )
+        throw DependencyError.serviceNotFound(
+            "Real PlannerService not registered - cannot update task \(taskId)")
     }
 
     func calculateGoalProgress(_ goalId: UUID) async throws -> GoalProgress {
