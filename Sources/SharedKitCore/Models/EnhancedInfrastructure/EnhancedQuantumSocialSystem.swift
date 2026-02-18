@@ -8,17 +8,20 @@
 import Foundation
 import SwiftData
 
-// MARK: - Enhanced Quantum Governance System
-
 @Model
 public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossProjectRelatable {
     public var id: UUID
     public var name: String
-    public var description: String
+    public var systemDescription: String
     public var creationDate: Date
     public var lastModified: Date
     public var version: String
     public var isActive: Bool
+
+    // Cross-project Properties
+    public var globalId: String
+    public var projectContext: ProjectType
+    public var externalReferences: [ExternalReference]
 
     // Core Social Metrics
     public var totalPopulation: Int
@@ -75,17 +78,29 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
     @Relationship(deleteRule: .cascade, inverse: \EnhancedSocialMetric.socialSystem)
     public var performanceMetrics: [EnhancedSocialMetric] = []
 
-    // Tracking
-    public var eventLog: [TrackedEvent] = []
-    public var crossProjectReferences: [CrossProjectReference] = []
+    // Analytics Properties
+    public var analyticsMetadata: [String: Any] {
+        [
+            "version": self.version,
+            "population": self.totalPopulation,
+            "harmony": self.socialHarmony,
+            "trust": self.trustIndex,
+            "isActive": self.isActive,
+        ]
+    }
+
+    public var trackingId: String {
+        "social_system_\(self.id.uuidString)"
+    }
 
     public init(
         name: String = "Enhanced Quantum Social System",
-        description: String = "Universal quantum-enhanced social infrastructure"
+        systemDescription: String = "Universal quantum-enhanced social infrastructure"
     ) {
-        self.id = UUID()
+        let newId = UUID()
+        self.id = newId
         self.name = name
-        self.description = description
+        self.systemDescription = systemDescription  // Kept original parameter name
         self.creationDate = Date()
         self.lastModified = Date()
         self.version = "1.0.0"
@@ -136,7 +151,15 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
         self.accessEquality = 0.0
         self.opportunityEquality = 0.0
 
+        self.projectContext = .sharedKit
+        self.globalId = "social_system_\(newId.uuidString)"
+        self.externalReferences = []
+
         self.trackEvent("system_initialized", parameters: ["version": self.version])
+    }
+
+    public var isValid: Bool {
+        (try? validate()) != nil
     }
 
     // MARK: - Validatable Protocol
@@ -158,32 +181,31 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
 
     // MARK: - Trackable Protocol
 
-    public func trackEvent(_ event: String, parameters: [String: Any] = [:]) {
-        let trackedEvent = TrackedEvent(
-            componentId: self.id,
-            eventType: event,
-            parameters: parameters,
-            timestamp: Date()
+    public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
+        var eventParameters = self.analyticsMetadata
+        parameters?.forEach { key, value in
+            eventParameters[key] = value
+        }
+
+        print(
+            "Tracking social event: \(event) for system: \(self.name) with parameters: \(eventParameters)"
         )
-        self.eventLog.append(trackedEvent)
         self.lastModified = Date()
     }
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
-        let reference = CrossProjectReference(
-            sourceProjectId: self.id,
-            targetProjectId: projectId,
-            referenceType: referenceType,
-            referenceId: referenceId,
-            timestamp: Date()
+    @MainActor
+    public func addExternalReference(_ reference: ExternalReference) {
+        self.externalReferences.append(reference)
+        self.lastModified = Date()
+        self.trackEvent(
+            "external_reference_added",
+            parameters: [
+                "project": reference.projectContext.rawValue,
+                "model_type": reference.modelType,
+            ]
         )
-        self.crossProjectReferences.append(reference)
-    }
-
-    public func getRelatedProjects() -> [UUID] {
-        self.crossProjectReferences.map(\.targetProjectId)
     }
 
     // MARK: - Social System Methods
@@ -365,12 +387,79 @@ public final class EnhancedQuantumSocialSystem: Validatable, Trackable, CrossPro
         self.purposeFulfillment = min(1.0, self.purposeFulfillment + 0.07)
 
         // Improve mental health
-        self.aiProficiency = aiProficiency
-        self.facilityId = facilityId
-        self.hireDate = Date()
-        self.patientsTreated = 0
-        self.successRate = 0.0
-        self.patientSatisfaction = 0.0
-        self.certifications = []
+        self.mentalHealthIndex = min(1.0, self.mentalHealthIndex + 0.1)
     }
+}
+
+@Model
+public final class EnhancedSocialCommunity {
+    public var id: UUID
+    public var name: String
+    public var type: CommunityType
+    public var location: String
+    public var focus: String
+    public var memberCapacity: Int
+    public var socialSystem: EnhancedQuantumSocialSystem?
+
+    public init(
+        socialSystem: EnhancedQuantumSocialSystem, name: String, type: CommunityType,
+        location: String, focus: String, memberCapacity: Int
+    ) {
+        self.id = UUID()
+        self.socialSystem = socialSystem
+        self.name = name
+        self.type = type
+        self.location = location
+        self.focus = focus
+        self.memberCapacity = memberCapacity
+    }
+}
+
+@Model
+public final class EnhancedSocialConnection {
+    public var id: UUID
+    public var personA: String
+    public var personB: String
+    public var connectionType: ConnectionType
+    public var strength: Double
+    public var sharedInterests: [String]
+    public var socialSystem: EnhancedQuantumSocialSystem?
+
+    public init(
+        socialSystem: EnhancedQuantumSocialSystem, personA: String, personB: String,
+        connectionType: ConnectionType, strength: Double, sharedInterests: [String]
+    ) {
+        self.id = UUID()
+        self.socialSystem = socialSystem
+        self.personA = personA
+        self.personB = personB
+        self.connectionType = connectionType
+        self.strength = strength
+        self.sharedInterests = sharedInterests
+    }
+}
+
+@Model
+public final class EnhancedSocialMetric {
+    public var id: UUID
+    public var name: String
+    public var value: Double
+    public var timestamp: Date
+    public var socialSystem: EnhancedQuantumSocialSystem?
+
+    public init(socialSystem: EnhancedQuantumSocialSystem, name: String, value: Double) {
+        self.id = UUID()
+        self.socialSystem = socialSystem
+        self.name = name
+        self.value = value
+        self.timestamp = Date()
+    }
+}
+
+public enum CommunityType: String, Codable, CaseIterable {
+    case support, cultural, recreational, educational, professional
+}
+
+public enum ConnectionType: String, Codable, CaseIterable {
+    case friendship, familial, professional, educational, community
 }

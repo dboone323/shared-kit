@@ -1,180 +1,285 @@
-//
-//  StateManagement.swift
-//  Shared State Management System
-//
-//  Created by Enhanced Architecture System
-//  Copyright © 2024 Quantum Workspace. All rights reserved.
-//
-
 import Combine
 import Foundation
+import SharedKitCore
 import SwiftData
 import SwiftUI
-import SharedKitCore
+
+#if canImport(XCTest)
+    import XCTest
+#endif
+
+// MARK: - Integration Types
+
+// Note: StateValue, StateChangeType, ProjectType and MockInjected are now
+// centrally defined in SharedKitCore/CommonTypes.swift to ensure consistency.
 
 // MARK: - Type Definitions
 // Note: Shared models and protocols are now centrally defined in ServiceProtocols.swift
 // to avoid redeclaration errors and ensure consistency across the framework.
 
-// Mock Injected property wrapper for compilation
-@propertyWrapper
-public struct MockInjected<T> {
-    public var wrappedValue: T
-
-    public init() {
-        // This is a mock implementation - in production, this would resolve from DependencyContainer
-        fatalError("Mock injection not implemented for type \(T.self)")
-    }
-
-    public init(wrappedValue: T) {
-        self.wrappedValue = wrappedValue
-    }
-}
-
 // Mock service implementations for compilation
+@MainActor
 public class MockAnalyticsService: AnalyticsServiceProtocol {
-    public let serviceId = "mock_analytics"
+    public let serviceId = "mock_analytics_service"
     public let version = "1.0.0"
+
+    public init() {}
+
     public func initialize() async throws {}
     public func cleanup() async {}
     public func healthCheck() async -> ServiceHealthStatus { .healthy }
 
-    public func track(event: String, properties _: [String: Any]?, userId _: String?) async {
+    public func track(event: String, properties: [String: AnyCodable]?, userId: String?) async {
         print("📊 Mock Analytics: \(event)")
     }
+
     public func trackUserAction(_ action: UserAction) async {}
     public func trackPerformance(_ metric: PerformanceMetric) async {}
-    public func trackError(_ error: Error, context: [String: Any]?) async {}
+    public func trackError(_ error: any Error & Sendable, context: [String: AnyCodable]?) async {}
+
     public func getAnalyticsSummary(timeRange: DateInterval) async throws -> AnalyticsSummary {
         AnalyticsSummary(
-            timeRange: timeRange, totalEvents: 0, uniqueUsers: 0, topActions: [:],
-            averageSessionDuration: 0, errorRate: 0, performanceMetrics: [:])
+            timeRange: timeRange,
+            totalEvents: 0,
+            uniqueUsers: 0,
+            topActions: [:],
+            averageSessionDuration: 0,
+            errorRate: 0,
+            performanceMetrics: [:]
+        )
     }
-    public func exportData(format: ExportFormat, timeRange: DateInterval) async throws -> Data {
+
+    public func exportData(format: SharedKitCore.ExportFormat, timeRange: DateInterval) async throws
+        -> Data
+    {
         Data()
     }
 }
 
+@MainActor
 public class MockHabitService: HabitServiceProtocol {
     public let serviceId = "mock_habit"
     public let version = "1.0.0"
+
+    public init() {}
+
     public func initialize() async throws {}
     public func cleanup() async {}
     public func healthCheck() async -> ServiceHealthStatus { .healthy }
 
-    public func createHabit(_ habit: any EnhancedHabitProtocol) async throws
-        -> any EnhancedHabitProtocol
-    {
-        habit
+    public func createHabit(_ habit: EnhancedHabit) async throws -> EnhancedHabit {
+        return habit
     }
 
     public func logHabitCompletion(
         _ habitId: UUID,
-        value _: Double?,
-        mood _: MoodRating?,
-        notes _: String?
-    ) async throws -> any EnhancedHabitLogProtocol {
-        MockHabitLog(id: UUID(), habitId: habitId)
+        value: Double? = nil,
+        mood: MoodRating? = nil,
+        notes: String? = nil
+    ) async throws -> EnhancedHabitLog {
+        return EnhancedHabitLog(
+            habit: EnhancedHabit(name: "Mock"),
+            completionDate: Date(),
+            isCompleted: true,
+            actualDurationMinutes: value.map { Int($0) },
+            notes: notes,
+            mood: mood
+        )
     }
 
-    public func calculateStreak(for _: UUID) async throws -> Int {
-        0
+    public func calculateStreak(for habitId: UUID) async throws -> Int {
+        return 0
     }
 
     public func getHabitInsights(for habitId: UUID, timeRange: DateInterval) async throws
         -> HabitInsights
     {
-        HabitInsights(
+        return HabitInsights(
             habitId: habitId,
             timeRange: timeRange,
-            completionRate: 0,
+            completionRate: 0.0,
             currentStreak: 0,
             longestStreak: 0,
-            averageValue: nil,
-            moodCorrelation: nil,
+            averageValue: 0.0,
+            moodCorrelation: 0.0,
             recommendations: []
         )
     }
 
-    public func checkAchievements(for _: UUID) async throws -> [any HabitAchievementProtocol] {
-        []
+    public func checkAchievements(for habitId: UUID) async throws -> [HabitAchievement] {
+        return []
     }
 
     public func generateRecommendations(for userId: String) async throws -> [HabitRecommendation] {
-        []
+        return []
     }
 }
 
-public class MockFinancialService: FinancialServiceProtocol {
-    public let serviceId = "mock_financial"
+@MainActor
+public class MockFinancialService: SharedKitCore.FinancialServiceProtocol {
+    public let serviceId = "mock_financial_service"
     public let version = "1.0.0"
+
+    public init() {}
+
     public func initialize() async throws {}
     public func cleanup() async {}
-    public func healthCheck() async -> ServiceHealthStatus { .healthy }
+    public func healthCheck() async -> SharedKitCore.ServiceHealthStatus { .healthy }
 
-    public func createTransaction(_ transaction: any EnhancedFinancialTransactionProtocol)
-        async throws
-        -> any EnhancedFinancialTransactionProtocol
-    {
+    public func createTransaction(
+        _ transaction: EnhancedFinancialTransaction
+    ) async throws -> EnhancedFinancialTransaction {
         transaction
     }
 
-    public func calculateNetWorth(for userId: String, asOf: Date?) async throws -> NetWorthSummary {
-        NetWorthSummary(
+    public func calculateAccountBalance(_ accountId: UUID, asOf: Date?) async throws -> Double { 0 }
+
+    public func getBudgetInsights(for budgetId: UUID, timeRange: DateInterval) async throws
+        -> SharedKitCore.BudgetInsights
+    {
+        SharedKitCore.BudgetInsights(
+            budgetId: budgetId,
+            timeRange: timeRange,
+            utilizationRate: 0.5,
+            categoryBreakdown: [:],
+            trendAnalysis: .stable,
+            recommendations: [],
+            alerts: []
+        )
+    }
+
+    public func calculateNetWorth(for userId: String, asOf date: Date?) async throws
+        -> SharedKitCore.NetWorthSummary
+    {
+        SharedKitCore.NetWorthSummary(
             userId: userId,
-            asOfDate: asOf ?? Date(),
+            asOfDate: date ?? Date(),
             totalAssets: 0,
             totalLiabilities: 0,
             monthOverMonthChange: 0,
             yearOverYearChange: 0,
-            breakdown: NetWorthBreakdown(
-                cashAndEquivalents: 0, investments: 0, realEstate: 0, personalProperty: 0,
-                creditCardDebt: 0, loans: 0, mortgages: 0)
+            breakdown: SharedKitCore.NetWorthBreakdown(
+                cashAndEquivalents: 0,
+                investments: 0,
+                realEstate: 0,
+                personalProperty: 0,
+                creditCardDebt: 0,
+                loans: 0,
+                mortgages: 0
+            )
         )
     }
 
-    public func generateFinancialRecommendations(for _: String) async throws
-        -> [FinancialRecommendation]
+    public func generateFinancialRecommendations(for userId: String) async throws -> [SharedKitCore
+        .FinancialRecommendation]
+    { [] }
+
+    public func categorizeTransaction(
+        _ transaction: EnhancedFinancialTransaction
+    ) async throws -> SharedKitCore.TransactionCategory {
+        .expense
+    }
+
+    public func getTransaction(by id: UUID) async throws -> EnhancedFinancialTransaction? {
+        nil
+    }
+
+    public func getAllTransactions(predicate: NSPredicate?) async throws
+        -> [EnhancedFinancialTransaction]
     {
         []
     }
 
-    public func calculateAccountBalance(_ accountId: UUID, asOf: Date?) async throws -> Double { 0 }
-    public func getBudgetInsights(for budgetId: UUID, timeRange: DateInterval) async throws
-        -> BudgetInsights
+    public func updateTransaction(
+        _ transaction: EnhancedFinancialTransaction
+    )
+        async throws -> EnhancedFinancialTransaction
     {
-        BudgetInsights(
-            budgetId: budgetId, timeRange: timeRange, utilizationRate: 0, categoryBreakdown: [:],
-            trendAnalysis: .stable, recommendations: [], alerts: [])
+        transaction
     }
-    public func categorizeTransaction(_ transaction: any EnhancedFinancialTransactionProtocol)
-        async throws -> TransactionCategory
-    { .other }
+
+    public func deleteTransaction(by id: UUID) async throws {}
+
+    public func batchCreateTransactions(
+        _ transactions: [EnhancedFinancialTransaction]
+    )
+        async throws -> [EnhancedFinancialTransaction]
+    {
+        transactions
+    }
+
+    public func batchUpdateTransactions(
+        _ transactions: [EnhancedFinancialTransaction]
+    )
+        async throws -> [EnhancedFinancialTransaction]
+    {
+        transactions
+    }
+
+    public func batchDeleteTransactions(ids: [UUID]) async throws {}
+
+    public func searchTransactions(query: String, fields: [String]) async throws
+        -> [EnhancedFinancialTransaction]
+    {
+        []
+    }
+
+    public func countTransactions(predicate: NSPredicate?) async throws -> Int {
+        0
+    }
+
+    public func validateTransaction(
+        _ transaction: EnhancedFinancialTransaction
+    )
+        async throws
+    {}
+
+    public func exportFinancialData(for userId: String, format: SharedKitCore.ExportFormat)
+        async throws -> Data
+    {
+        Data()
+    }
 }
 
+@MainActor
 public class MockPlannerService: PlannerServiceProtocol {
     public let serviceId = "mock_planner"
     public let version = "1.0.0"
+
+    public init() {}
+
     public func initialize() async throws {}
     public func cleanup() async {}
     public func healthCheck() async -> ServiceHealthStatus { .healthy }
 
-    public func createTask(_ task: any EnhancedTaskProtocol) async throws
-        -> any EnhancedTaskProtocol
-    {
-        task
+    public func createTask(_ task: EnhancedTask) async throws -> EnhancedTask {
+        return task
     }
 
-    public func updateTaskProgress(_ taskId: UUID, progress _: Double) async throws
-        -> any EnhancedTaskProtocol
-    {
-        MockTask(id: taskId, title: "Mock Task")
+    public func updateTaskProgress(_ taskId: UUID, progress: Double) async throws -> EnhancedTask {
+        return EnhancedTask(title: "Mock Task")
+    }
+
+    public func calculateGoalProgress(_ goalId: UUID) async throws -> SharedKitCore.GoalProgress {
+        SharedKitCore.GoalProgress(
+            goalId: goalId,
+            currentProgress: 0,
+            targetValue: 100,
+            estimatedCompletion: nil,
+            milestones: []
+        )
+    }
+
+    public func generateTaskRecommendations(
+        for userId: String, context: SharedKitCore.PlanningContext
+    ) async throws -> [SharedKitCore.TaskRecommendation] {
+        []
     }
 
     public func optimizeSchedule(for userId: String, timeRange: DateInterval) async throws
-        -> ScheduleOptimization
+        -> SharedKitCore.ScheduleOptimization
     {
-        ScheduleOptimization(
+        SharedKitCore.ScheduleOptimization(
             userId: userId,
             timeRange: timeRange,
             optimizedTasks: [],
@@ -183,11 +288,10 @@ public class MockPlannerService: PlannerServiceProtocol {
         )
     }
 
-    public func getProductivityInsights(
-        for userId: String,
-        timeRange: DateInterval
-    ) async throws -> ProductivityInsights {
-        ProductivityInsights(
+    public func getProductivityInsights(for userId: String, timeRange: DateInterval) async throws
+        -> SharedKitCore.ProductivityInsights
+    {
+        SharedKitCore.ProductivityInsights(
             userId: userId,
             timeRange: timeRange,
             completionRate: 0,
@@ -198,118 +302,68 @@ public class MockPlannerService: PlannerServiceProtocol {
             recommendations: []
         )
     }
-
-    public func calculateGoalProgress(_ goalId: UUID) async throws -> GoalProgress {
-        GoalProgress(
-            goalId: goalId, currentProgress: 0, targetValue: 100, estimatedCompletion: nil,
-            milestones: [])
-    }
-
-    public func generateTaskRecommendations(for userId: String, context: PlanningContext)
-        async throws -> [TaskRecommendation]
-    {
-        []
-    }
 }
 
-public class MockCrossProjectService: CrossProjectServiceProtocol {
-    public let serviceId = "mock_cross_project"
+@MainActor
+public class MockCrossProjectService: SharedKitCore.CrossProjectServiceProtocol {
+    public let serviceId = "mock_cross_project_service"
     public let version = "1.0.0"
+
+    public init() {}
+
     public func initialize() async throws {}
     public func cleanup() async {}
-    public func healthCheck() async -> ServiceHealthStatus { .healthy }
+    public func healthCheck() async -> SharedKitCore.ServiceHealthStatus { .healthy }
 
-    public func syncData(from sourceProject: ProjectType, to targetProject: ProjectType)
-        async throws
-    {
-        print("Mock sync from \(sourceProject.displayName) to \(targetProject.displayName)")
+    public func syncData(
+        from sourceProject: SharedKitCore.ProjectType, to targetProject: SharedKitCore.ProjectType
+    ) async throws {
+        print("Mock sync from \(sourceProject.rawValue) to \(targetProject.rawValue)")
     }
 
     public func getCrossProjectReferences(for entityId: UUID, entityType: String) async throws
-        -> [CrossProjectReference]
-    { [] }
-    public func createCrossProjectRelationship(_ relationship: CrossProjectRelationship)
-        async throws
-    {}
-    public func getUnifiedUserInsights(for userId: String) async throws -> UnifiedUserInsights {
-        UnifiedUserInsights(
+        -> [SharedKitCore.CrossProjectReference]
+    {
+        []
+    }
+
+    public func createCrossProjectRelationship(
+        _ relationship: SharedKitCore.CrossProjectRelationship
+    ) async throws {}
+
+    public func getUnifiedUserInsights(for userId: String) async throws
+        -> SharedKitCore.UnifiedUserInsights
+    {
+        SharedKitCore.UnifiedUserInsights(
             userId: userId,
             timeRange: DateInterval(start: Date(), duration: 3600),
             habitInsights: [],
             financialInsights: nil,
-            productivityInsights: ProductivityInsights(
-                userId: userId, timeRange: DateInterval(start: Date(), duration: 3600),
-                completionRate: 0, averageTaskDuration: 0, peakProductivityHours: [],
-                productivityTrend: .stable, topCategories: [:], recommendations: []),
+            productivityInsights: SharedKitCore.ProductivityInsights(
+                userId: userId,
+                timeRange: DateInterval(start: Date(), duration: 3600),
+                completionRate: 0,
+                averageTaskDuration: 0,
+                peakProductivityHours: [],
+                productivityTrend: .stable,
+                topCategories: [:],
+                recommendations: []
+            ),
             crossProjectCorrelations: [],
             overallScore: 0,
             recommendations: []
         )
     }
-    public func exportUnifiedData(for userId: String, format: ExportFormat) async throws -> Data {
+
+    public func exportUnifiedData(for userId: String, format: SharedKitCore.ExportFormat)
+        async throws -> Data
+    {
         Data()
     }
 }
 
-// Mock model implementations
-public struct MockHabitLog: EnhancedHabitLogProtocol {
-    public let id: UUID
-    public var habitId: UUID
-    public var timestamp: Date = Date()
-    public var value: Double?
-    public var mood: MoodRating?
-    public var notes: String?
-}
-
-public struct MockTask: EnhancedTaskProtocol {
-    public let id: UUID
-    public var title: String
-    public var description: String?
-    public var priority: ServiceTaskPriority = .medium
-    public var isCompleted: Bool = false
-    public var dueDate: Date?
-    public var category: String = "General"
-    public var tags: [String] = []
-    public var estimatedDuration: TimeInterval?
-    public var actualDuration: TimeInterval?
-    public var completedAt: Date?
-}
-
-public struct MockHabit: EnhancedHabitProtocol {
-    public let id: UUID
-    public var name: String
-    public var description: String?
-    public var frequency: HabitFrequency = .daily
-    public var targetValue: Double?
-    public var unit: String?
-    public var category: HabitCategory = .health
-    public var difficulty: HabitDifficulty = .medium
-    public var streak: Int = 0
-    public var createdAt: Date = Date()
-    public var updatedAt: Date = Date()
-}
-
-public struct MockTransaction: EnhancedFinancialTransactionProtocol {
-    public let id: UUID
-    public var amount: Double
-    public var date: Date = Date()
-    public var description: String = ""
-    public var category: BudgetCategory = .other
-    public var type: TransactionType = .expense
-    public var accountId: UUID = UUID()
-    public var tags: [String] = []
-    public var isPending: Bool = false
-    public var merchantName: String?
-}
-
-public struct MockAchievement: HabitAchievementProtocol {
-    public let id: UUID
-    public var habitId: UUID
-    public var title: String = ""
-    public var description: String = ""
-    public var dateEarned: Date = Date()
-    public var icon: String = ""
-}
+// Mock model implementations removed as we now use concrete types locally or in tests
+// Mock implementations removed
 
 // MARK: - Core State Management Protocols
 
@@ -372,46 +426,30 @@ public protocol StateSynchronizable {
 // MARK: - State Change Models
 
 /// Represents a state change event
+// MARK: - State Management Core
+
 public struct StateChange: Sendable {
-    public let id: UUID = .init()
+    public let id: UUID
     public let timestamp: Date = .init()
-    public let sourceProject: ProjectType
+    public let sourceProject: SharedKitCore.ProjectType
     public let stateManager: String
-    public let changeType: StateChangeType
-    public let payload: [String: Any]
+    public let changeType: SharedKitCore.StateChangeType
+    public let payload: [String: SharedKitCore.StateValue]
     public let userId: String?
 
     public init(
-        sourceProject: ProjectType,
+        sourceProject: SharedKitCore.ProjectType,
         stateManager: String,
-        changeType: StateChangeType,
-        payload: [String: Any],
+        changeType: SharedKitCore.StateChangeType,
+        payload: [String: SharedKitCore.StateValue],
         userId: String? = nil
     ) {
+        self.id = UUID()
         self.sourceProject = sourceProject
         self.stateManager = stateManager
         self.changeType = changeType
         self.payload = payload
         self.userId = userId
-    }
-}
-
-/// State change type enumeration
-public enum StateChangeType {
-    case create
-    case update
-    case delete
-    case sync
-    case reset
-
-    public var description: String {
-        switch self {
-        case .create: "Create"
-        case .update: "Update"
-        case .delete: "Delete"
-        case .sync: "Sync"
-        case .reset: "Reset"
-        }
     }
 }
 
@@ -445,7 +483,7 @@ where T.ID == UUID {
     public func initialize() async throws {
         await self.analyticsService.track(
             event: "state_manager_initialized",
-            properties: ["state_id": self.stateId],
+            properties: ["state_id": AnyCodable(self.stateId)],
             userId: nil as String?
         )
     }
@@ -456,7 +494,7 @@ where T.ID == UUID {
         self.lastUpdated = nil
         await self.analyticsService.track(
             event: "state_manager_reset",
-            properties: ["state_id": self.stateId],
+            properties: ["state_id": AnyCodable(self.stateId)],
             userId: nil as String?
         )
     }
@@ -465,7 +503,7 @@ where T.ID == UUID {
         self.cancellables.removeAll()
         await self.analyticsService.track(
             event: "state_manager_cleaned_up",
-            properties: ["state_id": self.stateId],
+            properties: ["state_id": AnyCodable(self.stateId)],
             userId: nil as String?
         )
     }
@@ -522,7 +560,12 @@ where T.ID == UUID {
         self.error = error
         if error != nil {
             Task {
-                await self.analyticsService.trackError(error!, context: ["state_id": self.stateId])
+                await self.analyticsService.trackError(
+                    error!,
+                    context: [
+                        "state_id": .string(self.stateId),
+                        "error": .string(error!.localizedDescription),
+                    ])
             }
         }
     }
@@ -537,7 +580,9 @@ where T.ID == UUID {
                 Task {
                     await self.analyticsService.track(
                         event: "state_items_changed",
-                        properties: ["state_id": self.stateId, "item_count": self.items.count],
+                        properties: [
+                            "state_id": .string(self.stateId), "item_count": .int(self.items.count),
+                        ],
                         userId: nil as String?
                     )
                 }
@@ -557,9 +602,9 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
 
     // MARK: - Published Properties
 
-    @Published public private(set) var habits: [UUID: EnhancedHabitProtocol] = [:]
-    @Published public private(set) var habitLogs: [UUID: [EnhancedHabitLogProtocol]] = [:]
-    @Published public private(set) var achievements: [UUID: [HabitAchievementProtocol]] = [:]
+    @Published public private(set) var habits: [UUID: EnhancedHabit] = [:]
+    @Published public private(set) var habitLogs: [UUID: [EnhancedHabitLog]] = [:]
+    @Published public private(set) var achievements: [UUID: [HabitAchievement]] = [:]
     @Published public private(set) var streaks: [UUID: Int] = [:]
     @Published public private(set) var insights: [UUID: HabitInsights] = [:]
 
@@ -569,8 +614,9 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
 
     // MARK: - Services
 
-    @MockInjected private var habitService: HabitServiceProtocol
-    @MockInjected private var analyticsService: AnalyticsServiceProtocol
+    @SharedKitCore.MockInjected public var habitService: any SharedKitCore.HabitServiceProtocol
+    @SharedKitCore.MockInjected public var analyticsService:
+        any SharedKitCore.AnalyticsServiceProtocol
 
     private var cancellables = Set<AnyCancellable>()
     private var pendingChanges: [StateChange] = []
@@ -622,7 +668,7 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
 
     // MARK: - Habit Management
 
-    public func createHabit(_ habit: EnhancedHabitProtocol) async throws {
+    public func createHabit(_ habit: EnhancedHabit) async throws {
         self.isLoading = true
         defer { isLoading = false }
 
@@ -632,15 +678,18 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
 
             self.addPendingChange(
                 StateChange(
-                    sourceProject: .habitQuest,
+                    sourceProject: ProjectType.habitQuest,
                     stateManager: self.stateId,
                     changeType: .create,
-                    payload: ["habit_id": createdHabit.id.uuidString, "name": createdHabit.name]
+                    payload: [
+                        "habitId": SharedKitCore.StateValue.string(createdHabit.id.uuidString),
+                        "name": SharedKitCore.StateValue.string(createdHabit.name),
+                    ]
                 ))
 
             await self.analyticsService.track(
                 event: "habit_created",
-                properties: ["habit_id": createdHabit.id.uuidString],
+                properties: ["habitId": .string(createdHabit.id.uuidString)],
                 userId: nil
             )
         } catch {
@@ -649,7 +698,7 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
         }
     }
 
-    public func updateHabit(_ habit: EnhancedHabitProtocol) async throws {
+    public func updateHabit(_ habit: EnhancedHabit) async throws {
         self.isLoading = true
         defer { isLoading = false }
 
@@ -660,12 +709,15 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
                 sourceProject: .habitQuest,
                 stateManager: self.stateId,
                 changeType: .update,
-                payload: ["habit_id": habit.id.uuidString, "name": habit.name]
+                payload: [
+                    "habitId": SharedKitCore.StateValue.string(habit.id.uuidString),
+                    "name": SharedKitCore.StateValue.string(habit.name),
+                ]
             ))
 
         await self.analyticsService.track(
             event: "habit_updated",
-            properties: ["habit_id": habit.id.uuidString],
+            properties: ["habit_id": .string(habit.id.uuidString)],
             userId: nil
         )
     }
@@ -681,13 +733,13 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
             StateChange(
                 sourceProject: .habitQuest,
                 stateManager: self.stateId,
-                changeType: .delete,
-                payload: ["habit_id": habitId.uuidString]
+                changeType: SharedKitCore.StateChangeType.delete,
+                payload: ["habitId": SharedKitCore.StateValue.string(habitId.uuidString)]
             ))
 
         await self.analyticsService.track(
             event: "habit_deleted",
-            properties: ["habit_id": habitId.uuidString],
+            properties: ["habit_id": .string(habitId.uuidString)],
             userId: nil
         )
     }
@@ -718,10 +770,10 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
             await self.analyticsService.track(
                 event: "habit_completed",
                 properties: [
-                    "habit_id": habitId.uuidString,
-                    "value": value ?? 0,
-                    "mood": mood?.rawValue ?? 0,
-                    "streak": currentStreak,
+                    "habitId": .string(habitId.uuidString),
+                    "value": .double(value ?? 0),
+                    "mood": .int(mood?.rawValue ?? 0),
+                    "streak": .int(currentStreak),
                 ], userId: nil)
         } catch {
             self.error = error
@@ -738,8 +790,8 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
             await self.analyticsService.track(
                 event: "habit_insights_loaded",
                 properties: [
-                    "habit_id": habitId.uuidString,
-                    "completion_rate": habitInsights.completionRate,
+                    "habit_id": .string(habitId.uuidString),
+                    "completion_rate": .double(habitInsights.completionRate),
                 ], userId: nil)
         } catch {
             self.error = error
@@ -761,7 +813,7 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
 
         await self.analyticsService.track(
             event: "habit_state_saved",
-            properties: ["habit_count": self.habits.count],
+            properties: ["habit_count": .int(self.habits.count)],
             userId: nil
         )
     }
@@ -789,7 +841,7 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
         for project in projects {
             await self.analyticsService.track(
                 event: "habit_state_sync_requested",
-                properties: ["target_project": project.rawValue],
+                properties: ["target_project": .string(project.rawValue)],
                 userId: nil
             )
         }
@@ -804,17 +856,16 @@ public final class HabitStateManager: ObservableObject, StateManagerProtocol, St
             await self.analyticsService.track(
                 event: "external_habit_change_received",
                 properties: [
-                    "source_project": change.sourceProject.rawValue,
-                    "change_type": change.changeType.description,
+                    "source_project": .string(change.sourceProject.rawValue),
+                    "change_type": .string(change.changeType.description),
                 ], userId: change.userId)
 
         case .delete:
             // Handle external deletions
-            if let habitIdString = change.payload["habit_id"] as? String,
+            guard let habitIdString = change.payload["habitId"]?.stringValue,
                 let habitId = UUID(uuidString: habitIdString)
-            {
-                self.habits.removeValue(forKey: habitId)
-            }
+            else { return }
+            self.habits.removeValue(forKey: habitId)
 
         case .sync, .reset:
             // Handle sync and reset operations
@@ -858,8 +909,8 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
 
     // MARK: - Published Properties
 
-    @Published public private(set) var accounts: [UUID: EnhancedFinancialTransactionProtocol] = [:]
-    @Published public private(set) var transactions: [EnhancedFinancialTransactionProtocol] = []
+    @Published public private(set) var accounts: [UUID: EnhancedFinancialAccount] = [:]
+    @Published public private(set) var transactions: [EnhancedFinancialTransaction] = []
     @Published public private(set) var budgets: [UUID: BudgetInsights] = [:]
     @Published public private(set) var netWorth: NetWorthSummary?
     @Published public private(set) var recommendations: [FinancialRecommendation] = []
@@ -924,8 +975,7 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
 
     // MARK: - Financial Operations
 
-    public func createTransaction(_ transaction: EnhancedFinancialTransactionProtocol) async throws
-    {
+    public func createTransaction(_ transaction: EnhancedFinancialTransaction) async throws {
         self.isLoading = true
         defer { isLoading = false }
 
@@ -939,17 +989,20 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
                     stateManager: self.stateId,
                     changeType: .create,
                     payload: [
-                        "transaction_id": createdTransaction.id.uuidString,
-                        "amount": createdTransaction.amount,
+                        "transaction_id": .string(createdTransaction.id.uuidString),
+                        "amount": .double(createdTransaction.amount),
                     ]
                 ))
 
             await self.analyticsService.track(
                 event: "transaction_created",
                 properties: [
-                    "transaction_id": createdTransaction.id.uuidString,
-                    "amount": createdTransaction.amount,
-                ], userId: nil)
+                    "transactionId": .string(transaction.id.uuidString),
+                    "amount": .double(transaction.amount),
+                    "category": .string(transaction.category ?? "Uncategorized"),
+                    "timestamp": .int(Int(transaction.date.timeIntervalSince1970)),
+                ],
+                userId: nil)
         } catch {
             self.error = error
             throw error
@@ -968,8 +1021,8 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
             await self.analyticsService.track(
                 event: "net_worth_calculated",
                 properties: [
-                    "user_id": userId,
-                    "net_worth": netWorthSummary.netWorth,
+                    "user_id": .string(userId),
+                    "net_worth": .double(netWorthSummary.netWorth),
                 ], userId: userId)
         } catch {
             self.error = error
@@ -989,8 +1042,8 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
             await self.analyticsService.track(
                 event: "financial_recommendations_generated",
                 properties: [
-                    "user_id": userId,
-                    "recommendation_count": newRecommendations.count,
+                    "user_id": .string(userId),
+                    "recommendation_count": .int(newRecommendations.count),
                 ], userId: userId)
         } catch {
             self.error = error
@@ -1004,7 +1057,7 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
         UserDefaults.standard.set(Date(), forKey: "financial_last_save_date")
         await self.analyticsService.track(
             event: "financial_state_saved",
-            properties: ["transaction_count": self.transactions.count],
+            properties: ["transaction_count": AnyCodable(self.transactions.count)],
             userId: nil
         )
     }
@@ -1030,7 +1083,7 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
         self.lastSyncDate = Date()
         await self.analyticsService.track(
             event: "financial_state_synced",
-            properties: ["project_count": projects.count],
+            properties: ["project_count": AnyCodable(projects.count)],
             userId: nil
         )
     }
@@ -1039,8 +1092,8 @@ public final class FinancialStateManager: ObservableObject, StateManagerProtocol
         await self.analyticsService.track(
             event: "external_financial_change_received",
             properties: [
-                "source_project": change.sourceProject.rawValue,
-                "change_type": change.changeType.description,
+                "source_project": AnyCodable(change.sourceProject.rawValue),
+                "change_type": AnyCodable(change.changeType.description),
             ], userId: change.userId)
     }
 
@@ -1080,7 +1133,7 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
 
     // MARK: - Published Properties
 
-    @Published public private(set) var tasks: [UUID: EnhancedTaskProtocol] = [:]
+    @Published public private(set) var tasks: [UUID: EnhancedTask] = [:]
     @Published public private(set) var goals: [UUID: GoalProgress] = [:]
     @Published public private(set) var scheduleOptimization: ScheduleOptimization?
     @Published public private(set) var productivityInsights: ProductivityInsights?
@@ -1146,7 +1199,7 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
 
     // MARK: - Task Management
 
-    public func createTask(_ task: EnhancedTaskProtocol) async throws {
+    public func createTask(_ task: EnhancedTask) async throws {
         self.isLoading = true
         defer { isLoading = false }
 
@@ -1159,15 +1212,19 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
                     sourceProject: .plannerApp,
                     stateManager: self.stateId,
                     changeType: .create,
-                    payload: ["task_id": createdTask.id.uuidString, "title": createdTask.title]
+                    payload: [
+                        "task_id": .string(createdTask.id.uuidString),
+                        "title": .string(createdTask.title),
+                    ]
                 ))
 
             await self.analyticsService.track(
                 event: "task_created",
                 properties: [
-                    "task_id": createdTask.id.uuidString,
-                    "title": createdTask.title,
-                ], userId: nil)
+                    "taskId": .string(createdTask.id.uuidString),
+                    "title": .string(createdTask.title),
+                ],
+                userId: nil)
         } catch {
             self.error = error
             throw error
@@ -1186,8 +1243,8 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
             await self.analyticsService.track(
                 event: "task_progress_updated",
                 properties: [
-                    "task_id": taskId.uuidString,
-                    "progress": progress,
+                    "task_id": .string(taskId.uuidString),
+                    "progress": .double(progress),
                 ], userId: nil)
         } catch {
             self.error = error
@@ -1207,9 +1264,9 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
             await self.analyticsService.track(
                 event: "schedule_optimized",
                 properties: [
-                    "user_id": userId,
-                    "efficiency": optimization.efficiency,
-                    "task_count": optimization.optimizedTasks.count,
+                    "user_id": .string(userId),
+                    "efficiency": .double(optimization.efficiency),
+                    "task_count": .int(optimization.optimizedTasks.count),
                 ], userId: userId)
         } catch {
             self.error = error
@@ -1229,8 +1286,8 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
             await self.analyticsService.track(
                 event: "productivity_insights_loaded",
                 properties: [
-                    "user_id": userId,
-                    "completion_rate": insights.completionRate,
+                    "user_id": .string(userId),
+                    "completion_rate": .double(insights.completionRate),
                 ], userId: userId)
         } catch {
             self.error = error
@@ -1244,7 +1301,7 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
         UserDefaults.standard.set(Date(), forKey: "planner_last_save_date")
         await self.analyticsService.track(
             event: "planner_state_saved",
-            properties: ["task_count": self.tasks.count],
+            properties: ["task_count": .int(self.tasks.count)],
             userId: nil
         )
     }
@@ -1269,7 +1326,7 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
         self.lastSyncDate = Date()
         await self.analyticsService.track(
             event: "planner_state_synced",
-            properties: ["project_count": projects.count],
+            properties: ["project_count": .int(projects.count)],
             userId: nil
         )
     }
@@ -1278,8 +1335,8 @@ public final class PlannerStateManager: ObservableObject, StateManagerProtocol, 
         await self.analyticsService.track(
             event: "external_planner_change_received",
             properties: [
-                "source_project": change.sourceProject.rawValue,
-                "change_type": change.changeType.description,
+                "source_project": .string(change.sourceProject.rawValue),
+                "change_type": .string(change.changeType.description),
             ], userId: change.userId)
     }
 
@@ -1385,7 +1442,7 @@ public final class GlobalStateCoordinator: ObservableObject {
             .momentumFinance,
             .plannerApp,
             .codingReviewer,
-            .avoidObstaclesGame,
+            .avoidObstacles,
         ]
 
         do {
@@ -1411,8 +1468,8 @@ public final class GlobalStateCoordinator: ObservableObject {
             await self.analyticsService.track(
                 event: "global_state_synced",
                 properties: [
-                    "change_count": allChanges.count,
-                    "projects_synced": allProjects.count,
+                    "change_count": .int(allChanges.count),
+                    "projects_synced": .int(allProjects.count),
                 ], userId: nil)
         } catch {
             self.globalError = error

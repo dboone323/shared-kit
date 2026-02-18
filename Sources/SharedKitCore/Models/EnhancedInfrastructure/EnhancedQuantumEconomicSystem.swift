@@ -14,11 +14,16 @@ import SwiftData
 public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossProjectRelatable {
     public var id: UUID
     public var name: String
-    public var description: String
+    public var systemDescription: String
     public var creationDate: Date
     public var lastModified: Date
     public var version: String
     public var isActive: Bool
+
+    // Cross-project Properties
+    public var globalId: String
+    public var projectContext: ProjectType
+    public var externalReferences: [ExternalReference]
 
     // Core Economic Metrics
     public var globalGDP: Double
@@ -75,17 +80,14 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
     @Relationship(deleteRule: .cascade, inverse: \EnhancedEconomicMetric.economicSystem)
     public var performanceMetrics: [EnhancedEconomicMetric] = []
 
-    // Tracking
-    public var eventLog: [TrackedEvent] = []
-    public var crossProjectReferences: [CrossProjectReference] = []
-
     public init(
         name: String = "Enhanced Quantum Economic System",
         description: String = "Universal quantum-enhanced economic infrastructure"
     ) {
-        self.id = UUID()
+        let newId = UUID()
+        self.id = newId
         self.name = name
-        self.description = description
+        self.systemDescription = description
         self.creationDate = Date()
         self.lastModified = Date()
         self.version = "1.0.0"
@@ -110,8 +112,6 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
 
         // Initialize performance
         self.averageIncome = 0.0
-        self.unemploymentRate = 0.0
-        self.inflationRate = 0.0
         self.investmentReturns = 0.0
         self.debtToGDPRatio = 0.0
 
@@ -136,7 +136,18 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
         self.resourceOptimization = 0.0
         self.supplyChainResilience = 0.0
 
+        self.unemploymentRate = 0.0
+        self.inflationRate = 0.0
+
+        self.globalId = "economic_system_\(newId.uuidString)"
+        self.projectContext = .momentumFinance
+        self.externalReferences = []
+
         self.trackEvent("system_initialized", parameters: ["version": self.version])
+    }
+
+    public var isValid: Bool {
+        (try? validate()) != nil
     }
 
     // MARK: - Validatable Protocol
@@ -158,32 +169,37 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
 
     // MARK: - Trackable Protocol
 
-    public func trackEvent(_ event: String, parameters: [String: Any] = [:]) {
-        let trackedEvent = TrackedEvent(
-            componentId: self.id,
-            eventType: event,
-            parameters: parameters,
-            timestamp: Date()
-        )
-        self.eventLog.append(trackedEvent)
-        self.lastModified = Date()
+    public var trackingId: String {
+        "economic_\(self.id.uuidString)"
+    }
+
+    public var analyticsMetadata: [String: Any] {
+        [
+            "name": self.name,
+            "globalGDP": self.globalGDP,
+            "economicStability": self.economicStability,
+            "incomeEquality": self.incomeEquality,
+        ]
+    }
+
+    public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
+        var eventParameters = self.analyticsMetadata
+        parameters?.forEach { key, value in
+            eventParameters[key] = value
+        }
+        print("Tracking economic event: \(event) with parameters: \(eventParameters)")
     }
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
-        let reference = CrossProjectReference(
-            sourceProjectId: self.id,
-            targetProjectId: projectId,
-            referenceType: referenceType,
-            referenceId: referenceId,
-            timestamp: Date()
+    public func addExternalReference(project: ProjectType, type: String, id: String) {
+        let reference = ExternalReference(
+            projectContext: project,
+            modelType: type,
+            modelId: id,
+            relationshipType: "related"
         )
-        self.crossProjectReferences.append(reference)
-    }
-
-    public func getRelatedProjects() -> [UUID] {
-        self.crossProjectReferences.map(\.targetProjectId)
+        self.externalReferences.append(reference)
     }
 
     // MARK: - Economic System Methods
@@ -213,7 +229,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
         case .enterprise:
             self.activeEnterprises += 1
         case .government:
-            break // Governments are not counted in participants
+            break  // Governments are not counted in participants
         case .nonprofit:
             self.activeEnterprises += 1
         }
@@ -310,13 +326,13 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
 
         // Calculate inflation rate (simplified - based on transaction volume growth)
         // This would need historical data in a real implementation
-        self.inflationRate = 0.02 // Placeholder: 2% inflation
+        self.inflationRate = 0.02  // Placeholder: 2% inflation
 
         // Calculate investment returns (simplified)
         let investmentTransactions = self.transactions.filter { $0.transactionType == .investment }
         if !investmentTransactions.isEmpty {
             let totalInvested = investmentTransactions.reduce(0.0) { $0 + $1.amount }
-            let returns = totalInvested * 1.15 // Assume 15% return
+            let returns = totalInvested * 1.15  // Assume 15% return
             self.investmentReturns = (returns - totalInvested) / totalInvested
         }
 
@@ -366,8 +382,8 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
     public func optimizeEconomicStability() {
         // Calculate economic stability based on various factors
         let stabilityFactors = [
-            1.0 - self.unemploymentRate, // Lower unemployment = higher stability
-            1.0 - abs(self.inflationRate - 0.02), // Closer to 2% target inflation = higher stability
+            1.0 - self.unemploymentRate,  // Lower unemployment = higher stability
+            1.0 - abs(self.inflationRate - 0.02),  // Closer to 2% target inflation = higher stability
             self.innovationIndex,
             self.sustainabilityIndex,
             self.tradeEfficiency,
@@ -399,7 +415,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
     @MainActor
     public func updateSocialEconomicMetrics() {
         // Poverty reduction based on entities above poverty line
-        let povertyLine = 1000.0 // Arbitrary poverty line
+        let povertyLine = 1000.0  // Arbitrary poverty line
         let abovePovertyLine = self.economicEntities.filter { $0.balance >= povertyLine }.count
         self.povertyReduction =
             Double(abovePovertyLine) / Double(max(1, self.economicEntities.count))
@@ -437,7 +453,7 @@ public final class EnhancedQuantumEconomicSystem: Validatable, Trackable, CrossP
         self.tradeVolume = max(self.tradeVolume, targetVolume)
 
         // Improve trade route efficiency with quantum optimization
-        self.tradeRouteEfficiency = min(1.0, self.tradeRouteEfficiency + 0.1)
+        self.tradeEfficiency = min(1.0, self.tradeEfficiency + 0.1)
 
         // Optimize resource allocation
         self.resourceOptimization = min(1.0, self.resourceOptimization + 0.08)

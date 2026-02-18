@@ -39,14 +39,17 @@ private struct CloudFallbackPolicy {
         guard enabled else { return }
         var tracker = Self.readJSON(path: quotaTrackerPath) ?? [:]
         var cb = (tracker["circuit_breaker"] as? [String: Any]) ?? [:]
-        var pcb = (cb[priority] as? [String: Any]) ?? [
-            "state": "closed", "failure_count": 0, "last_failure": NSNull(), "opened_at": NSNull(),
-        ]
+        var pcb =
+            (cb[priority] as? [String: Any]) ?? [
+                "state": "closed", "failure_count": 0, "last_failure": NSNull(),
+                "opened_at": NSNull(),
+            ]
         let now = Self.iso8601Now()
         let failures = ((pcb["failure_count"] as? Int) ?? 0) + 1
         pcb["failure_count"] = failures
         pcb["last_failure"] = now
-        let threshold = ((config["circuit_breaker"] as? [String: Any])?["failure_threshold"] as? Int) ?? 3
+        let threshold =
+            ((config["circuit_breaker"] as? [String: Any])?["failure_threshold"] as? Int) ?? 3
         if failures >= threshold {
             pcb["state"] = "open"
             pcb["opened_at"] = now
@@ -59,8 +62,8 @@ private struct CloudFallbackPolicy {
     func checkCircuit(priority: String) -> Bool {
         guard enabled else { return true }
         guard let tracker = Self.readJSON(path: quotaTrackerPath),
-              let cb = tracker["circuit_breaker"] as? [String: Any],
-              let pcb = cb[priority] as? [String: Any]
+            let cb = tracker["circuit_breaker"] as? [String: Any],
+            let pcb = cb[priority] as? [String: Any]
         else { return true }
         let state = (pcb["state"] as? String) ?? "closed"
         if state == "open" {
@@ -72,8 +75,8 @@ private struct CloudFallbackPolicy {
     func checkQuota(priority: String) -> Bool {
         guard enabled else { return true }
         guard let tracker = Self.readJSON(path: quotaTrackerPath),
-              let quotas = tracker["quotas"] as? [String: Any],
-              let pq = quotas[priority] as? [String: Any]
+            let quotas = tracker["quotas"] as? [String: Any],
+            let pq = quotas[priority] as? [String: Any]
         else { return false }
         let dailyUsed = (pq["daily_used"] as? Int) ?? 0
         let hourlyUsed = (pq["hourly_used"] as? Int) ?? 0
@@ -82,7 +85,9 @@ private struct CloudFallbackPolicy {
         return dailyUsed < dailyLimit && hourlyUsed < hourlyLimit
     }
 
-    func logEscalation(task: String, priority: String, reason: String, modelAttempted: String, provider: String) {
+    func logEscalation(
+        task: String, priority: String, reason: String, modelAttempted: String, provider: String
+    ) {
         guard enabled else { return }
         let now = Self.iso8601Now()
         let line: [String: Any] = [
@@ -94,7 +99,7 @@ private struct CloudFallbackPolicy {
             "cloud_provider": provider,
         ]
         if let data = try? JSONSerialization.data(withJSONObject: line),
-           let s = String(data: data, encoding: .utf8)
+            let s = String(data: data, encoding: .utf8)
         {
             if FileManager.default.fileExists(atPath: escalationLogPath) == false {
                 FileManager.default.createFile(atPath: escalationLogPath, contents: nil)
@@ -113,7 +118,8 @@ private struct CloudFallbackPolicy {
     }
 
     private static func writeJSON(path: String, object: [String: Any]) {
-        if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
+        if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted])
+        {
             try? data.write(to: URL(fileURLWithPath: path))
         }
     }
@@ -139,7 +145,7 @@ private struct CloudFallbackPolicy {
 public class OllamaClient: ObservableObject {
     private let config: OllamaConfig
     private let session: URLSession
-    private let logger: Logger
+    // private let logger: os.Logger
     private let cache: OllamaCache
     private let metrics: OllamaMetrics
     private var lastRequestTime: Date = .distantPast
@@ -161,8 +167,7 @@ public class OllamaClient: ObservableObject {
         configuration.httpMaximumConnectionsPerHost = 4
         self.session = URLSession(configuration: configuration)
 
-        // Enhanced logging
-        self.logger = Logger(subsystem: "OllamaClient", category: "AI")
+        // self.logger calls removed
 
         // Cache and metrics
         self.cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)
@@ -184,23 +189,19 @@ public class OllamaClient: ObservableObject {
                 let models = try await listModels()
                 self.availableModels = models
                 self.serverStatus = await self.getServerStatus()
-                self.logger.info("Connected to Ollama server with \(models.count) models")
+                // self.logger.info("Connected to Ollama server with \(models.count) models")
             }
         } catch {
-            self.logger.error("Failed to initialize connection: \(error.localizedDescription)")
+            // self.logger.error("Failed to initialize connection: \(error.localizedDescription)")
         }
     }
 
     private func ensureModelAvailable(_ model: String) async throws {
-        if !self.availableModels.contains(model), self.config.enableAutoModelDownload {
-            self.logger.info("Auto-downloading model: \(model)")
-            try await self.pullModel(model)
-            self.availableModels = try await self.listModels()
-        } else if !self.availableModels.contains(model) {
+        if !self.availableModels.contains(model) {
             // Try fallback models
             for fallback in self.config.fallbackModels {
                 if self.availableModels.contains(fallback) {
-                    self.logger.info("Using fallback model: \(fallback) instead of \(model)")
+                    // self.logger.warning("Model \(model) unavailable, using fallback: \(fallback)")
                     return
                 }
             }
@@ -226,15 +227,16 @@ public class OllamaClient: ObservableObject {
 
         // If cloud models are enabled and preferred, try cloud models first
         if self.config.enableCloudModels,
-           self.config.preferCloudModels || self.isCloudModel(targetModel)
+            self.config.preferCloudModels || self.isCloudModel(targetModel)
         {
             if self.isCloudModel(targetModel) {
                 // Gate cloud by policy; default priority medium (shared-kit)
                 let priority = "medium"
                 if policy
-                    .enabled == false ||
-                    (policy.allowed(priority: priority) && policy.checkQuota(priority: priority) && policy
-                        .checkCircuit(priority: priority))
+                    .enabled == false
+                    || (policy.allowed(priority: priority) && policy.checkQuota(priority: priority)
+                        && policy
+                            .checkCircuit(priority: priority))
                 {
                     // Cloud disabled in config by default; log and fall back to local
                     policy.logEscalation(
@@ -296,7 +298,7 @@ public class OllamaClient: ObservableObject {
         // Check cache first
         if useCache, self.config.enableCaching {
             let cacheKey = "\(requestModel):\(prompt.hashValue):\(requestTemp)"
-            if let cached = cache.get(cacheKey) {
+            if let cached = await cache.get(cacheKey) {
                 self.metrics.recordCacheHit()
                 return cached
             }
@@ -314,8 +316,6 @@ public class OllamaClient: ObservableObject {
             "stream": false,
         ]
 
-        self.logger.info("Generating with model: \(requestModel), prompt length: \(prompt.count)")
-
         do {
             let response = try await performRequestWithRetry(
                 endpoint: "api/generate", body: requestBody
@@ -327,7 +327,7 @@ public class OllamaClient: ObservableObject {
             // Cache successful response
             if useCache, self.config.enableCaching {
                 let cacheKey = "\(requestModel):\(prompt.hashValue):\(requestTemp)"
-                self.cache.set(cacheKey, value: result)
+                await self.cache.set(cacheKey, value: result)
             }
 
             // Record metrics
@@ -338,6 +338,7 @@ public class OllamaClient: ObservableObject {
 
             return result
         } catch {
+            // self.logger.error("API Error: \(error.localizedDescription)")
             self.metrics.recordError(error: error)
             throw error
         }
@@ -387,7 +388,7 @@ public class OllamaClient: ObservableObject {
         let response = try await performRequestWithRetry(endpoint: "api/chat", body: requestBody)
 
         guard let message = response["message"] as? [String: Any],
-              let content = message["content"] as? String
+            let content = message["content"] as? String
         else {
             throw OllamaError.invalidResponseFormat
         }
@@ -417,7 +418,7 @@ public class OllamaClient: ObservableObject {
             } catch {
                 lastError = error
                 if attempt < self.config.maxRetries - 1 {
-                    let delay = pow(2.0, Double(attempt)) // Exponential backoff
+                    let delay = pow(2.0, Double(attempt))  // Exponential backoff
                     try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                 }
             }
@@ -425,7 +426,7 @@ public class OllamaClient: ObservableObject {
 
         // Record failure for circuit breaker (shared-kit default medium priority)
         policy.recordFailure(priority: "medium")
-        throw lastError ?? OllamaError.invalidResponse
+        throw lastError ?? OllamaError.maxRetriesExceeded
     }
 
     private func optimizeMessageContext(_ messages: [OllamaMessage]) -> [OllamaMessage] {
@@ -485,7 +486,7 @@ public class OllamaClient: ObservableObject {
         let response = try await performRequest(endpoint: "api/chat", body: requestBody)
 
         guard let message = response["message"] as? [String: Any],
-              let content = message["content"] as? String
+            let content = message["content"] as? String
         else {
             throw OllamaError.invalidResponseFormat
         }
@@ -545,7 +546,8 @@ public class OllamaClient: ObservableObject {
 
     // MARK: - Private Methods
 
-    private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any] {
+    private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any]
+    {
         // Validate URL construction for security
         let urlString = "\(config.baseURL)/\(endpoint)"
         guard let url = URL(string: urlString), url.scheme?.hasPrefix("http") == true else {
@@ -577,13 +579,12 @@ public class OllamaClient: ObservableObject {
 
 // MARK: - Enhanced Cache System
 
-private class OllamaCache {
+private actor OllamaCache {
     private var cache: [String: CacheEntry] = [:]
     private let enabled: Bool
     private let expiryTime: TimeInterval
-    private let queue = DispatchQueue(label: "ollama.cache", attributes: .concurrent)
 
-    struct CacheEntry {
+    struct CacheEntry: Sendable {
         let value: String
         let timestamp: Date
 
@@ -599,26 +600,25 @@ private class OllamaCache {
 
     func get(_ key: String) -> String? {
         guard self.enabled else { return nil }
-
-        return self.queue.sync {
-            guard let entry = cache[key], !entry.isExpired(expiryTime: expiryTime) else {
-                self.cache.removeValue(forKey: key)
-                return nil
-            }
-            return entry.value
+        guard let entry = cache[key], !entry.isExpired(expiryTime: expiryTime) else {
+            self.cache.removeValue(forKey: key)
+            return nil
         }
+        return entry.value
+    }
+
+    private func log(_ message: String, type: OSLogType = .default) {
+        // self.logger.log(level: type, "\(message)")
+        // print(message)
     }
 
     func set(_ key: String, value: String) {
         guard self.enabled else { return }
+        self.cache[key] = CacheEntry(value: value, timestamp: Date())
 
-        self.queue.async(flags: .barrier) {
-            self.cache[key] = CacheEntry(value: value, timestamp: Date())
-
-            // Clean expired entries periodically
-            if self.cache.count > 100 {
-                self.cleanExpiredEntries()
-            }
+        // Clean expired entries periodically
+        if self.cache.count > 100 {
+            self.cleanExpiredEntries()
         }
     }
 
@@ -671,17 +671,17 @@ private class OllamaMetrics {
 
 // MARK: - Convenience Extensions
 
-public extension OllamaClient {
-    func generateCode(
+extension OllamaClient {
+    public func generateCode(
         language: String,
         task: String,
         context: String? = nil
     ) async throws -> String {
         let userPrompt = """
-        Language: \(language)
-        Task: \(task)
-        \(context != nil ? "Context: \(context!)" : "")
-        """
+            Language: \(language)
+            Task: \(task)
+            \(context != nil ? "Context: \(context!)" : "")
+            """
 
         return try await self.generate(
             model: "codellama",
@@ -691,20 +691,20 @@ public extension OllamaClient {
         )
     }
 
-    func analyzeCode(
+    public func analyzeCode(
         code: String,
         language: String
     ) async throws -> String {
         let prompt = """
-        Analyze this \(language) code for:
-        1. Potential bugs or issues
-        2. Performance improvements
-        3. Best practices compliance
-        4. Security concerns
+            Analyze this \(language) code for:
+            1. Potential bugs or issues
+            2. Performance improvements
+            3. Best practices compliance
+            4. Security concerns
 
-        Code:
-        \(code)
-        """
+            Code:
+            \(code)
+            """
 
         return try await self.generate(
             model: "llama2",
@@ -714,20 +714,20 @@ public extension OllamaClient {
         )
     }
 
-    func generateDocumentation(
+    public func generateDocumentation(
         code: String,
         language: String
     ) async throws -> String {
         let prompt = """
-        Generate comprehensive documentation for this \(language) code including:
-        - Function/class purpose
-        - Parameters and return values
-        - Usage examples
-        - Important notes
+            Generate comprehensive documentation for this \(language) code including:
+            - Function/class purpose
+            - Parameters and return values
+            - Usage examples
+            - Important notes
 
-        Code:
-        \(code)
-        """
+            Code:
+            \(code)
+            """
 
         return try await self.generate(
             model: "llama2",

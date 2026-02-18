@@ -67,17 +67,17 @@ public struct AnyCodable: Codable, Sendable {
         var container = encoder.singleValueContainer()
 
         switch value {
-        case let .string(stringValue):
+        case .string(let stringValue):
             try container.encode(stringValue)
-        case let .int(intValue):
+        case .int(let intValue):
             try container.encode(intValue)
-        case let .double(doubleValue):
+        case .double(let doubleValue):
             try container.encode(doubleValue)
-        case let .bool(boolValue):
+        case .bool(let boolValue):
             try container.encode(boolValue)
-        case let .array(arrayValue):
+        case .array(let arrayValue):
             try container.encode(arrayValue)
-        case let .dictionary(dictValue):
+        case .dictionary(let dictValue):
             try container.encode(dictValue)
         case .null:
             try container.encodeNil()
@@ -97,60 +97,60 @@ public struct AnyCodable: Codable, Sendable {
 
     /// Extract the value as a specific type
     public func asString() -> String? {
-        if case let .string(value) = value { return value }
+        if case .string(let value) = value { return value }
         return nil
     }
 
     public func asInt() -> Int? {
-        if case let .int(value) = value { return value }
+        if case .int(let value) = value { return value }
         return nil
     }
 
     public func asDouble() -> Double? {
-        if case let .double(value) = value { return value }
+        if case .double(let value) = value { return value }
         return nil
     }
 
     public func asBool() -> Bool? {
-        if case let .bool(value) = value { return value }
+        if case .bool(let value) = value { return value }
         return nil
     }
 
     public func asArray() -> [AnyCodable]? {
-        if case let .array(value) = value { return value }
+        if case .array(let value) = value { return value }
         return nil
     }
 
     public func asDictionary() -> [String: AnyCodable]? {
-        if case let .dictionary(value) = value { return value }
+        if case .dictionary(let value) = value { return value }
         return nil
     }
 }
 
 // MARK: - Convenience Initializers
 
-public extension AnyCodable {
-    static func string(_ value: String) -> AnyCodable {
+extension AnyCodable {
+    public static func string(_ value: String) -> AnyCodable {
         AnyCodable(value)
     }
 
-    static func int(_ value: Int) -> AnyCodable {
+    public static func int(_ value: Int) -> AnyCodable {
         AnyCodable(value)
     }
 
-    static func double(_ value: Double) -> AnyCodable {
+    public static func double(_ value: Double) -> AnyCodable {
         AnyCodable(value)
     }
 
-    static func bool(_ value: Bool) -> AnyCodable {
+    public static func bool(_ value: Bool) -> AnyCodable {
         AnyCodable(value)
     }
 
-    static func array(_ value: [any Sendable]) -> AnyCodable {
+    public static func array(_ value: [any Sendable]) -> AnyCodable {
         AnyCodable(value)
     }
 
-    static func dictionary(_ value: [String: any Sendable]) -> AnyCodable {
+    public static func dictionary(_ value: [String: any Sendable]) -> AnyCodable {
         AnyCodable(value)
     }
 }
@@ -160,12 +160,12 @@ public extension AnyCodable {
 extension AnyCodable: CustomStringConvertible {
     public var description: String {
         switch value {
-        case let .string(value): return "\"\(value)\""
-        case let .int(value): return "\(value)"
-        case let .double(value): return "\(value)"
-        case let .bool(value): return "\(value)"
-        case let .array(value): return "\(value)"
-        case let .dictionary(value): return "\(value)"
+        case .string(let value): return "\"\(value)\""
+        case .int(let value): return "\(value)"
+        case .double(let value): return "\(value)"
+        case .bool(let value): return "\(value)"
+        case .array(let value): return "\(value)"
+        case .dictionary(let value): return "\(value)"
         case .null: return "null"
         }
     }
@@ -176,14 +176,51 @@ extension AnyCodable: CustomStringConvertible {
 extension AnyCodable: Equatable {
     public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {
         switch (lhs.value, rhs.value) {
-        case let (.string(lhs), .string(rhs)): return lhs == rhs
-        case let (.int(lhs), .int(rhs)): return lhs == rhs
-        case let (.double(lhs), .double(rhs)): return lhs == rhs
-        case let (.bool(lhs), .bool(rhs)): return lhs == rhs
-        case let (.array(lhs), .array(rhs)): return lhs == rhs
-        case let (.dictionary(lhs), .dictionary(rhs)): return lhs == rhs
+        case (.string(let lhs), .string(let rhs)): return lhs == rhs
+        case (.int(let lhs), .int(let rhs)): return lhs == rhs
+        case (.double(let lhs), .double(let rhs)): return lhs == rhs
+        case (.bool(let lhs), .bool(let rhs)): return lhs == rhs
+        case (.array(let lhs), .array(let rhs)): return lhs == rhs
+        case (.dictionary(let lhs), .dictionary(let rhs)): return lhs == rhs
         case (.null, .null): return true
         default: return false
         }
+    }
+}
+// MARK: - ExpressibleByLiteral Support
+
+extension AnyCodable: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        self.init(value)
+    }
+}
+
+extension AnyCodable: ExpressibleByIntegerLiteral {
+    public init(integerLiteral value: Int) {
+        self.init(value)
+    }
+}
+
+extension AnyCodable: ExpressibleByFloatLiteral {
+    public init(floatLiteral value: Double) {
+        self.init(value)
+    }
+}
+
+extension AnyCodable: ExpressibleByBooleanLiteral {
+    public init(booleanLiteral value: Bool) {
+        self.init(value)
+    }
+}
+
+extension AnyCodable: ExpressibleByArrayLiteral {
+    public init(arrayLiteral elements: AnyCodable...) {
+        self.init(elements)
+    }
+}
+
+extension AnyCodable: ExpressibleByDictionaryLiteral {
+    public init(dictionaryLiteral elements: (String, AnyCodable)...) {
+        self.init(Dictionary(uniqueKeysWithValues: elements))
     }
 }

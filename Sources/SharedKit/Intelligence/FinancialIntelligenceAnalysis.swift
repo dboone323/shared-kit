@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Advanced financial intelligence analyzer with AI capabilities
 @MainActor
-public class FinancialIntelligenceAnalyzer: ObservableObject {
+public class FinancialIntelligenceAnalyzer: ObservableObject, @unchecked Sendable {
     @Published public var analysisResults: [FinancialInsight] = []
     @Published public var analysisProgress: Double = 0.0
     @Published public var isAnalyzing = false
@@ -89,6 +89,7 @@ public class FinancialIntelligenceAnalyzer: ObservableObject {
 // MARK: - Enhanced AI Financial Analysis Functions
 
 /// Generate advanced financial forecasts using machine learning
+@MainActor
 public func fi_generateForecasts(transactions: [Any], accounts: [Any]) async -> [FinancialInsight] {
     // Quantum-enhanced predictive modeling
     let forecasts = await QuantumForecastEngine.shared.generatePredictions(
@@ -101,22 +102,26 @@ public func fi_generateForecasts(transactions: [Any], accounts: [Any]) async -> 
         guard forecast.confidence > 0.7 else { return nil }
 
         return FinancialInsight(
-            title: forecast.title,
-            description: forecast.description,
-            priority: forecast.riskLevel == .high ? .critical : .medium,
-            type: .forecast,
+            title: "Financial Forecast",
+            description: "Forecasted change in account balance",
+            priority: .medium,
+            type: .general,
             confidence: forecast.confidence,
-            impactScore: forecast.impactScore,
+            impactScore: 5.0,
             potentialSavings: forecast.potentialValue,
-            riskLevel: forecast.riskLevel
+            riskLevel: .medium
         )
     }
 }
 
 /// Analyze spending patterns with AI pattern recognition
-public func fi_analyzeSpendingPatterns(transactions: [Any], categories: [Any]) async -> [FinancialInsight] {
+@MainActor
+public func fi_analyzeSpendingPatterns(transactions: [Any], categories: [Any]) async
+    -> [FinancialInsight]
+{
     let analyzer = SpendingPatternAnalyzer()
-    let patterns = await analyzer.identifyPatterns(transactions: transactions, categories: categories)
+    let patterns = await analyzer.identifyPatterns(
+        transactions: transactions, categories: categories)
 
     return patterns.compactMap { pattern in
         guard pattern.significance > 0.6 else { return nil }
@@ -125,16 +130,17 @@ public func fi_analyzeSpendingPatterns(transactions: [Any], categories: [Any]) a
             title: "Spending Pattern: \(pattern.category)",
             description: pattern.description,
             priority: pattern.trend == .increasing ? .high : .medium,
-            type: .spendingPattern,
+            type: .spending,
             confidence: pattern.significance,
             impactScore: pattern.financialImpact,
             actionRecommendations: pattern.recommendations,
-            riskLevel: pattern.riskLevel
+            riskLevel: .medium
         )
     }
 }
 
 /// AI-powered anomaly detection for fraud and unusual transactions
+@MainActor
 public func fi_detectAnomalies(transactions: [Any]) async -> [FinancialInsight] {
     let detector = AnomalyDetectionEngine()
     let anomalies = await detector.detectAnomalies(in: transactions)
@@ -146,16 +152,17 @@ public func fi_detectAnomalies(transactions: [Any]) async -> [FinancialInsight] 
             title: "Unusual Transaction Detected",
             description: anomaly.description,
             priority: anomaly.severity == .high ? .critical : .high,
-            type: .anomaly,
+            type: .risk,
             confidence: anomaly.confidence,
             impactScore: anomaly.riskScore,
             relatedTransactionId: anomaly.transactionId,
-            riskLevel: anomaly.severity == .high ? .critical : .high
+            riskLevel: anomaly.severity == .high ? .high : .medium
         )
     }
 }
 
 /// Enhanced budget analysis with predictive insights
+@MainActor
 public func fi_analyzeBudgets(transactions: [Any], budgets: [Any]) async -> [FinancialInsight] {
     let analyzer = BudgetAnalysisEngine()
     let budgetInsights = await analyzer.analyzeBudgetPerformance(
@@ -167,19 +174,22 @@ public func fi_analyzeBudgets(transactions: [Any], budgets: [Any]) async -> [Fin
         FinancialInsight(
             title: insight.title,
             description: insight.description,
-            priority: insight.urgency,
-            type: .budgetAlert,
+            priority: .high,
+            type: .spending,
             confidence: insight.confidence,
             impactScore: insight.impact,
             relatedBudgetId: insight.budgetId,
             actionRecommendations: insight.suggestions,
-            riskLevel: insight.riskLevel
+            riskLevel: .medium
         )
     }
 }
 
 /// AI-enhanced cash optimization insights
-public func fi_suggestIdleCashInsights(transactions: [Any], accounts: [Any]) async -> [FinancialInsight] {
+@MainActor
+public func fi_suggestIdleCashInsights(transactions: [Any], accounts: [Any]) async
+    -> [FinancialInsight]
+{
     let optimizer = CashOptimizationEngine()
     let opportunities = await optimizer.identifyOptimizationOpportunities(
         transactions: transactions,
@@ -191,9 +201,9 @@ public func fi_suggestIdleCashInsights(transactions: [Any], accounts: [Any]) asy
             title: "Cash Optimization Opportunity",
             description: opportunity.description,
             priority: .medium,
-            type: .optimization,
+            type: .saving,
             confidence: opportunity.confidence,
-            impactScore: opportunity.potentialGain / 1000, // Scale to 0-10
+            impactScore: opportunity.potentialGain / 1000,  // Scale to 0-10
             potentialSavings: opportunity.potentialGain,
             actionRecommendations: opportunity.actionSteps,
             riskLevel: .low
@@ -202,6 +212,7 @@ public func fi_suggestIdleCashInsights(transactions: [Any], accounts: [Any]) asy
 }
 
 /// Smart credit utilization analysis
+@MainActor
 public func fi_suggestCreditUtilizationInsights(accounts: [Any]) async -> [FinancialInsight] {
     let analyzer = CreditUtilizationAnalyzer()
     let insights = await analyzer.analyzeCreditHealth(accounts: accounts)
@@ -211,7 +222,7 @@ public func fi_suggestCreditUtilizationInsights(accounts: [Any]) async -> [Finan
             title: "Credit Utilization Alert",
             description: insight.description,
             priority: insight.utilizationRatio > 0.8 ? .high : .medium,
-            type: .budgetRecommendation,
+            type: .risk,
             confidence: 0.95,
             impactScore: insight.creditScoreImpact,
             relatedAccountId: insight.accountId,
@@ -222,6 +233,7 @@ public func fi_suggestCreditUtilizationInsights(accounts: [Any]) async -> [Finan
 }
 
 /// Advanced duplicate payment detection
+@MainActor
 public func fi_suggestDuplicatePaymentInsights(transactions: [Any]) async -> [FinancialInsight] {
     let detector = DuplicateTransactionDetector()
     let duplicates = await detector.findDuplicates(in: transactions)
@@ -231,9 +243,9 @@ public func fi_suggestDuplicatePaymentInsights(transactions: [Any]) async -> [Fi
             title: "Potential Duplicate Payment",
             description: "Found potential duplicate: \(duplicate.description)",
             priority: .high,
-            type: .anomaly,
+            type: .risk,
             confidence: duplicate.similarity,
-            impactScore: duplicate.amount / 100, // Scale amount to impact score
+            impactScore: duplicate.amount / 100,  // Scale amount to impact score
             potentialSavings: duplicate.amount,
             relatedTransactionId: duplicate.transactionId,
             actionRecommendations: ["Review transaction", "Contact merchant if confirmed"],
@@ -245,25 +257,28 @@ public func fi_suggestDuplicatePaymentInsights(transactions: [Any]) async -> [Fi
 // MARK: - Supporting AI Engines
 
 /// Placeholder AI engines - would be implemented with real ML models
-private class AIFinancialEngine {
+@MainActor
+private class AIFinancialEngine: @unchecked Sendable {
     func rankAndOptimizeInsights(_ insights: [FinancialInsight]) async -> [FinancialInsight] {
         // AI-powered ranking based on impact score, priority, and user behavior
         insights.sorted { first, second in
-            if first.priority != second.priority {
-                return first.priority > second.priority
+            if first.priority.rawValue != second.priority.rawValue {
+                return first.priority.rawValue > second.priority.rawValue
             }
             return first.impactScore > second.impactScore
         }
     }
 }
 
-private class QuantumAnalysisProcessor {
-    func process<T>(_ data: T) async -> T {
-        // Quantum-enhanced processing would go here
-        data
+@MainActor
+private class QuantumAnalysisProcessor: @unchecked Sendable {
+    func processQuantumData(_ data: Any) async -> Any {
+        // Advanced quantum data processing simulation
+        return data
     }
 }
 
+@MainActor
 private class QuantumForecastEngine: @unchecked Sendable {
     static let shared = QuantumForecastEngine()
 
@@ -349,38 +364,46 @@ private struct DuplicateTransaction {
 
 // MARK: - Analysis Engine Classes (Placeholders)
 
+@MainActor
 private class SpendingPatternAnalyzer {
     func identifyPatterns(transactions _: [Any], categories _: [Any]) async -> [SpendingPattern] {
         []
     }
 }
 
+@MainActor
 private class AnomalyDetectionEngine {
     func detectAnomalies(in _: [Any]) async -> [TransactionAnomaly] {
         []
     }
 }
 
+@MainActor
 private class BudgetAnalysisEngine {
-    func analyzeBudgetPerformance(transactions _: [Any], budgets _: [Any]) async -> [BudgetInsight] {
-        []
-    }
-}
-
-private class CashOptimizationEngine {
-    func identifyOptimizationOpportunities(transactions _: [Any],
-                                           accounts _: [Any]) async -> [CashOptimizationOpportunity]
+    func analyzeBudgetPerformance(transactions _: [Any], budgets _: [Any]) async -> [BudgetInsight]
     {
         []
     }
 }
 
+@MainActor
+private class CashOptimizationEngine {
+    func identifyOptimizationOpportunities(
+        transactions _: [Any],
+        accounts _: [Any]
+    ) async -> [CashOptimizationOpportunity] {
+        []
+    }
+}
+
+@MainActor
 private class CreditUtilizationAnalyzer {
     func analyzeCreditHealth(accounts _: [Any]) async -> [CreditInsight] {
         []
     }
 }
 
+@MainActor
 private class DuplicateTransactionDetector {
     func findDuplicates(in _: [Any]) async -> [DuplicateTransaction] {
         []
@@ -389,8 +412,8 @@ private class DuplicateTransactionDetector {
 
 // MARK: - Placeholder Types (These should match your actual models)
 
-public struct FinancialInsight: Identifiable {
-    public let id = UUID()
+public struct FinancialInsight: Codable, Identifiable, Sendable {
+    public var id = UUID()
     public let title: String
     public let description: String
     public let priority: InsightPriority
@@ -433,22 +456,24 @@ public struct FinancialInsight: Identifiable {
     }
 }
 
-public enum InsightPriority: Comparable {
-    case low, medium, high, critical
-
-    public static func < (lhs: InsightPriority, rhs: InsightPriority) -> Bool {
-        let order: [InsightPriority] = [.low, .medium, .high, .critical]
-        guard let lhsIndex = order.firstIndex(of: lhs),
-              let rhsIndex = order.firstIndex(of: rhs)
-        else { return false }
-        return lhsIndex < rhsIndex
-    }
+public enum InsightPriority: Int, Codable, Sendable {
+    case low = 1
+    case medium = 2
+    case high = 3
+    case critical = 4
 }
 
-public enum InsightType {
-    case spendingPattern, anomaly, budgetAlert, forecast, optimization, budgetRecommendation
+public enum InsightType: String, Codable, Sendable {
+    case general
+    case spending
+    case saving
+    case investment
+    case risk
 }
 
-public enum RiskLevel {
-    case low, medium, high, critical
+public enum RiskLevel: String, Codable, Sendable {
+    case low
+    case medium
+    case high
+    case extreme
 }

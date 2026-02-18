@@ -11,13 +11,14 @@ import SwiftData
 // MARK: - Enhanced Quantum Governance System
 
 @Model
-public final class EnhancedUniversalComputationSystem: Validatable, Trackable, CrossProjectRelatable {
+public final class EnhancedUniversalComputationSystem: Validatable, Trackable, CrossProjectRelatable
+{
     // Core Properties
     public var id: UUID
     public var name: String
-    public var computationDescription: String
+    public var systemDescription: String
     public var creationDate: Date
-    public var lastUpdated: Date
+    public var lastModified: Date
     public var version: String
     public var isActive: Bool
 
@@ -56,7 +57,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
 
     // Cross-project Properties
     public var globalId: String
-    public var projectContext: String
+    public var projectContext: ProjectType
     public var externalReferences: [ExternalReference]
 
     // Relationships
@@ -93,11 +94,12 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
         computationDescription: String,
         version: String = "1.0.0"
     ) {
-        self.id = UUID()
+        let id = UUID()
+        self.id = id
         self.name = name
-        self.computationDescription = computationDescription
+        self.systemDescription = computationDescription
         self.creationDate = Date()
-        self.lastUpdated = Date()
+        self.lastModified = Date()
         self.version = version
         self.isActive = true
 
@@ -114,10 +116,10 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
         self.averageSessionDuration = 0.0
         self.peakConcurrentUsers = 0
         self.totalOperationsPerformed = 0.0
-        self.syncInterval = 60 * 60 // 1 hour
+        self.syncInterval = 60 * 60  // 1 hour
 
-        self.maxSessionDuration = 8 * 60 * 60 // 8 hours
-        self.computationLimitPerUser = 1e18 // 10^18 operations
+        self.maxSessionDuration = 8 * 60 * 60  // 8 hours
+        self.computationLimitPerUser = 1e18  // 10^18 operations
         self.priorityQueueEnabled = true
         self.educationalAccessPriority = true
         self.emergencyAccessOverride = true
@@ -129,14 +131,13 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
         self.personalDevicesCount = 0
         self.averageUserSatisfaction = 0.0
 
-        self.globalId = "computation_\(self.id.uuidString)"
-        self.projectContext = ProjectContext.codingReviewer.rawValue
+        self.projectContext = .codingReviewer
+        self.globalId = "computation_\(id.uuidString)"
         self.externalReferences = []
     }
 
     // MARK: - Validatable Implementation
 
-    @MainActor
     public func validate() throws {
         let errors = self.validationErrors
         if !errors.isEmpty {
@@ -159,18 +160,18 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
             errors.append(.invalid(field: "name", reason: "must be 100 characters or less"))
         }
 
-        if self.computationDescription.count > 1000 {
+        if self.systemDescription.count > 1000 {
             errors.append(
-                .invalid(field: "computationDescription", reason: "must be 1000 characters or less")
+                .invalid(field: "systemDescription", reason: "must be 1000 characters or less")
             )
         }
 
         if self.quantumCoherence < 0.0 || self.quantumCoherence > 1.0 {
-            errors.append(.outOfRange(field: "quantumCoherence", min: 0.0, max: 1.0))
+            errors.append(.outOfRange(field: "quantumCoherence", min: 0, max: 1))
         }
 
         if self.globalCoverage < 0.0 || self.globalCoverage > 1.0 {
-            errors.append(.outOfRange(field: "globalCoverage", min: 0.0, max: 1.0))
+            errors.append(.outOfRange(field: "globalCoverage", min: 0, max: 1))
         }
 
         if self.totalAccessPoints < 0 {
@@ -325,7 +326,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
             self.addAccessPoint(location: location, type: type)
         }
 
-        self.globalCoverage = min(1.0, Double(self.totalAccessPoints) / 50000.0) // Target: 50,000 access points
+        self.globalCoverage = min(1.0, Double(self.totalAccessPoints) / 50000.0)  // Target: 50,000 access points
 
         self.trackEvent(
             "infrastructure_scaled",
@@ -356,7 +357,7 @@ public final class EnhancedUniversalComputationSystem: Validatable, Trackable, C
     @MainActor
     public func updateGlobalMetrics() {
         // Update utilization and coverage
-        self.globalCoverage = min(1.0, Double(self.activeUsers) / 8_000_000_000.0) // Target: 8 billion users
+        self.globalCoverage = min(1.0, Double(self.activeUsers) / 8_000_000_000.0)  // Target: 8 billion users
 
         // Update performance metrics
         updatePerformanceMetrics()

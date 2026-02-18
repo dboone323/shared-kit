@@ -6,79 +6,12 @@
 //
 
 import Foundation
-import SharedKitCore
+
 #if canImport(SwiftData)
     @_exported import SwiftData
 #endif
 
-// MARK: - Enhanced Core Data Protocols
-
-/// Protocol for models that support validation
-@MainActor
-public protocol Validatable {
-    /// Validates the model and returns any validation errors
-    func validate() throws
-
-    /// Returns true if the model is in a valid state
-    var isValid: Bool { get }
-
-    /// Returns validation errors without throwing
-    var validationErrors: [ValidationError] { get }
-}
-
-/// Protocol for models that support analytics tracking
-public protocol Trackable {
-    /// Unique identifier for analytics
-    var trackingId: String { get }
-
-    /// Metadata for analytics
-    var analyticsMetadata: [String: Any] { get }
-
-    /// Records an analytics event
-    func trackEvent(_ event: String, parameters: [String: Any]?)
-}
-
-/// Protocol for models that support cross-project relationships
-public protocol CrossProjectRelatable {
-    /// Unique identifier that can be referenced across projects
-    var globalId: String { get }
-
-    /// Project context this model belongs to
-    var projectContext: ProjectContext { get }
-
-    /// External references to other models
-    var externalReferences: [ExternalReference] { get set }
-}
-
-// MARK: - Supporting Types
-
-public enum ProjectContext: String, CaseIterable, Codable {
-    case habitQuest
-    case momentumFinance
-    case plannerApp
-    case codingReviewer
-    case avoidObstaclesGame
-}
-
-public struct ExternalReference: Codable, Identifiable {
-    public let id: UUID
-    public let projectContext: ProjectContext
-    public let modelType: String
-    public let modelId: String
-    public let relationshipType: String
-    public let createdAt: Date
-
-    public init(
-        projectContext: ProjectContext, modelType: String, modelId: String, relationshipType: String
-    ) {
-        self.id = UUID()
-        self.projectContext = projectContext
-        self.modelType = modelType
-        self.modelId = modelId
-        self.relationshipType = relationshipType
-        self.createdAt = Date()
-    }
-}
+// MARK: - Enhanced Habit Model
 
 // MARK: - Enhanced Habit Model
 
@@ -105,21 +38,21 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     public var iconName: String
     public var notes: String
     public var isArchived: Bool
-    public var priority: Int // 1-5 scale
+    public var priority: Int  // 1-5 scale
     public var streakGoal: Int
     public var completionReward: String?
 
     // Analytics Properties
     public var totalCompletions: Int
     public var totalMissedDays: Int
-    public var averageCompletionTime: Double // in minutes
+    public var averageCompletionTime: Double  // in minutes
     public var lastCompletionDate: Date?
     public var bestStreak: Int
     public var monthlyGoal: Int
 
     // Cross-project Properties
     public var globalId: String
-    public var projectContext: String
+    public var projectContext: ProjectType
     public var externalReferences: [ExternalReference]
 
     // Relationships
@@ -177,53 +110,48 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
     // Initialization
     public init(
         name: String,
-        habitDescription: String,
-        frequency: HabitFrequency,
+        description: String = "",
+        frequency: HabitFrequency = .daily,
         xpValue: Int = 10,
+        streak: Int = 0,
         category: HabitCategory = .health,
         difficulty: HabitDifficulty = .easy,
-        tags: [String] = [],
-        estimatedDurationMinutes: Int = 15,
-        color: String = "blue",
-        iconName: String = "star",
-        priority: Int = 3,
-        streakGoal: Int = 30
+        estimatedDuration: Int = 15
     ) {
-        self.id = UUID()
+        let id = UUID()
+        self.id = id
         self.name = name
-        self.habitDescription = habitDescription
+        self.habitDescription = description
         self.frequency = frequency
         self.creationDate = Date()
         self.xpValue = xpValue
-        self.streak = 0
+        self.streak = streak
         self.isActive = true
         self.category = category
         self.difficulty = difficulty
 
-        self.tags = tags
+        self.tags = []
         self.reminderTimes = []
-        self.estimatedDurationMinutes = estimatedDurationMinutes
-        self.color = color
-        self.iconName = iconName
+        self.estimatedDurationMinutes = estimatedDuration
+        self.color = "blue"
+        self.iconName = "circle"
         self.notes = ""
         self.isArchived = false
-        self.priority = priority
-        self.streakGoal = streakGoal
-
+        self.priority = 3
+        self.streakGoal = 30
         self.totalCompletions = 0
         self.totalMissedDays = 0
         self.averageCompletionTime = 0.0
         self.bestStreak = 0
         self.monthlyGoal = 20
 
-        self.globalId = "habit_\(self.id.uuidString)"
-        self.projectContext = ProjectContext.habitQuest.rawValue
+        self.globalId = "habit_\(id.uuidString)"
+        self.projectContext = .habitQuest
         self.externalReferences = []
     }
 
     // MARK: - Validatable Implementation
 
-    @MainActor
     public func validate() throws {
         let errors = self.validationErrors
         if !errors.isEmpty {
@@ -309,7 +237,8 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
         let today = Date()
 
         // Check if already completed today
-        if let existingLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) }) {
+        if let existingLog = logs.first(where: { Calendar.current.isDateInToday($0.completionDate) }
+        ) {
             existingLog.isCompleted = true
             existingLog.actualDurationMinutes = duration.map { Int($0 / 60) }
             existingLog.notes = notes
@@ -375,6 +304,7 @@ public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable 
             / Double(self.totalCompletions)
     }
 
+    @MainActor
     private func checkAchievements() {
         // Check milestone achievements
         for milestone in self.milestones where !milestone.isAchieved {
@@ -435,7 +365,7 @@ public final class EnhancedHabitLog {
     public var actualDurationMinutes: Int?
     public var location: String?
     public var weather: String?
-    public var energyLevel: Int? // 1-10 scale
+    public var energyLevel: Int?  // 1-10 scale
 
     // Relationship
     public var habit: EnhancedHabit?
@@ -453,7 +383,7 @@ public final class EnhancedHabitLog {
         self.completionDate = completionDate
         self.isCompleted = isCompleted
         self.notes = notes
-        self.xpEarned = 0 // Will be calculated after initialization
+        self.xpEarned = 0  // Will be calculated after initialization
         self.mood = mood
         self.completionTime = isCompleted ? Date() : nil
         self.actualDurationMinutes = actualDurationMinutes
@@ -462,7 +392,8 @@ public final class EnhancedHabitLog {
     @MainActor
     public func calculateXpEarned() {
         guard let habit else { return }
-        self.xpEarned = self.isCompleted ? habit.xpValue * habit.difficulty.xpMultiplier : 0
+        self.xpEarned =
+            self.isCompleted ? Int(Double(habit.xpValue) * habit.difficulty.xpMultiplier) : 0
     }
 }
 
@@ -521,136 +452,5 @@ public final class HabitMilestone {
     public func achieve() {
         self.isAchieved = true
         self.achievedDate = Date()
-    }
-}
-
-public enum MoodRating: String, CaseIterable, Codable {
-    case terrible = "😞"
-    case poor = "😕"
-    case okay = "😐"
-    case good = "😊"
-    case excellent = "😄"
-
-    public var displayName: String {
-        switch self {
-        case .terrible: "Terrible"
-        case .poor: "Poor"
-        case .okay: "Okay"
-        case .good: "Good"
-        case .excellent: "Excellent"
-        }
-    }
-
-    public var numericValue: Int {
-        switch self {
-        case .terrible: 1
-        case .poor: 2
-        case .okay: 3
-        case .good: 4
-        case .excellent: 5
-        }
-    }
-}
-
-// Re-export existing enums with enhancements
-public enum HabitFrequency: String, CaseIterable, Codable {
-    case daily
-    case weekly
-    case biweekly
-    case monthly
-    case custom
-
-    public var displayName: String {
-        switch self {
-        case .daily: "Daily"
-        case .weekly: "Weekly"
-        case .biweekly: "Bi-weekly"
-        case .monthly: "Monthly"
-        case .custom: "Custom"
-        }
-    }
-
-    public var expectedCompletionsPerMonth: Int {
-        switch self {
-        case .daily: 30
-        case .weekly: 4
-        case .biweekly: 2
-        case .monthly: 1
-        case .custom: 15 // default estimate
-        }
-    }
-}
-
-public enum HabitCategory: String, CaseIterable, Codable {
-    case health
-    case fitness
-    case learning
-    case productivity
-    case social
-    case creativity
-    case mindfulness
-    case finance
-    case career
-    case relationship
-    case other
-
-    public var emoji: String {
-        switch self {
-        case .health: "🏥"
-        case .fitness: "🏋️‍♀️"
-        case .learning: "📚"
-        case .productivity: "💼"
-        case .social: "👥"
-        case .creativity: "🎨"
-        case .mindfulness: "🧘‍♀️"
-        case .finance: "💰"
-        case .career: "📈"
-        case .relationship: "❤️"
-        case .other: "📋"
-        }
-    }
-
-    public var color: String {
-        switch self {
-        case .health: "red"
-        case .fitness: "orange"
-        case .learning: "blue"
-        case .productivity: "green"
-        case .social: "purple"
-        case .creativity: "yellow"
-        case .mindfulness: "indigo"
-        case .finance: "mint"
-        case .career: "brown"
-        case .relationship: "pink"
-        case .other: "gray"
-        }
-    }
-}
-
-public enum HabitDifficulty: String, CaseIterable, Codable {
-    case trivial
-    case easy
-    case medium
-    case hard
-    case extreme
-
-    public var displayName: String {
-        switch self {
-        case .trivial: "Trivial"
-        case .easy: "Easy"
-        case .medium: "Medium"
-        case .hard: "Hard"
-        case .extreme: "Extreme"
-        }
-    }
-
-    public nonisolated var xpMultiplier: Int {
-        switch self {
-        case .trivial: 1
-        case .easy: 2
-        case .medium: 3
-        case .hard: 5
-        case .extreme: 8
-        }
     }
 }

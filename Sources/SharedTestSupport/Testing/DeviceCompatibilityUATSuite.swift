@@ -1,7 +1,7 @@
 import Accessibility
 import Foundation
-import os.log
 import SwiftUI
+import os.log
 
 #if canImport(UIKit)
     import UIKit
@@ -29,7 +29,7 @@ enum Platform: String {
 struct DeviceCapability {
     let name: String
     let cpuCores: Int
-    let ram: Int // MB
+    let ram: Int  // MB
     let gpu: String
     let storage: String
 }
@@ -62,9 +62,23 @@ actor CompatibilityManager {
     static let shared = CompatibilityManager()
     private init() {}
 
-    func testPerformanceOnDevice(_ capability: DeviceCapability,
-                                 completion: @escaping (DevicePerformanceTestResult) -> Void)
-    {
+    func checkBiometricAvailability(
+        completion: @escaping @Sendable (Result<BiometricType, Error>) -> Void
+    ) {
+        // Mock implementation
+        let isAvailable = Bool.random()
+        if isAvailable {
+            let biometricType: BiometricType = [.faceID, .touchID, .none].randomElement()!
+            completion(.success(biometricType))
+        } else {
+            completion(.failure(NSError(domain: "BiometricError", code: -1, userInfo: nil)))
+        }
+    }
+
+    func testPerformanceOnDevice(
+        _ capability: DeviceCapability,
+        completion: @escaping (DevicePerformanceTestResult) -> Void
+    ) {
         Task {
             try? await Task.sleep(for: .seconds(Double.random(in: 2.0...4.0)))
             let baseScore = Double.random(in: 65...90)
@@ -95,7 +109,9 @@ actor CompatibilityManager {
 }
 
 class AccessibilityValidator {
-    func runAccessibilityTest(_ testName: String, completion: @escaping (AccessibilityTestResult) -> Void) {
+    func runAccessibilityTest(
+        _ testName: String, completion: @escaping (AccessibilityTestResult) -> Void
+    ) {
         DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...2.5)) {
             let result = AccessibilityTestResult(
                 testName: testName,
@@ -129,7 +145,9 @@ class UITestRunner {
 }
 
 class LocalizationTester {
-    func testLanguageSupport(_ languageCode: String, completion: @escaping (LocalizationTestResult) -> Void) {
+    func testLanguageSupport(
+        _ languageCode: String, completion: @escaping (LocalizationTestResult) -> Void
+    ) {
         DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...2.0)) {
             let result = LocalizationTestResult(
                 languageCode: languageCode,
@@ -137,7 +155,8 @@ class LocalizationTester {
                 completeness: Double.random(in: 85...100),
                 missingTranslations: Bool.random() ? [] : ["settings.title", "error.network"],
                 layoutAdaptsCorrectly: true,
-                textDirection: languageCode == "ar" || languageCode == "he" ? .rightToLeft : .leftToRight
+                textDirection: languageCode == "ar" || languageCode == "he"
+                    ? .rightToLeft : .leftToRight
             )
             completion(result)
         }
@@ -181,9 +200,9 @@ struct UXTestResult {
 struct DevicePerformanceTestResult {
     let deviceCapability: DeviceCapability
     let performanceScore: Double
-    let memoryUsage: Double // MB
-    let cpuUsage: Double // Percentage
-    let batteryDrain: Double // Per hour
+    let memoryUsage: Double  // MB
+    let cpuUsage: Double  // Percentage
+    let batteryDrain: Double  // Per hour
     let thermalState: String
 }
 
@@ -201,21 +220,40 @@ struct BetaReadinessResult {
 class DeviceCompatibilityUATSuite {
     // MARK: - Configuration
 
-    private let logger = Logger(subsystem: "QuantumWorkspace", category: "DeviceCompatibilityUAT")
+    private let logger = os.Logger(
+        subsystem: "QuantumWorkspace", category: "DeviceCompatibilityUAT")
     private let testTimeout: TimeInterval = 45.0
 
     // MARK: - Device Testing Matrix
 
     private let iOSDevices = [
-        DeviceSpec(name: "iPhone 15 Pro", screenSize: CGSize(width: 393, height: 852), platform: .iOS, version: "17.0"),
-        DeviceSpec(name: "iPhone 15", screenSize: CGSize(width: 393, height: 852), platform: .iOS, version: "17.0"),
-        DeviceSpec(name: "iPhone 14 Pro", screenSize: CGSize(width: 393, height: 852), platform: .iOS, version: "16.0"),
-        DeviceSpec(name: "iPhone 14", screenSize: CGSize(width: 390, height: 844), platform: .iOS, version: "16.0"),
-        DeviceSpec(name: "iPhone 13", screenSize: CGSize(width: 390, height: 844), platform: .iOS, version: "15.0"),
-        DeviceSpec(name: "iPhone SE", screenSize: CGSize(width: 375, height: 667), platform: .iOS, version: "15.0"),
-        DeviceSpec(name: "iPad Pro", screenSize: CGSize(width: 1024, height: 1366), platform: .iPadOS, version: "17.0"),
-        DeviceSpec(name: "iPad Air", screenSize: CGSize(width: 820, height: 1180), platform: .iPadOS, version: "16.0"),
-        DeviceSpec(name: "iPad", screenSize: CGSize(width: 810, height: 1080), platform: .iPadOS, version: "15.0"),
+        DeviceSpec(
+            name: "iPhone 15 Pro", screenSize: CGSize(width: 393, height: 852), platform: .iOS,
+            version: "17.0"),
+        DeviceSpec(
+            name: "iPhone 15", screenSize: CGSize(width: 393, height: 852), platform: .iOS,
+            version: "17.0"),
+        DeviceSpec(
+            name: "iPhone 14 Pro", screenSize: CGSize(width: 393, height: 852), platform: .iOS,
+            version: "16.0"),
+        DeviceSpec(
+            name: "iPhone 14", screenSize: CGSize(width: 390, height: 844), platform: .iOS,
+            version: "16.0"),
+        DeviceSpec(
+            name: "iPhone 13", screenSize: CGSize(width: 390, height: 844), platform: .iOS,
+            version: "15.0"),
+        DeviceSpec(
+            name: "iPhone SE", screenSize: CGSize(width: 375, height: 667), platform: .iOS,
+            version: "15.0"),
+        DeviceSpec(
+            name: "iPad Pro", screenSize: CGSize(width: 1024, height: 1366), platform: .iPadOS,
+            version: "17.0"),
+        DeviceSpec(
+            name: "iPad Air", screenSize: CGSize(width: 820, height: 1180), platform: .iPadOS,
+            version: "16.0"),
+        DeviceSpec(
+            name: "iPad", screenSize: CGSize(width: 810, height: 1080), platform: .iPadOS,
+            version: "15.0"),
     ]
 
     private let macOSDevices = [
@@ -237,7 +275,9 @@ class DeviceCompatibilityUATSuite {
             platform: .macOS,
             version: "13.0"
         ),
-        DeviceSpec(name: "iMac 24\"", screenSize: CGSize(width: 4480, height: 2520), platform: .macOS, version: "14.0"),
+        DeviceSpec(
+            name: "iMac 24\"", screenSize: CGSize(width: 4480, height: 2520), platform: .macOS,
+            version: "14.0"),
         DeviceSpec(
             name: "Mac Studio",
             screenSize: CGSize(width: 5120, height: 2880),
@@ -287,16 +327,20 @@ class DeviceCompatibilityUATSuite {
                 // Validate individual device compatibility
                 if !result.isCompatible {
                     self.logger
-                        .error("Compatibility failed for \(device.name): \(result.issues.joined(separator: ", "))")
+                        .error(
+                            "Compatibility failed for \(device.name): \(result.issues.joined(separator: ", "))"
+                        )
                 }
                 if result.performanceScore <= 60 {
-                    self.logger.error("Performance too low for \(device.name): \(result.performanceScore)")
+                    self.logger.error(
+                        "Performance too low for \(device.name): \(result.performanceScore)")
                 }
 
                 completedTests += 1
                 if completedTests == totalTests {
                     // Analyze overall iOS compatibility
-                    let averagePerformance = compatibilityResults.map(\.performanceScore)
+                    let averagePerformance =
+                        compatibilityResults.map(\.performanceScore)
                         .reduce(0, +) / Double(compatibilityResults.count)
                     let compatibleDevices = compatibilityResults.filter(\.isCompatible).count
 
@@ -306,12 +350,13 @@ class DeviceCompatibilityUATSuite {
                     self.logger.info("   Compatible Devices: \(compatibleDevices)/\(totalTests)")
                     self.logger.info("   Average Performance: \(averagePerformance)%")
 
-                    completion(TestResult(
-                        testName: "iOS Device Compatibility",
-                        passed: success,
-                        score: averagePerformance,
-                        details: "Compatible devices: \(compatibleDevices)/\(totalTests)"
-                    ))
+                    completion(
+                        TestResult(
+                            testName: "iOS Device Compatibility",
+                            passed: success,
+                            score: averagePerformance,
+                            details: "Compatible devices: \(compatibleDevices)/\(totalTests)"
+                        ))
                 }
             }
         }
@@ -338,12 +383,13 @@ class DeviceCompatibilityUATSuite {
 
         // Simulate other test suites (simplified for compilation)
         DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
-            allResults.append(TestResult(
-                testName: "macOS Device Compatibility",
-                passed: true,
-                score: 85.0,
-                details: "All macOS devices compatible"
-            ))
+            allResults.append(
+                TestResult(
+                    testName: "macOS Device Compatibility",
+                    passed: true,
+                    score: 85.0,
+                    details: "All macOS devices compatible"
+                ))
             completedTestSuites += 1
             if completedTestSuites == totalTestSuites {
                 completion(allResults)
@@ -351,12 +397,13 @@ class DeviceCompatibilityUATSuite {
         }
 
         DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
-            allResults.append(TestResult(
-                testName: "Accessibility Compliance",
-                passed: true,
-                score: 92.0,
-                details: "All accessibility tests passed"
-            ))
+            allResults.append(
+                TestResult(
+                    testName: "Accessibility Compliance",
+                    passed: true,
+                    score: 92.0,
+                    details: "All accessibility tests passed"
+                ))
             completedTestSuites += 1
             if completedTestSuites == totalTestSuites {
                 completion(allResults)
@@ -364,12 +411,13 @@ class DeviceCompatibilityUATSuite {
         }
 
         DispatchQueue.global().asyncAfter(deadline: .now() + 4.0) {
-            allResults.append(TestResult(
-                testName: "Internationalization Compliance",
-                passed: true,
-                score: 88.0,
-                details: "Most languages fully localized"
-            ))
+            allResults.append(
+                TestResult(
+                    testName: "Internationalization Compliance",
+                    passed: true,
+                    score: 88.0,
+                    details: "Most languages fully localized"
+                ))
             completedTestSuites += 1
             if completedTestSuites == totalTestSuites {
                 completion(allResults)
@@ -377,12 +425,13 @@ class DeviceCompatibilityUATSuite {
         }
 
         DispatchQueue.global().asyncAfter(deadline: .now() + 5.0) {
-            allResults.append(TestResult(
-                testName: "User Experience Flows",
-                passed: true,
-                score: 90.0,
-                details: "All user flows completed successfully"
-            ))
+            allResults.append(
+                TestResult(
+                    testName: "User Experience Flows",
+                    passed: true,
+                    score: 90.0,
+                    details: "All user flows completed successfully"
+                ))
             completedTestSuites += 1
             if completedTestSuites == totalTestSuites {
                 completion(allResults)
@@ -390,12 +439,13 @@ class DeviceCompatibilityUATSuite {
         }
 
         DispatchQueue.global().asyncAfter(deadline: .now() + 6.0) {
-            allResults.append(TestResult(
-                testName: "Beta Testing Readiness",
-                passed: true,
-                score: 95.0,
-                details: "Ready for beta testing program"
-            ))
+            allResults.append(
+                TestResult(
+                    testName: "Beta Testing Readiness",
+                    passed: true,
+                    score: 95.0,
+                    details: "Ready for beta testing program"
+                ))
             completedTestSuites += 1
             if completedTestSuites == totalTestSuites {
                 completion(allResults)
@@ -405,9 +455,10 @@ class DeviceCompatibilityUATSuite {
 
     // MARK: - Helper Methods
 
-    private func testDeviceCompatibility(device: DeviceSpec,
-                                         completion: @escaping (DeviceCompatibilityResult) -> Void)
-    {
+    private func testDeviceCompatibility(
+        device: DeviceSpec,
+        completion: @escaping (DeviceCompatibilityResult) -> Void
+    ) {
         // Simulate device compatibility testing
         DispatchQueue.global().asyncAfter(deadline: .now() + Double.random(in: 1.0...3.0)) {
             let result = DeviceCompatibilityResult(

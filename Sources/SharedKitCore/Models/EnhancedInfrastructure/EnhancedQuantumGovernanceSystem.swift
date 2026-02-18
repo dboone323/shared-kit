@@ -15,9 +15,9 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
     // Core Properties
     public var id: UUID
     public var name: String
-    public var governanceDescription: String
+    public var systemDescription: String
     public var creationDate: Date
-    public var lastUpdated: Date
+    public var lastModified: Date
     public var version: String
     public var isActive: Bool
 
@@ -55,8 +55,8 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
 
     // Cross-project Properties
     public var globalId: String
-    public var projectContext: String
-    public var externalReferences: [ExternalReference]
+    public var projectContext: ProjectType
+    public var externalReferences: [ExternalReference] = []
 
     // Relationships
     @Relationship(deleteRule: .cascade, inverse: \EnhancedGovernanceDecision.governanceSystem)
@@ -87,20 +87,21 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
     }
 
     public var averagePolicyOptimization: Double {
-        policies.reduce(0.0) { $0 + $1.optimizationScore } / Double(max(1, policies.count))
+        policies.reduce(0.0) { $0 + $1.effectiveness } / Double(max(1, policies.count))
     }
 
     // Initialization
     public init(
         name: String,
-        governanceDescription: String,
+        systemDescription: String,
         version: String = "1.0.0"
     ) {
-        self.id = UUID()
+        let id = UUID()
+        self.id = id
         self.name = name
-        self.governanceDescription = governanceDescription
+        self.systemDescription = systemDescription
         self.creationDate = Date()
-        self.lastUpdated = Date()
+        self.lastModified = Date()
         self.version = version
         self.isActive = true
 
@@ -116,7 +117,7 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         self.totalDecisionsMade = 0
         self.averageDecisionTime = 0.0
         self.systemUptime = 100.0
-        self.maintenanceInterval = 30 * 24 * 60 * 60 // 30 days
+        self.maintenanceInterval = 30 * 24 * 60 * 60  // 30 days
 
         self.decisionThreshold = 0.8
         self.ethicalOverrideEnabled = true
@@ -130,14 +131,13 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         self.crossBorderDecisions = 0
         self.emergencyDecisions = 0
 
-        self.globalId = "governance_\(self.id.uuidString)"
-        self.projectContext = ProjectContext.codingReviewer.rawValue
+        self.globalId = "governance_\(id.uuidString)"
+        self.projectContext = .codingReviewer
         self.externalReferences = []
     }
 
     // MARK: - Validatable Implementation
 
-    @MainActor
     public func validate() throws {
         let errors = self.validationErrors
         if !errors.isEmpty {
@@ -160,29 +160,29 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
             errors.append(.invalid(field: "name", reason: "must be 100 characters or less"))
         }
 
-        if self.governanceDescription.count > 1000 {
+        if self.systemDescription.count > 1000 {
             errors.append(
-                .invalid(field: "governanceDescription", reason: "must be 1000 characters or less"))
+                .invalid(field: "systemDescription", reason: "must be 1000 characters or less"))
         }
 
         if self.quantumCoherence < 0.0 || self.quantumCoherence > 1.0 {
-            errors.append(.outOfRange(field: "quantumCoherence", min: 0.0, max: 1.0))
+            errors.append(.outOfRange(field: "quantumCoherence", min: 0, max: 1))
         }
 
         if self.globalCoverage < 0.0 || self.globalCoverage > 1.0 {
-            errors.append(.outOfRange(field: "globalCoverage", min: 0.0, max: 1.0))
+            errors.append(.outOfRange(field: "globalCoverage", min: 0, max: 1))
         }
 
         if self.decisionAccuracy < 0.0 || self.decisionAccuracy > 1.0 {
-            errors.append(.outOfRange(field: "decisionAccuracy", min: 0.0, max: 1.0))
+            errors.append(.outOfRange(field: "decisionAccuracy", min: 0, max: 1))
         }
 
         if self.ethicalComplianceScore < 0.0 || self.ethicalComplianceScore > 1.0 {
-            errors.append(.outOfRange(field: "ethicalComplianceScore", min: 0.0, max: 1.0))
+            errors.append(.outOfRange(field: "ethicalComplianceScore", min: 0, max: 1))
         }
 
         if self.decisionThreshold < 0.0 || self.decisionThreshold > 1.0 {
-            errors.append(.outOfRange(field: "decisionThreshold", min: 0.0, max: 1.0))
+            errors.append(.outOfRange(field: "decisionThreshold", min: 0, max: 1))
         }
 
         if self.maxConcurrentDecisions < 1 || self.maxConcurrentDecisions > 10000 {
@@ -228,17 +228,15 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
     public func makeDecision(
         policyArea: String,
         options: [String],
-        priority: DecisionPriority = .normal
+        priority: DecisionPriority = .medium
     ) -> EnhancedGovernanceDecision {
         let decision = EnhancedGovernanceDecision(
             governanceSystem: self,
-            policyArea: policyArea,
-            options: options,
-            selectedOption: options.randomElement() ?? options.first!,
-            confidence: Double.random(in: 0.85...0.99),
-            reasoning:
-            "Quantum optimization analysis completed with \(String(format: "%.1f", decisionAccuracy * 100))% accuracy",
-            priority: priority
+            title: policyArea,
+            summary:
+                "Quantum optimization analysis completed with \(String(format: "%.1f", decisionAccuracy * 100))% accuracy",
+            priority: priority,
+            confidence: Double.random(in: 0.85...0.99)
         )
 
         self.decisions.append(decision)
@@ -342,8 +340,9 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
         }
 
         self
-            .globalCoverage = min(1.0,
-                                  Double(self.globalParticipationCount) / 8_000_000_000.0) // Target: 8 billion people
+            .globalCoverage = min(
+                1.0,
+                Double(self.globalParticipationCount) / 8_000_000_000.0)  // Target: 8 billion people
         self.policyOptimizationRate = self.averageOptimizationImprovement
 
         // Update performance metrics

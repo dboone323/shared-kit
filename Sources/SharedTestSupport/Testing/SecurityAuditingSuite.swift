@@ -2,8 +2,8 @@ import CryptoKit
 import Foundation
 import LocalAuthentication
 import Network
-import os.log
 import XCTest
+import os.log
 
 #if canImport(UIKit)
     import UIKit
@@ -16,14 +16,14 @@ import XCTest
 /// Comprehensive Security Auditing and Compliance Suite for Phase 4
 /// Validates security measures, encryption, authentication, and compliance requirements
 @available(iOS 15.0, macOS 12.0, *)
-class SecurityAuditingSuite: XCTestCase {
+@objc(SecurityAuditingSuite)
+final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
     // MARK: - Configuration
 
-    private let logger = Logger(subsystem: "QuantumWorkspace", category: "SecurityAuditing")
+    private let logger = os.Logger(subsystem: "QuantumWorkspace", category: "SecurityAuditing")
     private let testTimeout: TimeInterval = 30.0
 
-    // MARK: - Security Components
-
+    // Dependencies
     private var securityManager: SecurityManager!
     private var encryptionService: EncryptionService!
     private var authenticationService: AuthenticationService!
@@ -62,7 +62,9 @@ class SecurityAuditingSuite: XCTestCase {
 
             // Validate encryption
             XCTAssertNotEqual(encryptedData, testData, "Data was not encrypted")
-            XCTAssertGreaterThan(encryptedData.count, testData.count, "Encrypted data should be larger due to metadata")
+            XCTAssertGreaterThan(
+                encryptedData.count, testData.count,
+                "Encrypted data should be larger due to metadata")
 
             // Test decryption
             let decryptedData = try encryptionService.decrypt(encryptedData, with: testKey)
@@ -134,26 +136,28 @@ class SecurityAuditingSuite: XCTestCase {
 
         self.authenticationService.checkBiometricAvailability { result in
             switch result {
-            case let .success(biometricType):
+            case .success(let biometricType):
                 self.logger.info("✅ Biometric authentication available: \(biometricType.rawValue)")
 
                 // Test biometric authentication simulation
                 self.authenticationService
-                    .authenticateWithBiometrics(reason: "Security test authentication") { authResult in
+                    .authenticateWithBiometrics(reason: "Security test authentication") {
+                        authResult in
                         switch authResult {
-                        case let .success(authenticated):
+                        case .success(let authenticated):
                             XCTAssertTrue(authenticated, "Biometric authentication failed")
                             self.logger.info("✅ Biometric authentication successful")
 
-                        case let .failure(error):
+                        case .failure(let error):
                             // In test environment, biometric might not be available
-                            self.logger.info("ℹ️ Biometric authentication failed (expected in test): \(error)")
+                            self.logger.info(
+                                "ℹ️ Biometric authentication failed (expected in test): \(error)")
                         }
 
                         expectation.fulfill()
                     }
 
-            case let .failure(error):
+            case .failure(let error):
                 // Biometric might not be available in test environment
                 self.logger.info("ℹ️ Biometric not available (expected in test): \(error)")
                 expectation.fulfill()
@@ -178,7 +182,7 @@ class SecurityAuditingSuite: XCTestCase {
         // Test secure transmission
         self.networkSecurity.transmitSecurely(payload: testPayload) { result in
             switch result {
-            case let .success(response):
+            case .success(let response):
                 XCTAssertNotNil(response.signature, "Response should be signed")
                 XCTAssertTrue(response.isEncrypted, "Response should be encrypted")
                 XCTAssertNotNil(response.timestamp, "Response should have timestamp")
@@ -191,7 +195,7 @@ class SecurityAuditingSuite: XCTestCase {
                 self.logger.info("   Encrypted: \(response.isEncrypted)")
                 self.logger.info("   Signed: \(response.signature != nil)")
 
-            case let .failure(error):
+            case .failure(let error):
                 XCTFail("Secure data transmission failed: \(error)")
             }
 
@@ -212,60 +216,69 @@ class SecurityAuditingSuite: XCTestCase {
         // Test 1: SQL Injection Prevention
         let sqlInjectionResult = self.testSQLInjectionPrevention()
         if !sqlInjectionResult.isSecure {
-            vulnerabilities.append(SecurityVulnerability(
-                type: .sqlInjection,
-                severity: .high,
-                description: sqlInjectionResult.description,
-                recommendation: "Implement parameterized queries and input validation"
-            ))
+            vulnerabilities.append(
+                SecurityVulnerability(
+                    type: .sqlInjection,
+                    severity: .high,
+                    description: sqlInjectionResult.description,
+                    recommendation: "Implement parameterized queries and input validation"
+                ))
         }
 
         // Test 2: Cross-Site Scripting (XSS) Prevention
         let xssResult = self.testXSSPrevention()
         if !xssResult.isSecure {
-            vulnerabilities.append(SecurityVulnerability(
-                type: .crossSiteScripting,
-                severity: .high,
-                description: xssResult.description,
-                recommendation: "Implement proper input sanitization and output encoding"
-            ))
+            vulnerabilities.append(
+                SecurityVulnerability(
+                    type: .crossSiteScripting,
+                    severity: .high,
+                    description: xssResult.description,
+                    recommendation: "Implement proper input sanitization and output encoding"
+                ))
         }
 
         // Test 3: Insecure Data Storage
         let dataStorageResult = self.testInsecureDataStorage()
         if !dataStorageResult.isSecure {
-            vulnerabilities.append(SecurityVulnerability(
-                type: .insecureDataStorage,
-                severity: .medium,
-                description: dataStorageResult.description,
-                recommendation: "Encrypt sensitive data at rest and use secure storage mechanisms"
-            ))
+            vulnerabilities.append(
+                SecurityVulnerability(
+                    type: .insecureDataStorage,
+                    severity: .medium,
+                    description: dataStorageResult.description,
+                    recommendation:
+                        "Encrypt sensitive data at rest and use secure storage mechanisms"
+                ))
         }
 
         // Test 4: Weak Authentication
         let authResult = self.testWeakAuthentication()
         if !authResult.isSecure {
-            vulnerabilities.append(SecurityVulnerability(
-                type: .weakAuthentication,
-                severity: .high,
-                description: authResult.description,
-                recommendation: "Implement strong authentication mechanisms and multi-factor authentication"
-            ))
+            vulnerabilities.append(
+                SecurityVulnerability(
+                    type: .weakAuthentication,
+                    severity: .high,
+                    description: authResult.description,
+                    recommendation:
+                        "Implement strong authentication mechanisms and multi-factor authentication"
+                ))
         }
 
         // Test 5: Insufficient Transport Layer Protection
         let transportResult = self.testTransportLayerSecurity()
         if !transportResult.isSecure {
-            vulnerabilities.append(SecurityVulnerability(
-                type: .insufficientTransportSecurity,
-                severity: .high,
-                description: transportResult.description,
-                recommendation: "Use TLS 1.3, implement certificate pinning, and validate certificates"
-            ))
+            vulnerabilities.append(
+                SecurityVulnerability(
+                    type: .insufficientTransportSecurity,
+                    severity: .high,
+                    description: transportResult.description,
+                    recommendation:
+                        "Use TLS 1.3, implement certificate pinning, and validate certificates"
+                ))
         }
 
         // Validate vulnerability assessment results
-        XCTAssertEqual(vulnerabilities.count, 0, "Security vulnerabilities found: \(vulnerabilities)")
+        XCTAssertEqual(
+            vulnerabilities.count, 0, "Security vulnerabilities found: \(vulnerabilities)")
 
         if vulnerabilities.isEmpty {
             self.logger.info("✅ No security vulnerabilities detected")
@@ -308,7 +321,8 @@ class SecurityAuditingSuite: XCTestCase {
         complianceIssues.append(contentsOf: rightToBeForgotten)
 
         // Validate compliance
-        XCTAssertEqual(complianceIssues.count, 0, "Privacy compliance issues found: \(complianceIssues)")
+        XCTAssertEqual(
+            complianceIssues.count, 0, "Privacy compliance issues found: \(complianceIssues)")
 
         if complianceIssues.isEmpty {
             self.logger.info("✅ All privacy compliance requirements met")
@@ -347,7 +361,9 @@ class SecurityAuditingSuite: XCTestCase {
         requirements.append(contentsOf: encryptionCompliance)
 
         let failedRequirements = requirements.filter { !$0.isMet }
-        XCTAssertEqual(failedRequirements.count, 0, "App Store security requirements not met: \(failedRequirements)")
+        XCTAssertEqual(
+            failedRequirements.count, 0,
+            "App Store security requirements not met: \(failedRequirements)")
 
         if failedRequirements.isEmpty {
             self.logger.info("✅ All App Store security requirements met")
@@ -408,7 +424,8 @@ class SecurityAuditingSuite: XCTestCase {
 
         return SecurityTestResult(
             isSecure: isInputSanitized,
-            description: isInputSanitized ? "SQL injection prevention working" : "SQL injection vulnerability detected"
+            description: isInputSanitized
+                ? "SQL injection prevention working" : "SQL injection vulnerability detected"
         )
     }
 
@@ -432,25 +449,28 @@ class SecurityAuditingSuite: XCTestCase {
 
         return SecurityTestResult(
             isSecure: isStoredSecurely,
-            description: isStoredSecurely ? "Data stored securely" : "Insecure data storage detected"
+            description: isStoredSecurely
+                ? "Data stored securely" : "Insecure data storage detected"
         )
     }
 
     private func testWeakAuthentication() -> SecurityTestResult {
         // Test authentication strength
         let authStrength = self.authenticationService.getAuthenticationStrength()
-        let isStrong = authStrength.score >= 8.0 // Out of 10
+        let isStrong = authStrength.score >= 8.0  // Out of 10
 
         return SecurityTestResult(
             isSecure: isStrong,
-            description: isStrong ? "Strong authentication implemented" : "Weak authentication detected"
+            description: isStrong
+                ? "Strong authentication implemented" : "Weak authentication detected"
         )
     }
 
     private func testTransportLayerSecurity() -> SecurityTestResult {
         // Test transport layer security implementation
         let tlsConfiguration = self.networkSecurity.getTLSConfiguration()
-        let isSecure = tlsConfiguration.version >= .tls13 && tlsConfiguration.certificatePinningEnabled
+        let isSecure =
+            tlsConfiguration.version >= .tls13 && tlsConfiguration.certificatePinningEnabled
 
         return SecurityTestResult(
             isSecure: isSecure,
@@ -467,32 +487,35 @@ class SecurityAuditingSuite: XCTestCase {
 
         // Test data processing consent
         if !self.securityManager.hasValidConsent(for: .dataProcessing) {
-            issues.append(ComplianceIssue(
-                regulation: .gdpr,
-                requirement: "Data Processing Consent",
-                description: "Valid consent for data processing not found",
-                severity: .high
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .gdpr,
+                    requirement: "Data Processing Consent",
+                    description: "Valid consent for data processing not found",
+                    severity: .high
+                ))
         }
 
         // Test data subject rights implementation
         if !self.securityManager.supportsDataSubjectRights() {
-            issues.append(ComplianceIssue(
-                regulation: .gdpr,
-                requirement: "Data Subject Rights",
-                description: "Data subject rights not properly implemented",
-                severity: .high
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .gdpr,
+                    requirement: "Data Subject Rights",
+                    description: "Data subject rights not properly implemented",
+                    severity: .high
+                ))
         }
 
         // Test privacy policy compliance
         if !self.securityManager.hasCompliantPrivacyPolicy() {
-            issues.append(ComplianceIssue(
-                regulation: .gdpr,
-                requirement: "Privacy Policy",
-                description: "Privacy policy not GDPR compliant",
-                severity: .medium
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .gdpr,
+                    requirement: "Privacy Policy",
+                    description: "Privacy policy not GDPR compliant",
+                    severity: .medium
+                ))
         }
 
         return issues
@@ -503,22 +526,24 @@ class SecurityAuditingSuite: XCTestCase {
 
         // Test opt-out mechanism
         if !self.securityManager.providesOptOutMechanism() {
-            issues.append(ComplianceIssue(
-                regulation: .ccpa,
-                requirement: "Opt-out Mechanism",
-                description: "CCPA opt-out mechanism not provided",
-                severity: .high
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .ccpa,
+                    requirement: "Opt-out Mechanism",
+                    description: "CCPA opt-out mechanism not provided",
+                    severity: .high
+                ))
         }
 
         // Test data disclosure transparency
         if !self.securityManager.providesDataDisclosureTransparency() {
-            issues.append(ComplianceIssue(
-                regulation: .ccpa,
-                requirement: "Data Disclosure Transparency",
-                description: "Data disclosure transparency not provided",
-                severity: .medium
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .ccpa,
+                    requirement: "Data Disclosure Transparency",
+                    description: "Data disclosure transparency not provided",
+                    severity: .medium
+                ))
         }
 
         return issues
@@ -533,12 +558,14 @@ class SecurityAuditingSuite: XCTestCase {
         let excessiveDataCollection = Set(collectedDataTypes).subtracting(Set(necessaryDataTypes))
 
         if !excessiveDataCollection.isEmpty {
-            issues.append(ComplianceIssue(
-                regulation: .general,
-                requirement: "Data Minimization",
-                description: "Collecting excessive data: \(excessiveDataCollection.joined(separator: ", "))",
-                severity: .medium
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .general,
+                    requirement: "Data Minimization",
+                    description:
+                        "Collecting excessive data: \(excessiveDataCollection.joined(separator: ", "))",
+                    severity: .medium
+                ))
         }
 
         return issues
@@ -548,21 +575,23 @@ class SecurityAuditingSuite: XCTestCase {
         var issues: [ComplianceIssue] = []
 
         if !self.securityManager.hasGranularConsentOptions() {
-            issues.append(ComplianceIssue(
-                regulation: .general,
-                requirement: "Consent Management",
-                description: "Granular consent options not provided",
-                severity: .medium
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .general,
+                    requirement: "Consent Management",
+                    description: "Granular consent options not provided",
+                    severity: .medium
+                ))
         }
 
         if !self.securityManager.allowsConsentWithdrawal() {
-            issues.append(ComplianceIssue(
-                regulation: .general,
-                requirement: "Consent Withdrawal",
-                description: "Consent withdrawal mechanism not provided",
-                severity: .high
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .general,
+                    requirement: "Consent Withdrawal",
+                    description: "Consent withdrawal mechanism not provided",
+                    severity: .high
+                ))
         }
 
         return issues
@@ -572,12 +601,13 @@ class SecurityAuditingSuite: XCTestCase {
         var issues: [ComplianceIssue] = []
 
         if !self.securityManager.supportsDataExport() {
-            issues.append(ComplianceIssue(
-                regulation: .gdpr,
-                requirement: "Data Portability",
-                description: "Data export functionality not implemented",
-                severity: .medium
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .gdpr,
+                    requirement: "Data Portability",
+                    description: "Data export functionality not implemented",
+                    severity: .medium
+                ))
         }
 
         return issues
@@ -587,12 +617,13 @@ class SecurityAuditingSuite: XCTestCase {
         var issues: [ComplianceIssue] = []
 
         if !self.securityManager.supportsDataDeletion() {
-            issues.append(ComplianceIssue(
-                regulation: .gdpr,
-                requirement: "Right to be Forgotten",
-                description: "Data deletion functionality not implemented",
-                severity: .high
-            ))
+            issues.append(
+                ComplianceIssue(
+                    regulation: .gdpr,
+                    requirement: "Right to be Forgotten",
+                    description: "Data deletion functionality not implemented",
+                    severity: .high
+                ))
         }
 
         return issues
@@ -604,17 +635,19 @@ class SecurityAuditingSuite: XCTestCase {
         var requirements: [AppStoreSecurityRequirement] = []
 
         // Simulate Info.plist validation
-        requirements.append(AppStoreSecurityRequirement(
-            name: "App Transport Security",
-            description: "ATS configuration properly set",
-            isMet: true
-        ))
+        requirements.append(
+            AppStoreSecurityRequirement(
+                name: "App Transport Security",
+                description: "ATS configuration properly set",
+                isMet: true
+            ))
 
-        requirements.append(AppStoreSecurityRequirement(
-            name: "Privacy Permissions",
-            description: "All privacy-sensitive permissions properly described",
-            isMet: true
-        ))
+        requirements.append(
+            AppStoreSecurityRequirement(
+                name: "Privacy Permissions",
+                description: "All privacy-sensitive permissions properly described",
+                isMet: true
+            ))
 
         return requirements
     }
@@ -622,11 +655,12 @@ class SecurityAuditingSuite: XCTestCase {
     private func validateNetworkSecurityConfig() -> [AppStoreSecurityRequirement] {
         var requirements: [AppStoreSecurityRequirement] = []
 
-        requirements.append(AppStoreSecurityRequirement(
-            name: "Network Security Configuration",
-            description: "Network security properly configured",
-            isMet: true
-        ))
+        requirements.append(
+            AppStoreSecurityRequirement(
+                name: "Network Security Configuration",
+                description: "Network security properly configured",
+                isMet: true
+            ))
 
         return requirements
     }
@@ -634,11 +668,12 @@ class SecurityAuditingSuite: XCTestCase {
     private func validateCodeSigning() -> [AppStoreSecurityRequirement] {
         var requirements: [AppStoreSecurityRequirement] = []
 
-        requirements.append(AppStoreSecurityRequirement(
-            name: "Code Signing",
-            description: "App properly code signed",
-            isMet: true
-        ))
+        requirements.append(
+            AppStoreSecurityRequirement(
+                name: "Code Signing",
+                description: "App properly code signed",
+                isMet: true
+            ))
 
         return requirements
     }
@@ -646,11 +681,12 @@ class SecurityAuditingSuite: XCTestCase {
     private func validatePrivacyPermissions() -> [AppStoreSecurityRequirement] {
         var requirements: [AppStoreSecurityRequirement] = []
 
-        requirements.append(AppStoreSecurityRequirement(
-            name: "Privacy Permissions",
-            description: "Privacy permissions properly requested and justified",
-            isMet: true
-        ))
+        requirements.append(
+            AppStoreSecurityRequirement(
+                name: "Privacy Permissions",
+                description: "Privacy permissions properly requested and justified",
+                isMet: true
+            ))
 
         return requirements
     }
@@ -658,11 +694,12 @@ class SecurityAuditingSuite: XCTestCase {
     private func validateEncryptionExportCompliance() -> [AppStoreSecurityRequirement] {
         var requirements: [AppStoreSecurityRequirement] = []
 
-        requirements.append(AppStoreSecurityRequirement(
-            name: "Encryption Export Compliance",
-            description: "Encryption export compliance properly declared",
-            isMet: true
-        ))
+        requirements.append(
+            AppStoreSecurityRequirement(
+                name: "Encryption Export Compliance",
+                description: "Encryption export compliance properly declared",
+                isMet: true
+            ))
 
         return requirements
     }
@@ -671,27 +708,27 @@ class SecurityAuditingSuite: XCTestCase {
 
     private func validateInputValidation() -> [SecureCodingIssue] {
         // Simulate input validation check
-        [] // No issues found
+        []  // No issues found
     }
 
     private func validateOutputEncoding() -> [SecureCodingIssue] {
         // Simulate output encoding check
-        [] // No issues found
+        []  // No issues found
     }
 
     private func validateErrorHandling() -> [SecureCodingIssue] {
         // Simulate error handling check
-        [] // No issues found
+        []  // No issues found
     }
 
     private func validateLoggingPractices() -> [SecureCodingIssue] {
         // Simulate logging practices check
-        [] // No issues found
+        []  // No issues found
     }
 
     private func validateDependencySecurity() -> [SecureCodingIssue] {
         // Simulate dependency security check
-        [] // No issues found
+        []  // No issues found
     }
 
     // MARK: - Helper Methods
@@ -704,7 +741,7 @@ class SecurityAuditingSuite: XCTestCase {
 
 // MARK: - Security Service Implementations (Mock for Testing)
 
-class SecurityManager {
+final class SecurityManager: Sendable {
     static let shared = SecurityManager()
     private init() {}
 
@@ -786,7 +823,7 @@ class SecurityManager {
     }
 }
 
-class EncryptionService {
+final class EncryptionService: @unchecked Sendable {
     static let shared = EncryptionService()
     private init() {}
 
@@ -803,7 +840,7 @@ class EncryptionService {
     }
 }
 
-class AuthenticationService {
+final class AuthenticationService: Sendable {
     static let shared = AuthenticationService()
     private init() {}
 
@@ -812,13 +849,15 @@ class AuthenticationService {
         var error: NSError?
 
         if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            completion(.success(.faceID)) // Simulate Face ID availability
+            completion(.success(.faceID))  // Simulate Face ID availability
         } else {
             completion(.failure(error ?? AuthenticationError.biometricNotAvailable))
         }
     }
 
-    func authenticateWithBiometrics(reason _: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func authenticateWithBiometrics(
+        reason _: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void
+    ) {
         // Mock implementation
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             completion(.success(true))
@@ -834,11 +873,13 @@ class AuthenticationService {
     }
 }
 
-class NetworkSecurityService {
+final class NetworkSecurityService: Sendable {
     static let shared = NetworkSecurityService()
     private init() {}
 
-    func transmitSecurely(payload _: SecureDataPayload, completion: @escaping (Result<SecureResponse, Error>) -> Void) {
+    func transmitSecurely(
+        payload _: SecureDataPayload, completion: @escaping (Result<SecureResponse, Error>) -> Void
+    ) {
         // Mock implementation
         DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
             let response = SecureResponse(
@@ -903,11 +944,15 @@ struct TLSConfiguration {
     let cipherSuites: [String]
 }
 
-enum TLSVersion: Int {
+enum TLSVersion: Int, Comparable {
     case tls10 = 1
     case tls11 = 2
     case tls12 = 3
     case tls13 = 4
+
+    static func < (lhs: TLSVersion, rhs: TLSVersion) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
 }
 
 struct SecurityTestResult {

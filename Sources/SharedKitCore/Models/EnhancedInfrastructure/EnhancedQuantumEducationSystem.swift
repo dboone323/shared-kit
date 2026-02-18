@@ -14,11 +14,16 @@ import SwiftData
 public final class EnhancedQuantumEducationSystem: Validatable, Trackable, CrossProjectRelatable {
     public var id: UUID
     public var name: String
-    public var description: String
+    public var systemDescription: String
     public var creationDate: Date
     public var lastModified: Date
     public var version: String
     public var isActive: Bool
+
+    // Cross-project Properties
+    public var globalId: String
+    public var projectContext: ProjectType
+    public var externalReferences: [ExternalReference]
 
     // Core Education Metrics
     public var totalStudents: Int
@@ -81,17 +86,14 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
     @Relationship(deleteRule: .cascade, inverse: \EnhancedEducationMetric.educationSystem)
     public var performanceMetrics: [EnhancedEducationMetric] = []
 
-    // Tracking
-    public var eventLog: [TrackedEvent] = []
-    public var crossProjectReferences: [CrossProjectReference] = []
-
     public init(
         name: String = "Enhanced Quantum Education System",
         description: String = "Universal quantum-enhanced education infrastructure"
     ) {
-        self.id = UUID()
+        let newId = UUID()
+        self.id = newId
         self.name = name
-        self.description = description
+        self.systemDescription = description
         self.creationDate = Date()
         self.lastModified = Date()
         self.version = "1.0.0"
@@ -142,7 +144,13 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
         self.accessibilityScore = 0.0
         self.culturalPreservationIndex = 0.0
 
-        self.trackEvent("system_initialized", parameters: ["version": self.version])
+        self.projectContext = .sharedKit
+        self.globalId = "education_system_\(newId.uuidString)"
+        self.externalReferences = []
+    }
+
+    public var isValid: Bool {
+        (try? validate()) != nil
     }
 
     // MARK: - Validatable Protocol
@@ -164,32 +172,36 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
 
     // MARK: - Trackable Protocol
 
-    public func trackEvent(_ event: String, parameters: [String: Any] = [:]) {
-        let trackedEvent = TrackedEvent(
-            componentId: self.id,
-            eventType: event,
-            parameters: parameters,
-            timestamp: Date()
-        )
-        self.eventLog.append(trackedEvent)
-        self.lastModified = Date()
+    public var trackingId: String {
+        "education_\(self.id.uuidString)"
+    }
+
+    public var analyticsMetadata: [String: Any] {
+        [
+            "name": self.name,
+            "globalCoverage": self.globalCoverage,
+            "literacyRate": self.literacyRate,
+        ]
+    }
+
+    public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
+        var eventParameters = self.analyticsMetadata
+        parameters?.forEach { key, value in
+            eventParameters[key] = value
+        }
+        print("Tracking education event: \(event) with parameters: \(eventParameters)")
     }
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
-        let reference = CrossProjectReference(
-            sourceProjectId: self.id,
-            targetProjectId: projectId,
-            referenceType: referenceType,
-            referenceId: referenceId,
-            timestamp: Date()
+    public func addExternalReference(project: ProjectType, type: String, id: String) {
+        let reference = ExternalReference(
+            projectContext: project,
+            modelType: type,
+            modelId: id,
+            relationshipType: "related"
         )
-        self.crossProjectReferences.append(reference)
-    }
-
-    public func getRelatedProjects() -> [UUID] {
-        self.crossProjectReferences.map(\.targetProjectId)
+        self.externalReferences.append(reference)
     }
 
     // MARK: - Education System Methods
@@ -379,13 +391,13 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
 
         // Add virtual classrooms and AI tutors proportionally
         if studentsToAdd > 0 {
-            self.virtualClassrooms += max(1, studentsToAdd / 100) // 1 classroom per 100 students
-            self.aiTutors += max(1, studentsToAdd / 50) // 1 AI tutor per 50 students
-            self.learningPlatforms += max(1, studentsToAdd / 1000) // 1 platform per 1000 students
+            self.virtualClassrooms += max(1, studentsToAdd / 100)  // 1 classroom per 100 students
+            self.aiTutors += max(1, studentsToAdd / 50)  // 1 AI tutor per 50 students
+            self.learningPlatforms += max(1, studentsToAdd / 1000)  // 1 platform per 1000 students
         }
 
         if educatorsToAdd > 0 {
-            self.researchFacilities += max(1, educatorsToAdd / 10) // 1 facility per 10 educators
+            self.researchFacilities += max(1, educatorsToAdd / 10)  // 1 facility per 10 educators
         }
 
         self.educationalResources = self.virtualClassrooms * 100 + self.learningPlatforms * 500
@@ -412,14 +424,14 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
 
         // Gender equality based on enrollment distribution
         // This would be calculated from actual demographic data
-        self.genderEqualityIndex = 0.95 // Placeholder - would be calculated from real data
+        self.genderEqualityIndex = 0.95  // Placeholder - would be calculated from real data
 
         // Accessibility based on adaptive learning features
         self.accessibilityScore =
             self.aiPersonalizationLevel * 0.8 + self.neuralInterfaceCompatibility * 0.2
 
         // Cultural preservation through diverse curriculum
-        self.culturalPreservationIndex = min(1.0, Double(self.courses.count) / 1000.0) // Target: 1000+ courses
+        self.culturalPreservationIndex = min(1.0, Double(self.courses.count) / 1000.0)  // Target: 1000+ courses
 
         self.trackEvent(
             "social_impact_updated",

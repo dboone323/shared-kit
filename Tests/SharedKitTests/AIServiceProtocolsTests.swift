@@ -3,21 +3,26 @@
 // SharedKitTests
 //
 
-@testable import SharedKit
-import XCTest
+import Foundation
+import Testing
 
-final class AIServiceProtocolsTests: XCTestCase {
+@testable import SharedKit
+
+@Suite("AI Service Protocols Tests")
+struct AIServiceProtocolsTests {
     // MARK: - ServiceHealth Tests
 
-    func testServiceHealthDefaultInit() {
+    @Test("ServiceHealth Default Initialization")
+    func serviceHealthDefaultInit() {
         let health = ServiceHealth()
-        XCTAssertEqual(health.serviceName, "")
-        XCTAssertFalse(health.isRunning)
-        XCTAssertFalse(health.modelsAvailable)
-        XCTAssertEqual(health.errorRate, 0.0)
+        #expect(health.serviceName == "")
+        #expect(health.isRunning == false)
+        #expect(health.modelsAvailable == false)
+        #expect(health.errorRate == 0.0)
     }
 
-    func testServiceHealthCustomInit() {
+    @Test("ServiceHealth Custom Initialization")
+    func serviceHealthCustomInit() {
         let health = ServiceHealth(
             serviceName: "ollama",
             isRunning: true,
@@ -25,77 +30,84 @@ final class AIServiceProtocolsTests: XCTestCase {
             responseTime: 0.5,
             errorRate: 0.01
         )
-        XCTAssertEqual(health.serviceName, "ollama")
-        XCTAssertTrue(health.isRunning)
-        XCTAssertEqual(health.responseTime, 0.5)
+        #expect(health.serviceName == "ollama")
+        #expect(health.isRunning == true)
+        #expect(health.responseTime == 0.5)
     }
 
-    func testServiceHealthCodable() throws {
+    @Test("ServiceHealth Codable Support")
+    func serviceHealthCodable() throws {
         let health = ServiceHealth(serviceName: "test", isRunning: true)
         let data = try JSONEncoder().encode(health)
         let decoded = try JSONDecoder().decode(ServiceHealth.self, from: data)
-        XCTAssertEqual(decoded.serviceName, "test")
-        XCTAssertTrue(decoded.isRunning)
+        #expect(decoded.serviceName == "test")
+        #expect(decoded.isRunning == true)
     }
 
     // MARK: - CodeIssue Tests
 
-    func testCodeIssueDefaultInit() {
+    @Test("CodeIssue Default Initialization")
+    func codeIssueDefaultInit() {
         let issue = CodeIssue(description: "Test issue")
-        XCTAssertEqual(issue.severity, .medium)
-        XCTAssertNil(issue.lineNumber)
-        XCTAssertEqual(issue.category, "general")
+        #expect(issue.severity == .medium)
+        #expect(issue.lineNumber == nil)
+        #expect(issue.category == "general")
     }
 
-    func testCodeIssueCustomInit() {
+    @Test("CodeIssue Custom Initialization")
+    func codeIssueCustomInit() {
         let issue = CodeIssue(
             description: "Critical bug",
             severity: .critical,
             lineNumber: 42,
             category: "security"
         )
-        XCTAssertEqual(issue.description, "Critical bug")
-        XCTAssertEqual(issue.severity, .critical)
-        XCTAssertEqual(issue.lineNumber, 42)
-        XCTAssertEqual(issue.category, "security")
+        #expect(issue.description == "Critical bug")
+        #expect(issue.severity == .critical)
+        #expect(issue.lineNumber == 42)
+        #expect(issue.category == "security")
     }
 
     // MARK: - IssueSeverity Tests
 
-    func testIssueSeverityRawValues() {
-        XCTAssertEqual(IssueSeverity.low.rawValue, "low")
-        XCTAssertEqual(IssueSeverity.medium.rawValue, "medium")
-        XCTAssertEqual(IssueSeverity.high.rawValue, "high")
-        XCTAssertEqual(IssueSeverity.critical.rawValue, "critical")
+    @Test("IssueSeverity Raw Values")
+    func issueSeverityRawValues() {
+        #expect(IssueSeverity.low.rawValue == "low")
+        #expect(IssueSeverity.medium.rawValue == "medium")
+        #expect(IssueSeverity.high.rawValue == "high")
+        #expect(IssueSeverity.critical.rawValue == "critical")
     }
 
     // MARK: - AnalysisType Tests
 
-    func testAnalysisTypeRawValues() {
-        XCTAssertEqual(AnalysisType.bugs.rawValue, "bugs")
-        XCTAssertEqual(AnalysisType.performance.rawValue, "performance")
-        XCTAssertEqual(AnalysisType.security.rawValue, "security")
-        XCTAssertEqual(AnalysisType.comprehensive.rawValue, "comprehensive")
+    @Test("AnalysisType Raw Values")
+    func analysisTypeRawValues() {
+        #expect(AnalysisType.bugs.rawValue == "bugs")
+        #expect(AnalysisType.performance.rawValue == "performance")
+        #expect(AnalysisType.security.rawValue == "security")
+        #expect(AnalysisType.comprehensive.rawValue == "comprehensive")
     }
 
     // MARK: - CodeAnalysisResult Tests
 
-    func testCodeAnalysisResultInit() {
+    @Test("CodeAnalysisResult Initialization")
+    func codeAnalysisResultInit() {
         let result = CodeAnalysisResult(
             analysis: "No issues found",
             language: "swift",
             analysisType: .bugs
         )
-        XCTAssertEqual(result.analysis, "No issues found")
-        XCTAssertEqual(result.language, "swift")
-        XCTAssertEqual(result.analysisType, .bugs)
-        XCTAssertTrue(result.issues.isEmpty)
+        #expect(result.analysis == "No issues found")
+        #expect(result.language == "swift")
+        #expect(result.analysisType == .bugs)
+        #expect(result.issues.isEmpty)
     }
 
-    func testCodeAnalysisResultWithIssues() {
+    @Test("CodeAnalysisResult with Issues")
+    func codeAnalysisResultWithIssues() {
         let issues = [
             CodeIssue(description: "Issue 1"),
-            CodeIssue(description: "Issue 2")
+            CodeIssue(description: "Issue 2"),
         ]
         let result = CodeAnalysisResult(
             analysis: "Found issues",
@@ -103,112 +115,124 @@ final class AIServiceProtocolsTests: XCTestCase {
             language: "python",
             analysisType: .security
         )
-        XCTAssertEqual(result.issues.count, 2)
+        #expect(result.issues.count == 2)
     }
 
     // MARK: - CodeGenerationResult Tests
 
-    func testCodeGenerationResultInit() {
+    @Test("CodeGenerationResult Initialization")
+    func codeGenerationResultInit() {
         let result = CodeGenerationResult(
             code: "func hello() {}",
             language: "swift"
         )
-        XCTAssertEqual(result.code, "func hello() {}")
-        XCTAssertEqual(result.complexity, .standard)
+        #expect(result.code == "func hello() {}")
+        #expect(result.complexity == .standard)
     }
 
-    func testCodeComplexityRawValues() {
-        XCTAssertEqual(CodeComplexity.simple.rawValue, "simple")
-        XCTAssertEqual(CodeComplexity.standard.rawValue, "standard")
-        XCTAssertEqual(CodeComplexity.advanced.rawValue, "advanced")
+    @Test("CodeComplexity Raw Values")
+    func codeComplexityRawValues() {
+        #expect(CodeComplexity.simple.rawValue == "simple")
+        #expect(CodeComplexity.standard.rawValue == "standard")
+        #expect(CodeComplexity.advanced.rawValue == "advanced")
     }
 
     // MARK: - CacheStats Tests
 
-    func testCacheStatsDefaultInit() {
+    @Test("CacheStats Default Initialization")
+    func cacheStatsDefaultInit() {
         let stats = CacheStats()
-        XCTAssertEqual(stats.totalEntries, 0)
-        XCTAssertEqual(stats.hitRate, 0.0)
-        XCTAssertNil(stats.lastCleanup)
+        #expect(stats.totalEntries == 0)
+        #expect(stats.hitRate == 0.0)
+        #expect(stats.lastCleanup == nil)
     }
 
     // MARK: - PerformanceMetrics Tests
 
-    func testPerformanceMetricsDefaultInit() {
+    @Test("PerformanceMetrics Default Initialization")
+    func performanceMetricsDefaultInit() {
         let metrics = PerformanceMetrics()
-        XCTAssertEqual(metrics.totalOperations, 0)
-        XCTAssertEqual(metrics.successRate, 0.0)
-        XCTAssertTrue(metrics.errorBreakdown.isEmpty)
+        #expect(metrics.totalOperations == 0)
+        #expect(metrics.successRate == 0.0)
+        #expect(metrics.errorBreakdown.isEmpty)
     }
 
     // MARK: - AIServiceInfo Tests
 
-    func testAIServiceInfoInit() {
+    @Test("AIServiceInfo Initialization")
+    func aiServiceInfoInit() {
         let info = AIServiceInfo(
             id: "ollama-1",
             name: "Ollama",
             type: .local,
             capabilities: [.textGeneration, .codeGeneration]
         )
-        XCTAssertEqual(info.id, "ollama-1")
-        XCTAssertEqual(info.type, .local)
-        XCTAssertEqual(info.capabilities.count, 2)
-        XCTAssertTrue(info.isAvailable)
+        #expect(info.id == "ollama-1")
+        #expect(info.type == .local)
+        #expect(info.capabilities.count == 2)
+        #expect(info.isAvailable == true)
     }
 
-    func testAIServiceTypeRawValues() {
-        XCTAssertEqual(AIServiceType.local.rawValue, "local")
-        XCTAssertEqual(AIServiceType.cloud.rawValue, "cloud")
-        XCTAssertEqual(AIServiceType.hybrid.rawValue, "hybrid")
+    @Test("AIServiceType Raw Values")
+    func aiServiceTypeRawValues() {
+        #expect(AIServiceType.local.rawValue == "local")
+        #expect(AIServiceType.cloud.rawValue == "cloud")
+        #expect(AIServiceType.hybrid.rawValue == "hybrid")
     }
 
     // MARK: - AICapability Tests
 
-    func testAICapabilityRawValues() {
-        XCTAssertEqual(AICapability.textGeneration.rawValue, "textGeneration")
-        XCTAssertEqual(AICapability.codeGeneration.rawValue, "codeGeneration")
-        XCTAssertEqual(AICapability.codeAnalysis.rawValue, "codeAnalysis")
-        XCTAssertEqual(AICapability.documentation.rawValue, "documentation")
-        XCTAssertEqual(AICapability.testing.rawValue, "testing")
+    @Test("AICapability Raw Values")
+    func aiCapabilityRawValues() {
+        #expect(AICapability.textGeneration.rawValue == "textGeneration")
+        #expect(AICapability.codeGeneration.rawValue == "codeGeneration")
+        #expect(AICapability.codeAnalysis.rawValue == "codeAnalysis")
+        #expect(AICapability.documentation.rawValue == "documentation")
+        #expect(AICapability.testing.rawValue == "testing")
     }
 
     // MARK: - AIOperation Tests
 
-    func testAIOperationInit() {
+    @Test("AIOperation Initialization")
+    func aiOperationInit() {
         let op = AIOperation(type: .generateText)
-        XCTAssertEqual(op.type, .generateText)
-        XCTAssertEqual(op.priority, .normal)
-        XCTAssertFalse(op.id.isEmpty)
+        #expect(op.type == .generateText)
+        #expect(op.priority == .normal)
+        #expect(!op.id.isEmpty)
     }
 
-    func testAIOperationTypeRawValues() {
-        XCTAssertEqual(AIOperationType.generateText.rawValue, "generateText")
-        XCTAssertEqual(AIOperationType.generateCode.rawValue, "generateCode")
-        XCTAssertEqual(AIOperationType.analyzeCode.rawValue, "analyzeCode")
+    @Test("AIOperationType Raw Values")
+    func aiOperationTypeRawValues() {
+        #expect(AIOperationType.generateText.rawValue == "generateText")
+        #expect(AIOperationType.generateCode.rawValue == "generateCode")
+        #expect(AIOperationType.analyzeCode.rawValue == "analyzeCode")
     }
 
-    func testOperationPriorityRawValues() {
-        XCTAssertEqual(OperationPriority.low.rawValue, "low")
-        XCTAssertEqual(OperationPriority.normal.rawValue, "normal")
-        XCTAssertEqual(OperationPriority.high.rawValue, "high")
-        XCTAssertEqual(OperationPriority.critical.rawValue, "critical")
+    @Test("OperationPriority Raw Values")
+    func operationPriorityRawValues() {
+        #expect(OperationPriority.low.rawValue == "low")
+        #expect(OperationPriority.normal.rawValue == "normal")
+        #expect(OperationPriority.high.rawValue == "high")
+        #expect(OperationPriority.critical.rawValue == "critical")
     }
 
     // MARK: - AIOperationResult Tests
 
-    func testAIOperationResultSuccess() {
+    @Test("AIOperationResult Success")
+    func aiOperationResultSuccess() {
         let result = AIOperationResult(
             operationId: "op-1",
             success: true,
             executionTime: 0.5,
             serviceUsed: "ollama"
         )
-        XCTAssertTrue(result.success)
-        XCTAssertNil(result.error)
-        XCTAssertEqual(result.executionTime, 0.5)
+        #expect(result.success == true)
+        #expect(result.error == nil)
+        #expect(result.executionTime == 0.5)
     }
 
-    func testAIOperationResultFailure() {
+    @Test("AIOperationResult Failure")
+    func aiOperationResultFailure() {
         let result = AIOperationResult(
             operationId: "op-2",
             success: false,
@@ -216,58 +240,63 @@ final class AIServiceProtocolsTests: XCTestCase {
             executionTime: 1.0,
             serviceUsed: "ollama"
         )
-        XCTAssertFalse(result.success)
-        XCTAssertEqual(result.error, "Service unavailable")
+        #expect(result.success == false)
+        #expect(result.error == "Service unavailable")
     }
 
     // MARK: - RateLimit Tests
 
-    func testRateLimitDefaultInit() {
+    @Test("RateLimit Default Initialization")
+    func rateLimitDefaultInit() {
         let limit = RateLimit()
-        XCTAssertEqual(limit.requestsPerMinute, 60)
-        XCTAssertEqual(limit.requestsPerHour, 1000)
-        XCTAssertEqual(limit.burstLimit, 10)
+        #expect(limit.requestsPerMinute == 60)
+        #expect(limit.requestsPerHour == 1000)
+        #expect(limit.burstLimit == 10)
     }
 
-    func testRateLimitCustomInit() {
+    @Test("RateLimit Custom Initialization")
+    func rateLimitCustomInit() {
         let limit = RateLimit(requestsPerMinute: 30, requestsPerHour: 500, burstLimit: 5)
-        XCTAssertEqual(limit.requestsPerMinute, 30)
-        XCTAssertEqual(limit.requestsPerHour, 500)
+        #expect(limit.requestsPerMinute == 30)
+        #expect(limit.requestsPerHour == 500)
     }
 
     // MARK: - AIServiceConfiguration Tests
 
-    func testAIServiceConfigurationInit() {
+    @Test("AIServiceConfiguration Initialization")
+    func aiServiceConfigurationInit() {
         let config = AIServiceConfiguration(
             serviceId: "openai",
             apiKey: "sk-xxx",
             baseURL: "https://api.openai.com",
             timeout: 60
         )
-        XCTAssertEqual(config.serviceId, "openai")
-        XCTAssertEqual(config.timeout, 60)
-        XCTAssertEqual(config.maxRetries, 3)
+        #expect(config.serviceId == "openai")
+        #expect(config.timeout == 60)
+        #expect(config.maxRetries == 3)
     }
 
     // MARK: - AIError Tests
 
-    func testAIErrorDescriptions() {
+    @Test("AIError Descriptions")
+    func aiErrorDescriptions() {
         let error1 = AIError.serviceNotImplemented("test")
-        XCTAssertTrue(error1.errorDescription?.contains("not implemented") ?? false)
+        #expect(error1.errorDescription?.contains("not implemented") == true)
 
         let error2 = AIError.rateLimitExceeded
-        XCTAssertTrue(error2.errorDescription?.contains("rate limit") ?? false)
+        #expect(error2.errorDescription?.contains("rate limit") == true)
 
         let error3 = AIError.authenticationFailed
-        XCTAssertTrue(error3.errorDescription?.contains("authentication") ?? false)
+        #expect(error3.errorDescription?.contains("authentication") == true)
     }
 
     // MARK: - ServiceHealthOverview Tests
 
-    func testServiceHealthOverviewDefaultInit() {
+    @Test("ServiceHealthOverview Default Initialization")
+    func serviceHealthOverviewDefaultInit() {
         let overview = ServiceHealthOverview()
-        XCTAssertEqual(overview.totalServices, 0)
-        XCTAssertEqual(overview.availableServices, 0)
-        XCTAssertEqual(overview.overallHealthScore, 0.0)
+        #expect(overview.totalServices == 0)
+        #expect(overview.availableServices == 0)
+        #expect(overview.overallHealthScore == 0.0)
     }
 }

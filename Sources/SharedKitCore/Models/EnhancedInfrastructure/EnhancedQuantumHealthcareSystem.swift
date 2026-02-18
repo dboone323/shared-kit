@@ -14,11 +14,16 @@ import SwiftData
 public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, CrossProjectRelatable {
     public var id: UUID
     public var name: String
-    public var description: String
+    public var systemDescription: String
     public var creationDate: Date
     public var lastModified: Date
     public var version: String
     public var isActive: Bool
+
+    // Cross-project Properties
+    public var globalId: String
+    public var projectContext: ProjectType
+    public var externalReferences: [ExternalReference]
 
     // Core Healthcare Metrics
     public var totalPatients: Int
@@ -78,17 +83,14 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
     @Relationship(deleteRule: .cascade, inverse: \EnhancedHealthcareMetric.healthcareSystem)
     public var performanceMetrics: [EnhancedHealthcareMetric] = []
 
-    // Tracking
-    public var eventLog: [TrackedEvent] = []
-    public var crossProjectReferences: [CrossProjectReference] = []
-
     public init(
         name: String = "Enhanced Quantum Healthcare System",
         description: String = "Universal quantum-enhanced healthcare infrastructure"
     ) {
-        self.id = UUID()
+        let newId = UUID()
+        self.id = newId
         self.name = name
-        self.description = description
+        self.systemDescription = description
         self.creationDate = Date()
         self.lastModified = Date()
         self.version = "1.0.0"
@@ -110,9 +112,10 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
         self.telemedicineCenters = 0
         self.researchLabs = 0
         self.emergencyResponseUnits = 0
+        self.emergencyResponseUnits = 0
 
         // Initialize outcomes
-        self.lifeExpectancy = 72.0 // Current global average
+        self.lifeExpectancy = 72.0  // Current global average
         self.diseasePreventionRate = 0.0
         self.treatmentSuccessRate = 0.0
         self.recoveryTime = 0.0
@@ -139,7 +142,15 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
         self.pediatricCareQuality = 0.0
         self.globalHealthSecurity = 0.0
 
+        self.projectContext = .sharedKit
+        self.globalId = "healthcare_system_\(newId.uuidString)"
+        self.externalReferences = []
+
         self.trackEvent("system_initialized", parameters: ["version": self.version])
+    }
+
+    public var isValid: Bool {
+        (try? validate()) != nil
     }
 
     // MARK: - Validatable Protocol
@@ -161,32 +172,36 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
 
     // MARK: - Trackable Protocol
 
-    public func trackEvent(_ event: String, parameters: [String: Any] = [:]) {
-        let trackedEvent = TrackedEvent(
-            componentId: self.id,
-            eventType: event,
-            parameters: parameters,
-            timestamp: Date()
-        )
-        self.eventLog.append(trackedEvent)
-        self.lastModified = Date()
+    public var trackingId: String {
+        "healthcare_\(self.id.uuidString)"
+    }
+
+    public var analyticsMetadata: [String: Any] {
+        [
+            "name": self.name,
+            "globalCoverage": self.globalCoverage,
+            "treatmentSuccessRate": self.treatmentSuccessRate,
+        ]
+    }
+
+    public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
+        var eventParameters = self.analyticsMetadata
+        parameters?.forEach { key, value in
+            eventParameters[key] = value
+        }
+        print("Tracking healthcare event: \(event) with parameters: \(eventParameters)")
     }
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
-        let reference = CrossProjectReference(
-            sourceProjectId: self.id,
-            targetProjectId: projectId,
-            referenceType: referenceType,
-            referenceId: referenceId,
-            timestamp: Date()
+    public func addExternalReference(project: ProjectType, type: String, id: String) {
+        let reference = ExternalReference(
+            projectContext: project,
+            modelType: type,
+            modelId: id,
+            relationshipType: "related"
         )
-        self.crossProjectReferences.append(reference)
-    }
-
-    public func getRelatedProjects() -> [UUID] {
-        self.crossProjectReferences.map(\.targetProjectId)
+        self.externalReferences.append(reference)
     }
 
     // MARK: - Healthcare System Methods
@@ -350,7 +365,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
         self.lifeExpectancy = baseLifeExpectancy + improvement
 
         // Update recovery time (faster with quantum medicine)
-        self.recoveryTime = max(1.0, 30.0 - (self.quantumSimulationCapability * 20.0)) // Days
+        self.recoveryTime = max(1.0, 30.0 - (self.quantumSimulationCapability * 20.0))  // Days
 
         // Update chronic disease management
         self.chronicDiseaseManagement =
@@ -395,15 +410,14 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
 
     @MainActor
     public func expandHealthcareInfrastructure(targetPatients: Int, targetFacilities: Int) {
-        let patientsToAdd = targetPatients - self.totalPatients
         let facilitiesToAdd = targetFacilities - self.totalFacilities
 
         if facilitiesToAdd > 0 {
             // Add facilities proportionally
-            let hospitalsToAdd = facilitiesToAdd / 5 // 20% hospitals
-            let clinicsToAdd = facilitiesToAdd * 2 / 5 // 40% clinics
-            let telemedicineToAdd = facilitiesToAdd / 5 // 20% telemedicine
-            let researchToAdd = facilitiesToAdd / 5 // 20% research
+            let hospitalsToAdd = facilitiesToAdd / 5  // 20% hospitals
+            let clinicsToAdd = facilitiesToAdd * 2 / 5  // 40% clinics
+            let telemedicineToAdd = facilitiesToAdd / 5  // 20% telemedicine
+            let researchToAdd = facilitiesToAdd / 5  // 20% research
             let emergencyToAdd =
                 facilitiesToAdd - hospitalsToAdd - clinicsToAdd - telemedicineToAdd - researchToAdd
 
@@ -423,7 +437,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
                     type: .clinic,
                     location: "Global Region \(i + 1)",
                     capacity: 200,
-                    specializations: ["Primary Care", "Specialty Care"]
+                    specializations: ["Primary Care", "Diagnostics"]
                 )
             }
 

@@ -11,14 +11,20 @@ import SwiftData
 // MARK: - Enhanced Quantum Governance System
 
 @Model
-public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, CrossProjectRelatable {
+public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, CrossProjectRelatable
+{
     public var id: UUID
     public var name: String
-    public var description: String
+    public var systemDescription: String
     public var creationDate: Date
     public var lastModified: Date
     public var version: String
     public var isActive: Bool
+
+    // Cross-project Properties
+    public var globalId: String
+    public var projectContext: ProjectType
+    public var externalReferences: [ExternalReference]
 
     // Core Environmental Metrics
     public var globalCoverage: Double
@@ -72,17 +78,13 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
     @Relationship(deleteRule: .cascade, inverse: \EnhancedEnvironmentalMetric.environmentalSystem)
     public var performanceMetrics: [EnhancedEnvironmentalMetric] = []
 
-    // Tracking
-    public var eventLog: [TrackedEvent] = []
-    public var crossProjectReferences: [CrossProjectReference] = []
-
     public init(
         name: String = "Enhanced Quantum Environmental System",
         description: String = "Universal quantum-enhanced environmental infrastructure"
     ) {
         self.id = UUID()
         self.name = name
-        self.description = description
+        self.systemDescription = description
         self.creationDate = Date()
         self.lastModified = Date()
         self.version = "1.0.0"
@@ -97,6 +99,15 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
         self.airQualityIndex = 0.0
         self.waterQualityIndex = 0.0
         self.soilHealthIndex = 0.0
+
+        let newId = UUID()
+        self.id = newId
+        self.name = name
+        self.systemDescription = description
+        self.creationDate = Date()
+        self.lastModified = Date()
+        self.version = "1.1.0"
+        self.isActive = true
 
         // Initialize infrastructure
         self.monitoringStations = 0
@@ -133,7 +144,17 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
         self.sustainableDevelopment = 0.0
         self.climateResilience = 0.0
 
+        self.projectContext = .codingReviewer
+        self.globalId = "environmental_system_\(newId.uuidString)"
+        self.externalReferences = []
+
+        // Track initialization
+        // Note: trackEvent should ideally be called after initialization is complete
         self.trackEvent("system_initialized", parameters: ["version": self.version])
+    }
+
+    public var isValid: Bool {
+        (try? validate()) != nil
     }
 
     // MARK: - Validatable Protocol
@@ -155,32 +176,37 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
 
     // MARK: - Trackable Protocol
 
-    public func trackEvent(_ event: String, parameters: [String: Any] = [:]) {
-        let trackedEvent = TrackedEvent(
-            componentId: self.id,
-            eventType: event,
-            parameters: parameters,
-            timestamp: Date()
-        )
-        self.eventLog.append(trackedEvent)
-        self.lastModified = Date()
+    public var trackingId: String {
+        "environmental_\(self.id.uuidString)"
+    }
+
+    public var analyticsMetadata: [String: Any] {
+        [
+            "name": self.name,
+            "globalCoverage": self.globalCoverage,
+            "carbonNeutralStatus": self.carbonNeutralStatus,
+            "biodiversityIndex": self.biodiversityIndex,
+        ]
+    }
+
+    public func trackEvent(_ event: String, parameters: [String: Any]? = nil) {
+        var eventParameters = self.analyticsMetadata
+        parameters?.forEach { key, value in
+            eventParameters[key] = value
+        }
+        print("Tracking environmental event: \(event) with parameters: \(eventParameters)")
     }
 
     // MARK: - CrossProjectRelatable Protocol
 
-    public func addCrossProjectReference(projectId: UUID, referenceType: String, referenceId: UUID) {
-        let reference = CrossProjectReference(
-            sourceProjectId: self.id,
-            targetProjectId: projectId,
-            referenceType: referenceType,
-            referenceId: referenceId,
-            timestamp: Date()
+    public func addExternalReference(project: ProjectType, type: String, id: String) {
+        let reference = ExternalReference(
+            projectContext: project,
+            modelType: type,
+            modelId: id,
+            relationshipType: "related"
         )
-        self.crossProjectReferences.append(reference)
-    }
-
-    public func getRelatedProjects() -> [UUID] {
-        self.crossProjectReferences.map(\.targetProjectId)
+        self.externalReferences.append(reference)
     }
 
     // MARK: - Environmental System Methods
@@ -207,7 +233,7 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
 
         // Update global coverage
         let totalArea = self.environmentalZones.reduce(0.0) { $0 + $1.area }
-        self.globalCoverage = min(1.0, totalArea / 510_000_000.0) // Earth's land area in km²
+        self.globalCoverage = min(1.0, totalArea / 510_000_000.0)  // Earth's land area in km²
 
         // Update infrastructure counts based on zone type
         switch type {
@@ -331,10 +357,10 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
     @MainActor
     public func restoreEcosystems(targetSpecies: Int, targetHabitats: Int) {
         // Protect species
-        self.speciesProtection = min(1.0, Double(targetSpecies) / 1_000_000.0) // Target: 1M species
+        self.speciesProtection = min(1.0, Double(targetSpecies) / 1_000_000.0)  // Target: 1M species
 
         // Restore habitats
-        self.habitatRestoration = min(1.0, Double(targetHabitats) / 100_000.0) // Target: 100K habitats
+        self.habitatRestoration = min(1.0, Double(targetHabitats) / 100_000.0)  // Target: 100K habitats
 
         // Improve ocean health
         self.oceanHealth = min(1.0, self.oceanHealth + 0.05)

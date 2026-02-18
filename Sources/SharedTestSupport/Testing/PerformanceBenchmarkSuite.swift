@@ -14,41 +14,43 @@ import os.log
 /// Performance Validation and Benchmarking System for Phase 4
 /// Validates all performance optimization systems against industry standards
 @available(iOS 15.0, macOS 12.0, *)
+@available(iOS 15.0, macOS 12.0, *)
+@MainActor
 class PerformanceBenchmarkSuite {
     // MARK: - Configuration
 
-    private let logger = Logger(subsystem: "QuantumWorkspace", category: "PerformanceBenchmarks")
+    private let logger = os.Logger(subsystem: "QuantumWorkspace", category: "PerformanceBenchmarks")
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Benchmark Standards
 
     enum BenchmarkStandards {
         // Memory Usage Benchmarks
-        static let maxMemoryUsageApp: Int64 = 200 * 1024 * 1024 // 200MB
-        static let maxMemoryUsageAI: Int64 = 100 * 1024 * 1024 // 100MB
-        static let maxMemoryUsageAnimation: Int64 = 50 * 1024 * 1024 // 50MB
+        static let maxMemoryUsageApp: Int64 = 200 * 1024 * 1024  // 200MB
+        static let maxMemoryUsageAI: Int64 = 100 * 1024 * 1024  // 100MB
+        static let maxMemoryUsageAnimation: Int64 = 50 * 1024 * 1024  // 50MB
 
         // CPU Usage Benchmarks
-        static let maxCPUUsageIdle: Double = 5.0 // 5%
-        static let maxCPUUsageNormal: Double = 30.0 // 30%
-        static let maxCPUUsageIntensive: Double = 70.0 // 70%
+        static let maxCPUUsageIdle: Double = 5.0  // 5%
+        static let maxCPUUsageNormal: Double = 30.0  // 30%
+        static let maxCPUUsageIntensive: Double = 70.0  // 70%
 
         // Performance Timing Benchmarks
-        static let maxAppLaunchTime: Double = 3.0 // 3 seconds
-        static let maxViewTransition: Double = 0.3 // 300ms
-        static let maxAIInference: Double = 2.0 // 2 seconds
-        static let maxAnimationDuration: Double = 0.6 // 600ms
+        static let maxAppLaunchTime: Double = 3.0  // 3 seconds
+        static let maxViewTransition: Double = 0.3  // 300ms
+        static let maxAIInference: Double = 2.0  // 2 seconds
+        static let maxAnimationDuration: Double = 0.6  // 600ms
 
         // Frame Rate Benchmarks
-        static let minFrameRate: Double = 58.0 // 58 FPS minimum
-        static let targetFrameRate: Double = 60.0 // 60 FPS target
+        static let minFrameRate: Double = 58.0  // 58 FPS minimum
+        static let targetFrameRate: Double = 60.0  // 60 FPS target
 
         // Battery Usage Benchmarks
-        static let maxBatteryDrainPerHour: Double = 8.0 // 8% per hour
+        static let maxBatteryDrainPerHour: Double = 8.0  // 8% per hour
 
         // Network Benchmarks
-        static let maxNetworkLatency: Double = 2.0 // 2 seconds
-        static let minNetworkThroughput: Double = 1.0 // 1 MB/s
+        static let maxNetworkLatency: Double = 2.0  // 2 seconds
+        static let minNetworkThroughput: Double = 1.0  // 1 MB/s
     }
 
     // MARK: - Benchmark Results
@@ -255,14 +257,16 @@ class PerformanceBenchmarkSuite {
         var memoryMetrics: [(usage: Int64, timestamp: Date)] = []
 
         // Heavy memory allocation test
-        await measureMemoryUsage(during: {
-            await self.simulateHeavyMemoryUsage()
-        }, recordingTo: &memoryMetrics)
+        await measureMemoryUsage(
+            during: {
+                await self.simulateHeavyMemoryUsage()
+            }, recordingTo: &memoryMetrics)
 
         // Memory cleanup test
-        await self.measureMemoryUsage(during: {
-            await self.simulateMemoryCleanup()
-        }, recordingTo: &memoryMetrics)
+        await self.measureMemoryUsage(
+            during: {
+                await self.simulateMemoryCleanup()
+            }, recordingTo: &memoryMetrics)
 
         // Memory leak detection
         let initialMemory = self.getCurrentMemoryUsage()
@@ -339,14 +343,16 @@ class PerformanceBenchmarkSuite {
         var cpuMetrics: [(usage: Double, timestamp: Date)] = []
 
         // CPU-intensive operations
-        await measureCPUUsage(during: {
-            await self.simulateComputeIntensiveTask()
-        }, recordingTo: &cpuMetrics)
+        await measureCPUUsage(
+            during: {
+                await self.simulateComputeIntensiveTask()
+            }, recordingTo: &cpuMetrics)
 
         // Multi-threading efficiency
-        await self.measureCPUUsage(during: {
-            await self.simulateMultiThreadedOperations()
-        }, recordingTo: &cpuMetrics)
+        await self.measureCPUUsage(
+            during: {
+                await self.simulateMultiThreadedOperations()
+            }, recordingTo: &cpuMetrics)
 
         let currentCPU = self.getCurrentCPUUsage()
 
@@ -755,7 +761,7 @@ class PerformanceBenchmarkSuite {
             batteryResults: batteryResults,
             networkResults: nil,
             overallScore: overallScore,
-            passed: overallScore >= 70.0 // Lower threshold for stress test
+            passed: overallScore >= 70.0  // Lower threshold for stress test
         )
     }
 
@@ -797,42 +803,42 @@ class PerformanceBenchmarkSuite {
 
         let report = """
 
-        🏆 QUANTUM WORKSPACE PERFORMANCE BENCHMARK REPORT
-        ================================================
+            🏆 QUANTUM WORKSPACE PERFORMANCE BENCHMARK REPORT
+            ================================================
 
-        📊 Overall Score: \(String(format: "%.1f", overallScore))/100
-        ✅ Tests Passed: \(passedTests)/\(totalTests)
-        ⏱️  Total Duration: \(String(format: "%.2f", results.map(\.duration).reduce(0, +)))s
+            📊 Overall Score: \(String(format: "%.1f", overallScore))/100
+            ✅ Tests Passed: \(passedTests)/\(totalTests)
+            ⏱️  Total Duration: \(String(format: "%.2f", results.map(\.duration).reduce(0, +)))s
 
-        📈 Individual Test Results:
-        \(results.map(\.summary).joined(separator: "\n\n"))
+            📈 Individual Test Results:
+            \(results.map(\.summary).joined(separator: "\n\n"))
 
-        🎯 Performance Summary:
-        - Memory Management: \(String(
-            format: "%.1f",
-            results.map(\.memoryResults.score).reduce(0, +) / Double(results.count)
-        ))/100
-        - CPU Optimization: \(String(
-            format: "%.1f",
-            results.map(\.cpuResults.score).reduce(0, +) / Double(results.count)
-        ))/100
-        - Animation Performance: \(String(
-            format: "%.1f",
-            results.map(\.frameRateResults.score).reduce(0, +) / Double(results.count)
-        ))/100
-        - Battery Efficiency: \(String(
-            format: "%.1f",
-            results.map(\.batteryResults.score).reduce(0, +) / Double(results.count)
-        ))/100
+            🎯 Performance Summary:
+            - Memory Management: \(String(
+                format: "%.1f",
+                results.map(\.memoryResults.score).reduce(0, +) / Double(results.count)
+            ))/100
+            - CPU Optimization: \(String(
+                format: "%.1f",
+                results.map(\.cpuResults.score).reduce(0, +) / Double(results.count)
+            ))/100
+            - Animation Performance: \(String(
+                format: "%.1f",
+                results.map(\.frameRateResults.score).reduce(0, +) / Double(results.count)
+            ))/100
+            - Battery Efficiency: \(String(
+                format: "%.1f",
+                results.map(\.batteryResults.score).reduce(0, +) / Double(results.count)
+            ))/100
 
-        🚀 Status: \(overallScore >= 80.0
+            🚀 Status: \(overallScore >= 80.0
             ? "EXCELLENT PERFORMANCE"
             : overallScore >= 70.0
                 ? "GOOD PERFORMANCE"
                 : overallScore >= 60.0
                     ? "ACCEPTABLE PERFORMANCE"
                     : "NEEDS IMPROVEMENT")
-        """
+            """
 
         self.logger.info("\(report)")
 
@@ -841,8 +847,10 @@ class PerformanceBenchmarkSuite {
     }
 
     private func saveReportToFile(_ report: String) {
-        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let reportURL = documentsPath.appendingPathComponent("PerformanceBenchmarkReport_\(Date().ISO8601Format()).txt")
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            .first!
+        let reportURL = documentsPath.appendingPathComponent(
+            "PerformanceBenchmarkReport_\(Date().ISO8601Format()).txt")
 
         do {
             try report.write(to: reportURL, atomically: true, encoding: .utf8)
@@ -855,39 +863,39 @@ class PerformanceBenchmarkSuite {
     // MARK: - Simulation Methods (Placeholder implementations)
 
     private func simulateAppInitialization() async {
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5s
+        try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5s
     }
 
     private func simulateDataLoading() async {
-        try? await Task.sleep(nanoseconds: 800_000_000) // 0.8s
+        try? await Task.sleep(nanoseconds: 800_000_000)  // 0.8s
     }
 
     private func simulateUISetup() async {
-        try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
+        try? await Task.sleep(nanoseconds: 600_000_000)  // 0.6s
     }
 
     private func simulateSystemIntegration() async {
-        try? await Task.sleep(nanoseconds: 400_000_000) // 0.4s
+        try? await Task.sleep(nanoseconds: 400_000_000)  // 0.4s
     }
 
     private func simulateHeavyMemoryUsage() async {
         // Simulate memory-intensive operations
-        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2s
+        try? await Task.sleep(nanoseconds: 2_000_000_000)  // 2s
     }
 
     private func simulateMemoryCleanup() async {
         // Simulate memory cleanup
-        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1s
+        try? await Task.sleep(nanoseconds: 1_000_000_000)  // 1s
     }
 
     private func simulateMemoryLeakTest() async {
         // Simulate operations that might cause memory leaks
-        try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5s
+        try? await Task.sleep(nanoseconds: 1_500_000_000)  // 1.5s
     }
 
     private func simulateComputeIntensiveTask() async {
         // Simulate CPU-intensive computation
-        try? await Task.sleep(nanoseconds: 3_000_000_000) // 3s
+        try? await Task.sleep(nanoseconds: 3_000_000_000)  // 3s
     }
 
     private func simulateMultiThreadedOperations() async {
@@ -895,22 +903,22 @@ class PerformanceBenchmarkSuite {
         await withTaskGroup(of: Void.self) { group in
             for _ in 0..<4 {
                 group.addTask {
-                    try? await Task.sleep(nanoseconds: 1_000_000_000) // 1s
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)  // 1s
                 }
             }
         }
     }
 
     private func simulateComplexAnimations() async {
-        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2s
+        try? await Task.sleep(nanoseconds: 2_000_000_000)  // 2s
     }
 
     private func simulateMicroInteractions() async {
-        try? await Task.sleep(nanoseconds: 300_000_000) // 0.3s
+        try? await Task.sleep(nanoseconds: 300_000_000)  // 0.3s
     }
 
     private func simulateViewTransitions() async {
-        try? await Task.sleep(nanoseconds: 250_000_000) // 0.25s
+        try? await Task.sleep(nanoseconds: 250_000_000)  // 0.25s
     }
 
     private func measureFrameRatesDuringAnimations() async -> [Double] {
@@ -919,19 +927,19 @@ class PerformanceBenchmarkSuite {
     }
 
     private func simulateCoreMLInference() async {
-        try? await Task.sleep(nanoseconds: 800_000_000) // 0.8s
+        try? await Task.sleep(nanoseconds: 800_000_000)  // 0.8s
     }
 
     private func simulateNLPProcessing() async {
-        try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
+        try? await Task.sleep(nanoseconds: 600_000_000)  // 0.6s
     }
 
     private func simulateComputerVision() async {
-        try? await Task.sleep(nanoseconds: 1_200_000_000) // 1.2s
+        try? await Task.sleep(nanoseconds: 1_200_000_000)  // 1.2s
     }
 
     private func simulatePredictiveAnalytics() async {
-        try? await Task.sleep(nanoseconds: 900_000_000) // 0.9s
+        try? await Task.sleep(nanoseconds: 900_000_000)  // 0.9s
     }
 
     private func testPlatformOptimizations() async -> Double {
@@ -950,25 +958,25 @@ class PerformanceBenchmarkSuite {
     }
 
     private func simulateMaximumLoad() async {
-        try? await Task.sleep(nanoseconds: 5_000_000_000) // 5s
+        try? await Task.sleep(nanoseconds: 5_000_000_000)  // 5s
     }
 
     private func simulateMemoryPressure() async {
-        try? await Task.sleep(nanoseconds: 3_000_000_000) // 3s
+        try? await Task.sleep(nanoseconds: 3_000_000_000)  // 3s
     }
 
     private func simulateConcurrentOperations() async {
         await withTaskGroup(of: Void.self) { group in
             for _ in 0..<8 {
                 group.addTask {
-                    try? await Task.sleep(nanoseconds: 2_000_000_000) // 2s
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)  // 2s
                 }
             }
         }
     }
 
     private func simulateExtendedUsage() async {
-        try? await Task.sleep(nanoseconds: 10_000_000_000) // 10s
+        try? await Task.sleep(nanoseconds: 10_000_000_000)  // 10s
     }
 
     // MARK: - Network Measurement Methods
@@ -980,7 +988,7 @@ class PerformanceBenchmarkSuite {
 
     private func measureNetworkThroughput() async -> Double {
         // Simulate network throughput measurement
-        2.5 // MB/s
+        2.5  // MB/s
     }
 
     private func measureNetworkReliability() async -> (errorRate: Double, successRate: Double) {
@@ -990,7 +998,9 @@ class PerformanceBenchmarkSuite {
 
     // MARK: - System Metrics Methods
 
-    private func getCurrentMemoryUsage() -> (current: Int64, peak: Int64, average: Int64, leaked: Int64) {
+    private func getCurrentMemoryUsage() -> (
+        current: Int64, peak: Int64, average: Int64, leaked: Int64
+    ) {
         // Simulate memory usage data
         (current: 85 * 1024 * 1024, peak: 120 * 1024 * 1024, average: 90 * 1024 * 1024, leaked: 0)
     }
@@ -1006,25 +1016,33 @@ class PerformanceBenchmarkSuite {
 
     private func getCurrentSystemMetrics() -> SystemMetrics {
         SystemMetrics(
-            memory: (current: 90 * 1024 * 1024, peak: 150 * 1024 * 1024, average: 95 * 1024 * 1024, leaked: 0),
+            memory: (
+                current: 90 * 1024 * 1024, peak: 150 * 1024 * 1024, average: 95 * 1024 * 1024,
+                leaked: 0
+            ),
             cpu: (current: 35.0, peak: 68.0, average: 42.0),
             frameRate: (average: 57.8, minimum: 52.0, dropped: 12),
             battery: (drainRate: 7.5, thermalImpact: "Medium")
         )
     }
 
-    private func measureMemoryUsage(during operation: () async -> Void, recordingTo metrics: inout [(
-        usage: Int64,
-        timestamp: Date
-    )]) async {
+    private func measureMemoryUsage(
+        during operation: () async -> Void,
+        recordingTo metrics:
+            inout [(
+                usage: Int64,
+                timestamp: Date
+            )]
+    ) async {
         let startTime = Date()
         await operation()
         let endTime = Date()
 
         // Simulate memory usage recording during operation
         for i in 0..<10 {
-            let timestamp = startTime.addingTimeInterval(Double(i) * (endTime.timeIntervalSince(startTime) / 10))
-            let usage = Int64(60 + i * 5) * 1024 * 1024 // Simulate increasing memory usage
+            let timestamp = startTime.addingTimeInterval(
+                Double(i) * (endTime.timeIntervalSince(startTime) / 10))
+            let usage = Int64(60 + i * 5) * 1024 * 1024  // Simulate increasing memory usage
             metrics.append((usage: usage, timestamp: timestamp))
         }
     }
@@ -1039,24 +1057,31 @@ class PerformanceBenchmarkSuite {
 
         // Simulate CPU usage recording during operation
         for i in 0..<10 {
-            let timestamp = startTime.addingTimeInterval(Double(i) * (endTime.timeIntervalSince(startTime) / 10))
-            let usage = 20.0 + Double(i) * 3.0 // Simulate varying CPU usage
+            let timestamp = startTime.addingTimeInterval(
+                Double(i) * (endTime.timeIntervalSince(startTime) / 10))
+            let usage = 20.0 + Double(i) * 3.0  // Simulate varying CPU usage
             metrics.append((usage: usage, timestamp: timestamp))
         }
     }
 
     // MARK: - Score Calculation Methods
 
-    private func calculateMemoryScore(_ memory: (current: Int64, peak: Int64, average: Int64, leaked: Int64))
+    private func calculateMemoryScore(
+        _ memory: (current: Int64, peak: Int64, average: Int64, leaked: Int64)
+    )
         -> Double
     {
-        let peakScore = max(0, 100 - (Double(memory.peak) / Double(BenchmarkStandards.maxMemoryUsageApp)) * 100)
-        let averageScore = max(0, 100 - (Double(memory.average) / Double(BenchmarkStandards.maxMemoryUsageApp)) * 80)
+        let peakScore = max(
+            0, 100 - (Double(memory.peak) / Double(BenchmarkStandards.maxMemoryUsageApp)) * 100)
+        let averageScore = max(
+            0, 100 - (Double(memory.average) / Double(BenchmarkStandards.maxMemoryUsageApp)) * 80)
         let leakPenalty = memory.leaked > 0 ? 20.0 : 0.0
         return max(0, (peakScore + averageScore) / 2 - leakPenalty)
     }
 
-    private func calculateCPUScore(_ cpu: (current: Double, peak: Double, average: Double)) -> Double {
+    private func calculateCPUScore(_ cpu: (current: Double, peak: Double, average: Double))
+        -> Double
+    {
         let peakScore = max(0, 100 - (cpu.peak / BenchmarkStandards.maxCPUUsageIntensive) * 100)
         let averageScore = max(0, 100 - (cpu.average / BenchmarkStandards.maxCPUUsageNormal) * 100)
         return (peakScore + averageScore) / 2
@@ -1097,9 +1122,13 @@ class PerformanceBenchmarkSuite {
         return (memoryScore + cpuScore + frameRateScore + batteryScore) / 4
     }
 
-    private func calculateBatteryScore(_ battery: (drainRate: Double, thermalImpact: String)) -> Double {
-        let drainScore = max(0, 100 - (battery.drainRate / BenchmarkStandards.maxBatteryDrainPerHour) * 100)
-        let thermalPenalty = battery.thermalImpact == "High" ? 20.0 : battery.thermalImpact == "Medium" ? 10.0 : 0.0
+    private func calculateBatteryScore(_ battery: (drainRate: Double, thermalImpact: String))
+        -> Double
+    {
+        let drainScore = max(
+            0, 100 - (battery.drainRate / BenchmarkStandards.maxBatteryDrainPerHour) * 100)
+        let thermalPenalty =
+            battery.thermalImpact == "High" ? 20.0 : battery.thermalImpact == "Medium" ? 10.0 : 0.0
         return max(0, drainScore - thermalPenalty)
     }
 
@@ -1108,7 +1137,8 @@ class PerformanceBenchmarkSuite {
         _ throughput: Double,
         _ reliability: (errorRate: Double, successRate: Double)
     ) -> Double {
-        let latencyScore = max(0, 100 - (latency.average / BenchmarkStandards.maxNetworkLatency) * 100)
+        let latencyScore = max(
+            0, 100 - (latency.average / BenchmarkStandards.maxNetworkLatency) * 100)
         let throughputScore = min(100, (throughput / BenchmarkStandards.minNetworkThroughput) * 100)
         let reliabilityScore = reliability.successRate * 100
         return (latencyScore + throughputScore + reliabilityScore) / 3

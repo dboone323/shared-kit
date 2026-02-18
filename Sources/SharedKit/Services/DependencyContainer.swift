@@ -8,6 +8,7 @@
 
 import Foundation
 import SharedKitCore
+
 #if canImport(SwiftData)
     @_exported import SwiftData
 #endif
@@ -130,13 +131,17 @@ public final class DependencyContainer: @unchecked Sendable {
 
     private func setupDefaultServices() {
         // Register default service implementations
-        self.registerSingleton(factory: { DefaultAnalyticsService() }, for: AnalyticsServiceProtocol.self)
-        self.registerSingleton(factory: { DefaultCrossProjectService() }, for: CrossProjectServiceProtocol.self)
+        self.registerSingleton(
+            factory: { DefaultAnalyticsService() }, for: AnalyticsServiceProtocol.self)
+        self.registerSingleton(
+            factory: { DefaultCrossProjectService() }, for: CrossProjectServiceProtocol.self)
 
         // Register data services
         self.registerSingleton(factory: { DefaultHabitService() }, for: HabitServiceProtocol.self)
-        self.registerSingleton(factory: { DefaultFinancialService() }, for: FinancialServiceProtocol.self)
-        self.registerSingleton(factory: { DefaultPlannerService() }, for: PlannerServiceProtocol.self)
+        self.registerSingleton(
+            factory: { DefaultFinancialService() }, for: FinancialServiceProtocol.self)
+        self.registerSingleton(
+            factory: { DefaultPlannerService() }, for: PlannerServiceProtocol.self)
     }
 }
 
@@ -198,11 +203,11 @@ public enum DependencyError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case let .serviceNotFound(service):
+        case .serviceNotFound(let service):
             "Service not found: \(service)"
-        case let .circularDependency(service):
+        case .circularDependency(let service):
             "Circular dependency detected for service: \(service)"
-        case let .initializationFailed(service):
+        case .initializationFailed(let service):
             "Failed to initialize service: \(service)"
         }
     }
@@ -254,6 +259,7 @@ public final class ServiceManager: @unchecked Sendable {
     }
 
     /// Initialize a specific service
+    @MainActor
     private func initializeService(_ service: ServiceProtocol) async throws {
         let serviceId = service.serviceId
         let alreadyInitialized = self.withInitializedServicesLock {
@@ -301,12 +307,13 @@ public final class ServiceManager: @unchecked Sendable {
             await plannerService.cleanup()
         }
 
-        _ = self.withInitializedServicesLock {
+        self.withInitializedServicesLock {
             self.initializedServices.removeAll()
         }
     }
 
     /// Get health status of all services
+    @MainActor
     public func getServicesHealthStatus() async -> [String: ServiceHealthStatus] {
         let container = DependencyContainer.shared
         var healthStatuses: [String: ServiceHealthStatus] = [:]
@@ -356,10 +363,12 @@ final class DefaultAnalyticsService: AnalyticsServiceProtocol {
         .healthy
     }
 
-    func track(event: String, properties: [String: Any]?, userId: String?) async {
+    func track(event: String, properties: [String: AnyCodable]?, userId: String?) async {
         // Default implementation - log to console in debug mode
         #if DEBUG
-            print("📊 Analytics: \(event) | User: \(userId ?? "anonymous") | Properties: \(properties ?? [:])")
+            print(
+                "📊 Analytics: \(event) | User: \(userId ?? "anonymous") | Properties: \(String(describing: properties))"
+            )
         #endif
     }
 
@@ -368,18 +377,25 @@ final class DefaultAnalyticsService: AnalyticsServiceProtocol {
     }
 
     func trackPerformance(_ metric: PerformanceMetric) async {
-        await self.track(event: "performance_metric", properties: [
-            "name": metric.name,
-            "value": metric.value,
-            "unit": metric.unit,
-        ], userId: nil)
+        await self.track(
+            event: "performance_metric",
+            properties: [
+                "name": AnyCodable(metric.name),
+                "value": AnyCodable(metric.value),
+                "unit": AnyCodable(metric.unit),
+            ], userId: nil)
     }
 
-    func trackError(_ error: Error, context: [String: Any]?) async {
-        await self.track(event: "error", properties: [
-            "error": error.localizedDescription,
-            "context": context ?? [:],
-        ], userId: nil)
+    func trackError(_ error: any Error & Sendable, context: [String: AnyCodable]?) async {
+        var properties: [String: AnyCodable] = context ?? [:]
+        properties["error"] = AnyCodable(error.localizedDescription)
+
+        // Convert context entries to string description if needed for debug printing inside track,
+        // but here we just pass AnyCodable to match signature.
+
+        await self.track(
+            event: "error",
+            properties: properties, userId: nil)
     }
 
     func getAnalyticsSummary(timeRange: DateInterval) async throws -> AnalyticsSummary {
@@ -423,7 +439,9 @@ final class DefaultCrossProjectService: CrossProjectServiceProtocol {
         print("Syncing data from \(sourceProject.displayName) to \(targetProject.displayName)")
     }
 
-    func getCrossProjectReferences(for _: UUID, entityType _: String) async throws -> [CrossProjectReference] {
+    func getCrossProjectReferences(for _: UUID, entityType _: String) async throws
+        -> [CrossProjectReference]
+    {
         // Default implementation returns empty array
         []
     }
@@ -485,9 +503,10 @@ final class DefaultHabitService: HabitServiceProtocol {
         return habit
     }
 
-    func logHabitCompletion(_ habitId: UUID, value _: Double?, mood _: MoodRating?,
-                            notes _: String?) async throws -> EnhancedHabitLog
-    {
+    func logHabitCompletion(
+        _ habitId: UUID, value _: Double?, mood _: MoodRating?,
+        notes _: String?
+    ) async throws -> EnhancedHabitLog {
         // Default implementation - placeholder
         print("Logging habit completion for: \(habitId)")
         // This would return a proper EnhancedHabitLog instance in production
@@ -499,7 +518,8 @@ final class DefaultHabitService: HabitServiceProtocol {
         0
     }
 
-    func getHabitInsights(for habitId: UUID, timeRange: DateInterval) async throws -> HabitInsights {
+    func getHabitInsights(for habitId: UUID, timeRange: DateInterval) async throws -> HabitInsights
+    {
         HabitInsights(
             habitId: habitId,
             timeRange: timeRange,
@@ -538,7 +558,9 @@ final class DefaultFinancialService: FinancialServiceProtocol {
         .healthy
     }
 
-    func createTransaction(_ transaction: EnhancedFinancialTransaction) async throws -> EnhancedFinancialTransaction {
+    func createTransaction(_ transaction: EnhancedFinancialTransaction) async throws
+        -> EnhancedFinancialTransaction
+    {
         print("Creating transaction: \(transaction.amount)")
         return transaction
     }
@@ -547,7 +569,9 @@ final class DefaultFinancialService: FinancialServiceProtocol {
         0
     }
 
-    func getBudgetInsights(for budgetId: UUID, timeRange: DateInterval) async throws -> BudgetInsights {
+    func getBudgetInsights(for budgetId: UUID, timeRange: DateInterval) async throws
+        -> BudgetInsights
+    {
         BudgetInsights(
             budgetId: budgetId,
             timeRange: timeRange,
@@ -583,7 +607,8 @@ final class DefaultFinancialService: FinancialServiceProtocol {
         []
     }
 
-    func categorizeTransaction(_: EnhancedFinancialTransaction) async throws -> TransactionCategory {
+    func categorizeTransaction(_: EnhancedFinancialTransaction) async throws -> TransactionCategory
+    {
         .expense
     }
 }
@@ -626,11 +651,15 @@ final class DefaultPlannerService: PlannerServiceProtocol {
         )
     }
 
-    func generateTaskRecommendations(for _: String, context _: PlanningContext) async throws -> [TaskRecommendation] {
+    func generateTaskRecommendations(for _: String, context _: PlanningContext) async throws
+        -> [TaskRecommendation]
+    {
         []
     }
 
-    func optimizeSchedule(for userId: String, timeRange: DateInterval) async throws -> ScheduleOptimization {
+    func optimizeSchedule(for userId: String, timeRange: DateInterval) async throws
+        -> ScheduleOptimization
+    {
         ScheduleOptimization(
             userId: userId,
             timeRange: timeRange,
@@ -640,7 +669,9 @@ final class DefaultPlannerService: PlannerServiceProtocol {
         )
     }
 
-    func getProductivityInsights(for userId: String, timeRange: DateInterval) async throws -> ProductivityInsights {
+    func getProductivityInsights(for userId: String, timeRange: DateInterval) async throws
+        -> ProductivityInsights
+    {
         ProductivityInsights(
             userId: userId,
             timeRange: timeRange,

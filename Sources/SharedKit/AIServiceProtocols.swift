@@ -6,6 +6,7 @@
 //  Shared AI service protocols for consistent integration across all Quantum-workspace projects
 
 import Foundation
+import SharedKitCore
 
 // MARK: - Core AI Service Protocols
 

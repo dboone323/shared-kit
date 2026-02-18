@@ -13,6 +13,7 @@ import SwiftUI
 
 // MARK: - Performance Monitor
 
+@MainActor
 public class PerformanceMonitor: ObservableObject {
     public static let shared = PerformanceMonitor()
 
@@ -26,11 +27,6 @@ public class PerformanceMonitor: ObservableObject {
 
     private init() {
         self.setupSystemObservers()
-    }
-
-    deinit {
-        stopMonitoring()
-        removeSystemObservers()
     }
 
     // MARK: - Monitoring Control
@@ -56,7 +52,7 @@ public class PerformanceMonitor: ObservableObject {
 
     // MARK: - Metrics Collection
 
-    private func updateMetrics() {
+    nonisolated private func updateMetrics() {
         Task { @MainActor in
             self.currentMetrics = SystemPerformanceMetrics(
                 memoryUsage: self.getCurrentMemoryUsage(),
@@ -81,7 +77,7 @@ public class PerformanceMonitor: ObservableObject {
         }
 
         if kerr == KERN_SUCCESS {
-            let usedMemory = Double(info.resident_size) / 1024 / 1024 // Convert to MB
+            let usedMemory = Double(info.resident_size) / 1024 / 1024  // Convert to MB
             let availableMemory = Double(ProcessInfo.processInfo.physicalMemory) / 1024 / 1024
 
             return MemoryUsage(
@@ -121,9 +117,9 @@ public class PerformanceMonitor: ObservableObject {
             var totalIdle: UInt32 = 0
 
             for cpu in cpuLoadInfo {
-                totalUser += cpu.cpu_ticks.0 // CPU_STATE_USER
-                totalSystem += cpu.cpu_ticks.1 // CPU_STATE_SYSTEM
-                totalIdle += cpu.cpu_ticks.2 // CPU_STATE_IDLE
+                totalUser += cpu.cpu_ticks.0  // CPU_STATE_USER
+                totalSystem += cpu.cpu_ticks.1  // CPU_STATE_SYSTEM
+                totalIdle += cpu.cpu_ticks.2  // CPU_STATE_IDLE
             }
 
             let totalTicks = totalUser + totalSystem + totalIdle
@@ -323,9 +319,9 @@ public struct SystemPerformanceMetrics: Codable, Sendable {
     }
 }
 
-public struct MemoryUsage: Codable {
-    public let used: Double // MB
-    public let available: Double // MB
+public struct MemoryUsage: Codable, Sendable {
+    public let used: Double  // MB
+    public let available: Double  // MB
     public let percentage: Double
 
     public init(used: Double, available: Double, percentage: Double) {
@@ -347,7 +343,7 @@ public struct MemoryUsage: Codable {
     }
 }
 
-public struct CPUUsage: Codable {
+public struct CPUUsage: Codable, Sendable {
     public let user: Double
     public let system: Double
     public let idle: Double
@@ -362,61 +358,48 @@ public struct CPUUsage: Codable {
 
     public var usageLevel: UsageLevel {
         if self.total > 80 {
-            .critical
+            UsageLevel.critical
         } else if self.total > 60 {
-            .high
+            UsageLevel.high
         } else if self.total > 40 {
-            .medium
+            UsageLevel.medium
         } else {
-            .low
+            UsageLevel.low
         }
     }
 }
 
-public struct BatteryStatus: Codable {
-    public let level: Double // Percentage
-    public let state: BatteryState
-    public let isLowPowerModeEnabled: Bool
-
+public struct BatteryStatus: Codable, Sendable {
     public init(level: Double, state: BatteryState, isLowPowerModeEnabled: Bool) {
         self.level = level
         self.state = state
         self.isLowPowerModeEnabled = isLowPowerModeEnabled
     }
-
-    public var needsOptimization: Bool {
-        self.level < 20 || self.isLowPowerModeEnabled || self.state == .unplugged
-    }
+    public let level: Double
+    public let state: BatteryState
+    public let isLowPowerModeEnabled: Bool
 }
 
-public enum BatteryState: String, Codable {
-    case unknown
-    case unplugged
-    case charging
-    case full
+public enum BatteryState: String, Codable, Sendable {
+    case unknown, unplugged, charging, full
 
     #if canImport(UIKit)
-        init(from uiState: UIDevice.BatteryState) {
-            switch uiState {
-            case .unknown:
-                self = .unknown
-            case .unplugged:
-                self = .unplugged
-            case .charging:
-                self = .charging
-            case .full:
-                self = .full
-            @unknown default:
-                self = .unknown
+        init(from state: UIDevice.BatteryState) {
+            switch state {
+            case .unknown: self = .unknown
+            case .unplugged: self = .unplugged
+            case .charging: self = .charging
+            case .full: self = .full
+            @unknown default: self = .unknown
             }
         }
     #endif
 }
 
-public struct NetworkStatus: Codable {
+public struct NetworkStatus: Codable, Sendable {
     public let isConnected: Bool
     public let connectionType: ConnectionType
-    public let bandwidth: Double // Mbps
+    public let bandwidth: Double  // Assuming Double, used in comparisons
 
     public init(isConnected: Bool, connectionType: ConnectionType, bandwidth: Double) {
         self.isConnected = isConnected
@@ -424,8 +407,8 @@ public struct NetworkStatus: Codable {
         self.bandwidth = bandwidth
     }
 
-    public var isHighBandwidth: Bool {
-        self.connectionType == .wifi || self.connectionType == .ethernet
+    public var isExpensive: Bool {
+        self.connectionType == .cellular
     }
 
     public var shouldOptimizeForBandwidth: Bool {
@@ -433,7 +416,7 @@ public struct NetworkStatus: Codable {
     }
 }
 
-public enum ConnectionType: String, Codable {
+public enum ConnectionType: String, Codable, Sendable {
     case unknown
     case wifi
     case cellular
@@ -441,7 +424,7 @@ public enum ConnectionType: String, Codable {
     case offline
 }
 
-public enum ThermalState: String, Codable {
+public enum ThermalState: String, Codable, Sendable {
     case nominal
     case fair
     case serious
@@ -507,6 +490,7 @@ public enum PerformanceLevel: String, Codable {
 
 // MARK: - Memory Manager
 
+@MainActor
 public class MemoryManager: ObservableObject {
     public static let shared = MemoryManager()
 
@@ -524,22 +508,20 @@ public class MemoryManager: ObservableObject {
         self.startPeriodicCleanup()
     }
 
-    deinit {
-        cacheCleanupTimer?.invalidate()
-    }
+    // deinit removed for MainActor safety
 
     // MARK: - Cache Management
 
     private func setupCaches() {
         #if canImport(UIKit)
             // Configure image cache
-            self.imageCache.countLimit = 100 // Max 100 images
-            self.imageCache.totalCostLimit = 50 * 1024 * 1024 // 50MB
+            self.imageCache.countLimit = 100  // Max 100 images
+            self.imageCache.totalCostLimit = 50 * 1024 * 1024  // 50MB
         #endif
 
         // Configure data cache
-        self.dataCache.countLimit = 200 // Max 200 data objects
-        self.dataCache.totalCostLimit = 20 * 1024 * 1024 // 20MB
+        self.dataCache.countLimit = 200  // Max 200 data objects
+        self.dataCache.totalCostLimit = 20 * 1024 * 1024  // 20MB
 
         // Set up automatic cleanup on memory warning
         #if canImport(UIKit)
@@ -625,8 +607,10 @@ public class MemoryManager: ObservableObject {
     private func startPeriodicCleanup() {
         self.cacheCleanupTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) {
             [weak self] _ in
-            // Cleanup every 5 minutes
-            self?.performRoutineCleanup()
+            Task { @MainActor [weak self] in
+                // Cleanup every 5 minutes
+                self?.performRoutineCleanup()
+            }
         }
     }
 
@@ -634,7 +618,7 @@ public class MemoryManager: ObservableObject {
 
     #if canImport(UIKit)
         public func cacheImage(_ image: UIImage, forKey key: String) {
-            let cost = Int(image.size.width * image.size.height * 4) // Rough memory estimate
+            let cost = Int(image.size.width * image.size.height * 4)  // Rough memory estimate
             self.imageCache.setObject(image, forKey: key as NSString, cost: cost)
         }
 
@@ -654,6 +638,7 @@ public class MemoryManager: ObservableObject {
 
 // MARK: - CPU Optimizer
 
+@MainActor
 public class CPUOptimizer: ObservableObject {
     public static let shared = CPUOptimizer()
 
@@ -671,7 +656,9 @@ public class CPUOptimizer: ObservableObject {
 
     private func startMonitoring() {
         Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
-            self?.evaluateOptimizationNeeds()
+            Task { @MainActor [weak self] in
+                self?.evaluateOptimizationNeeds()
+            }
         }
     }
 
@@ -734,28 +721,28 @@ public class CPUOptimizer: ObservableObject {
         self.throttleTimer = nil
     }
 
-    private func throttleProcessing(factor: Double) {
-        let sleepTime = (1.0 - factor) * 0.1 // Up to 100ms delay
+    nonisolated private func throttleProcessing(factor: Double) {
+        let sleepTime = (1.0 - factor) * 0.1  // Up to 100ms delay
         Thread.sleep(forTimeInterval: sleepTime)
     }
 
     // MARK: - Optimized Task Execution
 
-    public func executeOptimizedTask<T>(
-        priority: TaskPriority = .medium,
-        operation: @escaping () async throws -> T
+    public func executeOptimizedTask<T: Sendable>(
+        priority: _Concurrency.TaskPriority = .medium,
+        operation: @escaping @Sendable () async throws -> T
     ) async throws -> T {
         try await withThrowingTaskGroup(of: T.self) { group in
-            let taskPriority: TaskPriority =
+            let taskPriority: _Concurrency.TaskPriority =
                 switch self.optimizationLevel {
                 case .normal:
                     priority
                 case .mild:
-                    .utility
+                    .low
                 case .moderate:
-                    .background
+                    .low
                 case .aggressive:
-                    .background
+                    .low
                 }
 
             group.addTask(priority: taskPriority) {
@@ -791,33 +778,11 @@ public enum OptimizationLevel: String, Codable {
     }
 }
 
-extension TaskPriority {
-    var qosClass: DispatchQoS.QoSClass {
-        if #available(iOS 15.0, macOS 12.0, *) {
-            switch self {
-            case .background:
-                .background
-            case .utility:
-                .utility
-            case .medium:
-                .default
-            case .userInitiated:
-                .userInitiated
-            case .high:
-                .userInteractive
-            default:
-                .default
-            }
-        } else {
-            .default
-        }
-    }
-}
-
 // MARK: - Network Monitor
 
+@MainActor
 public class NetworkMonitor: ObservableObject {
-    @MainActor public static let shared = NetworkMonitor()
+    public static let shared = NetworkMonitor()
 
     @Published public var currentStatus = NetworkStatus(
         isConnected: true, connectionType: .wifi, bandwidth: 0
@@ -871,7 +836,7 @@ public class NetworkMonitor: ObservableObject {
         self.currentStatus = NetworkStatus(
             isConnected: isConnected,
             connectionType: connectionType,
-            bandwidth: self.currentStatus.bandwidth // Keep existing bandwidth until updated
+            bandwidth: self.currentStatus.bandwidth  // Keep existing bandwidth until updated
         )
 
         // Apply network-based optimizations
@@ -881,7 +846,9 @@ public class NetworkMonitor: ObservableObject {
     private func startBandwidthMeasurement() {
         self.bandwidthTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) {
             [weak self] _ in
-            self?.measureBandwidth()
+            Task { @MainActor [weak self] in
+                self?.measureBandwidth()
+            }
         }
     }
 
@@ -957,6 +924,7 @@ public enum ImageQuality: String, Codable {
 
 // MARK: - Battery Optimizer
 
+@MainActor
 public class BatteryOptimizer: ObservableObject {
     public static let shared = BatteryOptimizer()
 
@@ -977,7 +945,9 @@ public class BatteryOptimizer: ObservableObject {
     private func startBatteryMonitoring() {
         self.batteryTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) {
             [weak self] _ in
-            self?.updateBatteryOptimization()
+            Task { @MainActor [weak self] in
+                self?.updateBatteryOptimization()
+            }
         }
 
         #if canImport(UIKit)
@@ -1063,7 +1033,7 @@ public class BatteryOptimizer: ObservableObject {
         let levelDrop = recentReadings.first!.level - recentReadings.last!.level
 
         if timeSpan > 0, levelDrop > 0 {
-            let drainRate = levelDrop / timeSpan // Percent per second
+            let drainRate = levelDrop / timeSpan  // Percent per second
             let currentLevel = self.batteryHistory.last!.level
             let estimatedSeconds = currentLevel / drainRate
             self.estimatedBatteryLife = estimatedSeconds
@@ -1157,12 +1127,12 @@ private struct BatteryReading {
 
 // MARK: - Notification Names
 
-public extension Notification.Name {
-    static let performanceMemoryWarning = Notification.Name("PerformanceMemoryWarning")
-    static let performanceMemoryCleanup = Notification.Name("PerformanceMemoryCleanup")
-    static let performanceOptimizationChanged = Notification.Name(
+extension Notification.Name {
+    public static let performanceMemoryWarning = Notification.Name("PerformanceMemoryWarning")
+    public static let performanceMemoryCleanup = Notification.Name("PerformanceMemoryCleanup")
+    public static let performanceOptimizationChanged = Notification.Name(
         "PerformanceOptimizationChanged")
-    static let performanceNetworkChanged = Notification.Name("PerformanceNetworkChanged")
-    static let performanceBatteryModeChanged = Notification.Name(
+    public static let performanceNetworkChanged = Notification.Name("PerformanceNetworkChanged")
+    public static let performanceBatteryModeChanged = Notification.Name(
         "PerformanceBatteryModeChanged")
 }

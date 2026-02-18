@@ -9,15 +9,15 @@
 //  for enhanced user experience across all applications.
 //
 
-import Foundation
 import Combine
-import SwiftData
+import Foundation
 import Network
+import SwiftData
 
 // MARK: - Core Synchronization Engine
 
 @available(iOS 17.0, macOS 14.0, *)
-public final class SynchronizationEngine {
+public final class SynchronizationEngine: @unchecked Sendable {
     @MainActor public static let shared = SynchronizationEngine()
 
     private let syncManager: SyncManager
@@ -54,7 +54,9 @@ public final class SynchronizationEngine {
     }
 
     /// Resolve a synchronization conflict
-    public func resolveConflict(_ conflict: SyncConflict, with resolution: ConflictResolution) async throws {
+    public func resolveConflict(_ conflict: SyncConflict, with resolution: ConflictResolution)
+        async throws
+    {
         try await conflictResolver.resolve(conflict, with: resolution)
     }
 
@@ -66,16 +68,21 @@ public final class SynchronizationEngine {
     /// Configure synchronization settings
     public func configure(settings: SyncSettings) {
         syncManager.updateSettings(settings)
-        queueManager.configure(settings.queue)
+        let queue = settings.queue
+        Task { [queueManager] in
+            await queueManager.configure(queue)
+        }
     }
 
     // MARK: - Private Methods
 
     private func setupNetworkMonitoring() {
         networkMonitor.statusPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] status in
-                Task {
-                    await self?.handleNetworkStatusChange(status)
+                guard let self = self else { return }
+                Task { @MainActor in
+                    await self.handleNetworkStatusChange(status)
                 }
             }
             .store(in: &cancellables)
@@ -98,7 +105,7 @@ public final class SynchronizationEngine {
 
 // MARK: - Sync Operation
 
-public struct SyncOperation {
+public struct SyncOperation: Sendable {
     public let id: String
     public let type: OperationType
     public let entityType: String
@@ -108,14 +115,16 @@ public struct SyncOperation {
     public let priority: Priority
     public let requiresNetwork: Bool
 
-    public init(id: String = UUID().uuidString,
-                type: OperationType,
-                entityType: String,
-                entityId: String,
-                data: [String: Any],
-                timestamp: Date = Date(),
-                priority: Priority = .normal,
-                requiresNetwork: Bool = true) {
+    public init(
+        id: String = UUID().uuidString,
+        type: OperationType,
+        entityType: String,
+        entityId: String,
+        data: [String: Any],
+        timestamp: Date = Date(),
+        priority: Priority = .normal,
+        requiresNetwork: Bool = true
+    ) {
         self.id = id
         self.type = type
         self.entityType = entityType
@@ -128,17 +137,17 @@ public struct SyncOperation {
     }
 }
 
-public enum OperationType {
+public enum OperationType: Sendable {
     case create, update, delete, sync
 }
 
-public enum Priority {
+public enum Priority: Sendable {
     case low, normal, high, critical
 }
 
 // MARK: - Sync Status
 
-public struct SyncStatus {
+public struct SyncStatus: Sendable {
     public let isOnline: Bool
     public let lastSyncDate: Date?
     public let pendingOperations: Int
@@ -148,13 +157,13 @@ public struct SyncStatus {
     public let estimatedSyncTime: TimeInterval?
 }
 
-public enum SynchronizationNetworkStatus {
+public enum SynchronizationNetworkStatus: Sendable {
     case connected, disconnected, expensive
 }
 
 // MARK: - Sync Conflict
 
-public struct SyncConflict {
+public struct SyncConflict: Sendable {
     public let id: String
     public let operation: SyncOperation
     public let serverData: Data
@@ -163,12 +172,13 @@ public struct SyncConflict {
     public let detectedAt: Date
 }
 
-public enum ConflictType {
+public enum ConflictType: Sendable {
     case versionMismatch, dataConflict, deletionConflict
 }
 
-public enum ConflictResolution: Codable {
-    case useServer, useLocal, merge, custom([String: String])
+public enum ConflictResolution: Codable, Sendable {
+    case useServer, useLocal, merge
+    case custom([String: String])
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -199,30 +209,34 @@ public enum ConflictResolution: Codable {
 
 // MARK: - Sync Settings
 
-public struct SyncSettings {
+public struct SyncSettings: Sendable {
     public let queue: QueueSettings
     public let network: NetworkSettings
     public let storage: StorageSettings
 
-    public init(queue: QueueSettings = QueueSettings(),
-                network: NetworkSettings = NetworkSettings(),
-                storage: StorageSettings = StorageSettings()) {
+    public init(
+        queue: QueueSettings = QueueSettings(),
+        network: NetworkSettings = NetworkSettings(),
+        storage: StorageSettings = StorageSettings()
+    ) {
         self.queue = queue
         self.network = network
         self.storage = storage
     }
 }
 
-public struct QueueSettings {
+public struct QueueSettings: Sendable {
     public let maxRetries: Int
     public let retryDelay: TimeInterval
     public let batchSize: Int
     public let maxQueueSize: Int
 
-    public init(maxRetries: Int = 3,
-                retryDelay: TimeInterval = 60,
-                batchSize: Int = 50,
-                maxQueueSize: Int = 1000) {
+    public init(
+        maxRetries: Int = 3,
+        retryDelay: TimeInterval = 60,
+        batchSize: Int = 50,
+        maxQueueSize: Int = 1000
+    ) {
         self.maxRetries = maxRetries
         self.retryDelay = retryDelay
         self.batchSize = batchSize
@@ -230,16 +244,18 @@ public struct QueueSettings {
     }
 }
 
-public struct NetworkSettings {
+public struct NetworkSettings: Sendable {
     public let syncOnCellular: Bool
     public let syncOnExpensive: Bool
     public let backgroundSync: Bool
     public let syncInterval: TimeInterval
 
-    public init(syncOnCellular: Bool = true,
-                syncOnExpensive: Bool = false,
-                backgroundSync: Bool = true,
-                syncInterval: TimeInterval = 300) { // 5 minutes
+    public init(
+        syncOnCellular: Bool = true,
+        syncOnExpensive: Bool = false,
+        backgroundSync: Bool = true,
+        syncInterval: TimeInterval = 300
+    ) {  // 5 minutes
         self.syncOnCellular = syncOnCellular
         self.syncOnExpensive = syncOnExpensive
         self.backgroundSync = backgroundSync
@@ -247,16 +263,18 @@ public struct NetworkSettings {
     }
 }
 
-public struct StorageSettings {
+public struct StorageSettings: Sendable {
     public let maxOfflineDataSize: Int64
     public let compressionEnabled: Bool
     public let encryptionEnabled: Bool
     public let cleanupInterval: TimeInterval
 
-    public init(maxOfflineDataSize: Int64 = 100 * 1024 * 1024, // 100MB
-                compressionEnabled: Bool = true,
-                encryptionEnabled: Bool = true,
-                cleanupInterval: TimeInterval = 86400) { // 24 hours
+    public init(
+        maxOfflineDataSize: Int64 = 100 * 1024 * 1024,  // 100MB
+        compressionEnabled: Bool = true,
+        encryptionEnabled: Bool = true,
+        cleanupInterval: TimeInterval = 86400
+    ) {  // 24 hours
         self.maxOfflineDataSize = maxOfflineDataSize
         self.compressionEnabled = compressionEnabled
         self.encryptionEnabled = encryptionEnabled
@@ -287,7 +305,7 @@ private final class SyncManager {
         print("Performing synchronization...")
 
         // Simulate sync process
-        try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+        try await Task.sleep(nanoseconds: 1_000_000_000)  // 1 second
 
         print("Synchronization completed")
     }
@@ -335,13 +353,13 @@ private actor SyncQueueManager {
 
     func getStatus() async -> SyncStatus {
         let status = SyncStatus(
-            isOnline: true, // Would check actual network status
-            lastSyncDate: Date(), // Would get from persistent storage
+            isOnline: true,  // Would check actual network status
+            lastSyncDate: Date(),  // Would get from persistent storage
             pendingOperations: operationQueue.count,
             failedOperations: failedOperations.count,
-            networkStatus: .connected, // Would get from network monitor
-            storageUsed: 0, // Would calculate actual storage used
-            estimatedSyncTime: TimeInterval(operationQueue.count * 2) // Rough estimate
+            networkStatus: .connected,  // Would get from network monitor
+            storageUsed: 0,  // Would calculate actual storage used
+            estimatedSyncTime: TimeInterval(operationQueue.count * 2)  // Rough estimate
         )
         return status
     }
@@ -386,12 +404,16 @@ private final class ConflictResolver {
 // MARK: - Network Monitor
 
 @available(iOS 17.0, macOS 14.0, *)
-private final class SyncNetworkMonitor {
+@available(iOS 17.0, macOS 14.0, *)
+private final class SyncNetworkMonitor: @unchecked Sendable {
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "com.tools-automation.network.monitor")
+    private let publisherLock = NSLock()
 
     private var _statusPublisher: PassthroughSubject<SynchronizationNetworkStatus, Never>?
     var statusPublisher: AnyPublisher<SynchronizationNetworkStatus, Never> {
+        publisherLock.lock()
+        defer { publisherLock.unlock() }
         if _statusPublisher == nil {
             _statusPublisher = PassthroughSubject<SynchronizationNetworkStatus, Never>()
             startMonitoring()
@@ -401,6 +423,8 @@ private final class SyncNetworkMonitor {
 
     private func startMonitoring() {
         monitor.pathUpdateHandler = { [weak self] path in
+            guard let self = self else { return }
+
             let status: SynchronizationNetworkStatus
             if path.status == .satisfied {
                 if path.isExpensive {
@@ -412,7 +436,9 @@ private final class SyncNetworkMonitor {
                 status = .disconnected
             }
 
-            self?._statusPublisher?.send(status)
+            self.publisherLock.lock()
+            self._statusPublisher?.send(status)
+            self.publisherLock.unlock()
         }
 
         monitor.start(queue: queue)

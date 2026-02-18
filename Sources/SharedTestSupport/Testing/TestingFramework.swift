@@ -165,8 +165,8 @@ import SwiftUI
             description: String? = "Test Description",
             frequency: HabitFrequency = .daily,
             streak: Int = 0
-        ) -> Habit {
-            Habit(
+        ) -> TestHabit {
+            TestHabit(
                 id: id,
                 name: name,
                 description: description,
@@ -232,9 +232,9 @@ import SwiftUI
 
     extension XCTestCase {
         /// Wait for async operation to complete with timeout
-        public func waitForAsync<T>(
+        public func waitForAsync<T: Sendable>(
             timeout: TimeInterval = 5.0,
-            operation: @escaping () async throws -> T
+            operation: @escaping @Sendable () async throws -> T
         ) async throws -> T {
             try await withThrowingTaskGroup(of: T.self) { group in
                 group.addTask {
@@ -256,7 +256,7 @@ import SwiftUI
         public func waitForPublisher<T: Publisher>(
             _ publisher: T,
             timeout: TimeInterval = 5.0,
-            file: StaticString = #file,
+            file: StaticString = #filePath,
             line: UInt = #line
         ) throws -> T.Output {
             var result: Result<T.Output, Error>?
@@ -281,7 +281,7 @@ import SwiftUI
 
             guard let unwrappedResult = result else {
                 XCTFail("Publisher did not emit a value", file: file, line: line)
-                throw XCTestError(.unexpectedNil)
+                throw TestError.timeoutExceeded
             }
 
             return try unwrappedResult.get()
@@ -291,7 +291,7 @@ import SwiftUI
         public func assertThrowsAsync(
             _ operation: @escaping () async throws -> some Any,
             expectedError: Error,
-            file: StaticString = #file,
+            file: StaticString = #filePath,
             line: UInt = #line
         ) async {
             do {
@@ -423,11 +423,12 @@ import SwiftUI
     // MARK: - UI Testing Utilities
 
     @available(iOS 13.0, *)
+    @MainActor
     public class UITestCase: XCTestCase {
         public var app: XCUIApplication!
 
-        override public func setUp() {
-            super.setUp()
+        override public func setUp() async throws {
+            try await super.setUp()
             continueAfterFailure = false
             self.app = XCUIApplication()
             self.app.launchArguments = ["--uitesting"]
@@ -437,7 +438,7 @@ import SwiftUI
         public func waitForElement(
             _ element: XCUIElement,
             timeout: TimeInterval = 5.0,
-            file: StaticString = #file,
+            file: StaticString = #filePath,
             line: UInt = #line
         ) {
             let exists = NSPredicate(format: "exists == true")
@@ -453,7 +454,7 @@ import SwiftUI
         public func waitForElementToDisappear(
             _ element: XCUIElement,
             timeout: TimeInterval = 5.0,
-            file: StaticString = #file,
+            file: StaticString = #filePath,
             line: UInt = #line
         ) {
             let doesNotExist = NSPredicate(format: "exists == false")
@@ -467,11 +468,13 @@ import SwiftUI
             }
         }
 
+        @MainActor
         public func tapAndWait(_ element: XCUIElement, timeout: TimeInterval = 2.0) {
             self.waitForElement(element, timeout: timeout)
             element.tap()
         }
 
+        @MainActor
         public func typeAndWait(
             _ text: String,
             in element: XCUIElement,
@@ -482,6 +485,7 @@ import SwiftUI
             element.typeText(text)
         }
 
+        @MainActor
         public func scrollToElement(
             _ element: XCUIElement,
             in scrollView: XCUIElement,
@@ -509,7 +513,7 @@ import SwiftUI
 
         public func test<T>(
             _ testCase: @escaping (Content) throws -> T,
-            file _: StaticString = #file,
+            file _: StaticString = #filePath,
             line _: UInt = #line
         ) rethrows -> T {
             try testCase(self.view)
@@ -585,8 +589,8 @@ import SwiftUI
 
     // MARK: - Test Runner Configuration
 
-    public struct TestConfiguration {
-        public static let shared = TestConfiguration()
+    public struct TestConfiguration: Sendable {
+        public static let shared: TestConfiguration = .init()
 
         public let isUITesting: Bool
         public let isPerformanceTesting: Bool
@@ -603,8 +607,8 @@ import SwiftUI
 
     // MARK: - Test Reporting
 
-    public class TestReporter {
-        public static let shared = TestReporter()
+    public actor TestReporter {
+        public static let shared: TestReporter = .init()
         private var testResults: [UnitTestResult] = []
 
         private init() {}
@@ -736,7 +740,7 @@ import SwiftUI
         }
     }
 
-    public enum HTTPMethod: String {
+    public enum HTTPMethod: String, Codable, Sendable {
         case GET, POST, PUT, DELETE, PATCH
     }
 
@@ -770,7 +774,7 @@ import SwiftUI
         }
     }
 
-    public enum HabitFrequency: String, Codable, CaseIterable {
+    public enum HabitFrequency: String, Codable, CaseIterable, Sendable {
         case daily, weekly, monthly
     }
 

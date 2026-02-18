@@ -1,5 +1,6 @@
 import Foundation
 import OSLog
+import SharedKitCore
 
 /// Enhanced Hugging Face API Client with Quantum Performance
 /// Provides access to Hugging Face's free inference API with advanced features
@@ -438,7 +439,8 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService,
 
     // MARK: - AICodeAnalysisService Implementation
 
-    public func analyzeCode(code: String, language: String, analysisType: AnalysisType) async throws
+    public func analyzeCode(code: String, language: String, analysisType: AICodeAnalysisType)
+        async throws
         -> CodeAnalysisResult
     {
         let analysis = try await analyzeCode(
@@ -457,9 +459,9 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService,
         )
     }
 
-    private func extractIssues(from analysis: String) -> [CodeIssue] {
+    private func extractIssues(from analysis: String) -> [AICodeIssue] {
         let lines = analysis.components(separatedBy: "\n")
-        var issues: [CodeIssue] = []
+        var issues: [AICodeIssue] = []
 
         for line in lines {
             if line.lowercased().contains("error") || line.lowercased().contains("bug")
@@ -467,7 +469,7 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService,
                 || line.lowercased().contains("warning")
             {
                 issues.append(
-                    CodeIssue(
+                    AICodeIssue(
                         description: line.trimmingCharacters(in: .whitespaces), severity: .medium
                     ))
             }
@@ -574,7 +576,8 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService,
 
     // MARK: - AICachingService Implementation
 
-    public func cacheResponse(key: String, response: String, metadata: [String: Any]?) async {
+    public func cacheResponse(key: String, response: String, metadata: [String: AnyCodable]?) async
+    {
         cache.set(key, response: response, prompt: key, model: "huggingface")
     }
 
@@ -600,7 +603,7 @@ extension HuggingFaceClient: AITextGenerationService, AICodeAnalysisService,
     // MARK: - AIPerformanceMonitoring Implementation
 
     public func recordOperation(
-        operation: String, duration: TimeInterval, success: Bool, metadata: [String: Any]?
+        operation: String, duration: TimeInterval, success: Bool, metadata: [String: AnyCodable]?
     ) async {
         let errorType = metadata?["error"] as? String
         metrics.recordRequest(

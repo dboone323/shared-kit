@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Core Ollama Configuration & Types
 
-public struct OllamaConfig {
+public struct OllamaConfig: Sendable {
     public let baseURL: String
     public let defaultModel: String
     public let timeout: TimeInterval
@@ -94,7 +94,9 @@ public struct OllamaConfig {
         defaultModel: "deepseek-v3.1:671b-cloud",
         temperature: 0.3,
         maxTokens: 16384,
-        fallbackModels: ["deepseek-v3.1:671b-cloud", "gpt-oss:120b-cloud", "qwen3-coder:480b-cloud"],
+        fallbackModels: [
+            "deepseek-v3.1:671b-cloud", "gpt-oss:120b-cloud", "qwen3-coder:480b-cloud",
+        ],
         enableCloudModels: true,
         preferCloudModels: true
     )
@@ -154,6 +156,8 @@ public enum OllamaError: LocalizedError {
     case contextWindowExceeded
     case authenticationFailed
     case serverOverloaded
+    case maxRetriesExceeded
+    case invalidConfiguration(String)
 
     public var errorDescription: String? {
         switch self {
@@ -161,7 +165,7 @@ public enum OllamaError: LocalizedError {
             "Invalid Ollama server URL"
         case .invalidResponse:
             "Invalid response from Ollama server"
-        case let .httpError(code):
+        case .httpError(let code):
             "HTTP error: \(code)"
         case .invalidResponseFormat:
             "Invalid response format from Ollama"
@@ -169,7 +173,7 @@ public enum OllamaError: LocalizedError {
             "Failed to pull model from Ollama"
         case .serverNotRunning:
             "Ollama server is not running"
-        case let .modelNotAvailable(model):
+        case .modelNotAvailable(let model):
             "Model '\(model)' is not available"
         case .networkTimeout:
             "Network request timed out"
@@ -177,7 +181,7 @@ public enum OllamaError: LocalizedError {
             "Rate limit exceeded"
         case .cacheError:
             "Cache operation failed"
-        case let .modelLoadFailed(model):
+        case .modelLoadFailed(let model):
             "Failed to load model: \(model)"
         case .contextWindowExceeded:
             "Input exceeds model's context window"
@@ -185,6 +189,10 @@ public enum OllamaError: LocalizedError {
             "Authentication failed"
         case .serverOverloaded:
             "Server is overloaded"
+        case .maxRetriesExceeded:
+            "Maximum retry attempts exceeded"
+        case .invalidConfiguration(let message):
+            "Invalid configuration: \(message)"
         }
     }
 
@@ -200,6 +208,10 @@ public enum OllamaError: LocalizedError {
             "Wait before retrying to respect rate limits"
         case .contextWindowExceeded:
             "Reduce input length or split into smaller chunks"
+        case .maxRetriesExceeded:
+            "Check network stability and server status"
+        case .invalidConfiguration:
+            "Check the URL and model configuration settings"
         default:
             "Check Ollama server status and configuration"
         }
@@ -208,10 +220,11 @@ public enum OllamaError: LocalizedError {
 
 // MARK: - Integration Result Models
 
-public struct OllamaServiceHealth {
+public struct OllamaServiceHealth: Sendable {
     public let ollamaRunning: Bool
     public let modelsAvailable: Bool
     public let modelCount: Int
+    public let responseTime: TimeInterval
     public let recommendedActions: [String]
 }
 

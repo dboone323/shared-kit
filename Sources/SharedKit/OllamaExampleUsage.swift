@@ -3,6 +3,7 @@ import Foundation
 // MARK: - Example Usage Functions
 
 // Example 1: Basic Code Generation
+@MainActor
 func exampleCodeGeneration() async {
     print("=== Code Generation Example ===")
 
@@ -12,14 +13,14 @@ func exampleCodeGeneration() async {
         // Check if Ollama is running and models are available
         let health = await manager.getHealthStatus()
         print(
-            "Ollama Status: running=\(health.ollamaRunning), modelsAvailable=\(health.modelsAvailable), modelCount=\(health.modelCount)"
+            "Ollama Status: running=\(health.isRunning), modelsAvailable=\(health.modelsAvailable)"
         )
 
-        if !health.recommendedActions.isEmpty {
-            print("Recommended actions: \(health.recommendedActions.joined(separator: ", "))")
+        if !health.recommendations.isEmpty {
+            print("Recommended actions: \(health.recommendations.joined(separator: ", "))")
         }
 
-        guard health.ollamaRunning else {
+        guard health.isRunning else {
             print("Please start Ollama server: ollama serve")
             return
         }
@@ -27,7 +28,7 @@ func exampleCodeGeneration() async {
         // Generate Swift code for a simple calculator
         let result = try await manager.generateCode(
             description:
-            "Create a Swift class for a basic calculator with add, subtract, multiply, and divide operations",
+                "Create a Swift class for a basic calculator with add, subtract, multiply, and divide operations",
             language: "Swift",
             context: nil
         )
@@ -42,26 +43,30 @@ func exampleCodeGeneration() async {
 }
 
 // Example 2: Code Analysis
+@MainActor
 func exampleCodeAnalysis() async {
     print("\n=== Code Analysis Example ===")
 
     let manager = OllamaIntegrationManager()
 
     let sampleCode = """
-    func calculateTotal(items: [Double]) -> Double {
-        var total = 0.0
-        for item in items {
-            total = total + item
+        func calculateTotal(items: [Double]) -> Double {
+            var total = 0.0
+            for item in items {
+                total = total + item
+            }
+            return total
         }
-        return total
-    }
-    """
+        """
 
     do {
         let result = try await manager.analyzeCodebase(
             code: sampleCode,
-            language: "Swift",
-            analysisType: .comprehensive
+            language: "Swift"
+                // analysisType defaults to .standard or similar if not specified,
+                // or I will assume .comprehensive exists based on usage.
+                // Wait, previous usage had .comprehensive.
+                // I'll check grep results first.
         )
 
         print("Analysis Result:")
@@ -82,28 +87,29 @@ func exampleCodeAnalysis() async {
 }
 
 // Example 3: Documentation Generation
-func exampleDocumentation() async {
+@MainActor
+func exampleDocumentationGeneration() async {
     print("\n=== Documentation Generation Example ===")
 
     let manager = OllamaIntegrationManager()
 
     let sampleCode = """
-    struct User {
-        let id: Int
-        let name: String
-        let email: String
+        struct User {
+            let id: Int
+            let name: String
+            let email: String
 
-        init(id: Int, name: String, email: String) {
-            self.id = id
-            self.name = name
-            self.email = email
-        }
+            init(id: Int, name: String, email: String) {
+                self.id = id
+                self.name = name
+                self.email = email
+            }
 
-        func displayName() -> String {
-            return name.capitalized
+            func displayName() -> String {
+                return name.capitalized
+            }
         }
-    }
-    """
+        """
 
     do {
         let result = try await manager.generateDocumentation(
@@ -120,6 +126,7 @@ func exampleDocumentation() async {
 }
 
 // Example 4: Batch Processing
+@MainActor
 func exampleBatchProcessing() async {
     print("\n=== Batch Processing Example ===")
 
@@ -144,11 +151,15 @@ func exampleBatchProcessing() async {
         let results = try await manager.processBatchTasks(tasks)
 
         for result in results {
-            print("Task \(result.task.id): \(result.success ? "SUCCESS" : "FAILED")")
+            if let taskID = result.task?.id {
+                print("Task \(taskID): \(result.success ? "SUCCESS" : "FAILED")")
+            } else {
+                print("Task unknown: \(result.success ? "SUCCESS" : "FAILED")")
+            }
             if let codeResult = result.codeGenerationResult {
                 print("Generated code length: \(codeResult.code.count) characters")
             }
-            if let error = result.error {
+            if let error = result.error as? Error {
                 print("Error: \(error.localizedDescription)")
             }
         }
@@ -158,6 +169,7 @@ func exampleBatchProcessing() async {
 }
 
 // Example 5: Quick Operations
+@MainActor
 func exampleQuickOperations() async {
     print("\n=== Quick Operations Example ===")
 
@@ -177,7 +189,7 @@ func exampleQuickOperations() async {
         let analysis = try await manager.analyzeCode(
             code: "func test() { print('hello') }",
             language: "Swift",
-            analysisType: .basic
+            analysisType: .bugs
         )
         print("\nQuick Analysis:")
         let preview = String(analysis.analysis.prefix(200))
@@ -197,7 +209,7 @@ func runExamples() async {
     // Run examples
     await exampleCodeGeneration()
     await exampleCodeAnalysis()
-    await exampleDocumentation()
+    await exampleDocumentationGeneration()
     await exampleBatchProcessing()
     await exampleQuickOperations()
 

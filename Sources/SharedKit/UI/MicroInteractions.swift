@@ -131,11 +131,13 @@ public struct PressAndHoldButton<Content: View>: View {
         GestureAnimations.hapticFeedback(style: 0)
 
         self.timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
-            self.progress += 0.05 / self.duration
-            self.onProgress(self.progress)
+            DispatchQueue.main.async {
+                self.progress += 0.05 / self.duration
+                self.onProgress(self.progress)
 
-            if self.progress >= 1.0 {
-                self.completeAction()
+                if self.progress >= 1.0 {
+                    self.completeAction()
+                }
             }
         }
     }
@@ -401,20 +403,22 @@ public struct MultiTouchGestureArea<Content: View>: View {
         self.tapTimer?.invalidate()
 
         self.tapTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
-            switch self.tapCount {
-            case 1:
-                self.onSingleTap?()
-                GestureAnimations.hapticFeedback(style: 0)
-            case 2:
-                self.onDoubleTap?()
-                GestureAnimations.hapticFeedback(style: 1)
-            case 3:
-                self.onTripleTap?()
-                GestureAnimations.hapticFeedback(style: 2)
-            default:
-                break
+            DispatchQueue.main.async {
+                switch self.tapCount {
+                case 1:
+                    self.onSingleTap?()
+                    GestureAnimations.hapticFeedback(style: 0)
+                case 2:
+                    self.onDoubleTap?()
+                    GestureAnimations.hapticFeedback(style: 1)
+                case 3:
+                    self.onTripleTap?()
+                    GestureAnimations.hapticFeedback(style: 2)
+                default:
+                    break
+                }
+                self.tapCount = 0
             }
-            self.tapCount = 0
         }
     }
 }

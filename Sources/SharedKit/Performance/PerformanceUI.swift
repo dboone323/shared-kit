@@ -82,11 +82,13 @@ public struct PerformanceDashboard: View {
                 PerformanceControlActions()
             }
             .navigationTitle("Performance")
-            .navigationBarItems(
-                trailing: Button("Details") {
-                    self.showingDetails = true
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Details") {
+                        self.showingDetails = true
+                    }
                 }
-            )
+            }
             .sheet(isPresented: self.$showingDetails) {
                 DetailedPerformanceView()
             }
@@ -103,7 +105,7 @@ public struct PerformanceDashboard: View {
 // MARK: - Performance Score Card
 
 private struct PerformanceScoreCard: View {
-    let metrics: PerformanceMetrics
+    let metrics: SystemPerformanceMetrics
 
     var body: some View {
         VStack(spacing: 12) {
@@ -380,7 +382,7 @@ private struct MemoryContent: View {
                 )
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.1))
             .cornerRadius(12)
 
             // Memory Management Actions
@@ -410,7 +412,7 @@ private struct CPUContent: View {
                     if cpuOptimizer.isThrottling {
                         Label("Throttling", systemImage: "speedometer")
                             .font(.caption)
-                            .foregroundColor(.orange)
+                            .foregroundColor(Color.gray)
                     }
                 }
 
@@ -436,7 +438,7 @@ private struct CPUContent: View {
                 )
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.1))
             .cornerRadius(12)
         }
     }
@@ -488,7 +490,7 @@ private struct NetworkContent: View {
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.1))
             .cornerRadius(12)
 
             // Network Recommendations
@@ -547,7 +549,7 @@ private struct BatteryContent: View {
                 }
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(Color.gray.opacity(0.1))
             .cornerRadius(12)
 
             // Battery Optimization Actions
@@ -557,11 +559,11 @@ private struct BatteryContent: View {
 
     private func batteryColor(for battery: BatteryStatus) -> Color {
         if battery.level < 15 {
-            .red
+            return .red
         } else if battery.level < 30 {
-            .orange
+            return .orange
         } else {
-            .green
+            return .green
         }
     }
 }
@@ -652,7 +654,7 @@ private struct SystemStatusIndicators: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.1))
         .cornerRadius(12)
     }
 
@@ -719,7 +721,7 @@ private struct MemoryUsageChart: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.2))
                         .cornerRadius(6)
 
                     Rectangle()
@@ -762,7 +764,7 @@ private struct CPUUsageChart: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
-                        .fill(Color(.systemGray5))
+                        .fill(Color.gray.opacity(0.2))
                         .cornerRadius(6)
 
                     HStack(spacing: 0) {
@@ -839,7 +841,7 @@ private struct NetworkRecommendations: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.1))
         .cornerRadius(12)
     }
 }
@@ -969,7 +971,7 @@ private struct BatteryOptimizationActions: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color.gray.opacity(0.1))
         .cornerRadius(12)
     }
 }
@@ -1087,20 +1089,18 @@ private struct DetailedPerformanceView: View {
                         value: thermal.rawValue.capitalized,
                         color: thermalColor(for: thermal)
                     )
-
-                    MetricDetailRow(
-                        title: "Frame Rate",
-                        value: "\(Int(performanceMonitor.currentMetrics.frameRate)) FPS"
-                    )
+                }  // End Section
+            }  // End List
+            .navigationTitle("Performance Details")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
             }
-            .navigationTitle("Performance Details")
-            .navigationBarItems(
-                trailing: Button("Done") {
-                    presentationMode.wrappedValue.dismiss()
-                })
-        }
-    }
+        }  // End NavigationView
+    }  // End body
 
     private func batteryColor(for battery: BatteryStatus) -> Color {
         if battery.level < 15 {

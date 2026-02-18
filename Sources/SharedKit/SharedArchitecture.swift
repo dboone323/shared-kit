@@ -1,4 +1,5 @@
 import Foundation
+@_exported import SharedKitCore
 
 #if canImport(SwiftUI)
     import SwiftUI

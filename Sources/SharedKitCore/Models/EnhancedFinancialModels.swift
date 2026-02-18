@@ -8,8 +8,6 @@
 import Foundation
 import SwiftData
 
-// MARK: - Enhanced Financial Account
-
 @Model
 public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjectRelatable {
     // Core Properties
@@ -46,9 +44,8 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
     public var lowestBalance: Double
     public var lastTransactionDate: Date?
 
-    // Cross-project Properties
     public var globalId: String
-    public var projectContext: String
+    public var projectContext: ProjectType
     public var externalReferences: [ExternalReference]
 
     // Relationships
@@ -91,9 +88,15 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         case .checking, .savings, .cash:
             self.balance
         case .credit:
-            -self.balance // Credit card balances are liabilities
+            -self.balance  // Credit card balances are liabilities
         case .investment:
-            self.balance // Investment accounts are assets
+            self.balance  // Investment accounts are assets
+        case .loan:
+            -self.balance  // Loans are liabilities
+        case .retirement:
+            self.balance  // Retirement accounts are assets
+        case .other:
+            self.balance
         }
     }
 
@@ -112,7 +115,8 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         institutionName: String = "",
         accountOwner: String = ""
     ) {
-        self.id = UUID()
+        let id = UUID()
+        self.id = id
         self.name = name
         self.balance = balance
         self.iconName = iconName
@@ -120,9 +124,17 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         self.currencyCode = currencyCode
         self.createdDate = Date()
 
+        self.creditLimit = nil  // Initialize optional properties
+        self.accountNumber = nil
+        self.routingNumber = nil
         self.institutionName = institutionName
         self.color = "blue"
         self.isActive = true
+        self.interestRate = nil
+        self.minimumBalance = nil
+        self.monthlyFee = nil
+        self.lastSyncDate = nil
+        self.externalAccountId = nil
         self.accountOwner = accountOwner
         self.jointOwners = []
         self.tags = []
@@ -133,15 +145,15 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         self.averageMonthlyBalance = balance
         self.highestBalance = balance
         self.lowestBalance = balance
+        self.lastTransactionDate = nil
 
-        self.globalId = "account_\(self.id.uuidString)"
-        self.projectContext = ProjectContext.momentumFinance.rawValue
+        self.globalId = "account_\(id.uuidString)"
+        self.projectContext = .momentumFinance
         self.externalReferences = []
     }
 
     // MARK: - Validatable Implementation
 
-    @MainActor
     public func validate() throws {
         let errors = self.validationErrors
         if !errors.isEmpty {
@@ -215,14 +227,14 @@ public final class EnhancedFinancialAccount: Validatable, Trackable, CrossProjec
         let previousBalance = self.balance
 
         switch transaction.transactionType {
-        case .income:
+        case .income, .deposit, .grant:
             self.balance += transaction.amount
             self.totalInflow += transaction.amount
-        case .expense:
+        case .expense, .withdrawal, .payment:
             self.balance -= transaction.amount
             self.totalOutflow += transaction.amount
-        case .transfer:
-            // Handle transfer logic
+        case .transfer, .investment, .trade, .donation, .loan:
+            // Handle specialized logic or do nothing for simple balance update
             break
         }
 
@@ -307,7 +319,7 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
     public var notes: String
     public var isRecurring: Bool
     public var recurringGroupId: String?
-    public var confidence: Double // For imported transactions
+    public var confidence: Double  // For imported transactions
     public var exchangeRate: Double?
     public var originalAmount: Double?
     public var originalCurrency: String?
@@ -378,19 +390,32 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
         self.category = category
         self.isReconciled = false
         self.createdDate = Date()
+        self.modifiedDate = nil  // Initialize optional property
         self.account = account
 
+        self.merchant = nil  // Initialize optional properties
+        self.location = nil
+        self.receiptUrl = nil
         self.tags = []
         self.notes = ""
         self.isRecurring = false
+        self.recurringGroupId = nil
         self.confidence = 1.0
+        self.exchangeRate = nil
+        self.originalAmount = nil
+        self.originalCurrency = nil
+        self.paymentMethod = nil
+        self.referenceNumber = nil
         self.isBusinessExpense = false
         self.isTaxDeductible = false
+
+        self.deviceUsed = nil  // Initialize optional properties
+        self.importSource = nil
+        self.lastModifiedBy = nil
     }
 
     // MARK: - Validatable Implementation
 
-    @MainActor
     public func validate() throws {
         let errors = self.validationErrors
         if !errors.isEmpty {
@@ -413,7 +438,7 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
             errors.append(.required(field: "description"))
         }
 
-        if self.date > Date().addingTimeInterval(86400) { // Allow 1 day in future
+        if self.date > Date().addingTimeInterval(86400) {  // Allow 1 day in future
             errors.append(
                 .invalid(field: "date", reason: "cannot be more than 1 day in the future"))
         }
@@ -459,7 +484,7 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
 // MARK: - Enhanced Budget
 
 @Model
-public final class EnhancedBudget: Validatable, Trackable {
+public final class EnhancedBudget: Validatable, Trackable, CrossProjectRelatable {
     public var id: UUID
     public var name: String
     public var amount: Double
@@ -472,15 +497,15 @@ public final class EnhancedBudget: Validatable, Trackable {
 
     // Enhanced Properties
     public var budgetType: BudgetType
-    public var alertThreshold: Double // Percentage (0-100)
+    public var alertThreshold: Double  // Percentage (0-100)
     public var color: String
     public var iconName: String
     public var notes: String
     public var tags: [String]
     public var autoRenew: Bool
-    public var carryover: Bool // Allow unused budget to carry over
-    public var parentBudgetId: String? // For sub-budgets
-    public var priority: Int // 1-5 scale
+    public var carryover: Bool  // Allow unused budget to carry over
+    public var parentBudgetId: String?  // For sub-budgets
+    public var priority: Int  // 1-5 scale
 
     // Analytics Properties
     public var totalSpent: Double
@@ -488,6 +513,11 @@ public final class EnhancedBudget: Validatable, Trackable {
     public var periodsOver: Int
     public var periodsUnder: Int
     public var lastResetDate: Date?
+
+    // Cross-project Properties
+    public var globalId: String
+    public var projectContext: ProjectType
+    public var externalReferences: [ExternalReference]
 
     // Relationships
     public var account: EnhancedFinancialAccount?
@@ -557,59 +587,62 @@ public final class EnhancedBudget: Validatable, Trackable {
     public init(
         name: String,
         amount: Double,
-        period: BudgetPeriod,
-        category: String? = nil,
-        budgetType: BudgetType = .spending
+        period: BudgetPeriod = .monthly,
+        startDate: Date = Date(),
+        category: String? = nil
     ) {
-        self.id = UUID()
+        let id = UUID()
+        self.id = id
         self.name = name
         self.amount = amount
         self.period = period
         self.category = category
-        self.budgetType = budgetType
+        self.startDate = startDate
         self.isActive = true
         self.createdDate = Date()
 
-        // Calculate dates based on period
         let calendar = Calendar.current
-        self.startDate = calendar.startOfDay(for: Date())
-
         switch period {
         case .weekly:
             self.endDate =
-                calendar.date(byAdding: .weekOfYear, value: 1, to: self.startDate) ?? self.startDate
+                calendar.date(byAdding: .weekOfYear, value: 1, to: startDate) ?? startDate
         case .monthly:
-            self.endDate =
-                calendar.date(byAdding: .month, value: 1, to: self.startDate) ?? self.startDate
+            self.endDate = calendar.date(byAdding: .month, value: 1, to: startDate) ?? startDate
         case .quarterly:
-            self.endDate =
-                calendar.date(byAdding: .month, value: 3, to: self.startDate) ?? self.startDate
+            self.endDate = calendar.date(byAdding: .month, value: 3, to: startDate) ?? startDate
         case .yearly:
-            self.endDate =
-                calendar.date(byAdding: .year, value: 1, to: self.startDate) ?? self.startDate
+            self.endDate = calendar.date(byAdding: .year, value: 1, to: startDate) ?? startDate
         case .custom:
-            self.endDate =
-                calendar.date(byAdding: .month, value: 1, to: self.startDate) ?? self.startDate
+            self.endDate = calendar.date(byAdding: .month, value: 1, to: startDate) ?? startDate
         }
 
+        self.budgetType = .spending
         self.alertThreshold = 80.0
         self.color = "blue"
         self.iconName = "dollarsign.circle"
         self.notes = ""
         self.tags = []
-        self.autoRenew = false
+        self.autoRenew = true
         self.carryover = false
+        self.parentBudgetId = nil  // Initialize optional property
         self.priority = 3
 
-        self.totalSpent = 0
-        self.averageSpentPerPeriod = 0
+        self.totalSpent = 0.0
+        self.averageSpentPerPeriod = 0.0
         self.periodsOver = 0
         self.periodsUnder = 0
+        self.lastResetDate = nil  // Initialize optional property
+
+        self.account = nil  // Initialize optional relationship
+        // subBudgets is initialized by default value []
+
+        self.globalId = "budget_\(id.uuidString)"
+        self.projectContext = .momentumFinance
+        self.externalReferences = []
     }
 
     // MARK: - Validatable Implementation
 
-    @MainActor
     public func validate() throws {
         let errors = self.validationErrors
         if !errors.isEmpty {
@@ -727,7 +760,6 @@ public final class EnhancedSavingsGoal: Validatable, Trackable {
 
     // MARK: - Validatable Implementation
 
-    @MainActor
     public func validate() throws {
         let errors = self.validationErrors
         if !errors.isEmpty {
@@ -803,87 +835,5 @@ public final class TransactionAttachment {
         self.fileType = fileType
         self.fileSize = fileSize
         self.uploadDate = Date()
-    }
-}
-
-// MARK: - Supporting Enums
-
-public enum AccountType: String, CaseIterable, Codable {
-    case checking = "Checking"
-    case savings = "Savings"
-    case credit = "Credit Card"
-    case investment = "Investment"
-    case cash = "Cash"
-    case loan = "Loan"
-    case retirement = "Retirement"
-    case other = "Other"
-
-    public var displayName: String { rawValue }
-
-    public var iconName: String {
-        switch self {
-        case .checking: "banknote"
-        case .savings: "dollarsign.circle"
-        case .credit: "creditcard"
-        case .investment: "chart.line.uptrend.xyaxis"
-        case .cash: "dollarsign.square"
-        case .loan: "building.columns"
-        case .retirement: "person.badge.clock"
-        case .other: "questionmark.circle"
-        }
-    }
-}
-
-public enum TransactionType: String, CaseIterable, Codable {
-    case income = "Income"
-    case expense = "Expense"
-    case transfer = "Transfer"
-
-    public var displayName: String { rawValue }
-}
-
-public enum DatePeriod {
-    case thisWeek
-    case thisMonth
-    case thisQuarter
-    case thisYear
-    case last7Days
-    case last30Days
-    case last90Days
-    case last365Days
-    case custom(start: Date, end: Date)
-
-    public var dateRange: (start: Date, end: Date) {
-        let calendar = Calendar.current
-        let now = Date()
-
-        switch self {
-        case .thisWeek:
-            let startOfWeek = calendar.dateInterval(of: .weekOfYear, for: now)?.start ?? now
-            return (startOfWeek, now)
-        case .thisMonth:
-            let startOfMonth = calendar.dateInterval(of: .month, for: now)?.start ?? now
-            return (startOfMonth, now)
-        case .thisQuarter:
-            let startOfQuarter = calendar.dateInterval(of: .quarter, for: now)?.start ?? now
-            return (startOfQuarter, now)
-        case .thisYear:
-            let startOfYear = calendar.dateInterval(of: .year, for: now)?.start ?? now
-            return (startOfYear, now)
-        case .last7Days:
-            let start = calendar.date(byAdding: .day, value: -7, to: now) ?? now
-            return (start, now)
-        case .last30Days:
-            let start = calendar.date(byAdding: .day, value: -30, to: now) ?? now
-            return (start, now)
-        case .last90Days:
-            let start = calendar.date(byAdding: .day, value: -90, to: now) ?? now
-            return (start, now)
-        case .last365Days:
-            let start = calendar.date(byAdding: .day, value: -365, to: now) ?? now
-            return (start, now)
-        case let .custom(start, end):
-            return (start, end)
-        }
     }
 }

@@ -31,7 +31,7 @@ public enum ViewModelError: Error, Equatable {
 }
 
 /// Result type for asynchronous operations
-public enum OperationResult<T> {
+public enum OperationResult<T: Sendable>: Sendable {
     case success(T)
     case failure(ViewModelError)
 
@@ -84,11 +84,11 @@ extension BaseViewModel {
         isLoading = loading
     }
 
-    func setError(_ error: Error) {
+    public func setError(_ error: Error) {
         errorMessage = error.localizedDescription
     }
 
-    func setError(_ message: String) {
+    public func setError(_ message: String) {
         errorMessage = message
     }
 
@@ -201,7 +201,7 @@ class TaskPerformanceMonitor: ObservableObject {
         let name: String
         let duration: TimeInterval
         let timestamp: Date
-        let additionalInfo: [String: Any]
+        let additionalInfo: [String: AnyCodable]
     }
 
     func measureAsync<T: Sendable>(

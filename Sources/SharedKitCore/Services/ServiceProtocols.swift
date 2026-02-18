@@ -19,50 +19,62 @@ import Foundation
 
 // Re-export core protocols from EnhancedDataModels
 public protocol Validatable {
-    func validate() -> ServiceValidationError?
+    func validate() throws
+    var isValid: Bool { get }
 }
 
 public protocol Trackable {
-    func track(event: String, metadata: [String: Any]?)
+    var trackingId: String { get }
+    var analyticsMetadata: [String: Any] { get }
+    func trackEvent(_ event: String, parameters: [String: Any]?)
 }
 
 public protocol CrossProjectRelatable {
-    var crossProjectReferences: [String: UUID] { get set }
-    mutating func addCrossProjectReference(_ project: String, referenceId: UUID)
-    mutating func removeCrossProjectReference(_ project: String)
+    var globalId: String { get }
+    var projectContext: ProjectType { get }
+    var externalReferences: [ExternalReference] { get set }
 }
 
-// Re-export key enums from enhanced models
-public enum MoodRating: Int, CaseIterable {
-    case veryPoor = 1
-    case poor, fair, good, excellent
+// Re-export key enums from enhanced/// Mood rating enum
+public enum MoodRating: Int, CaseIterable, Codable, Sendable {
+    case none = 0
+    case terrible, bad, neutral, good, great
 }
 
-public enum HabitCategory: String, CaseIterable {
+public enum HabitFrequency: String, CaseIterable, Codable, Sendable {
+    case daily, weekly, monthly
+}
+
+public enum HabitCategory: String, CaseIterable, Codable, Sendable {
     case health, fitness, learning, productivity, social, creative, spiritual, financial, other
 }
 
-public enum HabitDifficulty: String, CaseIterable {
+public enum HabitDifficulty: String, CaseIterable, Codable, Sendable {
     case easy, medium, hard, expert
+
+    public var xpMultiplier: Double {
+        switch self {
+        case .easy: 1.0
+        case .medium: 1.5
+        case .hard: 2.0
+        case .expert: 3.0
+        }
+    }
 }
 
-public enum BudgetCategory: String, CaseIterable {
+public enum BudgetCategory: String, CaseIterable, Sendable {
     case housing, food, transportation, healthcare, entertainment, savings, other
 }
 
-public enum EnergyLevel: String, CaseIterable {
-    case low, medium, high
-}
-
-public enum ServiceTaskPriority: String, CaseIterable {
+public enum ServiceTaskPriority: String, CaseIterable, Sendable {
     case low, medium, high, urgent
 }
 
-public enum TransactionCategory: String, CaseIterable {
+public enum TransactionCategory: String, CaseIterable, Sendable {
     case income, expense, transfer, investment
 }
 
-public struct ServiceValidationError {
+public struct ServiceValidationError: Sendable {
     public let field: String
     public let message: String
     public let code: String
@@ -76,7 +88,7 @@ public struct ServiceValidationError {
 
 // Forward declarations for enhanced model types
 // These would be properly imported in production
-public protocol EnhancedHabitProtocol: Validatable, Trackable, CrossProjectRelatable {
+public protocol EnhancedHabitProtocol: Validatable, Trackable, CrossProjectRelatable, Sendable {
     var id: UUID { get }
     var name: String { get set }
 }
@@ -84,9 +96,13 @@ public protocol EnhancedHabitProtocol: Validatable, Trackable, CrossProjectRelat
 public protocol EnhancedHabitLogProtocol: Validatable, Trackable {
     var id: UUID { get }
     var habitId: UUID { get set }
+    var timestamp: Date { get set }
+    var value: Double? { get set }
+    var mood: SharedKitCore.MoodRating? { get set }
+    var notes: String? { get set }
 }
 
-public protocol HabitAchievementProtocol: Validatable, Trackable {
+public protocol HabitAchievementProtocol: Validatable, Trackable, Sendable {
     var id: UUID { get }
     var habitId: UUID { get set }
 }
@@ -95,24 +111,20 @@ public protocol EnhancedFinancialTransactionProtocol: Validatable, Trackable, Cr
 {
     var id: UUID { get }
     var amount: Double { get set }
+    var date: Date { get set }
+    var category: TransactionCategory { get set }
 }
 
-public protocol EnhancedTaskProtocol: Validatable, Trackable, CrossProjectRelatable {
+public protocol EnhancedTaskProtocol: Validatable, Trackable, CrossProjectRelatable, Sendable {
     var id: UUID { get }
     var title: String { get set }
 }
 
-// Type aliases for cleaner protocol definitions
-public typealias EnhancedHabit = any EnhancedHabitProtocol
-public typealias EnhancedHabitLog = any EnhancedHabitLogProtocol
-public typealias HabitAchievement = any HabitAchievementProtocol
-public typealias EnhancedFinancialTransaction = any EnhancedFinancialTransactionProtocol
-public typealias EnhancedTask = any EnhancedTaskProtocol
-
 // MARK: - Core Service Protocols
 
 /// Base protocol for all service layer components
-public protocol ServiceProtocol {
+@MainActor
+public protocol ServiceProtocol: Sendable {
     /// Service identifier
     var serviceId: String { get }
 
@@ -130,10 +142,10 @@ public protocol ServiceProtocol {
 }
 
 /// Service health status enumeration
-public enum ServiceHealthStatus {
+public enum ServiceHealthStatus: Sendable {
     case healthy
     case degraded(reason: String)
-    case unhealthy(error: Error)
+    case unhealthy(error: any Error & Sendable)
 
     public var isHealthy: Bool {
         switch self {
@@ -146,7 +158,8 @@ public enum ServiceHealthStatus {
 // MARK: - Data Service Protocols
 
 /// Protocol for data persistence services
-public protocol DataServiceProtocol: ServiceProtocol {
+@MainActor
+public protocol DataServiceProtocol: ServiceProtocol, Sendable {
     associatedtype ModelType: Validatable & Trackable
 
     /// Create a new model instance
@@ -180,9 +193,10 @@ public protocol DataServiceProtocol: ServiceProtocol {
 }
 
 /// Protocol for analytics and tracking services
-public protocol AnalyticsServiceProtocol: ServiceProtocol {
+@MainActor
+public protocol AnalyticsServiceProtocol: ServiceProtocol, Sendable {
     /// Track an event with metadata
-    func track(event: String, properties: [String: Any]?, userId: String?) async
+    func track(event: String, properties: [String: AnyCodable]?, userId: String?) async
 
     /// Track user behavior
     func trackUserAction(_ action: UserAction) async
@@ -191,7 +205,7 @@ public protocol AnalyticsServiceProtocol: ServiceProtocol {
     func trackPerformance(_ metric: PerformanceMetric) async
 
     /// Track errors and exceptions
-    func trackError(_ error: Error, context: [String: Any]?) async
+    func trackError(_ error: any Error & Sendable, context: [String: AnyCodable]?) async
 
     /// Get analytics summary
     func getAnalyticsSummary(timeRange: DateInterval) async throws -> AnalyticsSummary
@@ -201,17 +215,17 @@ public protocol AnalyticsServiceProtocol: ServiceProtocol {
 }
 
 /// User action tracking model
-public struct UserAction {
+public struct UserAction: Sendable {
     public let id: UUID = .init()
     public let timestamp: Date = .init()
     public let action: String
     public let context: String?
     public let userId: String?
-    public let metadata: [String: Any]?
+    public let metadata: [String: AnyCodable]?
 
     public init(
         action: String, context: String? = nil, userId: String? = nil,
-        metadata: [String: Any]? = nil
+        metadata: [String: AnyCodable]? = nil
     ) {
         self.action = action
         self.context = context
@@ -221,15 +235,15 @@ public struct UserAction {
 }
 
 /// Performance metric tracking model
-public struct PerformanceMetric {
+public struct PerformanceMetric: Sendable {
     public let id: UUID = .init()
     public let timestamp: Date = .init()
     public let name: String
     public let value: Double
     public let unit: String
-    public let metadata: [String: Any]?
+    public let metadata: [String: AnyCodable]?
 
-    public init(name: String, value: Double, unit: String, metadata: [String: Any]? = nil) {
+    public init(name: String, value: Double, unit: String, metadata: [String: AnyCodable]? = nil) {
         self.name = name
         self.value = value
         self.unit = unit
@@ -238,7 +252,7 @@ public struct PerformanceMetric {
 }
 
 /// Analytics summary model
-public struct AnalyticsSummary {
+public struct AnalyticsSummary: Sendable {
     public let timeRange: DateInterval
     public let totalEvents: Int
     public let uniqueUsers: Int
@@ -267,7 +281,7 @@ public struct AnalyticsSummary {
 }
 
 /// Export format enumeration
-public enum ExportFormat {
+public enum ExportFormat: Sendable {
     case json
     case csv
     case xml
@@ -295,7 +309,8 @@ public enum ExportFormat {
 // MARK: - Business Logic Service Protocols
 
 /// Protocol for habit-related business logic
-public protocol HabitServiceProtocol: ServiceProtocol {
+@MainActor
+public protocol HabitServiceProtocol: ServiceProtocol, Sendable {
     /// Create a new habit with validation
     func createHabit(_ habit: EnhancedHabit) async throws -> EnhancedHabit
 
@@ -318,7 +333,8 @@ public protocol HabitServiceProtocol: ServiceProtocol {
 }
 
 /// Protocol for financial services
-public protocol FinancialServiceProtocol: ServiceProtocol {
+@MainActor
+public protocol FinancialServiceProtocol: ServiceProtocol, Sendable {
     /// Create financial transaction with validation
     func createTransaction(_ transaction: EnhancedFinancialTransaction) async throws
         -> EnhancedFinancialTransaction
@@ -343,7 +359,8 @@ public protocol FinancialServiceProtocol: ServiceProtocol {
 }
 
 /// Protocol for task and goal management services
-public protocol PlannerServiceProtocol: ServiceProtocol {
+@MainActor
+public protocol PlannerServiceProtocol: ServiceProtocol, Sendable {
     /// Create task with intelligent scheduling
     func createTask(_ task: EnhancedTask) async throws -> EnhancedTask
 
@@ -369,7 +386,8 @@ public protocol PlannerServiceProtocol: ServiceProtocol {
 // MARK: - Cross-Project Integration Protocols
 
 /// Protocol for cross-project data synchronization
-public protocol CrossProjectServiceProtocol: ServiceProtocol {
+@MainActor
+public protocol CrossProjectServiceProtocol: ServiceProtocol, Sendable {
     /// Sync data between projects
     func syncData(from sourceProject: ProjectType, to targetProject: ProjectType) async throws
 
@@ -387,27 +405,8 @@ public protocol CrossProjectServiceProtocol: ServiceProtocol {
     func exportUnifiedData(for userId: String, format: ExportFormat) async throws -> Data
 }
 
-/// Project type enumeration
-public enum ProjectType: String, CaseIterable {
-    case habitQuest = "habit_quest"
-    case momentumFinance = "momentum_finance"
-    case plannerApp = "planner_app"
-    case codingReviewer = "coding_reviewer"
-    case avoidObstaclesGame = "avoid_obstacles_game"
-
-    public var displayName: String {
-        switch self {
-        case .habitQuest: "HabitQuest"
-        case .momentumFinance: "MomentumFinance"
-        case .plannerApp: "PlannerApp"
-        case .codingReviewer: "CodingReviewer"
-        case .avoidObstaclesGame: "AvoidObstaclesGame"
-        }
-    }
-}
-
 /// Cross-project reference model
-public struct CrossProjectReference {
+public struct CrossProjectReference: Sendable {
     public let id: UUID
     public let sourceProject: ProjectType
     public let sourceEntityId: UUID
@@ -416,7 +415,7 @@ public struct CrossProjectReference {
     public let targetEntityId: UUID
     public let targetEntityType: String
     public let relationship: String
-    public let metadata: [String: Any]?
+    public let metadata: [String: AnyCodable]?
     public let createdAt: Date
 
     public init(
@@ -427,7 +426,7 @@ public struct CrossProjectReference {
         targetEntityId: UUID,
         targetEntityType: String,
         relationship: String,
-        metadata: [String: Any]? = nil
+        metadata: [String: AnyCodable]? = nil
     ) {
         self.id = UUID()
         self.sourceProject = sourceProject
@@ -443,14 +442,16 @@ public struct CrossProjectReference {
 }
 
 /// Cross-project relationship model
-public struct CrossProjectRelationship {
+public struct CrossProjectRelationship: Sendable {
     public let id: UUID
     public let type: RelationshipType
     public let entities: [ProjectEntity]
-    public let metadata: [String: Any]?
+    public let metadata: [String: AnyCodable]?
     public let createdAt: Date
 
-    public init(type: RelationshipType, entities: [ProjectEntity], metadata: [String: Any]? = nil) {
+    public init(
+        type: RelationshipType, entities: [ProjectEntity], metadata: [String: AnyCodable]? = nil
+    ) {
         self.id = UUID()
         self.type = type
         self.entities = entities
@@ -460,7 +461,7 @@ public struct CrossProjectRelationship {
 }
 
 /// Relationship type enumeration
-public enum RelationshipType: String {
+public enum RelationshipType: String, Sendable {
     case oneToOne = "one_to_one"
     case oneToMany = "one_to_many"
     case manyToMany = "many_to_many"
@@ -470,14 +471,15 @@ public enum RelationshipType: String {
 }
 
 /// Project entity reference
-public struct ProjectEntity {
+public struct ProjectEntity: Sendable {
     public let project: ProjectType
     public let entityId: UUID
     public let entityType: String
-    public let metadata: [String: Any]?
+    public let metadata: [String: AnyCodable]?
 
     public init(
-        project: ProjectType, entityId: UUID, entityType: String, metadata: [String: Any]? = nil
+        project: ProjectType, entityId: UUID, entityType: String,
+        metadata: [String: AnyCodable]? = nil
     ) {
         self.project = project
         self.entityId = entityId
@@ -489,7 +491,7 @@ public struct ProjectEntity {
 // MARK: - Supporting Models
 
 /// Habit insights model
-public struct HabitInsights {
+public struct HabitInsights: Sendable {
     public let habitId: UUID
     public let timeRange: DateInterval
     public let completionRate: Double
@@ -500,14 +502,9 @@ public struct HabitInsights {
     public let recommendations: [String]
 
     public init(
-        habitId: UUID,
-        timeRange: DateInterval,
-        completionRate: Double,
-        currentStreak: Int,
-        longestStreak: Int,
-        averageValue: Double?,
-        moodCorrelation: Double?,
-        recommendations: [String]
+        habitId: UUID, timeRange: DateInterval, completionRate: Double, currentStreak: Int,
+        longestStreak: Int, averageValue: Double? = nil, moodCorrelation: Double? = nil,
+        recommendations: [String] = []
     ) {
         self.habitId = habitId
         self.timeRange = timeRange
@@ -521,7 +518,7 @@ public struct HabitInsights {
 }
 
 /// Habit recommendation model
-public struct HabitRecommendation {
+public struct HabitRecommendation: Sendable {
     public let id: UUID = .init()
     public let title: String
     public let description: String
@@ -551,23 +548,23 @@ public struct HabitRecommendation {
 }
 
 /// Budget insights model
-public struct BudgetInsights {
+public struct BudgetInsights: Sendable {
     public let budgetId: UUID
     public let timeRange: DateInterval
     public let utilizationRate: Double
-    public let categoryBreakdown: [BudgetCategory: Double]
+    public let categoryBreakdown: [String: Double]
     public let trendAnalysis: TrendDirection
     public let recommendations: [String]
-    public let alerts: [BudgetAlert]
+    public let alerts: [String]
 
     public init(
         budgetId: UUID,
         timeRange: DateInterval,
         utilizationRate: Double,
-        categoryBreakdown: [BudgetCategory: Double],
+        categoryBreakdown: [String: Double],
         trendAnalysis: TrendDirection,
         recommendations: [String],
-        alerts: [BudgetAlert]
+        alerts: [String]
     ) {
         self.budgetId = budgetId
         self.timeRange = timeRange
@@ -580,15 +577,18 @@ public struct BudgetInsights {
 }
 
 /// Net worth summary model
-public struct NetWorthSummary {
+public struct NetWorthSummary: Sendable {
     public let userId: String
     public let asOfDate: Date
     public let totalAssets: Double
     public let totalLiabilities: Double
-    public let netWorth: Double
     public let monthOverMonthChange: Double
     public let yearOverYearChange: Double
     public let breakdown: NetWorthBreakdown
+
+    public var netWorth: Double {
+        return totalAssets - totalLiabilities
+    }
 
     public init(
         userId: String,
@@ -603,7 +603,6 @@ public struct NetWorthSummary {
         self.asOfDate = asOfDate
         self.totalAssets = totalAssets
         self.totalLiabilities = totalLiabilities
-        self.netWorth = totalAssets - totalLiabilities
         self.monthOverMonthChange = monthOverMonthChange
         self.yearOverYearChange = yearOverYearChange
         self.breakdown = breakdown
@@ -611,7 +610,7 @@ public struct NetWorthSummary {
 }
 
 /// Net worth breakdown model
-public struct NetWorthBreakdown {
+public struct NetWorthBreakdown: Sendable {
     public let cashAndEquivalents: Double
     public let investments: Double
     public let realEstate: Double
@@ -640,7 +639,7 @@ public struct NetWorthBreakdown {
 }
 
 /// Financial recommendation model
-public struct FinancialRecommendation {
+public struct FinancialRecommendation: Sendable {
     public let id: UUID = .init()
     public let type: RecommendationType
     public let title: String
@@ -673,7 +672,7 @@ public struct FinancialRecommendation {
 }
 
 /// Recommendation type enumeration
-public enum RecommendationType {
+public enum RecommendationType: Sendable {
     case budgetOptimization
     case debtReduction
     case investmentStrategy
@@ -683,7 +682,7 @@ public enum RecommendationType {
 }
 
 /// Recommendation priority enumeration
-public enum RecommendationPriority: Int, CaseIterable {
+public enum RecommendationPriority: Int, CaseIterable, Sendable {
     case low = 1
     case medium = 2
     case high = 3
@@ -700,7 +699,7 @@ public enum RecommendationPriority: Int, CaseIterable {
 }
 
 /// Trend direction enumeration
-public enum TrendDirection: String, Codable {
+public enum TrendDirection: String, Codable, Sendable {
     case increasing
     case decreasing
     case stable
@@ -719,7 +718,7 @@ public enum TrendDirection: String, Codable {
 }
 
 /// Budget alert model
-public struct BudgetAlert {
+public struct BudgetAlert: Sendable {
     public let id: UUID = .init()
     public let type: AlertType
     public let severity: AlertSeverity
@@ -741,7 +740,7 @@ public struct BudgetAlert {
 }
 
 /// Alert type enumeration
-public enum AlertType {
+public enum AlertType: Sendable {
     case budgetExceeded
     case budgetWarning
     case unusualSpending
@@ -751,7 +750,7 @@ public enum AlertType {
 }
 
 /// Alert severity enumeration
-public enum AlertSeverity: Int, CaseIterable {
+public enum AlertSeverity: Int, CaseIterable, Sendable {
     case info = 1
     case warning = 2
     case error = 3
@@ -768,38 +767,27 @@ public enum AlertSeverity: Int, CaseIterable {
 }
 
 /// Goal progress model
-public struct GoalProgress {
+public struct GoalProgress: Sendable {
     public let goalId: UUID
     public let currentProgress: Double
     public let targetValue: Double
-    public let progressPercentage: Double
     public let estimatedCompletion: Date?
-    public let onTrack: Bool
-    public let milestones: [GoalMilestone]
+    public let milestones: [String]
 
     public init(
-        goalId: UUID,
-        currentProgress: Double,
-        targetValue: Double,
-        estimatedCompletion: Date?,
-        milestones: [GoalMilestone]
+        goalId: UUID, currentProgress: Double, targetValue: Double,
+        estimatedCompletion: Date? = nil, milestones: [String] = []
     ) {
         self.goalId = goalId
         self.currentProgress = currentProgress
         self.targetValue = targetValue
-        self.progressPercentage = targetValue > 0 ? (currentProgress / targetValue) * 100 : 0
         self.estimatedCompletion = estimatedCompletion
-        self.onTrack =
-            self
-            .progressPercentage >= 95
-            || (estimatedCompletion != nil
-                && estimatedCompletion! <= Date().addingTimeInterval(86400 * 7))
         self.milestones = milestones
     }
 }
 
 /// Goal milestone model
-public struct GoalMilestone {
+public struct GoalMilestone: Sendable {
     public let id: UUID = .init()
     public let title: String
     public let targetValue: Double
@@ -823,37 +811,27 @@ public struct GoalMilestone {
 }
 
 /// Task recommendation model
-public struct TaskRecommendation {
-    public let id: UUID = .init()
-    public let title: String
-    public let description: String
-    public let priority: TaskPriority
-    public let estimatedDuration: Int
-    public let suggestedSchedule: Date?
-    public let reasoning: String
-    public let confidence: Double
+public struct TaskRecommendation: Sendable {
+    public let taskId: UUID?
+    public let type: String
+    public let message: String
+    public let priority: RecommendationPriority
+    public let suggestedTime: Date?
 
     public init(
-        title: String,
-        description: String,
-        priority: TaskPriority,
-        estimatedDuration: Int,
-        suggestedSchedule: Date?,
-        reasoning: String,
-        confidence: Double
+        taskId: UUID? = nil, type: String, message: String, priority: RecommendationPriority,
+        suggestedTime: Date? = nil
     ) {
-        self.title = title
-        self.description = description
+        self.taskId = taskId
+        self.type = type
+        self.message = message
         self.priority = priority
-        self.estimatedDuration = estimatedDuration
-        self.suggestedSchedule = suggestedSchedule
-        self.reasoning = reasoning
-        self.confidence = confidence
+        self.suggestedTime = suggestedTime
     }
 }
 
 /// Planning context model
-public struct PlanningContext {
+public struct PlanningContext: Sendable {
     public let userId: String
     public let currentTime: Date
     public let availableTime: Int
@@ -882,19 +860,16 @@ public struct PlanningContext {
 }
 
 /// Schedule optimization model
-public struct ScheduleOptimization {
+public struct ScheduleOptimization: Sendable {
     public let userId: String
     public let timeRange: DateInterval
-    public let optimizedTasks: [OptimizedTaskSchedule]
+    public let optimizedTasks: [String]
     public let efficiency: Double
     public let recommendations: [String]
 
     public init(
-        userId: String,
-        timeRange: DateInterval,
-        optimizedTasks: [OptimizedTaskSchedule],
-        efficiency: Double,
-        recommendations: [String]
+        userId: String, timeRange: DateInterval, optimizedTasks: [String] = [],
+        efficiency: Double = 0.0, recommendations: [String] = []
     ) {
         self.userId = userId
         self.timeRange = timeRange
@@ -905,7 +880,7 @@ public struct ScheduleOptimization {
 }
 
 /// Optimized task schedule model
-public struct OptimizedTaskSchedule {
+public struct OptimizedTaskSchedule: Sendable {
     public let taskId: UUID
     public let title: String
     public let scheduledStart: Date
@@ -931,25 +906,21 @@ public struct OptimizedTaskSchedule {
 }
 
 /// Productivity insights model
-public struct ProductivityInsights {
+public struct ProductivityInsights: Sendable {
     public let userId: String
     public let timeRange: DateInterval
     public let completionRate: Double
     public let averageTaskDuration: TimeInterval
     public let peakProductivityHours: [Int]
     public let productivityTrend: TrendDirection
-    public let topCategories: [String: Int]
+    public let topCategories: [String: Double]
     public let recommendations: [String]
 
     public init(
-        userId: String,
-        timeRange: DateInterval,
-        completionRate: Double,
-        averageTaskDuration: TimeInterval,
-        peakProductivityHours: [Int],
-        productivityTrend: TrendDirection,
-        topCategories: [String: Int],
-        recommendations: [String]
+        userId: String, timeRange: DateInterval, completionRate: Double,
+        averageTaskDuration: TimeInterval, peakProductivityHours: [Int],
+        productivityTrend: TrendDirection, topCategories: [String: Double],
+        recommendations: [String] = []
     ) {
         self.userId = userId
         self.timeRange = timeRange
@@ -963,7 +934,7 @@ public struct ProductivityInsights {
 }
 
 /// Unified user insights model
-public struct UnifiedUserInsights {
+public struct UnifiedUserInsights: Sendable {
     public let userId: String
     public let timeRange: DateInterval
     public let habitInsights: [HabitInsights]
@@ -995,7 +966,7 @@ public struct UnifiedUserInsights {
 }
 
 /// Cross-project correlation model
-public struct CrossProjectCorrelation {
+public struct CrossProjectCorrelation: Sendable {
     public let project1: ProjectType
     public let project2: ProjectType
     public let correlation: Double
@@ -1018,7 +989,7 @@ public struct CrossProjectCorrelation {
 }
 
 /// Unified recommendation model
-public struct UnifiedRecommendation {
+public struct UnifiedRecommendation: Sendable {
     public let id: UUID = .init()
     public let type: UnifiedRecommendationType
     public let title: String
@@ -1048,7 +1019,7 @@ public struct UnifiedRecommendation {
 }
 
 /// Unified recommendation type enumeration
-public enum UnifiedRecommendationType {
+public enum UnifiedRecommendationType: String, Sendable {
     case habitFinanceIntegration
     case productivityHabitAlignment
     case financialGoalTask

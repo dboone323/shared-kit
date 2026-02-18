@@ -8,8 +8,8 @@
 
 import CryptoKit
 import Foundation
-import SharedKitCore
 import Security
+import SharedKitCore
 
 // MARK: - Security Framework
 
@@ -80,7 +80,7 @@ public enum SecurityFramework {
 
             // Check scheme
             guard let scheme = url.scheme?.lowercased(),
-                  ["http", "https"].contains(scheme)
+                ["http", "https"].contains(scheme)
             else {
                 return .failure(.invalidURLScheme)
             }
@@ -147,7 +147,7 @@ public enum SecurityFramework {
             let status = SecItemCopyMatching(query as CFDictionary, &result)
 
             guard status == errSecSuccess,
-                  let data = result as? Data
+                let data = result as? Data
             else {
                 throw SecurityError.keychainError(status: status)
             }
@@ -259,7 +259,8 @@ public enum SecurityFramework {
     /// Vulnerability scanning utilities
     public enum VulnerabilityScanner {
         /// Scans code for common vulnerabilities
-        public static func scanForVulnerabilities(code: String, language: String) -> [Vulnerability] {
+        public static func scanForVulnerabilities(code: String, language: String) -> [Vulnerability]
+        {
             var vulnerabilities: [Vulnerability] = []
 
             // SQL Injection patterns
@@ -291,7 +292,7 @@ public enum SecurityFramework {
                                 description: "Potential XSS vulnerability detected",
                                 line: findLineNumber(code: code, pattern: pattern),
                                 recommendation:
-                                "Use safe DOM manipulation methods or sanitize input"
+                                    "Use safe DOM manipulation methods or sanitize input"
                             ))
                     }
                 }
@@ -302,7 +303,7 @@ public enum SecurityFramework {
             for pattern in secretPatterns {
                 if code.lowercased().contains(pattern) && code.contains("\"")
                     && !code.contains("//")
-                { // Ignore comments
+                {  // Ignore comments
                     vulnerabilities.append(
                         Vulnerability(
                             type: .hardcodedSecret,
@@ -310,7 +311,7 @@ public enum SecurityFramework {
                             description: "Potential hardcoded secret detected",
                             line: findLineNumber(code: code, pattern: pattern),
                             recommendation:
-                            "Move secrets to environment variables or secure storage"
+                                "Move secrets to environment variables or secure storage"
                         ))
                 }
             }
@@ -360,7 +361,7 @@ public enum ValidationResult {
     public var error: ValidationError? {
         switch self {
         case .success: return nil
-        case let .failure(error): return error
+        case .failure(let error): return error
         }
     }
 }
@@ -374,7 +375,7 @@ public enum SecurityError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case let .keychainError(status):
+        case .keychainError(let status):
             return "Keychain operation failed with status: \(status)"
         case .randomGenerationFailed:
             return "Failed to generate secure random data"
@@ -396,15 +397,15 @@ public enum SecurityEvent {
 
     public var description: String {
         switch self {
-        case let .inputValidationFailed(type):
+        case .inputValidationFailed(let type):
             return "Input validation failed for type: \(type)"
-        case let .keychainOperationFailed(operation):
+        case .keychainOperationFailed(let operation):
             return "Keychain operation failed: \(operation)"
         case .encryptionOperationFailed:
             return "Encryption operation failed"
-        case let .vulnerabilityDetected(type):
+        case .vulnerabilityDetected(let type):
             return "Vulnerability detected: \(type.rawValue)"
-        case let .incidentDetected(type):
+        case .incidentDetected(let type):
             return "Security incident detected: \(type)"
         }
     }
@@ -479,12 +480,8 @@ extension HMAC<SHA256>.MAC {
 }
 
 extension AES.GCM.Nonce {
-    init(data: Data) throws {
-        self = try .init(data: data)
-    }
-
     var data: Data {
-        withUnsafeBytes { Data($0) }
+        Data(self)
     }
 }
 

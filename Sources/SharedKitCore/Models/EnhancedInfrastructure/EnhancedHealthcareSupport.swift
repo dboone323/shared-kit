@@ -117,6 +117,119 @@ public final class EnhancedHealthcareMetric {
     }
 }
 
+public enum FacilityType: String, CaseIterable, Codable {
+    case hospital
+    case clinic
+    case telemedicine
+    case research
+    case emergency
+}
+
+public enum Gender: String, CaseIterable, Codable {
+    case male
+    case female
+    case nonBinary
+    case other
+}
+
+@Model
+public final class EnhancedPatientRecord {
+    public var id: UUID
+    public var patientId: String
+    public var age: Int
+    public var gender: Gender
+    public var location: String
+    public var medicalHistory: [String]
+    public var healthIndex: Double
+    public var lastVisit: Date
+    public var registrationDate: Date
+
+    @Relationship(deleteRule: .cascade, inverse: \EnhancedTreatment.patientRecord)
+    public var treatments: [EnhancedTreatment] = []
+
+    public var healthcareSystem: EnhancedQuantumHealthcareSystem?
+
+    public init(
+        healthcareSystem: EnhancedQuantumHealthcareSystem,
+        patientId: String,
+        age: Int,
+        gender: Gender,
+        location: String,
+        medicalHistory: [String] = []
+    ) {
+        self.id = UUID()
+        self.healthcareSystem = healthcareSystem
+        self.patientId = patientId
+        self.age = age
+        self.gender = gender
+        self.location = location
+        self.medicalHistory = medicalHistory
+        self.healthIndex = 1.0
+        self.lastVisit = Date()
+        self.registrationDate = Date()
+    }
+
+    @MainActor
+    public func recordTreatment(
+        providerId: String,
+        treatmentType: String,
+        success: Bool,
+        duration: TimeInterval,
+        cost: Double
+    ) {
+        let treatment = EnhancedTreatment(
+            patientRecord: self,
+            providerId: providerId,
+            treatmentType: treatmentType,
+            success: success,
+            duration: duration,
+            cost: cost
+        )
+        self.treatments.append(treatment)
+        self.lastVisit = Date()
+
+        // Update health index based on success
+        if success {
+            self.healthIndex = min(1.0, self.healthIndex + 0.05)
+        } else {
+            self.healthIndex = max(0.0, self.healthIndex - 0.1)
+        }
+    }
+}
+
+@Model
+public final class EnhancedHealthcareProvider {
+    public var id: UUID
+    public var providerId: String
+    public var specializations: [String]
+    public var experience: Double
+    public var aiProficiency: Double
+    public var facilityId: UUID
+    public var rating: Double
+    public var totalTreatments: Int
+
+    public var healthcareSystem: EnhancedQuantumHealthcareSystem?
+
+    public init(
+        healthcareSystem: EnhancedQuantumHealthcareSystem,
+        providerId: String,
+        specializations: [String],
+        experience: Double,
+        aiProficiency: Double,
+        facilityId: UUID
+    ) {
+        self.id = UUID()
+        self.healthcareSystem = healthcareSystem
+        self.providerId = providerId
+        self.specializations = specializations
+        self.experience = experience
+        self.aiProficiency = aiProficiency
+        self.facilityId = facilityId
+        self.rating = 5.0
+        self.totalTreatments = 0
+    }
+}
+
 // MARK: - Supporting Economic Models
 
 public enum EconomicEntityType: String, CaseIterable, Codable {
@@ -124,15 +237,6 @@ public enum EconomicEntityType: String, CaseIterable, Codable {
     case enterprise
     case government
     case nonprofit
-}
-
-public enum TransactionType: String, CaseIterable, Codable {
-    case payment
-    case investment
-    case trade
-    case donation
-    case loan
-    case grant
 }
 
 @Model
@@ -169,7 +273,7 @@ public final class EnhancedEconomicEntity {
         self.sector = sector
         self.registrationDate = Date()
         self.transactionCount = 0
-        self.creditScore = 700.0 // Default good credit
+        self.creditScore = 700.0  // Default good credit
         self.riskProfile = "Low"
     }
 }
@@ -181,7 +285,7 @@ public final class EnhancedEconomicTransaction {
     public var toEntityId: String
     public var amount: Double
     public var transactionType: TransactionType
-    public var description: String
+    public var transactionDescription: String
     public var timestamp: Date
     public var fee: Double
     public var status: String
@@ -203,9 +307,9 @@ public final class EnhancedEconomicTransaction {
         self.toEntityId = toEntityId
         self.amount = amount
         self.transactionType = transactionType
-        self.description = description
+        self.transactionDescription = description
         self.timestamp = Date()
-        self.fee = amount * 0.001 // 0.1% transaction fee
+        self.fee = amount * 0.001  // 0.1% transaction fee
         self.status = "completed"
     }
 }
@@ -293,12 +397,12 @@ public final class EnhancedEnvironmentalZone {
         self.area = area
         self.priority = priority
         self.establishmentDate = Date()
-        self.airQuality = 0.5 // Default moderate quality
+        self.airQuality = 0.5  // Default moderate quality
         self.waterQuality = 0.5
         self.soilHealth = 0.5
         self.biodiversity = 0.5
         self.restorationProgress = 0.0
-        self.monitoringFrequency = 3600.0 // 1 hour
+        self.monitoringFrequency = 3600.0  // 1 hour
     }
 }
 

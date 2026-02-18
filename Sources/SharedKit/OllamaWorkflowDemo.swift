@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import SharedKitCore
 
 /// Demonstration of the complete Ollama Workflow Integration System
 /// Shows how to use all components together for autonomous AI workflows
@@ -54,14 +55,17 @@ public final class OllamaWorkflowDemo {
         print("-" * 30)
 
         let health = await integrationManager.getHealthStatus()
-        print("Ollama Server: \(health.isRunning ? "✅ Running" : "❌ Not Running")")
-        print("Models Available: \(health.modelsAvailable ? "✅ Yes" : "❌ No")")
-        print("Model Count: \(health.modelCount)")
-        print("Response Time: \(String(format: "%.2f", health.responseTime))s")
-
-        if !health.recommendedActions.isEmpty {
-            print("Recommended Actions:")
-            health.recommendedActions.forEach { print("  • \($0)") }
+        print("Ollama Running: \(health.isRunning)")
+        // print("Models Available: \(health.modelsAvailable)")
+        print("Models Available: \(health.modelsAvailable)")
+        if let responseTime = health.responseTime {
+            print("Response Time: \(String(format: "%.2f", responseTime))s")  // Fix formatting
+        }
+        if !health.recommendations.isEmpty {
+            print("Recommendations:")
+            for action in health.recommendations {
+                print("- \(action)")
+            }
         }
     }
 
@@ -113,29 +117,31 @@ public final class OllamaWorkflowDemo {
 
         // Sample code to analyze
         let sampleCode = """
-        func calculateTotal(items: [Double]) -> Double {
-            var total = 0.0
-            for item in items {
-                total += item
+            func calculateTotal(items: [Double]) -> Double {
+                var total = 0.0
+                for item in items {
+                    total += item
+                }
+                return total
             }
-            return total
-        }
-        """
+            """
 
         // Execute workflow
-        let inputs = ["code": sampleCode]
-        let result = try await workflowOrchestrator.executeWorkflow(workflow)
+        let inputs: [String: AnyCodable] = [
+            "code": AnyCodable(sampleCode)
+        ]
+        let result = try await workflowOrchestrator.executeWorkflow(workflow, inputs: inputs)
 
         print("Workflow: \(workflow.name)")
         print("Steps: \(workflow.steps.count)")
         print("Success: \(result.success)")
         print("Execution Time: \(String(format: "%.2f", result.executionTime))s")
 
-        if let analysis = result.outputs["analysis"] as? String {
+        if let analysis = result.outputs["analysis"]?.asString() {
             print("Analysis: \(analysis.prefix(100))...")
         }
 
-        if let fixes = result.outputs["fixes"] as? String {
+        if let fixes = result.outputs["fixes"]?.asString() {
             print("Fixes: \(fixes.prefix(100))...")
         }
     }
@@ -149,7 +155,8 @@ public final class OllamaWorkflowDemo {
 
         let result = try await integrationManager.generateCode(
             description: description,
-            language: language
+            language: language,
+            context: nil
         )
 
         print("Description: \(description)")
@@ -175,7 +182,7 @@ public final class OllamaWorkflowDemo {
                     model: "llama2",
                     prompt: "Generate documentation for: {{code}}",
                     outputKey: "documentation"
-                ),
+                )
             ]
         )
 
@@ -188,21 +195,23 @@ public final class OllamaWorkflowDemo {
                     model: "codellama",
                     prompt: "Generate unit tests for: {{code}}",
                     outputKey: "tests"
-                ),
+                )
             ]
         )
 
         let sampleCode = """
-        struct User {
-            let id: Int
-            let name: String
-            let email: String
-        }
-        """
+            struct User {
+                let id: Int
+                let name: String
+                let email: String
+            }
+            """
 
         // Execute both workflows in parallel
-        async let result1 = workflowOrchestrator.executeWorkflow(workflow1)
-        async let result2 = workflowOrchestrator.executeWorkflow(workflow2)
+        async let result1 = workflowOrchestrator.executeWorkflow(
+            workflow1, inputs: ["code": AnyCodable(sampleCode)])
+        async let result2 = workflowOrchestrator.executeWorkflow(
+            workflow2, inputs: ["code": AnyCodable(sampleCode)])
 
         let (r1, r2) = try await (result1, result2)
 
@@ -234,14 +243,17 @@ public final class OllamaWorkflowDemo {
         print("📦 Caching Demo:")
 
         let prompt = "What is the capital of France?"
-        let startTime = Date()
+        var startTime = Date()
 
         // First request (should cache)
-        _ = try? await integrationManager.generateText(prompt: prompt, maxTokens: 50)
+        _ = try? await integrationManager.generateText(
+            prompt: prompt, maxTokens: 50, temperature: 0.7)
         let firstDuration = Date().timeIntervalSince(startTime)
 
         // Second request (should use cache)
-        _ = try? await integrationManager.generateText(prompt: prompt, maxTokens: 50)
+        startTime = Date()
+        _ = try? await integrationManager.generateText(
+            prompt: prompt, maxTokens: 50, temperature: 0.7)
         let secondDuration = Date().timeIntervalSince(startTime) - firstDuration
 
         print("  First request: \(String(format: "%.2f", firstDuration))s")
@@ -305,6 +317,7 @@ extension String {
 // MARK: - Demo Runner
 
 /// Main demo runner for easy execution
+@MainActor
 public func runOllamaWorkflowDemo() async {
     let demo = OllamaWorkflowDemo()
 
@@ -321,6 +334,7 @@ public func runOllamaWorkflowDemo() async {
 /// Example usage patterns for the Ollama Workflow Integration
 public enum OllamaWorkflowExamples {
     /// Basic text generation example
+    @MainActor
     public static func basicGenerationExample() async throws -> String {
         let manager = OllamaIntegrationManager()
         return try await manager.generateText(
@@ -331,32 +345,55 @@ public enum OllamaWorkflowExamples {
     }
 
     /// Code analysis workflow example
+    @MainActor
     public static func codeAnalysisWorkflowExample() async throws -> CodeAnalysisResult {
         let manager = OllamaIntegrationManager()
 
         let sampleCode = """
-        func fetchUser(id: Int) async throws -> User {
-            let url = URL(string: "https://api.example.com/users/\(id)")!
-            let (data, _) = try await URLSession.shared.data(from: url)
-            return try JSONDecoder().decode(User.self, from: data)
-        }
-        """
+            func fetchUser(id: Int) async throws -> User {
+                let url = URL(string: "https://api.example.com/users/\\(id)")!
+                let (data, _) = try await URLSession.shared.data(from: url)
+                return try JSONDecoder().decode(User.self, from: data)
+            }
+            """
 
-        return try await manager.analyzeCode(
+        // 2. Analyze code
+        let analysis = try await manager.analyzeCode(
             code: sampleCode,
             language: "Swift",
-            analysisType: .comprehensive
+            analysisType: .security
         )
+
+        // 3. Generate documentation
+        _ = try await manager.generateCode(
+            description: "Generate documentation for the user fetch function",
+            language: "Markdown",
+            context: nil
+        )
+
+        // 4. Create implementation plan
+        let plan = try await manager.generateCode(
+            description: "Create a Swift protocol for data validation",
+            language: "Swift",
+            context: nil
+        )
+
+        print("Generated Code:")
+        print(plan.code)
+
+        return analysis
     }
 
     /// Complete development workflow example
+    @MainActor
     public static func completeDevelopmentWorkflow() async throws {
         let manager = OllamaIntegrationManager()
 
         // 1. Generate code
         let codeResult = try await manager.generateCode(
             description: "Create a Swift protocol for data validation",
-            language: "Swift"
+            language: "Swift",
+            context: nil
         )
 
         print("Generated Code:")
@@ -379,7 +416,7 @@ public enum OllamaWorkflowExamples {
         )
 
         print("\nDocumentation:")
-        print(docs.documentation)
+        print(docs)
 
         // 4. Generate tests
         let tests = try await manager.generateTests(
@@ -388,6 +425,6 @@ public enum OllamaWorkflowExamples {
         )
 
         print("\nTests:")
-        print(tests.testCode)
+        print(tests)
     }
 }
