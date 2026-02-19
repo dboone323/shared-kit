@@ -6,7 +6,7 @@ let package = Package(
     // Lower macOS platform version to enable test discovery on current host (macOS 14)
     platforms: [
         .iOS(.v18),
-        .macOS(.v14),
+        .macOS(.v15),
     ],
     products: [
         .library(

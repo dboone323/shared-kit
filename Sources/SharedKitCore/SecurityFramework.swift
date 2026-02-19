@@ -87,7 +87,8 @@ actor InputValidator {
             }
         case .identifier:
             if input.range(of: "^[a-zA-Z0-9_]+$", options: .regularExpression) == nil {
-                throw ValidationError.invalidFormat(description: "Invalid identifier (alphanumeric only)")
+                throw ValidationError.invalidFormat(
+                    description: "Invalid identifier (alphanumeric only)")
             }
         case .text:
             // Check for obvious XSS tags
@@ -106,7 +107,7 @@ actor InputValidator {
     func sanitize(_ input: String) -> String {
         // Basic sanitization: remove null bytes and control characters
         input.replacingOccurrences(of: "\0", with: "")
-            .replacingOccurrences(of: "'", with: "''") // Basic SQL escape (use prepared statements effectively instead)
+            .replacingOccurrences(of: "'", with: "''")  // Basic SQL escape (use prepared statements effectively instead)
     }
 }
 
@@ -145,7 +146,7 @@ actor AccessControl {
         // RBAC Matrix
         switch user.role {
         case .admin:
-            return // Allowed everything
+            return  // Allowed everything
 
         case .user:
             switch action {
@@ -186,13 +187,13 @@ public actor CryptoManager {
         }
     }
 
-    func encrypt(_ data: Data) async throws -> Data {
+    public func encrypt(_ data: Data) async throws -> Data {
         let key = try await getKey()
         let sealedBox = try AES.GCM.seal(data, using: key)
         return sealedBox.combined!
     }
 
-    func decrypt(_ data: Data) async throws -> Data {
+    public func decrypt(_ data: Data) async throws -> Data {
         let key = try await getKey()
         let sealedBox = try AES.GCM.SealedBox(combined: data)
         return try AES.GCM.open(sealedBox, using: key)
