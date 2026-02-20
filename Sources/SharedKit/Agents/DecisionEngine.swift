@@ -36,15 +36,13 @@ public final class DecisionEngine: Sendable {
     public func evaluate(metrics: [String: Any]) -> [ProposedAction] {
         var actions: [ProposedAction] = []
 
-        for rule in rules {
-            if evaluateCondition(rule.condition, metrics: metrics) {
-                actions.append(
-                    ProposedAction(
-                        action: rule.action,
-                        reason: "Rule '\(rule.name)' satisfied",
-                        params: rule.params
-                    ))
-            }
+        for rule in rules where evaluateCondition(rule.condition, metrics: metrics) {
+            actions.append(
+                ProposedAction(
+                    action: rule.action,
+                    reason: "Rule '\(rule.name)' satisfied",
+                    params: rule.params
+                ))
         }
 
         return actions

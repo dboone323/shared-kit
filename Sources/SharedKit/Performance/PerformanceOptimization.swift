@@ -35,10 +35,11 @@ public class PerformanceMonitor: ObservableObject {
         guard !self.isMonitoring else { return }
 
         self.isMonitoring = true
-        self.monitoringTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) {
-            [weak self] _ in
+        let timerBlock: @Sendable (Timer) -> Void = { [weak self] _ in
             self?.updateMetrics()
         }
+        self.monitoringTimer = Timer.scheduledTimer(
+            withTimeInterval: interval, repeats: true, block: timerBlock)
 
         self.networkMonitor.startMonitoring()
     }
@@ -52,7 +53,7 @@ public class PerformanceMonitor: ObservableObject {
 
     // MARK: - Metrics Collection
 
-    nonisolated private func updateMetrics() {
+    private nonisolated func updateMetrics() {
         Task { @MainActor in
             self.currentMetrics = SystemPerformanceMetrics(
                 memoryUsage: self.getCurrentMemoryUsage(),
@@ -605,13 +606,14 @@ public class MemoryManager: ObservableObject {
     }
 
     private func startPeriodicCleanup() {
-        self.cacheCleanupTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) {
-            [weak self] _ in
+        let timerBlock: @Sendable (Timer) -> Void = { [weak self] _ in
             Task { @MainActor [weak self] in
                 // Cleanup every 5 minutes
                 self?.performRoutineCleanup()
             }
         }
+        self.cacheCleanupTimer = Timer.scheduledTimer(
+            withTimeInterval: 300, repeats: true, block: timerBlock)
     }
 
     // MARK: - Cache Access
@@ -721,7 +723,7 @@ public class CPUOptimizer: ObservableObject {
         self.throttleTimer = nil
     }
 
-    nonisolated private func throttleProcessing(factor: Double) {
+    private nonisolated func throttleProcessing(factor: Double) {
         let sleepTime = (1.0 - factor) * 0.1  // Up to 100ms delay
         Thread.sleep(forTimeInterval: sleepTime)
     }
@@ -801,7 +803,7 @@ public class NetworkMonitor: ObservableObject {
 
     public func startMonitoring() {
         self.pathMonitor.start(queue: self.monitorQueue)
-        self.startBandwidthMeasurement()
+        self.startBandwidthMonitoring()
     }
 
     public func stopMonitoring() {
@@ -843,13 +845,14 @@ public class NetworkMonitor: ObservableObject {
         self.applyNetworkOptimizations()
     }
 
-    private func startBandwidthMeasurement() {
-        self.bandwidthTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) {
-            [weak self] _ in
+    private func startBandwidthMonitoring() {
+        let timerBlock: @Sendable (Timer) -> Void = { [weak self] _ in
             Task { @MainActor [weak self] in
                 self?.measureBandwidth()
             }
         }
+        self.bandwidthTimer = Timer.scheduledTimer(
+            withTimeInterval: 60.0, repeats: true, block: timerBlock)
     }
 
     private func measureBandwidth() {
@@ -937,18 +940,19 @@ public class BatteryOptimizer: ObservableObject {
     private var batteryHistory: [BatteryReading] = []
 
     private init() {
-        self.startBatteryMonitoring()
+        self.startMonitoring()
     }
 
     // MARK: - Battery Monitoring
 
-    private func startBatteryMonitoring() {
-        self.batteryTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) {
-            [weak self] _ in
+    private func startMonitoring() {
+        let timerBlock: @Sendable (Timer) -> Void = { [weak self] _ in
             Task { @MainActor [weak self] in
                 self?.updateBatteryOptimization()
             }
         }
+        self.batteryTimer = Timer.scheduledTimer(
+            withTimeInterval: 60.0, repeats: true, block: timerBlock)
 
         #if canImport(UIKit)
             NotificationCenter.default.addObserver(

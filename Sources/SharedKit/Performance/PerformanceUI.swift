@@ -875,26 +875,32 @@ private struct PerformanceControlActions: View {
 
     var body: some View {
         HStack(spacing: 16) {
-            Button(action: {
-                memoryManager.performRoutineCleanup()
-            }) {
-                Label("Clean Memory", systemImage: "trash")
-            }
+            Button(
+                action: {
+                    memoryManager.performRoutineCleanup()
+                },
+                label: {
+                    Label("Clean Memory", systemImage: "trash")
+                }
+            )
             .buttonStyle(.bordered)
             .disabled(memoryManager.isOptimizing)
 
-            Button(action: {
-                if performanceMonitor.isMonitoring {
-                    performanceMonitor.stopMonitoring()
-                } else {
-                    performanceMonitor.startMonitoring()
+            Button(
+                action: {
+                    if performanceMonitor.isMonitoring {
+                        performanceMonitor.stopMonitoring()
+                    } else {
+                        performanceMonitor.startMonitoring()
+                    }
+                },
+                label: {
+                    Label(
+                        performanceMonitor.isMonitoring ? "Stop" : "Start",
+                        systemImage: performanceMonitor.isMonitoring ? "stop.circle" : "play.circle"
+                    )
                 }
-            }) {
-                Label(
-                    performanceMonitor.isMonitoring ? "Stop" : "Start",
-                    systemImage: performanceMonitor.isMonitoring ? "stop.circle" : "play.circle"
-                )
-            }
+            )
             .buttonStyle(.bordered)
 
             Spacer()
@@ -909,21 +915,27 @@ private struct MemoryManagementActions: View {
     var body: some View {
         VStack(spacing: 12) {
             HStack {
-                Button(action: {
-                    memoryManager.performRoutineCleanup()
-                }) {
-                    Label("Routine Cleanup", systemImage: "trash")
-                        .frame(maxWidth: .infinity)
-                }
+                Button(
+                    action: {
+                        memoryManager.performRoutineCleanup()
+                    },
+                    label: {
+                        Label("Routine Cleanup", systemImage: "trash")
+                            .frame(maxWidth: .infinity)
+                    }
+                )
                 .buttonStyle(.bordered)
                 .disabled(memoryManager.isOptimizing)
 
-                Button(action: {
-                    memoryManager.performEmergencyCleanup()
-                }) {
-                    Label("Emergency Cleanup", systemImage: "exclamationmark.triangle")
-                        .frame(maxWidth: .infinity)
-                }
+                Button(
+                    action: {
+                        memoryManager.performEmergencyCleanup()
+                    },
+                    label: {
+                        Label("Emergency Cleanup", systemImage: "exclamationmark.triangle")
+                            .frame(maxWidth: .infinity)
+                    }
+                )
                 .buttonStyle(.borderedProminent)
                 .disabled(memoryManager.isOptimizing)
             }
@@ -957,15 +969,18 @@ private struct BatteryOptimizationActions: View {
                 }
 
                 #if canImport(UIKit)
-                    Button(action: {
-                        // Open system settings for Low Power Mode
-                        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
-                            UIApplication.shared.open(settingsUrl)
+                    Button(
+                        action: {
+                            // Open system settings for Low Power Mode
+                            if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(settingsUrl)
+                            }
+                        },
+                        label: {
+                            Label("Open Battery Settings", systemImage: "gearshape")
+                                .frame(maxWidth: .infinity)
                         }
-                    }) {
-                        Label("Open Battery Settings", systemImage: "gearshape")
-                            .frame(maxWidth: .infinity)
-                    }
+                    )
                     .buttonStyle(.bordered)
                 #endif
             }
@@ -1157,24 +1172,29 @@ public struct PerformanceWidget: View {
     public init() {}
 
     public var body: some View {
-        Button(action: {
-            showingDashboard = true
-        }) {
-            HStack(spacing: 8) {
-                PerformanceRing(score: performanceMonitor.currentMetrics.overallPerformanceScore)
+        Button(
+            action: {
+                showingDashboard = true
+            },
+            label: {
+                HStack(spacing: 8) {
+                    PerformanceRing(
+                        score: performanceMonitor.currentMetrics.overallPerformanceScore
+                    )
                     .frame(width: 24, height: 24)
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Performance")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Performance")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
 
-                    Text("\(Int(performanceMonitor.currentMetrics.overallPerformanceScore))")
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
-                        .foregroundColor(.primary)
+                        Text("\(Int(performanceMonitor.currentMetrics.overallPerformanceScore))")
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundColor(.primary)
+                    }
                 }
             }
-        }
+        )
         .buttonStyle(PlainButtonStyle())
         .sheet(isPresented: $showingDashboard) {
             PerformanceDashboard()

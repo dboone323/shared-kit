@@ -52,7 +52,6 @@ public class AITaskPrioritizationService {
         }
 
         return await Task.detached(priority: .userInitiated) {
-
             // Generate suggestions using multiple AI approaches
             // Note: We need a way to call back into self's async methods.
             // Since self is MainActor, we can't easily call it from detached task unless those methods are non-isolated or we await them on MainActor.
@@ -112,7 +111,8 @@ public class AITaskPrioritizationService {
                 title: "Diversify Your Tasks",
                 subtitle: "Work-Life Balance",
                 reasoning:
-                    "You've been focusing heavily on \(dominant.rawValue) tasks. Consider balancing with other categories.",
+                    "You've been focusing heavily on \(dominant.rawValue) tasks. "
+                    + "Consider balancing with other categories.",
                 priority: .medium,
                 urgency: .low,
                 suggestedTime: nil,
@@ -556,7 +556,6 @@ public class AITaskPrioritizationService {
     }
 
     private func suggestBatchTime(_ category: TaskCategory) -> Date {
-
         let now = Date()
 
         // Suggest batch times based on category

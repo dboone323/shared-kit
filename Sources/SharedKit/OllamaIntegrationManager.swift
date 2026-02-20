@@ -3,12 +3,11 @@ import SharedKitCore
 
 // import SharedKit // Will be available when integrated into package
 
+// MARK: - Core Integration Manager
+
 /// Unified Ollama Integration Framework
 /// Provides a clean, unified interface for all Ollama-powered automation
 /// Completely free alternative to paid AI services
-
-// MARK: - Core Integration Manager
-
 @MainActor
 public class OllamaIntegrationManager: AITextGenerationService, AICodeAnalysisService,
     AICodeGenerationService, AICachingService, AIPerformanceMonitoring
@@ -813,13 +812,21 @@ extension OllamaIntegrationManager {
         }
     }
 
+    public struct ServiceAvailability {
+        public let ollama: Bool
+        public let huggingFace: Bool
+        public let anyAvailable: Bool
+    }
+
     /// Get service availability status
-    func getServiceStatus() async -> (ollama: Bool, huggingFace: Bool, anyAvailable: Bool) {
+    func getServiceStatus() async -> ServiceAvailability {
         let ollamaHealth = await getOllamaHealth()
         let huggingFaceAvailable = await HuggingFaceClient.shared.isAvailable()
         let anyAvailable = ollamaHealth.ollamaRunning || huggingFaceAvailable
 
-        return (ollamaHealth.ollamaRunning, huggingFaceAvailable, anyAvailable)
+        return ServiceAvailability(
+            ollama: ollamaHealth.ollamaRunning, huggingFace: huggingFaceAvailable,
+            anyAvailable: anyAvailable)
     }
 
     public func resetCircuitBreaker() {

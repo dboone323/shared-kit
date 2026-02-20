@@ -140,6 +140,7 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                 self.logger.info("✅ Biometric authentication available: \(biometricType.rawValue)")
 
                 // Test biometric authentication simulation
+                // swiftlint:disable closure_parameter_position
                 self.authenticationService
                     .authenticateWithBiometrics(reason: "Security test authentication") {
                         authResult in
@@ -156,6 +157,7 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
 
                         expectation.fulfill()
                     }
+            // swiftlint:enable closure_parameter_position
 
             case .failure(let error):
                 // Biometric might not be available in test environment

@@ -346,18 +346,16 @@ public final class OllamaHTTPClient: Sendable {
                         throw OllamaError.invalidResponse
                     }
 
-                    for try await line in bytes.lines {
-                        if line.hasPrefix("data: ") {
-                            let jsonString = String(line.dropFirst(6))
-                            if let data = jsonString.data(using: .utf8) {
-                                let response = try JSONDecoder().decode(
-                                    OllamaResponse.self, from: data)
-                                continuation.yield(response)
+                    for try await line in bytes.lines where line.hasPrefix("data: ") {
+                        let jsonString = String(line.dropFirst(6))
+                        if let data = jsonString.data(using: .utf8) {
+                            let response = try JSONDecoder().decode(
+                                OllamaResponse.self, from: data)
+                            continuation.yield(response)
 
-                                if response.done {
-                                    continuation.finish()
-                                    return
-                                }
+                            if response.done {
+                                continuation.finish()
+                                return
                             }
                         }
                     }
@@ -676,10 +674,8 @@ public final class OllamaWorkflowOrchestrator: WorkflowOrchestrator, Sendable {
             result.append(step)
         }
 
-        for step in steps {
-            if !visited.contains(step.id) {
-                try visit(step)
-            }
+        for step in steps where !visited.contains(step.id) {
+            try visit(step)
         }
 
         return result

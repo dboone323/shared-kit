@@ -981,9 +981,9 @@ class PerformanceBenchmarkSuite {
 
     // MARK: - Network Measurement Methods
 
-    private func measureNetworkLatency() async -> (average: Double, min: Double, max: Double) {
+    private func measureNetworkLatency() async -> NetworkLatencyMetrics {
         // Simulate network latency measurements
-        (average: 0.8, min: 0.3, max: 1.5)
+        NetworkLatencyMetrics(average: 0.8, min: 0.3, max: 1.5)
     }
 
     private func measureNetworkThroughput() async -> Double {
@@ -998,16 +998,16 @@ class PerformanceBenchmarkSuite {
 
     // MARK: - System Metrics Methods
 
-    private func getCurrentMemoryUsage() -> (
-        current: Int64, peak: Int64, average: Int64, leaked: Int64
-    ) {
+    private func getCurrentMemoryUsage() -> MemoryUsageMetrics {
         // Simulate memory usage data
-        (current: 85 * 1024 * 1024, peak: 120 * 1024 * 1024, average: 90 * 1024 * 1024, leaked: 0)
+        MemoryUsageMetrics(
+            current: 85 * 1024 * 1024, peak: 120 * 1024 * 1024, average: 90 * 1024 * 1024, leaked: 0
+        )
     }
 
-    private func getCurrentCPUUsage() -> (current: Double, peak: Double, average: Double) {
+    private func getCurrentCPUUsage() -> CPUUsageMetrics {
         // Simulate CPU usage data
-        (current: 25.0, peak: 45.0, average: 28.0)
+        CPUUsageMetrics(current: 25.0, peak: 45.0, average: 28.0)
     }
 
     private func getThermalState() -> String {
@@ -1016,12 +1016,12 @@ class PerformanceBenchmarkSuite {
 
     private func getCurrentSystemMetrics() -> SystemMetrics {
         SystemMetrics(
-            memory: (
+            memory: MemoryUsageMetrics(
                 current: 90 * 1024 * 1024, peak: 150 * 1024 * 1024, average: 95 * 1024 * 1024,
                 leaked: 0
             ),
-            cpu: (current: 35.0, peak: 68.0, average: 42.0),
-            frameRate: (average: 57.8, minimum: 52.0, dropped: 12),
+            cpu: CPUUsageMetrics(current: 35.0, peak: 68.0, average: 42.0),
+            frameRate: FrameRateMetrics(average: 57.8, minimum: 52.0, dropped: 12),
             battery: (drainRate: 7.5, thermalImpact: "Medium")
         )
     }
@@ -1067,7 +1067,7 @@ class PerformanceBenchmarkSuite {
     // MARK: - Score Calculation Methods
 
     private func calculateMemoryScore(
-        _ memory: (current: Int64, peak: Int64, average: Int64, leaked: Int64)
+        _ memory: MemoryUsageMetrics
     )
         -> Double
     {
@@ -1079,7 +1079,7 @@ class PerformanceBenchmarkSuite {
         return max(0, (peakScore + averageScore) / 2 - leakPenalty)
     }
 
-    private func calculateCPUScore(_ cpu: (current: Double, peak: Double, average: Double))
+    private func calculateCPUScore(_ cpu: CPUUsageMetrics)
         -> Double
     {
         let peakScore = max(0, 100 - (cpu.peak / BenchmarkStandards.maxCPUUsageIntensive) * 100)
@@ -1133,7 +1133,7 @@ class PerformanceBenchmarkSuite {
     }
 
     private func calculateNetworkScore(
-        _ latency: (average: Double, min: Double, max: Double),
+        _ latency: NetworkLatencyMetrics,
         _ throughput: Double,
         _ reliability: (errorRate: Double, successRate: Double)
     ) -> Double {
@@ -1151,9 +1151,34 @@ class PerformanceBenchmarkSuite {
 
 // MARK: - Supporting Types
 
+struct MemoryUsageMetrics {
+    let current: Int64
+    let peak: Int64
+    let average: Int64
+    let leaked: Int64
+}
+
+struct CPUUsageMetrics {
+    let current: Double
+    let peak: Double
+    let average: Double
+}
+
+struct FrameRateMetrics {
+    let average: Double
+    let minimum: Double
+    let dropped: Int
+}
+
+struct NetworkLatencyMetrics {
+    let average: Double
+    let min: Double
+    let max: Double
+}
+
 struct SystemMetrics {
-    let memory: (current: Int64, peak: Int64, average: Int64, leaked: Int64)
-    let cpu: (current: Double, peak: Double, average: Double)
-    let frameRate: (average: Double, minimum: Double, dropped: Int)
+    let memory: MemoryUsageMetrics
+    let cpu: CPUUsageMetrics
+    let frameRate: FrameRateMetrics
     let battery: (drainRate: Double, thermalImpact: String)
 }

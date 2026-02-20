@@ -234,7 +234,8 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
             governanceSystem: self,
             title: policyArea,
             summary:
-                "Quantum optimization analysis completed with \(String(format: "%.1f", decisionAccuracy * 100))% accuracy",
+                "Quantum optimization analysis completed with "
+                + "\(String(format: "%.1f", decisionAccuracy * 100))% accuracy",
             priority: priority,
             confidence: Double.random(in: 0.85...0.99)
         )

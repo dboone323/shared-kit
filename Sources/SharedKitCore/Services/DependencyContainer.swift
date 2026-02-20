@@ -350,7 +350,8 @@ final class DefaultAnalyticsService: AnalyticsServiceProtocol {
     func initialize() async throws {
         // Initialize analytics tracking
         NSLog(
-            "[DefaultAnalyticsService] WARNING: Non-persistent analytics initialized. Real backend integration required for production."
+            "[DefaultAnalyticsService] WARNING: Non-persistent analytics initialized. "
+                + "Real backend integration required for production."
         )
     }
 
@@ -416,7 +417,8 @@ final class DefaultCrossProjectService: CrossProjectServiceProtocol {
 
     func initialize() async throws {
         NSLog(
-            "[DefaultCrossProjectService] WARNING: Limited synchronization initialized. Full sync requires a registered CrossProjectService."
+            "[DefaultCrossProjectService] WARNING: Limited synchronization initialized. "
+                + "Full sync requires a registered CrossProjectService."
         )
     }
 
@@ -484,7 +486,8 @@ final class DefaultHabitService: HabitServiceProtocol {
 
     func initialize() async throws {
         NSLog(
-            "[DefaultHabitService] WARNING: Volatile habit tracking initialized. Data persistence requires a registered database driver."
+            "[DefaultHabitService] WARNING: Volatile habit tracking initialized. "
+                + "Data persistence requires a registered database driver."
         )
     }
 
@@ -551,7 +554,8 @@ final class DefaultFinancialService: FinancialServiceProtocol {
 
     func initialize() async throws {
         NSLog(
-            "[DefaultFinancialService] WARNING: Temporary financial state initialized. Secure ledger persistence required for production."
+            "[DefaultFinancialService] WARNING: Temporary financial state initialized. "
+                + "Secure ledger persistence required for production."
         )
     }
 
@@ -627,7 +631,8 @@ final class DefaultPlannerService: PlannerServiceProtocol {
 
     func initialize() async throws {
         NSLog(
-            "[DefaultPlannerService] WARNING: In-memory task management initialized. Persistent scheduling required for production."
+            "[DefaultPlannerService] WARNING: In-memory task management initialized. "
+                + "Persistent scheduling required for production."
         )
     }
 

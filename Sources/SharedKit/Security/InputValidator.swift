@@ -46,8 +46,8 @@ public enum InputValidator {
         try self.validateNotEmpty(urlString)
 
         guard let url = URL(string: urlString),
-              url.scheme != nil,
-              url.host != nil
+            url.scheme != nil,
+            url.host != nil
         else {
             throw ValidationError.invalidURL
         }
@@ -66,7 +66,8 @@ public enum InputValidator {
         try validateNotEmpty(phone)
 
         // Remove common separators for validation
-        let cleanPhone = phone.replacingOccurrences(of: "[\\s\\-\\(\\)]", with: "", options: .regularExpression)
+        let cleanPhone = phone.replacingOccurrences(
+            of: "[\\s\\-\\(\\)]", with: "", options: .regularExpression)
 
         guard phonePredicate.evaluate(with: cleanPhone) else {
             throw ValidationError.invalidPhoneNumber
@@ -74,7 +75,9 @@ public enum InputValidator {
     }
 
     /// Validate numeric input
-    public static func validateNumeric(_ input: String, min: Double? = nil, max: Double? = nil) throws {
+    public static func validateNumeric(_ input: String, min: Double? = nil, max: Double? = nil)
+        throws
+    {
         try self.validateNotEmpty(input)
 
         guard let number = Double(input) else {
@@ -106,10 +109,9 @@ public enum InputValidator {
             "*/",
         ]
 
-        for pattern in sqlPatterns {
-            if input.range(of: pattern, options: [.regularExpression, .caseInsensitive]) != nil {
-                throw ValidationError.containsSQLInjection
-            }
+        for pattern in sqlPatterns
+        where input.range(of: pattern, options: [.regularExpression, .caseInsensitive]) != nil {
+            throw ValidationError.containsSQLInjection
         }
     }
 
@@ -127,10 +129,8 @@ public enum InputValidator {
         ]
 
         let lowerInput = input.lowercased()
-        for pattern in xssPatterns {
-            if lowerInput.contains(pattern) {
-                throw ValidationError.containsXSS
-            }
+        for pattern in xssPatterns where lowerInput.contains(pattern) {
+            throw ValidationError.containsXSS
         }
     }
 
@@ -147,10 +147,8 @@ public enum InputValidator {
             "/home/",
         ]
 
-        for pattern in traversalPatterns {
-            if input.contains(pattern) {
-                throw ValidationError.containsPathTraversal
-            }
+        for pattern in traversalPatterns where input.contains(pattern) {
+            throw ValidationError.containsPathTraversal
         }
     }
 
@@ -224,8 +222,11 @@ public enum InputValidator {
         let usernamePredicate = NSPredicate(format: "SELF MATCHES %@", usernameRegex)
 
         guard usernamePredicate.evaluate(with: username) else {
-            throw ValidationError
-                .invalidFormat(description: "Username can only contain letters, numbers, underscores, and dashes")
+            throw
+                ValidationError
+                .invalidFormat(
+                    description:
+                        "Username can only contain letters, numbers, underscores, and dashes")
         }
     }
 
@@ -240,11 +241,13 @@ public enum InputValidator {
         let digitRegex = ".*[0-9].*"
 
         guard password.range(of: uppercaseRegex, options: .regularExpression) != nil else {
-            throw ValidationError.custom(message: "Password must contain at least one uppercase letter")
+            throw ValidationError.custom(
+                message: "Password must contain at least one uppercase letter")
         }
 
         guard password.range(of: lowercaseRegex, options: .regularExpression) != nil else {
-            throw ValidationError.custom(message: "Password must contain at least one lowercase letter")
+            throw ValidationError.custom(
+                message: "Password must contain at least one lowercase letter")
         }
 
         guard password.range(of: digitRegex, options: .regularExpression) != nil else {
@@ -262,7 +265,8 @@ public enum InputValidator {
     }
 
     /// Validate and sanitize user input (returns sanitized version)
-    public static func validateAndSanitize(_ input: String, maxLength: Int = 1000) throws -> String {
+    public static func validateAndSanitize(_ input: String, maxLength: Int = 1000) throws -> String
+    {
         try self.validateTextInput(input, maxLength: maxLength)
         return self.sanitizeInput(input)
     }
@@ -270,9 +274,11 @@ public enum InputValidator {
 
 // MARK: - Extensions
 
-public extension String {
+extension String {
     /// Validate this string with comprehensive security checks
-    func validated(as type: ValidationType, options: ValidationOptions = .default) throws -> String {
+    public func validated(as type: ValidationType, options: ValidationOptions = .default) throws
+        -> String
+    {
         switch type {
         case .username:
             try InputValidator.validateUsername(self)
@@ -313,9 +319,13 @@ public struct ValidationOptions: Sendable {
     public let maxValue: Double?
     public let sanitize: Bool
 
-    public static let `default` = ValidationOptions(maxLength: 1000, minValue: nil, maxValue: nil, sanitize: true)
+    public static let `default` = ValidationOptions(
+        maxLength: 1000, minValue: nil, maxValue: nil, sanitize: true)
 
-    public init(maxLength: Int = 1000, minValue: Double? = nil, maxValue: Double? = nil, sanitize: Bool = true) {
+    public init(
+        maxLength: Int = 1000, minValue: Double? = nil, maxValue: Double? = nil,
+        sanitize: Bool = true
+    ) {
         self.maxLength = maxLength
         self.minValue = minValue
         self.maxValue = maxValue

@@ -314,6 +314,7 @@ public final class EnhancedQuantumHealthcareSystem: Validatable, Trackable, Cros
     }
 
     @MainActor
+    // swiftlint:disable:next function_parameter_count
     public func recordTreatment(
         patientId: String,
         providerId: String,

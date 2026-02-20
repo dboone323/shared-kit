@@ -80,11 +80,11 @@ public struct EntityMemory: Sendable {
 
     public mutating func extractEntities(from text: String) {
         // Extract service names (common Docker services)
-        let servicePatterns = ["postgres", "redis", "ollama", "grafana", "sonarqube", "prometheus", "db"]
-        for pattern in servicePatterns {
-            if text.lowercased().contains(pattern) {
-                services.insert(pattern)
-            }
+        let servicePatterns = [
+            "postgres", "redis", "ollama", "grafana", "sonarqube", "prometheus", "db",
+        ]
+        for pattern in servicePatterns where text.lowercased().contains(pattern) {
+            services.insert(pattern)
         }
 
         // Extract file paths using basic string matching
@@ -98,7 +98,9 @@ public struct EntityMemory: Sendable {
 
         // Track errors
         if text.lowercased().contains("error") {
-            let errorLine = text.split(separator: "\n").first(where: { $0.lowercased().contains("error") })
+            let errorLine = text.split(separator: "\n").first(where: {
+                $0.lowercased().contains("error")
+            })
             if let error = errorLine {
                 recentErrors.append(String(error))
                 if recentErrors.count > 5 {

@@ -46,8 +46,15 @@ class TestUtilities {
     static func createTestCodeFile() -> [String: Any] {
         [
             "name": "TestFile.swift",
-            "content":
-                "import Foundation\n\nclass TestClass {\n    func testMethod() {\n        print(\"Hello, test!\")\n    }\n}",
+            "content": """
+            import Foundation
+
+            class TestClass {
+                func testMethod() {
+                    print("Hello, test!")
+                }
+            }
+            """,
             "language": "swift",
             "size": 100,
         ]

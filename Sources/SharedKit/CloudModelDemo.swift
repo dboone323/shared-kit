@@ -1,37 +1,12 @@
 import Foundation
 
-/**
- * Demonstration of Ollama v0.12 Cloud Model Integration
- * Shows how to use the new cloud models: qwen3-coder:480b-cloud, gpt-oss:120b-cloud, etc.
- *
- * Usage Examples for Cloud Models:
- *
- * // Initialize with cloud configuration
- * let client = OllamaClient(config: OllamaConfig.cloudCoder)
- *
- * // Generate code with cloud model
- * let code = try await client.generate(
- *     model: "qwen3-coder:480b-cloud",
- *     prompt: "Write a Swift binary search function",
- *     temperature: 0.2
- * )
- *
- * // Use advanced cloud model for analysis
- * let analysis = try await client.generate(
- *     model: "deepseek-v3.1:671b-cloud",
- *     prompt: "Analyze this code for performance issues",
- *     temperature: 0.3,
- *     maxTokens: 16384
- * )
- */
-
 // MARK: - Available Cloud Models in Ollama v0.12
 
 enum CloudModels {
-    static let qwenCoder = "qwen3-coder:480b-cloud" // Specialized for code generation
-    static let gptLarge = "gpt-oss:120b-cloud" // Large general model
-    static let gptSmall = "gpt-oss:20b-cloud" // Smaller general model
-    static let deepseek = "deepseek-v3.1:671b-cloud" // Advanced reasoning model
+    static let qwenCoder = "qwen3-coder:480b-cloud"  // Specialized for code generation
+    static let gptLarge = "gpt-oss:120b-cloud"  // Large general model
+    static let gptSmall = "gpt-oss:20b-cloud"  // Smaller general model
+    static let deepseek = "deepseek-v3.1:671b-cloud"  // Advanced reasoning model
 }
 
 // MARK: - Cloud Configuration Examples
@@ -73,7 +48,7 @@ struct CloudUsageExamples {
     /*
      static func generateSwiftCode() async throws -> String {
          let client = OllamaClient(config: .cloudCoder)
-
+    
          let prompt = """
          Create a Swift class that implements a thread-safe cache with:
          1. Generic key-value storage
@@ -81,17 +56,17 @@ struct CloudUsageExamples {
          3. LRU eviction policy
          4. Proper error handling
          """
-
+    
          return try await client.generate(
              model: CloudModels.qwenCoder,
              prompt: prompt,
              temperature: 0.2
          )
      }
-
+    
      static func performCodeAnalysis(code: String) async throws -> String {
          let client = OllamaClient(config: .cloudAdvanced)
-
+    
          let prompt = """
          Analyze this Swift code for:
          - Performance bottlenecks
@@ -99,11 +74,11 @@ struct CloudUsageExamples {
          - Memory leaks
          - Thread safety issues
          - Best practice violations
-
+    
          Code:
          \(code)
          """
-
+    
          return try await client.generate(
              model: CloudModels.deepseek,
              prompt: prompt,
@@ -111,10 +86,10 @@ struct CloudUsageExamples {
              maxTokens: 16384
          )
      }
-
+    
      static func generateDocumentation(code: String) async throws -> String {
          let client = OllamaClient(config: .cloudGeneral)
-
+    
          let prompt = """
          Generate comprehensive documentation for this Swift code:
          - Class/function overview
@@ -122,11 +97,11 @@ struct CloudUsageExamples {
          - Return value details
          - Usage examples
          - Important notes
-
+    
          Code:
          \(code)
          """
-
+    
          return try await client.generate(
              model: CloudModels.gptLarge,
              prompt: prompt,
@@ -142,7 +117,7 @@ struct CloudConnectivityTest {
     /*
      static func testConnection() async -> Bool {
          let client = OllamaClient(config: .cloudCoder)
-
+    
          do {
              let response = try await client.generate(
                  model: CloudModels.qwenCoder,
@@ -157,10 +132,10 @@ struct CloudConnectivityTest {
              return false
          }
      }
-
+    
      static func benchmarkCloudVsLocal() async {
          let prompt = "Write a Swift function to sort an array of integers"
-
+    
          // Test cloud model
          let cloudStart = Date()
          do {
@@ -174,7 +149,7 @@ struct CloudConnectivityTest {
          } catch {
              print("Cloud model failed: \(error.localizedDescription)")
          }
-
+    
          // Test local model
          let localStart = Date()
          do {

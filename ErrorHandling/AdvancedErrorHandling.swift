@@ -8,8 +8,8 @@
 
 import Combine
 import Foundation
-import os.log
 import SwiftUI
+import os.log
 
 // MARK: - Required Imports and Type Definitions
 
@@ -166,7 +166,7 @@ public struct AppError: AppErrorProtocol, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case errorId, severity, category, timestamp, userMessage, technicalDetails,
-             recoverySuggestions, shouldReport, isRecoverable
+            recoverySuggestions, shouldReport, isRecoverable
         case contextData
     }
 
@@ -282,8 +282,8 @@ public struct ValidationError: AppErrorProtocol, Sendable {
             "Validation failed for field '\(field)' with rule '\(validationRule)'"
         self.recoverySuggestions =
             recoverySuggestions.isEmpty
-                ? ["Please check the \(field) field and try again"]
-                : recoverySuggestions
+            ? ["Please check the \(field) field and try again"]
+            : recoverySuggestions
 
         var contextDict: [String: Any] = [
             "field": field,
@@ -385,11 +385,11 @@ public struct NetworkError: AppErrorProtocol, Sendable {
         // Generate technical details
         self.technicalDetails =
             technicalDetails
-                ?? NetworkError.generateTechnicalDetails(
-                    statusCode: statusCode,
-                    endpoint: endpoint,
-                    httpMethod: httpMethod
-                )
+            ?? NetworkError.generateTechnicalDetails(
+                statusCode: statusCode,
+                endpoint: endpoint,
+                httpMethod: httpMethod
+            )
 
         // Generate recovery suggestions
         self.recoverySuggestions = NetworkError.generateRecoverySuggestions(statusCode: statusCode)
@@ -788,7 +788,8 @@ public final class ErrorHandlerManager: ObservableObject {
     // MARK: - Recovery Management
 
     /// Register a custom recovery strategy
-    public func registerRecoveryStrategy(_ strategy: RecoveryStrategy, for category: ErrorCategory) {
+    public func registerRecoveryStrategy(_ strategy: RecoveryStrategy, for category: ErrorCategory)
+    {
         if self.recoveryStrategies[category] == nil {
             self.recoveryStrategies[category] = []
         }
@@ -943,12 +944,12 @@ public final class ErrorHandlerManager: ObservableObject {
 
     private func collectSystemInfo() -> SystemInfo {
         SystemInfo(
-            platform: "iOS", // Would be determined at runtime
+            platform: "iOS",  // Would be determined at runtime
             version: "1.0.0",
-            device: "iPhone", // Would be determined at runtime
+            device: "iPhone",  // Would be determined at runtime
             memory: ProcessInfo.processInfo.physicalMemory,
-            diskSpace: 0, // Would be calculated
-            networkStatus: "Connected", // Would be determined
+            diskSpace: 0,  // Would be calculated
+            networkStatus: "Connected",  // Would be determined
             timestamp: Date()
         )
     }
@@ -1043,10 +1044,10 @@ public struct DebugErrorReporter: ErrorReporter {
     private let logger = Logger(subsystem: "QuantumWorkspace", category: "ErrorReporting")
 
     public func reportError(_ error: any AppErrorProtocol) async throws {
-        self.logger
-            .fault(
-                "ERROR: [\(error.category.displayName)] \(error.userMessage) | Technical: \(error.technicalDetails) | Context: \(error.context)"
-            )
+        self.logger.fault(
+            "ERROR: [\(error.category.displayName)] \(error.userMessage) | "
+                + "Technical: \(error.technicalDetails) | Context: \(error.context)"
+        )
     }
 }
 
@@ -1074,7 +1075,7 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
             return statusCode >= 500 || statusCode == 429 || statusCode == 408
         }
 
-        return true // Can retry connection failures
+        return true  // Can retry connection failures
     }
 
     public func attemptRecovery(_ error: any AppErrorProtocol) async throws -> RecoveryResult {
@@ -1084,10 +1085,10 @@ public struct NetworkRetryStrategy: RecoveryStrategy {
 
         // Simulate retry logic
         for attempt in 1...self.maxRetries {
-            try await Task.sleep(nanoseconds: UInt64(attempt * 1_000_000_000)) // Wait 1, 2, 3 seconds
+            try await Task.sleep(nanoseconds: UInt64(attempt * 1_000_000_000))  // Wait 1, 2, 3 seconds
 
             // In real implementation, would retry the network request
-            let simulatedSuccess = attempt == 2 // Succeed on second attempt
+            let simulatedSuccess = attempt == 2  // Succeed on second attempt
 
             if simulatedSuccess {
                 return RecoveryResult(
@@ -1193,8 +1194,8 @@ public struct SystemRestartStrategy: RecoveryStrategy {
 /// Error report structure for export
 public struct ErrorReport: Codable {
     public let generatedAt: Date
-    public let recentErrors: [AppError] // Simplified for Codable
-    public let criticalErrors: [AppError] // Simplified for Codable
+    public let recentErrors: [AppError]  // Simplified for Codable
+    public let criticalErrors: [AppError]  // Simplified for Codable
     public let globalState: GlobalErrorState
     public let systemInfo: SystemInfo
 }

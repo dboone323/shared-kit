@@ -41,7 +41,7 @@ public actor Intelligence {
 public struct ToolDescription: Sendable, Hashable {
     public let name: String
     public let description: String
-    public let vector: [Float]? // Pre-computed embedding
+    public let vector: [Float]?  // Pre-computed embedding
 
     public init(name: String, description: String, vector: [Float]? = nil) {
         self.name = name
@@ -52,7 +52,7 @@ public struct ToolDescription: Sendable, Hashable {
 
 @available(macOS 12.0, iOS 15.0, *)
 actor ToolRecommender {
-    private var historicalSuccess: [String: Double] = [:] // Simple exponential moving average of success
+    private var historicalSuccess: [String: Double] = [:]  // Simple exponential moving average of success
 
     /// Rank tools by hybrid score (Vector Similarity + Success Rate)
     func rank(tools: [ToolDescription], for task: String) -> [String] {
@@ -114,7 +114,7 @@ actor HealthPredictor {
     }
 
     private var latencyHistory: [String: [LatencySample]] = [:]
-    private let windowSize: TimeInterval = 300 // 5 minutes
+    private let windowSize: TimeInterval = 300  // 5 minutes
 
     func recordLatency(model: String, duration: TimeInterval) {
         let sample = LatencySample(timestamp: Date(), duration: duration)
@@ -181,7 +181,7 @@ actor SemanticCache {
 
     private var cache: [String: CacheEntry] = [:]
     private let maxEntries = 1000
-    private let similarityThreshold: Float = 0.9 // For semantic match
+    private let similarityThreshold: Float = 0.9  // For semantic match
 
     func set(_ result: String, for query: String, vector: [Float], ttl: TimeInterval = 300) {
         if cache.count >= maxEntries {
@@ -203,7 +203,7 @@ actor SemanticCache {
             cache[query] = CacheEntry(
                 result: entry.result,
                 vector: entry.vector,
-                lastAccessed: Date(), // Update access time for LRU
+                lastAccessed: Date(),  // Update access time for LRU
                 expiry: entry.expiry
             )
             return entry.result
@@ -212,12 +212,10 @@ actor SemanticCache {
         // 2. Semantic Match (Simulated)
         // Find most similar providing it's above threshold
         // Requires vector math import (simplified here)
-        for (_, entry) in cache {
-            if entry.expiry > Date() {
-                let sim = cosineSimilarity(v1: vector, v2: entry.vector)
-                if sim > similarityThreshold {
-                    return entry.result
-                }
+        for (_, entry) in cache where entry.expiry > Date() {
+            let sim = cosineSimilarity(v1: vector, v2: entry.vector)
+            if sim > similarityThreshold {
+                return entry.result
             }
         }
 

@@ -46,38 +46,41 @@ public struct NeumorphicButton<Label: View>: View {
     }
 
     public var body: some View {
-        Button(action: {
-            GestureAnimations.hapticFeedback(style: 0)
-            withAnimation(AnimationTiming.quick) {
-                self.isAnimating = true
-            }
+        Button(
+            action: {
+                GestureAnimations.hapticFeedback(style: 0)
+                withAnimation(AnimationTiming.quick) {
+                    self.isAnimating = true
+                }
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.action()
-                self.isAnimating = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.action()
+                    self.isAnimating = false
+                }
+            },
+            label: {
+                self.label
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(self.backgroundColor)
+                            .shadow(
+                                color: self.shadowColor,
+                                radius: self.isAnimating ? 2 : 8,
+                                x: self.isAnimating ? 1 : 4,
+                                y: self.isAnimating ? 1 : 4
+                            )
+                            .shadow(
+                                color: Color.white.opacity(0.8),
+                                radius: self.isAnimating ? 2 : 8,
+                                x: self.isAnimating ? -1 : -4,
+                                y: self.isAnimating ? -1 : -4
+                            )
+                    )
+                    .scaleEffect(self.isAnimating ? 0.95 : 1.0)
             }
-        }) {
-            self.label
-                .padding(.horizontal, 24)
-                .padding(.vertical, 12)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(self.backgroundColor)
-                        .shadow(
-                            color: self.shadowColor,
-                            radius: self.isAnimating ? 2 : 8,
-                            x: self.isAnimating ? 1 : 4,
-                            y: self.isAnimating ? 1 : 4
-                        )
-                        .shadow(
-                            color: Color.white.opacity(0.8),
-                            radius: self.isAnimating ? 2 : 8,
-                            x: self.isAnimating ? -1 : -4,
-                            y: self.isAnimating ? -1 : -4
-                        )
-                )
-                .scaleEffect(self.isAnimating ? 0.95 : 1.0)
-        }
+        )
         .buttonStyle(PlainButtonStyle())
         .animation(AnimationTiming.quick, value: self.isAnimating)
     }
@@ -101,25 +104,28 @@ public struct GlassButton<Label: View>: View {
     }
 
     public var body: some View {
-        Button(action: {
-            GestureAnimations.hapticFeedback(style: 0)
-            self.action()
-        }) {
-            self.label
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(self.backgroundColor)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                        )
-                )
-                .scaleEffect(self.isPressed ? 0.95 : 1.0)
-                .brightness(self.isPressed ? -0.1 : 0)
-        }
+        Button(
+            action: {
+                GestureAnimations.hapticFeedback(style: 0)
+                self.action()
+            },
+            label: {
+                self.label
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(self.backgroundColor)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                            )
+                    )
+                    .scaleEffect(self.isPressed ? 0.95 : 1.0)
+                    .brightness(self.isPressed ? -0.1 : 0)
+            }
+        )
         .buttonStyle(PlainButtonStyle())
         .onLongPressGesture(
             minimumDuration: 0, maximumDistance: .infinity,
@@ -163,30 +169,33 @@ public struct FloatingActionButton: View {
                     .animation(AnimationTiming.easeOut, value: self.showRipple)
             }
 
-            Button(action: {
-                GestureAnimations.hapticFeedback(style: 1)
-                withAnimation(AnimationTiming.quick) {
-                    self.showRipple = true
-                }
+            Button(
+                action: {
+                    GestureAnimations.hapticFeedback(style: 1)
+                    withAnimation(AnimationTiming.quick) {
+                        self.showRipple = true
+                    }
 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.showRipple = false
-                }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.showRipple = false
+                    }
 
-                self.action()
-            }) {
-                self.icon
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                    .frame(width: self.size, height: self.size)
-                    .background(
-                        Circle()
-                            .fill(self.color)
-                            .shadow(color: self.color.opacity(0.3), radius: 8, x: 0, y: 4)
-                    )
-                    .scaleEffect(self.isPressed ? 0.9 : 1.0)
-            }
+                    self.action()
+                },
+                label: {
+                    self.icon
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(width: self.size, height: self.size)
+                        .background(
+                            Circle()
+                                .fill(self.color)
+                                .shadow(color: self.color.opacity(0.3), radius: 8, x: 0, y: 4)
+                        )
+                        .scaleEffect(self.isPressed ? 0.9 : 1.0)
+                }
+            )
             .buttonStyle(PlainButtonStyle())
             .onLongPressGesture(
                 minimumDuration: 0, maximumDistance: .infinity,
@@ -504,7 +513,7 @@ public struct RadialProgressIndicator: View {
                 self.animatedProgress = self.progress
             }
         }
-        .onChange(of: self.progress) { newProgress in
+        .onChange(of: self.progress) { _, newProgress in
             withAnimation(AnimationTiming.easeOut) {
                 self.animatedProgress = newProgress
             }
@@ -633,35 +642,38 @@ public struct InteractiveToggle: View {
     }
 
     public var body: some View {
-        Button(action: {
-            GestureAnimations.hapticFeedback(style: 0)
-            withAnimation(AnimationTiming.springBouncy) {
-                self.isOn.toggle()
-                self.isAnimating = true
-            }
+        Button(
+            action: {
+                GestureAnimations.hapticFeedback(style: 0)
+                withAnimation(AnimationTiming.springBouncy) {
+                    self.isOn.toggle()
+                    self.isAnimating = true
+                }
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.isAnimating = false
-            }
-        }) {
-            ZStack {
-                // Background
-                RoundedRectangle(cornerRadius: self.size.height / 2)
-                    .fill(self.isOn ? self.onColor : self.offColor)
-                    .frame(width: self.size.width, height: self.size.height)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self.isAnimating = false
+                }
+            },
+            label: {
+                ZStack {
+                    // Background
+                    RoundedRectangle(cornerRadius: self.size.height / 2)
+                        .fill(self.isOn ? self.onColor : self.offColor)
+                        .frame(width: self.size.width, height: self.size.height)
 
-                // Thumb
-                Circle()
-                    .fill(self.thumbColor)
-                    .frame(width: self.size.height - 4, height: self.size.height - 4)
-                    .shadow(color: Color.black.opacity(0.2), radius: 2, x: 0, y: 1)
-                    .scaleEffect(self.isAnimating ? 1.1 : 1.0)
-                    .offset(
-                        x: self.isOn
-                            ? (self.size.width - self.size.height) / 2
-                            : -(self.size.width - self.size.height) / 2)
+                    // Thumb
+                    Circle()
+                        .fill(self.thumbColor)
+                        .frame(width: self.size.height - 4, height: self.size.height - 4)
+                        .shadow(color: Color.black.opacity(0.2), radius: 2, x: 0, y: 1)
+                        .scaleEffect(self.isAnimating ? 1.1 : 1.0)
+                        .offset(
+                            x: self.isOn
+                                ? (self.size.width - self.size.height) / 2
+                                : -(self.size.width - self.size.height) / 2)
+                }
             }
-        }
+        )
         .buttonStyle(PlainButtonStyle())
     }
 }
@@ -692,24 +704,27 @@ public struct TabBarItem: View {
     }
 
     public var body: some View {
-        Button(action: {
-            GestureAnimations.hapticFeedback(style: 0)
-            self.action()
-        }) {
-            VStack(spacing: 4) {
-                (self.isSelected ? (self.selectedIcon ?? self.icon) : self.icon)
-                    .font(.system(size: 24))
-                    .foregroundColor(self.isSelected ? .primary : .secondary)
-                    .scaleEffect(self.isPressed ? 0.9 : (self.isSelected ? 1.1 : 1.0))
+        Button(
+            action: {
+                GestureAnimations.hapticFeedback(style: 0)
+                self.action()
+            },
+            label: {
+                VStack(spacing: 4) {
+                    (self.isSelected ? (self.selectedIcon ?? self.icon) : self.icon)
+                        .font(.system(size: 24))
+                        .foregroundColor(self.isSelected ? .primary : .secondary)
+                        .scaleEffect(self.isPressed ? 0.9 : (self.isSelected ? 1.1 : 1.0))
 
-                Text(self.title)
-                    .font(.caption)
-                    .fontWeight(self.isSelected ? .semibold : .regular)
-                    .foregroundColor(self.isSelected ? .primary : .secondary)
+                    Text(self.title)
+                        .font(.caption)
+                        .fontWeight(self.isSelected ? .semibold : .regular)
+                        .foregroundColor(self.isSelected ? .primary : .secondary)
+                }
+                .padding(.vertical, 8)
             }
-            .padding(.vertical, 8)
-            .frame(maxWidth: .infinity)
-        }
+        )
+        .frame(maxWidth: .infinity)
         .buttonStyle(PlainButtonStyle())
         .onLongPressGesture(
             minimumDuration: 0, maximumDistance: .infinity,

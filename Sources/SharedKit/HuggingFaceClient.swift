@@ -2,10 +2,6 @@ import Foundation
 import OSLog
 import SharedKitCore
 
-/// Enhanced Hugging Face API Client with Quantum Performance
-/// Provides access to Hugging Face's free inference API with advanced features
-/// Enhanced by AI System v2.1 on 9/12/25
-
 // MARK: - Enhanced Error Types
 
 public enum HuggingFaceError: LocalizedError {
@@ -819,10 +815,16 @@ private class ResponseCache {
         return components.joined(separator: "|").hashValue.description
     }
 
-    func getStats() -> (hitRate: Double, totalRequests: Int, cacheSize: Int) {
+    struct CacheStats {
+        let hitRate: Double
+        let totalRequests: Int
+        let cacheSize: Int
+    }
+
+    func getStats() -> CacheStats {
         let totalRequests = hitCount + missCount
         let hitRate = totalRequests > 0 ? Double(hitCount) / Double(totalRequests) : 0.0
-        return (hitRate, totalRequests, cache.count)
+        return CacheStats(hitRate: hitRate, totalRequests: totalRequests, cacheSize: cache.count)
     }
 }
 

@@ -67,7 +67,10 @@ public struct ScaleTransitionAdvanced: ViewModifier {
     let toScale: CGFloat
     let anchor: UnitPoint
 
-    public init(isPresented: Bool, fromScale: CGFloat = 0.5, toScale: CGFloat = 1.0, anchor: UnitPoint = .center) {
+    public init(
+        isPresented: Bool, fromScale: CGFloat = 0.5, toScale: CGFloat = 1.0,
+        anchor: UnitPoint = .center
+    ) {
         self.isPresented = isPresented
         self.fromScale = fromScale
         self.toScale = toScale
@@ -111,7 +114,7 @@ public struct FlipTransition: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .rotation3DEffect(
-                .degrees(self.isPresented ? 0 : (self.axis == .horizontal ? 180 : 180)),
+                .degrees(self.isPresented ? 0 : 180),
                 axis: self.axis == .horizontal ? (x: 0, y: 1, z: 0) : (x: 1, y: 0, z: 0)
             )
             .opacity(self.isPresented ? 1 : 0)
@@ -131,7 +134,8 @@ public struct ElasticTransition: ViewModifier {
             .opacity(self.isPresented ? 1.0 : 0.0)
             .animation(
                 self.isPresented
-                    ? Animation.interpolatingSpring(mass: 1, stiffness: 50, damping: 5, initialVelocity: 10)
+                    ? Animation.interpolatingSpring(
+                        mass: 1, stiffness: 50, damping: 5, initialVelocity: 10)
                     : Animation.easeInOut(duration: 0.2),
                 value: self.isPresented
             )
@@ -151,7 +155,8 @@ public struct BounceTransition: ViewModifier {
             .opacity(self.isPresented ? 1.0 : 0.0)
             .animation(
                 self.isPresented
-                    ? Animation.interpolatingSpring(mass: 0.5, stiffness: 300, damping: 15, initialVelocity: 20)
+                    ? Animation.interpolatingSpring(
+                        mass: 0.5, stiffness: 300, damping: 15, initialVelocity: 20)
                     : Animation.easeIn(duration: 0.15),
                 value: self.isPresented
             )
@@ -212,12 +217,13 @@ private struct IrisShape: Shape {
         let radius = maxRadius * self.progress
 
         var path = Path()
-        path.addEllipse(in: CGRect(
-            x: centerPoint.x - radius,
-            y: centerPoint.y - radius,
-            width: radius * 2,
-            height: radius * 2
-        ))
+        path.addEllipse(
+            in: CGRect(
+                x: centerPoint.x - radius,
+                y: centerPoint.y - radius,
+                width: radius * 2,
+                height: radius * 2
+            ))
         return path
     }
 }
@@ -311,7 +317,7 @@ public struct LiquidTransition: ViewModifier {
                     self.animationProgress = self.isPresented ? 1.0 : 0.0
                 }
             }
-            .onChange(of: self.isPresented) { newValue in
+            .onChange(of: self.isPresented) { _, newValue in
                 withAnimation(AnimationTiming.easeInOut) {
                     self.animationProgress = newValue ? 1.0 : 0.0
                 }
@@ -345,8 +351,9 @@ private struct LiquidShape: Shape {
 
         for x in stride(from: 0, to: rect.width, by: 1) {
             let relativeX = x / rect.width
-            let waveY = sin((relativeX * frequency * CGFloat.pi * 2) + self.waveOffset) * waveHeight *
-                (1 - self.progress)
+            let waveY =
+                sin((relativeX * frequency * CGFloat.pi * 2) + self.waveOffset) * waveHeight
+                * (1 - self.progress)
             let y = rect.height - fillHeight + waveY
 
             if x == 0 {
@@ -382,7 +389,9 @@ public struct RippleTransition: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .clipShape(
-                RippleShape(progress: self.animationProgress, center: self.center, rippleCount: self.rippleCount)
+                RippleShape(
+                    progress: self.animationProgress, center: self.center,
+                    rippleCount: self.rippleCount)
             )
             .onAppear {
                 withAnimation(AnimationTiming.easeOut) {
@@ -424,12 +433,13 @@ private struct RippleShape: Shape {
             let rippleRadius = maxRadius * min(1, rippleProgress)
 
             if rippleRadius > 0 {
-                path.addEllipse(in: CGRect(
-                    x: centerPoint.x - rippleRadius,
-                    y: centerPoint.y - rippleRadius,
-                    width: rippleRadius * 2,
-                    height: rippleRadius * 2
-                ))
+                path.addEllipse(
+                    in: CGRect(
+                        x: centerPoint.x - rippleRadius,
+                        y: centerPoint.y - rippleRadius,
+                        width: rippleRadius * 2,
+                        height: rippleRadius * 2
+                    ))
             }
         }
 
@@ -466,7 +476,7 @@ public struct MorphTransition<StartShape: Shape, EndShape: Shape>: ViewModifier 
                     self.morphProgress = self.isPresented ? 1.0 : 0.0
                 }
             }
-            .onChange(of: self.isPresented) { newValue in
+            .onChange(of: self.isPresented) { _, newValue in
                 withAnimation(AnimationTiming.easeInOut) {
                     self.morphProgress = newValue ? 1.0 : 0.0
                 }
@@ -516,7 +526,7 @@ public struct PageCurlTransition: ViewModifier {
                     self.curlProgress = self.isPresented ? 1.0 : 0.0
                 }
             }
-            .onChange(of: self.isPresented) { newValue in
+            .onChange(of: self.isPresented) { _, newValue in
                 withAnimation(AnimationTiming.easeInOut) {
                     self.curlProgress = newValue ? 1.0 : 0.0
                 }
@@ -601,17 +611,21 @@ public class TransitionManager: ObservableObject {
 
 // MARK: - View Extensions
 
-public extension View {
-    func customTransition(_ type: TransitionType, isPresented: Bool) -> some View {
+extension View {
+    public func customTransition(_ type: TransitionType, isPresented: Bool) -> some View {
         Group {
             switch type {
-            case let .slide(edge, distance):
-                self.modifier(SlideTransitionAdvanced(isPresented: isPresented, edge: edge, distance: distance))
-            case let .scale(from, to):
-                self.modifier(ScaleTransitionAdvanced(isPresented: isPresented, fromScale: from, toScale: to))
-            case let .rotate(degrees):
-                self.modifier(RotationTransitionAdvanced(isPresented: isPresented, degrees: degrees))
-            case let .flip(axis):
+            case .slide(let edge, let distance):
+                self.modifier(
+                    SlideTransitionAdvanced(
+                        isPresented: isPresented, edge: edge, distance: distance))
+            case .scale(let from, let to):
+                self.modifier(
+                    ScaleTransitionAdvanced(isPresented: isPresented, fromScale: from, toScale: to))
+            case .rotate(let degrees):
+                self.modifier(
+                    RotationTransitionAdvanced(isPresented: isPresented, degrees: degrees))
+            case .flip(let axis):
                 self.modifier(FlipTransition(isPresented: isPresented, axis: axis))
             case .elastic:
                 self.modifier(ElasticTransition(isPresented: isPresented))
@@ -631,56 +645,64 @@ public extension View {
         }
     }
 
-    func slideTransitionAdvanced(isPresented: Bool, edge: Edge, distance: CGFloat = 300,
-                                 overshoot: CGFloat = 50) -> some View
-    {
-        modifier(SlideTransitionAdvanced(
-            isPresented: isPresented,
-            edge: edge,
-            distance: distance,
-            overshoot: overshoot
-        ))
+    public func slideTransitionAdvanced(
+        isPresented: Bool, edge: Edge, distance: CGFloat = 300,
+        overshoot: CGFloat = 50
+    ) -> some View {
+        modifier(
+            SlideTransitionAdvanced(
+                isPresented: isPresented,
+                edge: edge,
+                distance: distance,
+                overshoot: overshoot
+            ))
     }
 
-    func scaleTransitionAdvanced(
+    public func scaleTransitionAdvanced(
         isPresented: Bool,
         fromScale: CGFloat = 0.5,
         toScale: CGFloat = 1.0,
         anchor: UnitPoint = .center
     ) -> some View {
-        modifier(ScaleTransitionAdvanced(
-            isPresented: isPresented,
-            fromScale: fromScale,
-            toScale: toScale,
-            anchor: anchor
-        ))
+        modifier(
+            ScaleTransitionAdvanced(
+                isPresented: isPresented,
+                fromScale: fromScale,
+                toScale: toScale,
+                anchor: anchor
+            ))
     }
 
-    func flipTransition(isPresented: Bool, axis: FlipAxis = .horizontal) -> some View {
+    public func flipTransition(isPresented: Bool, axis: FlipAxis = .horizontal) -> some View {
         modifier(FlipTransition(isPresented: isPresented, axis: axis))
     }
 
-    func elasticTransition(isPresented: Bool) -> some View {
+    public func elasticTransition(isPresented: Bool) -> some View {
         modifier(ElasticTransition(isPresented: isPresented))
     }
 
-    func bounceTransition(isPresented: Bool) -> some View {
+    public func bounceTransition(isPresented: Bool) -> some View {
         modifier(BounceTransition(isPresented: isPresented))
     }
 
-    func irisTransition(isPresented: Bool, center: UnitPoint = .center) -> some View {
+    public func irisTransition(isPresented: Bool, center: UnitPoint = .center) -> some View {
         modifier(IrisTransition(isPresented: isPresented, center: center))
     }
 
-    func liquidTransition(isPresented: Bool) -> some View {
+    public func liquidTransition(isPresented: Bool) -> some View {
         modifier(LiquidTransition(isPresented: isPresented))
     }
 
-    func rippleTransition(isPresented: Bool, center: UnitPoint = .center, rippleCount: Int = 3) -> some View {
-        modifier(RippleTransition(isPresented: isPresented, center: center, rippleCount: rippleCount))
+    public func rippleTransition(
+        isPresented: Bool, center: UnitPoint = .center, rippleCount: Int = 3
+    ) -> some View {
+        modifier(
+            RippleTransition(isPresented: isPresented, center: center, rippleCount: rippleCount))
     }
 
-    func pageCurlTransition(isPresented: Bool, direction: CurlDirection = .topRight) -> some View {
+    public func pageCurlTransition(isPresented: Bool, direction: CurlDirection = .topRight)
+        -> some View
+    {
         modifier(PageCurlTransition(isPresented: isPresented, direction: direction))
     }
 }

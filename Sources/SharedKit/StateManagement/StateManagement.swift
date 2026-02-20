@@ -421,7 +421,6 @@ public protocol StateSynchronizable {
 
 // MARK: - State Change Models
 
-/// Represents a state change event
 // MARK: - State Management Core
 
 public struct StateChange: Sendable {

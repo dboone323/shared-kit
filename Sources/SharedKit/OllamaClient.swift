@@ -131,10 +131,6 @@ private struct CloudFallbackPolicy {
     }
 }
 
-/// Enhanced Free AI Client for Ollama with Quantum Performance
-/// Zero-cost AI inference with advanced error handling, caching, and monitoring
-/// Enhanced by AI System v2.1 on 9/12/25
-
 // MARK: - Configuration
 
 // Shared type definitions such as `OllamaConfig` live in `OllamaTypes.swift`.
@@ -203,11 +199,10 @@ public class OllamaClient: ObservableObject {
     private func ensureModelAvailable(_ model: String) async throws {
         if !self.availableModels.contains(model) {
             // Try fallback models
-            for fallback in self.config.fallbackModels {
-                if self.availableModels.contains(fallback) {
-                    // self.logger.warning("Model \(model) unavailable, using fallback: \(fallback)")
-                    return
-                }
+            for fallback in self.config.fallbackModels where self.availableModels.contains(fallback)
+            {
+                // self.logger.warning("Model \(model) unavailable, using fallback: \(fallback)")
+                return
             }
             throw OllamaError.modelNotAvailable(model)
         }

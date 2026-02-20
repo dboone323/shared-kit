@@ -105,9 +105,9 @@ actor InputValidator {
     }
 
     func sanitize(_ input: String) -> String {
-        // Basic sanitization: remove null bytes and control characters
+        // Basic SQL escape (use prepared statements effectively instead)
         input.replacingOccurrences(of: "\0", with: "")
-            .replacingOccurrences(of: "'", with: "''")  // Basic SQL escape (use prepared statements effectively instead)
+            .replacingOccurrences(of: "'", with: "''")
     }
 }
 

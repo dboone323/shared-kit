@@ -106,7 +106,7 @@ public final class CrossProjectIntegrator: ObservableObject {
             throw CrossProjectError.integrationNotActive
         }
 
-        do {
+        // Removed do
             // Gather insights from all connected projects
             var habitInsights: [HabitInsights] = []
             var financialInsights: BudgetInsights?
@@ -177,10 +177,8 @@ public final class CrossProjectIntegrator: ObservableObject {
                 ],
                 userId: userId
             )
-        } catch {
-            self.integrationHealth = .error(error)
-            throw error
-        }
+            )
+        // Error handling was removed because methods inside do not throw.
     }
 
     /// Export unified data across all projects
@@ -272,7 +270,8 @@ public final class CrossProjectIntegrator: ObservableObject {
         ]
 
         for project in availableProjects {
-            if await self.isProjectAvailable(project) {
+            let isAvailable = await self.isProjectAvailable(project)
+            if isAvailable {
                 self.connectedProjects.insert(project)
             }
         }
@@ -286,12 +285,13 @@ public final class CrossProjectIntegrator: ObservableObject {
 
     private func startIntegrationWorkflows() async {
         // Start periodic sync timer
-        self.integrationTimer = Timer.scheduledTimer(withTimeInterval: 600, repeats: true) {
-            [weak self] _ in
+        let timerBlock: @Sendable (Timer) -> Void = { [weak self] _ in
             Task { [weak self] in
                 await self?.performPeriodicSync()
             }
         }
+        self.integrationTimer = Timer.scheduledTimer(
+            withTimeInterval: 600, repeats: true, block: timerBlock)
 
         // Start real-time integration workflows
         await self.startRealTimeIntegration()

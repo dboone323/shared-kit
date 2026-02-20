@@ -15,6 +15,13 @@ import SharedKitCore
 
 /// Comprehensive security framework for the Quantum workspace
 public enum SecurityFramework {
+    /// Result of AES-GCM Encryption
+    public struct AESGCMEncryptionResult {
+        public let ciphertext: Data
+        public let nonce: Data
+        public let tag: Data
+    }
+
     // MARK: - Input Validation
 
     /// Input validation utilities
@@ -198,12 +205,11 @@ public enum SecurityFramework {
         }
 
         /// Encrypts data using AES-GCM
-        public static func encryptAESGCM(data: Data, key: Data) throws -> (
-            ciphertext: Data, nonce: Data, tag: Data
-        ) {
+        public static func encryptAESGCM(data: Data, key: Data) throws -> AESGCMEncryptionResult {
             let nonce = AES.GCM.Nonce()
             let sealedBox = try AES.GCM.seal(data, using: .init(data: key), nonce: nonce)
-            return (sealedBox.ciphertext, Data(nonce), sealedBox.tag)
+            return AESGCMEncryptionResult(
+                ciphertext: sealedBox.ciphertext, nonce: Data(nonce), tag: sealedBox.tag)
         }
 
         /// Decrypts data using AES-GCM
@@ -266,54 +272,50 @@ public enum SecurityFramework {
             // SQL Injection patterns
             if language.lowercased().contains("sql") || code.contains("SELECT") {
                 let sqlPatterns = ["'", "\"", ";", "--", "/*", "*/", "UNION", "DROP", "DELETE"]
-                for pattern in sqlPatterns {
-                    if code.contains(pattern) && !isInSafeContext(code, pattern: pattern) {
-                        vulnerabilities.append(
-                            Vulnerability(
-                                type: .sqlInjection,
-                                severity: .high,
-                                description: "Potential SQL injection vulnerability detected",
-                                line: findLineNumber(code: code, pattern: pattern),
-                                recommendation: "Use parameterized queries or prepared statements"
-                            ))
-                    }
+                for pattern in sqlPatterns
+                where code.contains(pattern) && !isInSafeContext(code, pattern: pattern) {
+                    vulnerabilities.append(
+                        Vulnerability(
+                            type: .sqlInjection,
+                            severity: .high,
+                            description: "Potential SQL injection vulnerability detected",
+                            line: findLineNumber(code: code, pattern: pattern),
+                            recommendation: "Use parameterized queries or prepared statements"
+                        ))
                 }
             }
 
             // XSS patterns for web languages
             if ["javascript", "html", "typescript"].contains(language.lowercased()) {
                 let xssPatterns = ["innerHTML", "outerHTML", "document.write", "eval("]
-                for pattern in xssPatterns {
-                    if code.contains(pattern) {
-                        vulnerabilities.append(
-                            Vulnerability(
-                                type: .xss,
-                                severity: .high,
-                                description: "Potential XSS vulnerability detected",
-                                line: findLineNumber(code: code, pattern: pattern),
-                                recommendation:
-                                    "Use safe DOM manipulation methods or sanitize input"
-                            ))
-                    }
+                for pattern in xssPatterns where code.contains(pattern) {
+                    vulnerabilities.append(
+                        Vulnerability(
+                            type: .xss,
+                            severity: .high,
+                            description: "Potential XSS vulnerability detected",
+                            line: findLineNumber(code: code, pattern: pattern),
+                            recommendation:
+                                "Use safe DOM manipulation methods or sanitize input"
+                        ))
                 }
             }
 
             // Hardcoded secrets
             let secretPatterns = ["password", "secret", "key", "token"]
-            for pattern in secretPatterns {
-                if code.lowercased().contains(pattern) && code.contains("\"")
-                    && !code.contains("//")
-                {  // Ignore comments
-                    vulnerabilities.append(
-                        Vulnerability(
-                            type: .hardcodedSecret,
-                            severity: .critical,
-                            description: "Potential hardcoded secret detected",
-                            line: findLineNumber(code: code, pattern: pattern),
-                            recommendation:
-                                "Move secrets to environment variables or secure storage"
-                        ))
-                }
+            for pattern in secretPatterns
+            where code.lowercased().contains(pattern) && code.contains("\"") && !code.contains("//")
+            {
+                // Ignore comments
+                vulnerabilities.append(
+                    Vulnerability(
+                        type: .hardcodedSecret,
+                        severity: .critical,
+                        description: "Potential hardcoded secret detected",
+                        line: findLineNumber(code: code, pattern: pattern),
+                        recommendation:
+                            "Move secrets to environment variables or secure storage"
+                    ))
             }
 
             return vulnerabilities
@@ -322,22 +324,18 @@ public enum SecurityFramework {
         private static func isInSafeContext(_ code: String, pattern: String) -> Bool {
             // Simple heuristic - check if pattern is in a comment or safe context
             let lines = code.components(separatedBy: .newlines)
-            for line in lines {
-                if line.contains(pattern) {
-                    return line.trimmingCharacters(in: .whitespaces).hasPrefix("//")
-                        || line.trimmingCharacters(in: .whitespaces).hasPrefix("/*")
-                        || line.contains("preparedStatement") || line.contains("bindValue")
-                }
+            for line in lines where line.contains(pattern) {
+                return line.trimmingCharacters(in: .whitespaces).hasPrefix("//")
+                    || line.trimmingCharacters(in: .whitespaces).hasPrefix("/*")
+                    || line.contains("preparedStatement") || line.contains("bindValue")
             }
             return false
         }
 
         private static func findLineNumber(code: String, pattern: String) -> Int? {
             let lines = code.components(separatedBy: .newlines)
-            for (index, line) in lines.enumerated() {
-                if line.contains(pattern) {
-                    return index + 1
-                }
+            for (index, line) in lines.enumerated() where line.contains(pattern) {
+                return index + 1
             }
             return nil
         }

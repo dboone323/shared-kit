@@ -476,7 +476,8 @@ public final class EnhancedFinancialTransaction: Validatable, Trackable {
         }
 
         print(
-            "Tracking event: \(event) for transaction: \(self.transactionDescription) with parameters: \(eventParameters)"
+            "Tracking event: \(event) for transaction: "
+                + "\(self.transactionDescription) with parameters: \(eventParameters)"
         )
     }
 }

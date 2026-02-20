@@ -29,12 +29,14 @@ public struct APIClient {
         }
 
         session.dataTask(with: url) { data, response, error in
-            if let _ = error {
+            if error != nil {
                 completion(.failure(.requestFailed))
                 return
             }
 
-            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode)
+            else {
                 let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
                 completion(.failure(.serverError(statusCode: statusCode)))
                 return
