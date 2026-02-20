@@ -47,7 +47,6 @@ cyclomatic_complexity:
 
 force_cast: warning
 force_try: warning
-force_unwrapping: warning
 
 line_length:
   warning: 120
@@ -55,28 +54,6 @@ line_length:
   ignores_urls: true
   ignores_function_declarations: false
   ignores_comments: true
-
-identifier_name:
-  min_length:
-    warning: 2
-    error: 1
-  max_length:
-    warning: 40
-    error: 50
-  excluded:
-    - i
-    - j
-    - id
-    - x
-    - y
-    - z
-    - a
-    - b
-    - r
-    - g
-    - t
-    - l
-    - n
 
 included:
   - .
