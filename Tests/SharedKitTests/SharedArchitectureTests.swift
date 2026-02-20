@@ -38,7 +38,13 @@ final class MockViewModel: BaseViewModel {
             state.data = []
         case .setError(let message):
             state.errorMessage = message
+            errorMessage = message
         }
+    }
+
+    func resetError() {
+        errorMessage = nil
+        state.errorMessage = nil
     }
 }
 

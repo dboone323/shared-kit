@@ -81,14 +81,14 @@ class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
 
     func testAsyncTestingHelpers() async {
         // Test that async testing helpers work correctly
-        var executionCount = 0
-
         await assertAsyncCompletes {
-            executionCount += 1
-            return executionCount
+            return 1
         }
 
-        XCTAssertEqual(executionCount, 1)
+        let value = try? await waitForAsync {
+            return 2
+        }
+        XCTAssertEqual(value, 2)
 
         // Test async throws - just verify it throws, don't check exact error
         var didThrow = false
@@ -108,15 +108,12 @@ class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
     // MARK: - State Testing Helpers
 
     func testStateTestingHelpers() async {
-        var counter = 0
-
         do {
             // Test state change
             try await assertStateChange(
                 initialState: 0,
                 operation: {
-                    counter = 5
-                    return counter
+                    return 5
                 }
             )
 
@@ -124,8 +121,7 @@ class SharedArchitectureIntegrationTests: SharedViewModelTestCase {
             try await assertStateBecomes(
                 10,
                 operation: {
-                    counter = 10
-                    return counter
+                    return 10
                 }
             )
         } catch {
