@@ -1,48 +1,34 @@
-name: Auto-merge .github PRs
+name: Repository Maintenance
 
 on:
+  schedule:
+    - cron: "30 1 * * *"
   pull_request:
-    types:
-      - labeled
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
+    types: [labeled, opened, synchronize, reopened, ready_for_review]
 
 permissions:
+  issues: write
   pull-requests: write
   contents: write
 
 jobs:
+  stale:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: 'This issue is stale because it has been open 30 days with no activity.'
+          days-before-stale: 30
+          days-before-close: 7
+
   automerge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dboone323' && contains(github.event.pull_request.labels.*.name, 'github-actions')
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dboone323' && contains(github.event.pull_request.labels.*.name, 'github-actions')
     steps:
       - name: Automerge PR
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{secrets.GH_TOKEN}}
-
-
-name: "Close stale issues and PRs"
-on:
-  schedule:
-    - cron: "30 1 * * *"
-
-jobs:
-  stale:
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
-    steps:
-      - uses: actions/stale@v9
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          stale-issue-message: "This issue is stale because it has been open 60 days with no activity. Remove stale label or comment or this will be closed in 7 days."
-          stale-pr-message: "This PR is stale because it has been open 45 days with no activity. Remove stale label or comment or this will be closed in 7 days."
-          stale-issue-label: "no-issue-activity"
-          stale-pr-label: "no-pr-activity"
-          days-before-stale: 60
-          days-before-close: 7
