@@ -1,34 +1,15 @@
-## Description
+# Description
+Please include a summary of the changes and the related issue/context.
 
-Please include a short description of the change and why it's needed.
-
-## Type of Change
-
+## Type of change
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
-- [ ] Code refactoring
-- [ ] Performance improvement
-- [ ] Security enhancement
 
-## Checklist
-
-- [ ] I ran `pre-commit run --all-files` locally and fixed issues reported by the hooks
-- [ ] Tests added/updated where appropriate
-- [ ] Documentation updated if needed
-- [ ] No breaking changes introduced
-
-## Testing
-
-- [ ] All existing tests pass
-- [ ] New tests added for new functionality
-- [ ] Manual testing completed
-
-## Screenshots (if applicable)
-
-Add screenshots to help reviewers understand the changes.
-
-## Additional Notes
-
-Add any other context about the PR here.
+## Checklist:
+- [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
