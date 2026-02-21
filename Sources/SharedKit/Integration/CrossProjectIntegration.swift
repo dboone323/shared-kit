@@ -177,7 +177,6 @@ public final class CrossProjectIntegrator: ObservableObject {
                 ],
                 userId: userId
             )
-            )
         // Error handling was removed because methods inside do not throw.
     }
 

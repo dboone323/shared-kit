@@ -93,7 +93,7 @@ let package = Package(
         ),
         .testTarget(
             name: "SharedKitTests",
-            dependencies: ["SharedKit", "SharedTestSupport"],
+            dependencies: ["SharedKit", "SharedTestSupport", "SharedKitCore"],
             path: "Tests/SharedKitTests"
         ),
     ]

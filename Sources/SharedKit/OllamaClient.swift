@@ -198,6 +198,17 @@ public class OllamaClient: ObservableObject {
 
     private func ensureModelAvailable(_ model: String) async throws {
         if !self.availableModels.contains(model) {
+            // Refresh model inventory lazily to avoid races with async initialization.
+            if let refreshedModels = try? await listModels(), !refreshedModels.isEmpty {
+                self.availableModels = refreshedModels
+            } else if self.availableModels.isEmpty {
+                // If model discovery is temporarily unavailable, allow the direct generate call
+                // to determine real availability from server response.
+                return
+            }
+
+            guard !self.availableModels.contains(model) else { return }
+
             // Try fallback models
             for fallback in self.config.fallbackModels where self.availableModels.contains(fallback)
             {

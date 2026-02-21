@@ -743,25 +743,51 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
 
 // MARK: - Security Service Implementations (Mock for Testing)
 
-final class SecurityManager: Sendable {
+final class SecurityManager: @unchecked Sendable {
     static let shared = SecurityManager()
+
+    enum KeychainError: Error {
+        case itemNotFound(String)
+    }
+
+    private let lock = NSLock()
+    private var keychainStorage: [String: Data] = [:]
+
     private init() {}
 
-    func storeInKeychain(key _: String, data _: Data) throws {
-        // Mock implementation
+    func storeInKeychain(key: String, data: Data) throws {
+        lock.lock()
+        defer { lock.unlock() }
+        keychainStorage[key] = data
     }
 
-    func retrieveFromKeychain(key _: String) throws -> Data {
-        // Mock implementation
-        Data("test_value".utf8)
+    func retrieveFromKeychain(key: String) throws -> Data {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard let value = keychainStorage[key] else {
+            throw KeychainError.itemNotFound(key)
+        }
+        return value
     }
 
-    func updateKeychain(key _: String, data _: Data) throws {
-        // Mock implementation
+    func updateKeychain(key: String, data: Data) throws {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard keychainStorage[key] != nil else {
+            throw KeychainError.itemNotFound(key)
+        }
+        keychainStorage[key] = data
     }
 
-    func deleteFromKeychain(key _: String) throws {
-        // Mock implementation
+    func deleteFromKeychain(key: String) throws {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard keychainStorage.removeValue(forKey: key) != nil else {
+            throw KeychainError.itemNotFound(key)
+        }
     }
 
     func validateAndSanitizeInput(_: String) -> Bool {
