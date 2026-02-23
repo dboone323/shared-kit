@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.5
 
 # Build Stage
-FROM swift:6.0 AS builder
+FROM swift:6.2 AS builder
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ COPY . .
 RUN --mount=type=cache,target=/root/.swiftpm swift build -c release
 
 # Run Stage (Slim)
-FROM swift:6.0-slim
+FROM swift:6.2-slim
 
 WORKDIR /app
 
