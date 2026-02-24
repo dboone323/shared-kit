@@ -38,7 +38,7 @@ jobs:
 
             - name: Check for secrets using TruffleHog (PRs)
               if: github.event_name == 'pull_request'
-              uses: trufflesecurity/trufflehog@7c84b27f62ac973ec607dd480204f7d5e0be2926
+              uses: trufflesecurity/trufflehog@be889fa341b7a3b1c8d5fbd9e5c6ab378f417da8
               with:
                   path: ./
                   base: ${{ github.event.pull_request.base.sha }}
@@ -47,7 +47,7 @@ jobs:
 
             - name: Check for secrets using TruffleHog (Scheduled)
               if: github.event_name == 'schedule'
-              uses: trufflesecurity/trufflehog@7c84b27f62ac973ec607dd480204f7d5e0be2926
+              uses: trufflesecurity/trufflehog@be889fa341b7a3b1c8d5fbd9e5c6ab378f417da8
               with:
                   path: ./
                   extra_args: --debug --only-verified
