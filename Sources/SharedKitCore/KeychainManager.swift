@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(Security)
 import Security
 
 /// Secure Keychain Manager for handling sensitive data storage
@@ -107,3 +108,4 @@ public actor KeychainManager {
         }
     }
 }
+#endif
