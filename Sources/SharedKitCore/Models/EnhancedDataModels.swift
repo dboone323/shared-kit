@@ -8,8 +8,7 @@
 import Foundation
 
 #if canImport(SwiftData)
-    @_exported import SwiftData
-#endif
+import SwiftData
 
 // MARK: - Enhanced Habit Model
 
@@ -456,3 +455,5 @@ public final class HabitMilestone {
         self.achievedDate = Date()
     }
 }
+
+#endif

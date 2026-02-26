@@ -1,3 +1,4 @@
+#if canImport(SwiftData) || canImport(CloudKit) || canImport(OSLog) || canImport(SwiftUI)
 //
 //  EnhancedEducationSupport.swift
 //  SharedKitCore
@@ -192,3 +193,4 @@ public final class EnhancedEducationMetric {
         self.timestamp = Date()
     }
 }
+#endif

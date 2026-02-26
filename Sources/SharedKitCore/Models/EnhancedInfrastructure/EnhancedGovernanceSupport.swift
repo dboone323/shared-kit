@@ -1,3 +1,4 @@
+#if canImport(SwiftData) || canImport(CloudKit) || canImport(OSLog) || canImport(SwiftUI)
 //
 //  EnhancedGovernanceSupport.swift
 //  SharedKitCore
@@ -110,3 +111,4 @@ public final class EnhancedConsensusNetwork {
         self.regions = regions
     }
 }
+#endif

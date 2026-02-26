@@ -5,9 +5,10 @@
 //  Advanced planner data models with comprehensive features
 //
 
-import CloudKit
 import Foundation
+#if canImport(SwiftData) && canImport(CloudKit)
 import SwiftData
+import CloudKit
 
 // MARK: - Enhanced Task Model
 
@@ -1110,3 +1111,5 @@ public enum EmotionalTone: String, CaseIterable, Codable {
         rawValue.capitalized
     }
 }
+
+#endif

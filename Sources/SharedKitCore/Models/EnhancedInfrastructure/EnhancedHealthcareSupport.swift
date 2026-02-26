@@ -1,3 +1,4 @@
+#if canImport(SwiftData) || canImport(CloudKit) || canImport(OSLog) || canImport(SwiftUI)
 //
 //  EnhancedHealthcareSupport.swift
 //  Quantum-workspace
@@ -438,3 +439,4 @@ public final class EnhancedEnvironmentalMetric {
         self.isWithinRange = targetValue.map { abs(value - $0) / $0 <= 0.1 } ?? true
     }
 }
+#endif

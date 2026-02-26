@@ -1,3 +1,4 @@
+#if canImport(SwiftData) || canImport(CloudKit) || canImport(OSLog) || canImport(SwiftUI)
 //
 //  EnhancedQuantumSocialSystem.swift
 //  Quantum-workspace
@@ -463,3 +464,4 @@ public enum CommunityType: String, Codable, CaseIterable {
 public enum ConnectionType: String, Codable, CaseIterable {
     case friendship, familial, professional, educational, community
 }
+#endif

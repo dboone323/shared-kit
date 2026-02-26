@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(SwiftData)
 import SwiftData
 
 @Model
@@ -838,3 +839,5 @@ public final class TransactionAttachment {
         self.uploadDate = Date()
     }
 }
+
+#endif

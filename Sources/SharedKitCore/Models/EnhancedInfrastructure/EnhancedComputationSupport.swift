@@ -1,3 +1,4 @@
+#if canImport(SwiftData) || canImport(CloudKit) || canImport(OSLog) || canImport(SwiftUI)
 //
 //  EnhancedComputationSupport.swift
 //  SharedKitCore
@@ -102,3 +103,4 @@ public final class EnhancedInfrastructureMetric {
         self.timestamp = timestamp
     }
 }
+#endif

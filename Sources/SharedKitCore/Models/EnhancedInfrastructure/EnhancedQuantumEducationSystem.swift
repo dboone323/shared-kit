@@ -1,3 +1,4 @@
+#if canImport(SwiftData) || canImport(CloudKit) || canImport(OSLog) || canImport(SwiftUI)
 //
 //  EnhancedQuantumEducationSystem.swift
 //  Quantum-workspace
@@ -486,3 +487,4 @@ public final class EnhancedQuantumEducationSystem: Validatable, Trackable, Cross
 }
 
 // MARK: - Enhanced Quantum Healthcare System
+#endif

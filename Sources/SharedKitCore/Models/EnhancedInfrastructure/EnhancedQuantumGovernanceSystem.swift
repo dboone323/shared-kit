@@ -1,3 +1,4 @@
+#if canImport(SwiftData) || canImport(CloudKit) || canImport(OSLog) || canImport(SwiftUI)
 //
 //  EnhancedQuantumGovernanceSystem.swift
 //  Quantum-workspace
@@ -404,3 +405,4 @@ public final class EnhancedQuantumGovernanceSystem: Validatable, Trackable, Cros
 }
 
 // MARK: - Enhanced Universal Computation System
+#endif

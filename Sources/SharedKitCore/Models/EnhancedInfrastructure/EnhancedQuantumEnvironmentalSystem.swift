@@ -1,3 +1,4 @@
+#if canImport(SwiftData) || canImport(CloudKit) || canImport(OSLog) || canImport(SwiftUI)
 //
 //  EnhancedQuantumEnvironmentalSystem.swift
 //  Quantum-workspace
@@ -483,3 +484,4 @@ public final class EnhancedQuantumEnvironmentalSystem: Validatable, Trackable, C
 }
 
 // MARK: - Enhanced Quantum Social System
+#endif

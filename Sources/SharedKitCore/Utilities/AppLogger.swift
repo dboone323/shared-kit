@@ -1,6 +1,8 @@
 // Compatibility wrapper to match CodingReviewer AppLogger API.
 import Foundation
+#if canImport(OSLog)
 import OSLog
+#endif
 
 /// Lightweight wrapper providing a shared instance to delegate to the static `Logger` API.
 final class AppLogger: @unchecked Sendable {
