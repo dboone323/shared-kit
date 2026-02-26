@@ -3,6 +3,9 @@ import Foundation
 #if canImport(SwiftUI)
     import SwiftUI
 #endif
+#if canImport(Combine)
+    import Combine
+#endif
 
 // MARK: - View Model Error Types
 
@@ -111,6 +114,7 @@ extension BaseViewModel {
 
 // MARK: - Enhanced Base View Model Classes
 
+#if canImport(Combine)
 /// Base class for list view models with standardized functionality
 @MainActor
 class BaseListViewModel<StateType, ActionType>: ObservableObject {
@@ -189,9 +193,11 @@ class BaseFormViewModel<StateType, ActionType>: ObservableObject {
         // Override in subclasses to reset form state
     }
 }
+#endif
 
 // MARK: - Performance Monitoring
 
+#if canImport(Combine)
 /// Shared performance monitoring for tasks
 @MainActor
 class TaskPerformanceMonitor: ObservableObject {
@@ -223,6 +229,7 @@ class TaskPerformanceMonitor: ObservableObject {
         return result
     }
 }
+#endif
 
 // MARK: - Storage Protocol
 
