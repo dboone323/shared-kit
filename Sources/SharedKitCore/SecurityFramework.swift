@@ -77,8 +77,7 @@ actor InputValidator {
         switch type {
         case .email:
             let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-            let predicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-            if !predicate.evaluate(with: input) {
+            if input.range(of: emailRegex, options: .regularExpression) == nil {
                 throw ValidationError.invalidEmail
             }
         case .url:
