@@ -20,6 +20,9 @@ import Foundation
         public init(subsystem: String, category: String) {
             self.subsystem = subsystem
             self.category = category
+        }
+    }
+
     public enum OSLogType {
         case `default`, info, debug, error, fault
     }
