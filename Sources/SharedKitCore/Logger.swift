@@ -62,23 +62,23 @@ import Foundation
 public enum SharedLogger {
     // MARK: - Core Logger Categories
 
-    static let ui = OSLog(
+    public static let ui = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "QuantumWorkspace",
         category: "UI"
     )
-    static let data = OSLog(
+    public static let data = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "QuantumWorkspace",
         category: "Data"
     )
-    static let business = OSLog(
+    public static let business = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "QuantumWorkspace",
         category: "Business"
     )
-    static let network = OSLog(
+    public static let network = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "QuantumWorkspace",
         category: "Network"
     )
-    static let performance = OSLog(
+    public static let performance = OSLog(
         subsystem: Bundle.main.bundleIdentifier ?? "QuantumWorkspace",
         category: "Performance"
     )
