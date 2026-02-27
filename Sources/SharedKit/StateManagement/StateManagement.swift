@@ -1,6 +1,8 @@
 import Combine
 import Foundation
 import SharedKitCore
+
+#if canImport(SwiftData) && canImport(Combine)
 import SwiftData
 import SwiftUI
 
@@ -1554,3 +1556,5 @@ public final class GlobalStateCoordinator: ObservableObject {
         }
     }
 }
+
+#endif

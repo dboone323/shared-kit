@@ -10,7 +10,6 @@ import Foundation
 
 #if canImport(SwiftData)
     @_exported import SwiftData
-#endif
 
 // MARK: - Dependency Injection Container
 
@@ -702,3 +701,5 @@ final class DefaultPlannerService: PlannerServiceProtocol {
         )
     }
 }
+
+#endif

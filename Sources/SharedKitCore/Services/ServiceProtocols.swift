@@ -10,7 +10,6 @@ import Foundation
 
 #if canImport(SwiftData)
     @_exported import SwiftData
-#endif
 
 // MARK: - Forward Declarations and Imports
 
@@ -1027,3 +1026,5 @@ public enum UnifiedRecommendationType: String, Codable, Sendable {
     case timeEnergyOptimization
     case crossProjectSynergy
 }
+
+#endif

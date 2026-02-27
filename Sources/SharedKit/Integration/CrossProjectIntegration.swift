@@ -9,6 +9,8 @@
 import Combine
 import Foundation
 import SharedKitCore
+
+#if canImport(SwiftData) && canImport(Combine)
 import SwiftUI
 
 // MARK: - Cross-Project Integration Core
@@ -1021,3 +1023,5 @@ public struct UnifiedExportData: Codable {
         self.rawData = rawData
     }
 }
+
+#endif
