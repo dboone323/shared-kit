@@ -1,3 +1,4 @@
+#if canImport(Combine)
 //
 //  IntegrationWorkflows.swift
 //  Cross-Project Integration Workflows
@@ -601,3 +602,5 @@ public struct PointSystem {
     public let actions: [String: Int]
     public let multipliers: [String: Double]
 }
+
+#endif

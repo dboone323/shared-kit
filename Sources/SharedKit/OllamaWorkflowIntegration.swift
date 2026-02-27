@@ -1,3 +1,4 @@
+#if canImport(Combine)
 //
 //  OllamaWorkflowIntegration.swift
 //  Quantum-workspace
@@ -809,3 +810,5 @@ public struct AnyEncodable: Encodable, @unchecked Sendable {
         try encode(encoder)
     }
 }
+
+#endif

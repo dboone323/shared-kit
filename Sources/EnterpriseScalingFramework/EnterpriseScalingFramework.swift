@@ -1,3 +1,4 @@
+#if canImport(Combine)
 //
 //  EnterpriseScalingFramework.swift
 //  Shared-Kit
@@ -604,3 +605,5 @@ extension ResourceSettings: Codable {}
 extension OveragePolicy: Codable {}
 extension ComplianceSettings: Codable {}
 extension ScalingSettings: Codable {}
+
+#endif

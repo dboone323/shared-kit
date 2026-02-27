@@ -1,3 +1,4 @@
+#if canImport(Combine)
 import Combine
 import Foundation
 
@@ -681,3 +682,5 @@ public struct ActivityRecord: Codable, Sendable {
     public let type: ActivityType
     public let timestamp: Date
 }
+
+#endif

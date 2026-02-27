@@ -1,3 +1,4 @@
+#if canImport(Combine)
 //
 // NetworkMonitor.swift
 // SharedKit
@@ -26,3 +27,5 @@ public class NetworkMonitor: ObservableObject {
         monitor.start(queue: queue)
     }
 }
+
+#endif

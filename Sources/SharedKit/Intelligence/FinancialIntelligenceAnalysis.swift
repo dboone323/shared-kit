@@ -1,3 +1,4 @@
+#if canImport(Combine)
 import Combine
 import Foundation
 import SwiftUI
@@ -477,3 +478,5 @@ public enum RiskLevel: String, Codable, Sendable {
     case high
     case extreme
 }
+
+#endif

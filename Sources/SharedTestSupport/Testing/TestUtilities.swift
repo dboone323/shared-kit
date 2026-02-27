@@ -1,3 +1,4 @@
+#if canImport(Combine)
 import Combine
 import SharedKit
 import SharedKitCore
@@ -499,3 +500,5 @@ enum UnitTestDataBuilder {
         )
     }
 }
+
+#endif

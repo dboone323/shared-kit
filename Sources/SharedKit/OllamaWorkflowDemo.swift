@@ -1,3 +1,4 @@
+#if canImport(Combine)
 //
 //  OllamaWorkflowDemo.swift
 //  Quantum-workspace
@@ -428,3 +429,5 @@ public enum OllamaWorkflowExamples {
         print(tests)
     }
 }
+
+#endif

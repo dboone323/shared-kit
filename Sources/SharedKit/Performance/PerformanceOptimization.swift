@@ -1,3 +1,4 @@
+#if canImport(Combine)
 import Combine
 import Foundation
 import Network
@@ -1140,3 +1141,5 @@ extension Notification.Name {
     public static let performanceBatteryModeChanged = Notification.Name(
         "PerformanceBatteryModeChanged")
 }
+
+#endif

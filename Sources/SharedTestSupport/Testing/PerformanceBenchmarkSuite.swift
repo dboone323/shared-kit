@@ -1,3 +1,4 @@
+#if canImport(Combine)
 import Combine
 import CoreML
 import Foundation
@@ -1182,3 +1183,5 @@ struct SystemMetrics {
     let frameRate: FrameRateMetrics
     let battery: (drainRate: Double, thermalImpact: String)
 }
+
+#endif

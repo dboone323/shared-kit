@@ -1,3 +1,4 @@
+#if canImport(Combine)
 import Combine
 import SwiftUI
 
@@ -782,3 +783,5 @@ extension View {
         }
     }
 }
+
+#endif

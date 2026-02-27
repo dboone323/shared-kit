@@ -1,3 +1,4 @@
+#if canImport(Combine)
 import Combine
 import SharedKit
 import XCTest
@@ -293,3 +294,5 @@ open class BaseViewModelTestCase<ViewModelType: BaseViewModel>: SharedViewModelT
         XCTAssertEqual(viewModel.errorMessage, expectedErrorMessage, file: file, line: line)
     }
 }
+
+#endif

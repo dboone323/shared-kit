@@ -1,3 +1,4 @@
+#if canImport(Combine)
 //
 //  OfflineSynchronizationFramework.swift
 //  Shared-Kit
@@ -516,3 +517,5 @@ extension SyncSettings: Codable {}
 extension QueueSettings: Codable {}
 extension NetworkSettings: Codable {}
 extension StorageSettings: Codable {}
+
+#endif

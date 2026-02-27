@@ -1,3 +1,4 @@
+#if canImport(Combine)
 import Combine
 import Foundation
 import SharedKit
@@ -851,4 +852,6 @@ import SwiftUI
             self.createdAt = createdAt
         }
     }
+#endif
+
 #endif

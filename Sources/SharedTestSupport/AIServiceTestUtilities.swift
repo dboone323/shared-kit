@@ -1,3 +1,4 @@
+#if canImport(Combine)
 import Combine
 import SharedKit
 import XCTest
@@ -350,3 +351,5 @@ extension SharedViewModelTestCase {
         )
     }
 }
+
+#endif
