@@ -1,3 +1,4 @@
+#if canImport(SwiftData)
 import Foundation
 import SwiftData
 
@@ -30,3 +31,5 @@ public class FinancialTransaction {
         self.isRecurring = isRecurring
     }
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if canImport(SwiftData)
 import Foundation
 import SharedKitCore
 import SwiftData
@@ -33,3 +34,5 @@ public class FinancialAccount {
         self.updatedAt = updatedAt
     }
 }
+
+#endif
