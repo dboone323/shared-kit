@@ -2,7 +2,7 @@
 // Copyright © 2025 Quantum Workspace. All rights reserved.
 
 //
-//  Logger.swift
+//  SharedLogger.swift
 //  SharedKit
 //
 //  Created by Daniel Stevens
@@ -237,9 +237,9 @@ public struct PerformanceMeasurement {
     /// - Returns: <#description#>
     func end() {
         let timeElapsed = Date().timeIntervalSinceReferenceDate - self.startTime
-        Logger.logInfo(
+        SharedLogger.logInfo(
             "[PERFORMANCE] \(self.operation) completed in \(String(format: "%.4f", timeElapsed)) seconds",
-            category: Logger.performance
+            category: SharedLogger.performance
         )
     }
 }

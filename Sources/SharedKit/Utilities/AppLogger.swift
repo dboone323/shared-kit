@@ -21,12 +21,12 @@ final class AppLogger: @unchecked Sendable {
 
     private func osLog(for category: LogCategory) -> OSLog {
         switch category {
-        case .ui: Logger.ui
-        case .data: Logger.data
-        case .business: Logger.business
-        case .network: Logger.network
-        case .performance: Logger.performance
-        default: Logger.business
+        case .ui: SharedLogger.ui
+        case .data: SharedLogger.data
+        case .business: SharedLogger.business
+        case .network: SharedLogger.network
+        case .performance: SharedLogger.performance
+        default: SharedLogger.business
         }
     }
 
@@ -34,32 +34,32 @@ final class AppLogger: @unchecked Sendable {
         let oslog = self.osLog(for: category)
         switch level {
         case .debug:
-            Logger.logDebug(message, category: oslog)
+            SharedLogger.logDebug(message, category: oslog)
         case .info:
-            Logger.logInfo(message, category: oslog)
+            SharedLogger.logInfo(message, category: oslog)
         case .warning:
-            Logger.logWarning(message, category: oslog)
+            SharedLogger.logWarning(message, category: oslog)
         case .error:
-            Logger.logError(
+            SharedLogger.logError(
                 NSError(
                     domain: "AppLogger", code: 1, userInfo: [NSLocalizedDescriptionKey: message]
                 ),
                 context: ""
             )
         case .critical:
-            Logger.logWarning(message, category: oslog)
+            SharedLogger.logWarning(message, category: oslog)
         }
     }
 
     func debug(_ message: String) {
-        Logger.logDebug(message, category: Logger.ui)
+        SharedLogger.logDebug(message, category: SharedLogger.ui)
     }
 
     func logWarning(_ message: String) {
-        Logger.logWarning(message, category: Logger.business)
+        SharedLogger.logWarning(message, category: SharedLogger.business)
     }
 
     func logError(_ error: Error, context: String = "") {
-        Logger.logError(error, context: context)
+        SharedLogger.logError(error, context: context)
     }
 }

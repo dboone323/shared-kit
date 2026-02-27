@@ -2,7 +2,7 @@
 // Copyright © 2025 Quantum Workspace. All rights reserved.
 
 //
-//  Logger.swift
+//  SharedLogger.swift
 //  SharedKit
 //
 //  Created by Daniel Stevens
@@ -59,7 +59,7 @@ import Foundation
 
 /// Centralized logging system for Quantum Workspace applications
 /// Provides structured logging across different categories and severity levels
-public enum Logger {
+public enum SharedLogger {
     // MARK: - Core Logger Categories
 
     static let ui = OSLog(
@@ -91,7 +91,7 @@ public enum Logger {
 
 // MARK: - Core Logging Methods
 
-extension Logger {
+extension SharedLogger {
     /// Log error messages with context
     public static func logError(
         _ error: Error,
@@ -133,7 +133,7 @@ extension Logger {
 
 // MARK: - Business Logic Logging
 
-extension Logger {
+extension SharedLogger {
     /// Log business-related events and decisions
     public static func logBusiness(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
@@ -169,7 +169,7 @@ extension Logger {
 
 // MARK: - Performance Measurement
 
-extension Logger {
+extension SharedLogger {
     /// Measure and log execution time of a code block
     public static func measurePerformance<T>(_ operation: String, block: () throws -> T) rethrows
         -> T
@@ -194,7 +194,7 @@ extension Logger {
 
 // MARK: - Context-Aware Logging
 
-extension Logger {
+extension SharedLogger {
     /// Log with additional context information
     public static func logWithContext(
         _ message: String, context: [String: AnyCodable], category: OSLog = defaultLog,
@@ -214,7 +214,7 @@ extension Logger {
 
 // MARK: - File Logging Support
 
-extension Logger {
+extension SharedLogger {
     /// Write log to file for debugging purposes
     public static func writeToFile(_ message: String, fileName: String = "quantum_workspace.log") {
         #if DEBUG
@@ -252,9 +252,9 @@ public struct PerformanceMeasurement {
     /// - Returns: <#description#>
     func end() {
         let timeElapsed = Date().timeIntervalSinceReferenceDate - self.startTime
-        Logger.logInfo(
+        SharedLogger.logInfo(
             "[PERFORMANCE] \(self.operation) completed in \(String(format: "%.4f", timeElapsed)) seconds",
-            category: Logger.performance
+            category: SharedLogger.performance
         )
     }
 }
