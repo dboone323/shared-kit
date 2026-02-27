@@ -3,6 +3,7 @@
 // SharedKitTests
 //
 
+import SharedKitCore
 @testable import SharedKit
 import XCTest
 
