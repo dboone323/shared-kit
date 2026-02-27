@@ -206,7 +206,7 @@ public extension SecureLogger {
 public extension SecureLogger {
     /// Temporary compatibility method for gradual migration from print()
     /// Mark as deprecated to encourage proper usage
-    @available(*, deprecated, message: "Use SecureSharedLogger.debug/info/error instead")
+    @available(*, deprecated, message: "Use SecureLogger.debug/info/error instead")
     static func legacy(_ message: String) {
         #if DEBUG
             print("[LEGACY] \(message)")
@@ -218,18 +218,18 @@ public extension SecureLogger {
 
 /// Global logging functions for easier migration
 @available(macOS 11.0, iOS 14.0, *)
-public func logDebug(_ message: String, category: SecureSharedLogger.Category = .general) {
-    SecureSharedLogger.debug(message, category: category)
+public func logDebug(_ message: String, category: SecureLogger.Category = .general) {
+    SecureLogger.debug(message, category: category)
 }
 
 @available(macOS 11.0, iOS 14.0, *)
-public func logInfo(_ message: String, category: SecureSharedLogger.Category = .general) {
-    SecureSharedLogger.info(message, category: category)
+public func logInfo(_ message: String, category: SecureLogger.Category = .general) {
+    SecureLogger.info(message, category: category)
 }
 
 @available(macOS 11.0, iOS 14.0, *)
 public func logError(
-    _ message: String, category: SecureSharedLogger.Category = .general, error: Error? = nil
+    _ message: String, category: SecureLogger.Category = .general, error: Error? = nil
 ) {
-    SecureSharedLogger.error(message, category: category, error: error)
+    SecureLogger.error(message, category: category, error: error)
 }

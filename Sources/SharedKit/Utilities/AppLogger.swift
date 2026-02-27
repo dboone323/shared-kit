@@ -3,6 +3,7 @@ import Foundation
 #if canImport(OSLog)
 import OSLog
 #endif
+import SharedKitCore
 
 /// Lightweight wrapper providing a shared instance to delegate to the static `Logger` API.
 final class AppLogger: @unchecked Sendable {
