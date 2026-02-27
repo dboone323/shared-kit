@@ -14,6 +14,9 @@ import Crypto
 import Foundation
 #if canImport(Security)
 import Security
+#else
+public typealias OSStatus = Int32
+public let errSecSuccess: OSStatus = 0
 #endif
 import SharedKitCore
 
