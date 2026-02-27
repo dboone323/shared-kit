@@ -1,7 +1,9 @@
 #if canImport(Combine)
 import Combine
 import Foundation
+#if canImport(OSLog)
 import OSLog
+#endif
 
 // MARK: - Cloud Fallback Policy (Shared-Kit)
 
