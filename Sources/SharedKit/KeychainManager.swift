@@ -108,5 +108,25 @@ public actor KeychainManager {
         }
     }
 }
+#else
+import Foundation
+import SharedKitCore
 
+public actor KeychainManager {
+    public static let shared = KeychainManager()
+    private init() {}
+
+    public enum KeychainError: Error {
+        case itemNotFound
+        case duplicateItem
+        case unexpectedStatus(OSStatus)
+        case dataConversionError
+    }
+
+    public func save(_ string: String, service: String, account: String) throws {}
+    public func save(_ data: Data, service: String, account: String) throws {}
+    public func retrieveString(service: String, account: String) throws -> String { throw KeychainError.itemNotFound }
+    public func retrieveData(service: String, account: String) throws -> Data { throw KeychainError.itemNotFound }
+    public func delete(service: String, account: String) throws {}
+}
 #endif

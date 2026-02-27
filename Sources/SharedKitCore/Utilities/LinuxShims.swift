@@ -1,12 +1,13 @@
 import Foundation
 
-#if canImport(Combine)
-@_exported import Combine
-#else
-/// Minimal compatibility shims for Combine features used in the project.
-/// This file provides no-op implementations of ObservableObject and @Published
-/// when Combine is not available (e.g., on Linux with standard toolchains).
+#if !canImport(Security)
+public typealias OSStatus = Int32
+public let errSecSuccess: OSStatus = 0
+public let errSecDuplicateItem: OSStatus = -25299
+public let errSecItemNotFound: OSStatus = -25300
+#endif
 
+#if !canImport(Combine)
 public protocol ObservableObject: AnyObject {
     var objectWillChange: ObservableObjectPublisher { get }
 }
