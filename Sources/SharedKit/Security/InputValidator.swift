@@ -32,11 +32,9 @@ public enum InputValidator {
     /// Validate email format
     public static func validateEmail(_ email: String) throws {
         let emailRegex = #"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-
         try validateNotEmpty(email)
-
-        guard emailPredicate.evaluate(with: email) else {
+        guard let regex = try? NSRegularExpression(pattern: emailRegex, options: []),
+              regex.firstMatch(in: email, options: [], range: NSRange(location: 0, length: email.utf16.count)) != nil else {
             throw ValidationError.invalidEmail
         }
     }
@@ -61,15 +59,14 @@ public enum InputValidator {
     /// Validate phone number (basic international format)
     public static func validatePhoneNumber(_ phone: String) throws {
         let phoneRegex = #"^\+?[1-9]\d{1,14}$"#
-        let phonePredicate = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
-
         try validateNotEmpty(phone)
 
         // Remove common separators for validation
         let cleanPhone = phone.replacingOccurrences(
             of: "[\\s\\-\\(\\)]", with: "", options: .regularExpression)
 
-        guard phonePredicate.evaluate(with: cleanPhone) else {
+        guard let regex = try? NSRegularExpression(pattern: phoneRegex, options: []),
+              regex.firstMatch(in: cleanPhone, options: [], range: NSRange(location: 0, length: cleanPhone.utf16.count)) != nil else {
             throw ValidationError.invalidPhoneNumber
         }
     }
@@ -219,9 +216,8 @@ public enum InputValidator {
 
         // Check for valid username characters (alphanumeric, underscore, dash)
         let usernameRegex = #"^[a-zA-Z0-9_-]+$"#
-        let usernamePredicate = NSPredicate(format: "SELF MATCHES %@", usernameRegex)
-
-        guard usernamePredicate.evaluate(with: username) else {
+        guard let regex = try? NSRegularExpression(pattern: usernameRegex, options: []),
+              regex.firstMatch(in: username, options: [], range: NSRange(location: 0, length: username.utf16.count)) != nil else {
             throw
                 ValidationError
                 .invalidFormat(
