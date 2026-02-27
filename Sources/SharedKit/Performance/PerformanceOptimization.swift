@@ -73,6 +73,9 @@ public class PerformanceMonitor: ObservableObject {
     }
 
     private func getCurrentMemoryUsage() -> MemoryUsage {
+        #if os(Linux)
+        return MemoryUsage(used: 0, available: 0, percentage: 0)
+        #else
         var info = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
 
@@ -94,9 +97,13 @@ public class PerformanceMonitor: ObservableObject {
         }
 
         return MemoryUsage(used: 0, available: 0, percentage: 0)
+        #endif
     }
 
     private func getCurrentCPUUsage() -> CPUUsage {
+        #if os(Linux)
+        return CPUUsage(user: 0, system: 0, idle: 100, total: 0)
+        #else
         var info = processor_info_array_t(bitPattern: 0)
         var numCpuInfo: mach_msg_type_number_t = 0
         var numCpus: natural_t = 0
@@ -145,6 +152,7 @@ public class PerformanceMonitor: ObservableObject {
         }
 
         return CPUUsage(user: 0, system: 0, idle: 100, total: 0)
+        #endif
     }
 
     private func getCurrentBatteryLevel() -> BatteryStatus {
@@ -559,9 +567,11 @@ public class MemoryManager: ObservableObject {
         self.dataCache.removeAllObjects()
 
         // Force garbage collection
+        #if !os(Linux)
         autoreleasepool {
             // Perform any additional cleanup
         }
+        #endif
 
         Task { @MainActor in
             self.isOptimizing = false
@@ -787,6 +797,7 @@ public enum OptimizationLevel: String, Codable {
 
 // MARK: - Network Monitor
 
+#if canImport(Network)
 @MainActor
 public class NetworkMonitor: ObservableObject {
     public static let shared = NetworkMonitor()
@@ -912,6 +923,25 @@ public class NetworkMonitor: ObservableObject {
         }
     }
 }
+#else
+@MainActor
+public class NetworkMonitor: ObservableObject {
+    public static let shared = NetworkMonitor()
+
+    @Published public var currentStatus = NetworkStatus(
+        isConnected: true, connectionType: .wifi, bandwidth: 100
+    )
+    @Published public var isOptimizing = false
+
+    private init() {}
+
+    public func startMonitoring() {}
+    public func stopMonitoring() {}
+    public func shouldCompressData() -> Bool { false }
+    public func shouldCacheAggressively() -> Bool { false }
+    public func recommendedImageQuality() -> ImageQuality { .high }
+}
+#endif
 
 public enum ImageQuality: String, Codable {
     case low
