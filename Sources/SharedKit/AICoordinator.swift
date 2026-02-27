@@ -1,6 +1,9 @@
+#if canImport(Combine)
 import Combine
+#endif
 import Foundation
 
+#if canImport(Combine)
 @available(iOS 13.0, macOS 10.15, *)
 @MainActor
 public class AICoordinator {
@@ -10,6 +13,7 @@ public class AICoordinator {
 
     private init() {}
 }
+#endif
 
 public enum AIFeature: String, Hashable, Codable, Sendable {
     case predictiveText
