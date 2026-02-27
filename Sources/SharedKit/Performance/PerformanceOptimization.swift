@@ -459,6 +459,7 @@ public enum UsageLevel: String, Codable {
     case high
     case critical
 
+    #if canImport(SwiftUI)
     public var color: Color {
         switch self {
         case .low:
@@ -471,6 +472,7 @@ public enum UsageLevel: String, Codable {
             .red
         }
     }
+    #endif
 }
 
 public enum PerformanceLevel: String, Codable {
@@ -492,6 +494,7 @@ public enum PerformanceLevel: String, Codable {
         }
     }
 
+    #if canImport(SwiftUI)
     public var color: Color {
         switch self {
         case .excellent:
@@ -504,6 +507,7 @@ public enum PerformanceLevel: String, Codable {
             .red
         }
     }
+    #endif
 }
 
 // MARK: - Memory Manager
@@ -1142,6 +1146,7 @@ public enum BatteryMode: String, Codable {
         }
     }
 
+    #if canImport(SwiftUI)
     public var color: Color {
         switch self {
         case .normal:
@@ -1154,6 +1159,7 @@ public enum BatteryMode: String, Codable {
             .orange
         }
     }
+    #endif
 }
 
 public enum BatterySavingLevel {
