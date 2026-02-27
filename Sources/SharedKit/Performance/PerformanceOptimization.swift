@@ -556,10 +556,12 @@ public class MemoryManager: ObservableObject {
         #endif
     }
 
+    #if canImport(UIKit)
     @objc
     private func handleMemoryWarning() {
         self.performEmergencyCleanup()
     }
+    #endif
 
     // MARK: - Cleanup Operations
 
@@ -1014,15 +1016,19 @@ public class BatteryOptimizer: ObservableObject {
         #endif
     }
 
+    #if canImport(UIKit)
     @objc
     private func batteryLevelChanged() {
         self.updateBatteryOptimization()
     }
+    #endif
 
+    #if canImport(UIKit)
     @objc
     private func powerModeChanged() {
         self.updateBatteryOptimization()
     }
+    #endif
 
     private func updateBatteryOptimization() {
         let batteryStatus = PerformanceMonitor.shared.currentMetrics.batteryLevel
