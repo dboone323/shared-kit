@@ -159,9 +159,9 @@ extension Logger {
     public static func measurePerformance<T>(_ operation: String, block: () throws -> T) rethrows
         -> T
     {
-        let startTime = CFAbsoluteTimeGetCurrent()
+        let startTime = Date().timeIntervalSinceReferenceDate
         let result = try block()
-        let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
+        let timeElapsed = Date().timeIntervalSinceReferenceDate - startTime
 
         os_log(
             "[PERFORMANCE] %@ completed in %.4f seconds", log: self.performance, type: .info,
@@ -173,7 +173,7 @@ extension Logger {
 
     /// Start a performance measurement session
     public static func startPerformanceMeasurement(_ operation: String) -> PerformanceMeasurement {
-        PerformanceMeasurement(operation: operation, startTime: CFAbsoluteTimeGetCurrent())
+        PerformanceMeasurement(operation: operation, startTime: Date().timeIntervalSinceReferenceDate)
     }
 }
 
@@ -231,12 +231,12 @@ extension Logger {
 
 public struct PerformanceMeasurement {
     let operation: String
-    let startTime: CFAbsoluteTime
+    let startTime: TimeInterval
 
     /// <#Description#>
     /// - Returns: <#description#>
     func end() {
-        let timeElapsed = CFAbsoluteTimeGetCurrent() - self.startTime
+        let timeElapsed = Date().timeIntervalSinceReferenceDate - self.startTime
         Logger.logInfo(
             "[PERFORMANCE] \(self.operation) completed in \(String(format: "%.4f", timeElapsed)) seconds",
             category: Logger.performance
