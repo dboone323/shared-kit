@@ -11,7 +11,9 @@ import SharedKitCore
 
 #if canImport(SwiftData) && canImport(Combine)
 import Combine
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 
 // MARK: - Cross-Project Integration Core
 

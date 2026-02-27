@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 #if canImport(XCTest) && canImport(UIKit)
     import SwiftUI
     import UIKit
@@ -782,5 +783,7 @@
             }
         }
     }
+
+#endif
 
 #endif

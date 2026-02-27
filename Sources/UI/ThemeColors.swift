@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 //
 // ThemeColors.swift
 // SharedKit
@@ -17,3 +18,5 @@ public enum ThemeColors {
     public static let background = Color("Background", bundle: .module)
     public static let cardBackground = Color("CardBackground", bundle: .module)
 }
+
+#endif

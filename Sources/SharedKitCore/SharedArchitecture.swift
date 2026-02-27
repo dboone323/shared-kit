@@ -1,7 +1,9 @@
 import Foundation
 
 #if canImport(SwiftUI)
-    import SwiftUI
+    #if canImport(SwiftUI)
+import SwiftUI
+#endif
 #endif
 #if canImport(Combine)
     import Combine

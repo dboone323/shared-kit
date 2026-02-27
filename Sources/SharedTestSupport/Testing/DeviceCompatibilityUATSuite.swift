@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import Accessibility
 import Foundation
 import SwiftUI
@@ -514,3 +515,5 @@ actor DeviceCompatibilityCollector {
         results.append(result)
     }
 }
+
+#endif

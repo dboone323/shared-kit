@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import SwiftUI
 
 /// Shared color palette for consistent theming across all projects
@@ -184,3 +185,5 @@ extension Color {
         #endif
     }
 }
+
+#endif

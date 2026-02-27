@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import SwiftUI
 
 #if os(macOS)
@@ -816,3 +817,5 @@ extension View {
         }
     }
 }
+
+#endif

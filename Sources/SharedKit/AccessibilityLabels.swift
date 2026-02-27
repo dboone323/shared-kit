@@ -6,7 +6,9 @@
 //
 
 #if canImport(SwiftUI)
-    import SwiftUI
+    #if canImport(SwiftUI)
+import SwiftUI
+#endif
 
     // MARK: - Accessibility Helpers
 

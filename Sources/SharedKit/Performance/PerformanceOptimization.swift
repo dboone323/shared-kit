@@ -1,8 +1,12 @@
 #if canImport(Combine)
 import Combine
 import Foundation
+#if canImport(Network)
 import Network
+#endif
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 
 #if canImport(UIKit)
     import UIKit

@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 #if canImport(Combine)
 import Combine
 import SwiftUI
@@ -1205,5 +1206,7 @@ public struct PerformanceWidget: View {
         }
     }
 }
+
+#endif
 
 #endif

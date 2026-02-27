@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import SharedKit
 import SwiftUI
 
@@ -193,3 +194,5 @@ struct ActivityLog: Identifiable {
         }
     }
 }
+
+#endif

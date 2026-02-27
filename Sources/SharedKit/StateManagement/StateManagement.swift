@@ -3,7 +3,9 @@ import SharedKitCore
 
 #if canImport(SwiftData) && canImport(Combine)
 import SwiftData
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 import Combine
 
 // MARK: - Integration Types

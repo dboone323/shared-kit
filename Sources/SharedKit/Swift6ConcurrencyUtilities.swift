@@ -9,7 +9,9 @@
 import Foundation
 
 #if canImport(SwiftUI)
-    import SwiftUI
+    #if canImport(SwiftUI)
+import SwiftUI
+#endif
 #endif
 
 // MARK: - Actor Boundary Utilities

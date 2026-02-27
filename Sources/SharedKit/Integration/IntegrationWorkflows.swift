@@ -10,7 +10,9 @@
 import Combine
 import Foundation
 import SharedKitCore
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 
 // MARK: - Integration Workflow Manager
 

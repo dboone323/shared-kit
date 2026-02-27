@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 
 // MARK: - Performance Optimization Utilities
 
@@ -19,7 +21,7 @@ public final class PerformanceProfiler: @unchecked Sendable {
 
     public func startMeasuring(_ operation: String) -> UUID {
         let id = UUID()
-        let startTime = CFAbsoluteTimeGetCurrent()
+        let startTime = Date().timeIntervalSinceReferenceDate
 
         self.queue.async(flags: .barrier) {
             self.measurements["\(operation)_\(id.uuidString)_start"] = [startTime]
@@ -29,7 +31,7 @@ public final class PerformanceProfiler: @unchecked Sendable {
     }
 
     public func endMeasuring(_ operation: String, id: UUID) -> TimeInterval? {
-        let endTime = CFAbsoluteTimeGetCurrent()
+        let endTime = Date().timeIntervalSinceReferenceDate
         let key = "\(operation)_\(id.uuidString)_start"
 
         return self.queue.sync {
@@ -62,9 +64,9 @@ public final class PerformanceProfiler: @unchecked Sendable {
         _ operation: String,
         block: () throws -> T
     ) rethrows -> (result: T, duration: TimeInterval) {
-        let startTime = CFAbsoluteTimeGetCurrent()
+        let startTime = Date().timeIntervalSinceReferenceDate
         let result = try block()
-        let endTime = CFAbsoluteTimeGetCurrent()
+        let endTime = Date().timeIntervalSinceReferenceDate
         let duration = endTime - startTime
 
         self.queue.async(flags: .barrier) {
@@ -87,9 +89,9 @@ public final class PerformanceProfiler: @unchecked Sendable {
         _ operation: String,
         block: () async throws -> T
     ) async rethrows -> (result: T, duration: TimeInterval) {
-        let startTime = CFAbsoluteTimeGetCurrent()
+        let startTime = Date().timeIntervalSinceReferenceDate
         let result = try await block()
-        let endTime = CFAbsoluteTimeGetCurrent()
+        let endTime = Date().timeIntervalSinceReferenceDate
         let duration = endTime - startTime
 
         self.queue.async(flags: .barrier) {
@@ -166,12 +168,13 @@ public final class PerformanceProfiler: @unchecked Sendable {
 
 // MARK: - SwiftUI Performance Helpers
 
+#if canImport(SwiftUI)
 extension View {
     public func measureRenderTime(_ label: String) -> some View {
         onAppear {
-            let startTime = CFAbsoluteTimeGetCurrent()
+            let startTime = Date().timeIntervalSinceReferenceDate
             DispatchQueue.main.async {
-                let renderTime = CFAbsoluteTimeGetCurrent() - startTime
+                let renderTime = Date().timeIntervalSinceReferenceDate - startTime
                 print("[\(label)] Render time: \(renderTime * 1000)ms")
             }
         }
@@ -276,6 +279,7 @@ public enum DataOptimizer {
     }
 }
 
+#if canImport(SwiftUI)
 // MARK: - Animation Performance Helpers
 
 public struct PerformantAnimationModifier: ViewModifier {
@@ -314,6 +318,7 @@ extension Animation {
         }
     }
 }
+#endif
 
 // MARK: - Performance Testing Utilities
 
@@ -331,9 +336,9 @@ public class PerformanceTest {
         self.results.removeAll()
 
         for _ in 0..<self.iterations {
-            let startTime = CFAbsoluteTimeGetCurrent()
+            let startTime = Date().timeIntervalSinceReferenceDate
             try operation()
-            let endTime = CFAbsoluteTimeGetCurrent()
+            let endTime = Date().timeIntervalSinceReferenceDate
             self.results.append(endTime - startTime)
         }
 
@@ -349,9 +354,9 @@ public class PerformanceTest {
         self.results.removeAll()
 
         for _ in 0..<self.iterations {
-            let startTime = CFAbsoluteTimeGetCurrent()
+            let startTime = Date().timeIntervalSinceReferenceDate
             try await operation()
-            let endTime = CFAbsoluteTimeGetCurrent()
+            let endTime = Date().timeIntervalSinceReferenceDate
             self.results.append(endTime - startTime)
         }
 
@@ -410,6 +415,7 @@ public struct PerformanceTestResult {
     }
 }
 
+#if canImport(Combine)
 // MARK: - Background Task Manager
 
 @MainActor
@@ -436,11 +442,11 @@ public class BackgroundTaskManager: ObservableObject {
         let task = Task(priority: priority) {
             self.activeTasks.insert(identifier)
 
-            let startTime = CFAbsoluteTimeGetCurrent()
+            let startTime = Date().timeIntervalSinceReferenceDate
 
             do {
                 let result = try await operation()
-                let duration = CFAbsoluteTimeGetCurrent() - startTime
+                let duration = Date().timeIntervalSinceReferenceDate - startTime
 
                 self.taskResults[identifier] = TaskResult(
                     identifier: identifier,
@@ -452,7 +458,7 @@ public class BackgroundTaskManager: ObservableObject {
 
                 completion(.success(result))
             } catch {
-                let duration = CFAbsoluteTimeGetCurrent() - startTime
+                let duration = Date().timeIntervalSinceReferenceDate - startTime
 
                 self.taskResults[identifier] = TaskResult(
                     identifier: identifier,
@@ -539,6 +545,7 @@ public class BackgroundTaskManager: ObservableObject {
         }
     }
 }
+#endif
 
 // MARK: - Data Extensions for Performance
 

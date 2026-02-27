@@ -1,7 +1,9 @@
 #if canImport(Combine)
 import Combine
 import Foundation
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 
 // MARK: - Enhanced Financial Intelligence Analysis
 

@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import SwiftUI
 
 // MARK: - Custom Transition System
@@ -706,3 +707,5 @@ extension View {
         modifier(PageCurlTransition(isPresented: isPresented, direction: direction))
     }
 }
+
+#endif

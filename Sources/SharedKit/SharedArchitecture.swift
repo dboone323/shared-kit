@@ -2,7 +2,9 @@ import Foundation
 @_exported import SharedKitCore
 
 #if canImport(SwiftUI)
-    import SwiftUI
+    #if canImport(SwiftUI)
+import SwiftUI
+#endif
 #endif
 
 // MARK: - View Model Error Types

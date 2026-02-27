@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 //
 // PrimaryButton.swift
 // SharedKit
@@ -28,3 +29,5 @@ public struct PrimaryButton: View {
         }
     }
 }
+
+#endif

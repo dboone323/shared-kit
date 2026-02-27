@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import SharedKit
 import SwiftUI
 
@@ -189,3 +190,5 @@ struct PlatformFlagsItem: Identifiable {
         "\(key)=\(enabled ? "on" : "off")"
     }
 }
+
+#endif
