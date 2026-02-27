@@ -8,6 +8,8 @@
 
 #if canImport(CryptoKit)
 import CryptoKit
+#elseif canImport(Crypto)
+import Crypto
 #endif
 import Foundation
 #if canImport(Security)
@@ -195,7 +197,7 @@ public enum SecurityFramework {
     /// Cryptographic utilities
 #endif
 
-#if canImport(CryptoKit)
+#if canImport(CryptoKit) || canImport(Crypto)
     public enum Crypto {
         /// Hashes data using SHA-256
         public static func sha256(_ data: Data) -> Data {
@@ -475,6 +477,7 @@ public struct Vulnerability {
 
 // MARK: - Extensions
 
+#if canImport(CryptoKit) || canImport(Crypto)
 extension SHA256Digest {
     var data: Data {
         Data(self)
@@ -492,6 +495,7 @@ extension AES.GCM.Nonce {
         Data(self)
     }
 }
+#endif
 
 // MARK: - Logger (Simple implementation)
 
