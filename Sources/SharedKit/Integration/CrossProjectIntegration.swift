@@ -6,11 +6,11 @@
 //  Copyright © 2024 Quantum Workspace. All rights reserved.
 //
 
-import Combine
 import Foundation
 import SharedKitCore
 
 #if canImport(SwiftData) && canImport(Combine)
+import Combine
 import SwiftUI
 
 // MARK: - Cross-Project Integration Core
