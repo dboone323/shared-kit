@@ -407,11 +407,11 @@ public struct PerformanceTestResult {
         """
         Performance Test: \(self.name)
         Iterations: \(self.iterations)
-        Average: \(String(format: "%.3f", self.averageTime * 1000))ms
-        Median: \(String(format: "%.3f", self.medianTime * 1000))ms
-        Min: \(String(format: "%.3f", self.minTime * 1000))ms
-        Max: \(String(format: "%.3f", self.maxTime * 1000))ms
-        95th percentile: \(String(format: "%.3f", (self.percentile(95) ?? 0) * 1000))ms
+        Average: \(self.averageTime * 1000)ms
+        Median: \(self.medianTime * 1000)ms
+        Min: \(self.minTime * 1000)ms
+        Max: \(self.maxTime * 1000)ms
+        95th percentile: \((self.percentile(95) ?? 0) * 1000)ms
         """
     }
 }

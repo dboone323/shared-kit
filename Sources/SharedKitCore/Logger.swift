@@ -253,7 +253,7 @@ public struct PerformanceMeasurement {
     func end() {
         let timeElapsed = Date().timeIntervalSinceReferenceDate - self.startTime
         SharedLogger.logInfo(
-            "[PERFORMANCE] \(self.operation) completed in \(String(format: "%.4f", timeElapsed)) seconds",
+            "[PERFORMANCE] \(self.operation) completed in \(timeElapsed) seconds",
             category: SharedLogger.performance
         )
     }

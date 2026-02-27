@@ -102,7 +102,7 @@ public final class SecureLogger {
         _ operation: String, duration: TimeInterval, category: Category = .performance
     ) {
         logger(for: category).notice(
-            "⏱️ \(operation) completed in \(String(format: "%.3f", duration))s")
+            "⏱️ \(operation) completed in \(duration)s")
     }
 
     /// Log network request

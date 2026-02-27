@@ -9,9 +9,11 @@
 import Foundation
 
 #if canImport(SwiftUI)
-    #if canImport(SwiftUI)
 import SwiftUI
 #endif
+
+#if canImport(Observation)
+import Observation
 #endif
 
 // MARK: - Actor Boundary Utilities
@@ -42,6 +44,7 @@ public typealias SendableThrowingAsyncResultClosure<T: Sendable> = @Sendable () 
 
 // MARK: - Common Sendable Protocols
 
+#if canImport(Observation)
 /// Protocol for ViewModels that need to be used with @MainActor
 /// Reduces boilerplate of @MainActor @Observable ViewModel declarations
 @MainActor
@@ -49,6 +52,14 @@ public protocol MainActorViewModel: AnyObject, Observable {
     /// Common initialization for ViewModels
     init()
 }
+#else
+/// Protocol for ViewModels that need to be used with @MainActor
+@MainActor
+public protocol MainActorViewModel: AnyObject {
+    /// Common initialization for ViewModels
+    init()
+}
+#endif
 
 /// Base error type that is Sendable-compliant
 /// Use this as a base for custom errors to ensure Sendable conformance
