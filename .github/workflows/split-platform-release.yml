@@ -45,8 +45,8 @@ jobs:
             --file Dockerfile \
             --pull \
             --load \
-            --sbom=true \
-            --provenance=true \
+            --sbom=false \
+            --provenance=false \
             --tag "${IMAGE_TAG}" \
             .
           docker image inspect "${IMAGE_TAG}" > linux-image-metadata.json
