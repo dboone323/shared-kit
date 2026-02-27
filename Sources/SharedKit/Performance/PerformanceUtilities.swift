@@ -211,6 +211,7 @@ private struct PerformanceAwareModifier: ViewModifier {
             )
     }
 }
+#endif
 
 // MARK: - Image Optimization Utilities
 

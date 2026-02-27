@@ -1,3 +1,4 @@
+#if canImport(CryptoKit)
 import CryptoKit
 import Foundation
 
@@ -33,3 +34,4 @@ public actor EncryptedFileStore {
         return try AES.GCM.open(sealed, using: symmetricKey)
     }
 }
+#endif
