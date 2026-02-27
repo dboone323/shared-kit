@@ -1,5 +1,9 @@
+#if canImport(Combine) || os(Linux)
 #if canImport(Combine)
 import Combine
+#else
+import SharedKitCore
+#endif
 import Foundation
 #if canImport(OSLog)
 import OSLog
