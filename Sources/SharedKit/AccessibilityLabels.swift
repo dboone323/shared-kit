@@ -1,9 +1,6 @@
 //
-// AccessibilityLabels.swift
-// Shared accessibility utilities for all iOS projects.
-//
-// Step 27: Accessibility labels for all interactive elements.
-//
+import Foundation
+
 
 #if canImport(SwiftUI)
     #if canImport(SwiftUI)
