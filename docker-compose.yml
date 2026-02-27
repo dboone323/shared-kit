@@ -9,9 +9,9 @@ services:
       context: .
       dockerfile: Dockerfile
       cache_from:
-        - type: registry,ref=localhost:5000/shared-kit:buildcache
+        - "type=registry,ref=localhost:5000/shared-kit:buildcache"
       cache_to:
-        - type: registry,ref=localhost:5000/shared-kit:buildcache,mode=max
+        - "type=registry,ref=localhost:5000/shared-kit:buildcache,mode=max"
       args:
         - BUILDKIT_INLINE_CACHE=1
     image: shared-kit:latest
