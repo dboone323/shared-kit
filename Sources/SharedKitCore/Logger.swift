@@ -20,25 +20,37 @@ import Foundation
         public init(subsystem: String, category: String) {
             self.subsystem = subsystem
             self.category = category
-        }
-    }
-
     public enum OSLogType {
         case `default`, info, debug, error, fault
     }
 
+    public struct Logger: Sendable {
+        let subsystem: String
+        let category: String
+        public init(subsystem: String, category: String) {
+            self.subsystem = subsystem
+            self.category = category
+        }
+        public func info(_ message: String) {
+            print("[INFO] [\(category)] \(message)")
+        }
+        public func debug(_ message: String) {
+            print("[DEBUG] [\(category)] \(message)")
+        }
+        public func error(_ message: String) {
+            print("[ERROR] [\(category)] \(message)")
+        }
+        public func fault(_ message: String) {
+            print("[FAULT] [\(category)] \(message)")
+        }
+    }
+
     func os_log(_ message: String, log: OSLog, type: OSLogType, _ args: CVarArg...) {
-        let timestamp = DateFormatter.localizedString(
-            from: Date(), dateStyle: .none, timeStyle: .medium
-        )
-        print("[\(timestamp)] [\(log.category)] \(message)")
+        print("[\(log.category)] \(message)")
     }
 
     func os_log(_ message: StaticString, log: OSLog, type: OSLogType, _ args: CVarArg...) {
-        let timestamp = DateFormatter.localizedString(
-            from: Date(), dateStyle: .none, timeStyle: .medium
-        )
-        print("[\(timestamp)] [\(log.category)] \(message)")
+        print("[\(log.category)] \(message)")
     }
 #endif
 
