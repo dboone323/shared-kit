@@ -264,9 +264,11 @@ public enum DataOptimizer {
         let data = try encoder.encode(object)
 
         // Apply compression if beneficial
+        #if !os(Linux)
         if data.count > 1024, networkMonitor.shouldCompressData() {
             return try data.compressed()
         }
+        #endif
 
         return data
     }
@@ -550,6 +552,7 @@ public class BackgroundTaskManager: ObservableObject {
 
 // MARK: - Data Extensions for Performance
 
+#if !os(Linux)
 extension Data {
     func compressed() throws -> Data {
         try (self as NSData).compressed(using: .lzfse) as Data
@@ -559,6 +562,7 @@ extension Data {
         try (self as NSData).decompressed(using: .lzfse) as Data
     }
 }
+#endif
 
 // MARK: - UserDefaults Performance Optimization
 
@@ -576,6 +580,7 @@ extension UserDefaults {
 
         let decoder = JSONDecoder()
 
+        #if !os(Linux)
         // Try decompression first
         do {
             let decompressed = try data.decompressed()
@@ -584,5 +589,8 @@ extension UserDefaults {
             // Fall back to direct decoding
             return try decoder.decode(type, from: data)
         }
+        #else
+        return try decoder.decode(type, from: data)
+        #endif
     }
 }
