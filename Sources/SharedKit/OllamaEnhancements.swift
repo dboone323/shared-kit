@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Enhanced connection pool for Ollama models
 @available(macOS 11.0, iOS 14.0, *)

@@ -5,6 +5,9 @@ import Combine
 import SharedKitCore
 #endif
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 #if canImport(OSLog)
 import OSLog
 #endif
