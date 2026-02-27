@@ -6,9 +6,13 @@
 //  cryptographic operations, and vulnerability protection.
 //
 
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 import Foundation
+#if canImport(Security)
 import Security
+#endif
 import SharedKitCore
 
 // MARK: - Security Framework
@@ -121,6 +125,7 @@ public enum SecurityFramework {
     // MARK: - Secure Data Handling
 
     /// Secure data handling utilities
+#if canImport(Security)
     public enum DataSecurity {
         /// Securely stores sensitive data in Keychain
         public static func storeInKeychain(key: String, data: Data) throws {
@@ -188,6 +193,9 @@ public enum SecurityFramework {
     // MARK: - Cryptographic Operations
 
     /// Cryptographic utilities
+#endif
+
+#if canImport(CryptoKit)
     public enum Crypto {
         /// Hashes data using SHA-256
         public static func sha256(_ data: Data) -> Data {
@@ -225,6 +233,8 @@ public enum SecurityFramework {
     // MARK: - Security Monitoring
 
     /// Security monitoring and logging
+#endif
+
     public enum Monitoring {
         private static let logger = SecurityLogger(
             subsystem: "com.quantum.security", category: "SecurityFramework"

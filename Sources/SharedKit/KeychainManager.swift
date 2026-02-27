@@ -1,3 +1,4 @@
+#if canImport(Security)
 import Foundation
 import Security
 
@@ -107,3 +108,5 @@ public actor KeychainManager {
         }
     }
 }
+
+#endif

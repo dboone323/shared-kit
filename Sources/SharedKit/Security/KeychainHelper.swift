@@ -1,3 +1,4 @@
+#if canImport(Security)
 //
 //  KeychainHelper.swift
 //  Shared
@@ -225,3 +226,5 @@ extension KeychainHelper {
         return true
     }
 }
+
+#endif
