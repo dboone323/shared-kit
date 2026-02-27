@@ -241,15 +241,17 @@ protocol StorageService {
 
 enum ValidationUtilities {
     static func isValidEmail(_ email: String) -> Bool {
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: email)
+        let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}$"
+        guard let regex = try? NSRegularExpression(pattern: emailRegex) else { return false }
+        let range = NSRange(location: 0, length: email.utf16.count)
+        return regex.firstMatch(in: email, options: [], range: range) != nil
     }
 
     static func isValidCurrency(_ amount: String) -> Bool {
         let currencyRegex = "^\\d{1,10}(\\.\\d{1,2})?$"
-        let currencyPredicate = NSPredicate(format: "SELF MATCHES %@", currencyRegex)
-        return currencyPredicate.evaluate(with: amount)
+        guard let regex = try? NSRegularExpression(pattern: currencyRegex) else { return false }
+        let range = NSRange(location: 0, length: amount.utf16.count)
+        return regex.firstMatch(in: amount, options: [], range: range) != nil
     }
 
     static func isNotEmpty(_ text: String) -> Bool {
