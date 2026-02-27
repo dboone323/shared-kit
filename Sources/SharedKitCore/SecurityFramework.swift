@@ -15,7 +15,10 @@ public actor SecurityFramework {
 
     private let inputValidator = InputValidator()
     private let accessControl = AccessControl()
+    
+    #if canImport(CryptoKit)
     private let cryptoManager = CryptoManager()
+    #endif
 
     public init() {}
 
@@ -48,6 +51,7 @@ public actor SecurityFramework {
     }
 
     /// Step 46: Encrypt data (At Rest)
+    #if canImport(CryptoKit)
     public func encrypt(_ data: Data) async throws -> Data {
         try await cryptoManager.encrypt(data)
     }
@@ -56,6 +60,7 @@ public actor SecurityFramework {
     public func decrypt(_ data: Data) async throws -> Data {
         try await cryptoManager.decrypt(data)
     }
+    #endif
 }
 
 // MARK: - Step 43: Input Validation
@@ -164,6 +169,7 @@ actor AccessControl {
 
 // MARK: - Step 46-47: Encryption
 
+#if canImport(CryptoKit)
 public actor CryptoManager {
     public static let shared = CryptoManager()
 
@@ -198,3 +204,4 @@ public actor CryptoManager {
         return try AES.GCM.open(sealedBox, using: key)
     }
 }
+#endif
