@@ -1,7 +1,11 @@
 #if canImport(CryptoKit)
 import CryptoKit
+#elseif canImport(Crypto)
+import Crypto
+#endif
 import Foundation
 
+#if canImport(CryptoKit) || canImport(Crypto)
 public enum EncryptedFileStoreError: Error {
     case invalidCiphertext
     case missingData
