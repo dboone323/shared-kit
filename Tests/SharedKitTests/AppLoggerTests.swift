@@ -10,15 +10,15 @@ final class AppLoggerTests: XCTestCase {
     // MARK: - Shared Instance Tests
 
     func testSharedInstance() {
-        // Logger uses static methods, not a singleton pattern
-        Logger.logInfo("Test log entry")
-        XCTAssertTrue(true, "Logger static methods work correctly")
+        // SharedLogger uses static methods, not a singleton pattern
+        SharedLogger.logInfo("Test log entry")
+        XCTAssertTrue(true, "SharedLogger static methods work correctly")
     }
 
     func testSingletonPattern() {
-        // Logger is a static utility class
-        Logger.logDebug("Debug test")
-        Logger.logInfo("Info test")
+        // SharedLogger is a static utility class
+        SharedLogger.logDebug("Debug test")
+        SharedLogger.logInfo("Info test")
         XCTAssertTrue(true, "Multiple log calls work correctly")
     }
 

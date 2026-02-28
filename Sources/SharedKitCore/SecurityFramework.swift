@@ -177,6 +177,8 @@ public actor CryptoManager {
     private let serviceName = "com.habitquest.encryption"
     private let accountName = "primaryKey"
 
+    public init() {}
+
     private func getKey() async throws -> SymmetricKey {
         do {
             let keyData = try await keychain.retrieveData(

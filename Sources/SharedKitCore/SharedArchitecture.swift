@@ -81,11 +81,11 @@ public protocol BaseViewModel: AnyObject {
 }
 
 extension BaseViewModel {
-    func resetError() {
+    public func resetError() {
         errorMessage = nil
     }
 
-    func setLoading(_ loading: Bool) {
+    public func setLoading(_ loading: Bool) {
         isLoading = loading
     }
 
@@ -97,13 +97,13 @@ extension BaseViewModel {
         errorMessage = message
     }
 
-    func validateState() -> Bool {
+    public func validateState() -> Bool {
         // Default implementation - override in subclasses for specific validation
         true
     }
 
     /// Convenience method for synchronous actions
-    func handle(_ action: Action) {
+    public func handle(_ action: Action) {
         Task {
             await handle(action)
         }

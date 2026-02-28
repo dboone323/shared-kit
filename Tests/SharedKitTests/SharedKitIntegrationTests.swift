@@ -1,7 +1,6 @@
 import XCTest
 
 @testable import SharedKit
-@testable import SharedKitCore
 
 final class SharedKitIntegrationTests: XCTestCase {
     @MainActor

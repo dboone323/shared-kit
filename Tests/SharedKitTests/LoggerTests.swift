@@ -9,9 +9,9 @@ import XCTest
 
 final class LoggerTests: XCTestCase {
     func testLoggerSharedInstance() {
-        // Logger is a static utility class, not a singleton
-        Logger.logInfo("Test message")
-        XCTAssertTrue(true, "Logger should work via static methods")
+        // SharedLogger is a static utility class, not a singleton
+        SharedLogger.logInfo("Test message")
+        XCTAssertTrue(true, "SharedLogger should work via static methods")
     }
 
     func testLogLevelDebug() {
