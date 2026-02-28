@@ -48,10 +48,10 @@ public actor CircuitBreaker {
 
         do {
             let result = try await operation()
-            await recordSuccess()
+            recordSuccess()
             return result
         } catch {
-            await recordFailure()
+            recordFailure()
             throw error
         }
     }

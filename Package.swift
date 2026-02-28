@@ -84,6 +84,7 @@ let package = Package(
                 "UI/UI_UX_IMPLEMENTATION_GUIDE.md",
                 "Services/SERVICE_LAYER_INTEGRATION_GUIDE.md",
                 "StateManagement/STATE_MANAGEMENT_INTEGRATION_GUIDE.md",
+                "Integration/CROSS_PROJECT_INTEGRATION_GUIDE.md",
             ]
         ),
         .target(

@@ -17,7 +17,7 @@ import SwiftData
 /// Enhanced version of the Habit model with advanced features
 @Model
 public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable,
-    EnhancedHabitProtocol, @unchecked Sendable
+    EnhancedHabitProtocol
 {
     // Core Properties
     public var id: UUID

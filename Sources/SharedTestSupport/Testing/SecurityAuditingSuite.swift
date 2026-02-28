@@ -906,7 +906,7 @@ final class NetworkSecurityService: Sendable {
     private init() {}
 
     func transmitSecurely(
-        payload _: SecureDataPayload, completion: @escaping (Result<SecureResponse, Error>) -> Void
+        payload _: SecureDataPayload, completion: @escaping @Sendable (Result<SecureResponse, Error>) -> Void
     ) {
         // Mock implementation
         DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {

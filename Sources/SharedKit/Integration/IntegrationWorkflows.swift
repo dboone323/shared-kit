@@ -113,7 +113,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
 
     private func registerDefaultWorkflows() {
         // Register built-in workflows
-        let workflows = [
+        _ = [
             createHabitFinanceWorkflow(),
             createProductivityOptimizationWorkflow(),
             createWellnessIntegrationWorkflow(),
@@ -121,9 +121,7 @@ public final class IntegrationWorkflowManager: ObservableObject {
             createDataSyncWorkflow(),
         ]
 
-        for workflow in workflows {
-            // Store workflow templates for later use
-        }
+
     }
 
     private func executeWorkflow(_ workflow: IntegrationWorkflow) async throws

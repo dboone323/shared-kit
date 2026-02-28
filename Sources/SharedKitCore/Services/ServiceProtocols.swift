@@ -87,7 +87,7 @@ public struct ServiceValidationError: Sendable {
 
 // Forward declarations for enhanced model types
 // These would be properly imported in production
-public protocol EnhancedHabitProtocol: Validatable, Trackable, CrossProjectRelatable, Sendable {
+public protocol EnhancedHabitProtocol: Validatable, Trackable, CrossProjectRelatable {
     var id: UUID { get }
     var name: String { get set }
 }
@@ -101,7 +101,7 @@ public protocol EnhancedHabitLogProtocol: Validatable, Trackable {
     var notes: String? { get set }
 }
 
-public protocol HabitAchievementProtocol: Validatable, Trackable, Sendable {
+public protocol HabitAchievementProtocol: Validatable, Trackable {
     var id: UUID { get }
     var habitId: UUID { get set }
 }
@@ -518,7 +518,7 @@ public struct HabitInsights: Codable, Sendable {
 
 /// Habit recommendation model
 public struct HabitRecommendation: Codable, Sendable {
-    public let id: UUID = .init()
+    public var id: UUID = .init()
     public let title: String
     public let description: String
     public let category: HabitCategory
@@ -639,7 +639,7 @@ public struct NetWorthBreakdown: Codable, Sendable {
 
 /// Financial recommendation model
 public struct FinancialRecommendation: Codable, Sendable {
-    public let id: UUID = .init()
+    public var id: UUID = .init()
     public let type: RecommendationType
     public let title: String
     public let description: String
@@ -718,13 +718,13 @@ public enum TrendDirection: String, Codable, Sendable {
 
 /// Budget alert model
 public struct BudgetAlert: Codable, Sendable {
-    public let id: UUID = .init()
+    public var id: UUID = .init()
     public let type: AlertType
     public let severity: AlertSeverity
     public let message: String
     public let threshold: Double
     public let currentValue: Double
-    public let createdAt: Date = .init()
+    public var createdAt: Date = .init()
 
     public init(
         type: AlertType, severity: AlertSeverity, message: String, threshold: Double,
@@ -787,7 +787,7 @@ public struct GoalProgress: Codable, Sendable {
 
 /// Goal milestone model
 public struct GoalMilestone: Codable, Sendable {
-    public let id: UUID = .init()
+    public var id: UUID = .init()
     public let title: String
     public let targetValue: Double
     public let achieved: Bool
@@ -989,7 +989,7 @@ public struct CrossProjectCorrelation: Codable, Sendable {
 
 /// Unified recommendation model
 public struct UnifiedRecommendation: Codable, Sendable {
-    public let id: UUID = .init()
+    public var id: UUID = .init()
     public let type: UnifiedRecommendationType
     public let title: String
     public let description: String

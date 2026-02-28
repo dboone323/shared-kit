@@ -186,7 +186,7 @@ actor RequestDeduplicator {
                 // inherits priority but not actor context unless specified.
                 // It might be because we are inside the actor? No, Task escapes.
                 // Let's rely on Task to handle it, just call it.
-                Task { await self.remove(id: id) }
+                Task { self.remove(id: id) }
             }
             // Ensure operation result is Sendable to pass out of actor
             return try await operation()

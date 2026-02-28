@@ -248,7 +248,7 @@ public final class EnhancedTask: Validatable, Trackable, CrossProjectRelatable {
         // Update analytics
         self.completionStreak += 1
 
-        if let estimatedDuration {
+        if self.estimatedDuration != nil {
             self.actualDuration = self.timeSpentTotal
             self.updateAverageCompletionTime()
         }

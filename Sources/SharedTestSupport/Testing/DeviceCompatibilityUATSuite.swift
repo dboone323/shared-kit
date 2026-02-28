@@ -83,7 +83,7 @@ actor CompatibilityManager {
         Task {
             try? await Task.sleep(for: .seconds(Double.random(in: 2.0...4.0)))
             let baseScore = Double.random(in: 65...90)
-            let capabilityMultiplier = await self.getCapabilityMultiplier(capability)
+            let capabilityMultiplier = self.getCapabilityMultiplier(capability)
             let finalScore = min(100, baseScore * capabilityMultiplier)
 
             let result = DevicePerformanceTestResult(

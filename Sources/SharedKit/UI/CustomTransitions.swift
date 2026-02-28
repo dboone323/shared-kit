@@ -187,7 +187,7 @@ public struct IrisTransition: ViewModifier {
                     self.animationProgress = self.isPresented ? 1.0 : 0.0
                 }
             }
-            .onChange(of: self.isPresented) { newValue in
+            .onChange(of: self.isPresented) { _, newValue in
                 withAnimation(AnimationTiming.easeOut) {
                     self.animationProgress = newValue ? 1.0 : 0.0
                 }
@@ -250,7 +250,7 @@ public struct FanTransition: ViewModifier {
                     self.animationProgress = self.isPresented ? 1.0 : 0.0
                 }
             }
-            .onChange(of: self.isPresented) { newValue in
+            .onChange(of: self.isPresented) { _, newValue in
                 withAnimation(AnimationTiming.easeOut) {
                     self.animationProgress = newValue ? 1.0 : 0.0
                 }
@@ -399,7 +399,7 @@ public struct RippleTransition: ViewModifier {
                     self.animationProgress = self.isPresented ? 1.0 : 0.0
                 }
             }
-            .onChange(of: self.isPresented) { newValue in
+            .onChange(of: self.isPresented) { _, newValue in
                 withAnimation(AnimationTiming.easeOut) {
                     self.animationProgress = newValue ? 1.0 : 0.0
                 }
