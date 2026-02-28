@@ -36,6 +36,17 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+
+      - name: Fetch centralized Dockerfile
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository_owner }}/tools-automation.git ${RUNNER_TEMP}/tools-infra
+          cp ${RUNNER_TEMP}/tools-infra/docker/ecosystem/Dockerfile.shared-kit ./Dockerfile
+          if [ -f ${RUNNER_TEMP}/tools-infra/docker/ecosystem/docker-compose.shared-kit.yml ]; then
+            cp ${RUNNER_TEMP}/tools-infra/docker/ecosystem/docker-compose.shared-kit.yml ./docker-compose.yml
+          fi
       - name: Build Linux image
         env:
           IMAGE_TAG: ghcr.io/${{ github.repository }}:${{ github.sha }}
