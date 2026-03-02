@@ -69,7 +69,7 @@ jobs:
           tail -n 40 /tmp/compose.out || true
 
       - name: Upload Linux build metadata
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-build-metadata
           path: linux-image-metadata.json
@@ -102,7 +102,7 @@ jobs:
           fi
 
       - name: Upload package build index
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: package-build-index
           path: build-file-index.txt
@@ -148,7 +148,7 @@ jobs:
           cat release-manifest.json
 
       - name: Upload release manifest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-manifest
           path: release-manifest.json
