@@ -20,3 +20,10 @@ SharedKit is the foundational library for all AI agents and protocol standards i
 
 - No third-party dependencies unless explicitly listed in `Package.swift`.
 - Maintain 100% compatibility with Xcode 26.3 and Python 3.13 orchestration.
+
+## March 2026 Code Standards
+
+- **No Stubs/Mocks**: Do not use placeholders, mocks, or stubs in implementation or testing.
+- **Production Ready**: Every new line of code must be real, working, and production-ready.
+- **End-to-End Testing**: Use real working and tested code to verify behavior natively to avoid down-the-line problems.
+- **Modern Standards**: Adhere strictly to the latest ecosystem standards (Swift 6.2 concurrency, Python 3.13).
