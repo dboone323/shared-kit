@@ -147,7 +147,7 @@
     // MARK: - Enhanced Quantum Ollama Client
 
     @MainActor
-    public class OllamaClient: ObservableObject {
+    public class OllamaClient: ObservableObject, LanguageModelProvider {
         private let config: OllamaConfig
         private let session: URLSession
         // private let logger: os.Logger
@@ -510,6 +510,15 @@
             }
 
             return content.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        public func chat(
+            model: String,
+            messages: [ProviderMessage],
+            temperature: Double
+        ) async throws -> String {
+            let ollamaMessages = messages.map { OllamaMessage(role: $0.role, content: $0.content) }
+            return try await self.chat(model: model, messages: ollamaMessages, temperature: temperature)
         }
 
         public func chatStream(
