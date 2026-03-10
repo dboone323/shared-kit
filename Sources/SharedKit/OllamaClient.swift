@@ -1,721 +1,770 @@
 #if canImport(Combine) || os(Linux)
-#if canImport(Combine)
-import Combine
-#else
-import SharedKitCore
-#endif
-import Foundation
-#if canImport(FoundationNetworking)
-import FoundationNetworking
-#endif
-#if canImport(OSLog)
-import OSLog
-#endif
+    #if canImport(Combine)
+        import Combine
+    #else
+        import SharedKitCore
+    #endif
+    import Foundation
+    #if canImport(FoundationNetworking)
+        import FoundationNetworking
+    #endif
+    #if canImport(OSLog)
+        import OSLog
+    #endif
 
-// MARK: - Cloud Fallback Policy (Shared-Kit)
+    // MARK: - Cloud Fallback Policy (Shared-Kit)
 
-private struct CloudFallbackPolicy {
-    let configPath: String
-    let quotaTrackerPath: String
-    let escalationLogPath: String
+    private struct CloudFallbackPolicy {
+        let configPath: String
+        let quotaTrackerPath: String
+        let escalationLogPath: String
 
-    private(set) var enabled: Bool = false
-    private var config: [String: Any] = [:]
+        private(set) var enabled: Bool = false
+        private var config: [String: Any] = [:]
 
-    init(
-        configPath: String = "config/cloud_fallback_config.json",
-        quotaTrackerPath: String = "metrics/quota_tracker.json",
-        escalationLogPath: String = "logs/cloud_escalation_log.jsonl"
-    ) {
-        self.configPath = configPath
-        self.quotaTrackerPath = quotaTrackerPath
-        self.escalationLogPath = escalationLogPath
-        self.reload()
-    }
+        init(
+            configPath: String = "config/cloud_fallback_config.json",
+            quotaTrackerPath: String = "metrics/quota_tracker.json",
+            escalationLogPath: String = "logs/cloud_escalation_log.jsonl"
+        ) {
+            self.configPath = configPath
+            self.quotaTrackerPath = quotaTrackerPath
+            self.escalationLogPath = escalationLogPath
+            self.reload()
+        }
 
-    mutating func reload() {
-        guard let cfg = Self.readJSON(path: configPath) else { return }
-        self.config = cfg
-        self.enabled = true
-    }
+        mutating func reload() {
+            guard let cfg = Self.readJSON(path: configPath) else { return }
+            self.config = cfg
+            self.enabled = true
+        }
 
-    func allowed(priority: String) -> Bool {
-        guard enabled else { return true }
-        let allowed = config["allowed_priority_levels"] as? [String] ?? []
-        return allowed.contains(priority)
-    }
+        func allowed(priority: String) -> Bool {
+            guard enabled else { return true }
+            let allowed = config["allowed_priority_levels"] as? [String] ?? []
+            return allowed.contains(priority)
+        }
 
-    mutating func recordFailure(priority: String) {
-        guard enabled else { return }
-        var tracker = Self.readJSON(path: quotaTrackerPath) ?? [:]
-        var cb = (tracker["circuit_breaker"] as? [String: Any]) ?? [:]
-        var pcb =
-            (cb[priority] as? [String: Any]) ?? [
-                "state": "closed", "failure_count": 0, "last_failure": NSNull(),
-                "opened_at": NSNull(),
+        mutating func recordFailure(priority: String) {
+            guard enabled else { return }
+            var tracker = Self.readJSON(path: quotaTrackerPath) ?? [:]
+            var cb = (tracker["circuit_breaker"] as? [String: Any]) ?? [:]
+            var pcb =
+                (cb[priority] as? [String: Any]) ?? [
+                    "state": "closed", "failure_count": 0, "last_failure": NSNull(),
+                    "opened_at": NSNull(),
+                ]
+            let now = Self.iso8601Now()
+            let failures = ((pcb["failure_count"] as? Int) ?? 0) + 1
+            pcb["failure_count"] = failures
+            pcb["last_failure"] = now
+            let threshold =
+                ((config["circuit_breaker"] as? [String: Any])?["failure_threshold"] as? Int) ?? 3
+            if failures >= threshold {
+                pcb["state"] = "open"
+                pcb["opened_at"] = now
+            }
+            cb[priority] = pcb
+            tracker["circuit_breaker"] = cb
+            Self.writeJSON(path: quotaTrackerPath, object: tracker)
+        }
+
+        func checkCircuit(priority: String) -> Bool {
+            guard enabled else { return true }
+            guard let tracker = Self.readJSON(path: quotaTrackerPath),
+                  let cb = tracker["circuit_breaker"] as? [String: Any],
+                  let pcb = cb[priority] as? [String: Any]
+            else { return true }
+            let state = (pcb["state"] as? String) ?? "closed"
+            if state == "open" {
+                return false
+            }
+            return true
+        }
+
+        func checkQuota(priority: String) -> Bool {
+            guard enabled else { return true }
+            guard let tracker = Self.readJSON(path: quotaTrackerPath),
+                  let quotas = tracker["quotas"] as? [String: Any],
+                  let pq = quotas[priority] as? [String: Any]
+            else { return false }
+            let dailyUsed = (pq["daily_used"] as? Int) ?? 0
+            let hourlyUsed = (pq["hourly_used"] as? Int) ?? 0
+            let dailyLimit = (pq["daily_limit"] as? Int) ?? Int.max
+            let hourlyLimit = (pq["hourly_limit"] as? Int) ?? Int.max
+            return dailyUsed < dailyLimit && hourlyUsed < hourlyLimit
+        }
+
+        func logEscalation(
+            task: String, priority: String, reason: String, modelAttempted: String, provider: String
+        ) {
+            guard enabled else { return }
+            let now = Self.iso8601Now()
+            let line: [String: Any] = [
+                "timestamp": now,
+                "task": task,
+                "priority": priority,
+                "reason": reason,
+                "model_attempted": modelAttempted,
+                "cloud_provider": provider,
             ]
-        let now = Self.iso8601Now()
-        let failures = ((pcb["failure_count"] as? Int) ?? 0) + 1
-        pcb["failure_count"] = failures
-        pcb["last_failure"] = now
-        let threshold =
-            ((config["circuit_breaker"] as? [String: Any])?["failure_threshold"] as? Int) ?? 3
-        if failures >= threshold {
-            pcb["state"] = "open"
-            pcb["opened_at"] = now
-        }
-        cb[priority] = pcb
-        tracker["circuit_breaker"] = cb
-        Self.writeJSON(path: quotaTrackerPath, object: tracker)
-    }
-
-    func checkCircuit(priority: String) -> Bool {
-        guard enabled else { return true }
-        guard let tracker = Self.readJSON(path: quotaTrackerPath),
-            let cb = tracker["circuit_breaker"] as? [String: Any],
-            let pcb = cb[priority] as? [String: Any]
-        else { return true }
-        let state = (pcb["state"] as? String) ?? "closed"
-        if state == "open" {
-            return false
-        }
-        return true
-    }
-
-    func checkQuota(priority: String) -> Bool {
-        guard enabled else { return true }
-        guard let tracker = Self.readJSON(path: quotaTrackerPath),
-            let quotas = tracker["quotas"] as? [String: Any],
-            let pq = quotas[priority] as? [String: Any]
-        else { return false }
-        let dailyUsed = (pq["daily_used"] as? Int) ?? 0
-        let hourlyUsed = (pq["hourly_used"] as? Int) ?? 0
-        let dailyLimit = (pq["daily_limit"] as? Int) ?? Int.max
-        let hourlyLimit = (pq["hourly_limit"] as? Int) ?? Int.max
-        return dailyUsed < dailyLimit && hourlyUsed < hourlyLimit
-    }
-
-    func logEscalation(
-        task: String, priority: String, reason: String, modelAttempted: String, provider: String
-    ) {
-        guard enabled else { return }
-        let now = Self.iso8601Now()
-        let line: [String: Any] = [
-            "timestamp": now,
-            "task": task,
-            "priority": priority,
-            "reason": reason,
-            "model_attempted": modelAttempted,
-            "cloud_provider": provider,
-        ]
-        if let data = try? JSONSerialization.data(withJSONObject: line),
-            let s = String(data: data, encoding: .utf8)
-        {
-            if FileManager.default.fileExists(atPath: escalationLogPath) == false {
-                FileManager.default.createFile(atPath: escalationLogPath, contents: nil)
-            }
-            if let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: escalationLogPath)) {
-                h.seekToEndOfFile()
-                h.write(Data((s + "\n").utf8))
-                try? h.close()
-            }
-        }
-    }
-
-    private static func readJSON(path: String) -> [String: Any]? {
-        guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return nil }
-        return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
-    }
-
-    private static func writeJSON(path: String, object: [String: Any]) {
-        if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted])
-        {
-            try? data.write(to: URL(fileURLWithPath: path))
-        }
-    }
-
-    private static func iso8601Now() -> String {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime]
-        return f.string(from: Date())
-    }
-}
-
-// MARK: - Configuration
-
-// Shared type definitions such as `OllamaConfig` live in `OllamaTypes.swift`.
-
-// MARK: - Enhanced Quantum Ollama Client
-
-@MainActor
-public class OllamaClient: ObservableObject {
-    private let config: OllamaConfig
-    private let session: URLSession
-    // private let logger: os.Logger
-    private let cache: OllamaCache
-    private let metrics: OllamaMetrics
-    private var lastRequestTime: Date = .distantPast
-    private var policy = CloudFallbackPolicy()
-
-    @Published public var isConnected = false
-    @Published public var availableModels: [String] = []
-    @Published public var currentModel: String = ""
-    @Published public var serverStatus: OllamaServerStatus?
-
-    public init(config: OllamaConfig = .default, session: URLSession? = nil) {
-        self.config = config
-
-        if let session = session {
-            self.session = session
-        } else {
-            // Enhanced URLSession configuration
-            let configuration = URLSessionConfiguration.default
-            configuration.timeoutIntervalForRequest = config.timeout
-            configuration.timeoutIntervalForResource = config.timeout * 2
-            configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-            configuration.httpMaximumConnectionsPerHost = 4
-            self.session = URLSession(configuration: configuration)
-        }
-
-        // self.logger calls removed
-
-        // Cache and metrics
-        self.cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)
-        self.metrics = OllamaMetrics(enabled: config.enableMetrics)
-        self.currentModel = config.defaultModel
-
-        Task {
-            await self.initializeConnection()
-        }
-    }
-
-    // MARK: - Connection Management
-
-    private func initializeConnection() async {
-        do {
-            let serverRunning = await isServerRunning()
-            self.isConnected = serverRunning
-            if self.isConnected {
-                let models = try await listModels()
-                self.availableModels = models
-                self.serverStatus = await self.getServerStatus()
-                // self.logger.info("Connected to Ollama server with \(models.count) models")
-            }
-        } catch {
-            // self.logger.error("Failed to initialize connection: \(error.localizedDescription)")
-        }
-    }
-
-    private func ensureModelAvailable(_ model: String) async throws {
-        if !self.availableModels.contains(model) {
-            // Refresh model inventory lazily to avoid races with async initialization.
-            if let refreshedModels = try? await listModels(), !refreshedModels.isEmpty {
-                self.availableModels = refreshedModels
-            } else if self.availableModels.isEmpty {
-                // If model discovery is temporarily unavailable, allow the direct generate call
-                // to determine real availability from server response.
-                return
-            }
-
-            guard !self.availableModels.contains(model) else { return }
-
-            // Try fallback models
-            for fallback in self.config.fallbackModels where self.availableModels.contains(fallback)
+            if let data = try? JSONSerialization.data(withJSONObject: line),
+               let s = String(data: data, encoding: .utf8)
             {
-                // self.logger.warning("Model \(model) unavailable, using fallback: \(fallback)")
-                return
+                if FileManager.default.fileExists(atPath: escalationLogPath) == false {
+                    FileManager.default.createFile(atPath: escalationLogPath, contents: nil)
+                }
+                if let h = try? FileHandle(forWritingTo: URL(fileURLWithPath: escalationLogPath)) {
+                    h.seekToEndOfFile()
+                    h.write(Data((s + "\n").utf8))
+                    try? h.close()
+                }
             }
-            throw OllamaError.modelNotAvailable(model)
+        }
+
+        private static func readJSON(path: String) -> [String: Any]? {
+            guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return nil }
+            return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+        }
+
+        private static func writeJSON(path: String, object: [String: Any]) {
+            if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
+                try? data.write(to: URL(fileURLWithPath: path))
+            }
+        }
+
+        private static func iso8601Now() -> String {
+            let f = ISO8601DateFormatter()
+            f.formatOptions = [.withInternetDateTime]
+            return f.string(from: Date())
         }
     }
 
-    // MARK: - Cloud Model Utilities
+    // MARK: - Configuration
 
-    private func isCloudModel(_ model: String) -> Bool {
-        model.hasSuffix("-cloud") || model.contains(":") && model.hasSuffix("-cloud")
-    }
+    // Shared type definitions such as `OllamaConfig` live in `OllamaTypes.swift`.
 
-    private func getCloudModels() -> [String] {
-        [
-            "qwen3-coder:480b-cloud", "gpt-oss:120b-cloud", "gpt-oss:20b-cloud",
-            "deepseek-v3.1:671b-cloud",
-        ]
-    }
+    // MARK: - Enhanced Quantum Ollama Client
 
-    private func selectOptimalModel(_ preferredModel: String?) async throws -> String {
-        let targetModel = preferredModel ?? self.config.defaultModel
+    @MainActor
+    public class OllamaClient: ObservableObject {
+        private let config: OllamaConfig
+        private let session: URLSession
+        // private let logger: os.Logger
+        private let cache: OllamaCache
+        private let metrics: OllamaMetrics
+        private var lastRequestTime: Date = .distantPast
+        private var policy = CloudFallbackPolicy()
 
-        // If cloud models are enabled and preferred, try cloud models first
-        if self.config.enableCloudModels,
-            self.config.preferCloudModels || self.isCloudModel(targetModel)
-        {
-            if self.isCloudModel(targetModel) {
-                // Gate cloud by policy; default priority medium (shared-kit)
-                let priority = "medium"
-                if policy
-                    .enabled == false
-                    || (policy.allowed(priority: priority) && policy.checkQuota(priority: priority)
-                        && policy
+        @Published public var isConnected = false
+        @Published public var availableModels: [String] = []
+        @Published public var currentModel: String = ""
+        @Published public var serverStatus: OllamaServerStatus?
+
+        public init(config: OllamaConfig = .default, session: URLSession? = nil) {
+            self.config = config
+
+            if let session {
+                self.session = session
+            } else {
+                // Enhanced URLSession configuration
+                let configuration = URLSessionConfiguration.default
+                configuration.timeoutIntervalForRequest = config.timeout
+                configuration.timeoutIntervalForResource = config.timeout * 2
+                configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+                configuration.httpMaximumConnectionsPerHost = 4
+                self.session = URLSession(configuration: configuration)
+            }
+
+            // self.logger calls removed
+
+            // Cache and metrics
+            self.cache = OllamaCache(enabled: config.enableCaching, expiryTime: config.cacheExpiryTime)
+            self.metrics = OllamaMetrics(enabled: config.enableMetrics)
+            self.currentModel = config.defaultModel
+
+            Task {
+                await self.initializeConnection()
+            }
+        }
+
+        // MARK: - Connection Management
+
+        private func initializeConnection() async {
+            do {
+                let serverRunning = await isServerRunning()
+                self.isConnected = serverRunning
+                if self.isConnected {
+                    let models = try await listModels()
+                    self.availableModels = models
+                    self.serverStatus = await self.getServerStatus()
+                    // self.logger.info("Connected to Ollama server with \(models.count) models")
+                }
+            } catch {
+                // self.logger.error("Failed to initialize connection: \(error.localizedDescription)")
+            }
+        }
+
+        private func ensureModelAvailable(_ model: String) async throws {
+            if !self.availableModels.contains(model) {
+                // Refresh model inventory lazily to avoid races with async initialization.
+                if let refreshedModels = try? await listModels(), !refreshedModels.isEmpty {
+                    self.availableModels = refreshedModels
+                } else if self.availableModels.isEmpty {
+                    // If model discovery is temporarily unavailable, allow the direct generate call
+                    // to determine real availability from server response.
+                    return
+                }
+
+                guard !self.availableModels.contains(model) else { return }
+
+                // Try fallback models
+                for fallback in self.config.fallbackModels where self.availableModels.contains(fallback) {
+                    // self.logger.warning("Model \(model) unavailable, using fallback: \(fallback)")
+                    return
+                }
+                throw OllamaError.modelNotAvailable(model)
+            }
+        }
+
+        // MARK: - Cloud Model Utilities
+
+        private func isCloudModel(_ model: String) -> Bool {
+            model.hasSuffix("-cloud") || model.contains(":") && model.hasSuffix("-cloud")
+        }
+
+        private func getCloudModels() -> [String] {
+            [
+                "qwen3-coder:480b-cloud", "gpt-oss:120b-cloud", "gpt-oss:20b-cloud",
+                "deepseek-v3.1:671b-cloud",
+            ]
+        }
+
+        private func selectOptimalModel(_ preferredModel: String?) async throws -> String {
+            let targetModel = preferredModel ?? self.config.defaultModel
+
+            // If cloud models are enabled and preferred, try cloud models first
+            if self.config.enableCloudModels,
+               self.config.preferCloudModels || self.isCloudModel(targetModel)
+            {
+                if self.isCloudModel(targetModel) {
+                    // Gate cloud by policy; default priority medium (shared-kit)
+                    let priority = "medium"
+                    if policy
+                        .enabled == false
+                        || (policy.allowed(priority: priority) && policy.checkQuota(priority: priority)
+                            && policy
                             .checkCircuit(priority: priority))
-                {
-                    // Cloud disabled in config by default; log and fall back to local
+                    {
+                        // Cloud disabled in config by default; log and fall back to local
+                        policy.logEscalation(
+                            task: "sharedKit.generate",
+                            priority: priority,
+                            reason: "cloud_disabled_or_logged_only",
+                            modelAttempted: targetModel,
+                            provider: "ollama_cloud"
+                        )
+                        try await self.ensureModelAvailable(preferredModel ?? self.config.defaultModel)
+                        return preferredModel ?? self.config.defaultModel
+                    } else {
+                        // Not allowed by policy; log and use local
+                        policy.logEscalation(
+                            task: "sharedKit.generate",
+                            priority: priority,
+                            reason: "policy_blocked",
+                            modelAttempted: targetModel,
+                            provider: "ollama_cloud"
+                        )
+                        try await self.ensureModelAvailable(preferredModel ?? self.config.defaultModel)
+                        return preferredModel ?? self.config.defaultModel
+                    }
+                }
+
+                // Find best cloud alternative -> gate via policy and then prefer local
+                if self.getCloudModels().contains(targetModel + "-cloud") {
+                    let priority = "medium"
                     policy.logEscalation(
                         task: "sharedKit.generate",
                         priority: priority,
-                        reason: "cloud_disabled_or_logged_only",
-                        modelAttempted: targetModel,
+                        reason: "cloud_candidate_logged_only",
+                        modelAttempted: targetModel + "-cloud",
                         provider: "ollama_cloud"
                     )
-                    try await self.ensureModelAvailable(preferredModel ?? self.config.defaultModel)
-                    return preferredModel ?? self.config.defaultModel
-                } else {
-                    // Not allowed by policy; log and use local
-                    policy.logEscalation(
-                        task: "sharedKit.generate",
-                        priority: priority,
-                        reason: "policy_blocked",
-                        modelAttempted: targetModel,
-                        provider: "ollama_cloud"
-                    )
-                    try await self.ensureModelAvailable(preferredModel ?? self.config.defaultModel)
-                    return preferredModel ?? self.config.defaultModel
+                    try await self.ensureModelAvailable(targetModel)
+                    return targetModel
                 }
             }
 
-            // Find best cloud alternative -> gate via policy and then prefer local
-            if self.getCloudModels().contains(targetModel + "-cloud") {
-                let priority = "medium"
-                policy.logEscalation(
-                    task: "sharedKit.generate",
-                    priority: priority,
-                    reason: "cloud_candidate_logged_only",
-                    modelAttempted: targetModel + "-cloud",
-                    provider: "ollama_cloud"
+            // Check local availability or use fallbacks
+            try await self.ensureModelAvailable(targetModel)
+            return targetModel
+        }
+
+        // MARK: - Enhanced Generation Methods
+
+        public func generate(
+            model: String? = nil,
+            prompt: String,
+            temperature: Double? = nil,
+            maxTokens: Int? = nil,
+            useCache: Bool = true
+        ) async throws -> String {
+            let requestModel = try await selectOptimalModel(model)
+            let requestTemp = temperature ?? self.config.temperature
+            let requestMaxTokens = maxTokens ?? self.config.maxTokens
+
+            // Check cache first
+            if useCache, self.config.enableCaching {
+                let cacheKey = "\(requestModel):\(prompt.hashValue):\(requestTemp)"
+                if let cached = await cache.get(cacheKey) {
+                    self.metrics.recordCacheHit()
+                    return cached
+                }
+            }
+
+            // Apply rate limiting
+            await self.throttleRequest()
+
+            let startTime = Date()
+            let requestBody: [String: Any] = [
+                "model": requestModel,
+                "prompt": prompt,
+                "temperature": requestTemp,
+                "num_predict": requestMaxTokens,
+                "stream": false,
+            ]
+
+            do {
+                let response = try await performRequestWithRetry(
+                    endpoint: "api/generate", body: requestBody
                 )
-                try await self.ensureModelAvailable(targetModel)
-                return targetModel
+                guard let result = response["response"] as? String else {
+                    throw OllamaError.invalidResponseFormat
+                }
+
+                // Cache successful response
+                if useCache, self.config.enableCaching {
+                    let cacheKey = "\(requestModel):\(prompt.hashValue):\(requestTemp)"
+                    await self.cache.set(cacheKey, value: result)
+                }
+
+                // Record metrics
+                let duration = Date().timeIntervalSince(startTime)
+                self.metrics.recordRequest(
+                    model: requestModel, duration: duration, tokenCount: result.count / 4
+                )
+
+                return result
+            } catch {
+                // self.logger.error("API Error: \(error.localizedDescription)")
+                self.metrics.recordError(error: error)
+                throw error
             }
         }
 
-        // Check local availability or use fallbacks
-        try await self.ensureModelAvailable(targetModel)
-        return targetModel
-    }
+        public func generateWithProgress(
+            model: String? = nil,
+            prompt: String,
+            temperature: Double? = nil,
+            progressHandler: @escaping (String) -> Void
+        ) async throws -> String {
+            let requestModel = try await selectOptimalModel(model)
 
-    // MARK: - Enhanced Generation Methods
-
-    public func generate(
-        model: String? = nil,
-        prompt: String,
-        temperature: Double? = nil,
-        maxTokens: Int? = nil,
-        useCache: Bool = true
-    ) async throws -> String {
-        let requestModel = try await selectOptimalModel(model)
-        let requestTemp = temperature ?? self.config.temperature
-        let requestMaxTokens = maxTokens ?? self.config.maxTokens
-
-        // Check cache first
-        if useCache, self.config.enableCaching {
-            let cacheKey = "\(requestModel):\(prompt.hashValue):\(requestTemp)"
-            if let cached = await cache.get(cacheKey) {
-                self.metrics.recordCacheHit()
-                return cached
-            }
-        }
-
-        // Apply rate limiting
-        await self.throttleRequest()
-
-        let startTime = Date()
-        let requestBody: [String: Any] = [
-            "model": requestModel,
-            "prompt": prompt,
-            "temperature": requestTemp,
-            "num_predict": requestMaxTokens,
-            "stream": false,
-        ]
-
-        do {
-            let response = try await performRequestWithRetry(
-                endpoint: "api/generate", body: requestBody
+            // This would implement streaming generation
+            // For now, we'll simulate progress
+            progressHandler("Starting generation...")
+            let result = try await generate(
+                model: requestModel, prompt: prompt, temperature: temperature
             )
-            guard let result = response["response"] as? String else {
+            progressHandler("Generation complete")
+            return result
+        }
+
+        // MARK: - Quantum Chat Interface
+
+        public func quantumChat(
+            model: String,
+            messages: [OllamaMessage],
+            temperature: Double = 0.7,
+            contextOptimization: Bool = true
+        ) async throws -> String {
+            let optimizedMessages =
+                contextOptimization ? self.optimizeMessageContext(messages) : messages
+
+            let requestBody: [String: Any] = [
+                "model": model,
+                "messages": optimizedMessages.map { ["role": $0.role, "content": $0.content] },
+                "temperature": temperature,
+                "stream": false,
+                "options": [
+                    "num_ctx": 4096,
+                    "num_thread": ProcessInfo.processInfo.processorCount,
+                    "num_gpu": 1,
+                ],
+            ]
+
+            let response = try await performRequestWithRetry(endpoint: "api/chat", body: requestBody)
+
+            guard let message = response["message"] as? [String: Any],
+                  let content = message["content"] as? String
+            else {
                 throw OllamaError.invalidResponseFormat
             }
 
-            // Cache successful response
-            if useCache, self.config.enableCaching {
-                let cacheKey = "\(requestModel):\(prompt.hashValue):\(requestTemp)"
-                await self.cache.set(cacheKey, value: result)
+            return content.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        // MARK: - Private Helper Methods
+
+        private func throttleRequest() async {
+            let timeSinceLastRequest = Date().timeIntervalSince(self.lastRequestTime)
+            if timeSinceLastRequest < self.config.requestThrottleDelay {
+                let delay = self.config.requestThrottleDelay - timeSinceLastRequest
+                try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            }
+            self.lastRequestTime = Date()
+        }
+
+        private func performRequestWithRetry(endpoint: String, body: [String: Any]) async throws
+            -> [String: Any]
+        {
+            var lastError: Error?
+
+            for attempt in 0 ..< self.config.maxRetries {
+                do {
+                    return try await self.performRequest(endpoint: endpoint, body: body)
+                } catch {
+                    lastError = error
+                    if attempt < self.config.maxRetries - 1 {
+                        let delay = pow(2.0, Double(attempt)) // Exponential backoff
+                        try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                    }
+                }
             }
 
-            // Record metrics
-            let duration = Date().timeIntervalSince(startTime)
-            self.metrics.recordRequest(
-                model: requestModel, duration: duration, tokenCount: result.count / 4
-            )
-
-            return result
-        } catch {
-            // self.logger.error("API Error: \(error.localizedDescription)")
-            self.metrics.recordError(error: error)
-            throw error
-        }
-    }
-
-    public func generateWithProgress(
-        model: String? = nil,
-        prompt: String,
-        temperature: Double? = nil,
-        progressHandler: @escaping (String) -> Void
-    ) async throws -> String {
-        let requestModel = try await selectOptimalModel(model)
-
-        // This would implement streaming generation
-        // For now, we'll simulate progress
-        progressHandler("Starting generation...")
-        let result = try await generate(
-            model: requestModel, prompt: prompt, temperature: temperature
-        )
-        progressHandler("Generation complete")
-        return result
-    }
-
-    // MARK: - Quantum Chat Interface
-
-    public func quantumChat(
-        model: String,
-        messages: [OllamaMessage],
-        temperature: Double = 0.7,
-        contextOptimization: Bool = true
-    ) async throws -> String {
-        let optimizedMessages =
-            contextOptimization ? self.optimizeMessageContext(messages) : messages
-
-        let requestBody: [String: Any] = [
-            "model": model,
-            "messages": optimizedMessages.map { ["role": $0.role, "content": $0.content] },
-            "temperature": temperature,
-            "stream": false,
-            "options": [
-                "num_ctx": 4096,
-                "num_thread": ProcessInfo.processInfo.processorCount,
-                "num_gpu": 1,
-            ],
-        ]
-
-        let response = try await performRequestWithRetry(endpoint: "api/chat", body: requestBody)
-
-        guard let message = response["message"] as? [String: Any],
-            let content = message["content"] as? String
-        else {
-            throw OllamaError.invalidResponseFormat
+            // Record failure for circuit breaker (shared-kit default medium priority)
+            policy.recordFailure(priority: "medium")
+            throw lastError ?? OllamaError.maxRetriesExceeded
         }
 
-        return content.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
-    // MARK: - Private Helper Methods
-
-    private func throttleRequest() async {
-        let timeSinceLastRequest = Date().timeIntervalSince(self.lastRequestTime)
-        if timeSinceLastRequest < self.config.requestThrottleDelay {
-            let delay = self.config.requestThrottleDelay - timeSinceLastRequest
-            try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+        private func optimizeMessageContext(_ messages: [OllamaMessage]) -> [OllamaMessage] {
+            // Implement context window optimization
+            // For now, just return the last N messages to fit context window
+            let maxMessages = 10
+            return Array(messages.suffix(maxMessages))
         }
-        self.lastRequestTime = Date()
-    }
 
-    private func performRequestWithRetry(endpoint: String, body: [String: Any]) async throws
-        -> [String: Any]
-    {
-        var lastError: Error?
+        // MARK: - Core Generation Methods
 
-        for attempt in 0..<self.config.maxRetries {
-            do {
-                return try await self.performRequest(endpoint: endpoint, body: body)
-            } catch {
-                lastError = error
-                if attempt < self.config.maxRetries - 1 {
-                    let delay = pow(2.0, Double(attempt))  // Exponential backoff
-                    try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+        public func generateAdvanced(
+            model: String,
+            prompt: String,
+            system: String? = nil,
+            temperature: Double = 0.7,
+            topP: Double = 0.9,
+            topK: Int = 40,
+            maxTokens: Int = 500,
+            context: [Int]? = nil
+        ) async throws -> OllamaGenerateResponse {
+            var requestBody: [String: Any] = [
+                "model": model,
+                "prompt": prompt,
+                "temperature": temperature,
+                "top_p": topP,
+                "top_k": topK,
+                "num_predict": maxTokens,
+                "stream": false,
+            ]
+
+            if let system {
+                requestBody["system"] = system
+            }
+
+            if let context {
+                requestBody["context"] = context
+            }
+
+            let response = try await performRequest(endpoint: "api/generate", body: requestBody)
+            let data = try JSONSerialization.data(withJSONObject: response)
+            return try JSONDecoder().decode(OllamaGenerateResponse.self, from: data)
+        }
+
+        public func chat(
+            model: String,
+            messages: [OllamaMessage],
+            temperature: Double = 0.7
+        ) async throws -> String {
+            let requestBody: [String: Any] = [
+                "model": model,
+                "messages": messages.map { ["role": $0.role, "content": $0.content] },
+                "temperature": temperature,
+                "stream": false,
+            ]
+
+            let response = try await performRequest(endpoint: "api/chat", body: requestBody)
+
+            guard let message = response["message"] as? [String: Any],
+                  let content = message["content"] as? String
+            else {
+                throw OllamaError.invalidResponseFormat
+            }
+
+            return content.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        public func chatStream(
+            model: String,
+            messages: [OllamaMessage],
+            temperature: Double = 0.7
+        ) -> AsyncThrowingStream<String, Error> {
+            AsyncThrowingStream { continuation in
+                Task {
+                    do {
+                        let urlString = "\(config.baseURL)/api/chat"
+                        guard let url = URL(string: urlString) else {
+                            throw OllamaError.invalidURL
+                        }
+
+                        let requestBody: [String: Any] = [
+                            "model": model,
+                            "messages": messages.map { ["role": $0.role, "content": $0.content] },
+                            "temperature": temperature,
+                            "stream": true,
+                        ]
+
+                        var request = URLRequest(url: url)
+                        request.httpMethod = "POST"
+                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+
+                        let (bytes, response) = try await session.bytes(for: request)
+                        guard let httpResponse = response as? HTTPURLResponse,
+                              httpResponse.statusCode == 200
+                        else {
+                            throw OllamaError.invalidResponse
+                        }
+
+                        for try await line in bytes.lines {
+                            guard !line.isEmpty else { continue }
+                            if let data = line.data(using: .utf8),
+                               let chunk = try? JSONDecoder().decode(OllamaChatChunk.self, from: data),
+                               let content = chunk.message?.content
+                            {
+                                continuation.yield(content)
+                                if chunk.done {
+                                    break
+                                }
+                            }
+                        }
+                        continuation.finish()
+                    } catch {
+                        continuation.finish(throwing: error)
+                    }
                 }
             }
         }
 
-        // Record failure for circuit breaker (shared-kit default medium priority)
-        policy.recordFailure(priority: "medium")
-        throw lastError ?? OllamaError.maxRetriesExceeded
-    }
+        // MARK: - Model Management
 
-    private func optimizeMessageContext(_ messages: [OllamaMessage]) -> [OllamaMessage] {
-        // Implement context window optimization
-        // For now, just return the last N messages to fit context window
-        let maxMessages = 10
-        return Array(messages.suffix(maxMessages))
-    }
-
-    // MARK: - Core Generation Methods
-
-    public func generateAdvanced(
-        model: String,
-        prompt: String,
-        system: String? = nil,
-        temperature: Double = 0.7,
-        topP: Double = 0.9,
-        topK: Int = 40,
-        maxTokens: Int = 500,
-        context: [Int]? = nil
-    ) async throws -> OllamaGenerateResponse {
-        var requestBody: [String: Any] = [
-            "model": model,
-            "prompt": prompt,
-            "temperature": temperature,
-            "top_p": topP,
-            "top_k": topK,
-            "num_predict": maxTokens,
-            "stream": false,
-        ]
-
-        if let system {
-            requestBody["system"] = system
-        }
-
-        if let context {
-            requestBody["context"] = context
-        }
-
-        let response = try await performRequest(endpoint: "api/generate", body: requestBody)
-        let data = try JSONSerialization.data(withJSONObject: response)
-        return try JSONDecoder().decode(OllamaGenerateResponse.self, from: data)
-    }
-
-    public func chat(
-        model: String,
-        messages: [OllamaMessage],
-        temperature: Double = 0.7
-    ) async throws -> String {
-        let requestBody: [String: Any] = [
-            "model": model,
-            "messages": messages.map { ["role": $0.role, "content": $0.content] },
-            "temperature": temperature,
-            "stream": false,
-        ]
-
-        let response = try await performRequest(endpoint: "api/chat", body: requestBody)
-
-        guard let message = response["message"] as? [String: Any],
-            let content = message["content"] as? String
-        else {
-            throw OllamaError.invalidResponseFormat
-        }
-
-        return content.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
-    // MARK: - Model Management
-
-    public func listModels() async throws -> [String] {
-        let response = try await performRequest(endpoint: "api/tags", body: [:])
-        let models = response["models"] as? [[String: Any]] ?? []
-        return models.compactMap { $0["name"] as? String }
-    }
-
-    public func pullModel(_ modelName: String) async throws {
-        let requestBody: [String: Any] = [
-            "name": modelName,
-            "stream": false,
-        ]
-
-        _ = try await self.performRequest(endpoint: "api/pull", body: requestBody)
-    }
-
-    public func checkModelAvailability(_ model: String) async -> Bool {
-        do {
-            let models = try await listModels()
-            return models.contains(model)
-        } catch {
-            return false
-        }
-    }
-
-    // MARK: - Health & Status
-
-    public func isServerRunning() async -> Bool {
-        do {
-            _ = try await performRequest(endpoint: "api/tags", body: [:])
-            return true
-        } catch {
-            return false
-        }
-    }
-
-    public func getServerStatus() async -> OllamaServerStatus {
-        do {
+        public func listModels() async throws -> [String] {
             let response = try await performRequest(endpoint: "api/tags", body: [:])
             let models = response["models"] as? [[String: Any]] ?? []
-            return OllamaServerStatus(
-                running: true, modelCount: models.count,
-                models: models.compactMap { $0["name"] as? String }
-            )
-        } catch {
-            return OllamaServerStatus(running: false, modelCount: 0, models: [])
+            return models.compactMap { $0["name"] as? String }
+        }
+
+        public func pullModel(_ modelName: String) async throws {
+            let requestBody: [String: Any] = [
+                "name": modelName,
+                "stream": false,
+            ]
+
+            _ = try await self.performRequest(endpoint: "api/pull", body: requestBody)
+        }
+
+        public func checkModelAvailability(_ model: String) async -> Bool {
+            do {
+                let models = try await listModels()
+                return models.contains(model)
+            } catch {
+                return false
+            }
+        }
+
+        // MARK: - Health & Status
+
+        public func isServerRunning() async -> Bool {
+            do {
+                _ = try await performRequest(endpoint: "api/tags", body: [:])
+                return true
+            } catch {
+                return false
+            }
+        }
+
+        public func getServerStatus() async -> OllamaServerStatus {
+            do {
+                let response = try await performRequest(endpoint: "api/tags", body: [:])
+                let models = response["models"] as? [[String: Any]] ?? []
+                return OllamaServerStatus(
+                    running: true, modelCount: models.count,
+                    models: models.compactMap { $0["name"] as? String }
+                )
+            } catch {
+                return OllamaServerStatus(running: false, modelCount: 0, models: [])
+            }
+        }
+
+        // MARK: - Private Methods
+
+        private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any] {
+            // Validate URL construction for security
+            let urlString = "\(config.baseURL)/\(endpoint)"
+            guard let url = URL(string: urlString), url.scheme?.hasPrefix("http") == true else {
+                throw OllamaError.invalidConfiguration("Invalid URL: \(urlString)")
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+            let (data, response) = try await session.data(for: request)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw OllamaError.invalidResponse
+            }
+
+            guard httpResponse.statusCode == 200 else {
+                throw OllamaError.httpError(httpResponse.statusCode)
+            }
+
+            guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                throw OllamaError.invalidResponseFormat
+            }
+
+            return json
         }
     }
 
-    // MARK: - Private Methods
+    // MARK: - Enhanced Cache System
 
-    private func performRequest(endpoint: String, body: [String: Any]) async throws -> [String: Any]
-    {
-        // Validate URL construction for security
-        let urlString = "\(config.baseURL)/\(endpoint)"
-        guard let url = URL(string: urlString), url.scheme?.hasPrefix("http") == true else {
-            throw OllamaError.invalidConfiguration("Invalid URL: \(urlString)")
+    private actor OllamaCache {
+        private var cache: [String: CacheEntry] = [:]
+        private let enabled: Bool
+        private let expiryTime: TimeInterval
+
+        struct CacheEntry: Sendable {
+            let value: String
+            let timestamp: Date
+
+            func isExpired(expiryTime: TimeInterval) -> Bool {
+                Date().timeIntervalSince(self.timestamp) > expiryTime
+            }
         }
 
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
-
-        let (data, response) = try await session.data(for: request)
-
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw OllamaError.invalidResponse
+        init(enabled: Bool, expiryTime: TimeInterval) {
+            self.enabled = enabled
+            self.expiryTime = expiryTime
         }
 
-        guard httpResponse.statusCode == 200 else {
-            throw OllamaError.httpError(httpResponse.statusCode)
+        func get(_ key: String) -> String? {
+            guard self.enabled else { return nil }
+            guard let entry = cache[key], !entry.isExpired(expiryTime: expiryTime) else {
+                self.cache.removeValue(forKey: key)
+                return nil
+            }
+            return entry.value
         }
 
-        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            throw OllamaError.invalidResponseFormat
+        private func log(_ message: String, type: OSLogType = .default) {
+            // self.logger.log(level: type, "\(message)")
+            // print(message)
         }
 
-        return json
-    }
-}
+        func set(_ key: String, value: String) {
+            guard self.enabled else { return }
+            self.cache[key] = CacheEntry(value: value, timestamp: Date())
 
-// MARK: - Enhanced Cache System
-
-private actor OllamaCache {
-    private var cache: [String: CacheEntry] = [:]
-    private let enabled: Bool
-    private let expiryTime: TimeInterval
-
-    struct CacheEntry: Sendable {
-        let value: String
-        let timestamp: Date
-
-        func isExpired(expiryTime: TimeInterval) -> Bool {
-            Date().timeIntervalSince(self.timestamp) > expiryTime
+            // Clean expired entries periodically
+            if self.cache.count > 100 {
+                self.cleanExpiredEntries()
+            }
         }
-    }
 
-    init(enabled: Bool, expiryTime: TimeInterval) {
-        self.enabled = enabled
-        self.expiryTime = expiryTime
-    }
-
-    func get(_ key: String) -> String? {
-        guard self.enabled else { return nil }
-        guard let entry = cache[key], !entry.isExpired(expiryTime: expiryTime) else {
-            self.cache.removeValue(forKey: key)
-            return nil
-        }
-        return entry.value
-    }
-
-    private func log(_ message: String, type: OSLogType = .default) {
-        // self.logger.log(level: type, "\(message)")
-        // print(message)
-    }
-
-    func set(_ key: String, value: String) {
-        guard self.enabled else { return }
-        self.cache[key] = CacheEntry(value: value, timestamp: Date())
-
-        // Clean expired entries periodically
-        if self.cache.count > 100 {
-            self.cleanExpiredEntries()
+        private func cleanExpiredEntries() {
+            self.cache = self.cache.filter { !$0.value.isExpired(expiryTime: self.expiryTime) }
         }
     }
 
-    private func cleanExpiredEntries() {
-        self.cache = self.cache.filter { !$0.value.isExpired(expiryTime: self.expiryTime) }
+    // MARK: - Metrics System
+
+    private class OllamaMetrics {
+        private let enabled: Bool
+        private var requestCount: Int = 0
+        private var errorCount: Int = 0
+        private var cacheHits: Int = 0
+        private var totalTokens: Int = 0
+        private var totalDuration: TimeInterval = 0
+
+        init(enabled: Bool) {
+            self.enabled = enabled
+        }
+
+        func recordRequest(model _: String, duration: TimeInterval, tokenCount: Int) {
+            guard self.enabled else { return }
+            self.requestCount += 1
+            self.totalTokens += tokenCount
+            self.totalDuration += duration
+        }
+
+        func recordError(error _: Error) {
+            guard self.enabled else { return }
+            self.errorCount += 1
+        }
+
+        func recordCacheHit() {
+            guard self.enabled else { return }
+            self.cacheHits += 1
+        }
+
+        var averageResponseTime: TimeInterval {
+            guard self.requestCount > 0 else { return 0 }
+            return self.totalDuration / TimeInterval(self.requestCount)
+        }
+
+        var cacheHitRate: Double {
+            guard self.requestCount > 0 else { return 0 }
+            return Double(self.cacheHits) / Double(self.requestCount)
+        }
     }
-}
 
-// MARK: - Metrics System
+    // MARK: - Convenience Extensions
 
-private class OllamaMetrics {
-    private let enabled: Bool
-    private var requestCount: Int = 0
-    private var errorCount: Int = 0
-    private var cacheHits: Int = 0
-    private var totalTokens: Int = 0
-    private var totalDuration: TimeInterval = 0
-
-    init(enabled: Bool) {
-        self.enabled = enabled
-    }
-
-    func recordRequest(model _: String, duration: TimeInterval, tokenCount: Int) {
-        guard self.enabled else { return }
-        self.requestCount += 1
-        self.totalTokens += tokenCount
-        self.totalDuration += duration
-    }
-
-    func recordError(error _: Error) {
-        guard self.enabled else { return }
-        self.errorCount += 1
-    }
-
-    func recordCacheHit() {
-        guard self.enabled else { return }
-        self.cacheHits += 1
-    }
-
-    var averageResponseTime: TimeInterval {
-        guard self.requestCount > 0 else { return 0 }
-        return self.totalDuration / TimeInterval(self.requestCount)
-    }
-
-    var cacheHitRate: Double {
-        guard self.requestCount > 0 else { return 0 }
-        return Double(self.cacheHits) / Double(self.requestCount)
-    }
-}
-
-// MARK: - Convenience Extensions
-
-extension OllamaClient {
-    public func generateCode(
-        language: String,
-        task: String,
-        context: String? = nil
-    ) async throws -> String {
-        let userPrompt = """
+    public extension OllamaClient {
+        func generateCode(
+            language: String,
+            task: String,
+            context: String? = nil
+        ) async throws -> String {
+            let userPrompt = """
             Language: \(language)
             Task: \(task)
             \(context != nil ? "Context: \(context!)" : "")
             """
 
-        return try await self.generate(
-            model: "codellama",
-            prompt: userPrompt,
-            temperature: 0.2,
-            maxTokens: 2048
-        )
-    }
+            return try await self.generate(
+                model: "codellama",
+                prompt: userPrompt,
+                temperature: 0.2,
+                maxTokens: 2048
+            )
+        }
 
-    public func analyzeCode(
-        code: String,
-        language: String
-    ) async throws -> String {
-        let prompt = """
+        func analyzeCode(
+            code: String,
+            language: String
+        ) async throws -> String {
+            let prompt = """
             Analyze this \(language) code for:
             1. Potential bugs or issues
             2. Performance improvements
@@ -726,19 +775,19 @@ extension OllamaClient {
             \(code)
             """
 
-        return try await self.generate(
-            model: "llama2",
-            prompt: prompt,
-            temperature: 0.3,
-            maxTokens: 1024
-        )
-    }
+            return try await self.generate(
+                model: "llama2",
+                prompt: prompt,
+                temperature: 0.3,
+                maxTokens: 1024
+            )
+        }
 
-    public func generateDocumentation(
-        code: String,
-        language: String
-    ) async throws -> String {
-        let prompt = """
+        func generateDocumentation(
+            code: String,
+            language: String
+        ) async throws -> String {
+            let prompt = """
             Generate comprehensive documentation for this \(language) code including:
             - Function/class purpose
             - Parameters and return values
@@ -749,13 +798,13 @@ extension OllamaClient {
             \(code)
             """
 
-        return try await self.generate(
-            model: "llama2",
-            prompt: prompt,
-            temperature: 0.4,
-            maxTokens: 1024
-        )
+            return try await self.generate(
+                model: "llama2",
+                prompt: prompt,
+                temperature: 0.4,
+                maxTokens: 1024
+            )
+        }
     }
-}
 
 #endif

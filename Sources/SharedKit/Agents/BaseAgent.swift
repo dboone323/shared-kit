@@ -9,7 +9,7 @@ public protocol BaseAgent: Sendable {
     var name: String { get }
 
     /// Perform a specific task based on input context
-    func execute(context: [String: Sendable]) async throws -> AgentResult
+    func execute(context: [String: any Sendable]) async throws -> AgentResult
 }
 
 /// Standardized result structure for agent execution

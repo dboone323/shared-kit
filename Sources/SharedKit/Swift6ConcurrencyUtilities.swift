@@ -9,11 +9,11 @@
 import Foundation
 
 #if canImport(SwiftUI)
-import SwiftUI
+    import SwiftUI
 #endif
 
 #if canImport(Observation)
-import Observation
+    import Observation
 #endif
 
 // MARK: - Actor Boundary Utilities
@@ -45,20 +45,20 @@ public typealias SendableThrowingAsyncResultClosure<T: Sendable> = @Sendable () 
 // MARK: - Common Sendable Protocols
 
 #if canImport(Observation)
-/// Protocol for ViewModels that need to be used with @MainActor
-/// Reduces boilerplate of @MainActor @Observable ViewModel declarations
-@MainActor
-public protocol MainActorViewModel: AnyObject, Observable {
-    /// Common initialization for ViewModels
-    init()
-}
+    /// Protocol for ViewModels that need to be used with @MainActor
+    /// Reduces boilerplate of @MainActor @Observable ViewModel declarations
+    @MainActor
+    public protocol MainActorViewModel: AnyObject, Observable {
+        /// Common initialization for ViewModels
+        init()
+    }
 #else
-/// Protocol for ViewModels that need to be used with @MainActor
-@MainActor
-public protocol MainActorViewModel: AnyObject {
-    /// Common initialization for ViewModels
-    init()
-}
+    /// Protocol for ViewModels that need to be used with @MainActor
+    @MainActor
+    public protocol MainActorViewModel: AnyObject {
+        /// Common initialization for ViewModels
+        init()
+    }
 #endif
 
 /// Base error type that is Sendable-compliant
@@ -108,16 +108,16 @@ public struct UncheckedSendableBox<T>: @unchecked Sendable {
 
 // MARK: - Collection Extensions for Actor Isolation
 
-extension Collection {
+public extension Collection {
     /// Thread-safe isEmpty check that works across actor boundaries
     /// Note: In most cases, standard isEmpty should work fine
     /// This is provided for consistency in actor-isolated contexts
-    public var sendableIsEmpty: Bool {
+    var sendableIsEmpty: Bool {
         isEmpty
     }
 
     /// Thread-safe count check
-    public var sendableCount: Int {
+    var sendableCount: Int {
         count
     }
 }
@@ -162,6 +162,7 @@ public enum TaskUtilities {
 }
 
 #if canImport(SwiftUI)
+
     // MARK: - SwiftUI Helpers
 
     /// Common color utilities for Swift 6.0 migration
@@ -181,11 +182,11 @@ public enum TaskUtilities {
     }
 
     /// Extension for common @MainActor view modifiers
-    extension View {
+    public extension View {
         /// Apply @MainActor animation safely
         @MainActor
-        public func mainActorAnimation<V: Equatable>(
-            _ value: V
+        func mainActorAnimation(
+            _ value: some Equatable
         ) -> some View {
             animation(.default, value: value)
         }
@@ -203,13 +204,13 @@ public enum Swift6Error: SendableError {
 
     public var localizedDescription: String {
         switch self {
-        case .actorIsolationViolation(let message):
+        case let .actorIsolationViolation(message):
             return "Actor isolation violation: \(message)"
-        case .invalidState(let message):
+        case let .invalidState(message):
             return "Invalid state: \(message)"
         case .operationCancelled:
             return "Operation was cancelled"
-        case .notImplemented(let message):
+        case let .notImplemented(message):
             return "Not implemented: \(message)"
         }
     }

@@ -18,7 +18,7 @@ public actor PostgresConnectionPool {
             domain: "PostgresConnectionPool",
             code: -1,
             userInfo: [
-                NSLocalizedDescriptionKey: "Postgres dependency unavailable in this build target."
+                NSLocalizedDescriptionKey: "Postgres dependency unavailable in this build target.",
             ]
         )
     }
@@ -29,8 +29,7 @@ public actor PostgresConnectionPool {
     }
 
     /// Execute a query using pooled connection
-    public func withConnection<T>(_ body: (PostgresConnection) async throws -> T) async throws -> T
-    {
+    public func withConnection<T>(_ body: (PostgresConnection) async throws -> T) async throws -> T {
         NSLog(
             "[PostgresConnectionPool] ERROR: Attempted to execute query without PostgresNIO dependency."
         )
@@ -38,7 +37,7 @@ public actor PostgresConnectionPool {
             domain: "PostgresConnectionPool",
             code: -1,
             userInfo: [
-                NSLocalizedDescriptionKey: "Postgres dependency unavailable in this build target."
+                NSLocalizedDescriptionKey: "Postgres dependency unavailable in this build target.",
             ]
         )
     }
@@ -58,7 +57,7 @@ public struct PostgresConnection {
             domain: "PostgresConnection",
             code: -1,
             userInfo: [
-                NSLocalizedDescriptionKey: "Postgres connection requires PostgresNIO library."
+                NSLocalizedDescriptionKey: "Postgres connection requires PostgresNIO library.",
             ]
         )
     }
@@ -72,8 +71,8 @@ public struct PostgresConnectionConfiguration {
     public init() {}
 }
 
-extension PostgresConnection {
-    public struct Configuration {
+public extension PostgresConnection {
+    struct Configuration {
         public init() {}
     }
 }

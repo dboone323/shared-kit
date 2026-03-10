@@ -8,9 +8,9 @@ private enum AgentCLIError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .missingValue(let flag):
+        case let .missingValue(flag):
             return "Missing value for \(flag)."
-        case .invalidCommand(let command):
+        case let .invalidCommand(command):
             return "Unsupported command: \(command)"
         case .backupVerificationFailed:
             return "Backup round-trip verification failed."
@@ -150,9 +150,9 @@ private struct AgentCLITool {
         switch status {
         case .healthy:
             return "healthy"
-        case .degraded(let reason):
+        case let .degraded(reason):
             return "degraded (\(reason))"
-        case .unhealthy(let error):
+        case let .unhealthy(error):
             return "unhealthy (\(error.localizedDescription))"
         }
     }

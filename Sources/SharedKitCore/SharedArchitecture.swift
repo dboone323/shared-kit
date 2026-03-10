@@ -2,8 +2,8 @@ import Foundation
 
 #if canImport(SwiftUI)
     #if canImport(SwiftUI)
-import SwiftUI
-#endif
+        import SwiftUI
+    #endif
 #endif
 #if canImport(Combine)
     import Combine
@@ -29,7 +29,7 @@ public enum ViewModelError: Error, Equatable {
             return "Data error occurred"
         case .unknownError:
             return "Unknown error occurred"
-        case .customError(let message):
+        case let .customError(message):
             return message
         }
     }
@@ -41,14 +41,14 @@ public enum OperationResult<T: Sendable>: Sendable {
     case failure(ViewModelError)
 
     public var value: T? {
-        if case .success(let value) = self {
+        if case let .success(value) = self {
             return value
         }
         return nil
     }
 
     public var error: ViewModelError? {
-        if case .failure(let error) = self {
+        if case let .failure(error) = self {
             return error
         }
         return nil
@@ -80,30 +80,30 @@ public protocol BaseViewModel: AnyObject {
     func validateState() -> Bool
 }
 
-extension BaseViewModel {
-    public func resetError() {
+public extension BaseViewModel {
+    func resetError() {
         errorMessage = nil
     }
 
-    public func setLoading(_ loading: Bool) {
+    func setLoading(_ loading: Bool) {
         isLoading = loading
     }
 
-    public func setError(_ error: Error) {
+    func setError(_ error: Error) {
         errorMessage = error.localizedDescription
     }
 
-    public func setError(_ message: String) {
+    func setError(_ message: String) {
         errorMessage = message
     }
 
-    public func validateState() -> Bool {
+    func validateState() -> Bool {
         // Default implementation - override in subclasses for specific validation
         true
     }
 
     /// Convenience method for synchronous actions
-    public func handle(_ action: Action) {
+    func handle(_ action: Action) {
         Task {
             await handle(action)
         }
@@ -117,120 +117,120 @@ extension BaseViewModel {
 // MARK: - Enhanced Base View Model Classes
 
 #if canImport(Combine)
-/// Base class for list view models with standardized functionality
-@MainActor
-class BaseListViewModel<StateType, ActionType>: ObservableObject {
-    typealias State = StateType
-    typealias Action = ActionType
+    /// Base class for list view models with standardized functionality
+    @MainActor
+    class BaseListViewModel<StateType, ActionType>: ObservableObject {
+        typealias State = StateType
+        typealias Action = ActionType
 
-    @Published var state: State
-    @Published var isLoading = false
-    @Published var errorMessage: String?
-    @Published var searchText = ""
+        @Published var state: State
+        @Published var isLoading = false
+        @Published var errorMessage: String?
+        @Published var searchText = ""
 
-    init(initialState: State) {
-        self.state = initialState
+        init(initialState: State) {
+            self.state = initialState
+        }
+
+        func handle(_ action: Action) async {
+            // Override in subclasses
+            fatalError("Subclasses must implement handle(_:)")
+        }
+
+        func loadData() async {
+            // Override in subclasses
+        }
+
+        func refresh() async {
+            await loadData()
+        }
+
+        func search(query: String) async {
+            searchText = query
+            // Override in subclasses for custom search logic
+        }
+
+        var filteredItems: [Any] {
+            // Override in subclasses
+            []
+        }
     }
 
-    func handle(_ action: Action) async {
-        // Override in subclasses
-        fatalError("Subclasses must implement handle(_:)")
+    /// Base class for form view models with validation
+    @MainActor
+    class BaseFormViewModel<StateType, ActionType>: ObservableObject {
+        typealias State = StateType
+        typealias Action = ActionType
+
+        @Published var state: State
+        @Published var isLoading = false
+        @Published var errorMessage: String?
+        @Published var isValid = false
+
+        init(initialState: State) {
+            self.state = initialState
+            validate()
+        }
+
+        func handle(_ action: Action) async {
+            // Override in subclasses
+            fatalError("Subclasses must implement handle(_:)")
+        }
+
+        func validate() {
+            isValid = validateState()
+        }
+
+        func validateState() -> Bool {
+            // Override in subclasses
+            true
+        }
+
+        func save() async throws {
+            // Override in subclasses
+            fatalError("Subclasses must implement save()")
+        }
+
+        func reset() {
+            // Override in subclasses to reset form state
+        }
     }
-
-    func loadData() async {
-        // Override in subclasses
-    }
-
-    func refresh() async {
-        await loadData()
-    }
-
-    func search(query: String) async {
-        searchText = query
-        // Override in subclasses for custom search logic
-    }
-
-    var filteredItems: [Any] {
-        // Override in subclasses
-        []
-    }
-}
-
-/// Base class for form view models with validation
-@MainActor
-class BaseFormViewModel<StateType, ActionType>: ObservableObject {
-    typealias State = StateType
-    typealias Action = ActionType
-
-    @Published var state: State
-    @Published var isLoading = false
-    @Published var errorMessage: String?
-    @Published var isValid = false
-
-    init(initialState: State) {
-        self.state = initialState
-        validate()
-    }
-
-    func handle(_ action: Action) async {
-        // Override in subclasses
-        fatalError("Subclasses must implement handle(_:)")
-    }
-
-    func validate() {
-        isValid = validateState()
-    }
-
-    func validateState() -> Bool {
-        // Override in subclasses
-        true
-    }
-
-    func save() async throws {
-        // Override in subclasses
-        fatalError("Subclasses must implement save()")
-    }
-
-    func reset() {
-        // Override in subclasses to reset form state
-    }
-}
 #endif
 
 // MARK: - Performance Monitoring
 
 #if canImport(Combine)
-/// Shared performance monitoring for tasks
-@MainActor
-class TaskPerformanceMonitor: ObservableObject {
-    @Published var metrics: [PerformanceMetric] = []
+    /// Shared performance monitoring for tasks
+    @MainActor
+    class TaskPerformanceMonitor: ObservableObject {
+        @Published var metrics: [PerformanceMetric] = []
 
-    struct PerformanceMetric {
-        let name: String
-        let duration: TimeInterval
-        let timestamp: Date
-        let additionalInfo: [String: AnyCodable]
+        struct PerformanceMetric {
+            let name: String
+            let duration: TimeInterval
+            let timestamp: Date
+            let additionalInfo: [String: AnyCodable]
+        }
+
+        func measureAsync<T: Sendable>(
+            operation: String,
+            task: @Sendable () async throws -> T
+        ) async rethrows -> T {
+            let startTime = Date()
+            let result = try await task()
+            let duration = Date().timeIntervalSince(startTime)
+
+            let metric = PerformanceMetric(
+                name: operation,
+                duration: duration,
+                timestamp: startTime,
+                additionalInfo: [:]
+            )
+
+            self.metrics.append(metric)
+            return result
+        }
     }
-
-    func measureAsync<T: Sendable>(
-        operation: String,
-        task: @Sendable () async throws -> T
-    ) async rethrows -> T {
-        let startTime = Date()
-        let result = try await task()
-        let duration = Date().timeIntervalSince(startTime)
-
-        let metric = PerformanceMetric(
-            name: operation,
-            duration: duration,
-            timestamp: startTime,
-            additionalInfo: [:]
-        )
-
-        self.metrics.append(metric)
-        return result
-    }
-}
 #endif
 
 // MARK: - Storage Protocol
@@ -336,7 +336,7 @@ extension Array {
 
     func chunked(into size: Int) -> [[Element]] {
         stride(from: 0, to: count, by: size).map {
-            Array(self[$0..<Swift.min($0 + size, count)])
+            Array(self[$0 ..< Swift.min($0 + size, count)])
         }
     }
 }
@@ -356,7 +356,7 @@ extension String {
         prefix(1).capitalized + dropFirst()
     }
 
-    /// Converts a color string to SwiftUI Color with fallback
+    // Converts a color string to SwiftUI Color with fallback
     #if canImport(SwiftUI)
         var toColor: Color {
             switch self.lowercased() {
@@ -374,7 +374,7 @@ extension String {
             case "primary": return .primary
             case "secondary": return .secondary
             case "accent": return .accentColor
-            default: return .blue  // Default fallback color
+            default: return .blue // Default fallback color
             }
         }
     #endif
@@ -407,11 +407,11 @@ extension String {
             let g: UInt64
             let b: UInt64
             switch hex.count {
-            case 3:  // RGB (12-bit)
+            case 3: // RGB (12-bit)
                 (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-            case 6:  // RGB (24-bit)
+            case 6: // RGB (24-bit)
                 (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-            case 8:  // ARGB (32-bit)
+            case 8: // ARGB (32-bit)
                 (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
             default:
                 (a, r, g, b) = (255, 0, 0, 0)
@@ -426,7 +426,7 @@ extension String {
             )
         }
 
-        // Create gradient colors for modern effects
+        /// Create gradient colors for modern effects
         static func gradient(from startColor: Color, to endColor: Color) -> LinearGradient {
             LinearGradient(
                 gradient: Gradient(colors: [startColor, endColor]),
@@ -435,7 +435,7 @@ extension String {
             )
         }
 
-        // Glass morphism effect
+        /// Glass morphism effect
         var glassMorphism: some View {
             opacity(0.7)
                 .background(.ultraThinMaterial)

@@ -42,7 +42,8 @@ public final class DecisionEngine: Sendable {
                     action: rule.action,
                     reason: "Rule '\(rule.name)' satisfied",
                     params: rule.params
-                ))
+                )
+            )
         }
 
         return actions

@@ -80,7 +80,7 @@ public struct OllamaConfig: Sendable {
         requestThrottleDelay: 0.05
     )
 
-    // Cloud presets
+    /// Cloud presets
     public static let cloudCoder = OllamaConfig(
         defaultModel: "qwen3-coder:480b-cloud",
         temperature: 0.2,
@@ -111,7 +111,7 @@ public struct OllamaConfig: Sendable {
     )
 }
 
-public struct OllamaMessage: Codable {
+public struct OllamaMessage: Codable, Sendable {
     public let role: String
     public let content: String
 
@@ -119,6 +119,15 @@ public struct OllamaMessage: Codable {
         self.role = role
         self.content = content
     }
+}
+
+/// Single chunk from streaming response
+public struct OllamaChatChunk: Codable, Sendable {
+    public let model: String?
+    public let message: OllamaMessage?
+    public let done: Bool
+    public let total_duration: Int64?
+    public let eval_count: Int?
 }
 
 public struct OllamaGenerateResponse: Codable {
@@ -165,7 +174,7 @@ public enum OllamaError: LocalizedError {
             "Invalid Ollama server URL"
         case .invalidResponse:
             "Invalid response from Ollama server"
-        case .httpError(let code):
+        case let .httpError(code):
             "HTTP error: \(code)"
         case .invalidResponseFormat:
             "Invalid response format from Ollama"
@@ -173,7 +182,7 @@ public enum OllamaError: LocalizedError {
             "Failed to pull model from Ollama"
         case .serverNotRunning:
             "Ollama server is not running"
-        case .modelNotAvailable(let model):
+        case let .modelNotAvailable(model):
             "Model '\(model)' is not available"
         case .networkTimeout:
             "Network request timed out"
@@ -181,7 +190,7 @@ public enum OllamaError: LocalizedError {
             "Rate limit exceeded"
         case .cacheError:
             "Cache operation failed"
-        case .modelLoadFailed(let model):
+        case let .modelLoadFailed(model):
             "Failed to load model: \(model)"
         case .contextWindowExceeded:
             "Input exceeds model's context window"
@@ -191,7 +200,7 @@ public enum OllamaError: LocalizedError {
             "Server is overloaded"
         case .maxRetriesExceeded:
             "Maximum retry attempts exceeded"
-        case .invalidConfiguration(let message):
+        case let .invalidConfiguration(message):
             "Invalid configuration: \(message)"
         }
     }

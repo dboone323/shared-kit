@@ -6,8 +6,8 @@ import Foundation
     import Crypto
 #endif
 
-/// Security Hardening Framework for Shared-Kit
-/// Covers Steps 42-47: Headers, Input Validation, Auth/RBAC, Encryption
+// Security Hardening Framework for Shared-Kit
+// Covers Steps 42-47: Headers, Input Validation, Auth/RBAC, Encryption
 
 @available(macOS 12.0, iOS 15.0, *)
 public actor SecurityFramework {
@@ -15,9 +15,9 @@ public actor SecurityFramework {
 
     private let inputValidator = InputValidator()
     private let accessControl = AccessControl()
-    
+
     #if canImport(CryptoKit)
-    private let cryptoManager = CryptoManager()
+        private let cryptoManager = CryptoManager()
     #endif
 
     public init() {}
@@ -50,16 +50,16 @@ public actor SecurityFramework {
         try await accessControl.authorize(user: user, action: action)
     }
 
-    /// Step 46: Encrypt data (At Rest)
+    // Step 46: Encrypt data (At Rest)
     #if canImport(CryptoKit)
-    public func encrypt(_ data: Data) async throws -> Data {
-        try await cryptoManager.encrypt(data)
-    }
+        public func encrypt(_ data: Data) async throws -> Data {
+            try await cryptoManager.encrypt(data)
+        }
 
-    /// Step 46: Decrypt data
-    public func decrypt(_ data: Data) async throws -> Data {
-        try await cryptoManager.decrypt(data)
-    }
+        /// Step 46: Decrypt data
+        public func decrypt(_ data: Data) async throws -> Data {
+            try await cryptoManager.decrypt(data)
+        }
     #endif
 }
 
@@ -92,7 +92,8 @@ actor InputValidator {
         case .identifier:
             if input.range(of: "^[a-zA-Z0-9_]+$", options: .regularExpression) == nil {
                 throw ValidationError.invalidFormat(
-                    description: "Invalid identifier (alphanumeric only)")
+                    description: "Invalid identifier (alphanumeric only)"
+                )
             }
         case .text:
             // Check for obvious XSS tags
@@ -150,7 +151,7 @@ actor AccessControl {
         // RBAC Matrix
         switch user.role {
         case .admin:
-            return  // Allowed everything
+            return // Allowed everything
 
         case .user:
             switch action {
@@ -170,40 +171,40 @@ actor AccessControl {
 // MARK: - Step 46-47: Encryption
 
 #if canImport(CryptoKit)
-public actor CryptoManager {
-    public static let shared = CryptoManager()
+    public actor CryptoManager {
+        public static let shared = CryptoManager()
 
-    private let keychain = KeychainManager.shared
-    private let serviceName = "com.habitquest.encryption"
-    private let accountName = "primaryKey"
+        private let keychain = KeychainManager.shared
+        private let serviceName = "com.habitquest.encryption"
+        private let accountName = "primaryKey"
 
-    public init() {}
+        public init() {}
 
-    private func getKey() async throws -> SymmetricKey {
-        do {
-            let keyData = try await keychain.retrieveData(
-                service: serviceName, account: accountName
-            )
-            return SymmetricKey(data: keyData)
-        } catch {
-            // Generate new key if not found
-            let newKey = SymmetricKey(size: .bits256)
-            let keyData = newKey.withUnsafeBytes { Data($0) }
-            try await keychain.save(keyData, service: serviceName, account: accountName)
-            return newKey
+        private func getKey() async throws -> SymmetricKey {
+            do {
+                let keyData = try await keychain.retrieveData(
+                    service: serviceName, account: accountName
+                )
+                return SymmetricKey(data: keyData)
+            } catch {
+                // Generate new key if not found
+                let newKey = SymmetricKey(size: .bits256)
+                let keyData = newKey.withUnsafeBytes { Data($0) }
+                try await keychain.save(keyData, service: serviceName, account: accountName)
+                return newKey
+            }
+        }
+
+        public func encrypt(_ data: Data) async throws -> Data {
+            let key = try await getKey()
+            let sealedBox = try AES.GCM.seal(data, using: key)
+            return sealedBox.combined!
+        }
+
+        public func decrypt(_ data: Data) async throws -> Data {
+            let key = try await getKey()
+            let sealedBox = try AES.GCM.SealedBox(combined: data)
+            return try AES.GCM.open(sealedBox, using: key)
         }
     }
-
-    public func encrypt(_ data: Data) async throws -> Data {
-        let key = try await getKey()
-        let sealedBox = try AES.GCM.seal(data, using: key)
-        return sealedBox.combined!
-    }
-
-    public func decrypt(_ data: Data) async throws -> Data {
-        let key = try await getKey()
-        let sealedBox = try AES.GCM.SealedBox(combined: data)
-        return try AES.GCM.open(sealedBox, using: key)
-    }
-}
 #endif

@@ -1,8 +1,8 @@
 import Foundation
 import SharedKitCore
 
-/// Comprehensive input validation and sanitization utilities
-/// Provides secure validation for user inputs across all Quantum Workspace projects
+// Comprehensive input validation and sanitization utilities
+// Provides secure validation for user inputs across all Quantum Workspace projects
 
 /// Input validation rules and sanitization
 public enum InputValidator {
@@ -34,7 +34,8 @@ public enum InputValidator {
         let emailRegex = #"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
         try validateNotEmpty(email)
         guard let regex = try? NSRegularExpression(pattern: emailRegex, options: []),
-              regex.firstMatch(in: email, options: [], range: NSRange(location: 0, length: email.utf16.count)) != nil else {
+              regex.firstMatch(in: email, options: [], range: NSRange(location: 0, length: email.utf16.count)) != nil
+        else {
             throw ValidationError.invalidEmail
         }
     }
@@ -44,8 +45,8 @@ public enum InputValidator {
         try self.validateNotEmpty(urlString)
 
         guard let url = URL(string: urlString),
-            url.scheme != nil,
-            url.host != nil
+              url.scheme != nil,
+              url.host != nil
         else {
             throw ValidationError.invalidURL
         }
@@ -63,10 +64,12 @@ public enum InputValidator {
 
         // Remove common separators for validation
         let cleanPhone = phone.replacingOccurrences(
-            of: "[\\s\\-\\(\\)]", with: "", options: .regularExpression)
+            of: "[\\s\\-\\(\\)]", with: "", options: .regularExpression
+        )
 
         guard let regex = try? NSRegularExpression(pattern: phoneRegex, options: []),
-              regex.firstMatch(in: cleanPhone, options: [], range: NSRange(location: 0, length: cleanPhone.utf16.count)) != nil else {
+              regex.firstMatch(in: cleanPhone, options: [], range: NSRange(location: 0, length: cleanPhone.utf16.count)) != nil
+        else {
             throw ValidationError.invalidPhoneNumber
         }
     }
@@ -107,7 +110,8 @@ public enum InputValidator {
         ]
 
         for pattern in sqlPatterns
-        where input.range(of: pattern, options: [.regularExpression, .caseInsensitive]) != nil {
+            where input.range(of: pattern, options: [.regularExpression, .caseInsensitive]) != nil
+        {
             throw ValidationError.containsSQLInjection
         }
     }
@@ -217,12 +221,14 @@ public enum InputValidator {
         // Check for valid username characters (alphanumeric, underscore, dash)
         let usernameRegex = #"^[a-zA-Z0-9_-]+$"#
         guard let regex = try? NSRegularExpression(pattern: usernameRegex, options: []),
-              regex.firstMatch(in: username, options: [], range: NSRange(location: 0, length: username.utf16.count)) != nil else {
+              regex.firstMatch(in: username, options: [], range: NSRange(location: 0, length: username.utf16.count)) != nil
+        else {
             throw
                 ValidationError
                 .invalidFormat(
                     description:
-                        "Username can only contain letters, numbers, underscores, and dashes")
+                    "Username can only contain letters, numbers, underscores, and dashes"
+                )
         }
     }
 
@@ -238,12 +244,14 @@ public enum InputValidator {
 
         guard password.range(of: uppercaseRegex, options: .regularExpression) != nil else {
             throw ValidationError.custom(
-                message: "Password must contain at least one uppercase letter")
+                message: "Password must contain at least one uppercase letter"
+            )
         }
 
         guard password.range(of: lowercaseRegex, options: .regularExpression) != nil else {
             throw ValidationError.custom(
-                message: "Password must contain at least one lowercase letter")
+                message: "Password must contain at least one lowercase letter"
+            )
         }
 
         guard password.range(of: digitRegex, options: .regularExpression) != nil else {
@@ -261,8 +269,7 @@ public enum InputValidator {
     }
 
     /// Validate and sanitize user input (returns sanitized version)
-    public static func validateAndSanitize(_ input: String, maxLength: Int = 1000) throws -> String
-    {
+    public static func validateAndSanitize(_ input: String, maxLength: Int = 1000) throws -> String {
         try self.validateTextInput(input, maxLength: maxLength)
         return self.sanitizeInput(input)
     }
@@ -270,9 +277,9 @@ public enum InputValidator {
 
 // MARK: - Extensions
 
-extension String {
+public extension String {
     /// Validate this string with comprehensive security checks
-    public func validated(as type: ValidationType, options: ValidationOptions = .default) throws
+    func validated(as type: ValidationType, options: ValidationOptions = .default) throws
         -> String
     {
         switch type {
@@ -316,7 +323,8 @@ public struct ValidationOptions: Sendable {
     public let sanitize: Bool
 
     public static let `default` = ValidationOptions(
-        maxLength: 1000, minValue: nil, maxValue: nil, sanitize: true)
+        maxLength: 1000, minValue: nil, maxValue: nil, sanitize: true
+    )
 
     public init(
         maxLength: Int = 1000, minValue: Double? = nil, maxValue: Double? = nil,

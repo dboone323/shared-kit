@@ -20,14 +20,15 @@ public enum ProjectType: String, Codable, CaseIterable, Sendable {
     case codingReviewer = "coding-reviewer"
 
     public var displayName: String {
-        return self.rawValue.components(separatedBy: "-").map { $0.capitalized }.joined(
-            separator: " ")
+        self.rawValue.components(separatedBy: "-").map(\.capitalized).joined(
+            separator: " "
+        )
     }
 }
 
 public struct ExternalReference: Codable, Identifiable, Sendable {
     public let id: UUID
-    public let projectContext: ProjectType  // Changed from ProjectContext enum to ProjectType
+    public let projectContext: ProjectType // Changed from ProjectContext enum to ProjectType
     public let modelType: String
     public let modelId: String
     public let relationshipType: String
@@ -106,29 +107,29 @@ public enum SharedStateValue: Sendable {
     case energyLevel(EnergyLevel)
 
     public var stringValue: String? {
-        if case .string(let value) = self { return value }
-        if case .uuid(let value) = self { return value.uuidString }
-        if case .accountType(let value) = self { return value.rawValue }
-        if case .energyLevel(let value) = self { return value.rawValue }
+        if case let .string(value) = self { return value }
+        if case let .uuid(value) = self { return value.uuidString }
+        if case let .accountType(value) = self { return value.rawValue }
+        if case let .energyLevel(value) = self { return value.rawValue }
         return nil
     }
 
     public var doubleValue: Double? {
-        if case .double(let value) = self { return value }
-        if case .int(let value) = self { return Double(value) }
+        if case let .double(value) = self { return value }
+        if case let .int(value) = self { return Double(value) }
         return nil
     }
 
     public var anyValue: Any {
         switch self {
-        case .string(let v): v
-        case .int(let v): v
-        case .double(let v): v
-        case .bool(let v): v
-        case .uuid(let v): v.uuidString
-        case .date(let v): v
-        case .accountType(let v): v.rawValue
-        case .energyLevel(let v): v.rawValue
+        case let .string(v): v
+        case let .int(v): v
+        case let .double(v): v
+        case let .bool(v): v
+        case let .uuid(v): v.uuidString
+        case let .date(v): v
+        case let .accountType(v): v.rawValue
+        case let .energyLevel(v): v.rawValue
         }
     }
 }
@@ -136,7 +137,7 @@ public enum SharedStateValue: Sendable {
 public struct AnyEncodable: Encodable, @unchecked Sendable {
     private let encode: (Encoder) throws -> Void
 
-    public init<T: Encodable>(_ wrapped: T) {
+    public init(_ wrapped: some Encodable) {
         self.encode = { try wrapped.encode(to: $0) }
     }
 
@@ -240,7 +241,7 @@ public struct ValidationResult: Sendable {
         self.recommendations = recommendations
     }
 
-    // Convenience initializers for backward compatibility
+    /// Convenience initializers for backward compatibility
     public static func success(
         score: Double? = nil,
         confidence: Double? = nil,
@@ -501,19 +502,19 @@ public enum ValidationError: Error, LocalizedError {
         switch self {
         case .emptyInput:
             return "Input cannot be empty"
-        case .invalidLength(let min, let max):
+        case let .invalidLength(min, max):
             return "Input length must be between \(min) and \(max) characters"
-        case .inputTooLong(let maxLength):
+        case let .inputTooLong(maxLength):
             return "Input exceeds maximum length of \(maxLength) characters"
-        case .belowMinimumLength(let min):
+        case let .belowMinimumLength(min):
             return "Input is below minimum length of \(min) characters"
-        case .exceedsMaximumLength(let max):
+        case let .exceedsMaximumLength(max):
             return "Input exceeds maximum length of \(max) characters"
-        case .invalidFormat(let description):
+        case let .invalidFormat(description):
             return description
         case .invalidCharacters:
             return "Input contains invalid characters"
-        case .containsInvalidCharacters(let characters):
+        case let .containsInvalidCharacters(characters):
             return "Input contains invalid characters: \(characters)"
         case .maliciousContent:
             return "Input contains potentially malicious content"
@@ -539,23 +540,23 @@ public enum ValidationError: Error, LocalizedError {
             return "Input contains potential cross-site scripting"
         case .containsPathTraversal:
             return "Input contains potential path traversal"
-        case .valueTooLow(let minimum):
+        case let .valueTooLow(minimum):
             return "Value is below minimum allowed value of \(minimum)"
-        case .valueTooHigh(let maximum):
+        case let .valueTooHigh(maximum):
             return "Value is above maximum allowed value of \(maximum)"
-        case .required(let field):
+        case let .required(field):
             return "\(field) is required"
-        case .invalid(let field, let reason):
+        case let .invalid(field, reason):
             return "\(field) is invalid: \(reason)"
-        case .outOfRange(let field, let min, let max):
+        case let .outOfRange(field, min, max):
             let minStr = min.map { String($0) } ?? "nil"
             let maxStr = max.map { String($0) } ?? "nil"
             return "\(field) is out of range (\(minStr) - \(maxStr))"
-        case .custom(let message):
+        case let .custom(message):
             return message
         case .tooLong:
             return "Input is too long"
-        case .invalidData(let message):
+        case let .invalidData(message):
             return "Invalid data: \(message)"
         }
     }

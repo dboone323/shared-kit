@@ -1,6 +1,6 @@
 import Foundation
 #if canImport(SwiftUI)
-import SwiftUI
+    import SwiftUI
 #endif
 
 // MARK: - Performance Optimization Utilities
@@ -36,7 +36,7 @@ public final class PerformanceProfiler: @unchecked Sendable {
 
         return self.queue.sync {
             guard let startTimes = measurements[key],
-                let startTime = startTimes.first
+                  let startTime = startTimes.first
             else {
                 return nil
             }
@@ -169,48 +169,48 @@ public final class PerformanceProfiler: @unchecked Sendable {
 // MARK: - SwiftUI Performance Helpers
 
 #if canImport(SwiftUI)
-extension View {
-    public func measureRenderTime(_ label: String) -> some View {
-        onAppear {
-            let startTime = Date().timeIntervalSinceReferenceDate
-            DispatchQueue.main.async {
-                let renderTime = Date().timeIntervalSinceReferenceDate - startTime
-                print("[\(label)] Render time: \(renderTime * 1000)ms")
+    public extension View {
+        func measureRenderTime(_ label: String) -> some View {
+            onAppear {
+                let startTime = Date().timeIntervalSinceReferenceDate
+                DispatchQueue.main.async {
+                    let renderTime = Date().timeIntervalSinceReferenceDate - startTime
+                    print("[\(label)] Render time: \(renderTime * 1000)ms")
+                }
             }
+        }
+
+        func optimizeForBattery() -> some View {
+            drawingGroup(opaque: BatteryOptimizer.shared.currentMode != .normal)
+        }
+
+        func conditionalAnimation(
+            _ value: some Equatable,
+            animation: Animation? = .default
+        ) -> some View {
+            let shouldAnimate = PerformanceMonitor.shared.currentMetrics.performanceLevel != .poor
+            return self.animation(shouldAnimate ? animation : nil, value: value)
+        }
+
+        func performanceAware() -> some View {
+            modifier(PerformanceAwareModifier())
         }
     }
 
-    public func optimizeForBattery() -> some View {
-        drawingGroup(opaque: BatteryOptimizer.shared.currentMode != .normal)
+    // MARK: - Performance Aware View Modifier
+
+    private struct PerformanceAwareModifier: ViewModifier {
+        @StateObject private var performanceMonitor = PerformanceMonitor.shared
+
+        func body(content: Content) -> some View {
+            content
+                .opacity(self.performanceMonitor.currentMetrics.thermalState.shouldThrottle ? 0.8 : 1.0)
+                .animation(
+                    self.performanceMonitor.currentMetrics.performanceLevel == .poor ? nil : .easeInOut,
+                    value: self.performanceMonitor.currentMetrics.thermalState
+                )
+        }
     }
-
-    public func conditionalAnimation(
-        _ value: some Equatable,
-        animation: Animation? = .default
-    ) -> some View {
-        let shouldAnimate = PerformanceMonitor.shared.currentMetrics.performanceLevel != .poor
-        return self.animation(shouldAnimate ? animation : nil, value: value)
-    }
-
-    public func performanceAware() -> some View {
-        modifier(PerformanceAwareModifier())
-    }
-}
-
-// MARK: - Performance Aware View Modifier
-
-private struct PerformanceAwareModifier: ViewModifier {
-    @StateObject private var performanceMonitor = PerformanceMonitor.shared
-
-    func body(content: Content) -> some View {
-        content
-            .opacity(self.performanceMonitor.currentMetrics.thermalState.shouldThrottle ? 0.8 : 1.0)
-            .animation(
-                self.performanceMonitor.currentMetrics.performanceLevel == .poor ? nil : .easeInOut,
-                value: self.performanceMonitor.currentMetrics.thermalState
-            )
-    }
-}
 #endif
 
 // MARK: - Image Optimization Utilities
@@ -223,7 +223,7 @@ public enum ImageOptimizer {
             let quality = networkMonitor.recommendedImageQuality()
 
             guard let data = image.jpegData(compressionQuality: quality.compressionQuality),
-                let optimizedImage = UIImage(data: data)
+                  let optimizedImage = UIImage(data: data)
             else {
                 return image
             }
@@ -241,8 +241,9 @@ public enum ImageOptimizer {
 
     public static func shouldDownsample(imageSize: CGSize, targetSize: CGSize) -> Bool {
         let sizeRatio = max(
-            imageSize.width / targetSize.width, imageSize.height / targetSize.height)
-        return sizeRatio > 2.0  // Downsample if image is more than 2x target size
+            imageSize.width / targetSize.width, imageSize.height / targetSize.height
+        )
+        return sizeRatio > 2.0 // Downsample if image is more than 2x target size
     }
 }
 
@@ -256,18 +257,18 @@ public enum DataOptimizer {
         // Optimize encoding based on network conditions
         let networkMonitor = NetworkMonitor.shared
         if networkMonitor.shouldCompressData() {
-            encoder.outputFormatting = []  // Compact format
+            encoder.outputFormatting = [] // Compact format
         } else {
-            encoder.outputFormatting = [.prettyPrinted]  // Readable format for debugging
+            encoder.outputFormatting = [.prettyPrinted] // Readable format for debugging
         }
 
         let data = try encoder.encode(object)
 
         // Apply compression if beneficial
         #if !os(Linux)
-        if data.count > 1024, networkMonitor.shouldCompressData() {
-            return try data.compressed()
-        }
+            if data.count > 1024, networkMonitor.shouldCompressData() {
+                return try data.compressed()
+            }
         #endif
 
         return data
@@ -283,44 +284,45 @@ public enum DataOptimizer {
 }
 
 #if canImport(SwiftUI)
-// MARK: - Animation Performance Helpers
 
-public struct PerformantAnimationModifier: ViewModifier {
-    let animation: Animation
-    let condition: () -> Bool
+    // MARK: - Animation Performance Helpers
 
-    public init(animation: Animation, when condition: @escaping () -> Bool = { true }) {
-        self.animation = animation
-        self.condition = condition
-    }
+    public struct PerformantAnimationModifier: ViewModifier {
+        let animation: Animation
+        let condition: () -> Bool
 
-    public func body(content: Content) -> some View {
-        let performanceLevel = PerformanceMonitor.shared.currentMetrics.performanceLevel
-        let shouldAnimate = self.condition() && performanceLevel != .poor
+        public init(animation: Animation, when condition: @escaping () -> Bool = { true }) {
+            self.animation = animation
+            self.condition = condition
+        }
 
-        return
-            content
-            .animation(shouldAnimate ? self.animation : nil, value: shouldAnimate)
-    }
-}
+        public func body(content: Content) -> some View {
+            let performanceLevel = PerformanceMonitor.shared.currentMetrics.performanceLevel
+            let shouldAnimate = self.condition() && performanceLevel != .poor
 
-extension Animation {
-    @MainActor
-    public static var performanceOptimized: Animation {
-        let performanceLevel = PerformanceMonitor.shared.currentMetrics.performanceLevel
-
-        switch performanceLevel {
-        case .excellent:
-            return .spring(response: 0.5, dampingFraction: 0.8)
-        case .good:
-            return .easeInOut(duration: 0.3)
-        case .fair:
-            return .easeInOut(duration: 0.2)
-        case .poor:
-            return .easeInOut(duration: 0.1)
+            return
+                content
+                    .animation(shouldAnimate ? self.animation : nil, value: shouldAnimate)
         }
     }
-}
+
+    public extension Animation {
+        @MainActor
+        static var performanceOptimized: Animation {
+            let performanceLevel = PerformanceMonitor.shared.currentMetrics.performanceLevel
+
+            switch performanceLevel {
+            case .excellent:
+                return .spring(response: 0.5, dampingFraction: 0.8)
+            case .good:
+                return .easeInOut(duration: 0.3)
+            case .fair:
+                return .easeInOut(duration: 0.2)
+            case .poor:
+                return .easeInOut(duration: 0.1)
+            }
+        }
+    }
 #endif
 
 // MARK: - Performance Testing Utilities
@@ -338,7 +340,7 @@ public class PerformanceTest {
     public func run(operation: () throws -> Void) rethrows -> PerformanceTestResult {
         self.results.removeAll()
 
-        for _ in 0..<self.iterations {
+        for _ in 0 ..< self.iterations {
             let startTime = Date().timeIntervalSinceReferenceDate
             try operation()
             let endTime = Date().timeIntervalSinceReferenceDate
@@ -352,11 +354,10 @@ public class PerformanceTest {
         )
     }
 
-    public func runAsync(operation: () async throws -> Void) async rethrows -> PerformanceTestResult
-    {
+    public func runAsync(operation: () async throws -> Void) async rethrows -> PerformanceTestResult {
         self.results.removeAll()
 
-        for _ in 0..<self.iterations {
+        for _ in 0 ..< self.iterations {
             let startTime = Date().timeIntervalSinceReferenceDate
             try await operation()
             let endTime = Date().timeIntervalSinceReferenceDate
@@ -419,155 +420,157 @@ public struct PerformanceTestResult {
 }
 
 #if canImport(Combine)
-// MARK: - Background Task Manager
 
-@MainActor
-public class BackgroundTaskManager: ObservableObject {
-    public static let shared = BackgroundTaskManager()
+    // MARK: - Background Task Manager
 
-    @Published public var activeTasks: Set<String> = []
-    @Published public var taskResults: [String: TaskResult] = [:]
+    @MainActor
+    public class BackgroundTaskManager: ObservableObject {
+        public static let shared = BackgroundTaskManager()
 
-    private var tasks: [String: Task<Void, Never>] = [:]
-    // Queue removed for MainActor safety
+        @Published public var activeTasks: Set<String> = []
+        @Published public var taskResults: [String: TaskResult] = [:]
 
-    private init() {}
+        private var tasks: [String: Task<Void, Never>] = [:]
+        // Queue removed for MainActor safety
 
-    public func scheduleTask<T>(
-        _ identifier: String,
-        priority: _Concurrency.TaskPriority = .low,
-        operation: @escaping () async throws -> T,
-        completion: @escaping (Result<T, Error>) -> Void = { _ in }
-    ) {
-        // Cancel existing task with same identifier
-        self.cancelTask(identifier)
+        private init() {}
 
-        let task = Task(priority: priority) {
-            self.activeTasks.insert(identifier)
-
-            let startTime = Date().timeIntervalSinceReferenceDate
-
-            do {
-                let result = try await operation()
-                let duration = Date().timeIntervalSinceReferenceDate - startTime
-
-                self.taskResults[identifier] = TaskResult(
-                    identifier: identifier,
-                    duration: duration,
-                    success: true,
-                    completedAt: Date()
-                )
-                self.activeTasks.remove(identifier)
-
-                completion(.success(result))
-            } catch {
-                let duration = Date().timeIntervalSinceReferenceDate - startTime
-
-                self.taskResults[identifier] = TaskResult(
-                    identifier: identifier,
-                    duration: duration,
-                    success: false,
-                    completedAt: Date(),
-                    error: error.localizedDescription
-                )
-                self.activeTasks.remove(identifier)
-
-                completion(.failure(error))
-            }
-        }
-
-        self.tasks[identifier] = task
-    }
-
-    public func cancelTask(_ identifier: String) {
-        self.tasks[identifier]?.cancel()
-        self.tasks.removeValue(forKey: identifier)
-
-        Task { @MainActor in
-            self.activeTasks.remove(identifier)
-        }
-    }
-
-    public func cancelAllTasks() {
-        self.tasks.values.forEach { $0.cancel() }
-        self.tasks.removeAll()
-
-        Task { @MainActor in
-            self.activeTasks.removeAll()
-        }
-    }
-
-    public func isTaskActive(_ identifier: String) -> Bool {
-        self.activeTasks.contains(identifier)
-    }
-
-    public func getTaskResult(_ identifier: String) -> TaskResult? {
-        self.taskResults[identifier]
-    }
-
-    // MARK: - Performance Optimized Task Scheduling
-
-    public func scheduleOptimizedTask<T>(
-        _ identifier: String,
-        operation: @escaping () async throws -> T,
-        completion: @escaping (Result<T, Error>) -> Void = { _ in }
-    ) {
-        let cpuOptimizer = CPUOptimizer.shared
-        let batteryOptimizer = BatteryOptimizer.shared
-
-        // Determine optimal priority based on system state
-        let priority: _Concurrency.TaskPriority =
-            if batteryOptimizer.currentMode == .critical {
-                .low
-            } else if cpuOptimizer.shouldDeferNonCriticalWork() {
-                .low
-            } else {
-                .medium
-            }
-
-        self.scheduleTask(
-            identifier, priority: priority, operation: operation, completion: completion)
-    }
-
-    public struct TaskResult {
-        public let identifier: String
-        public let duration: TimeInterval
-        public let success: Bool
-        public let completedAt: Date
-        public let error: String?
-
-        public init(
-            identifier: String, duration: TimeInterval, success: Bool, completedAt: Date,
-            error: String? = nil
+        public func scheduleTask<T>(
+            _ identifier: String,
+            priority: _Concurrency.TaskPriority = .low,
+            operation: @escaping () async throws -> T,
+            completion: @escaping (Result<T, Error>) -> Void = { _ in }
         ) {
-            self.identifier = identifier
-            self.duration = duration
-            self.success = success
-            self.completedAt = completedAt
-            self.error = error
+            // Cancel existing task with same identifier
+            self.cancelTask(identifier)
+
+            let task = Task(priority: priority) {
+                self.activeTasks.insert(identifier)
+
+                let startTime = Date().timeIntervalSinceReferenceDate
+
+                do {
+                    let result = try await operation()
+                    let duration = Date().timeIntervalSinceReferenceDate - startTime
+
+                    self.taskResults[identifier] = TaskResult(
+                        identifier: identifier,
+                        duration: duration,
+                        success: true,
+                        completedAt: Date()
+                    )
+                    self.activeTasks.remove(identifier)
+
+                    completion(.success(result))
+                } catch {
+                    let duration = Date().timeIntervalSinceReferenceDate - startTime
+
+                    self.taskResults[identifier] = TaskResult(
+                        identifier: identifier,
+                        duration: duration,
+                        success: false,
+                        completedAt: Date(),
+                        error: error.localizedDescription
+                    )
+                    self.activeTasks.remove(identifier)
+
+                    completion(.failure(error))
+                }
+            }
+
+            self.tasks[identifier] = task
+        }
+
+        public func cancelTask(_ identifier: String) {
+            self.tasks[identifier]?.cancel()
+            self.tasks.removeValue(forKey: identifier)
+
+            Task { @MainActor in
+                self.activeTasks.remove(identifier)
+            }
+        }
+
+        public func cancelAllTasks() {
+            self.tasks.values.forEach { $0.cancel() }
+            self.tasks.removeAll()
+
+            Task { @MainActor in
+                self.activeTasks.removeAll()
+            }
+        }
+
+        public func isTaskActive(_ identifier: String) -> Bool {
+            self.activeTasks.contains(identifier)
+        }
+
+        public func getTaskResult(_ identifier: String) -> TaskResult? {
+            self.taskResults[identifier]
+        }
+
+        // MARK: - Performance Optimized Task Scheduling
+
+        public func scheduleOptimizedTask<T>(
+            _ identifier: String,
+            operation: @escaping () async throws -> T,
+            completion: @escaping (Result<T, Error>) -> Void = { _ in }
+        ) {
+            let cpuOptimizer = CPUOptimizer.shared
+            let batteryOptimizer = BatteryOptimizer.shared
+
+            // Determine optimal priority based on system state
+            let priority: _Concurrency.TaskPriority =
+                if batteryOptimizer.currentMode == .critical {
+                    .low
+                } else if cpuOptimizer.shouldDeferNonCriticalWork() {
+                    .low
+                } else {
+                    .medium
+                }
+
+            self.scheduleTask(
+                identifier, priority: priority, operation: operation, completion: completion
+            )
+        }
+
+        public struct TaskResult {
+            public let identifier: String
+            public let duration: TimeInterval
+            public let success: Bool
+            public let completedAt: Date
+            public let error: String?
+
+            public init(
+                identifier: String, duration: TimeInterval, success: Bool, completedAt: Date,
+                error: String? = nil
+            ) {
+                self.identifier = identifier
+                self.duration = duration
+                self.success = success
+                self.completedAt = completedAt
+                self.error = error
+            }
         }
     }
-}
 #endif
 
 // MARK: - Data Extensions for Performance
 
 #if !os(Linux)
-extension Data {
-    func compressed() throws -> Data {
-        try (self as NSData).compressed(using: .lzfse) as Data
-    }
+    extension Data {
+        func compressed() throws -> Data {
+            try (self as NSData).compressed(using: .lzfse) as Data
+        }
 
-    func decompressed() throws -> Data {
-        try (self as NSData).decompressed(using: .lzfse) as Data
+        func decompressed() throws -> Data {
+            try (self as NSData).decompressed(using: .lzfse) as Data
+        }
     }
-}
 #endif
 
 // MARK: - UserDefaults Performance Optimization
 
-extension UserDefaults {
-    public func setOptimized(_ object: some Codable & Sendable, forKey key: String) async throws {
+public extension UserDefaults {
+    func setOptimized(_ object: some Codable & Sendable, forKey key: String) async throws {
         // MainActor required for DataOptimizer
         let data = try await MainActor.run {
             try DataOptimizer.compressJSON(object)
@@ -575,22 +578,22 @@ extension UserDefaults {
         set(data, forKey: key)
     }
 
-    public func getOptimized<T: Codable>(_ type: T.Type, forKey key: String) throws -> T? {
+    func getOptimized<T: Codable>(_ type: T.Type, forKey key: String) throws -> T? {
         guard let data = data(forKey: key) else { return nil }
 
         let decoder = JSONDecoder()
 
         #if !os(Linux)
-        // Try decompression first
-        do {
-            let decompressed = try data.decompressed()
-            return try decoder.decode(type, from: decompressed)
-        } catch {
-            // Fall back to direct decoding
-            return try decoder.decode(type, from: data)
-        }
+            // Try decompression first
+            do {
+                let decompressed = try data.decompressed()
+                return try decoder.decode(type, from: decompressed)
+            } catch {
+                // Fall back to direct decoding
+                return try decoder.decode(type, from: data)
+            }
         #else
-        return try decoder.decode(type, from: data)
+            return try decoder.decode(type, from: data)
         #endif
     }
 }

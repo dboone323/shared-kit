@@ -1,0 +1,65 @@
+[
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/InputValidator.swift",
+    "line" : 37,
+    "reason" : "Line should be 120 characters or less; currently it has 124 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/InputValidator.swift",
+    "line" : 69,
+    "reason" : "Line should be 120 characters or less; currently it has 134 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Security/InputValidator.swift",
+    "line" : 220,
+    "reason" : "Line should be 120 characters or less; currently it has 130 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Integration/IntegrationWorkflows.swift",
+    "line" : 124,
+    "reason" : "Limit vertical whitespace to a single empty line; currently 2",
+    "rule_id" : "vertical_whitespace",
+    "severity" : "Warning",
+    "type" : "Vertical Whitespace"
+  },
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Integration/IntegrationWorkflows.swift",
+    "line" : 123,
+    "reason" : "Don't include vertical whitespace (empty line) before closing braces",
+    "rule_id" : "vertical_whitespace_closing_braces",
+    "severity" : "Warning",
+    "type" : "Vertical Whitespace before Closing Braces"
+  },
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/AccessibilityLabels.swift",
+    "line" : 4,
+    "reason" : "Limit vertical whitespace to a single empty line; currently 2",
+    "rule_id" : "vertical_whitespace",
+    "severity" : "Warning",
+    "type" : "Vertical Whitespace"
+  },
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SecurityFramework.swift",
+    "line" : 18,
+    "reason" : "Lines should not have trailing whitespace",
+    "rule_id" : "trailing_whitespace",
+    "severity" : "Warning",
+    "type" : "Trailing Whitespace"
+  }
+]

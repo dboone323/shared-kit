@@ -1,7 +1,7 @@
 import Foundation
 
 public enum TestHelpers {
-    // Simple wait-for condition with timeout for async UI/testing
+    /// Simple wait-for condition with timeout for async UI/testing
     @discardableResult
     public static func wait(seconds: TimeInterval) -> Bool {
         let until = Date().addingTimeInterval(seconds)
@@ -26,5 +26,5 @@ public enum TestHelpers {
     }
 }
 
-// Marker type to locate bundle in XCTest contexts
+/// Marker type to locate bundle in XCTest contexts
 private final class BundleMarker {}

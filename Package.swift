@@ -5,8 +5,8 @@ let package = Package(
     name: "shared-kit",
     // Lower macOS platform version to enable test discovery on current host (macOS 14)
     platforms: [
-        .iOS(.v18),
-        .macOS(.v14),
+        .iOS("26.0"),
+        .macOS("26.0"),
     ],
     products: [
         .library(

@@ -9,7 +9,7 @@ private enum VerificationError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .unhealthyService(let name, let details):
+        case let .unhealthyService(name, details):
             return "Service '\(name)' is not healthy: \(details)"
         case .backupRoundTripFailed:
             return "Backup round-trip validation failed."
@@ -53,9 +53,9 @@ private struct RuntimeAssuranceVerifier {
             switch status {
             case .healthy:
                 continue
-            case .degraded(let reason):
+            case let .degraded(reason):
                 throw VerificationError.unhealthyService(name: service, details: "degraded: \(reason)")
-            case .unhealthy(let error):
+            case let .unhealthy(error):
                 throw VerificationError.unhealthyService(
                     name: service,
                     details: "unhealthy: \(error.localizedDescription)"

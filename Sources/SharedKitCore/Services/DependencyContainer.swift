@@ -11,695 +11,701 @@ import Foundation
 #if canImport(SwiftData)
     @_exported import SwiftData
 
-// MARK: - Dependency Injection Container
+    // MARK: - Dependency Injection Container
 
-/// Main dependency injection container for the service layer
-public final class DependencyContainer: @unchecked Sendable {
-    // MARK: - Singleton Instance
+    /// Main dependency injection container for the service layer
+    public final class DependencyContainer: @unchecked Sendable {
+        // MARK: - Singleton Instance
 
-    public static let shared = DependencyContainer()
+        public static let shared = DependencyContainer()
 
-    // MARK: - Private Properties
+        // MARK: - Private Properties
 
-    private var services: [String: Any] = [:]
-    private var factories: [String: () -> Any] = [:]
-    private var singletons: [String: Any] = [:]
-    private let lock = NSLock()
+        private var services: [String: Any] = [:]
+        private var factories: [String: () -> Any] = [:]
+        private var singletons: [String: Any] = [:]
+        private let lock = NSLock()
 
-    // MARK: - Initialization
+        // MARK: - Initialization
 
-    private init() {
-        self.setupDefaultServices()
-    }
+        private init() {
+            self.setupDefaultServices()
+        }
 
-    // MARK: - Registration Methods
+        // MARK: - Registration Methods
 
-    /// Register a service instance
-    public func register<T>(_ service: T, for type: T.Type) {
-        self.lock.lock()
-        defer { lock.unlock() }
+        /// Register a service instance
+        public func register<T>(_ service: T, for type: T.Type) {
+            self.lock.lock()
+            defer { lock.unlock() }
 
-        let key = String(describing: type)
-        self.services[key] = service
-    }
+            let key = String(describing: type)
+            self.services[key] = service
+        }
 
-    /// Register a factory for creating service instances
-    public func register<T>(factory: @escaping () -> T, for type: T.Type) {
-        self.lock.lock()
-        defer { lock.unlock() }
+        /// Register a factory for creating service instances
+        public func register<T>(factory: @escaping () -> T, for type: T.Type) {
+            self.lock.lock()
+            defer { lock.unlock() }
 
-        let key = String(describing: type)
-        self.factories[key] = factory
-    }
+            let key = String(describing: type)
+            self.factories[key] = factory
+        }
 
-    /// Register a singleton factory
-    public func registerSingleton<T>(factory: @escaping () -> T, for type: T.Type) {
-        self.lock.lock()
-        defer { lock.unlock() }
+        /// Register a singleton factory
+        public func registerSingleton<T>(factory: @escaping () -> T, for type: T.Type) {
+            self.lock.lock()
+            defer { lock.unlock() }
 
-        let key = String(describing: type)
-        self.factories[key] = {
-            if let existing = self.singletons[key] {
-                return existing
+            let key = String(describing: type)
+            self.factories[key] = {
+                if let existing = self.singletons[key] {
+                    return existing
+                }
+                let instance = factory()
+                self.singletons[key] = instance
+                return instance
             }
-            let instance = factory()
-            self.singletons[key] = instance
-            return instance
-        }
-    }
-
-    // MARK: - Resolution Methods
-
-    /// Resolve a service instance
-    public func resolve<T>(_ type: T.Type) -> T? {
-        self.lock.lock()
-        defer { lock.unlock() }
-
-        let key = String(describing: type)
-
-        // Check for registered instance
-        if let service = services[key] as? T {
-            return service
         }
 
-        // Check for factory
-        if let factory = factories[key] {
-            return factory() as? T
-        }
+        // MARK: - Resolution Methods
 
-        return nil
-    }
+        /// Resolve a service instance
+        public func resolve<T>(_ type: T.Type) -> T? {
+            self.lock.lock()
+            defer { lock.unlock() }
 
-    /// Resolve a service instance with error handling
-    public func resolve<T>(_ type: T.Type) throws -> T {
-        guard let service = resolve(type) else {
-            throw DependencyError.serviceNotFound(String(describing: type))
-        }
-        return service
-    }
+            let key = String(describing: type)
 
-    /// Check if a service is registered
-    public func isRegistered(_ type: (some Any).Type) -> Bool {
-        self.lock.lock()
-        defer { lock.unlock() }
-
-        let key = String(describing: type)
-        return self.services[key] != nil || self.factories[key] != nil
-    }
-
-    // MARK: - Lifecycle Methods
-
-    /// Clear all registrations
-    public func clear() {
-        self.lock.lock()
-        defer { lock.unlock() }
-
-        self.services.removeAll()
-        self.factories.removeAll()
-        self.singletons.removeAll()
-    }
-
-    /// Reset to default configuration
-    public func reset() {
-        self.clear()
-        self.setupDefaultServices()
-    }
-
-    // MARK: - Private Methods
-
-    private func setupDefaultServices() {
-        // Register default service implementations
-        self.registerSingleton(
-            factory: { DefaultAnalyticsService() }, for: AnalyticsServiceProtocol.self)
-        self.registerSingleton(
-            factory: { DefaultCrossProjectService() }, for: CrossProjectServiceProtocol.self)
-
-        // Register data services
-        self.registerSingleton(factory: { DefaultHabitService() }, for: HabitServiceProtocol.self)
-        self.registerSingleton(
-            factory: { DefaultFinancialService() }, for: FinancialServiceProtocol.self)
-        self.registerSingleton(
-            factory: { DefaultPlannerService() }, for: PlannerServiceProtocol.self)
-    }
-}
-
-// MARK: - Dependency Injection Property Wrapper
-
-/// Property wrapper for automatic dependency injection
-@propertyWrapper
-public struct Injected<T> {
-    private var service: T?
-
-    public var wrappedValue: T {
-        mutating get {
-            if let service {
+            // Check for registered instance
+            if let service = services[key] as? T {
                 return service
             }
 
-            guard let resolvedService = DependencyContainer.shared.resolve(T.self) else {
-                fatalError("Service of type \(T.self) not registered in DependencyContainer")
+            // Check for factory
+            if let factory = factories[key] {
+                return factory() as? T
             }
 
-            service = resolvedService
-            return resolvedService
-        }
-        set {
-            self.service = newValue
-        }
-    }
-
-    public init() {}
-
-    public init(wrappedValue: T) {
-        self.service = wrappedValue
-    }
-}
-
-// MARK: - Service Locator Pattern
-
-/// Service locator for accessing services
-public enum ServiceLocator {
-    public static func get<T>(_ type: T.Type) -> T? {
-        DependencyContainer.shared.resolve(type)
-    }
-
-    public static func get<T>(_ type: T.Type) throws -> T {
-        try DependencyContainer.shared.resolve(type)
-    }
-
-    public static func register<T>(_ service: T, for type: T.Type) {
-        DependencyContainer.shared.register(service, for: type)
-    }
-}
-
-// MARK: - Error Types
-
-public enum DependencyError: Error, LocalizedError {
-    case serviceNotFound(String)
-    case circularDependency(String)
-    case initializationFailed(String)
-
-    public var errorDescription: String? {
-        switch self {
-        case .serviceNotFound(let service):
-            "Service not found: \(service)"
-        case .circularDependency(let service):
-            "Circular dependency detected for service: \(service)"
-        case .initializationFailed(let service):
-            "Failed to initialize service: \(service)"
-        }
-    }
-}
-
-// MARK: - Service Manager
-
-/// Manager for service lifecycle and configuration
-@MainActor
-public final class ServiceManager: @unchecked Sendable {
-    public static let shared = ServiceManager()
-
-    private var initializedServices: Set<String> = []
-    private let lock = NSLock()
-
-    private init() {}
-
-    private func withInitializedServicesLock<T>(_ operation: () -> T) -> T {
-        self.lock.lock()
-        defer { self.lock.unlock() }
-        return operation()
-    }
-
-    /// Initialize all registered services
-    public func initializeServices() async throws {
-        let container = DependencyContainer.shared
-
-        // Initialize analytics service
-        if let analyticsService = container.resolve(AnalyticsServiceProtocol.self) {
-            try await self.initializeService(analyticsService)
+            return nil
         }
 
-        // Initialize cross-project service
-        if let crossProjectService = container.resolve(CrossProjectServiceProtocol.self) {
-            try await self.initializeService(crossProjectService)
-        }
-
-        // Initialize business logic services
-        if let habitService = container.resolve(HabitServiceProtocol.self) {
-            try await self.initializeService(habitService)
-        }
-
-        if let financialService = container.resolve(FinancialServiceProtocol.self) {
-            try await self.initializeService(financialService)
-        }
-
-        if let plannerService = container.resolve(PlannerServiceProtocol.self) {
-            try await self.initializeService(plannerService)
-        }
-    }
-
-    /// Initialize a specific service
-    private func initializeService(_ service: ServiceProtocol) async throws {
-        let serviceId = service.serviceId
-        let alreadyInitialized = self.withInitializedServicesLock {
-            self.initializedServices.contains(serviceId)
-        }
-
-        if !alreadyInitialized {
-            try await service.initialize()
-
-            _ = self.withInitializedServicesLock {
-                self.initializedServices.insert(serviceId)
+        /// Resolve a service instance with error handling
+        public func resolve<T>(_ type: T.Type) throws -> T {
+            guard let service = resolve(type) else {
+                throw DependencyError.serviceNotFound(String(describing: type))
             }
-        }
-    }
-
-    /// Cleanup all services
-    public func cleanupServices() async {
-        let container = DependencyContainer.shared
-
-        let hasInitializedServices = self.withInitializedServicesLock {
-            !self.initializedServices.isEmpty
-        }
-        guard hasInitializedServices else {
-            return
+            return service
         }
 
-        // Cleanup services in reverse order.
-        if let analyticsService = container.resolve(AnalyticsServiceProtocol.self) {
-            await analyticsService.cleanup()
+        /// Check if a service is registered
+        public func isRegistered(_ type: (some Any).Type) -> Bool {
+            self.lock.lock()
+            defer { lock.unlock() }
+
+            let key = String(describing: type)
+            return self.services[key] != nil || self.factories[key] != nil
         }
 
-        if let crossProjectService = container.resolve(CrossProjectServiceProtocol.self) {
-            await crossProjectService.cleanup()
+        // MARK: - Lifecycle Methods
+
+        /// Clear all registrations
+        public func clear() {
+            self.lock.lock()
+            defer { lock.unlock() }
+
+            self.services.removeAll()
+            self.factories.removeAll()
+            self.singletons.removeAll()
         }
 
-        if let habitService = container.resolve(HabitServiceProtocol.self) {
-            await habitService.cleanup()
+        /// Reset to default configuration
+        public func reset() {
+            self.clear()
+            self.setupDefaultServices()
         }
 
-        if let financialService = container.resolve(FinancialServiceProtocol.self) {
-            await financialService.cleanup()
-        }
+        // MARK: - Private Methods
 
-        if let plannerService = container.resolve(PlannerServiceProtocol.self) {
-            await plannerService.cleanup()
-        }
-
-        self.withInitializedServicesLock {
-            self.initializedServices.removeAll()
-        }
-    }
-
-    /// Get health status of all services
-    public func getServicesHealthStatus() async -> [String: ServiceHealthStatus] {
-        let container = DependencyContainer.shared
-        var healthStatuses: [String: ServiceHealthStatus] = [:]
-
-        if let analyticsService = container.resolve(AnalyticsServiceProtocol.self) {
-            healthStatuses[analyticsService.serviceId] = await analyticsService.healthCheck()
-        }
-
-        if let crossProjectService = container.resolve(CrossProjectServiceProtocol.self) {
-            healthStatuses[crossProjectService.serviceId] = await crossProjectService.healthCheck()
-        }
-
-        if let habitService = container.resolve(HabitServiceProtocol.self) {
-            healthStatuses[habitService.serviceId] = await habitService.healthCheck()
-        }
-
-        if let financialService = container.resolve(FinancialServiceProtocol.self) {
-            healthStatuses[financialService.serviceId] = await financialService.healthCheck()
-        }
-
-        if let plannerService = container.resolve(PlannerServiceProtocol.self) {
-            healthStatuses[plannerService.serviceId] = await plannerService.healthCheck()
-        }
-
-        return healthStatuses
-    }
-}
-
-// MARK: - Default Service Implementations
-
-/// Default analytics service implementation
-final class DefaultAnalyticsService: AnalyticsServiceProtocol {
-    let serviceId = "default_analytics_service"
-    let version = "1.0.0"
-
-    func initialize() async throws {
-        // Initialize analytics tracking
-        NSLog(
-            "[DefaultAnalyticsService] WARNING: Non-persistent analytics initialized. "
-                + "Real backend integration required for production."
-        )
-    }
-
-    func cleanup() async {
-        // Cleanup analytics resources
-        print("Analytics service cleaned up")
-    }
-
-    func healthCheck() async -> ServiceHealthStatus {
-        .healthy
-    }
-
-    func track(event: String, properties: [String: AnyCodable]?, userId: String?) async {
-        // Default implementation - log to console in debug mode
-        #if DEBUG
-            print(
-                "📊 Analytics: \(event) | User: \(userId ?? "anonymous") | Properties: \(properties ?? [:])"
+        private func setupDefaultServices() {
+            // Register default service implementations
+            self.registerSingleton(
+                factory: { DefaultAnalyticsService() }, for: AnalyticsServiceProtocol.self
             )
-        #endif
+            self.registerSingleton(
+                factory: { DefaultCrossProjectService() }, for: CrossProjectServiceProtocol.self
+            )
+
+            // Register data services
+            self.registerSingleton(factory: { DefaultHabitService() }, for: HabitServiceProtocol.self)
+            self.registerSingleton(
+                factory: { DefaultFinancialService() }, for: FinancialServiceProtocol.self
+            )
+            self.registerSingleton(
+                factory: { DefaultPlannerService() }, for: PlannerServiceProtocol.self
+            )
+        }
     }
 
-    func trackUserAction(_ action: UserAction) async {
-        await self.track(event: action.action, properties: action.metadata, userId: action.userId)
+    // MARK: - Dependency Injection Property Wrapper
+
+    /// Property wrapper for automatic dependency injection
+    @propertyWrapper
+    public struct Injected<T> {
+        private var service: T?
+
+        public var wrappedValue: T {
+            mutating get {
+                if let service {
+                    return service
+                }
+
+                guard let resolvedService = DependencyContainer.shared.resolve(T.self) else {
+                    fatalError("Service of type \(T.self) not registered in DependencyContainer")
+                }
+
+                service = resolvedService
+                return resolvedService
+            }
+            set {
+                self.service = newValue
+            }
+        }
+
+        public init() {}
+
+        public init(wrappedValue: T) {
+            self.service = wrappedValue
+        }
     }
 
-    func trackPerformance(_ metric: PerformanceMetric) async {
-        await self.track(
-            event: "performance_metric",
-            properties: [
-                "name": AnyCodable(metric.name),
-                "value": AnyCodable(metric.value),
-                "unit": AnyCodable(metric.unit),
-            ], userId: nil)
+    // MARK: - Service Locator Pattern
+
+    /// Service locator for accessing services
+    public enum ServiceLocator {
+        public static func get<T>(_ type: T.Type) -> T? {
+            DependencyContainer.shared.resolve(type)
+        }
+
+        public static func get<T>(_ type: T.Type) throws -> T {
+            try DependencyContainer.shared.resolve(type)
+        }
+
+        public static func register<T>(_ service: T, for type: T.Type) {
+            DependencyContainer.shared.register(service, for: type)
+        }
     }
 
-    func trackError(_ error: any Error & Sendable, context: [String: AnyCodable]?) async {
-        await self.track(event: "error", properties: context, userId: nil)
+    // MARK: - Error Types
+
+    public enum DependencyError: Error, LocalizedError {
+        case serviceNotFound(String)
+        case circularDependency(String)
+        case initializationFailed(String)
+
+        public var errorDescription: String? {
+            switch self {
+            case let .serviceNotFound(service):
+                "Service not found: \(service)"
+            case let .circularDependency(service):
+                "Circular dependency detected for service: \(service)"
+            case let .initializationFailed(service):
+                "Failed to initialize service: \(service)"
+            }
+        }
     }
 
-    func getAnalyticsSummary(timeRange: DateInterval) async throws -> AnalyticsSummary {
-        // Default implementation returns empty summary
-        AnalyticsSummary(
-            timeRange: timeRange,
-            totalEvents: 0,
-            uniqueUsers: 0,
-            topActions: [:],
-            averageSessionDuration: 0,
-            errorRate: 0,
-            performanceMetrics: [:]
-        )
+    // MARK: - Service Manager
+
+    /// Manager for service lifecycle and configuration
+    @MainActor
+    public final class ServiceManager: @unchecked Sendable {
+        public static let shared = ServiceManager()
+
+        private var initializedServices: Set<String> = []
+        private let lock = NSLock()
+
+        private init() {}
+
+        private func withInitializedServicesLock<T>(_ operation: () -> T) -> T {
+            self.lock.lock()
+            defer { self.lock.unlock() }
+            return operation()
+        }
+
+        /// Initialize all registered services
+        public func initializeServices() async throws {
+            let container = DependencyContainer.shared
+
+            // Initialize analytics service
+            if let analyticsService = container.resolve(AnalyticsServiceProtocol.self) {
+                try await self.initializeService(analyticsService)
+            }
+
+            // Initialize cross-project service
+            if let crossProjectService = container.resolve(CrossProjectServiceProtocol.self) {
+                try await self.initializeService(crossProjectService)
+            }
+
+            // Initialize business logic services
+            if let habitService = container.resolve(HabitServiceProtocol.self) {
+                try await self.initializeService(habitService)
+            }
+
+            if let financialService = container.resolve(FinancialServiceProtocol.self) {
+                try await self.initializeService(financialService)
+            }
+
+            if let plannerService = container.resolve(PlannerServiceProtocol.self) {
+                try await self.initializeService(plannerService)
+            }
+        }
+
+        /// Initialize a specific service
+        private func initializeService(_ service: ServiceProtocol) async throws {
+            let serviceId = service.serviceId
+            let alreadyInitialized = self.withInitializedServicesLock {
+                self.initializedServices.contains(serviceId)
+            }
+
+            if !alreadyInitialized {
+                try await service.initialize()
+
+                _ = self.withInitializedServicesLock {
+                    self.initializedServices.insert(serviceId)
+                }
+            }
+        }
+
+        /// Cleanup all services
+        public func cleanupServices() async {
+            let container = DependencyContainer.shared
+
+            let hasInitializedServices = self.withInitializedServicesLock {
+                !self.initializedServices.isEmpty
+            }
+            guard hasInitializedServices else {
+                return
+            }
+
+            // Cleanup services in reverse order.
+            if let analyticsService = container.resolve(AnalyticsServiceProtocol.self) {
+                await analyticsService.cleanup()
+            }
+
+            if let crossProjectService = container.resolve(CrossProjectServiceProtocol.self) {
+                await crossProjectService.cleanup()
+            }
+
+            if let habitService = container.resolve(HabitServiceProtocol.self) {
+                await habitService.cleanup()
+            }
+
+            if let financialService = container.resolve(FinancialServiceProtocol.self) {
+                await financialService.cleanup()
+            }
+
+            if let plannerService = container.resolve(PlannerServiceProtocol.self) {
+                await plannerService.cleanup()
+            }
+
+            self.withInitializedServicesLock {
+                self.initializedServices.removeAll()
+            }
+        }
+
+        /// Get health status of all services
+        public func getServicesHealthStatus() async -> [String: ServiceHealthStatus] {
+            let container = DependencyContainer.shared
+            var healthStatuses: [String: ServiceHealthStatus] = [:]
+
+            if let analyticsService = container.resolve(AnalyticsServiceProtocol.self) {
+                healthStatuses[analyticsService.serviceId] = await analyticsService.healthCheck()
+            }
+
+            if let crossProjectService = container.resolve(CrossProjectServiceProtocol.self) {
+                healthStatuses[crossProjectService.serviceId] = await crossProjectService.healthCheck()
+            }
+
+            if let habitService = container.resolve(HabitServiceProtocol.self) {
+                healthStatuses[habitService.serviceId] = await habitService.healthCheck()
+            }
+
+            if let financialService = container.resolve(FinancialServiceProtocol.self) {
+                healthStatuses[financialService.serviceId] = await financialService.healthCheck()
+            }
+
+            if let plannerService = container.resolve(PlannerServiceProtocol.self) {
+                healthStatuses[plannerService.serviceId] = await plannerService.healthCheck()
+            }
+
+            return healthStatuses
+        }
     }
 
-    func exportData(format _: ExportFormat, timeRange _: DateInterval) async throws -> Data {
-        // Default implementation returns empty data
-        Data()
+    // MARK: - Default Service Implementations
+
+    /// Default analytics service implementation
+    final class DefaultAnalyticsService: AnalyticsServiceProtocol {
+        let serviceId = "default_analytics_service"
+        let version = "1.0.0"
+
+        func initialize() async throws {
+            // Initialize analytics tracking
+            NSLog(
+                "[DefaultAnalyticsService] WARNING: Non-persistent analytics initialized. "
+                    + "Real backend integration required for production."
+            )
+        }
+
+        func cleanup() async {
+            // Cleanup analytics resources
+            print("Analytics service cleaned up")
+        }
+
+        func healthCheck() async -> ServiceHealthStatus {
+            .healthy
+        }
+
+        func track(event: String, properties: [String: AnyCodable]?, userId: String?) async {
+            // Default implementation - log to console in debug mode
+            #if DEBUG
+                print(
+                    "📊 Analytics: \(event) | User: \(userId ?? "anonymous") | Properties: \(properties ?? [:])"
+                )
+            #endif
+        }
+
+        func trackUserAction(_ action: UserAction) async {
+            await self.track(event: action.action, properties: action.metadata, userId: action.userId)
+        }
+
+        func trackPerformance(_ metric: PerformanceMetric) async {
+            await self.track(
+                event: "performance_metric",
+                properties: [
+                    "name": AnyCodable(metric.name),
+                    "value": AnyCodable(metric.value),
+                    "unit": AnyCodable(metric.unit),
+                ], userId: nil
+            )
+        }
+
+        func trackError(_ error: any Error & Sendable, context: [String: AnyCodable]?) async {
+            await self.track(event: "error", properties: context, userId: nil)
+        }
+
+        func getAnalyticsSummary(timeRange: DateInterval) async throws -> AnalyticsSummary {
+            // Default implementation returns empty summary
+            AnalyticsSummary(
+                timeRange: timeRange,
+                totalEvents: 0,
+                uniqueUsers: 0,
+                topActions: [:],
+                averageSessionDuration: 0,
+                errorRate: 0,
+                performanceMetrics: [:]
+            )
+        }
+
+        func exportData(format _: ExportFormat, timeRange _: DateInterval) async throws -> Data {
+            // Default implementation returns empty data
+            Data()
+        }
     }
-}
 
-/// Default cross-project service implementation
-final class DefaultCrossProjectService: CrossProjectServiceProtocol {
-    let serviceId = "default_cross_project_service"
-    let version = "1.0.0"
+    /// Default cross-project service implementation
+    final class DefaultCrossProjectService: CrossProjectServiceProtocol {
+        let serviceId = "default_cross_project_service"
+        let version = "1.0.0"
 
-    func initialize() async throws {
-        NSLog(
-            "[DefaultCrossProjectService] WARNING: Limited synchronization initialized. "
-                + "Full sync requires a registered CrossProjectService."
-        )
-    }
+        func initialize() async throws {
+            NSLog(
+                "[DefaultCrossProjectService] WARNING: Limited synchronization initialized. "
+                    + "Full sync requires a registered CrossProjectService."
+            )
+        }
 
-    func cleanup() async {
-        print("Cross-project service cleaned up")
-    }
+        func cleanup() async {
+            print("Cross-project service cleaned up")
+        }
 
-    func healthCheck() async -> ServiceHealthStatus {
-        .healthy
-    }
+        func healthCheck() async -> ServiceHealthStatus {
+            .healthy
+        }
 
-    func syncData(
-        from sourceProject: SharedKitCore.ProjectType, to targetProject: SharedKitCore.ProjectType
-    ) async throws {
-        // Default implementation - placeholder
-        print("Syncing data from \(sourceProject.rawValue) to \(targetProject.rawValue)")
-    }
+        func syncData(
+            from sourceProject: SharedKitCore.ProjectType, to targetProject: SharedKitCore.ProjectType
+        ) async throws {
+            // Default implementation - placeholder
+            print("Syncing data from \(sourceProject.rawValue) to \(targetProject.rawValue)")
+        }
 
-    func getCrossProjectReferences(for _: UUID, entityType _: String) async throws
-        -> [CrossProjectReference]
-    {
-        // Default implementation returns empty array
-        []
-    }
+        func getCrossProjectReferences(for _: UUID, entityType _: String) async throws
+            -> [CrossProjectReference]
+        {
+            // Default implementation returns empty array
+            []
+        }
 
-    func createCrossProjectRelationship(_ relationship: CrossProjectRelationship) async throws {
-        // Default implementation - placeholder
-        print("Created cross-project relationship: \(relationship.type.rawValue)")
-    }
+        func createCrossProjectRelationship(_ relationship: CrossProjectRelationship) async throws {
+            // Default implementation - placeholder
+            print("Created cross-project relationship: \(relationship.type.rawValue)")
+        }
 
-    func getUnifiedUserInsights(for userId: String) async throws -> UnifiedUserInsights {
-        // Default implementation returns minimal insights
-        UnifiedUserInsights(
-            userId: userId,
-            timeRange: DateInterval(start: Date().addingTimeInterval(-86400 * 30), end: Date()),
-            habitInsights: [],
-            financialInsights: nil,
-            productivityInsights: ProductivityInsights(
+        func getUnifiedUserInsights(for userId: String) async throws -> UnifiedUserInsights {
+            // Default implementation returns minimal insights
+            UnifiedUserInsights(
                 userId: userId,
                 timeRange: DateInterval(start: Date().addingTimeInterval(-86400 * 30), end: Date()),
+                habitInsights: [],
+                financialInsights: nil,
+                productivityInsights: ProductivityInsights(
+                    userId: userId,
+                    timeRange: DateInterval(start: Date().addingTimeInterval(-86400 * 30), end: Date()),
+                    completionRate: 0,
+                    averageTaskDuration: 0,
+                    peakProductivityHours: [],
+                    productivityTrend: .stable,
+                    topCategories: [:],
+                    recommendations: []
+                ),
+                crossProjectCorrelations: [],
+                overallScore: 0,
+                recommendations: []
+            )
+        }
+
+        func exportUnifiedData(for _: String, format _: ExportFormat) async throws -> Data {
+            // Default implementation returns empty data
+            Data()
+        }
+    }
+
+    /// Default habit service implementation
+    @MainActor
+    final class DefaultHabitService: HabitServiceProtocol {
+        let serviceId = "default_habit_service"
+        let version = "1.0.0"
+
+        func initialize() async throws {
+            NSLog(
+                "[DefaultHabitService] WARNING: Volatile habit tracking initialized. "
+                    + "Data persistence requires a registered database driver."
+            )
+        }
+
+        func cleanup() async {
+            print("Habit service cleaned up")
+        }
+
+        func healthCheck() async -> ServiceHealthStatus {
+            .healthy
+        }
+
+        func createHabit(_ habit: EnhancedHabit) async throws
+            -> EnhancedHabit
+        {
+            // Default implementation - placeholder
+            print("Creating habit: \(habit.id)")
+            return habit
+        }
+
+        func logHabitCompletion(
+            _ habitId: UUID, value: Double?, mood: SharedKitCore.MoodRating?,
+            notes: String?
+        ) async throws -> EnhancedHabitLog {
+            print(
+                "ERROR: DefaultHabitService.logHabitCompletion called. Real HabitService not registered."
+            )
+            throw DependencyError.serviceNotFound(
+                "Real HabitService not registered - cannot persist log for habit \(habitId)"
+            )
+        }
+
+        func calculateStreak(for _: UUID) async throws -> Int {
+            // Default implementation returns 0
+            0
+        }
+
+        func getHabitInsights(for habitId: UUID, timeRange: DateInterval) async throws -> HabitInsights {
+            HabitInsights(
+                habitId: habitId,
+                timeRange: timeRange,
+                completionRate: 0,
+                currentStreak: 0,
+                longestStreak: 0,
+                averageValue: nil,
+                moodCorrelation: nil,
+                recommendations: []
+            )
+        }
+
+        func checkAchievements(for _: UUID) async throws -> [HabitAchievement] {
+            []
+        }
+
+        func generateRecommendations(for _: String) async throws -> [HabitRecommendation] {
+            []
+        }
+    }
+
+    /// Default financial service implementation
+    @MainActor
+    final class DefaultFinancialService: FinancialServiceProtocol {
+        let serviceId = "default_financial_service"
+        let version = "1.0.0"
+
+        func initialize() async throws {
+            NSLog(
+                "[DefaultFinancialService] WARNING: Temporary financial state initialized. "
+                    + "Secure ledger persistence required for production."
+            )
+        }
+
+        func cleanup() async {
+            print("Financial service cleaned up")
+        }
+
+        func healthCheck() async -> ServiceHealthStatus {
+            .healthy
+        }
+
+        func createTransaction(_ transaction: EnhancedFinancialTransaction)
+            async throws -> EnhancedFinancialTransaction
+        {
+            print("Creating transaction: \(transaction.amount)")
+            return transaction
+        }
+
+        func calculateAccountBalance(_: UUID, asOf _: Date?) async throws -> Double {
+            0
+        }
+
+        func getBudgetInsights(for budgetId: UUID, timeRange: DateInterval) async throws
+            -> BudgetInsights
+        {
+            BudgetInsights(
+                budgetId: budgetId,
+                timeRange: timeRange,
+                utilizationRate: 0,
+                categoryBreakdown: [:],
+                trendAnalysis: .stable,
+                recommendations: [],
+                alerts: []
+            )
+        }
+
+        func calculateNetWorth(for userId: String, asOf: Date?) async throws -> NetWorthSummary {
+            NetWorthSummary(
+                userId: userId,
+                asOfDate: asOf ?? Date(),
+                totalAssets: 0,
+                totalLiabilities: 0,
+                monthOverMonthChange: 0,
+                yearOverYearChange: 0,
+                breakdown: NetWorthBreakdown(
+                    cashAndEquivalents: 0,
+                    investments: 0,
+                    realEstate: 0,
+                    personalProperty: 0,
+                    creditCardDebt: 0,
+                    loans: 0,
+                    mortgages: 0
+                )
+            )
+        }
+
+        func generateFinancialRecommendations(for _: String) async throws -> [FinancialRecommendation] {
+            []
+        }
+
+        func categorizeTransaction(
+            _ transaction: EnhancedFinancialTransaction
+        ) async throws -> SharedKitCore.TransactionCategory {
+            .expense
+        }
+    }
+
+    /// Default planner service implementation
+    @MainActor
+    final class DefaultPlannerService: PlannerServiceProtocol {
+        let serviceId = "default_planner_service"
+        let version = "1.0.0"
+
+        func initialize() async throws {
+            NSLog(
+                "[DefaultPlannerService] WARNING: In-memory task management initialized. "
+                    + "Persistent scheduling required for production."
+            )
+        }
+
+        func cleanup() async {
+            print("Planner service cleaned up")
+        }
+
+        func healthCheck() async -> ServiceHealthStatus {
+            .healthy
+        }
+
+        func createTask(_ task: EnhancedTask) async throws
+            -> EnhancedTask
+        {
+            print("Creating task: \(task.title)")
+            return task
+        }
+
+        func updateTaskProgress(_ taskId: UUID, progress: Double) async throws -> EnhancedTask {
+            print(
+                "ERROR: DefaultPlannerService.updateTaskProgress called. Real PlannerService not registered."
+            )
+            throw DependencyError.serviceNotFound(
+                "Real PlannerService not registered - cannot update task \(taskId)"
+            )
+        }
+
+        func calculateGoalProgress(_ goalId: UUID) async throws -> GoalProgress {
+            GoalProgress(
+                goalId: goalId,
+                currentProgress: 0,
+                targetValue: 100,
+                estimatedCompletion: nil,
+                milestones: []
+            )
+        }
+
+        func generateTaskRecommendations(for _: String, context _: PlanningContext) async throws
+            -> [TaskRecommendation]
+        {
+            []
+        }
+
+        func optimizeSchedule(for userId: String, timeRange: DateInterval) async throws
+            -> ScheduleOptimization
+        {
+            ScheduleOptimization(
+                userId: userId,
+                timeRange: timeRange,
+                optimizedTasks: [],
+                efficiency: 0,
+                recommendations: []
+            )
+        }
+
+        func getProductivityInsights(for userId: String, timeRange: DateInterval) async throws
+            -> ProductivityInsights
+        {
+            ProductivityInsights(
+                userId: userId,
+                timeRange: timeRange,
                 completionRate: 0,
                 averageTaskDuration: 0,
                 peakProductivityHours: [],
                 productivityTrend: .stable,
                 topCategories: [:],
                 recommendations: []
-            ),
-            crossProjectCorrelations: [],
-            overallScore: 0,
-            recommendations: []
-        )
-    }
-
-    func exportUnifiedData(for _: String, format _: ExportFormat) async throws -> Data {
-        // Default implementation returns empty data
-        Data()
-    }
-}
-
-/// Default habit service implementation
-@MainActor
-final class DefaultHabitService: HabitServiceProtocol {
-    let serviceId = "default_habit_service"
-    let version = "1.0.0"
-
-    func initialize() async throws {
-        NSLog(
-            "[DefaultHabitService] WARNING: Volatile habit tracking initialized. "
-                + "Data persistence requires a registered database driver."
-        )
-    }
-
-    func cleanup() async {
-        print("Habit service cleaned up")
-    }
-
-    func healthCheck() async -> ServiceHealthStatus {
-        .healthy
-    }
-
-    func createHabit(_ habit: EnhancedHabit) async throws
-        -> EnhancedHabit
-    {
-        // Default implementation - placeholder
-        print("Creating habit: \(habit.id)")
-        return habit
-    }
-
-    func logHabitCompletion(
-        _ habitId: UUID, value: Double?, mood: SharedKitCore.MoodRating?,
-        notes: String?
-    ) async throws -> EnhancedHabitLog {
-        print(
-            "ERROR: DefaultHabitService.logHabitCompletion called. Real HabitService not registered."
-        )
-        throw DependencyError.serviceNotFound(
-            "Real HabitService not registered - cannot persist log for habit \(habitId)")
-    }
-
-    func calculateStreak(for _: UUID) async throws -> Int {
-        // Default implementation returns 0
-        0
-    }
-
-    func getHabitInsights(for habitId: UUID, timeRange: DateInterval) async throws -> HabitInsights
-    {
-        HabitInsights(
-            habitId: habitId,
-            timeRange: timeRange,
-            completionRate: 0,
-            currentStreak: 0,
-            longestStreak: 0,
-            averageValue: nil,
-            moodCorrelation: nil,
-            recommendations: []
-        )
-    }
-
-    func checkAchievements(for _: UUID) async throws -> [HabitAchievement] {
-        []
-    }
-
-    func generateRecommendations(for _: String) async throws -> [HabitRecommendation] {
-        []
-    }
-}
-
-/// Default financial service implementation
-@MainActor
-final class DefaultFinancialService: FinancialServiceProtocol {
-    let serviceId = "default_financial_service"
-    let version = "1.0.0"
-
-    func initialize() async throws {
-        NSLog(
-            "[DefaultFinancialService] WARNING: Temporary financial state initialized. "
-                + "Secure ledger persistence required for production."
-        )
-    }
-
-    func cleanup() async {
-        print("Financial service cleaned up")
-    }
-
-    func healthCheck() async -> ServiceHealthStatus {
-        .healthy
-    }
-
-    func createTransaction(_ transaction: EnhancedFinancialTransaction)
-        async throws -> EnhancedFinancialTransaction
-    {
-        print("Creating transaction: \(transaction.amount)")
-        return transaction
-    }
-
-    func calculateAccountBalance(_: UUID, asOf _: Date?) async throws -> Double {
-        0
-    }
-
-    func getBudgetInsights(for budgetId: UUID, timeRange: DateInterval) async throws
-        -> BudgetInsights
-    {
-        BudgetInsights(
-            budgetId: budgetId,
-            timeRange: timeRange,
-            utilizationRate: 0,
-            categoryBreakdown: [:],
-            trendAnalysis: .stable,
-            recommendations: [],
-            alerts: []
-        )
-    }
-
-    func calculateNetWorth(for userId: String, asOf: Date?) async throws -> NetWorthSummary {
-        NetWorthSummary(
-            userId: userId,
-            asOfDate: asOf ?? Date(),
-            totalAssets: 0,
-            totalLiabilities: 0,
-            monthOverMonthChange: 0,
-            yearOverYearChange: 0,
-            breakdown: NetWorthBreakdown(
-                cashAndEquivalents: 0,
-                investments: 0,
-                realEstate: 0,
-                personalProperty: 0,
-                creditCardDebt: 0,
-                loans: 0,
-                mortgages: 0
             )
-        )
+        }
     }
-
-    func generateFinancialRecommendations(for _: String) async throws -> [FinancialRecommendation] {
-        []
-    }
-
-    func categorizeTransaction(
-        _ transaction: EnhancedFinancialTransaction
-    ) async throws -> SharedKitCore.TransactionCategory {
-        .expense
-    }
-}
-
-/// Default planner service implementation
-@MainActor
-final class DefaultPlannerService: PlannerServiceProtocol {
-    let serviceId = "default_planner_service"
-    let version = "1.0.0"
-
-    func initialize() async throws {
-        NSLog(
-            "[DefaultPlannerService] WARNING: In-memory task management initialized. "
-                + "Persistent scheduling required for production."
-        )
-    }
-
-    func cleanup() async {
-        print("Planner service cleaned up")
-    }
-
-    func healthCheck() async -> ServiceHealthStatus {
-        .healthy
-    }
-
-    func createTask(_ task: EnhancedTask) async throws
-        -> EnhancedTask
-    {
-        print("Creating task: \(task.title)")
-        return task
-    }
-
-    func updateTaskProgress(_ taskId: UUID, progress: Double) async throws -> EnhancedTask {
-        print(
-            "ERROR: DefaultPlannerService.updateTaskProgress called. Real PlannerService not registered."
-        )
-        throw DependencyError.serviceNotFound(
-            "Real PlannerService not registered - cannot update task \(taskId)")
-    }
-
-    func calculateGoalProgress(_ goalId: UUID) async throws -> GoalProgress {
-        GoalProgress(
-            goalId: goalId,
-            currentProgress: 0,
-            targetValue: 100,
-            estimatedCompletion: nil,
-            milestones: []
-        )
-    }
-
-    func generateTaskRecommendations(for _: String, context _: PlanningContext) async throws
-        -> [TaskRecommendation]
-    {
-        []
-    }
-
-    func optimizeSchedule(for userId: String, timeRange: DateInterval) async throws
-        -> ScheduleOptimization
-    {
-        ScheduleOptimization(
-            userId: userId,
-            timeRange: timeRange,
-            optimizedTasks: [],
-            efficiency: 0,
-            recommendations: []
-        )
-    }
-
-    func getProductivityInsights(for userId: String, timeRange: DateInterval) async throws
-        -> ProductivityInsights
-    {
-        ProductivityInsights(
-            userId: userId,
-            timeRange: timeRange,
-            completionRate: 0,
-            averageTaskDuration: 0,
-            peakProductivityHours: [],
-            productivityTrend: .stable,
-            topCategories: [:],
-            recommendations: []
-        )
-    }
-}
 
 #endif

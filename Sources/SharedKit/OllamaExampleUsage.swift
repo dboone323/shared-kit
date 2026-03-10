@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Example Usage Functions
 
-// Example 1: Basic Code Generation
+/// Example 1: Basic Code Generation
 @MainActor
 func exampleCodeGeneration() async {
     print("=== Code Generation Example ===")
@@ -28,7 +28,7 @@ func exampleCodeGeneration() async {
         // Generate Swift code for a simple calculator
         let result = try await manager.generateCode(
             description:
-                "Create a Swift class for a basic calculator with add, subtract, multiply, and divide operations",
+            "Create a Swift class for a basic calculator with add, subtract, multiply, and divide operations",
             language: "Swift",
             context: nil
         )
@@ -42,7 +42,7 @@ func exampleCodeGeneration() async {
     }
 }
 
-// Example 2: Code Analysis
+/// Example 2: Code Analysis
 @MainActor
 func exampleCodeAnalysis() async {
     print("\n=== Code Analysis Example ===")
@@ -50,23 +50,23 @@ func exampleCodeAnalysis() async {
     let manager = OllamaIntegrationManager()
 
     let sampleCode = """
-        func calculateTotal(items: [Double]) -> Double {
-            var total = 0.0
-            for item in items {
-                total = total + item
-            }
-            return total
+    func calculateTotal(items: [Double]) -> Double {
+        var total = 0.0
+        for item in items {
+            total = total + item
         }
-        """
+        return total
+    }
+    """
 
     do {
         let result = try await manager.analyzeCodebase(
             code: sampleCode,
             language: "Swift"
-                // analysisType defaults to .standard or similar if not specified,
-                // or I will assume .comprehensive exists based on usage.
-                // Wait, previous usage had .comprehensive.
-                // I'll check grep results first.
+            // analysisType defaults to .standard or similar if not specified,
+            // or I will assume .comprehensive exists based on usage.
+            // Wait, previous usage had .comprehensive.
+            // I'll check grep results first.
         )
 
         print("Analysis Result:")
@@ -86,7 +86,7 @@ func exampleCodeAnalysis() async {
     }
 }
 
-// Example 3: Documentation Generation
+/// Example 3: Documentation Generation
 @MainActor
 func exampleDocumentationGeneration() async {
     print("\n=== Documentation Generation Example ===")
@@ -94,22 +94,22 @@ func exampleDocumentationGeneration() async {
     let manager = OllamaIntegrationManager()
 
     let sampleCode = """
-        struct User {
-            let id: Int
-            let name: String
-            let email: String
+    struct User {
+        let id: Int
+        let name: String
+        let email: String
 
-            init(id: Int, name: String, email: String) {
-                self.id = id
-                self.name = name
-                self.email = email
-            }
-
-            func displayName() -> String {
-                return name.capitalized
-            }
+        init(id: Int, name: String, email: String) {
+            self.id = id
+            self.name = name
+            self.email = email
         }
-        """
+
+        func displayName() -> String {
+            return name.capitalized
+        }
+    }
+    """
 
     do {
         let result = try await manager.generateDocumentation(
@@ -125,7 +125,7 @@ func exampleDocumentationGeneration() async {
     }
 }
 
-// Example 4: Batch Processing
+/// Example 4: Batch Processing
 @MainActor
 func exampleBatchProcessing() async {
     print("\n=== Batch Processing Example ===")
@@ -168,7 +168,7 @@ func exampleBatchProcessing() async {
     }
 }
 
-// Example 5: Quick Operations
+/// Example 5: Quick Operations
 @MainActor
 func exampleQuickOperations() async {
     print("\n=== Quick Operations Example ===")

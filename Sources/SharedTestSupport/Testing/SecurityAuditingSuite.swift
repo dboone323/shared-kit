@@ -2,8 +2,8 @@ import CryptoKit
 import Foundation
 import LocalAuthentication
 import Network
-import XCTest
 import os.log
+import XCTest
 
 #if canImport(UIKit)
     import UIKit
@@ -64,7 +64,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
             XCTAssertNotEqual(encryptedData, testData, "Data was not encrypted")
             XCTAssertGreaterThan(
                 encryptedData.count, testData.count,
-                "Encrypted data should be larger due to metadata")
+                "Encrypted data should be larger due to metadata"
+            )
 
             // Test decryption
             let decryptedData = try encryptionService.decrypt(encryptedData, with: testKey)
@@ -136,7 +137,7 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
 
         self.authenticationService.checkBiometricAvailability { result in
             switch result {
-            case .success(let biometricType):
+            case let .success(biometricType):
                 self.logger.info("✅ Biometric authentication available: \(biometricType.rawValue)")
 
                 // Test biometric authentication simulation
@@ -145,21 +146,22 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     .authenticateWithBiometrics(reason: "Security test authentication") {
                         authResult in
                         switch authResult {
-                        case .success(let authenticated):
+                        case let .success(authenticated):
                             XCTAssertTrue(authenticated, "Biometric authentication failed")
                             self.logger.info("✅ Biometric authentication successful")
 
-                        case .failure(let error):
+                        case let .failure(error):
                             // In test environment, biometric might not be available
                             self.logger.info(
-                                "ℹ️ Biometric authentication failed (expected in test): \(error)")
+                                "ℹ️ Biometric authentication failed (expected in test): \(error)"
+                            )
                         }
 
                         expectation.fulfill()
                     }
             // swiftlint:enable closure_parameter_position
 
-            case .failure(let error):
+            case let .failure(error):
                 // Biometric might not be available in test environment
                 self.logger.info("ℹ️ Biometric not available (expected in test): \(error)")
                 expectation.fulfill()
@@ -184,7 +186,7 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
         // Test secure transmission
         self.networkSecurity.transmitSecurely(payload: testPayload) { result in
             switch result {
-            case .success(let response):
+            case let .success(response):
                 XCTAssertNotNil(response.signature, "Response should be signed")
                 XCTAssertTrue(response.isEncrypted, "Response should be encrypted")
                 XCTAssertNotNil(response.timestamp, "Response should have timestamp")
@@ -197,7 +199,7 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                 self.logger.info("   Encrypted: \(response.isEncrypted)")
                 self.logger.info("   Signed: \(response.signature != nil)")
 
-            case .failure(let error):
+            case let .failure(error):
                 XCTFail("Secure data transmission failed: \(error)")
             }
 
@@ -224,7 +226,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     severity: .high,
                     description: sqlInjectionResult.description,
                     recommendation: "Implement parameterized queries and input validation"
-                ))
+                )
+            )
         }
 
         // Test 2: Cross-Site Scripting (XSS) Prevention
@@ -236,7 +239,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     severity: .high,
                     description: xssResult.description,
                     recommendation: "Implement proper input sanitization and output encoding"
-                ))
+                )
+            )
         }
 
         // Test 3: Insecure Data Storage
@@ -248,8 +252,9 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     severity: .medium,
                     description: dataStorageResult.description,
                     recommendation:
-                        "Encrypt sensitive data at rest and use secure storage mechanisms"
-                ))
+                    "Encrypt sensitive data at rest and use secure storage mechanisms"
+                )
+            )
         }
 
         // Test 4: Weak Authentication
@@ -261,8 +266,9 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     severity: .high,
                     description: authResult.description,
                     recommendation:
-                        "Implement strong authentication mechanisms and multi-factor authentication"
-                ))
+                    "Implement strong authentication mechanisms and multi-factor authentication"
+                )
+            )
         }
 
         // Test 5: Insufficient Transport Layer Protection
@@ -274,13 +280,15 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     severity: .high,
                     description: transportResult.description,
                     recommendation:
-                        "Use TLS 1.3, implement certificate pinning, and validate certificates"
-                ))
+                    "Use TLS 1.3, implement certificate pinning, and validate certificates"
+                )
+            )
         }
 
         // Validate vulnerability assessment results
         XCTAssertEqual(
-            vulnerabilities.count, 0, "Security vulnerabilities found: \(vulnerabilities)")
+            vulnerabilities.count, 0, "Security vulnerabilities found: \(vulnerabilities)"
+        )
 
         if vulnerabilities.isEmpty {
             self.logger.info("✅ No security vulnerabilities detected")
@@ -324,7 +332,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
 
         // Validate compliance
         XCTAssertEqual(
-            complianceIssues.count, 0, "Privacy compliance issues found: \(complianceIssues)")
+            complianceIssues.count, 0, "Privacy compliance issues found: \(complianceIssues)"
+        )
 
         if complianceIssues.isEmpty {
             self.logger.info("✅ All privacy compliance requirements met")
@@ -365,7 +374,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
         let failedRequirements = requirements.filter { !$0.isMet }
         XCTAssertEqual(
             failedRequirements.count, 0,
-            "App Store security requirements not met: \(failedRequirements)")
+            "App Store security requirements not met: \(failedRequirements)"
+        )
 
         if failedRequirements.isEmpty {
             self.logger.info("✅ All App Store security requirements met")
@@ -459,7 +469,7 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
     private func testWeakAuthentication() -> SecurityTestResult {
         // Test authentication strength
         let authStrength = self.authenticationService.getAuthenticationStrength()
-        let isStrong = authStrength.score >= 8.0  // Out of 10
+        let isStrong = authStrength.score >= 8.0 // Out of 10
 
         return SecurityTestResult(
             isSecure: isStrong,
@@ -495,7 +505,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     requirement: "Data Processing Consent",
                     description: "Valid consent for data processing not found",
                     severity: .high
-                ))
+                )
+            )
         }
 
         // Test data subject rights implementation
@@ -506,7 +517,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     requirement: "Data Subject Rights",
                     description: "Data subject rights not properly implemented",
                     severity: .high
-                ))
+                )
+            )
         }
 
         // Test privacy policy compliance
@@ -517,7 +529,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     requirement: "Privacy Policy",
                     description: "Privacy policy not GDPR compliant",
                     severity: .medium
-                ))
+                )
+            )
         }
 
         return issues
@@ -534,7 +547,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     requirement: "Opt-out Mechanism",
                     description: "CCPA opt-out mechanism not provided",
                     severity: .high
-                ))
+                )
+            )
         }
 
         // Test data disclosure transparency
@@ -545,7 +559,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     requirement: "Data Disclosure Transparency",
                     description: "Data disclosure transparency not provided",
                     severity: .medium
-                ))
+                )
+            )
         }
 
         return issues
@@ -565,9 +580,10 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     regulation: .general,
                     requirement: "Data Minimization",
                     description:
-                        "Collecting excessive data: \(excessiveDataCollection.joined(separator: ", "))",
+                    "Collecting excessive data: \(excessiveDataCollection.joined(separator: ", "))",
                     severity: .medium
-                ))
+                )
+            )
         }
 
         return issues
@@ -583,7 +599,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     requirement: "Consent Management",
                     description: "Granular consent options not provided",
                     severity: .medium
-                ))
+                )
+            )
         }
 
         if !self.securityManager.allowsConsentWithdrawal() {
@@ -593,7 +610,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     requirement: "Consent Withdrawal",
                     description: "Consent withdrawal mechanism not provided",
                     severity: .high
-                ))
+                )
+            )
         }
 
         return issues
@@ -609,7 +627,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     requirement: "Data Portability",
                     description: "Data export functionality not implemented",
                     severity: .medium
-                ))
+                )
+            )
         }
 
         return issues
@@ -625,7 +644,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                     requirement: "Right to be Forgotten",
                     description: "Data deletion functionality not implemented",
                     severity: .high
-                ))
+                )
+            )
         }
 
         return issues
@@ -642,14 +662,16 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                 name: "App Transport Security",
                 description: "ATS configuration properly set",
                 isMet: true
-            ))
+            )
+        )
 
         requirements.append(
             AppStoreSecurityRequirement(
                 name: "Privacy Permissions",
                 description: "All privacy-sensitive permissions properly described",
                 isMet: true
-            ))
+            )
+        )
 
         return requirements
     }
@@ -662,7 +684,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                 name: "Network Security Configuration",
                 description: "Network security properly configured",
                 isMet: true
-            ))
+            )
+        )
 
         return requirements
     }
@@ -675,7 +698,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                 name: "Code Signing",
                 description: "App properly code signed",
                 isMet: true
-            ))
+            )
+        )
 
         return requirements
     }
@@ -688,7 +712,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                 name: "Privacy Permissions",
                 description: "Privacy permissions properly requested and justified",
                 isMet: true
-            ))
+            )
+        )
 
         return requirements
     }
@@ -701,7 +726,8 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
                 name: "Encryption Export Compliance",
                 description: "Encryption export compliance properly declared",
                 isMet: true
-            ))
+            )
+        )
 
         return requirements
     }
@@ -710,27 +736,27 @@ final class SecurityAuditingSuite: XCTestCase, @unchecked Sendable {
 
     private func validateInputValidation() -> [SecureCodingIssue] {
         // Simulate input validation check
-        []  // No issues found
+        [] // No issues found
     }
 
     private func validateOutputEncoding() -> [SecureCodingIssue] {
         // Simulate output encoding check
-        []  // No issues found
+        [] // No issues found
     }
 
     private func validateErrorHandling() -> [SecureCodingIssue] {
         // Simulate error handling check
-        []  // No issues found
+        [] // No issues found
     }
 
     private func validateLoggingPractices() -> [SecureCodingIssue] {
         // Simulate logging practices check
-        []  // No issues found
+        [] // No issues found
     }
 
     private func validateDependencySecurity() -> [SecureCodingIssue] {
         // Simulate dependency security check
-        []  // No issues found
+        [] // No issues found
     }
 
     // MARK: - Helper Methods
@@ -877,7 +903,7 @@ final class AuthenticationService: Sendable {
         var error: NSError?
 
         if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            completion(.success(.faceID))  // Simulate Face ID availability
+            completion(.success(.faceID)) // Simulate Face ID availability
         } else {
             completion(.failure(error ?? AuthenticationError.biometricNotAvailable))
         }
@@ -979,7 +1005,7 @@ enum TLSVersion: Int, Comparable {
     case tls13 = 4
 
     static func < (lhs: TLSVersion, rhs: TLSVersion) -> Bool {
-        return lhs.rawValue < rhs.rawValue
+        lhs.rawValue < rhs.rawValue
     }
 }
 

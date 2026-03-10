@@ -1,41 +1,41 @@
 #if canImport(CryptoKit)
-import CryptoKit
+    import CryptoKit
 #elseif canImport(Crypto)
-import Crypto
+    import Crypto
 #endif
 import Foundation
 
 #if canImport(CryptoKit) || canImport(Crypto)
-public enum EncryptedFileStoreError: Error {
-    case invalidCiphertext
-    case missingData
-}
-
-public actor EncryptedFileStore {
-    public static let shared = EncryptedFileStore()
-
-    private var symmetricKey: SymmetricKey
-
-    public init() {
-        symmetricKey = SymmetricKey(size: .bits256)
+    public enum EncryptedFileStoreError: Error {
+        case invalidCiphertext
+        case missingData
     }
 
-    public func updateKey(_ key: SymmetricKey) {
-        symmetricKey = key
-    }
+    public actor EncryptedFileStore {
+        public static let shared = EncryptedFileStore()
 
-    public func save(_ data: Data, to url: URL) throws {
-        let sealed = try AES.GCM.seal(data, using: symmetricKey)
-        guard let combined = sealed.combined else {
-            throw EncryptedFileStoreError.invalidCiphertext
+        private var symmetricKey: SymmetricKey
+
+        public init() {
+            symmetricKey = SymmetricKey(size: .bits256)
         }
-        try combined.write(to: url, options: .atomic)
-    }
 
-    public func load(from url: URL) throws -> Data {
-        let encrypted = try Data(contentsOf: url)
-        let sealed = try AES.GCM.SealedBox(combined: encrypted)
-        return try AES.GCM.open(sealed, using: symmetricKey)
+        public func updateKey(_ key: SymmetricKey) {
+            symmetricKey = key
+        }
+
+        public func save(_ data: Data, to url: URL) throws {
+            let sealed = try AES.GCM.seal(data, using: symmetricKey)
+            guard let combined = sealed.combined else {
+                throw EncryptedFileStoreError.invalidCiphertext
+            }
+            try combined.write(to: url, options: .atomic)
+        }
+
+        public func load(from url: URL) throws -> Data {
+            let encrypted = try Data(contentsOf: url)
+            let sealed = try AES.GCM.SealedBox(combined: encrypted)
+            return try AES.GCM.open(sealed, using: symmetricKey)
+        }
     }
-}
 #endif

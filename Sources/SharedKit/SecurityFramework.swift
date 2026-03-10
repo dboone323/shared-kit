@@ -7,13 +7,13 @@
 //
 
 #if canImport(CryptoKit)
-import CryptoKit
+    import CryptoKit
 #elseif canImport(Crypto)
-import Crypto
+    import Crypto
 #endif
 import Foundation
 #if canImport(Security)
-import Security
+    import Security
 #endif
 import SharedKitCore
 
@@ -42,7 +42,8 @@ public enum SecurityFramework {
             _ input: String,
             maxLength: Int = 1000,
             allowedCharacters: CharacterSet = .alphanumerics.union(.whitespacesAndNewlines).union(
-                CharacterSet(charactersIn: "!@#$%^&*()_+-=[]{}|;:,.<>?"))
+                CharacterSet(charactersIn: "!@#$%^&*()_+-=[]{}|;:,.<>?")
+            )
         ) -> ValidationResult {
             // Check for nil or empty
             guard !input.isEmpty else {
@@ -93,7 +94,7 @@ public enum SecurityFramework {
 
             // Check scheme
             guard let scheme = url.scheme?.lowercased(),
-                ["http", "https"].contains(scheme)
+                  ["http", "https"].contains(scheme)
             else {
                 return .failure(.invalidURLScheme)
             }
@@ -126,116 +127,117 @@ public enum SecurityFramework {
 
     // MARK: - Secure Data Handling
 
-    /// Secure data handling utilities
-#if canImport(Security)
-    public enum DataSecurity {
-        /// Securely stores sensitive data in Keychain
-        public static func storeInKeychain(key: String, data: Data) throws {
-            let query: [String: Any] = [
-                kSecClass as String: kSecClassGenericPassword,
-                kSecAttrAccount as String: key,
-                kSecValueData as String: data,
-                kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-            ]
+    // Secure data handling utilities
+    #if canImport(Security)
+        public enum DataSecurity {
+            /// Securely stores sensitive data in Keychain
+            public static func storeInKeychain(key: String, data: Data) throws {
+                let query: [String: Any] = [
+                    kSecClass as String: kSecClassGenericPassword,
+                    kSecAttrAccount as String: key,
+                    kSecValueData as String: data,
+                    kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+                ]
 
-            // Delete existing item
-            SecItemDelete(query as CFDictionary)
+                // Delete existing item
+                SecItemDelete(query as CFDictionary)
 
-            // Add new item
-            let status = SecItemAdd(query as CFDictionary, nil)
-            guard status == errSecSuccess else {
-                throw SecurityError.keychainError(status: status)
-            }
-        }
-
-        /// Retrieves sensitive data from Keychain
-        public static func retrieveFromKeychain(key: String) throws -> Data {
-            let query: [String: Any] = [
-                kSecClass as String: kSecClassGenericPassword,
-                kSecAttrAccount as String: key,
-                kSecReturnData as String: true,
-                kSecMatchLimit as String: kSecMatchLimitOne,
-            ]
-
-            var result: AnyObject?
-            let status = SecItemCopyMatching(query as CFDictionary, &result)
-
-            guard status == errSecSuccess,
-                let data = result as? Data
-            else {
-                throw SecurityError.keychainError(status: status)
-            }
-
-            return data
-        }
-
-        /// Securely wipes data from memory
-        public static func secureWipe(_ data: inout Data) {
-            data.withUnsafeMutableBytes { buffer in
-                if let baseAddress = buffer.baseAddress {
-                    memset_s(baseAddress, buffer.count, 0, buffer.count)
+                // Add new item
+                let status = SecItemAdd(query as CFDictionary, nil)
+                guard status == errSecSuccess else {
+                    throw SecurityError.keychainError(status: status)
                 }
             }
-            data.removeAll()
-        }
 
-        /// Generates cryptographically secure random data
-        public static func generateSecureRandomData(length: Int) throws -> Data {
-            var bytes = [UInt8](repeating: 0, count: length)
-            let status = SecRandomCopyBytes(kSecRandomDefault, length, &bytes)
+            /// Retrieves sensitive data from Keychain
+            public static func retrieveFromKeychain(key: String) throws -> Data {
+                let query: [String: Any] = [
+                    kSecClass as String: kSecClassGenericPassword,
+                    kSecAttrAccount as String: key,
+                    kSecReturnData as String: true,
+                    kSecMatchLimit as String: kSecMatchLimitOne,
+                ]
 
-            guard status == errSecSuccess else {
-                throw SecurityError.randomGenerationFailed
+                var result: AnyObject?
+                let status = SecItemCopyMatching(query as CFDictionary, &result)
+
+                guard status == errSecSuccess,
+                      let data = result as? Data
+                else {
+                    throw SecurityError.keychainError(status: status)
+                }
+
+                return data
             }
 
-            return Data(bytes)
-        }
-    }
+            /// Securely wipes data from memory
+            public static func secureWipe(_ data: inout Data) {
+                data.withUnsafeMutableBytes { buffer in
+                    if let baseAddress = buffer.baseAddress {
+                        memset_s(baseAddress, buffer.count, 0, buffer.count)
+                    }
+                }
+                data.removeAll()
+            }
 
-    // MARK: - Cryptographic Operations
+            /// Generates cryptographically secure random data
+            public static func generateSecureRandomData(length: Int) throws -> Data {
+                var bytes = [UInt8](repeating: 0, count: length)
+                let status = SecRandomCopyBytes(kSecRandomDefault, length, &bytes)
 
-    /// Cryptographic utilities
-#endif
+                guard status == errSecSuccess else {
+                    throw SecurityError.randomGenerationFailed
+                }
 
-#if canImport(CryptoKit) || canImport(Crypto)
-    public enum Crypto {
-        /// Hashes data using SHA-256
-        public static func sha256(_ data: Data) -> Data {
-            SHA256.hash(data: data).data
-        }
-
-        /// Hashes string using SHA-256
-        public static func sha256(_ string: String) -> Data {
-            sha256(Data(string.utf8))
-        }
-
-        /// Generates HMAC-SHA256
-        public static func hmacSHA256(data: Data, key: Data) -> Data {
-            HMAC<SHA256>.authenticationCode(for: data, using: .init(data: key)).data
+                return Data(bytes)
+            }
         }
 
-        /// Encrypts data using AES-GCM
-        public static func encryptAESGCM(data: Data, key: Data) throws -> AESGCMEncryptionResult {
-            let nonce = AES.GCM.Nonce()
-            let sealedBox = try AES.GCM.seal(data, using: .init(data: key), nonce: nonce)
-            return AESGCMEncryptionResult(
-                ciphertext: sealedBox.ciphertext, nonce: Data(nonce), tag: sealedBox.tag)
+        // MARK: - Cryptographic Operations
+
+        // Cryptographic utilities
+    #endif
+
+    #if canImport(CryptoKit) || canImport(Crypto)
+        public enum Crypto {
+            /// Hashes data using SHA-256
+            public static func sha256(_ data: Data) -> Data {
+                SHA256.hash(data: data).data
+            }
+
+            /// Hashes string using SHA-256
+            public static func sha256(_ string: String) -> Data {
+                sha256(Data(string.utf8))
+            }
+
+            /// Generates HMAC-SHA256
+            public static func hmacSHA256(data: Data, key: Data) -> Data {
+                HMAC<SHA256>.authenticationCode(for: data, using: .init(data: key)).data
+            }
+
+            /// Encrypts data using AES-GCM
+            public static func encryptAESGCM(data: Data, key: Data) throws -> AESGCMEncryptionResult {
+                let nonce = AES.GCM.Nonce()
+                let sealedBox = try AES.GCM.seal(data, using: .init(data: key), nonce: nonce)
+                return AESGCMEncryptionResult(
+                    ciphertext: sealedBox.ciphertext, nonce: Data(nonce), tag: sealedBox.tag
+                )
+            }
+
+            /// Decrypts data using AES-GCM
+            public static func decryptAESGCM(ciphertext: Data, nonce: Data, tag: Data, key: Data) throws
+                -> Data
+            {
+                let nonce = try AES.GCM.Nonce(data: nonce)
+                let sealedBox = try AES.GCM.SealedBox(nonce: nonce, ciphertext: ciphertext, tag: tag)
+                return try AES.GCM.open(sealedBox, using: .init(data: key))
+            }
         }
 
-        /// Decrypts data using AES-GCM
-        public static func decryptAESGCM(ciphertext: Data, nonce: Data, tag: Data, key: Data) throws
-            -> Data
-        {
-            let nonce = try AES.GCM.Nonce(data: nonce)
-            let sealedBox = try AES.GCM.SealedBox(nonce: nonce, ciphertext: ciphertext, tag: tag)
-            return try AES.GCM.open(sealedBox, using: .init(data: key))
-        }
-    }
+        // MARK: - Security Monitoring
 
-    // MARK: - Security Monitoring
-
-    /// Security monitoring and logging
-#endif
+        // Security monitoring and logging
+    #endif
 
     public enum Monitoring {
         private static let logger = SecurityLogger(
@@ -277,15 +279,15 @@ public enum SecurityFramework {
     /// Vulnerability scanning utilities
     public enum VulnerabilityScanner {
         /// Scans code for common vulnerabilities
-        public static func scanForVulnerabilities(code: String, language: String) -> [Vulnerability]
-        {
+        public static func scanForVulnerabilities(code: String, language: String) -> [Vulnerability] {
             var vulnerabilities: [Vulnerability] = []
 
             // SQL Injection patterns
             if language.lowercased().contains("sql") || code.contains("SELECT") {
                 let sqlPatterns = ["'", "\"", ";", "--", "/*", "*/", "UNION", "DROP", "DELETE"]
                 for pattern in sqlPatterns
-                where code.contains(pattern) && !isInSafeContext(code, pattern: pattern) {
+                    where code.contains(pattern) && !isInSafeContext(code, pattern: pattern)
+                {
                     vulnerabilities.append(
                         Vulnerability(
                             type: .sqlInjection,
@@ -293,7 +295,8 @@ public enum SecurityFramework {
                             description: "Potential SQL injection vulnerability detected",
                             line: findLineNumber(code: code, pattern: pattern),
                             recommendation: "Use parameterized queries or prepared statements"
-                        ))
+                        )
+                    )
                 }
             }
 
@@ -308,15 +311,16 @@ public enum SecurityFramework {
                             description: "Potential XSS vulnerability detected",
                             line: findLineNumber(code: code, pattern: pattern),
                             recommendation:
-                                "Use safe DOM manipulation methods or sanitize input"
-                        ))
+                            "Use safe DOM manipulation methods or sanitize input"
+                        )
+                    )
                 }
             }
 
             // Hardcoded secrets
             let secretPatterns = ["password", "secret", "key", "token"]
             for pattern in secretPatterns
-            where code.lowercased().contains(pattern) && code.contains("\"") && !code.contains("//")
+                where code.lowercased().contains(pattern) && code.contains("\"") && !code.contains("//")
             {
                 // Ignore comments
                 vulnerabilities.append(
@@ -326,8 +330,9 @@ public enum SecurityFramework {
                         description: "Potential hardcoded secret detected",
                         line: findLineNumber(code: code, pattern: pattern),
                         recommendation:
-                            "Move secrets to environment variables or secure storage"
-                    ))
+                        "Move secrets to environment variables or secure storage"
+                    )
+                )
             }
 
             return vulnerabilities
@@ -371,7 +376,7 @@ public enum ValidationResult {
     public var error: ValidationError? {
         switch self {
         case .success: return nil
-        case .failure(let error): return error
+        case let .failure(error): return error
         }
     }
 }
@@ -385,7 +390,7 @@ public enum SecurityError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .keychainError(let status):
+        case let .keychainError(status):
             return "Keychain operation failed with status: \(status)"
         case .randomGenerationFailed:
             return "Failed to generate secure random data"
@@ -407,15 +412,15 @@ public enum SecurityEvent {
 
     public var description: String {
         switch self {
-        case .inputValidationFailed(let type):
+        case let .inputValidationFailed(type):
             return "Input validation failed for type: \(type)"
-        case .keychainOperationFailed(let operation):
+        case let .keychainOperationFailed(operation):
             return "Keychain operation failed: \(operation)"
         case .encryptionOperationFailed:
             return "Encryption operation failed"
-        case .vulnerabilityDetected(let type):
+        case let .vulnerabilityDetected(type):
             return "Vulnerability detected: \(type.rawValue)"
-        case .incidentDetected(let type):
+        case let .incidentDetected(type):
             return "Security incident detected: \(type)"
         }
     }
@@ -478,23 +483,23 @@ public struct Vulnerability {
 // MARK: - Extensions
 
 #if canImport(CryptoKit) || canImport(Crypto)
-extension SHA256Digest {
-    var data: Data {
-        Data(self)
+    extension SHA256Digest {
+        var data: Data {
+            Data(self)
+        }
     }
-}
 
-extension HMAC<SHA256>.MAC {
-    var data: Data {
-        Data(self)
+    extension HMAC<SHA256>.MAC {
+        var data: Data {
+            Data(self)
+        }
     }
-}
 
-extension AES.GCM.Nonce {
-    var data: Data {
-        Data(self)
+    extension AES.GCM.Nonce {
+        var data: Data {
+            Data(self)
+        }
     }
-}
 #endif
 
 // MARK: - Logger (Simple implementation)

@@ -13,7 +13,7 @@ import Foundation
 #if canImport(OSLog)
     import OSLog
 #else
-    // Shim for Linux
+    /// Shim for Linux
     public struct OSLog: Sendable {
         let subsystem: String
         let category: String
@@ -34,15 +34,19 @@ import Foundation
             self.subsystem = subsystem
             self.category = category
         }
+
         public func info(_ message: String) {
             print("[INFO] [\(category)] \(message)")
         }
+
         public func debug(_ message: String) {
             print("[DEBUG] [\(category)] \(message)")
         }
+
         public func error(_ message: String) {
             print("[ERROR] [\(category)] \(message)")
         }
+
         public func fault(_ message: String) {
             print("[FAULT] [\(category)] \(message)")
         }
@@ -91,9 +95,9 @@ public enum SharedLogger {
 
 // MARK: - Core Logging Methods
 
-extension SharedLogger {
+public extension SharedLogger {
     /// Log error messages with context
-    public static func logError(
+    static func logError(
         _ error: Error,
         context: String = "",
         file: String = #file,
@@ -107,7 +111,7 @@ extension SharedLogger {
     }
 
     /// Log debug information
-    public static func logDebug(
+    static func logDebug(
         _ message: String,
         category: OSLog = defaultLog,
         file: String = #file,
@@ -121,21 +125,21 @@ extension SharedLogger {
     }
 
     /// Log informational messages
-    public static func logInfo(_ message: String, category: OSLog = defaultLog) {
+    static func logInfo(_ message: String, category: OSLog = defaultLog) {
         os_log("%@", log: category, type: .info, message)
     }
 
     /// Log warning messages
-    public static func logWarning(_ message: String, category: OSLog = defaultLog) {
+    static func logWarning(_ message: String, category: OSLog = defaultLog) {
         os_log("%@", log: category, type: .default, message)
     }
 }
 
 // MARK: - Business Logic Logging
 
-extension SharedLogger {
+public extension SharedLogger {
     /// Log business-related events and decisions
-    public static func logBusiness(
+    static func logBusiness(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
@@ -143,7 +147,7 @@ extension SharedLogger {
     }
 
     /// Log UI-related events
-    public static func logUI(
+    static func logUI(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
@@ -151,7 +155,7 @@ extension SharedLogger {
     }
 
     /// Log data operations
-    public static func logData(
+    static func logData(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
@@ -159,7 +163,7 @@ extension SharedLogger {
     }
 
     /// Log network operations
-    public static func logNetwork(
+    static func logNetwork(
         _ message: String, file: String = #file, function: String = #function, line: Int = #line
     ) {
         let source = "\(URL(fileURLWithPath: file).lastPathComponent):\(line) \(function)"
@@ -169,9 +173,9 @@ extension SharedLogger {
 
 // MARK: - Performance Measurement
 
-extension SharedLogger {
+public extension SharedLogger {
     /// Measure and log execution time of a code block
-    public static func measurePerformance<T>(_ operation: String, block: () throws -> T) rethrows
+    static func measurePerformance<T>(_ operation: String, block: () throws -> T) rethrows
         -> T
     {
         let startTime = Date().timeIntervalSinceReferenceDate
@@ -187,16 +191,16 @@ extension SharedLogger {
     }
 
     /// Start a performance measurement session
-    public static func startPerformanceMeasurement(_ operation: String) -> PerformanceMeasurement {
+    static func startPerformanceMeasurement(_ operation: String) -> PerformanceMeasurement {
         PerformanceMeasurement(operation: operation, startTime: Date().timeIntervalSinceReferenceDate)
     }
 }
 
 // MARK: - Context-Aware Logging
 
-extension SharedLogger {
+public extension SharedLogger {
     /// Log with additional context information
-    public static func logWithContext(
+    static func logWithContext(
         _ message: String, context: [String: AnyCodable], category: OSLog = defaultLog,
         type: OSLogType = .info
     ) {
@@ -206,7 +210,7 @@ extension SharedLogger {
     }
 
     /// Log analytics events
-    public static func logAnalytics(_ event: String, parameters: [String: AnyCodable] = [:]) {
+    static func logAnalytics(_ event: String, parameters: [String: AnyCodable] = [:]) {
         let paramString = parameters.isEmpty ? "" : " | Parameters: \(parameters)"
         os_log("[ANALYTICS] %@%@", log: self.defaultLog, type: .info, event, paramString)
     }
@@ -214,9 +218,9 @@ extension SharedLogger {
 
 // MARK: - File Logging Support
 
-extension SharedLogger {
+public extension SharedLogger {
     /// Write log to file for debugging purposes
-    public static func writeToFile(_ message: String, fileName: String = "quantum_workspace.log") {
+    static func writeToFile(_ message: String, fileName: String = "quantum_workspace.log") {
         #if DEBUG
             guard
                 let documentsPath = FileManager.default.urls(
@@ -261,8 +265,8 @@ public struct PerformanceMeasurement {
 
 // MARK: - Extensions
 
-extension DateFormatter {
-    fileprivate static let logFormatter: DateFormatter = {
+private extension DateFormatter {
+    static let logFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         return formatter

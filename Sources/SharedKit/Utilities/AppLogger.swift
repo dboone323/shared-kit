@@ -1,7 +1,7 @@
 // Compatibility wrapper to match CodingReviewer AppLogger API.
 import Foundation
 #if canImport(OSLog)
-import OSLog
+    import OSLog
 #endif
 import SharedKitCore
 
@@ -10,12 +10,12 @@ final class AppLogger: @unchecked Sendable {
     static let shared = AppLogger()
     private init() {}
 
-    // Local LogLevel used by callers (keeps compatibility with CodingReviewer usage)
+    /// Local LogLevel used by callers (keeps compatibility with CodingReviewer usage)
     enum LogLevel {
         case debug, info, warning, error, critical
     }
 
-    // Local LogCategory maps to MomentumFinance Logger OSLog categories
+    /// Local LogCategory maps to MomentumFinance Logger OSLog categories
     enum LogCategory {
         case general, analysis, performance, security, ui, ai, network, data, business
     }

@@ -1,6 +1,6 @@
 import Foundation
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 
 /// Enhanced connection pool for Ollama models
@@ -69,7 +69,7 @@ public struct RetryConfig {
     public func delay(for attempt: Int) -> TimeInterval {
         let exponentialDelay = baseDelay * pow(2.0, Double(attempt))
         let cappedDelay = min(exponentialDelay, maxDelay)
-        let jitter = cappedDelay * jitterFactor * Double.random(in: -1...1)
+        let jitter = cappedDelay * jitterFactor * Double.random(in: -1 ... 1)
         return max(0, cappedDelay + jitter)
     }
 }
