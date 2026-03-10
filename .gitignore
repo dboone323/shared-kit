@@ -151,3 +151,15 @@ DerivedData/
 **/*.xcuserstate
 **/*.xcuserdatad
 
+
+# Swift build artifacts
+*.d
+*.dia
+*.swiftdeps
+*.swiftmodule
+*.swiftsourceinfo
+*.pcm
+*.o
+*.dSYM
+.build/
+DerivedData/
