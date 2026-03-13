@@ -1,0 +1,207 @@
+warning: 'shared-kit': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+    /Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Integration/CROSS_PROJECT_INTEGRATION_GUIDE.md
+[0/1] Planning build
+Building for production...
+[0/18] Compiling CNIOWindows shim.c
+[1/18] Compiling CNIOWindows WSAStartup.c
+[2/18] Compiling CNIOWASI CNIOWASI.c
+[3/18] Compiling CNIOLinux shim.c
+[4/18] Compiling CNIOOpenBSD shim.c
+[5/18] Compiling CNIOLinux liburing_shims.c
+[6/18] Write swift-version--58304C5D6DBC2206.txt
+[7/18] Compiling _AtomicsShims.c
+[8/22] Compiling CNIOPosix event_loop_id.c
+[9/24] Compiling CNIODarwin shim.c
+[10/24] Compiling c-nioatomics.c
+[12/24] Compiling _NIOBase64 Base64.swift
+[12/24] Compiling c-atomics.c
+[14/25] Compiling InternalCollectionsUtilities FixedWidthInteger+roundUpToPowerOfTwo.swift
+[15/26] Compiling _NIODataStructures Heap.swift
+[16/26] Compiling NIOConcurrencyHelpers NIOAtomic.swift
+[17/26] Compiling DequeModule Deque+Codable.swift
+[18/26] Compiling Atomics OptionalRawRepresentable.swift
+[19/27] Compiling EnterpriseScalingFramework EnterpriseScalingFramework.swift
+[20/27] Compiling NIOCore AddressedEnvelope.swift
+[21/29] Compiling NIOEmbedded AsyncTestingChannel.swift
+[22/29] Compiling NIOPosix BSDSocketAPICommon.swift
+[23/29] Compiling SharedKitCore AnyCodable.swift
+macro expansion @Model:9:26: warning: redundant conformance of 'EnhancedHabit' to protocol 'Sendable'
+`- /Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/Models/EnhancedDataModels.swift:353:2: note: expanded code originates here
+ 16 | 
+ 17 | /// Enhanced version of the Habit model with advanced features
+ 18 | @Model
+    | `- note: in expansion of macro 'Model' on class 'EnhancedHabit' here
+ 19 | public final class EnhancedHabit: Validatable, Trackable, CrossProjectRelatable,
+    |                    `- note: 'EnhancedHabit' declares conformance to protocol 'Sendable' here
+ 20 |     EnhancedHabitProtocol, @unchecked Sendable
+ 21 | {
+    :
+351 |         )
+352 |     }
+353 | }
+    +--- macro expansion @Model ----------------------------------------
+    | 7 | @available(swift, deprecated: 5.9, message: "PersistentModels are not Sendable, consider utilizing a ModelActor or use EnhancedHabit's persistentModelID instead")
+    | 8 | @available(*, unavailable, message: "PersistentModels are not Sendable, consider utilizing a ModelActor or use EnhancedHabit's persistentModelID instead")
+    | 9 | extension EnhancedHabit: Sendable {
+    |   |                          `- warning: redundant conformance of 'EnhancedHabit' to protocol 'Sendable'
+    |10 | }
+    +-------------------------------------------------------------------
+354 | 
+355 | // MARK: - Enhanced Habit Log Model
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/Models/EnhancedPlannerModels.swift:251:16: warning: value 'estimatedDuration' was defined but never used; consider replacing with boolean test [#no-usage]
+ 249 |         self.completionStreak += 1
+ 250 | 
+ 251 |         if let estimatedDuration {
+     |                `- warning: value 'estimatedDuration' was defined but never used; consider replacing with boolean test [#no-usage]
+ 252 |             self.actualDuration = self.timeSpentTotal
+ 253 |             self.updateAverageCompletionTime()
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/Services/ServiceProtocols.swift:521:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 519 | /// Habit recommendation model
+ 520 | public struct HabitRecommendation: Codable, Sendable {
+ 521 |     public let id: UUID = .init()
+     |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+     |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+     |                `- note: make the property mutable instead
+ 522 |     public let title: String
+ 523 |     public let description: String
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/Services/ServiceProtocols.swift:642:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 640 | /// Financial recommendation model
+ 641 | public struct FinancialRecommendation: Codable, Sendable {
+ 642 |     public let id: UUID = .init()
+     |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+     |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+     |                `- note: make the property mutable instead
+ 643 |     public let type: RecommendationType
+ 644 |     public let title: String
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/Services/ServiceProtocols.swift:721:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 719 | /// Budget alert model
+ 720 | public struct BudgetAlert: Codable, Sendable {
+ 721 |     public let id: UUID = .init()
+     |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+     |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+     |                `- note: make the property mutable instead
+ 722 |     public let type: AlertType
+ 723 |     public let severity: AlertSeverity
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/Services/ServiceProtocols.swift:727:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 725 |     public let threshold: Double
+ 726 |     public let currentValue: Double
+ 727 |     public let createdAt: Date = .init()
+     |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+     |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'createdAt' case to silence this warning
+     |                `- note: make the property mutable instead
+ 728 | 
+ 729 |     public init(
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/Services/ServiceProtocols.swift:790:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 788 | /// Goal milestone model
+ 789 | public struct GoalMilestone: Codable, Sendable {
+ 790 |     public let id: UUID = .init()
+     |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+     |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+     |                `- note: make the property mutable instead
+ 791 |     public let title: String
+ 792 |     public let targetValue: Double
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/Services/ServiceProtocols.swift:992:16: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+ 990 | /// Unified recommendation model
+ 991 | public struct UnifiedRecommendation: Codable, Sendable {
+ 992 |     public let id: UUID = .init()
+     |                |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+     |                |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'id' case to silence this warning
+     |                `- note: make the property mutable instead
+ 993 |     public let type: UnifiedRecommendationType
+ 994 |     public let title: String
+[24/30] Compiling NIO Exports.swift
+[25/31] Compiling NIOFoundationCompat ByteBuffer-foundation.swift
+[26/32] Compiling SharedKit AICoordinator.swift
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/CircuitBreaker.swift:51:13: warning: no 'async' operations occur within 'await' expression
+ 49 |         do {
+ 50 |             let result = try await operation()
+ 51 |             await recordSuccess()
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 52 |             return result
+ 53 |         } catch {
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/CircuitBreaker.swift:54:13: warning: no 'async' operations occur within 'await' expression
+ 52 |             return result
+ 53 |         } catch {
+ 54 |             await recordFailure()
+    |             `- warning: no 'async' operations occur within 'await' expression
+ 55 |             throw error
+ 56 |         }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Integration/IntegrationWorkflows.swift:122:13: warning: immutable value 'workflow' was never used; consider replacing with '_' or removing it [#no-usage]
+120 |         ]
+121 | 
+122 |         for workflow in workflows {
+    |             `- warning: immutable value 'workflow' was never used; consider replacing with '_' or removing it [#no-usage]
+123 |             // Store workflow templates for later use
+124 |         }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/Reliability.swift:189:24: warning: no 'async' operations occur within 'await' expression
+187 |                 // It might be because we are inside the actor? No, Task escapes.
+188 |                 // Let's rely on Task to handle it, just call it.
+189 |                 Task { await self.remove(id: id) }
+    |                        `- warning: no 'async' operations occur within 'await' expression
+190 |             }
+191 |             // Ensure operation result is Sendable to pass out of actor
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift:189:14: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead. [#DeprecatedDeclaration]
+187 |                 }
+188 |             }
+189 |             .onChange(of: self.isPresented) { newValue in
+    |              `- warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead. [#DeprecatedDeclaration]
+190 |                 withAnimation(AnimationTiming.easeOut) {
+191 |                     self.animationProgress = newValue ? 1.0 : 0.0
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift:252:14: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead. [#DeprecatedDeclaration]
+250 |                 }
+251 |             }
+252 |             .onChange(of: self.isPresented) { newValue in
+    |              `- warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead. [#DeprecatedDeclaration]
+253 |                 withAnimation(AnimationTiming.easeOut) {
+254 |                     self.animationProgress = newValue ? 1.0 : 0.0
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/UI/CustomTransitions.swift:401:14: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead. [#DeprecatedDeclaration]
+399 |                 }
+400 |             }
+401 |             .onChange(of: self.isPresented) { newValue in
+    |              `- warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead. [#DeprecatedDeclaration]
+402 |                 withAnimation(AnimationTiming.easeOut) {
+403 |                     self.animationProgress = newValue ? 1.0 : 0.0
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[27/36] Compiling RAGVerifier main.swift
+[27/36] Write Objects.LinkFileList
+[29/36] Compiling AgentCLI main.swift
+[29/36] Write Objects.LinkFileList
+[31/36] Compiling AgentDesktop AgentDesktopApp.swift
+[31/36] Write Objects.LinkFileList
+[32/36] Linking RAGVerifier
+[33/36] Linking AgentCLI
+[34/36] Linking AgentDesktop
+[36/36] Compiling SharedTestSupport AIServiceTestUtilities.swift
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedTestSupport/Testing/DeviceCompatibilityUATSuite.swift:85:40: warning: no 'async' operations occur within 'await' expression
+ 83 |             try? await Task.sleep(for: .seconds(Double.random(in: 2.0...4.0)))
+ 84 |             let baseScore = Double.random(in: 65...90)
+ 85 |             let capabilityMultiplier = await self.getCapabilityMultiplier(capability)
+    |                                        `- warning: no 'async' operations occur within 'await' expression
+ 86 |             let finalScore = min(100, baseScore * capabilityMultiplier)
+ 87 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedTestSupport/Testing/SecurityAuditingSuite.swift:919:13: warning: capture of 'completion' with non-Sendable type '(Result<SecureResponse, any Error>) -> Void' in a '@Sendable' closure [#SendableClosureCaptures]
+ 917 |                 timestamp: Date()
+ 918 |             )
+ 919 |             completion(.success(response))
+     |             |- warning: capture of 'completion' with non-Sendable type '(Result<SecureResponse, any Error>) -> Void' in a '@Sendable' closure [#SendableClosureCaptures]
+     |             `- note: a function type must be marked '@Sendable' to conform to 'Sendable'
+ 920 |         }
+ 921 |     }
+
+[#SendableClosureCaptures]: <https://docs.swift.org/compiler/documentation/diagnostics/sendable-closure-captures>
+Build complete! (131.99s)

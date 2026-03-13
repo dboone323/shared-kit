@@ -119,16 +119,16 @@ public extension BaseViewModel {
 #if canImport(Combine)
     /// Base class for list view models with standardized functionality
     @MainActor
-    class BaseListViewModel<StateType, ActionType>: ObservableObject {
-        typealias State = StateType
-        typealias Action = ActionType
+    public class BaseListViewModel<StateType, ActionType>: ObservableObject {
+        public typealias State = StateType
+        public typealias Action = ActionType
 
-        @Published var state: State
-        @Published var isLoading = false
-        @Published var errorMessage: String?
-        @Published var searchText = ""
+        @Published public var state: State
+        @Published public var isLoading = false
+        @Published public var errorMessage: String?
+        @Published public var searchText = ""
 
-        init(initialState: State) {
+        public init(initialState: State) {
             self.state = initialState
         }
 
@@ -158,16 +158,16 @@ public extension BaseViewModel {
 
     /// Base class for form view models with validation
     @MainActor
-    class BaseFormViewModel<StateType, ActionType>: ObservableObject {
-        typealias State = StateType
-        typealias Action = ActionType
+    public class BaseFormViewModel<StateType, ActionType>: ObservableObject {
+        public typealias State = StateType
+        public typealias Action = ActionType
 
-        @Published var state: State
-        @Published var isLoading = false
-        @Published var errorMessage: String?
-        @Published var isValid = false
+        @Published public var state: State
+        @Published public var isLoading = false
+        @Published public var errorMessage: String?
+        @Published public var isValid = false
 
-        init(initialState: State) {
+        public init(initialState: State) {
             self.state = initialState
             validate()
         }
@@ -236,7 +236,7 @@ public extension BaseViewModel {
 // MARK: - Storage Protocol
 
 /// Shared storage interface
-protocol StorageService {
+public protocol StorageService {
     func store(_ object: some Codable, key: String) throws
     func retrieve<T: Codable>(_ type: T.Type, key: String) throws -> T?
     func remove(key: String) throws

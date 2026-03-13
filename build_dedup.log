@@ -1,0 +1,87 @@
+[0/1] Planning build
+Building for debugging...
+[0/11] Write sources
+[1/11] Write swift-version--58304C5D6DBC2206.txt
+[3/16] Emitting module _NIOBase64
+[4/16] Emitting module _NIODataStructures
+[5/16] Emitting module EnterpriseScalingFramework
+[6/16] Emitting module NIOConcurrencyHelpers
+[7/17] Emitting module NIOCore
+[8/19] Emitting module NIOEmbedded
+[9/19] Emitting module NIOPosix
+[10/20] Emitting module NIO
+[11/21] Emitting module NIOFoundationCompat
+[12/21] Emitting module SharedKitCore
+[13/65] Compiling SharedKit SecureLogger.swift
+[14/65] Compiling SharedKit InputValidator.swift
+[15/65] Compiling SharedKit KeychainHelper.swift
+[16/65] Compiling SharedKit SharedKitCoreExport.swift
+[17/69] Compiling SharedKit PerformanceUtilities.swift
+[18/69] Compiling SharedKit PostgresConnectionPool.swift
+[19/69] Compiling SharedKit PredictiveAnalyticsEngine.swift
+[20/69] Compiling SharedKit Reliability.swift
+[21/69] Compiling SharedKit SecretsManager.swift
+[22/69] Compiling SharedKit IntegrationWorkflows.swift
+[23/69] Compiling SharedKit Intelligence.swift
+[24/69] Compiling SharedKit FinancialIntelligenceAnalysis.swift
+[25/69] Compiling SharedKit KeychainManager.swift
+[26/69] Compiling SharedKit ExpenseCategory.swift
+[27/69] Compiling SharedKit OllamaExampleUsage.swift
+[28/69] Compiling SharedKit OllamaIntegrationFramework.swift
+[29/69] Compiling SharedKit OllamaIntegrationManager.swift
+[30/69] Compiling SharedKit OllamaTypes.swift
+[31/69] Compiling SharedKit OllamaWorkflowDemo.swift
+[32/69] Emitting module SharedKit
+[33/69] Compiling SharedKit AICoordinator.swift
+[34/69] Compiling SharedKit AIServiceProtocols.swift
+[35/69] Compiling SharedKit AITaskPrioritizationService.swift
+[36/69] Compiling SharedKit AccessibilityLabels.swift
+[37/69] Compiling SharedKit BaseAgent.swift
+[38/69] Compiling SharedKit DecisionEngine.swift
+[39/69] Compiling SharedKit CircuitBreaker.swift
+[40/69] Compiling SharedKit CloudModelDemo.swift
+[41/69] Compiling SharedKit HuggingFaceClient.swift
+[42/69] Compiling SharedKit CrossProjectIntegration.swift
+[43/69] Compiling SharedKit FinancialAccount.swift
+[44/69] Compiling SharedKit FinancialTransaction.swift
+[45/69] Compiling SharedKit OfflineSynchronizationFramework.swift
+[46/69] Compiling SharedKit OllamaClient.swift
+[47/69] Compiling SharedKit OllamaEnhancements.swift
+[48/69] Compiling SharedKit SharedTypes.swift
+[49/69] Compiling SharedKit StateManagement.swift
+[50/69] Compiling SharedKit StateTypes.swift
+[51/69] Compiling SharedKit Swift6ConcurrencyUtilities.swift
+[52/69] Compiling SharedKit OllamaWorkflowIntegration.swift
+[53/69] Compiling SharedKit NetworkRequestMonitor.swift
+[54/69] Compiling SharedKit PerformanceOptimization.swift
+[55/69] Compiling SharedKit PerformanceTelemetry.swift
+[56/69] Compiling SharedKit PerformanceUI.swift
+[57/69] Compiling SharedKit AdvancedAnimations.swift
+[58/69] Compiling SharedKit CustomTransitions.swift
+[59/69] Compiling SharedKit InteractiveComponents.swift
+[60/69] Compiling SharedKit MicroInteractions.swift
+[61/84] Compiling SharedTestSupport TestHelpers.swift
+[62/84] Emitting module RAGVerifier
+[63/84] Compiling RAGVerifier main.swift
+[63/84] Write Objects.LinkFileList
+[65/84] Compiling SharedTestSupport AIServiceTestUtilities.swift
+[66/84] Emitting module AgentCLI
+[67/84] Compiling AgentCLI main.swift
+[67/84] Write Objects.LinkFileList
+[69/84] Emitting module SharedTestSupport
+[70/84] Compiling AgentDesktop AgentDesktopApp.swift
+[71/84] Emitting module AgentDesktop
+[72/84] Compiling SharedTestSupport TestUtilities.swift
+[72/84] Write Objects.LinkFileList
+[74/84] Compiling SharedTestSupport BaseViewModelTestCase.swift
+[75/84] Compiling SharedTestSupport DeviceCompatibilityUATSuite.swift
+[76/84] Compiling SharedTestSupport PerformanceBenchmarkSuite.swift
+[77/84] Compiling SharedTestSupport SecurityAuditingSuite.swift
+[78/84] Compiling SharedTestSupport TestingFramework.swift
+[78/84] Linking RAGVerifier
+[79/84] Linking AgentCLI
+[80/84] Linking AgentDesktop
+[81/84] Applying AgentDesktop
+[82/84] Applying AgentCLI
+[82/84] Applying RAGVerifier
+Build complete! (29.99s)

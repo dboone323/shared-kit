@@ -1,0 +1,17 @@
+Building for debugging...
+[0/9] Write swift-version--58304C5D6DBC2206.txt
+[2/13] Compiling SharedKitTests LoggerTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+[3/13] Compiling SharedKitTests InterdimensionalMarketSystemsTests.swift
+[4/13] Compiling SharedKitTests KeychainHelperTests.swift
+[5/13] Emitting module SharedKitTests
+[5/13] Linking RAGVerifier
+[5/13] Linking AgentCLI
+[5/13] Linking AgentDesktop
+error: fatalError

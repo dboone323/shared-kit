@@ -1,0 +1,2715 @@
+[0/1] Planning build
+Building for debugging...
+[0/14] Write sources
+[2/14] Write swift-version--58304C5D6DBC2206.txt
+[4/19] Emitting module _NIOBase64
+[5/19] Emitting module _NIODataStructures
+[6/19] Emitting module EnterpriseScalingFramework
+[7/19] Emitting module NIOConcurrencyHelpers
+[8/20] Emitting module NIOCore
+[9/22] Emitting module NIOEmbedded
+[10/22] Emitting module NIOPosix
+[11/23] Emitting module NIO
+[12/24] Emitting module NIOFoundationCompat
+[13/24] Emitting module SharedKitCore
+[14/75] Compiling SharedKit PerformanceUtilities.swift
+[15/75] Compiling SharedKit PostgresConnectionPool.swift
+[16/75] Compiling SharedKit PredictiveAnalyticsEngine.swift
+[17/75] Compiling SharedKit Reliability.swift
+[18/75] Compiling SharedKit SecretsManager.swift
+[19/80] Compiling SharedKit AICoordinator.swift
+[20/80] Compiling SharedKit AIServiceProtocols.swift
+[21/80] Compiling SharedKit AITaskPrioritizationService.swift
+[22/80] Compiling SharedKit AccessibilityLabels.swift
+[23/80] Compiling SharedKit BaseAgent.swift
+[24/80] Compiling SharedKit DecisionEngine.swift
+[25/80] Compiling SharedKit CircuitBreaker.swift
+[26/80] Compiling SharedKit CloudModelDemo.swift
+[27/80] Compiling SharedKit HuggingFaceClient.swift
+[28/80] Compiling SharedKit CrossProjectIntegration.swift
+[29/80] Compiling SharedKit IntegrationWorkflows.swift
+[30/80] Compiling SharedKit Intelligence.swift
+[31/80] Emitting module SharedKit
+[32/80] Compiling SharedKit SecureLogger.swift
+[33/80] Compiling SharedKit CertificatePinningPolicy.swift
+[34/80] Compiling SharedKit EncryptedFileStore.swift
+[35/80] Compiling SharedKit InputValidator.swift
+[36/80] Compiling SharedKit KeychainHelper.swift
+[37/80] Compiling SharedKit StateManagement.swift
+[38/80] Compiling SharedKit StateTypes.swift
+[39/80] Compiling SharedKit Swift6ConcurrencyUtilities.swift
+[40/80] Compiling SharedKit ToolExecutionResult.swift
+[41/80] Compiling SharedKit AdvancedAnimations.swift
+[42/80] Compiling SharedKit SecurityFramework.swift
+[43/80] Compiling SharedKit BackupRestoreService.swift
+[44/80] Compiling SharedKit PlatformFeatureRegistry.swift
+[45/80] Compiling SharedKit SharedKitCoreExport.swift
+[46/80] Compiling SharedKit SharedTypes.swift
+[47/80] Compiling SharedKit CustomTransitions.swift
+[48/80] Compiling SharedKit InteractiveComponents.swift
+[49/80] Compiling SharedKit MicroInteractions.swift
+[50/80] Compiling SharedKit AppLogger.swift
+[51/80] Compiling SharedKit FinancialUtilities.swift
+[52/80] Compiling SharedKit OllamaClient.swift
+[53/80] Compiling SharedKit OllamaEnhancements.swift
+[54/80] Compiling SharedKit OllamaExampleUsage.swift
+[55/80] Compiling SharedKit OllamaIntegrationFramework.swift
+[56/80] Compiling SharedKit OllamaIntegrationManager.swift
+[57/80] Compiling SharedKit OllamaTypes.swift
+[58/80] Compiling SharedKit FinancialIntelligenceAnalysis.swift
+[59/80] Compiling SharedKit KeychainManager.swift
+[60/80] Compiling SharedKit ExpenseCategory.swift
+[61/80] Compiling SharedKit FinancialAccount.swift
+[62/80] Compiling SharedKit FinancialTransaction.swift
+[63/80] Compiling SharedKit OfflineSynchronizationFramework.swift
+[64/80] Compiling SharedKit OllamaWorkflowDemo.swift
+[65/80] Compiling SharedKit OllamaWorkflowIntegration.swift
+[66/80] Compiling SharedKit NetworkRequestMonitor.swift
+[67/80] Compiling SharedKit PerformanceOptimization.swift
+[68/80] Compiling SharedKit PerformanceTelemetry.swift
+[69/80] Compiling SharedKit PerformanceUI.swift
+[70/95] Emitting module AgentCLI
+[71/95] Compiling AgentCLI main.swift
+[71/95] Write Objects.LinkFileList
+[73/95] Emitting module RAGVerifier
+[74/95] Compiling RAGVerifier main.swift
+[74/95] Write Objects.LinkFileList
+[76/95] Emitting module AgentDesktop
+[77/95] Compiling AgentDesktop AgentDesktopApp.swift
+[77/95] Write Objects.LinkFileList
+[79/95] Compiling SharedTestSupport AIServiceTestUtilities.swift
+[80/95] Emitting module SharedTestSupport
+[81/95] Compiling SharedTestSupport BaseViewModelTestCase.swift
+[82/95] Compiling SharedTestSupport TestHelpers.swift
+[83/95] Compiling SharedTestSupport TestUtilities.swift
+[84/95] Compiling SharedTestSupport SecurityAuditingSuite.swift
+[85/95] Compiling SharedTestSupport DeviceCompatibilityUATSuite.swift
+[86/95] Compiling SharedTestSupport PerformanceBenchmarkSuite.swift
+[87/95] Compiling SharedTestSupport TestingFramework.swift
+[88/207] Compiling SharedKitTests SharedArchitectureTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[89/207] Compiling SharedKitTests SharedKitIntegrationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[90/207] Compiling SharedKitTests SharedTypesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[91/207] Compiling SharedKitTests SpacetimeFabricManipulationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[92/207] Compiling SharedKitTests SpikingNeuralNetworksTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[93/207] Compiling SharedKitTests StateManagementTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[94/207] Compiling SharedKitTests StateProtocolsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[95/207] Compiling SharedKitTests StateTypesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[96/207] Compiling SharedKitTests SwiftDataCompatTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[97/207] Compiling SharedKitTests SynapticPlasticityTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[98/207] Compiling SharedKitTests TestHelpersTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[99/207] Compiling SharedKitTests TestUtilitiesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:104:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+102 | 
+103 |     func testSetLoadingState() {
+104 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:107:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+105 |         XCTAssertTrue(viewModel.isLoading)
+106 | 
+107 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+108 |         XCTAssertFalse(viewModel.isLoading)
+109 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:120:33: error: 'validateState' is inaccessible due to 'internal' protection level
+118 | 
+119 |     func testValidateState() {
+120 |         let isValid = viewModel.validateState()
+    |                                 `- error: 'validateState' is inaccessible due to 'internal' protection level
+121 |         XCTAssertTrue(isValid)  // Default implementation returns true
+122 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:100:10: note: 'validateState()' declared here
+ 98 |     }
+ 99 | 
+100 |     func validateState() -> Bool {
+    |          `- note: 'validateState()' declared here
+101 |         // Default implementation - override in subclasses for specific validation
+102 |         true
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:159:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+157 |             .store(in: &cancellables)
+158 | 
+159 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+160 | 
+161 |         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:237:36: error: 'setLoading' is inaccessible due to 'internal' protection level
+235 |             for i in 0..<20 {
+236 |                 group.addTask { @MainActor in
+237 |                     self.viewModel.setLoading(i % 2 == 0)
+    |                                    `- error: 'setLoading' is inaccessible due to 'internal' protection level
+238 |                 }
+239 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:254:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+252 | 
+253 |         // Set loading
+254 |         viewModel.setLoading(true)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+255 |         XCTAssertTrue(viewModel.isLoading)
+256 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:262:19: error: 'setLoading' is inaccessible due to 'internal' protection level
+260 | 
+261 |         // Complete loading
+262 |         viewModel.setLoading(false)
+    |                   `- error: 'setLoading' is inaccessible due to 'internal' protection level
+263 |         XCTAssertFalse(viewModel.isLoading)
+264 | 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:279:16: error: 'setLoading' is inaccessible due to 'internal' protection level
+277 |         Task { @MainActor in
+278 |             let vm = MockViewModel()
+279 |             vm.setLoading(true)
+    |                `- error: 'setLoading' is inaccessible due to 'internal' protection level
+280 |             vm.handle(.loadData)
+281 |             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:312:27: error: 'setLoading' is inaccessible due to 'internal' protection level
+310 |         measure {
+311 |             for _ in 0..<1000 {
+312 |                 viewModel.setLoading(true)
+    |                           `- error: 'setLoading' is inaccessible due to 'internal' protection level
+313 |                 viewModel.setLoading(false)
+314 |             }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:88:10: note: 'setLoading' declared here
+ 86 |     }
+ 87 | 
+ 88 |     func setLoading(_ loading: Bool) {
+    |          `- note: 'setLoading' declared here
+ 89 |         isLoading = loading
+ 90 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:9:22: error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+ 7 |     func testEncryptedNetworkTransmission() async throws {
+ 8 |         // 1. Setup Security
+ 9 |         let crypto = CryptoManager()
+   |                      `- error: 'CryptoManager' initializer is inaccessible due to 'internal' protection level
+10 | 
+11 |         // 2. Setup Mock Network
+
+SharedKitCore.CryptoManager.init:2:10: note: 'init()' declared here
+1 | actor CryptoManager {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedKitIntegrationTests.swift:39:43: error: cannot infer contextual base in reference to member 'utf8'
+37 |                 HTTPURLResponse(
+38 |                     url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!,
+39 |                 responseJSON.data(using: .utf8)!
+   |                                           `- error: cannot infer contextual base in reference to member 'utf8'
+40 |             )
+41 |         }
+[99/219] Linking AgentDesktop
+[100/219] Linking RAGVerifier
+[101/219] Linking AgentCLI
+[102/219] Applying AgentDesktop
+[103/219] Applying RAGVerifier
+[104/219] Applying AgentCLI
+[106/219] Compiling SharedKitTests OllamaWorkflowIntegrationTests.swift
+[107/219] Compiling SharedKitTests PackageTests.swift
+[108/219] Compiling SharedKitTests PerformanceBenchmarkSuiteTests.swift
+[109/219] Compiling SharedKitTests PerformanceOptimizationTests.swift
+[110/219] Compiling SharedKitTests PerformanceTests.swift
+[111/219] Compiling SharedKitTests PerformanceUITests.swift
+[112/219] Compiling SharedKitTests PerformanceUtilitiesTests.swift
+[113/219] Compiling SharedKitTests Phase8DInfrastructureViewModelsTests.swift
+[114/219] Compiling SharedKitTests Phase8GMainTests.swift
+[115/219] Compiling SharedKitTests Phase8G_ComplexTests.swift
+[116/219] Compiling SharedKitTests Phase8G_DemosTests.swift
+[117/219] Compiling SharedKitTests PredictiveArchitectureTests.swift
+[118/219] Compiling SharedKitTests InterdimensionalMarketSystemsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[119/219] Compiling SharedKitTests KeychainHelperTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[120/219] Compiling SharedKitTests LoggerTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[121/219] Compiling SharedKitTests MicroInteractionsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[122/219] Compiling SharedKitTests MockURLSession.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[123/219] Compiling SharedKitTests MultiModalAIAssistantTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[124/219] Compiling SharedKitTests MultiversalBridgeConstructionTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[125/219] Compiling SharedKitTests MultiversalKnowledgeNetworksTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[126/219] Compiling SharedKitTests NeuralArchitectureSearchTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[127/219] Compiling SharedKitTests NeuromorphicArchitectureTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[128/219] Compiling SharedKitTests NeuromorphicAudioTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[129/219] Compiling SharedKitTests NeuromorphicDemoCleanTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:13:9: error: cannot find 'Logger' in scope
+11 |     func testLoggerSharedInstance() {
+12 |         // Logger is a static utility class, not a singleton
+13 |         Logger.logInfo("Test message")
+   |         `- error: cannot find 'Logger' in scope
+14 |         XCTAssertTrue(true, "Logger should work via static methods")
+15 |     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[130/219] Compiling SharedKitTests ErrorHandlingUITests.swift
+[131/219] Compiling SharedKitTests FinancialIntelligenceAnalysisTests.swift
+[132/219] Compiling SharedKitTests FullSystemVerificationTests.swift
+[133/219] Compiling SharedKitTests HuggingFaceClientTests.swift
+[134/219] Compiling SharedKitTests HybridNetworkIntegrationTests.swift
+[135/219] Compiling SharedKitTests InputValidatorTests.swift
+[136/219] Compiling SharedKitTests IntegratedIntelligenceOrchestrationSystemTests.swift
+[137/219] Compiling SharedKitTests IntegrationTestSuiteTests.swift
+[138/219] Compiling SharedKitTests IntegrationWorkflowsTests.swift
+[139/219] Compiling SharedKitTests IntelligentCollaborationTests.swift
+[140/219] Compiling SharedKitTests IntelligentResourceManagerTests.swift
+[141/219] Compiling SharedKitTests InteractiveComponentsTests.swift
+[142/219] Compiling SharedKitTests ConsciousAITests.swift
+[143/219] Compiling SharedKitTests CrossProjectIntegrationTests.swift
+[144/219] Compiling SharedKitTests CustomTransitionsTests.swift
+[145/219] Compiling SharedKitTests DependencyContainerTests.swift
+[146/219] Compiling SharedKitTests DeviceCompatibilityUATSuiteTests.swift
+[147/219] Compiling SharedKitTests DimensionalEngineeringTests.swift
+[148/219] Compiling SharedKitTests DistributedOllamaIntelligenceTests.swift
+[149/219] Compiling SharedKitTests EnhancedDataModelsTests.swift
+[150/219] Compiling SharedKitTests EnhancedFinancialModelsTests.swift
+[151/219] Compiling SharedKitTests EnhancedHealthcareSupportTests.swift
+[152/219] Compiling SharedKitTests EnhancedPlannerModelsTests.swift
+[153/219] Compiling SharedKitTests EnhancedUniversalComputationSystemTests.swift
+[154/219] Compiling SharedKitTests EntanglementNetworkTests.swift
+[155/219] Compiling SharedKitTests AutonomousDocumentationTests.swift
+[156/219] Compiling SharedKitTests AutonomousInnovationTests.swift
+[157/219] Compiling SharedKitTests AutonomousOperationSystemTests.swift
+[158/219] Compiling SharedKitTests AutonomousSecurityTests.swift
+[159/219] Compiling SharedKitTests AutonomousTestingFrameworkTests.swift
+[160/219] Compiling SharedKitTests AutonomousUniverseRepairTests.swift
+[161/219] Compiling SharedKitTests AutonomousWorkflowEvolutionSystemTests.swift
+[162/219] Compiling SharedKitTests BaseViewModelTestCaseTests.swift
+[163/219] Compiling SharedKitTests CircuitBreakerTests.swift
+[164/219] Compiling SharedKitTests CloudModelDemoTests.swift
+[165/219] Compiling SharedKitTests CombinedFrameworkTests.swift
+[166/219] Compiling SharedKitTests ComprehensiveSupportingArchitecturesTests.swift
+[167/219] Compiling SharedKitTests ConsciousAIDemoTests.swift
+[168/219] Compiling SharedKitTests NeuromorphicDemoTests.swift
+[169/219] Compiling SharedKitTests NeuromorphicRoboticsTests.swift
+[170/219] Compiling SharedKitTests NeuromorphicVisionTests.swift
+[171/219] Compiling SharedKitTests OllamaClientIntegrationTests.swift
+[172/219] Compiling SharedKitTests OllamaClientTests.swift
+[173/219] Compiling SharedKitTests OllamaEnhancementsTests.swift
+[174/219] Compiling SharedKitTests OllamaExampleUsageTests.swift
+[175/219] Compiling SharedKitTests OllamaIntegrationFrameworkTests.swift
+[176/219] Compiling SharedKitTests OllamaIntegrationManagerTests.swift
+[177/219] Compiling SharedKitTests OllamaModelEcosystemsTests.swift
+[178/219] Compiling SharedKitTests OllamaTypesTests.swift
+[179/219] Compiling SharedKitTests OllamaWorkflowDemoTests.swift
+[180/219] Compiling SharedKitTests TestingFrameworkTests.swift
+[181/219] Compiling SharedKitTests UniversalAutomationTests.swift
+[182/219] Compiling SharedKitTests UniversalAutomationTypesTests.swift
+[183/219] Compiling SharedKitTests UniversalIntelligenceCoordinationSystemTests.swift
+[184/219] Compiling SharedKitTests UniversalIntelligenceEmergenceTests.swift
+[185/219] Compiling SharedKitTests UniversalMindMergingTests.swift
+[186/219] Compiling SharedKitTests UniversalOptimizationNetworksTests.swift
+[187/219] Compiling SharedKitTests WorkflowIntelligenceAmplificationSystemTests.swift
+[188/219] Compiling SharedKitTests WorkspaceAIEnhancerTests.swift
+[189/219] Compiling SharedKitTests phase8d_complete_implementationTests.swift
+[190/219] Compiling SharedKitTests test_global_quantum_networkTests.swift
+[191/219] Compiling SharedKitTests test_quantum_internetTests.swift
+[192/219] Compiling SharedKitTests PredictiveEcosystemTests.swift
+[193/219] Compiling SharedKitTests PredictiveMaintenanceSystemTests.swift
+[194/219] Compiling SharedKitTests QueryFallbackTests.swift
+[195/219] Compiling SharedKitTests RAGComponentsTests.swift
+[196/219] Compiling SharedKitTests RAGIntegrationTests.swift
+[197/219] Compiling SharedKitTests ReliabilityTests.swift
+[198/219] Compiling SharedKitTests SecurityAuditingSuiteTests.swift
+[199/219] Compiling SharedKitTests SecurityFrameworkTests.swift
+[200/219] Compiling SharedKitTests SelfHealingEngineTests.swift
+[201/219] Compiling SharedKitTests SelfOptimizingCICDTests.swift
+[202/219] Compiling SharedKitTests ServiceProtocolsTests.swift
+[203/219] Compiling SharedKitTests SharedArchitectureIntegrationTests.swift
+error: emit-module command failed with exit code 1 (use -v to see invocation)
+[204/219] Emitting module SharedKitTests
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:16:13: error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+ 14 | 
+ 15 | @MainActor
+ 16 | final class MockViewModel: BaseViewModel {
+    |             |- error: type 'MockViewModel' does not conform to protocol 'BaseViewModel'
+    |             `- note: add stubs for conformance
+ 17 |     struct State {
+ 18 |         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:80:10: note: protocol requires function 'validateState()' with type '() -> Bool'
+ 78 |     func handle(_ action: Action) async
+ 79 |     func resetError()
+ 80 |     func validateState() -> Bool
+    |          `- note: protocol requires function 'validateState()' with type '() -> Bool'
+ 81 | }
+ 82 | 
+[205/219] Compiling SharedKitTests AIMLValidationSuiteTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[206/219] Compiling SharedKitTests AIServiceProtocolsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[207/219] Compiling SharedKitTests AIServiceTestUtilitiesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[208/219] Compiling SharedKitTests AITaskPrioritizationServiceTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[209/219] Compiling SharedKitTests AIUITests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[210/219] Compiling SharedKitTests AccessibilityLabelsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[211/219] Compiling SharedKitTests AdvancedAnimationsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[212/219] Compiling SharedKitTests AdvancedErrorHandlingTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[213/219] Compiling SharedKitTests AdvancedOllamaArchitecturesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[214/219] Compiling SharedKitTests AdvancedWorkflowLearningSystemTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[215/219] Compiling SharedKitTests AnyCodableTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[216/219] Compiling SharedKitTests AppLoggerTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[217/219] Compiling SharedKitTests AutonomousDeploymentTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+error: fatalError

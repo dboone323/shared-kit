@@ -1,0 +1,1275 @@
+[0/1] Planning build
+Building for debugging...
+[0/9] Write swift-version--58304C5D6DBC2206.txt
+[2/115] Compiling SharedKitTests ErrorHandlingUITests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[3/115] Compiling SharedKitTests FinancialIntelligenceAnalysisTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[4/115] Compiling SharedKitTests FullSystemVerificationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[5/115] Compiling SharedKitTests HuggingFaceClientTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[6/115] Compiling SharedKitTests HybridNetworkIntegrationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[7/115] Compiling SharedKitTests InputValidatorTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[8/115] Compiling SharedKitTests IntegratedIntelligenceOrchestrationSystemTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[9/115] Compiling SharedKitTests IntegrationTestSuiteTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[10/115] Compiling SharedKitTests IntegrationWorkflowsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[11/115] Compiling SharedKitTests IntelligentCollaborationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[12/115] Compiling SharedKitTests IntelligentResourceManagerTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[13/115] Compiling SharedKitTests InteractiveComponentsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/FullSystemVerificationTests.swift:104:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+102 | 
+103 |         let result = SharedKit.ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+104 |         var memory = SharedKit.EntityMemory()
+    |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+105 |         memory.extractEntities(from: result.output)
+106 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[14/127] Compiling SharedKitTests ConsciousAITests.swift
+[15/127] Compiling SharedKitTests CrossProjectIntegrationTests.swift
+[16/127] Compiling SharedKitTests CustomTransitionsTests.swift
+[17/127] Compiling SharedKitTests DependencyContainerTests.swift
+[18/127] Compiling SharedKitTests DeviceCompatibilityUATSuiteTests.swift
+[19/127] Compiling SharedKitTests DimensionalEngineeringTests.swift
+[20/127] Compiling SharedKitTests DistributedOllamaIntelligenceTests.swift
+[21/127] Compiling SharedKitTests EnhancedDataModelsTests.swift
+[22/127] Compiling SharedKitTests EnhancedFinancialModelsTests.swift
+[23/127] Compiling SharedKitTests EnhancedHealthcareSupportTests.swift
+[24/127] Compiling SharedKitTests EnhancedPlannerModelsTests.swift
+[25/127] Compiling SharedKitTests EnhancedUniversalComputationSystemTests.swift
+[26/127] Compiling SharedKitTests EntanglementNetworkTests.swift
+[27/127] Compiling SharedKitTests InterdimensionalMarketSystemsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[28/127] Compiling SharedKitTests KeychainHelperTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[29/127] Compiling SharedKitTests LoggerTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[30/127] Compiling SharedKitTests MicroInteractionsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[31/127] Compiling SharedKitTests MockURLSession.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[32/127] Compiling SharedKitTests MultiModalAIAssistantTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[33/127] Compiling SharedKitTests MultiversalBridgeConstructionTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[34/127] Compiling SharedKitTests MultiversalKnowledgeNetworksTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[35/127] Compiling SharedKitTests NeuralArchitectureSearchTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[36/127] Compiling SharedKitTests NeuromorphicArchitectureTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[37/127] Compiling SharedKitTests NeuromorphicAudioTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[38/127] Compiling SharedKitTests NeuromorphicDemoCleanTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 3 | @available(macOS 12.0, iOS 15.0, *)
+ 4 | public class MockURLSession: URLSession, @unchecked Sendable {
+ 5 |     override public init() {}
+   |                     `- warning: 'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[39/127] Compiling SharedKitTests AutonomousDocumentationTests.swift
+[40/127] Compiling SharedKitTests AutonomousInnovationTests.swift
+[41/127] Compiling SharedKitTests AutonomousOperationSystemTests.swift
+[42/127] Compiling SharedKitTests AutonomousSecurityTests.swift
+[43/127] Compiling SharedKitTests AutonomousTestingFrameworkTests.swift
+[44/127] Compiling SharedKitTests AutonomousUniverseRepairTests.swift
+[45/127] Compiling SharedKitTests AutonomousWorkflowEvolutionSystemTests.swift
+[46/127] Compiling SharedKitTests BaseViewModelTestCaseTests.swift
+[47/127] Compiling SharedKitTests CircuitBreakerTests.swift
+[48/127] Compiling SharedKitTests CloudModelDemoTests.swift
+[49/127] Compiling SharedKitTests CombinedFrameworkTests.swift
+[50/127] Compiling SharedKitTests ComprehensiveSupportingArchitecturesTests.swift
+[51/127] Compiling SharedKitTests ConsciousAIDemoTests.swift
+[52/127] Compiling SharedKitTests OllamaWorkflowIntegrationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[53/127] Compiling SharedKitTests PackageTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[54/127] Compiling SharedKitTests PerformanceBenchmarkSuiteTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[55/127] Compiling SharedKitTests PerformanceOptimizationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[56/127] Compiling SharedKitTests PerformanceTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[57/127] Compiling SharedKitTests PerformanceUITests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[58/127] Compiling SharedKitTests PerformanceUtilitiesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[59/127] Compiling SharedKitTests Phase8DInfrastructureViewModelsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[60/127] Compiling SharedKitTests Phase8GMainTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[61/127] Compiling SharedKitTests Phase8G_ComplexTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[62/127] Compiling SharedKitTests Phase8G_DemosTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[63/127] Compiling SharedKitTests PredictiveArchitectureTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:20:26: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+18 | 
+19 |         measure {
+20 |             var memory = EntityMemory()
+   |                          `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+21 |             for _ in 0..<50 {
+22 |                 memory.extractEntities(from: text)
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[64/127] Compiling SharedKitTests TestingFrameworkTests.swift
+[65/127] Compiling SharedKitTests UniversalAutomationTests.swift
+[66/127] Compiling SharedKitTests UniversalAutomationTypesTests.swift
+[67/127] Compiling SharedKitTests UniversalIntelligenceCoordinationSystemTests.swift
+[68/127] Compiling SharedKitTests UniversalIntelligenceEmergenceTests.swift
+[69/127] Compiling SharedKitTests UniversalMindMergingTests.swift
+[70/127] Compiling SharedKitTests UniversalOptimizationNetworksTests.swift
+[71/127] Compiling SharedKitTests WorkflowIntelligenceAmplificationSystemTests.swift
+[72/127] Compiling SharedKitTests WorkspaceAIEnhancerTests.swift
+[73/127] Compiling SharedKitTests phase8d_complete_implementationTests.swift
+[74/127] Compiling SharedKitTests test_global_quantum_networkTests.swift
+[75/127] Compiling SharedKitTests test_quantum_internetTests.swift
+[76/127] Compiling SharedKitTests NeuromorphicDemoTests.swift
+[77/127] Compiling SharedKitTests NeuromorphicRoboticsTests.swift
+[78/127] Compiling SharedKitTests NeuromorphicVisionTests.swift
+[79/127] Compiling SharedKitTests OllamaClientIntegrationTests.swift
+[80/127] Compiling SharedKitTests OllamaClientTests.swift
+[81/127] Compiling SharedKitTests OllamaEnhancementsTests.swift
+[82/127] Compiling SharedKitTests OllamaExampleUsageTests.swift
+[83/127] Compiling SharedKitTests OllamaIntegrationFrameworkTests.swift
+[84/127] Compiling SharedKitTests OllamaIntegrationManagerTests.swift
+[85/127] Compiling SharedKitTests OllamaModelEcosystemsTests.swift
+[86/127] Compiling SharedKitTests OllamaTypesTests.swift
+[87/127] Compiling SharedKitTests OllamaWorkflowDemoTests.swift
+[88/127] Compiling SharedKitTests SharedArchitectureTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[89/127] Compiling SharedKitTests SharedKitIntegrationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[90/127] Compiling SharedKitTests SharedTypesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[91/127] Compiling SharedKitTests SpacetimeFabricManipulationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[92/127] Compiling SharedKitTests SpikingNeuralNetworksTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[93/127] Compiling SharedKitTests StateManagementTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[94/127] Compiling SharedKitTests StateProtocolsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[95/127] Compiling SharedKitTests StateTypesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[96/127] Compiling SharedKitTests SwiftDataCompatTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[97/127] Compiling SharedKitTests SynapticPlasticityTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[98/127] Compiling SharedKitTests TestHelpersTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[99/127] Compiling SharedKitTests TestUtilitiesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:206:31: warning: switch condition evaluates to a constant
+204 |     func testViewModelErrorEquality() {
+205 |         // ViewModelError should be testable
+206 |         switch ViewModelError.networkError {
+    |                               `- warning: switch condition evaluates to a constant
+207 |         case .networkError:
+208 |             break  // Expected
+209 |         default:
+210 |             XCTFail("Wrong error type decoded")
+    |                     `- note: will never be executed
+211 |         }
+212 |     }
+[100/127] Compiling SharedKitTests PredictiveEcosystemTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[101/127] Compiling SharedKitTests PredictiveMaintenanceSystemTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[102/127] Compiling SharedKitTests QueryFallbackTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[103/127] Compiling SharedKitTests RAGComponentsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[104/127] Compiling SharedKitTests RAGIntegrationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[105/127] Compiling SharedKitTests ReliabilityTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[106/127] Compiling SharedKitTests SecurityAuditingSuiteTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[107/127] Compiling SharedKitTests SecurityFrameworkTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[108/127] Compiling SharedKitTests SelfHealingEngineTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[109/127] Compiling SharedKitTests SelfOptimizingCICDTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[110/127] Compiling SharedKitTests ServiceProtocolsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[111/127] Compiling SharedKitTests SharedArchitectureIntegrationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:30:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+28 | 
+29 |     func testEntityMemoryExtractsServicesAndFiles() {
+30 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+31 |         memory.extractEntities(
+32 |             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:41:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+39 | 
+40 |     func testEntityMemoryRetainsOnlyRecentErrors() {
+41 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+42 |         for index in 0..<10 {
+43 |             memory.extractEntities(from: "error \(index)")
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:22: error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+71 | 
+72 |         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+73 |         var memory = EntityMemory()
+   |                      `- error: 'EntityMemory' initializer is inaccessible due to 'internal' protection level
+74 |         memory.extractEntities(from: parsed.output)
+75 | 
+
+SharedKitCore.EntityMemory.init:2:10: note: 'init()' declared here
+1 | struct EntityMemory {
+2 | internal init()}
+  |          `- note: 'init()' declared here
+3 | 
+[112/127] Compiling SharedKitTests AIMLValidationSuiteTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[113/127] Compiling SharedKitTests AIServiceProtocolsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[114/127] Compiling SharedKitTests AIServiceTestUtilitiesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[115/127] Compiling SharedKitTests AITaskPrioritizationServiceTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[116/127] Compiling SharedKitTests AIUITests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[117/127] Compiling SharedKitTests AccessibilityLabelsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[118/127] Compiling SharedKitTests AdvancedAnimationsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[119/127] Compiling SharedKitTests AdvancedErrorHandlingTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[120/127] Compiling SharedKitTests AdvancedOllamaArchitecturesTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[121/127] Compiling SharedKitTests AdvancedWorkflowLearningSystemTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[122/127] Compiling SharedKitTests AnyCodableTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[123/127] Compiling SharedKitTests AppLoggerTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[124/127] Compiling SharedKitTests AutonomousDeploymentTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/AnyCodableTests.swift:68:13: warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 66 |         let json = "null"
+ 67 |         let data = json.data(using: .utf8)!
+ 68 |         let value = try JSONDecoder().decode(AnyCodable.self, from: data)
+    |             `- warning: initialization of immutable value 'value' was never used; consider replacing with assignment to '_' or removing it [#no-usage]
+ 69 |         // For now, AnyCodable implementation throws or handles null differently.
+ 70 |         // Assuming we want it to be nil or a specific null case.
+[125/127] Emitting module SharedKitTests
+error: fatalError

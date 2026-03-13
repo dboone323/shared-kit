@@ -5,17 +5,17 @@ import Foundation
 #endif
 
 /// Lightweight wrapper providing a shared instance to delegate to the static `Logger` API.
-final class AppLogger: @unchecked Sendable {
-    static let shared = AppLogger()
+public final class AppLogger: @unchecked Sendable {
+    public static let shared = AppLogger()
     private init() {}
 
     /// Local LogLevel used by callers (keeps compatibility with CodingReviewer usage)
-    enum LogLevel {
+    public enum LogLevel {
         case debug, info, warning, error, critical
     }
 
     /// Local LogCategory maps to MomentumFinance Logger OSLog categories
-    enum LogCategory {
+    public enum LogCategory {
         case general, analysis, performance, security, ui, ai, network, data, business
     }
 
@@ -30,7 +30,7 @@ final class AppLogger: @unchecked Sendable {
         }
     }
 
-    func log(_ message: String, level: LogLevel = .info, category: LogCategory = .general) {
+    public func log(_ message: String, level: LogLevel = .info, category: LogCategory = .general) {
         let oslog = self.osLog(for: category)
         switch level {
         case .debug:
@@ -51,15 +51,15 @@ final class AppLogger: @unchecked Sendable {
         }
     }
 
-    func debug(_ message: String) {
+    public func debug(_ message: String) {
         SharedLogger.logDebug(message, category: SharedLogger.ui)
     }
 
-    func logWarning(_ message: String) {
+    public func logWarning(_ message: String) {
         SharedLogger.logWarning(message, category: SharedLogger.business)
     }
 
-    func logError(_ error: Error, context: String = "") {
+    public func logError(_ error: Error, context: String = "") {
         SharedLogger.logError(error, context: context)
     }
 }

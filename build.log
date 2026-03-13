@@ -1,0 +1,1171 @@
+Building for debugging...
+[0/9] Write swift-version--58304C5D6DBC2206.txt
+[2/26] Compiling SharedKitTests PerformanceOptimizationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:13:37: [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m11 |[0;0m 
+[0;36m12 |[0;0m         measure {
+[0;36m13 |[0;0m             _ = ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+   [0;36m|[0;0m                                     `- [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m14 |[0;0m         }
+[0;36m15 |[0;0m     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:21:26: [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m19 |[0;0m 
+[0;36m20 |[0;0m         measure {
+[0;36m21 |[0;0m             var memory = EntityMemory()
+   [0;36m|[0;0m                          `- [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m22 |[0;0m             for _ in 0..<50 {
+[0;36m23 |[0;0m                 memory.extractEntities(from: text)
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+[3/26] Compiling SharedKitTests PerformanceTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:13:37: [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m11 |[0;0m 
+[0;36m12 |[0;0m         measure {
+[0;36m13 |[0;0m             _ = ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+   [0;36m|[0;0m                                     `- [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m14 |[0;0m         }
+[0;36m15 |[0;0m     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:21:26: [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m19 |[0;0m 
+[0;36m20 |[0;0m         measure {
+[0;36m21 |[0;0m             var memory = EntityMemory()
+   [0;36m|[0;0m                          `- [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m22 |[0;0m             for _ in 0..<50 {
+[0;36m23 |[0;0m                 memory.extractEntities(from: text)
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+[4/26] Compiling SharedKitTests PerformanceUITests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:13:37: [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m11 |[0;0m 
+[0;36m12 |[0;0m         measure {
+[0;36m13 |[0;0m             _ = ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+   [0;36m|[0;0m                                     `- [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m14 |[0;0m         }
+[0;36m15 |[0;0m     }
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/PerformanceTests.swift:21:26: [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m19 |[0;0m 
+[0;36m20 |[0;0m         measure {
+[0;36m21 |[0;0m             var memory = EntityMemory()
+   [0;36m|[0;0m                          `- [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m22 |[0;0m             for _ in 0..<50 {
+[0;36m23 |[0;0m                 memory.extractEntities(from: text)
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+[5/28] Compiling SharedKitTests PredictiveEcosystemTests.swift
+[6/28] Compiling SharedKitTests PredictiveMaintenanceSystemTests.swift
+[7/28] Compiling SharedKitTests RAGIntegrationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:42: [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m71 |[0;0m             """
+[0;36m72 |[0;0m 
+[0;36m73 |[0;0m         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+   [0;36m|[0;0m                                          `- [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m74 |[0;0m         var memory = EntityMemory()
+[0;36m75 |[0;0m         memory.extractEntities(from: parsed.output)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:74:22: [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m72 |[0;0m 
+[0;36m73 |[0;0m         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+[0;36m74 |[0;0m         var memory = EntityMemory()
+   [0;36m|[0;0m                      `- [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m75 |[0;0m         memory.extractEntities(from: parsed.output)
+[0;36m76 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+[8/28] Compiling SharedKitTests ReliabilityTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:73:42: [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m71 |[0;0m             """
+[0;36m72 |[0;0m 
+[0;36m73 |[0;0m         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+   [0;36m|[0;0m                                          `- [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m74 |[0;0m         var memory = EntityMemory()
+[0;36m75 |[0;0m         memory.extractEntities(from: parsed.output)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGIntegrationTests.swift:74:22: [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m72 |[0;0m 
+[0;36m73 |[0;0m         let parsed = ToolExecutionResult.parse(toolName: "status", rawOutput: output)
+[0;36m74 |[0;0m         var memory = EntityMemory()
+   [0;36m|[0;0m                      `- [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m75 |[0;0m         memory.extractEntities(from: parsed.output)
+[0;36m76 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+[9/28] Compiling SharedKitTests InterdimensionalMarketSystemsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:14:9: [1;31merror: [1;39mcannot find 'Logger' in scope[0;0m
+[0;36m12 |[0;0m     func testLoggerSharedInstance() {
+[0;36m13 |[0;0m         // Logger is a static utility class, not a singleton
+[0;36m14 |[0;0m         [4;39mLogger[0;0m.logInfo("Test message")
+   [0;36m|[0;0m         `- [1;31merror: [1;39mcannot find 'Logger' in scope[0;0m
+[0;36m15 |[0;0m         XCTAssertTrue(true, "Logger should work via static methods")
+[0;36m16 |[0;0m     }
+[10/28] Compiling SharedKitTests KeychainHelperTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:14:9: [1;31merror: [1;39mcannot find 'Logger' in scope[0;0m
+[0;36m12 |[0;0m     func testLoggerSharedInstance() {
+[0;36m13 |[0;0m         // Logger is a static utility class, not a singleton
+[0;36m14 |[0;0m         [4;39mLogger[0;0m.logInfo("Test message")
+   [0;36m|[0;0m         `- [1;31merror: [1;39mcannot find 'Logger' in scope[0;0m
+[0;36m15 |[0;0m         XCTAssertTrue(true, "Logger should work via static methods")
+[0;36m16 |[0;0m     }
+[11/28] Compiling SharedKitTests LoggerTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/LoggerTests.swift:14:9: [1;31merror: [1;39mcannot find 'Logger' in scope[0;0m
+[0;36m12 |[0;0m     func testLoggerSharedInstance() {
+[0;36m13 |[0;0m         // Logger is a static utility class, not a singleton
+[0;36m14 |[0;0m         [4;39mLogger[0;0m.logInfo("Test message")
+   [0;36m|[0;0m         `- [1;31merror: [1;39mcannot find 'Logger' in scope[0;0m
+[0;36m15 |[0;0m         XCTAssertTrue(true, "Logger should work via static methods")
+[0;36m16 |[0;0m     }
+[12/28] Compiling SharedKitTests SharedTypesTests.swift
+[13/28] Compiling SharedKitTests SpacetimeFabricManipulationTests.swift
+[14/28] Compiling SharedKitTests OllamaWorkflowIntegrationTests.swift
+[15/28] Compiling SharedKitTests PackageTests.swift
+[16/28] Compiling SharedKitTests PerformanceBenchmarkSuiteTests.swift
+[17/28] Compiling SharedKitTests SharedArchitectureTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:17:28: [1;31merror: [1;39m'BaseViewModel' is ambiguous for type lookup in this context[0;0m
+ [0;36m15 |[0;0m 
+ [0;36m16 |[0;0m @MainActor
+ [0;36m17 |[0;0m final class MockViewModel: [4;39mBaseViewModel[0;0m {
+    [0;36m|[0;0m                            `- [1;31merror: [1;39m'BaseViewModel' is ambiguous for type lookup in this context[0;0m
+ [0;36m18 |[0;0m     struct State {
+ [0;36m19 |[0;0m         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:68:17: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m66 |[0;0m /// Supports both ObservableObject and @Observable patterns for maximum compatibility
+ [0;36m67 |[0;0m @MainActor
+ [0;36m68 |[0;0m public protocol BaseViewModel: AnyObject {
+    [0;36m|[0;0m                 `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m69 |[0;0m     associatedtype State
+ [0;36m70 |[0;0m     associatedtype Action
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:70:17: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m68 |[0;0m /// Supports both ObservableObject and @Observable patterns for maximum compatibility
+ [0;36m69 |[0;0m @MainActor
+ [0;36m70 |[0;0m public protocol BaseViewModel: AnyObject {
+    [0;36m|[0;0m                 `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m71 |[0;0m     associatedtype State
+ [0;36m72 |[0;0m     associatedtype Action
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:105:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m103 |[0;0m 
+[0;36m104 |[0;0m     func testSetLoadingState() {
+[0;36m105 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m106 |[0;0m         XCTAssertTrue(viewModel.isLoading)
+[0;36m107 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:108:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m106 |[0;0m         XCTAssertTrue(viewModel.isLoading)
+[0;36m107 |[0;0m 
+[0;36m108 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(false)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m109 |[0;0m         XCTAssertFalse(viewModel.isLoading)
+[0;36m110 |[0;0m     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:121:33: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'validateState'[0;0m
+[0;36m119 |[0;0m 
+[0;36m120 |[0;0m     func testValidateState() {
+[0;36m121 |[0;0m         let isValid = [4;39mviewModel[0;0m.[4;39mvalidateState[0;0m()
+    [0;36m|[0;0m                                 `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'validateState'[0;0m
+[0;36m122 |[0;0m         XCTAssertTrue(isValid)  // Default implementation returns true
+[0;36m123 |[0;0m     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:160:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m158 |[0;0m             .store(in: &cancellables)
+[0;36m159 |[0;0m 
+[0;36m160 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m161 |[0;0m 
+[0;36m162 |[0;0m         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:169:21: [1;31merror: [1;39m'OperationResult' is ambiguous for type lookup in this context[0;0m
+[0;36m167 |[0;0m 
+[0;36m168 |[0;0m     func testOperationResultSuccess() {
+[0;36m169 |[0;0m         let result: [4;39mOperationResult[0;0m<String> = .success("Test data")
+    [0;36m|[0;0m                     `- [1;31merror: [1;39m'OperationResult' is ambiguous for type lookup in this context[0;0m
+[0;36m170 |[0;0m 
+[0;36m171 |[0;0m         switch result {
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:37:13: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m35 |[0;0m 
+ [0;36m36 |[0;0m /// Result type for asynchronous operations
+ [0;36m37 |[0;0m public enum OperationResult<T> {
+    [0;36m|[0;0m             `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m38 |[0;0m     case success(T)
+ [0;36m39 |[0;0m     case failure(ViewModelError)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:39:13: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m37 |[0;0m 
+ [0;36m38 |[0;0m /// Result type for asynchronous operations
+ [0;36m39 |[0;0m public enum OperationResult<T: Sendable>: Sendable {
+    [0;36m|[0;0m             `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m40 |[0;0m     case success(T)
+ [0;36m41 |[0;0m     case failure(ViewModelError)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:180:36: [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m178 |[0;0m 
+[0;36m179 |[0;0m     func testOperationResultFailure() {
+[0;36m180 |[0;0m         let error = ViewModelError.networkError
+    [0;36m|[0;0m                                    `- [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m181 |[0;0m         let result: OperationResult<String> = .failure(error)
+[0;36m182 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:15:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m13 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m14 |[0;0m     case invalidState
+ [0;36m15 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m16 |[0;0m     case dataError
+ [0;36m17 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:17:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m15 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m16 |[0;0m     case invalidState
+ [0;36m17 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m18 |[0;0m     case dataError
+ [0;36m19 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:181:21: [1;31merror: [1;39m'OperationResult' is ambiguous for type lookup in this context[0;0m
+[0;36m179 |[0;0m     func testOperationResultFailure() {
+[0;36m180 |[0;0m         let error = ViewModelError.networkError
+[0;36m181 |[0;0m         let result: [4;39mOperationResult[0;0m<String> = .failure(error)
+    [0;36m|[0;0m                     `- [1;31merror: [1;39m'OperationResult' is ambiguous for type lookup in this context[0;0m
+[0;36m182 |[0;0m 
+[0;36m183 |[0;0m         switch result {
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:37:13: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m35 |[0;0m 
+ [0;36m36 |[0;0m /// Result type for asynchronous operations
+ [0;36m37 |[0;0m public enum OperationResult<T> {
+    [0;36m|[0;0m             `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m38 |[0;0m     case success(T)
+ [0;36m39 |[0;0m     case failure(ViewModelError)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:39:13: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m37 |[0;0m 
+ [0;36m38 |[0;0m /// Result type for asynchronous operations
+ [0;36m39 |[0;0m public enum OperationResult<T: Sendable>: Sendable {
+    [0;36m|[0;0m             `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m40 |[0;0m     case success(T)
+ [0;36m41 |[0;0m     case failure(ViewModelError)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:194:43: [1;31merror: [1;39mambiguous use of 'invalidState'[0;0m
+[0;36m192 |[0;0m 
+[0;36m193 |[0;0m     func testViewModelErrorTypes() {
+[0;36m194 |[0;0m         let invalidState = ViewModelError.invalidState
+    [0;36m|[0;0m                                           `- [1;31merror: [1;39mambiguous use of 'invalidState'[0;0m
+[0;36m195 |[0;0m         let networkError = ViewModelError.networkError
+[0;36m196 |[0;0m         let dataError = ViewModelError.dataError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:14:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m12 |[0;0m /// Standard error types for view models
+ [0;36m13 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m14 |[0;0m     case invalidState
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m15 |[0;0m     case networkError
+ [0;36m16 |[0;0m     case dataError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:16:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m14 |[0;0m /// Standard error types for view models
+ [0;36m15 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m16 |[0;0m     case invalidState
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m17 |[0;0m     case networkError
+ [0;36m18 |[0;0m     case dataError
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:195:43: [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m193 |[0;0m     func testViewModelErrorTypes() {
+[0;36m194 |[0;0m         let invalidState = ViewModelError.invalidState
+[0;36m195 |[0;0m         let networkError = ViewModelError.networkError
+    [0;36m|[0;0m                                           `- [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m196 |[0;0m         let dataError = ViewModelError.dataError
+[0;36m197 |[0;0m         let unknownError = ViewModelError.unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:15:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m13 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m14 |[0;0m     case invalidState
+ [0;36m15 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m16 |[0;0m     case dataError
+ [0;36m17 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:17:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m15 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m16 |[0;0m     case invalidState
+ [0;36m17 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m18 |[0;0m     case dataError
+ [0;36m19 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:196:40: [1;31merror: [1;39mambiguous use of 'dataError'[0;0m
+[0;36m194 |[0;0m         let invalidState = ViewModelError.invalidState
+[0;36m195 |[0;0m         let networkError = ViewModelError.networkError
+[0;36m196 |[0;0m         let dataError = ViewModelError.dataError
+    [0;36m|[0;0m                                        `- [1;31merror: [1;39mambiguous use of 'dataError'[0;0m
+[0;36m197 |[0;0m         let unknownError = ViewModelError.unknownError
+[0;36m198 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:16:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m14 |[0;0m     case invalidState
+ [0;36m15 |[0;0m     case networkError
+ [0;36m16 |[0;0m     case dataError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m17 |[0;0m     case unknownError
+ [0;36m18 |[0;0m     case customError(String)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:18:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m16 |[0;0m     case invalidState
+ [0;36m17 |[0;0m     case networkError
+ [0;36m18 |[0;0m     case dataError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m19 |[0;0m     case unknownError
+ [0;36m20 |[0;0m     case customError(String)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:197:43: [1;31merror: [1;39mambiguous use of 'unknownError'[0;0m
+[0;36m195 |[0;0m         let networkError = ViewModelError.networkError
+[0;36m196 |[0;0m         let dataError = ViewModelError.dataError
+[0;36m197 |[0;0m         let unknownError = ViewModelError.unknownError
+    [0;36m|[0;0m                                           `- [1;31merror: [1;39mambiguous use of 'unknownError'[0;0m
+[0;36m198 |[0;0m 
+[0;36m199 |[0;0m         XCTAssertNotNil(invalidState)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:17:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m15 |[0;0m     case networkError
+ [0;36m16 |[0;0m     case dataError
+ [0;36m17 |[0;0m     case unknownError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m18 |[0;0m     case customError(String)
+ [0;36m19 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:19:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m17 |[0;0m     case networkError
+ [0;36m18 |[0;0m     case dataError
+ [0;36m19 |[0;0m     case unknownError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m20 |[0;0m     case customError(String)
+ [0;36m21 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:207:31: [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m205 |[0;0m     func testViewModelErrorEquality() {
+[0;36m206 |[0;0m         // ViewModelError should be testable
+[0;36m207 |[0;0m         switch ViewModelError.networkError {
+    [0;36m|[0;0m                               `- [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m208 |[0;0m         case .networkError:
+[0;36m209 |[0;0m             break  // Expected
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:15:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m13 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m14 |[0;0m     case invalidState
+ [0;36m15 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m16 |[0;0m     case dataError
+ [0;36m17 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:17:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m15 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m16 |[0;0m     case invalidState
+ [0;36m17 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m18 |[0;0m     case dataError
+ [0;36m19 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:238:36: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m236 |[0;0m             for i in 0..<20 {
+[0;36m237 |[0;0m                 group.addTask { @MainActor in
+[0;36m238 |[0;0m                     [4;39mself.viewModel[0;0m.[4;39msetLoading[0;0m(i % 2 == 0)
+    [0;36m|[0;0m                                    `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m239 |[0;0m                 }
+[0;36m240 |[0;0m             }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:255:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m253 |[0;0m 
+[0;36m254 |[0;0m         // Set loading
+[0;36m255 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m256 |[0;0m         XCTAssertTrue(viewModel.isLoading)
+[0;36m257 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:263:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m261 |[0;0m 
+[0;36m262 |[0;0m         // Complete loading
+[0;36m263 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(false)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m264 |[0;0m         XCTAssertFalse(viewModel.isLoading)
+[0;36m265 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:280:16: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m278 |[0;0m         Task { @MainActor in
+[0;36m279 |[0;0m             let vm = MockViewModel()
+[0;36m280 |[0;0m             [4;39mvm[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m281 |[0;0m             vm.handle(.loadData)
+[0;36m282 |[0;0m             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:313:27: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m311 |[0;0m         measure {
+[0;36m312 |[0;0m             for _ in 0..<1000 {
+[0;36m313 |[0;0m                 [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                           `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m314 |[0;0m                 viewModel.setLoading(false)
+[0;36m315 |[0;0m             }
+[18/28] Compiling SharedKitTests SharedKitIntegrationTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:17:28: [1;31merror: [1;39m'BaseViewModel' is ambiguous for type lookup in this context[0;0m
+ [0;36m15 |[0;0m 
+ [0;36m16 |[0;0m @MainActor
+ [0;36m17 |[0;0m final class MockViewModel: [4;39mBaseViewModel[0;0m {
+    [0;36m|[0;0m                            `- [1;31merror: [1;39m'BaseViewModel' is ambiguous for type lookup in this context[0;0m
+ [0;36m18 |[0;0m     struct State {
+ [0;36m19 |[0;0m         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:68:17: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m66 |[0;0m /// Supports both ObservableObject and @Observable patterns for maximum compatibility
+ [0;36m67 |[0;0m @MainActor
+ [0;36m68 |[0;0m public protocol BaseViewModel: AnyObject {
+    [0;36m|[0;0m                 `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m69 |[0;0m     associatedtype State
+ [0;36m70 |[0;0m     associatedtype Action
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:70:17: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m68 |[0;0m /// Supports both ObservableObject and @Observable patterns for maximum compatibility
+ [0;36m69 |[0;0m @MainActor
+ [0;36m70 |[0;0m public protocol BaseViewModel: AnyObject {
+    [0;36m|[0;0m                 `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m71 |[0;0m     associatedtype State
+ [0;36m72 |[0;0m     associatedtype Action
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:105:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m103 |[0;0m 
+[0;36m104 |[0;0m     func testSetLoadingState() {
+[0;36m105 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m106 |[0;0m         XCTAssertTrue(viewModel.isLoading)
+[0;36m107 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:108:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m106 |[0;0m         XCTAssertTrue(viewModel.isLoading)
+[0;36m107 |[0;0m 
+[0;36m108 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(false)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m109 |[0;0m         XCTAssertFalse(viewModel.isLoading)
+[0;36m110 |[0;0m     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:121:33: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'validateState'[0;0m
+[0;36m119 |[0;0m 
+[0;36m120 |[0;0m     func testValidateState() {
+[0;36m121 |[0;0m         let isValid = [4;39mviewModel[0;0m.[4;39mvalidateState[0;0m()
+    [0;36m|[0;0m                                 `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'validateState'[0;0m
+[0;36m122 |[0;0m         XCTAssertTrue(isValid)  // Default implementation returns true
+[0;36m123 |[0;0m     }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:160:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m158 |[0;0m             .store(in: &cancellables)
+[0;36m159 |[0;0m 
+[0;36m160 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m161 |[0;0m 
+[0;36m162 |[0;0m         wait(for: [expectation], timeout: 1.0)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:169:21: [1;31merror: [1;39m'OperationResult' is ambiguous for type lookup in this context[0;0m
+[0;36m167 |[0;0m 
+[0;36m168 |[0;0m     func testOperationResultSuccess() {
+[0;36m169 |[0;0m         let result: [4;39mOperationResult[0;0m<String> = .success("Test data")
+    [0;36m|[0;0m                     `- [1;31merror: [1;39m'OperationResult' is ambiguous for type lookup in this context[0;0m
+[0;36m170 |[0;0m 
+[0;36m171 |[0;0m         switch result {
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:37:13: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m35 |[0;0m 
+ [0;36m36 |[0;0m /// Result type for asynchronous operations
+ [0;36m37 |[0;0m public enum OperationResult<T> {
+    [0;36m|[0;0m             `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m38 |[0;0m     case success(T)
+ [0;36m39 |[0;0m     case failure(ViewModelError)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:39:13: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m37 |[0;0m 
+ [0;36m38 |[0;0m /// Result type for asynchronous operations
+ [0;36m39 |[0;0m public enum OperationResult<T: Sendable>: Sendable {
+    [0;36m|[0;0m             `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m40 |[0;0m     case success(T)
+ [0;36m41 |[0;0m     case failure(ViewModelError)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:180:36: [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m178 |[0;0m 
+[0;36m179 |[0;0m     func testOperationResultFailure() {
+[0;36m180 |[0;0m         let error = ViewModelError.networkError
+    [0;36m|[0;0m                                    `- [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m181 |[0;0m         let result: OperationResult<String> = .failure(error)
+[0;36m182 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:15:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m13 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m14 |[0;0m     case invalidState
+ [0;36m15 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m16 |[0;0m     case dataError
+ [0;36m17 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:17:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m15 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m16 |[0;0m     case invalidState
+ [0;36m17 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m18 |[0;0m     case dataError
+ [0;36m19 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:181:21: [1;31merror: [1;39m'OperationResult' is ambiguous for type lookup in this context[0;0m
+[0;36m179 |[0;0m     func testOperationResultFailure() {
+[0;36m180 |[0;0m         let error = ViewModelError.networkError
+[0;36m181 |[0;0m         let result: [4;39mOperationResult[0;0m<String> = .failure(error)
+    [0;36m|[0;0m                     `- [1;31merror: [1;39m'OperationResult' is ambiguous for type lookup in this context[0;0m
+[0;36m182 |[0;0m 
+[0;36m183 |[0;0m         switch result {
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:37:13: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m35 |[0;0m 
+ [0;36m36 |[0;0m /// Result type for asynchronous operations
+ [0;36m37 |[0;0m public enum OperationResult<T> {
+    [0;36m|[0;0m             `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m38 |[0;0m     case success(T)
+ [0;36m39 |[0;0m     case failure(ViewModelError)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:39:13: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m37 |[0;0m 
+ [0;36m38 |[0;0m /// Result type for asynchronous operations
+ [0;36m39 |[0;0m public enum OperationResult<T: Sendable>: Sendable {
+    [0;36m|[0;0m             `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m40 |[0;0m     case success(T)
+ [0;36m41 |[0;0m     case failure(ViewModelError)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:194:43: [1;31merror: [1;39mambiguous use of 'invalidState'[0;0m
+[0;36m192 |[0;0m 
+[0;36m193 |[0;0m     func testViewModelErrorTypes() {
+[0;36m194 |[0;0m         let invalidState = ViewModelError.invalidState
+    [0;36m|[0;0m                                           `- [1;31merror: [1;39mambiguous use of 'invalidState'[0;0m
+[0;36m195 |[0;0m         let networkError = ViewModelError.networkError
+[0;36m196 |[0;0m         let dataError = ViewModelError.dataError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:14:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m12 |[0;0m /// Standard error types for view models
+ [0;36m13 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m14 |[0;0m     case invalidState
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m15 |[0;0m     case networkError
+ [0;36m16 |[0;0m     case dataError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:16:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m14 |[0;0m /// Standard error types for view models
+ [0;36m15 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m16 |[0;0m     case invalidState
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m17 |[0;0m     case networkError
+ [0;36m18 |[0;0m     case dataError
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:195:43: [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m193 |[0;0m     func testViewModelErrorTypes() {
+[0;36m194 |[0;0m         let invalidState = ViewModelError.invalidState
+[0;36m195 |[0;0m         let networkError = ViewModelError.networkError
+    [0;36m|[0;0m                                           `- [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m196 |[0;0m         let dataError = ViewModelError.dataError
+[0;36m197 |[0;0m         let unknownError = ViewModelError.unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:15:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m13 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m14 |[0;0m     case invalidState
+ [0;36m15 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m16 |[0;0m     case dataError
+ [0;36m17 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:17:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m15 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m16 |[0;0m     case invalidState
+ [0;36m17 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m18 |[0;0m     case dataError
+ [0;36m19 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:196:40: [1;31merror: [1;39mambiguous use of 'dataError'[0;0m
+[0;36m194 |[0;0m         let invalidState = ViewModelError.invalidState
+[0;36m195 |[0;0m         let networkError = ViewModelError.networkError
+[0;36m196 |[0;0m         let dataError = ViewModelError.dataError
+    [0;36m|[0;0m                                        `- [1;31merror: [1;39mambiguous use of 'dataError'[0;0m
+[0;36m197 |[0;0m         let unknownError = ViewModelError.unknownError
+[0;36m198 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:16:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m14 |[0;0m     case invalidState
+ [0;36m15 |[0;0m     case networkError
+ [0;36m16 |[0;0m     case dataError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m17 |[0;0m     case unknownError
+ [0;36m18 |[0;0m     case customError(String)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:18:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m16 |[0;0m     case invalidState
+ [0;36m17 |[0;0m     case networkError
+ [0;36m18 |[0;0m     case dataError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m19 |[0;0m     case unknownError
+ [0;36m20 |[0;0m     case customError(String)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:197:43: [1;31merror: [1;39mambiguous use of 'unknownError'[0;0m
+[0;36m195 |[0;0m         let networkError = ViewModelError.networkError
+[0;36m196 |[0;0m         let dataError = ViewModelError.dataError
+[0;36m197 |[0;0m         let unknownError = ViewModelError.unknownError
+    [0;36m|[0;0m                                           `- [1;31merror: [1;39mambiguous use of 'unknownError'[0;0m
+[0;36m198 |[0;0m 
+[0;36m199 |[0;0m         XCTAssertNotNil(invalidState)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:17:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m15 |[0;0m     case networkError
+ [0;36m16 |[0;0m     case dataError
+ [0;36m17 |[0;0m     case unknownError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m18 |[0;0m     case customError(String)
+ [0;36m19 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:19:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m17 |[0;0m     case networkError
+ [0;36m18 |[0;0m     case dataError
+ [0;36m19 |[0;0m     case unknownError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m20 |[0;0m     case customError(String)
+ [0;36m21 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:207:31: [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m205 |[0;0m     func testViewModelErrorEquality() {
+[0;36m206 |[0;0m         // ViewModelError should be testable
+[0;36m207 |[0;0m         switch ViewModelError.networkError {
+    [0;36m|[0;0m                               `- [1;31merror: [1;39mambiguous use of 'networkError'[0;0m
+[0;36m208 |[0;0m         case .networkError:
+[0;36m209 |[0;0m             break  // Expected
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:15:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m13 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m14 |[0;0m     case invalidState
+ [0;36m15 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m16 |[0;0m     case dataError
+ [0;36m17 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:17:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m15 |[0;0m public enum ViewModelError: Error, Equatable {
+ [0;36m16 |[0;0m     case invalidState
+ [0;36m17 |[0;0m     case networkError
+    [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m18 |[0;0m     case dataError
+ [0;36m19 |[0;0m     case unknownError
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:238:36: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m236 |[0;0m             for i in 0..<20 {
+[0;36m237 |[0;0m                 group.addTask { @MainActor in
+[0;36m238 |[0;0m                     [4;39mself.viewModel[0;0m.[4;39msetLoading[0;0m(i % 2 == 0)
+    [0;36m|[0;0m                                    `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m239 |[0;0m                 }
+[0;36m240 |[0;0m             }
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:255:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m253 |[0;0m 
+[0;36m254 |[0;0m         // Set loading
+[0;36m255 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m256 |[0;0m         XCTAssertTrue(viewModel.isLoading)
+[0;36m257 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:263:19: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m261 |[0;0m 
+[0;36m262 |[0;0m         // Complete loading
+[0;36m263 |[0;0m         [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(false)
+    [0;36m|[0;0m                   `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m264 |[0;0m         XCTAssertFalse(viewModel.isLoading)
+[0;36m265 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:280:16: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m278 |[0;0m         Task { @MainActor in
+[0;36m279 |[0;0m             let vm = MockViewModel()
+[0;36m280 |[0;0m             [4;39mvm[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m281 |[0;0m             vm.handle(.loadData)
+[0;36m282 |[0;0m             XCTAssertNotNil(vm)
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:313:27: [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m311 |[0;0m         measure {
+[0;36m312 |[0;0m             for _ in 0..<1000 {
+[0;36m313 |[0;0m                 [4;39mviewModel[0;0m.[4;39msetLoading[0;0m(true)
+    [0;36m|[0;0m                           `- [1;31merror: [1;39mvalue of type 'MockViewModel' has no member 'setLoading'[0;0m
+[0;36m314 |[0;0m                 viewModel.setLoading(false)
+[0;36m315 |[0;0m             }
+[19/28] Compiling SharedKitTests MicroInteractionsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: [1;33mwarning: [1;39m'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration\DeprecatedDeclaration]8;;\]
+ [0;36m3 |[0;0m @available(macOS 12.0, iOS 15.0, *)
+ [0;36m4 |[0;0m public class MockURLSession: URLSession, @unchecked Sendable {
+ [0;36m5 |[0;0m     override public init() {}
+   [0;36m|[0;0m                     `- [1;33mwarning: [1;39m'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration\DeprecatedDeclaration]8;;\]
+ [0;36m6 |[0;0m 
+ [0;36m7 |[0;0m     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[20/28] Compiling SharedKitTests MockURLSession.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: [1;33mwarning: [1;39m'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration\DeprecatedDeclaration]8;;\]
+ [0;36m3 |[0;0m @available(macOS 12.0, iOS 15.0, *)
+ [0;36m4 |[0;0m public class MockURLSession: URLSession, @unchecked Sendable {
+ [0;36m5 |[0;0m     override public init() {}
+   [0;36m|[0;0m                     `- [1;33mwarning: [1;39m'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration\DeprecatedDeclaration]8;;\]
+ [0;36m6 |[0;0m 
+ [0;36m7 |[0;0m     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[21/28] Compiling SharedKitTests MultiModalAIAssistantTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/Mocks/MockURLSession.swift:5:21: [1;33mwarning: [1;39m'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration\DeprecatedDeclaration]8;;\]
+ [0;36m3 |[0;0m @available(macOS 12.0, iOS 15.0, *)
+ [0;36m4 |[0;0m public class MockURLSession: URLSession, @unchecked Sendable {
+ [0;36m5 |[0;0m     override public init() {}
+   [0;36m|[0;0m                     `- [1;33mwarning: [1;39m'init()' was deprecated in macOS 10.15: Please use +[NSURLSession sessionWithConfiguration:] or other class methods to create instances[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration\DeprecatedDeclaration]8;;\]
+ [0;36m6 |[0;0m 
+ [0;36m7 |[0;0m     // We can't easily override the async data(for:) method in a way that works perfectly with standard URLSession
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[22/28] Compiling SharedKitTests QueryFallbackTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:14:42: [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m12 |[0;0m             """
+[0;36m13 |[0;0m 
+[0;36m14 |[0;0m         let result = ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+   [0;36m|[0;0m                                          `- [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m15 |[0;0m 
+[0;36m16 |[0;0m         XCTAssertFalse(result.success)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:24:42: [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m22 |[0;0m     func testToolExecutionResultExtractsContainerMetrics() {
+[0;36m23 |[0;0m         let rawOutput = "5 running healthy containers"
+[0;36m24 |[0;0m         let result = ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+   [0;36m|[0;0m                                          `- [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m25 |[0;0m 
+[0;36m26 |[0;0m         XCTAssertEqual(result.metrics["containers_running"], "5")
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:31:22: [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m29 |[0;0m 
+[0;36m30 |[0;0m     func testEntityMemoryExtractsServicesAndFiles() {
+[0;36m31 |[0;0m         var memory = EntityMemory()
+   [0;36m|[0;0m                      `- [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m32 |[0;0m         memory.extractEntities(
+[0;36m33 |[0;0m             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:42:22: [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m40 |[0;0m 
+[0;36m41 |[0;0m     func testEntityMemoryRetainsOnlyRecentErrors() {
+[0;36m42 |[0;0m         var memory = EntityMemory()
+   [0;36m|[0;0m                      `- [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m43 |[0;0m         for index in 0..<10 {
+[0;36m44 |[0;0m             memory.extractEntities(from: "error \(index)")
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+[23/28] Compiling SharedKitTests RAGComponentsTests.swift
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:14:42: [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m12 |[0;0m             """
+[0;36m13 |[0;0m 
+[0;36m14 |[0;0m         let result = ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+   [0;36m|[0;0m                                          `- [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m15 |[0;0m 
+[0;36m16 |[0;0m         XCTAssertFalse(result.success)
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:24:42: [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m22 |[0;0m     func testToolExecutionResultExtractsContainerMetrics() {
+[0;36m23 |[0;0m         let rawOutput = "5 running healthy containers"
+[0;36m24 |[0;0m         let result = ToolExecutionResult.parse(toolName: "status", rawOutput: rawOutput)
+   [0;36m|[0;0m                                          `- [1;31merror: [1;39mambiguous use of 'parse(toolName:rawOutput:)'[0;0m
+[0;36m25 |[0;0m 
+[0;36m26 |[0;0m         XCTAssertEqual(result.metrics["containers_running"], "5")
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/ToolExecutionResult.swift:29:24: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m27 |[0;0m 
+ [0;36m28 |[0;0m     /// Parse structured output from docker-manager and extract key information
+ [0;36m29 |[0;0m     public static func parse(toolName: String, rawOutput: String) -> ToolExecutionResult {
+    [0;36m|[0;0m                        `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+ [0;36m30 |[0;0m         var success = !rawOutput.lowercased().contains("error")
+ [0;36m31 |[0;0m         var metrics: [String: String] = [:]
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:31:22: [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m29 |[0;0m 
+[0;36m30 |[0;0m     func testEntityMemoryExtractsServicesAndFiles() {
+[0;36m31 |[0;0m         var memory = EntityMemory()
+   [0;36m|[0;0m                      `- [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m32 |[0;0m         memory.extractEntities(
+[0;36m33 |[0;0m             from: "postgres and redis failed. See /var/log/postgres.log for error details")
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/RAGComponentsTests.swift:42:22: [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m40 |[0;0m 
+[0;36m41 |[0;0m     func testEntityMemoryRetainsOnlyRecentErrors() {
+[0;36m42 |[0;0m         var memory = EntityMemory()
+   [0;36m|[0;0m                      `- [1;31merror: [1;39mambiguous use of 'init'[0;0m
+[0;36m43 |[0;0m         for index in 0..<10 {
+[0;36m44 |[0;0m             memory.extractEntities(from: "error \(index)")
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKit.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKit'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init()}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+
+SharedKitCore.EntityMemory.init:2:10: [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m1 |[0;0m struct EntityMemory {
+[0;36m2 |[0;0m internal init(services: Set<String> = [], recentErrors: [String] = [], mentionedFiles: Set<String> = [])}
+  [0;36m|[0;0m          `- [1;39mnote: [1;39mfound this candidate in module 'SharedKitCore'[0;0m
+[0;36m3 |[0;0m 
+[24/28] Compiling SharedKitTests SpikingNeuralNetworksTests.swift
+[25/28] Compiling SharedKitTests StateManagementTests.swift
+error: emit-module command failed with exit code 1 (use -v to see invocation)
+[26/28] Emitting module SharedKitTests
+/Users/danielstevens/github-projects/shared-kit/Tests/SharedKitTests/SharedArchitectureTests.swift:17:28: [1;31merror: [1;39m'BaseViewModel' is ambiguous for type lookup in this context[0;0m
+ [0;36m15 |[0;0m 
+ [0;36m16 |[0;0m @MainActor
+ [0;36m17 |[0;0m final class MockViewModel: [4;39mBaseViewModel[0;0m {
+    [0;36m|[0;0m                            `- [1;31merror: [1;39m'BaseViewModel' is ambiguous for type lookup in this context[0;0m
+ [0;36m18 |[0;0m     struct State {
+ [0;36m19 |[0;0m         var isLoading: Bool = false
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKit/SharedArchitecture.swift:68:17: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m66 |[0;0m /// Supports both ObservableObject and @Observable patterns for maximum compatibility
+ [0;36m67 |[0;0m @MainActor
+ [0;36m68 |[0;0m public protocol BaseViewModel: AnyObject {
+    [0;36m|[0;0m                 `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m69 |[0;0m     associatedtype State
+ [0;36m70 |[0;0m     associatedtype Action
+
+/Users/danielstevens/github-projects/shared-kit/Sources/SharedKitCore/SharedArchitecture.swift:70:17: [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m68 |[0;0m /// Supports both ObservableObject and @Observable patterns for maximum compatibility
+ [0;36m69 |[0;0m @MainActor
+ [0;36m70 |[0;0m public protocol BaseViewModel: AnyObject {
+    [0;36m|[0;0m                 `- [1;39mnote: [1;39mfound this candidate[0;0m
+ [0;36m71 |[0;0m     associatedtype State
+ [0;36m72 |[0;0m     associatedtype Action
+error: fatalError

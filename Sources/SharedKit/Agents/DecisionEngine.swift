@@ -50,11 +50,55 @@ public final class DecisionEngine: Sendable {
     }
 
     private func evaluateCondition(_ condition: String, metrics: [String: Any]) -> Bool {
-        // Simple mock implementation for Phase 6.1
-        // In a real 2026 app, this would use a DSL or LLM evaluator
-        if let metricValue = metrics[condition] as? Bool {
-            return metricValue
+        // Supported format: "metric_name > value" or "metric_name == true"
+        let parts = condition.components(separatedBy: " ")
+        if parts.count == 1 {
+            if let metricValue = metrics[condition] as? Bool {
+                return metricValue
+            }
+            return false
         }
+
+        if parts.count == 3 {
+            let metricName = parts[0]
+            let `operator` = parts[1]
+            let valueString = parts[2]
+
+            guard let metricValue = metrics[metricName] else { return false }
+
+            switch `operator` {
+            case ">":
+                if let mValue = metricValue as? Double, let cValue = Double(valueString) {
+                    return mValue > cValue
+                }
+                if let mValue = metricValue as? Int, let cValue = Int(valueString) {
+                    return mValue > cValue
+                }
+            case "<":
+                if let mValue = metricValue as? Double, let cValue = Double(valueString) {
+                    return mValue < cValue
+                }
+                if let mValue = metricValue as? Int, let cValue = Int(valueString) {
+                    return mValue < cValue
+                }
+            case "==":
+                if let mValue = metricValue as? String {
+                    return mValue == valueString
+                }
+                if let mValue = metricValue as? Bool {
+                    return mValue == (valueString.lowercased() == "true")
+                }
+                if let mValue = metricValue as? Double, let cValue = Double(valueString) {
+                    return mValue == cValue
+                }
+                if let mValue = metricValue as? Int, let cValue = Int(valueString) {
+                    return mValue == cValue
+                }
+            default:
+                break
+            }
+        }
+
         return false
     }
 }

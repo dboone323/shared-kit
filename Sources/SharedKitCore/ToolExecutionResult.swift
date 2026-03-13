@@ -78,6 +78,8 @@ public struct EntityMemory: Sendable {
     public var recentErrors: [String] = []
     public var mentionedFiles: Set<String> = []
 
+    public init() {}
+
     public mutating func extractEntities(from text: String) {
         // Extract service names (common Docker services)
         let servicePatterns = [
