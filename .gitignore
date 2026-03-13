@@ -39,3 +39,9 @@ venv/
 # System
 .DS_Store
 Thumbs.db
+
+# Swift Build Residue (Root Level)
+*.d
+*.dia
+*.swiftdeps
+*.swiftmodule
