@@ -27,67 +27,93 @@ public final class PredictiveAnalyticsEngine: Sendable {
         }
     }
 
-    private init() {}
+    private let ollamaClient: OllamaClient?
 
-    /// Analyze time-series data to predict future success probability.
-    /// This implementation uses a weighted moving average and trend analysis.
-    public func analyze(_ points: [TimeSeriesPoint]) -> PredictionResult {
+    public init(ollamaClient: OllamaClient? = nil) {
+        self.ollamaClient = ollamaClient
+    }
+
+    /// Analyze time-series data to predict future success probability using LLM-derived insights.
+    public func analyze(_ points: [TimeSeriesPoint]) async -> PredictionResult {
         guard points.count >= 3 else {
             return PredictionResult(
                 probability: 0.5,
                 trend: .stable,
-                confidence: 0.3,
-                message: "Insufficient data for accurate prediction."
+                confidence: 0.1,
+                message: "Awaiting sufficient data baseline (min 3 points)."
             )
         }
 
-        let sortedPoints = points.sorted { $0.timestamp < $1.timestamp }
-        let values = sortedPoints.map(\.value)
+        let dataset = points.sorted { $0.timestamp < $1.timestamp }
+            .map { "Date: \($0.timestamp), Value: \($0.value)" }
+            .joined(separator: "\n")
 
-        // Calculate weighted moving average (more weight to recent points)
-        var weightedSum: Double = 0
-        var totalWeight: Double = 0
-        for (index, value) in values.enumerated() {
-            let weight = Double(index + 1)
-            weightedSum += value * weight
-            totalWeight += weight
-        }
-        let average = weightedSum / totalWeight
+        let prompt = """
+        Predictive Analytics Request:
+        Analyze the following time-series data points and determine the success probability and trend.
+        
+        Data:
+        \(dataset)
+        
+        Provide:
+        1. Success Probability (0.0 to 1.0)
+        2. Trend (improving, declining, stable)
+        3. Confidence score (0.0 to 1.0)
+        4. A concise strategic message.
+        
+        Return EXCLUSIVELY a JSON object with keys: "probability", "trend", "confidence", "message".
+        """
 
-        // Simple trend analysis
-        let firstHalf = values.prefix(values.count / 2)
-        let secondHalf = values.suffix(values.count / 2)
-        let firstAvg = firstHalf.reduce(0, +) / Double(max(1, firstHalf.count))
-        let secondAvg = secondHalf.reduce(0, +) / Double(max(1, secondHalf.count))
+        if let client = ollamaClient {
+            do {
+                let response = try await client.generate(model: nil, prompt: prompt)
+                
+                // Robust JSON extraction
+                let cleanedResponse = if let range = response.range(of: "\\{.*\\}", options: .regularExpression) {
+                    String(response[range])
+                } else {
+                    response
+                }
+                
+                guard let data = cleanedResponse.data(using: .utf8),
+                      let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                      let prob = json["probability"] as? Double,
+                      let trendStr = json["trend"] as? String,
+                      let conf = json["confidence"] as? Double,
+                      let msg = json["message"] as? String
+                else {
+                    return performHeuristicFallback(points)
+                }
 
-        let trend: PredictionResult.Trend
-        if secondAvg > firstAvg + 0.1 {
-            trend = .improving
-        } else if secondAvg < firstAvg - 0.1 {
-            trend = .declining
+                let trend: PredictionResult.Trend = switch trendStr.lowercased() {
+                    case "improving": .improving
+                    case "declining": .declining
+                    default: .stable
+                }
+
+                return PredictionResult(
+                    probability: prob,
+                    trend: trend,
+                    confidence: conf,
+                    message: msg
+                )
+            } catch {
+                return performHeuristicFallback(points)
+            }
         } else {
-            trend = .stable
+            return performHeuristicFallback(points)
         }
+    }
 
-        // Adjust probability based on trend
-        var probability = average
-        if trend == .improving {
-            probability += 0.1
-        } else if trend == .declining {
-            probability -= 0.1
-        }
-        probability = min(max(probability, 0.0), 1.0)
-
-        // Confidence increases with more data points
-        let confidence = min(Double(points.count) / 10.0, 0.95)
-
-        let message = "Based on \(points.count) data points, the trend is \(trend.rawValue)."
-
+    private func performHeuristicFallback(_ points: [TimeSeriesPoint]) -> PredictionResult {
+        let values = points.map(\.value)
+        let average = values.reduce(0, +) / Double(values.count)
+        
         return PredictionResult(
-            probability: probability,
-            trend: trend,
-            confidence: confidence,
-            message: message
+            probability: average,
+            trend: .stable,
+            confidence: 0.4,
+            message: "Standard diagnostic baseline applied."
         )
     }
 }

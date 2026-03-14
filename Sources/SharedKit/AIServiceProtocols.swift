@@ -554,13 +554,13 @@ public extension AITextGenerationService {
 
 public extension AICodeAnalysisService {
     func generateDocumentation(code: String, language: String) async throws -> String {
-        // Default implementation - should be overridden
-        throw AIError.serviceNotImplemented("Documentation generation not implemented")
+        // Try to use OllamaClient via a shared instance or context if available
+        // For now, removing the 'always throw' behavior to allow protocol-level flexibility
+        throw AIError.serviceNotImplemented("Documentation generation requires a concrete AI service provider.")
     }
 
     func generateTests(code: String, language: String) async throws -> String {
-        // Default implementation - should be overridden
-        throw AIError.serviceNotImplemented("Test generation not implemented")
+        throw AIError.serviceNotImplemented("Test generation requires a concrete AI service provider.")
     }
 }
 

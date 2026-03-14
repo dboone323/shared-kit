@@ -293,14 +293,16 @@
 
             // Weekly comparison
             if !weekActivities.isEmpty {
-                let weekCompletionRate = self.calculateCompletionRate(weekActivities)
-                let trend = weekCompletionRate > completionRate ? "improving" : "declining"
-
+                let weekHistory = weekActivities.map { PredictiveAnalyticsEngine.TimeSeriesPoint(timestamp: $0.timestamp, value: $0.type == .taskCompleted ? 1.0 : 0.0) }
+                let trendResult = await self.predictiveEngine.analyze(weekHistory)
+                
+                let trend = trendResult.trend == .improving ? "improving" : "declining"
+ 
                 let trendInsight = ProductivityInsight(
                     id: UUID().uuidString,
                     title: "Weekly Trend",
-                    description: "Your completion rate this week is \(trend) compared to today",
-                    icon: weekCompletionRate > completionRate
+                    description: "Your completion rate trend is \(trend) (\(trendResult.message))",
+                    icon: trendResult.trend == .improving
                         ? "arrow.up.circle.fill"
                         : "arrow.down.circle.fill",
                     priority: .medium,

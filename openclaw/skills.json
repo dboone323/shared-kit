@@ -1,0 +1,33 @@
+{
+  "skills": [
+    {
+      "id": "swift-test-runner",
+      "name": "Swift Unit Tester",
+      "description": "Runs SPM unit tests for the current package.",
+      "language": "swift",
+      "command": "swift test",
+      "capabilities": ["testing", "compilation"],
+      "security_level": "medium"
+    },
+    {
+      "id": "swift-lint",
+      "name": "Swift Linting",
+      "description": "Checks code style using SwiftLint.",
+      "language": "swift",
+      "command": "swiftlint lint",
+      "capabilities": ["linting"],
+      "security_level": "low"
+    },
+    {
+      "id": "swift-doc-gen",
+      "name": "Swift Documentation Generator",
+      "description": "Generates DocC documentation for the package.",
+      "language": "swift",
+      "command": "swift package --allow-writing-to-package-directory generate-documentation",
+      "capabilities": ["documentation"],
+      "security_level": "low"
+    }
+  ],
+  "version": "1.0.0",
+  "last_updated": "2026-03-14"
+}
