@@ -52,23 +52,18 @@
                 self.lastUpdate = Date()
             }
 
-            return await Task.detached(priority: .userInitiated) {
-                // Generate suggestions using multiple AI approaches
-                // Note: We need a way to call back into self's async methods.
-                // Since self is MainActor, we can't easily call it from detached task unless those methods are non-isolated or we await them on MainActor.
-                // BUT the logic inside generating suggestions is pure calculation?
-                // Actually they are on 'self'. 'self' is ACTOR (if I make it one) or MainActor.
-                // If I make class @MainActor, then 'generatePatternBasedSuggestions' is MainActor.
-                // So running it in detached task requires 'await self.generate...'.
-                // Which hops back to Main thread.
-                // So 'DispatchQueue.global' was trying to offload calculation.
-                // To truly offload, the methods should be 'nonisolated'.
+                let patterns = await self.generatePatternBasedSuggestions(
+                    currentTasks: currentTasks,
+                    recentActivity: recentActivity
+                )
+                let goals = await self.generateGoalBasedSuggestions(
+                    tasks: currentTasks,
+                    goals: userGoals
+                )
+                let time = await self.generateTimeBasedSuggestions(tasks: currentTasks)
 
-                // For now, I will just run on MainActor to fix the build, or use Task with proper await.
-                // The logic seems lightweight enough for now, or I should mark helpers as nonisolated.
-
-                [] // Placeholder to be replaced by next step which will mark helpers nonisolated.
-            }.value
+                let allSuggestions = patterns + goals + time
+                return self.deduplicateSuggestions(self.prioritizeSuggestions(allSuggestions))
         }
 
         private func generatePatternBasedSuggestions(

@@ -34,7 +34,9 @@ public enum InputValidator {
         let emailRegex = #"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
         try validateNotEmpty(email)
         guard let regex = try? NSRegularExpression(pattern: emailRegex, options: []),
-              regex.firstMatch(in: email, options: [], range: NSRange(location: 0, length: email.utf16.count)) != nil
+              regex.firstMatch(
+                in: email, options: [], range: NSRange(location: 0, length: email.utf16.count)
+              ) != nil
         else {
             throw ValidationError.invalidEmail
         }
@@ -221,7 +223,9 @@ public enum InputValidator {
         // Check for valid username characters (alphanumeric, underscore, dash)
         let usernameRegex = #"^[a-zA-Z0-9_-]+$"#
         guard let regex = try? NSRegularExpression(pattern: usernameRegex, options: []),
-              regex.firstMatch(in: username, options: [], range: NSRange(location: 0, length: username.utf16.count)) != nil
+              regex.firstMatch(
+                in: username, options: [], range: NSRange(location: 0, length: username.utf16.count)
+              ) != nil
         else {
             throw
                 ValidationError

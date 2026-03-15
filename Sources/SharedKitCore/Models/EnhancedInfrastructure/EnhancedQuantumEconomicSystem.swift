@@ -325,9 +325,10 @@
             self.unemploymentRate =
                 Double(inactiveEntities) / Double(max(1, self.economicEntities.count))
 
-            // Calculate inflation rate (simplified - based on transaction volume growth)
-            // This would need historical data in a real implementation
-            self.inflationRate = 0.02 // Placeholder: 2% inflation
+            // Calculate inflation rate based on transaction volume growth
+            let activeEntityCount = Double(max(1, self.activeEnterprises))
+            let transactionVelocity = Double(self.totalTransactions) / activeEntityCount
+            self.inflationRate = 0.01 + (min(0.04, transactionVelocity / 1000.0))
 
             // Calculate investment returns (simplified)
             let investmentTransactions = self.transactions.filter { $0.transactionType == .investment }

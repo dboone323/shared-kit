@@ -672,7 +672,7 @@ class HabitStateManagerTests: XCTestCase {
     }
 
     func testHabitCreation() async throws {
-        let habit = MockHabit(id: UUID(), name: "Test Habit")
+        let habit = EnhancedHabit(id: UUID(), name: "Test Habit", category: "Test", priority: 1)
 
         try await stateManager.createHabit(habit)
 

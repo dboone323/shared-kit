@@ -619,12 +619,12 @@ class CodingProgressIntegrator: ObservableObject {
         }
     }
 
-    private func analyzeCodingPatternsAndCreateHabits() async -> [MockHabit] {
+    private func analyzeCodingPatternsAndCreateHabits() async -> [EnhancedHabit] {
         // Analyze coding patterns and suggest habits
         return [
-            MockHabit(id: UUID(), name: "Daily Code Review"),
-            MockHabit(id: UUID(), name: "Weekly Refactoring"),
-            MockHabit(id: UUID(), name: "Documentation Updates")
+            EnhancedHabit(id: UUID(), name: "Daily Code Review", category: "Development", priority: 3),
+            EnhancedHabit(id: UUID(), name: "Weekly Refactoring", category: "Development", priority: 2),
+            EnhancedHabit(id: UUID(), name: "Documentation Updates", category: "Development", priority: 1)
         ]
     }
 

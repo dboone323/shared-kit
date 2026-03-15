@@ -192,24 +192,10 @@ public enum DatePeriod: String, CaseIterable, Codable, Sendable {
     }
 }
 
+
 // MARK: - Legacy Compatibility
-
-@propertyWrapper
-public struct MockInjected<T: Sendable>: Sendable {
-    public var wrappedValue: T
-
-    public init() {
-        // This is a placeholder for dependencies that must be registered in DependencyContainer.
-        // It should only be used in test environments or for baseline defaults.
-        fatalError(
-            "Dependency of type \(T.self) was not injected. Ensure it is registered in DependencyContainer before use."
-        )
-    }
-
-    public init(wrappedValue: T) {
-        self.wrappedValue = wrappedValue
-    }
-}
+// MockInjected and duplicate Injected removed.
+// Use SharedKitCore.Injected from DependencyContainer.swift instead.
 
 // MARK: - Validation Types
 
