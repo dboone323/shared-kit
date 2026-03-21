@@ -1,4 +1,10 @@
 #!/bin/bash
+
+if [[ "${FLEET_INTERNAL}" != "1" ]]; then
+  echo "❌ Error: Independent execution disabled. Please use 'python3 control/run_all.py' from the workspace root."
+  exit 1
+fi
+
 # Local Audit Script
 # Runs AI-based code review and security checks using local Ollama.
 
